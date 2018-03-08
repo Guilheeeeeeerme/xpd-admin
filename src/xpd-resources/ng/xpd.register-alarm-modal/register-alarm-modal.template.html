@@ -1,0 +1,332 @@
+<div class="modal-content" ng-init="alarm.alarmType = alarm.alarmType?alarm.alarmType:'depth';">
+    
+    <div class="modal-header">
+        <h3 class="modal-title">{{modalTitle}}</h3>
+    </div>
+    
+    <div class="modal-body">
+
+        <uib-tabset active="active">
+
+            <uib-tab index="0" heading="General Info">
+
+                <div class="row">
+                    <div class="col-md-12">
+
+                        <div class="form-group" ng-class="{ 'has-error': alarmForm.name.$invalid  && !alarmForm.name.$pristine }">
+                        
+                            <label for="alarm-info-upsert-data-name">Alarm/Task Name*</label>
+                            <input class="form-control"
+                                id='alarm-info-upsert-data-name'
+                                type='text' name="alarmName"
+                                ng-model='alarm.name'
+                                xpd-form-validation="alarmForm"
+                                maxlength="30" required>
+                        
+                            </div>
+
+                        <div 
+                            ng-if="alarmType != 'time'" 
+                            class="form-group" 
+                            ng-class="{ 'has-error': alarmForm.alarmType.$invalid  && !alarmForm.alarmType.$pristine }">
+                            
+                            <label for="alarm-info-upsert-data-alarmType">Trigger when reach a certain: </label>
+
+                            <div id="alarm-info-upsert-data-alarmType" class="btn-group">
+                                
+                                <label 
+                                    ng-if="!alarmType || alarmType == 'depth'"
+                                    class="btn btn-primary"
+                                    name="alarmType"
+                                    uib-btn-radio="'depth'"
+                                    ng-model = "alarm.alarmType"
+                                    required>Depth
+                                </label>
+
+                                <label 
+                                    ng-if="alarmType != 'depth'"
+                                    class="btn btn-primary"
+                                    name="alarmType"
+                                    ng-model='alarm.alarmType'
+                                    uib-btn-radio="'time'"
+                                    required>Time
+                                </label>
+                                
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <!-- Time -->
+                    <div class="col-md-12" ng-if="alarm.alarmType == 'time'">
+                            
+                        <div class="col-md-6">
+                            <div class="form-group" ng-class="{ 'has-error': alarmForm.startTime.$invalid  && !alarmForm.startTime.$pristine }">
+                                <label for="alarm-info-upsert-data-startTime">Start Time*</label>
+                                <input class="form-control"
+                                    id='alarm-info-upsert-data-startTime'
+                                    type='datetime-local' name="startTime"
+                                    ng-model='alarm.startTime'
+                                    xpd-form-validation="alarmForm"
+                                    max="{{ alarm.endTime }}" required>
+                            </div>
+                        </div>
+                            
+                        <div class="col-md-6">
+                            <div class="form-group" ng-class="{ 'has-error': alarmForm.endTime.$invalid  && !alarmForm.endTime.$pristine }">
+                                <label for="alarm-info-upsert-data-endTime">End Time*</label>
+                                <input class="form-control"
+                                    id='alarm-info-upsert-data-endTime'
+                                    type='datetime-local' name="endTime"
+                                    ng-model='alarm.endTime'
+                                    xpd-form-validation="alarmForm"
+                                    min="{{ alarm.startTime }}" required>
+                            </div>
+                        </div>
+                        
+                    </div>
+                    <!-- End Time -->
+
+                    <!-- Depth | Procedure-->
+                    <div class="col-md-12" ng-if="alarm.alarmType == 'depth'">
+
+                        <div class="col-md-6">
+
+                            <label for="alarm-info-upsert-data-startDepth">Start Depth*</label>
+                            <div class="input-group" ng-class="{ 'has-error': alarmForm.startDepth.$invalid  && !alarmForm.startDepth.$pristine }">
+                                <input class="form-control"
+                                    id='alarm-info-upsert-data-startDepth'
+                                    type='number' 
+                                    name="startDepth"
+                                    ng-model='alarm.startDepth'
+                                    ng-change="actionChangeDepth()"
+                                    xpd-form-validation="alarmForm"
+                                    min='0' max="{{ alarm.endDepth }}" 
+                                    required>
+                                <div class="input-group-addon">m</div>
+                            </div>
+
+                            <label for="alarm-info-upsert-is-duration-alarm">Stop in this position?</label>
+                            
+                            <div class="input-group" ng-class="{ 'has-error': alarmForm.isDurationAlarm.$invalid  && !alarmForm.isDurationAlarm.$pristine }">
+
+                                <xpd-switch
+                                    shape="round"
+                                    ng-model="alarm.isDurationAlarm"
+                                    resolve="alarm.isDurationAlarm = true"
+                                    reject="alarm.isDurationAlarm = false">
+                                </xpd-switch>
+
+                            </div>
+
+                            <label ng-if="!alarm.isDurationAlarm" for="alarm-info-upsert-data-endDepth">End Depth*</label>
+                            <div ng-if="!alarm.isDurationAlarm" class="input-group" ng-class="{ 'has-error': alarmForm.endDepth.$invalid  && !alarmForm.endDepth.$pristine }">
+                                <input class="form-control"                                   
+                                    id='alarm-info-upsert-data-endDepth'
+                                    type='number' 
+                                    name="endDepth"
+                                    ng-change="actionChangeDepth()"
+                                    ng-model='alarm.endDepth'
+                                    xpd-form-validation="alarmForm"
+                                    min="{{ alarm.startDepth + 1 }}"
+                                    required>
+                                <div class="input-group-addon">m</div>
+                                <!-- max= "{{ operation.endBitDepth }}" -->
+                            </div>
+
+                            <div ng-if="!alarm.isDurationAlarm" class="checkbox">
+                                <label for="alarm-info-upsert-data-hasSpeedRestriction">
+                                    <input 
+                                        ng-change="alarm.hasvre = (alarm.hasSpeedRestriction == true)?false:alarm.hasSpeedRestriction"
+                                        type="checkbox" name="hasSpeedRestriction"
+                                        id="alarm-info-upsert-data-hasSpeedRestriction"
+                                        ng-model='alarm.hasSpeedRestriction'
+                                        ng-disabled="alarm.startDepth >= alarm.endDepth">
+                                    <strong>Speed Restriction</strong>
+                                </label>
+                            </div>
+
+                            <div ng-if="!alarm.isDurationAlarm" class="input-group" ng-class="{ 'has-error': alarmForm.speedRestriction.$invalid  && !alarmForm.speedRestriction.$pristine }">
+                                <input class="form-control"
+                                    type='number' name="speedRestriction"
+                                    id="alarm-info-upsert-data-speedRestriction"
+                                    ng-model='alarm.speedRestriction'
+                                    xpd-form-validation="alarmForm"
+                                    min='0' max='{{operation.safetySpeedLimit}}'
+                                    ng-disabled="!alarm.hasSpeedRestriction"
+                                    ng-required='alarm.hasSpeedRestriction == true'>
+                                <div class="input-group-addon">m/h</div>
+
+                            </div>
+
+                            <small ng-if="!alarm.isDurationAlarm">
+                                Operation safety speed limit: <strong>{{ operation.safetySpeedLimit }}</strong>m/h
+                            </small>
+                        
+                            <div ng-if="alarm.isDurationAlarm" class="form-group" ng-class="{ 'has-error': alarmForm.optimumTime.$invalid  && !alarmForm.optimumTime.$pristine }">
+                                <label for="optimumTime">Procedure Duration*</label>
+                                <div ng-include src="'/alarm-info-upsert-optimum-time.html'"></div>
+
+                                <small class="has-error form-error-message">
+                                    <i ng-if="alarmForm.timeSlicesTripin.$invalid || alarmForm.timeSlicesTripout.$invalid">
+                                    Please enter the procedure steps
+                                    </i>
+                                </small>
+
+                            </div>
+
+                        </div>
+
+                        <div class="col-md-6">
+
+                            <div class="form-group">
+                                <label for="direction">Direction Trigger*</label>
+                                <div class="checkbox" id='alarm-info-upsert-data-direction'>
+                                    <label>
+                                        <input
+                                            ng-disabled = "alarm.tripin && !alarm.tripout"
+                                            id="alarm-info-upsert-data-tripin"
+                                            type="checkbox" name="tripin"
+                                            ng-init='!alarm.id ? alarm.tripin = true : alarm.tripin = !!alarm.tripin'
+                                            ng-model='alarm.tripin'>Trip In
+                                    </label>
+                                    <label>
+                                        <input 
+                                            ng-disabled = "!alarm.tripin && alarm.tripout"
+                                            id="alarm-info-upsert-data-tripout"
+                                            type="checkbox" name="tripout"
+                                            ng-init='alarm.tripout = !!alarm.tripout'
+                                            xpd-form-validation="alarmForm"
+                                            ng-model='alarm.tripout'>Trip Out
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="frequency">Trigger frequency</label>
+                                <div class="checkbox" id='alarm-info-upsert-data-frequency'>
+                                    <label>
+                                        <input
+                                            id="alarm-info-upsert-data-alwaysTripin"
+                                            type="checkbox" name="alwaysTripin"
+                                            ng-init='alarm.alwaysTripin = !!alarm.alwaysTripin'
+                                            ng-disabled="!alarm.tripin"
+                                            ng-model='alarm.alwaysTripin'>Always for Trip In
+                                    </label>
+                                    <label>
+                                        <input
+                                            id="alarm-info-upsert-data-alwaysTripout"
+                                            type="checkbox" name="alwaysTripout"
+                                            ng-init='alarm.alwaysTripout = !!alarm.alwaysTripout'
+                                            ng-disabled="!alarm.tripout"
+                                            ng-model='alarm.alwaysTripout'>Always for Trip Out
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="checkbox">
+                                <label>
+                                    <input
+                                        id="alarm-info-upsert-data-defaultAlarm"
+                                        type="checkbox" name="defaultAlarm"
+                                        ng-model='alarm.defaultAlarm'> Default for
+                                    <strong>{{operation.type | uppercase }}</strong> operations?
+                                </label>
+                            </div>
+
+                            <div class="checkbox" ng-init="alarm.hasvre = !!alarm.hasvre">
+                                <label>
+                                    <input
+                                        id="alarm-info-upsert-data-hasvre"
+                                        type="checkbox" 
+                                        name="hasvre"
+                                        ng-true-value="false"
+                                        ng-false-value="true"
+                                        ng-model='alarm.hasvre'> Exclude from performance calculation?
+                                </label>
+                            </div>
+
+                        </div>
+                    </div>
+                    <!-- End Depth | Procedure-->
+
+                    <div class="col-md-12">
+                        <div class="form-group" ng-class="{ 'has-error': alarmForm.message.$invalid  && !alarmForm.message.$pristine }">
+                            <label for="alarm-info-upsert-data-message">Message*</label>
+                            <textarea class="form-control"
+                                id="alarm-info-upsert-data-message"
+                                name="message"
+                                ng-model='alarm.message'
+                                rows="3" required>
+                            </textarea>
+                        </div>
+                    </div>
+
+                </div>
+
+            </uib-tab>
+
+            <!--#############################################################################################################-->
+            <!--#############################################################################################################-->
+            <!--#############################################################################################################-->
+            <!--#############################################################################################################-->
+            <!--#############################################################################################################-->
+            <!-- ( alarmForm.timeSlicesTripin.$invalid || alarmForm.timeSlicesTripout.$invalid ) -->
+            <uib-tab 
+                index="1"
+                class="has-error" 
+                heading="Procedure Steps"
+                ng-if="alarm.isDurationAlarm">
+
+                <div class="row">
+
+                    <div class="col-md-8 col-md-offset-2">
+                        <div class="col-md-6 col-md-offset-3 form-group" ng-class="{ 'has-error': alarmForm.optimumTime.$invalid  && !alarmForm.optimumTime.$pristine }">
+                            <label for="optimumTime">Procedure Duration*</label>
+
+                            <div ng-include src="'/alarm-info-upsert-optimum-time.html'"></div>
+
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+
+                        <time-slices-table
+                            name = "timeSlicesTripin"
+                            time-slice-form = "alarmForm"
+                            disabled = "alarm.tripin != true"
+                            ng-model = "alarm.timeSlices.tripin"
+                            duration = "{{ 3600 / alarm.optimumSpeed }}">
+                        </time-slices-table>
+
+                    </div>
+
+                    <div class="col-md-6">
+
+                        <time-slices-table 
+                            name = "timeSlicesTripout"
+                            disabled = "alarm.tripout != true"
+                            direction = "tripout"
+                            ng-model = "alarm.timeSlices.tripout"
+                            duration = "{{ 3600 / alarm.optimumSpeed }}">
+                        </time-slices-table>
+
+                    </div>
+
+                </div>
+
+            </uib-tab>
+
+    </div>
+
+    <div class="modal-footer">
+    
+        <button id="alarm-info-upsert-close" type="button" class="btn btn-default" ng-click='actionCancelAlarm()'>Cancel</button>
+    
+        <button id="alarm-info-upsert-save" type="button" class="btn btn-primary" ng-click='actionSaveAlarm()' ng-if="alarm.alarmType == 'depth'"
+            ng-disabled="( alarm.tripin == false && alarm.tripout == false ) || alarmForm.$invalid">Save changes</button>
+            
+        <button id="alarm-info-upsert-save" type="button" class="btn btn-primary" ng-click='actionSaveAlarm()' ng-if="alarm.alarmType == 'time'"
+            ng-disabled="alarmForm.$invalid">Save changes</button>
+    </div>
+</div>

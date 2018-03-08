@@ -1,0 +1,116 @@
+<div class="container-fluid" ng-controller="FailuresController as fController">
+    <form name="form">        
+
+        <!-- Failure on Going -->
+        <div class="scrolling-table-tabs">
+            <table class="table table-bordered xpd-operation-table table-fixed-header">
+                <thead>
+                    <tr>
+                        <th class="equilibrium-time-table-title" colspan="5">Failure on Going</th>
+                    </tr>
+                    <tr>
+                        <th class="col-md-1">NPT</th>
+                        <th class="col-md-3">Category</th>
+                        <th class="col-md-2">Start</th>
+                        <th class="col-md-3">Description</th>
+                        <th class="col-md-1"></th>
+                    </tr>
+                </thead>
+            </table>
+
+            <div>
+                <table class="table table-bordered xpd-operation-table table-fixed">
+                    <tbody>
+                        <tr ng-repeat="failureOnGoing in modalData.failureOnGoing" 
+                            ng-if="modalData.failureOnGoing.length > 0" 
+                            ng-class="{ 'in-npt': failureOnGoing.npt }"
+                            class="center-align-list">
+                            
+                            <td class="col-md-1">
+                                <span ng-class="{'glyphicon glyphicon-ok':(failureOnGoing.npt), '':(!failureOnGoing.npt)}"></span>
+                            </td>
+                            <td class="col-md-3">{{(failureOnGoing.category)? failureOnGoing.category.initial +' - '+  failureOnGoing.category.name : 'Non categorized' }}</td>
+                            <td class="col-md-2">{{failureOnGoing.startTime | date:'MM/dd/yyyy HH:mm:ss'}}</td>
+                            <td class="col-md-3 cell-description">{{failureOnGoing.description}}</td>
+                            <td class="col-md-1" style="white-space: nowrap;">
+                                <span 
+                                    class="btn btn-xs glyphicon glyphicon-pencil"
+                                    ng-click="fController.actionClickButtonEditFailure(failureOnGoing)">
+                                </span>
+                            </td>
+                        </tr>
+                        <tr ng-if="modalData.failureOnGoing.length <= 0">
+                            <td colspan="6">
+                                No failure on Going
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Failures -->
+        <div class="scrolling-table-tabs">
+            <table class="table table-bordered xpd-operation-table table-fixed-header">
+                <thead>
+                    <tr>
+                        <th class="equilibrium-time-table-title" colspan="6">Failures</th>
+                    </tr>
+                    <tr>
+                        <th class="col-md-1">NPT</th>
+                        <th class="col-md-3">Category</th>
+                        <th class="col-md-2">Start</th>
+                        <th class="col-md-2">End</th>
+                        <th class="col-md-3">Description</th>
+                        <th class="col-md-1"></th>
+                    </tr>
+                </thead>
+            </table>
+
+            <div>
+                <table class="table table-bordered xpd-operation-table table-fixed">
+                    <tbody>
+                        <tr ng-repeat="failure in modalData.failuresList" 
+                            ng-if="modalData.failuresList.length > 0" 
+                            ng-class="{ 'in-npt': failure.npt }"
+                            class="center-align-list">
+                            
+                            <td class="col-md-1">
+                                <span ng-class="{'glyphicon glyphicon-ok':(failure.npt), '':(!failure.npt)}"></span>
+                            </td>
+                            <td class="col-md-3">{{(failure.category)? failure.category.initial +' - '+  failure.category.name : 'Non categorized' }}</td>
+                            <td class="col-md-2">{{failure.startTime | date:'MM/dd/yyyy HH:mm:ss'}}</td>
+                            <td class="col-md-2">{{failure.endTime | date:'MM/dd/yyyy HH:mm:ss'}}</td>
+                            <td class="col-md-3 cell-description">{{failure.description}}</td>
+                            <td class="col-md-1" style="white-space: nowrap;">
+                                <span 
+                                    class="btn btn-xs glyphicon glyphicon-pencil"
+                                    ng-click="fController.actionClickButtonEditFailure(failure)">
+                                </span>
+
+                                <span 
+                                    class="btn btn-xs glyphicon glyphicon-remove"
+                                    ng-if="!failure.onGoing"
+                                    ng-click="fController.actionClickButtonRemoveFailure(failure)">
+                                </span>
+                            </td>
+                        </tr>
+                        <tr ng-if="modalData.failuresList.length <= 0">
+                            <td colspan="6">
+                                No failures registered
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="pull-right">
+            <span class="btn" ng-click="fController.actionClickButtonAddFailure()">
+                <span class="glyphicon glyphicon-plus"></span>
+                Failure / Delay
+            </span>
+        </div>
+
+    </form>    
+</div>

@@ -1,0 +1,162 @@
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    </meta>
+    <title>Drilling Mechanics Log</title>
+    <link rel="shortcut icon" href="/assets/favicon/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="/assets/favicon/favicon.ico" type="image/x-icon">
+
+
+    <!-- build:vendorcss -->
+    <link rel="stylesheet" href="/node_modules/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/node_modules/bootstrap/dist/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="/node_modules/angular-toastr/dist/angular-toastr.css" />
+    <!-- endbuild -->
+
+    <!-- build:basecss -->
+    <link rel="stylesheet" href="/xpd-resources/css/dmec-log.css">
+    <!-- endbuild -->
+
+    <!-- build:accessdata -->
+    <script type="text/javascript" src="/accessdata.js"></script>
+    <!-- endbuild -->
+
+    <!-- build:vendorjs -->
+    <script type="text/javascript" src="/node_modules/angular/angular.min.js"></script>
+
+    <!-- ANGULAR UI BOOTSTRAP -->
+    <script type="text/javascript" src="/node_modules/angular-ui-bootstrap/dist/ui-bootstrap.js"></script>
+    <script type="text/javascript" src="/node_modules/angular-ui-bootstrap/dist/ui-bootstrap-tpls.js"></script>
+
+    <!-- SOCKET IO -->
+    <script type="text/javascript" src="/node_modules/socket.io-client/dist/socket.io.js"></script>
+
+    <script type="text/javascript" src="/node_modules/ngstorage/ngStorage.min.js"></script>
+
+    <script type="text/javascript" src="/node_modules/angular-animate/angular-animate.min.js"></script>
+    <script type="text/javascript" src="/node_modules/angular-toastr/dist/angular-toastr.tpls.js"></script>
+
+    <!-- endbuild -->
+
+    <!-- build:basejs -->
+    <script type="text/javascript" src="/xpd-resources/ng/socket.io/socketio.module.js">
+    </script>
+    <script type="text/javascript" src="/xpd-resources/ng/socket.io/socket.factory.js"></script>
+
+    <!-- XPD ACCESS -->
+    <script type="text/javascript" src="/xpd-resources/ng/xpd.access/accessfactory.module.js"></script>
+    <script type="text/javascript" src="/xpd-resources/ng/xpd.access/accessfactory.directive.js"></script>
+    <script type="text/javascript" src="/xpd-resources/ng/xpd.access/security-interceptor.factory.js"></script>
+    <script type="text/javascript" src="/xpd-resources/ng/xpd.access/accessfactory.factory.js"></script>
+
+    <!-- D3 -->
+    <script type="text/javascript" src="/xpd-resources/ng/d3/d3.module.js"></script>
+    <script type="text/javascript" src="/xpd-resources/ng/d3/d3.service.js"></script>
+
+    <!-- FILTER -->
+    <script type="text/javascript" src="/xpd-resources/ng/xpd.filters/xpd-filter.module.js"></script>
+    <script type="text/javascript" src="/xpd-resources/ng/xpd.filters/percentage.filter.js"></script>
+
+    <!-- HIGHCHARTS -->
+    <script type="text/javascript" src="../xpd-resources/ng/highcharts/highcharts.module.js"></script>
+    <script type="text/javascript" src="../xpd-resources/ng/highcharts/highcharts.service.js"></script>
+
+    <!-- XPD VISUALIZATION -->
+    <script type="text/javascript" src="/xpd-resources/ng/xpd.visualization/xpd-visualization.module.js"></script>
+    <script type="text/javascript" src="/xpd-resources/ng/xpd.visualization/d3-dmec-chart-worker-service.js"></script>
+    <script type="text/javascript" src="/xpd-resources/ng/xpd.visualization/d3-dmec-chart.directive.js"></script>
+
+    <!-- XPD DIALOG -->
+    <script type="text/javascript" src="/xpd-resources/ng/xpd.dialog/xpd.dialog.module.js"></script>
+    <script type="text/javascript" src="/xpd-resources/ng/xpd.dialog/xpd.dialog.factory.js"></script>
+
+    <!-- XPD COMMUNICATION -->
+    <script type="text/javascript" src="/xpd-resources/ng/xpd.communication/communication.module.js"></script>
+    <script type="text/javascript" src="/xpd-resources/ng/xpd.communication/operation-communication.factory.js"></script>
+    <script type="text/javascript" src="/xpd-resources/ng/xpd.communication/operation-server-data.factory.js"></script>
+
+    <!-- XPD CALCULATION -->
+    <script type="text/javascript" src="/xpd-resources/ng/xpd.calculation/calculation.module.js"></script>
+    <script type="text/javascript" src="/xpd-resources/ng/xpd.calculation/calculation.service.js"></script>
+
+    <!-- DMEC LEGADÃO -->
+    <script type="text/javascript" src="/xpd-resources/ng/xpd.setupapi/setupapi.module.js"></script>
+    <script type="text/javascript" src="/xpd-resources/ng/xpd.setupapi/setupapi.service.js"></script>
+    <script type="text/javascript" src="/xpd-resources/ng/xpd.setupapi/reading-setupapi.service.js"></script>
+
+    <!-- DRILLING MECHANICS MODULE JS -->
+    <script type="text/javascript" src="./app/components/dmec-log/dmec-log.module.js"></script>
+    <script type="text/javascript" src="./app/components/dmec-log/change-scale.controller.js"></script>
+    <script type="text/javascript" src="./app/components/dmec-log/dmec-log.controller.js"></script>
+    <!-- endbuild -->
+
+</head>
+
+<body ng-app="xpd.dmeclog" ng-controller="DMecLogController as dmlController">
+
+    <nav class="navbar navbar-default navbar-fixed-top">
+        <div class="container-fluid">
+
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#">Drilling Mechanics </a>
+            </div>
+
+            <form class="navbar-form navbar-left">
+
+                <div class="form-group">
+                    <input type="date" class="form-control" ng-model="dmecStartDate" placeholder="Date">
+                </div>
+
+                <div class="form-group">
+                    <input type="time" class="form-control" ng-model="dmecStartTime" placeholder="Time">
+                </div>
+
+                <button type="submit" ng-click="dmlController.searchSince()" ng-disabled="!dmecStartDate || !dmecStartTime" class="btn btn-default">Search since</button>
+
+                <div class="form-group" ng-init="chartAutoScroll = true">
+                    <label>
+                        <input type="checkbox" ng-model="chartAutoScroll" name="chartAutoScroll" ng-true-value="true" ng-false-value="false">Auto Scroll
+                    </label>
+                </div>
+
+            </form>
+
+            <ul class="nav navbar-nav navbar-right">
+
+                <li>
+                    <div class="form-group">
+                        <input type="range" class="form-control" ng-model="threshold" min="600000" max="604800000">
+                    </div>
+                </li>
+
+
+                <li>
+                    <div class="checkbox">
+                    </div>
+                </li>
+
+                <li>
+                    <a href="#">
+                        {{ threshold / 1000 | secondsToHourMinutesSeconds }}
+                    </a>
+                </li>
+                <li>
+                    <a href="#" ng-click="dmlController.openScaleModal()">Config</a>
+                </li>
+            </ul>
+
+        </div>
+    </nav>
+
+    <div id="dmec-scroll" class="container-fuild container-dmec">
+
+        <d3-dmec-chart ng-if="tracks && tracks.length == 8" threads="{{ 4 }}" threshold="threshold" start-time="dmecStartDate" tracks="tracks"
+            old-points="oldPoints" new-points="newPoints" auto-scroll="chartAutoScroll">
+        </d3-dmec-chart>
+
+    </div>
+
+</body>
+
+</html>

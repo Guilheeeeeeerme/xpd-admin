@@ -1,0 +1,158 @@
+<!-- <pre>{{eventFailure | json}}</pre> -->
+<form name="form">
+	<div class="modal-header">
+	<span 
+            class="btn glyphicon glyphicon-remove pull-right"
+            ng-click="modalActionButtonClose()">
+        </span>
+        <h4 class="modal-title">Event Information</h4>
+    </div>
+    <div class="modal-body">
+    	<table class="table table-bordered xpd-operation-table">
+    		<thead>
+    			<tr>
+					<th colspan="5">
+						Event Information
+					</th>
+				</tr>
+			</thead>
+    		<tbody>
+    			<tr>
+    				<th>Event Type:</th>
+    				<td>
+    					<div class="form-inline">
+    						{{eventFailure.eventType}}
+    					</div>
+    				</td>
+    			</tr>
+    			<tr>
+    				<th>State:</th>
+    				<td>
+    					<div class="form-inline">
+    						{{eventFailure.state}}
+    					</div>
+    				</td>
+    			</tr>
+    			<tr>
+    				<th>Start Time:</th>
+    				<td>
+    					<div class="form-inline">
+    						{{eventFailure.startTime | date:'MM/dd/yyyy HH:mm'}}
+    					</div>
+    				</td>
+    			</tr>
+    			<tr>
+    				<th>End Time:</th>
+    				<td>
+    					<div class="form-inline">
+    						{{eventFailure.endTime| date:'MM/dd/yyyy HH:mm'}}
+    						({{ (eventFailure.duration/1000) | secondsToHourMinutesSeconds}})
+    					</div>
+    				</td>
+    			</tr>
+    			<tr>
+    				<th>Consistence:</th>
+    				<td>
+    					<div class="form-inline">
+    						{{eventFailure.score | number: 2}}
+    					</div>
+    				</td>
+    			</tr>
+    		</tbody>
+    	</table>
+    </div>
+
+    <div class="modal-body">
+    	<h4><b>Failures</b></h4>
+    	<table class="table table-bordered xpd-operation-table">
+    		<thead>
+    			<tr>
+                    <th>NPT</th>
+    				<th>Start</th>
+    				<th>End</th>
+                    <th>Description</th>
+                    <th>Category</th>
+    			</tr>
+    		</thead>
+    		<tbody>
+    			<tr ng-repeat="failure in eventFailure.failures" ng-if="eventFailure.failures.length > 0" ng-class="{ 'in-npt': failure.npt }">
+                    <td align="center">
+                        <span ng-class="{'glyphicon glyphicon-ok':(failure.npt), '':(!failure.npt)}"></span>
+                    </td>
+    				<td align="center">{{failure.startTime | date:'MM/dd/yyyy HH:mm:ss'}}</td>
+    				<td align="center">{{failure.endTime | date:'MM/dd/yyyy HH:mm:ss'}}</td>
+                    <td align="center">{{failure.description}}</td>
+                    <td align="center">{{(failure.category)? failure.category.initial +' - '+  failure.category.name : 'Non categorized' }}</td>
+    			</tr>
+    			<tr ng-if="eventFailure.failures.length <= 0">
+    				<td colspan="6">
+    					No failures registered
+    				</td>
+    			</tr>
+    		</tbody>
+    	</table>
+    </div>
+
+
+    <div class="modal-body">
+        <h4><b>Lessons Learned</b></h4>
+        <table class="table table-bordered xpd-operation-table">
+            <thead>
+                <tr>
+                    <th>Best Practices</th>
+                    <th>Start</th>
+                    <th>End</th>
+                    <th>Description</th>
+                    <th>Category</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="lessonLearned in eventFailure.lessonsLearned" ng-if="
+                eventFailure.lessonsLearned.length > 0" ng-class="{ 'in-best-practices': lessonLearned.bestPractices }">
+                    <td align="center">
+                        <span ng-class="{'glyphicon glyphicon-star':(lessonLearned.bestPractices), '':(!lessonLearned.bestPractices)}" style="color:#f9ff00;"></span>
+                    </td>
+                    <td align="center">{{lessonLearned.startTime | date:'MM/dd/yyyy HH:mm:ss'}}</td>
+                    <td align="center">{{lessonLearned.endTime | date:'MM/dd/yyyy HH:mm:ss'}}</td>
+                    <td align="center">{{lessonLearned.description}}</td>
+                    <td align="center">{{(lessonLearned.lessonLearnedCategory)? lessonLearned.lessonLearnedCategory.initial +' - '+  lessonLearned.lessonLearnedCategory.name : 'Non categorized' }}</td>
+                </tr>
+                <tr ng-if="eventFailure.lessonsLearned.length <= 0">
+                    <td colspan="6">
+                        No lessons learned registered
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+
+    <div class="modal-body">
+        <h4><b>Alarms</b></h4>
+        <table class="table table-bordered xpd-operation-table">
+            <thead>
+                <tr>
+                    <th>Start Depth (m)</th>
+                    <th>End Depth (m)</th>
+                    <th>Message</th>
+                    <th>Speed Restriction (m/h)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="alarm in eventFailure.alarms" ng-if="eventFailure.alarms.length > 0">
+                    <td align="center">{{alarm.startDepth}}</td>
+                    <td align="center">{{alarm.endDepth}}</td>
+                    <td align="center">{{alarm.message}}</td>
+                    <td align="center">{{alarm.speedRestriction}}</td>
+                </tr>
+                <tr ng-if="eventFailure.alarms.length <= 0">
+                    <td colspan="6">
+                        No alarms registered
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+</form>
+

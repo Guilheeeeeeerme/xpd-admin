@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <title>XPD Admin</title>
+
+    <!-- ref:remove -->
+    <link rel="shortcut icon" href="/assets/favicon/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="/assets/favicon/favicon.ico" type="image/x-icon">
+    <!-- endref -->
+
+    <!-- BASE.MIN.CSS -->
+    <!-- ref:css css/base.min.css -->
+
+    <!-- BOOTSTRAP CSS -->
+    <link rel="stylesheet" href="/node_modules/bootstrap/dist/css/bootstrap.min.css">
+    <link href="../node_modules/bootstrap/dist/css/bootstrap-theme.min.css" rel="stylesheet">
+
+    <!-- XPD CSS -->
+    <link rel="stylesheet" href="/xpd-resources/css/xpd.css">
+
+    <!-- endref -->
+
+    <!-- ACCESS DATA -->
+    <!-- ref:js ../xpd-resources/js/accessdata.js -->
+    <script type="text/javascript" src="/accessdata.js"></script>
+    <!-- endref -->
+
+    <!-- BASE.MIN.JS -->
+    <!-- ref:js js/base.min.js -->
+
+    <script type="text/javascript" src="/node_modules/angular/angular.min.js"></script>
+
+    <script type="text/javascript" src="/node_modules/angular-ui-bootstrap/dist/ui-bootstrap.js"></script>
+    <script type="text/javascript" src="/node_modules/angular-ui-bootstrap/dist/ui-bootstrap-tpls.js"></script>
+
+    <script type="text/javascript" src="/node_modules/socket.io-client/dist/socket.io.js"></script>
+
+    <script type="text/javascript" src="/xpd-resources/ng/d3/d3.module.js"></script>
+    <script type="text/javascript" src="/xpd-resources/ng/d3/d3.service.js"></script>
+
+    <script type="text/javascript" src="/xpd-resources/ng/xpd.access/accessfactory.module.js"></script>
+    <script type="text/javascript" src="/xpd-resources/ng/xpd.access/accessfactory.factory.js"></script>
+
+    <script type="text/javascript" src="/xpd-resources/ng/socket.io/socketio.module.js"></script>
+    <script type="text/javascript" src="/xpd-resources/ng/socket.io/socket.factory.js"></script>
+
+    <script type="text/javascript" src="/xpd-resources/ng/xpd.setupapi/setupapi.module.js"></script>
+    <script type="text/javascript" src="/xpd-resources/ng/xpd.setupapi/setupapi.service.js"></script>
+
+    <script type="text/javascript" src="/xpd-resources/ng/xpd.setupapi/master-user-setupapi.service.js"></script>
+    <script type="text/javascript" src="/xpd-resources/ng/xpd.setupapi/admin-user-setupapi.service.js"></script>
+
+    <script type="text/javascript" src="/xpd-resources/ng/xpd.operationmanager/operationmanager.directive.js"></script>
+    <script type="text/javascript" src="/xpd-resources/ng/xpd.scoredevent/scoredevent.directive.js"></script>
+
+    <script type="text/javascript" src="/xpd-resources/ng/xpd.communication/communication.module.js"></script>
+    <script type="text/javascript"
+            src="/xpd-resources/ng/xpd.communication/operation-communication.factory.js"></script>
+
+    <!-- endref -->
+
+    <!-- LOGIN.MIN.JS -->
+    <!-- ref:js js/login.min.js -->
+
+    <script type="text/javascript" src="./app/components/login/login.module.js"></script>
+    <script type="text/javascript" src="./app/components/login/login.controller.js"></script>
+    <script type="text/javascript" src="./app/components/login/modal/master-login.controller.js"></script>
+    <script type="text/javascript" src="./app/components/login/modal/master-panel.controller.js"></script>
+
+    <!-- endref -->
+</head>
+
+<body ng-app="xpd.admin.login" class="xpd-login-body">
+
+<header>
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <img class="xpd-header-logo" src="../xpd-resources/img/xpd-logo.png"/>
+            </div>
+        </div>
+    </nav>
+</header>
+
+<div class="container" ng-controller="LoginController as lController">
+    <form class="xpd-login-form">
+        <h2 class="xpd-login-form-title">Please sign in</h2>
+
+        <label for="username" class="sr-only">Username</label>
+        <input type="text" id="username" class="form-control xpd-login-form-username-input" ng-model="login.username"
+               placeholder="Username" autofocus required>
+
+
+        <div class="form-group">
+            <label for="password" class="sr-only">Password</label>
+            <input type="password" id="password" class="form-control" ng-model="login.password" placeholder="Password"
+                   required>
+
+            <p class="help-block text-right">Credentials are case sensitive.</p>
+        </div>
+
+        <button class="btn btn-lg btn-primary btn-block" type="submit" ng-click="lController.actionButtonSignIn()">Sign
+            in
+        </button>
+
+        <a ng-click="lController.actionLinkSignInAsMaster()">Sign in as Master</a>
+
+        <div uib-collapse="isCollapsed">
+            <div class="well well-lg">{{collapseMessage}}</div>
+        </div>
+
+    </form>
+</div>
+
+</body>
+
+</html>

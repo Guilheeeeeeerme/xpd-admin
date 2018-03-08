@@ -1,0 +1,55 @@
+<div class="container-fluid" ng-controller="LessonLearnedController as llController">
+    <form name="form" >
+        <div class="scrolling-table-tabs">
+        	<table class="table table-bordered xpd-operation-table">
+        		<thead>
+        			<tr>
+                        <th class="col-md-1">B. Pract.</th>
+                        <th class="col-md-3">Category</th>
+                        <th class="col-md-2">Start</th>
+                        <th class="col-md-2">End</th>
+                        <th class="col-md-3">Description</th>
+        				<th class="col-md-1"></th>
+        			</tr>
+        		</thead>
+        		<tbody>
+        			<tr ng-repeat="lessonLearned in modalData.lessonLearnedList" 
+                        ng-if="modalData.lessonLearnedList.length > 0" 
+                        ng-class="{ 'in-best-practices': lessonLearned.bestPractices }"
+                        class="center-align-list">
+
+                        <td class="col-md-1">
+                            <span ng-class="{'glyphicon glyphicon-star':(lessonLearned.bestPractices), '':(!lessonLearned.bestPractices)}"></span>
+                        </td>
+        				<td class="col-md-3">{{lessonLearned.startTime | date:'MM/dd/yyyy HH:mm'}}</td>
+        				<td class="col-md-2">{{lessonLearned.endTime | date:'MM/dd/yyyy HH:mm'}}</td>
+                        <td class="col-md-2 cell-description">{{lessonLearned.description}}</td>
+                        <td class="col-md-3">{{(lessonLearned.lessonLearnedCategory)? lessonLearned.lessonLearnedCategory.initial +' - '+  lessonLearned.lessonLearnedCategory.name : 'Non categorized' }}</td>
+        				<td class="col-md-1" style="white-space: nowrap;">
+                            <span 
+                                class="btn btn-xs glyphicon glyphicon-pencil"
+                                ng-click="llController.actionClickButtonEditLessonLearned(lessonLearned)">
+                            </span>
+
+                            <span 
+                                class="btn btn-xs glyphicon glyphicon-remove"
+                                ng-click="llController.actionClickButtonRemoveLessonLearned(lessonLearned)">
+                            </span>
+                        </td>
+        			</tr>
+        			<tr ng-if="modalData.lessonLearnedList.length <= 0">
+        				<td colspan="6">
+        					No lessons learned registered
+        				</td>
+        			</tr>
+        		</tbody>
+        	</table>
+        </div>
+        <div class="pull-right">
+            <span class="btn" ng-click="llController.actionClickButtonAddLessonLearned()">
+                <span class="glyphicon glyphicon-plus"></span>
+                Lesson Learned
+            </span>
+        </div>
+    </form>
+</div>

@@ -1,0 +1,65 @@
+<svg xmlns='http://www.w3.org/2000/svg' version='1.1' width='100%' ng-attr-height='{{ svg.height }}'
+     xpd-view-box="svg.viewBox" class="conn-ruler-container">
+
+    <g ng-repeat="(key, timeBlock) in plottedTimeBlocks"
+       ng-attr-transform="translate(0, {{ timeBlock.startPosition }} )">
+        <rect class="xpd-conn-ruler-event-block" width="75" ng-attr-height="{{ timeBlock.height }}"
+              ng-class="{ 'xpd-conn-ruler-event-block-past': timeBlock.endTime < chronometer && chronometer < vtargetDuration, 'xpd-conn-ruler-event-block-overtime': chronometer > vtargetDuration }"/>
+
+        <switch>
+            <foreignObject x="0" y="0" width="75" ng-attr-height="{{ timeBlock.height }}">
+
+                <div class="xpd-conn-ruler-event-name-container">
+                    <span class="xpd-conn-ruler-event-name"
+                          ng-class="{ 'xpd-conn-ruler-event-name-past': timeBlock.endTime < chronometer }"
+                          xmlns="http://www.w3.org/1999/xhtml"> {{ timeBlock.name }}
+                    </span>
+                </div>
+
+            </foreignObject>
+        </switch>
+
+        <rect x="75" y="0" width="25" ng-if="chronometer > timeBlock.startTime"
+              ng-attr-height="{{timeBlock.tempHeight}}" ng-attr-fill="url(#blackToBlue{{key}})"
+              ng-class="{'xpd-conn-ruler-event-block-overtime': chronometer > vtargetDuration }"/>
+
+        <text class="xpd-conn-ruler-tick-text"
+              ng-class="{ 'xpd-conn-ruler-tick-text-past': timeBlock.startTime < chronometer }" x="100" y="10"> {{
+            timeBlock.startTime * 1000 | date: 'mm:ss' : '+0000' }}
+        </text>
+
+        <text ng-if="hasVtarget" class="xpd-conn-ruler-duration-tick-text" x="74" y="10" ng-class="{ 'xpd-conn-ruler-duration-tick-text-past': timeBlock.endTime
+            < chronometer } ">{{ plottedTimeBlocks[key].duration | secondsToHourMinutesSeconds }}
+        </text>
+
+        <path class="xpd-conn-ruler-tick xpd-conn-ruler-tick-fancy" ng-attr-d="M80 0 l0 {{ timeBlock.height }}"
+              ng-attr-stroke="{{timeBlock.stopColorInverse}}"/>
+
+        <defs>
+
+            <linearGradient x1="0% " y1="0% " x2="0% " y2="100% " id="blackToBlue{{key}} ">
+                <stop offset="0% " stop-color="#517f89 " stop-opacity="1 "/>
+                <stop offset="80% " ng-attr-stop-color="{{ timeBlock.stopColor }} " stop-opacity="1 "/>
+            </linearGradient>
+
+        </defs>
+
+    </g>
+
+    <g ng-repeat="tick in ruler.ticks" ng-attr-transform="translate(75, {{ yPosition(tick) }} )">
+
+        <line class="xpd-conn-ruler-tick xpd-conn-ruler-tick-main" x1="0" y1="0" x2="15" y2="0"/>
+        <line class="xpd-conn-ruler-tick" x1="0" y1="0" x2="0" y2="-4"/>
+
+        <line class="xpd-conn-ruler-tick xpd-conn-ruler-tick-sub" x1="0" y1="2" x2="10" y2="2"/>
+        <line class="xpd-conn-ruler-tick " x1="0 " y1="2 " x2="0 " y2="6"/>
+
+    </g>
+
+    <g ng-if="chronometer && hasVtarget"
+       ng-attr-transform="translate(75, {{ (chronometer<vtargetDuration?yPosition(chronometer):yPosition(vtargetDuration)) || 0 }} ) ">
+        <line x1="5 " y1="0" x2="25 " y2="0" stroke="red " stroke-width="2"/>
+        <polygon points="0,0 8,5 8,-5" fill="red"/>
+    </g>
+
+</svg>

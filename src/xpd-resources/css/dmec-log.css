@@ -1,0 +1,51 @@
+body {
+	padding-top: 60px;
+}
+
+.container-dmec{
+	overflow: auto;
+	height: 100%;
+	width: 100%;
+}
+
+d3-dmec-chart{
+	display: block;
+	height: 100%;
+}
+  
+.overlay {
+	fill: none;
+	pointer-events: all;
+}
+
+/* .d3-dmec-chart{
+
+} */
+
+/* .container-dmec .charts{
+	margin: 0;
+	padding: 0;
+	height: 100%;
+}
+
+.dmec-svg{
+	height: 100%;
+	width: 100%;
+}
+
+.dmec-legend {
+	alignment-baseline: hanging;
+	font-size: 0.08em;
+}
+
+.dmec-legend.dmec-legend-min{
+	text-anchor: start;
+}
+
+.dmec-legend.dmec-legend-label{
+	text-anchor: middle;
+}
+
+.dmec-legend.dmec-legend-max{
+	text-anchor: end;
+} */

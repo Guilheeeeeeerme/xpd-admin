@@ -1,0 +1,27 @@
+<svg xmlns='http://www.w3.org/2000/svg' version='1.1' width='100%' ng-attr-height='{{svg.height}}' xpd-view-box="svg.viewBox" class="xpd-times-container">
+
+	<g ng-repeat="(key, event) in slipsData | orderBy: 'startTime' track by event.id" >
+	    <rect
+	    	ng-attr-x="{{ getXPosition(event.startTime) }}" ng-attr-y="{{ yScale(event.duration)}}"
+	    	ng-attr-width="{{ bar.width }}" ng-attr-height="{{ yAxisBar - yScale(event.duration) }}"
+	    	ng-attr-fill="{{getFillColor(event)}}" stroke="none" ng-click="actionBarClick($event, event)"
+        ng-dblclick="actionBarDoubleClick($event, event)"
+	    	class="xpd-times-bar" ng-class="{'xpd-times-selected-bar':(event.id === selectedEvent.id)}"
+	    />
+	    <!-- <text>{{event.startTime}}</text> -->
+    </g>
+
+    <g ng-attr-transform="{{'translate(0,'+(svg.height - 58)+')'}}">
+    	<line ng-repeat="(key, tick) in xTicks" y2="10" ng-attr-x1="{{ xScale(tick) }}" ng-attr-x2="{{ xScale(tick) }}" class="xpd-slips-line-ticks"></line>
+    </g>
+
+    <g ng-attr-transform="{{'translate(0,'+(svg.height - 42)+')'}}">
+    	<g ng-repeat="(key, tick) in xTicks" ng-attr-transform="{{'translate('+xScale(tick)+', 0) rotate(-35)'}}">
+    		<text y="5" class="xpd-slips-ticks xpd-slips-tick-x scale-date" fill="#517f89">{{ dateFormat(tick) }}</text>
+    	</g>
+    </g>
+
+	<g>
+    	<text ng-repeat="(key, tick) in yTicks" ng-attr-y="{{ yScale(tick) }}" x="5" class="xpd-slips-ticks xpd-slips-tick-y">{{ tick | date : 'mm:ss' : '+0000' }}</text>
+    </g>
+</svg>

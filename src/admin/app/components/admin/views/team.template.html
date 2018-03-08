@@ -1,0 +1,39 @@
+<section class='xpd-section container'>
+
+    <div class="row xpd-member-box">
+
+        <div class="container">
+            <a class="btn btn-sm btn-primary pull-right" href="#/team">Show Agenda</a>
+        </div>
+
+        <div class="col-md-12">
+            <h1 class="xpd-member-box-title">Teams</h1>
+        </div>
+
+        <div ng-if="team.teams != null && team.teams.length > 0"
+             class="col-xs-6 col-sm-4 col-md-3 xpd-chart-container-content" ng-repeat="value in team.teams">
+            <div member-performance member="value">
+            </div>
+        </div>
+
+        <div ng-if="!(team.teams != null && team.teams.length > 0)" class="col-md-3 xpd-chart-container-content">
+            <h1>No teams</h1>
+        </div>
+
+        <div class="col-md-12">
+            <h1 class="xpd-member-box-title">Members</h1>
+        </div>
+
+        <div ng-if="team.members != null && team.members.length > 0"
+             class="col-xs-6 col-sm-4 col-md-3 xpd-chart-container-content" ng-repeat="value in team.members">
+            <div member-performance member="value">
+            </div>
+        </div>
+
+        <div ng-if="!(team.members != null && team.members.length > 0)" class="col-md-3 xpd-chart-container-content">
+            <h1>No members</h1>
+        </div>
+
+    </div>
+
+</section>

@@ -1,0 +1,83 @@
+<svg xmlns='http://www.w3.org/2000/svg' version='1.1' width='100%' ng-attr-height='{{svg.height}}'
+     xpd-view-box="svg.viewBox" class="xpd-forecast-line-container">
+
+    <g ng-attr-transform="scale({{ type == 'BOTH'?0.5:1 }}, 1)">
+
+        <text class="xpd-forecast-line-axis-text" x="100" ng-attr-y="{{ chart.height * 0.5 }}" fill="#436a72">--
+            Optimum
+        </text>
+        <text class="xpd-forecast-line-axis-text" x="100" ng-attr-y="{{ chart.height * 0.7 }}" fill="red">-- Executed
+        </text>
+        <text class="xpd-forecast-line-axis-text" x="100" ng-attr-y="{{ chart.height * 0.9 }}" fill="#648f36">--
+            Target
+        </text>
+
+        <text class="xpd-forecast-line-axis-label" x="0" ng-attr-y="{{ chart.height * 0.2 }}">{{ type == 'BOTH'?'CONN &
+            TRIP':type }} Joints/h
+        </text>
+
+        <g id="optimumLine">
+            <path ng-if="optimumPath != null" ng-attr-d="{{optimumPath}}" stroke-width="0.5" stroke="#436a72"
+                  fill="none"/>
+        </g>
+
+        <g id="actualLine">
+            <path ng-if="actualPath != null" ng-attr-d="{{ actualPath }}" stroke-width="0.5" stroke="#ff0000"
+                  fill="none"/>
+        </g>
+
+        <g id="expectedLine">
+            <path ng-if="expectedPath != null" ng-attr-d="{{ expectedPath }}" stroke-width="0.5" stroke="#648f36"
+                  fill="none"/>
+        </g>
+
+
+    </g>
+
+
+    <g class="equilibrium-time-table" ng-if="type == 'BOTH'" transform="translate(50, 0)" width="50"
+       ng-attr-height='{{svg.height}}'>
+
+
+        <rect x="0" y="0" width="50" height="25%" fill="#517f89" stroke="black" stroke-width="1"/>
+        <text class="equilibrium-time-table-title" x="25" y="15%" font-size="5">To Equilibrim Point</text>
+
+
+        <rect x="0" y="25%" width="40" height="25%" fill="#acd7ca" stroke="black" stroke-width="1"/>
+        <rect x="40" y="25%" width="10" height="25%" fill="black" stroke="black" stroke-width="1"/>
+
+        <text x="20" y="40%" class="equilibrium-time-table-label" font-size="4">Intersect in (Joint)</text>
+        <text ng-if="intersect != null" x="45" y="40%" class="equilibrium-time-table-text" font-size="4">{{intersect |
+            number:0}}
+        </text>
+        <text ng-if="intersect == null" x="45" y="40%" class="equilibrium-time-table-text" font-size="4">&infin;</text>
+
+
+        <rect x="0" y="50%" width="40" height="25%" fill="#acd7ca" stroke="black" stroke-width="1"/>
+        <rect x="40" y="50%" width="10" height="25%" fill="black" stroke="black" stroke-width="1"/>
+
+        <text x="20" y="65%" class="equilibrium-time-table-label" font-size="4">Time to equilibrium</text>
+        <text ng-if="equilibrium != null" x="45" y="65%" class="equilibrium-time-table-text" font-size="4">{{
+            equilibrium * 1000 | date: 'HH:mm:ss': '+0000'}}
+        </text>
+        <text ng-if="equilibrium == null" x="45" y="65%" class="equilibrium-time-table-text"
+              font-size="4">&infin;</text>
+
+
+        <rect x="0" y="75%" width="40" height="25%" fill="#acd7ca" stroke="black" stroke-width="1"/>
+        <rect x="40" y="75%" width="10" height="25%" fill="black" stroke="black" stroke-width="1"/>
+
+        <text x="20" y="90%" class="equilibrium-time-table-label" font-size="4">Balance to the end operation</text>
+
+        <text ng-if="balance != null && balance < 0" x="45" y="90%" text-anchor="middle" fill="green" font-size="4">{{
+            balance * -1000 | date: 'HH:mm:ss': '+0000' }}
+        </text>
+        <text ng-if="balance != null && balance >= 0" x="45" y="90%" text-anchor="middle" fill="red" font-size="4">{{
+            balance * 1000 | date: 'HH:mm:ss': '+0000' }}
+        </text>
+
+        <text ng-if="balance == null" x="45" y="90%" class="equilibrium-time-table-text" font-size="4">&infin;</text>
+
+    </g>
+
+</svg>

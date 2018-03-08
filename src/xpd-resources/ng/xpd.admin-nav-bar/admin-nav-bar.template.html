@@ -1,0 +1,87 @@
+<div class="container-fluid xpd-admin-nav-bar">
+
+	<ul class="nav navbar-nav">
+		<ul class="nav nav-pills" role="tablist">
+
+			<li role="presentation" class="dropdown" uib-dropdown is-open="status.isopen">
+
+				<a class="dropdown-toggle" uib-dropdown-toggle href="#" id="nav-bar-menu">
+
+                	Menu <span class="caret"></span>
+
+				</a>
+				
+				<ul class="dropdown-menu">
+					<li>
+						<a ng-click="onclickItemMenu('/menu')" id="nav-bar-menu-control-panel">Control Panel</a>
+					</li>
+					<li>
+						<a ng-click="onclickItemMenu('/menu/data-acquisition')" id="nav-bar-menu-data-acquisition">Data Acquisition</a>
+					</li>
+					<li>
+						<a ng-click="onclickItemMenu('/menu/failure-delay-category')" id="nav-bar-menu-categories-failure">Categories (Failure / Delay)</a>
+					</li>
+					<li>
+						<a ng-click="onclickItemMenu('/menu/lesson-learned-category')" id="nav-bar-menu-categories-lessons">Categories (Lessons Learned)</a>
+					</li>
+				</ul>
+
+			</li>
+
+			<li role="presentation">
+				<a ng-click="onclickItemMenu('/setup')" id="nav-bar-setup">Setup</a>
+			</li>
+			<!-- <li role="presentation">
+				<a ng-click="onclickItemMenu('/team')" id="nav-bar-team">Team</a>
+			</li> -->
+
+			<li role="presentation">
+				<a ng-click="onclickItemMenu('/shift-report/')" id="nav-bar-team">RPD</a>
+			</li>
+			
+			<li role="presentation" class="dropdown" uib-dropdown is-open="flags.isopen">
+
+				<a class="dropdown-toggle" uib-dropdown-toggle href="#" id="nav-bar-operation">
+
+                Operation <span class="caret"></span>
+
+				</a>
+				
+				<ul class="dropdown-menu">
+					<li>
+						<a ng-click="onclickItemMenu('/')" id="nav-bar-operation-tracking">Tracking</a>
+					</li>
+					<li ng-if="showPlanner">
+						<a ng-click="onclickItemMenu('/planner')" id="nav-bar-operation-planner">Planner</a>
+					</li>
+					<li>
+						<a ng-click="onclickItemMenu('/alarm')" id="nav-bar-operation-alarm">Alarm</a>
+					</li>
+					<li>
+						<a ng-click="onclickItemMenu('dmeclog.html#/')" id="nav-bar-operation-dmec">D. Mech. Log</a>
+					</li>
+				</ul>
+
+			</li>
+
+			<!-- <li role="presentation">
+				<a ng-click="onclickItemMenu('/')">Tracking</a>
+			</li> -->
+			<li role="presentation">
+				<a ng-click="onclickItemMenu('reports.html#/')" id="nav-bar-reports">Reports</a>
+			</li>
+			<!-- <li ng-show="planner" role="presentation">
+				<a ng-click="onclickItemMenu('/planner')">Planner</a>
+			</li>
+			<li ng-show="planner" role="presentation">
+				<a ng-click="onclickItemMenu('/alarm')">Alarm</a>
+			</li>
+			<li role="presentation">
+				<a ng-click="onclickItemMenu('dmeclog.html#/')">D. Mech. Log</a>
+			</li> -->
+		</ul>
+	</ul>
+</div>
+
+<failure-nav-bar></failure-nav-bar>
+

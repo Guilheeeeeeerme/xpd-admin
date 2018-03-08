@@ -1,0 +1,144 @@
+<div class="xpd-admin-col-header">
+
+    Settings for {{ label }}
+
+    <button ng-show="leftPercentage == 0 && settings.targetSpeed != 0" class="pull-right" ng-click="actionButtonApply()">Apply
+    </button>
+
+    <span ng-show="settings.targetSpeed == 0" class="planner-error-text pull-right">You must set a speed</span>
+
+    <span ng-show="leftPercentage != 0" class="planner-error-text pull-right">You must allocated the whole time</span>
+</div>
+
+<div class="xpd-admin-col-content">
+
+    <div class="col-md-6 col-sm-6 col-xs-6 xpd-chart-container">
+
+        <div class="xpd-chart-container-header" ng-init="selectedDirection = selectedDirection || 'tripin' ">
+
+            <label class="radio-inline">
+                <input type="radio" name="direction" value="tripin" ng-model="selectedDirection"> Trip In</label>
+
+            <label class="radio-inline">
+                <input type="radio" name="direction" value="tripout" ng-model="selectedDirection"> Trip Out</label>
+
+        </div>
+
+        <div class="xpd-chart-container-content">
+
+            <div class="panel panel-default planner-box" ng-repeat="(key, item) in timeSlices[selectedDirection] track by $index">
+
+                <div class="panel-heading">
+
+                    <div class="row">
+
+                        <div class="col-md-12">
+                            {{ item.name }}
+                        </div>
+
+                        <div class="col-md-10 planner-box-text">
+                            Move Top Drive
+                        </div>
+
+                        <div class="col-md-2">
+                            <input type="checkbox" name="moveVtarget" value="true" ng-model="item.moveVtarget" ng-click="makeMoveVtarget(item, timeSlices[selectedDirection])">
+                        </div>
+
+                        <button class="col-md-4 btn btn-sm btn-default " ng-click="actionSwap(key, item, key - 1, timeSlices[selectedDirection][key - 1])">
+                            <i class="glyphicon glyphicon-chevron-up" aria-hidden="true"></i>
+                        </button>
+
+                        <button class="col-md-4 btn btn-sm btn-default " ng-click="actionSwap(key, item, key + 1, timeSlices[selectedDirection][key + 1])">
+                            <i class="glyphicon glyphicon-chevron-down" aria-hidden="true"></i>
+                        </button>
+
+                        <button class="col-md-4 btn btn-sm btn-danger " ng-click="timeSlices[selectedDirection].splice($index, 1)" ng-disabled="!item.canDelete">
+                            <i class="glyphicon glyphicon-remove" aria-hidden="true"></i>
+                        </button>
+
+                    </div>
+
+                </div>
+
+                <div class="panel-body">
+
+                    <div class="row">
+
+                        <div class="col-md-6 planner-box-label">Duration</div>
+                        <div class="col-md-6 planner-box-text">{{ (item.percentage/100) * targetTime * 1000 | date : 'HH:mm:ss' : '+0000' }}
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="panel-footer">
+                    <input type="range" class="form-control" ng-change="changingPercentageOf(item)" ng-model="item.percentage" step="1" min="0"
+                        max="100">
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="col-md-6 col-sm-6 col-xs-6 xpd-chart-container">
+
+        <div class="xpd-chart-container-header">
+
+            <div class="input-group">
+                <input type="text" class="form-control" ng-model="newTimeSliceName">
+                <span class="input-group-btn">
+                    <button ng-click="actionButtonAddTimeSlice(timeSlices, selectedDirection, newTimeSliceName)" class="btn btn-default" type="button"
+                        ng-disabled="!newTimeSliceName || newTimeSliceName.length < 0">Add Task</button>
+                </span>
+            </div>
+
+        </div>
+
+        <div class="xpd-chart-container-content">
+
+            <div class="xpd-chart" conn-ruler vtarget-duration='targetTime' time-blocks="timeSlices[selectedDirection]">
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<div class="xpd-admin-col-footer">
+
+    <table class="table table-condensed equilibrium-time-table">
+        <thead>
+            <tr>
+                <th class="equilibrium-time-table-title" colspan="3">Connection Time</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <th class="equilibrium-time-table-label">Optimum Speed (joint/h)</th>
+                <th class="equilibrium-time-table-label">Time</th>
+                <th class="equilibrium-time-table-label">Target Speed (joint/h)</th>
+            </tr>
+            <tr>
+                <td class="equilibrium-time-table-text">{{ optimumSpeed * 3600 | number: 2 }}
+                </td>
+                <td class="equilibrium-time-table-text">{{ targetTime * 1000 | date : 'HH:mm:ss' : '+0000' }}
+                </td>
+                <td class="equilibrium-time-table-text">{{ targetSpeed * 3600 | number: 2 }}
+                </td>
+            </tr>
+
+        </tbody>
+
+        <tfoot>
+            <tr>
+                <td colspan="3">
+                    <input type="range" step="0.00001" class="form-control" ng-model="targetSpeed" min="0" max="{{ 4 *  optimumSpeed   }}">
+                </td>
+            </tr>
+        </tfoot>
+
+    </table>
+</div>

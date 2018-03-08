@@ -1,0 +1,71 @@
+<form name="usForm">
+
+	<div class="modal-content">
+
+		<div class="modal-header">
+			<h3>Schedule Form</h3>
+		</div>
+
+		<div class="modal-body">
+			<table class="table">
+				<tbody>
+					<tr>
+						<td>
+							<h4>Start Date</h4>
+						</td>
+						<td>
+							<div class="col-md-6" max="modalData.endDate" uib-datepicker name="startDate" ng-model="modalData.startDate" required></div>
+						</td>
+						<td>
+							<div class="col-md-6" max="modalData.endDate" uib-timepicker name="startDate" ng-model="modalData.startDate" hour-step="1"
+							    minute-step="30" show-meridian="true" required></div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<h4>End Date</h4>
+						</td>
+						<td>
+							<div class="col-md-6" min="modalData.startDate" uib-datepicker name="endDate" ng-model="modalData.endDate" required></div>
+						</td>
+						<td>
+							<div class="col-md-6" min="modalData.startDate" uib-timepicker name="endDate" ng-model="modalData.endDate" hour-step="1"
+							    minute-step="30" show-meridian="true" required></div>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+
+
+			<div class="form-group" ng-class="{ 'has-error': modalData.shiftHours == null }">
+				<label for="shiftHours">Shift duration:</label>
+				{{ ((modalData.endDate - modalData.startDate)/1000) | secondsToHourMinutesSeconds }}
+			</div>
+
+			<div class="checkbox">
+				<label>
+					<input type="checkbox" ng-model="modalData.repeat"> Repeat every day
+				</label>
+			</div>
+
+			<div class="form-group" ng-if="modalData.repeat == true" ng-class="{ 'has-error': usForm.repeatUntil.$invalid && usForm.repeatUntil.$pristine }">
+
+				<label for="repeatUntil">Until:</label>
+				<input min="modalData.endDate" name="repeatUntil" type="date" class="form-control input-sm" ng-model="modalData.repeatUntil"
+				    required>
+
+				<small ng-show="( modalData.repeatUntil < modalData.endDate )">Until date must be after End Date</small>
+			</div>
+
+		</div>
+
+		<div class="modal-footer">
+			<button class="btn btn-primary" type="submit" ng-click="actionButtonAdd()" ng-disabled="usForm.$invalid || ( modalData.repeat == true && (modalData.repeatUntil < modalData.endDate) )">Save
+			</button>
+			<button ng-if="modalData.id != null" class="btn btn-danger" ng-click="actionButtonRemove()">Remove</button>
+			<button class="btn btn-secondary" ng-click="actionButtonCancel()">Cancel</button>
+		</div>
+
+	</div>
+
+</form>

@@ -1,0 +1,139 @@
+<svg xmlns='http://www.w3.org/2000/svg' version='1.1' width='100%' ng-attr-height='{{ svg.height }}'
+     xpd-view-box="svg.viewBox" class="trip-ruler-container">
+
+    <line ng-if="calculated.blockPosition && readings.blockPosition"
+          ng-class="unreachable > 0 ? 'unreachable-target-stroke' : ''"
+          class="xpd-trip-ruler-middle-bar" x1="25"
+          ng-attr-y1="{{ yPosition(calculated.blockPosition) }}" x2="25"
+          ng-attr-y2="{{ yPosition(readings.blockPosition) }}"/>
+
+    <rect class="xpd-trip-ruler-center-bar" x="20" y="0" width="10" ng-attr-height="{{ svg.viewBoxHeight }}"/>
+
+    <g ng-attr-transform="translate(0,{{ yPosition(tick) || 0 }})" ng-repeat="(key, tick) in ruler.ticks">
+
+        <line class="xpd-trip-ruler-tick xpd-trip-ruler-tick-main" x1="0" y1="0" x2="18" y2="0"/>
+        <line class="xpd-trip-ruler-tick" x1="18" y1="-2" x2="18" y2="0"/>
+
+        <line class="xpd-trip-ruler-tick xpd-trip-ruler-tick-sub" x1="5" y1="2" x2="18" y2="2"/>
+        <line class="xpd-trip-ruler-tick" x1="18" y1="4" x2="18" y2="2"/>
+
+        <line class="xpd-trip-ruler-tick xpd-trip-ruler-tick-main" x1="32" y1="0" x2="50" y2="0"/>
+        <line class="xpd-trip-ruler-tick" x1="32" y1="-2" x2="32" y2="0"/>
+        <line class="xpd-trip-ruler-tick xpd-trip-ruler-tick-sub" x1="32" y1="2" x2="45" y2="2"/>
+        <line class="xpd-trip-ruler-tick" x1="32" y1="4" x2="32" y2="2"/>
+
+        <text class="xpd-trip-ruler-tick-text" x="50" y="2.5">
+            {{ tick | number : 0 }}
+        </text>
+    </g>
+
+    <path class="xpd-trip-ruler-tick xpd-trip-ruler-tick-fancy" ng-attr-d="M13 0 l0 {{ svg.viewBoxHeight }}"/>
+    <path class="xpd-trip-ruler-tick xpd-trip-ruler-tick-fancy" ng-attr-d="M37 0 l0 {{ svg.viewBoxHeight }}"/>
+
+    <text ng-attr-y="{{ ( yPosition(operation.stickUp) ) || 0 }}" x="61"
+          class="xpd-trip-ruler-target-text-empty xpd-trip-ruler-mark-text" dy="0.25em">
+        Stick Up
+    </text>
+
+    <text ng-attr-y="{{ ( yPosition(dpLimitLabel) ) || 0 }}" x="61"
+          class="xpd-trip-ruler-target-text-empty xpd-trip-ruler-mark-text" dy="0.25em">
+        D. Pipe Limit
+    </text>
+
+    <text ng-attr-y="{{ ( yPosition(upperStopLabel) ) || 0 }}" x="61"
+          class="xpd-trip-ruler-target-text-empty xpd-trip-ruler-mark-text" dy="0.25em">
+        Upper Stop
+    </text>
+
+    <g ng-if="_expectedAlarmChanging && _expectedAlarmChanging.length > 0" ng-repeat="expected in _expectedAlarmChanging">
+
+        <!-- <text ng-attr-y="{{ ( yPosition( expected.blockPosition ) ) || 0 }}" x="61"
+              class="xpd-trip-ruler-target-text-empty xpd-trip-ruler-expected-alarm-text" dy="0.25em" ng-attr-fill="{{ expected.color }}" ng-attr-stroke="{{ expected.color }}">
+            {{expected.currentAlarm.name}}
+        </text> -->
+
+        <foreignObject ng-attr-y="{{ ( yPosition( expected.blockPosition ) ) || 0 }}" x="61" width="60%"
+              class="xpd-trip-ruler-target-text-empty xpd-trip-ruler-expected-alarm-text" dy="0.25em" ng-attr-color="{{ expected.color }}">
+              <p>{{expected.currentAlarm.name}}</p>
+        </foreignObject>
+
+        <line x1="0" ng-attr-y1="{{ ( yPosition(expected.blockPosition) ) || 0 }}" x2="50"
+          ng-attr-y2="{{ ( yPosition(expected.blockPosition) ) || 0 }}" ng-attr-stroke="{{ expected.color }}" stroke-opacity="1" stroke-width="2"/>
+
+          <line x1="0" ng-attr-y1="{{ ( yPosition(expected.endBlockPosition) ) || 0 }}" x2="50"
+            ng-attr-y2="{{ ( yPosition(expected.endBlockPosition) ) || 0 }}" ng-attr-stroke="{{ expected.color }}" stroke-opacity="1" stroke-width="2"/>
+
+        <line x1="25" ng-attr-y1="{{ ( yPosition(expected.blockPosition) ) || 0 }}" x2="25"
+        ng-attr-y2="{{ ( yPosition(expected.endBlockPosition) ) || 0 }}" ng-attr-stroke="{{ expected.color }}" stroke-opacity="0.3" stroke-width="50"/>
+    </g>
+
+    <g ng-if="_expectedChanging && _expectedChanging.length > 0" ng-repeat="expected in _expectedChanging">
+
+        <text ng-attr-y="{{ ( yPosition(expected.blockPosition) ) || 0 }}" x="61"
+              class="xpd-trip-ruler-target-text-empty xpd-trip-ruler-expected-text" dy="0.25em">
+            {{expected.state}}
+        </text>
+
+        <line x1="0" ng-attr-y1="{{ ( yPosition(expected.blockPosition) ) || 0 }}" x2="50"
+          ng-attr-y2="{{ ( yPosition(expected.blockPosition) ) || 0 }}" stroke="#E85654" stroke-width="2"/>
+
+        <line x1="0" ng-attr-y1="{{ ( yPosition(expected.blockPosition) ) || 0 }}" x2="50"
+        ng-attr-y2="{{ ( yPosition(expected.blockPosition) ) || 0 }}" stroke="rgba(232, 86, 84, 0.5)" stroke-width="15"/>
+    </g>
+
+    <line ng-if="operation.stickUp" x1="0" ng-attr-y1="{{ ( yPosition(operation.stickUp) ) || 0 }}" x2="50"
+          ng-attr-y2="{{ ( yPosition(operation.stickUp) ) || 0 }}" stroke="#ffa011" stroke-width="2"/>
+
+    <line ng-if="operation.stickUp && operation.averageStandLength" x1="0"
+          ng-attr-y1="{{ yPosition(operation.stickUp + operation.averageStandLength) }}" x2="50"
+          ng-attr-y2="{{ yPosition(operation.stickUp + operation.averageStandLength) }}" stroke="#ffa011"
+    " stroke-width="2" />
+
+    <line ng-if="operation.upperStop" x1="0" ng-attr-y1="{{ yPosition(operation.upperStop) }}" x2="50"
+          ng-attr-y2="{{ yPosition(operation.upperStop) }}" stroke="#ffa011" stroke-width="2"/>
+
+    <g ng-if="calculated.blockPosition" class="xpd-trip-ruler-calculated-container"
+       ng-attr-transform="translate(25, {{ yPosition(calculated.blockPosition) }})">
+
+        <line ng-class="unreachable > 0 ? 'unreachable-target-stroke' : ''" class="xpd-trip-ruler-target-tick" x1="0" y1="0" x2="40" y2="0"/>
+
+        <rect ng-class="unreachable > 0 ? 'unreachable-target-stroke' : ''" class="xpd-trip-ruler-target-box" x="38" y="-40" width="40" height="40"/>
+
+        <text ng-class="unreachable > 0 ? 'unreachable-target-stroke' : ''" class="xpd-trip-ruler-target-text xpd-trip-ruler-target-text-empty" x="42" y="-28">TARGET</text>
+        <text ng-class="unreachable > 0 ? 'unreachable-target-stroke' : ''" class="xpd-trip-ruler-target-text xpd-trip-ruler-target-text-empty" x="42" y="-15">POSITION</text>
+        <text ng-class="unreachable > 0 ? 'unreachable-target-stroke' : ''" class="xpd-trip-ruler-target-text xpd-trip-ruler-target-text-empty" x="42" y="-2">{{
+            calculated.blockPosition | number : 2 }}
+        </text>
+
+        <g>
+            <circle ng-class="unreachable > 0 ? 'unreachable-target-stroke' : ''" class="xpd-trip-ruler-target" r="10"/>
+            <circle ng-class="unreachable > 0 ? 'unreachable-target-stroke' : ''" class="xpd-trip-ruler-target" r="6"/>
+            <circle ng-class="unreachable > 0 ? 'unreachable-target-fill' : ''" class="xpd-trip-ruler-target-filled" r="2"/>
+        </g>
+
+        <text x="54" y="-55"
+              ng-class="unreachable > 0 ? 'unreachable-target-stroke' : ''"
+              class="xpd-trip-ruler-target-text xpd-trip-ruler-target-text-empty xpd-trip-ruler-slowdown-text"
+              ng-show="showSlowDown">
+            <tspan>SLOW</tspan>
+            <tspan x="54" dy="1em">DOWN!</tspan>
+        </text>
+    </g>
+
+    <g ng-if="readings.blockPosition" class="xpd-trip-ruler-reading-container"
+       ng-attr-transform="translate(25, {{ yPosition(readings.blockPosition) }})">
+
+        <line class="xpd-trip-ruler-reading-tick" x1="-100" y1="0" x2="-10" y2="0"/>
+
+        <g>
+            <circle class="xpd-trip-ruler-reading" r="10"/>
+
+            <line class="xpd-trip-ruler-reading-stick" x1="-10" y1="0" x2="-2" y2="0"/>
+            <line class="xpd-trip-ruler-reading-stick" x1="2" y1="0" x2="10" y2="0"/>
+
+            <line class="xpd-trip-ruler-reading-stick" x1="0" y1="2" x2="0" y2="10"/>
+            <line class="xpd-trip-ruler-reading-stick" x1="0" y1="-2" x2="0" y2="-10"/>
+        </g>
+    </g>
+
+</svg>

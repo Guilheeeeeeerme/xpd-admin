@@ -1,0 +1,29 @@
+{
+    "env": {
+        "browser": true
+    },
+    "extends": "eslint:recommended",
+    "rules": {
+        "no-console": 0,
+        "no-mixed-spaces-and-tabs": 0,
+        "linebreak-style": 0,
+        "indent": [
+            "error",
+            "tab"
+        ],
+        "quotes": [
+            "error",
+            "single"
+        ],
+        "semi": [
+            "error",
+            "always"
+        ]
+    },
+    "globals": {
+        "io": 1,
+        "d3": 1,
+        "angular": 1,
+        "gantt": 1
+    }
+}

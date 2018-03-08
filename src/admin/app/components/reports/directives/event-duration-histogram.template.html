@@ -1,0 +1,48 @@
+<div class="histogram-container"></div>
+
+<div class="histogram-diff-message-container" ng-if="showDiffMessage">
+	<div class="panel panel-default">
+	  <div class="panel-body">
+	    There are different contract parameters for this activity.
+	  </div>
+	  <div class="panel-footer">
+		<button class="btn btn-primary" ng-click="actionButtonShowLastParameters();">Show last parameters</button>
+	  	<button class="btn btn-primary" ng-click="actionButtonHideParameters();">Hide parameters</button>
+	  </div>
+	</div>
+</div>
+
+<div class="row">
+	<div class="col-md-12 form-inline">
+		<div class="form-group interval-selection">
+			MIN:
+			<input type="number" ng-model="minMinutes" 
+				class="form-control input-sm xpd-small-input" min="0" placeholder="MM">
+			<input type="number" ng-model="minSeconds" max="59"
+				class="form-control input-sm xpd-small-input" min="0" placeholder="SS">
+
+			MAX:
+			<input type="number" ng-model="maxMinutes" 
+				class="form-control input-sm xpd-small-input" min="0" placeholder="MM">
+			<input type="number" ng-model="maxSeconds" max="59"
+				class="form-control input-sm xpd-small-input" min="0" placeholder="SS">
+
+			<button class="btn btn-primary btn-sm" ng-click="actionButtonApplyExtremes()">
+				<span class="glyphicon glyphicon-search"></span>
+			</button>
+		</div>
+
+		<div class="form-group interval-selection pull-right">
+			BINS SIZE: 
+			<input type="number" ng-model="binMinutes"
+				class="form-control input-sm xpd-small-input" min="0" placeholder="MM"
+				ng-init="inputIntevals[histogram.label].minutes = 1">
+			<input type="number" ng-model="binSeconds" max="59"
+				class="form-control input-sm xpd-small-input" min="0" value="0" placeholder="SS"
+				ng-init="inputIntevals[histogram.label].seconds = 0">
+			<button class="btn btn-primary btn-sm" ng-click="actionButtonApply()">
+				<span class="glyphicon glyphicon-ok"></span>
+			</button>
+		</div>
+	</div>
+</div>

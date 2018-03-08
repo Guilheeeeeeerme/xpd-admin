@@ -1,0 +1,207 @@
+<fieldset>
+
+    <table class="table table-condensed section-table table-striped">
+
+        <thead>
+
+            <tr>
+
+                <!-- <th>Sec. Order</th> -->
+
+                <th>Section Name</th>
+
+                <th>Size (in)</th>
+
+                <th>MD Top (m)</th>
+
+                <th>MD Bottom (m)</th>
+
+                <th>Section Actions</th>
+
+            </tr>
+
+        </thead>
+
+        <tbody ng-init="openedSection = section.current">
+
+            <tr>
+
+                <!-- <td>{{ section.sectionOrder }}</td> -->
+                <td id="setup-section-list-label-name-{{index}}">
+                    <strong>{{ section.name }}</strong> 
+
+                    <!-- <span class="badge">{{ operations.length ? operations.length:0 }}</span> -->
+
+                    <i ng-if="!section.currentable" class="text-right">Unreachable</i>
+
+                </td>
+
+                <td id="setup-section-list-label-size-{{index}}">{{ section.size }}</td>
+                <td id="setup-section-list-label-mdTop-{{index}}">{{ section.mdTop }}</td>
+                <td id="setup-section-list-label-mdBottom-{{index}}">{{ section.mdBottom }}</td>
+
+                <td>
+                    <button ng-click="swapSection(lastSection, section)" class='btn btn-sm btn-default glyphicon glyphicon-chevron-up' id="setup-section-list-move-section-up-{{index}}" ng-disabled="!section.currentable"></button>
+                    
+                    <button ng-click="swapSection(nextSection, section)" class='btn btn-sm btn-default glyphicon glyphicon-chevron-down' id="setup-section-list-move-section-down-{{index}}" ng-disabled="!section.currentable"></button>
+
+                    <button 
+                        id="setup-section-list-{{openedSection?'hide':'show'}}-section-operations-{{index}}"
+                        class="btn btn-sm btn-info button-show-hide-operation" 
+                        ng-click="openedSection = (openedSection == false || openedSection == null)?true:false">{{openedSection?'HIDE':'SHOW'}} OPERATIONS
+                    </button>
+
+                    <button 
+                        id="setup-section-list-edit-section-{{index}}"
+                        class="btn btn-sm btn-default button-edit" 
+                        ng-click="actionButtonEditSection(section)" 
+                        ng-disabled="!section.currentable">EDIT
+                    </button>
+
+                    <button
+                        id="setup-section-list-remove-section-{{index}}" 
+                        class="btn btn-sm btn-danger" 
+                        ng-click="actionButtonRemoveSection(section)" 
+                        ng-disabled="!section.currentable">REMOVE
+                    </button>
+
+                </td>
+
+            </tr>
+
+        </tbody>
+
+        <tfoot>
+            
+            <tr ng-show="openedSection">
+                <td></td>
+                <td colspan="5">
+                    <table class="table table-condensed table-bordered table-sm operation-table">
+
+                        <thead>
+                            <tr>
+                                <!-- <th>Op. Order</th> -->
+                                <th>Name</th>
+                                <th>Start Date/Time</th>
+                                <th>End Date/Time</th>
+                                <th>Start Bit Depth (m)</th>
+                                <th>Hole Depth (m)</th>
+                                <th>Type</th>
+                                <th>
+                                    <div class="pull-left actions-column-label">
+                                        Operations Actions
+                                    </div>
+                                    <div class="btn-group pull-right" uib-dropdown is-open="status.isopen">
+                                        <button id="section-list-section-{{index}}-add-operation" type="button" ng-disabled="!section.currentable" class="btn btn-sm btn-success" uib-dropdown-toggle ng-disabled="disabled">
+                                            <span class="glyphicon glyphicon-plus"></span> Operation
+                                        </button>
+                                        <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="section-list-section-{{index}}-add-operation">
+                                            <li role="menuitem">
+                                                <a ng-click="actionButtonAddOperation('bha', section)" id="section-list-section-{{index}}-add-operation-bha" >BHA</a>
+                                            </li>
+                                            <li role="menuitem">
+                                                <a ng-click="actionButtonAddOperation('casing', section)" id="section-list-section-{{index}}-add-operation-casing" >Casing</a>
+                                            </li>
+                                            <li role="menuitem">
+                                                <a ng-click="actionButtonAddOperation('riser', section)" id="section-list-section-{{index}}-add-operation-riser" >Riser</a>
+                                            </li>
+                                            <li role="menuitem">
+                                                <a ng-click="actionButtonAddOperation('time', section)" id="section-list-section-{{index}}-add-operation-time" >Time</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    </div>                                    
+                                </th>
+
+                            </tr>
+                        </thead>
+
+                        <tbody >
+
+                            <tr ng-show="!operations || operations.length == 0">
+                                <td colspan="7">
+                                    No operation registered
+                                </td>
+                            </tr>
+
+                            <tr ng-show="operations.length > 0" ng-repeat="(operationKey, operation) in operations">
+
+                                <!-- <td> {{operation.operationOrder}}</td> -->
+
+                                <td id="section-list-{{index}}-operation-label-name-{{$index + 1}}"><strong>{{operation.name}}</strong></td>
+
+                                <td id="section-list-{{index}}-operation-label-startDate-{{$index + 1}}">{{operation.startDate | date: 'short'}}</td>
+
+                                <td id="section-list-{{index}}-operation-label-endDate-{{$index + 1}}">{{operation.endDate | date: 'short'}}</td>
+
+                                <td id="section-list-{{index}}-operation-label-startBitDepth-{{$index + 1}}">{{operation.startBitDepth}}</td>
+
+                                <td id="section-list-{{index}}-operation-label-endBitDepth-{{$index + 1}}" ng-if="operation.type == 'casing'">{{operation.endBitDepth}}</td>
+                                <td id="section-list-{{index}}-operation-label-startHoleDepth-{{$index + 1}}" ng-if="operation.type != 'casing'">{{operation.startHoleDepth}}</td>
+
+                                <td id="section-list-{{index}}-operation-label-type-{{$index + 1}}">{{operation.type}}</td>
+
+                                <td>
+                                    <button ng-click="swapOperation(operations[operationKey - 1], operations[operationKey], operations)" class='btn btn-sm btn-default glyphicon glyphicon-chevron-up' id="section-list-{{index}}-move-operation-up-{{$index + 1}}" ng-disabled="!section.currentable"></button>
+
+                                    <button ng-click="swapOperation(operations[operationKey], operations[operationKey + 1], operations)" class='btn btn-sm btn-default glyphicon glyphicon-chevron-down' id="section-list-{{index}}-move-operation-down-{{$index + 1}}" ng-disabled="!section.currentable"></button>
+
+                                    <button ng-show='operation.current && operation.running' class='btn btn-sm btn-success button-current' disabled>
+                                        <i>RUNNING</i>
+                                    </button>
+
+                                    <button ng-show='operation.current && !operation.running' class='btn btn-sm btn-info button-current' disabled>
+                                        <i>CURRENT</i>
+                                    </button>
+
+                                    <button
+                                        id="section-list-{{index}}-button-make-current-operation-{{$index + 1}}"
+                                        ng-show='operation.currentable && !operation.current && !operation.running' 
+                                        class='btn btn-sm btn-primary button-current' 
+                                        ng-click="actionButtonMakeCurrent(operation)" 
+                                        ng-disabled="!section.currentable || (well.id != currentWell.id)">
+                                        <i>MAKE CURRENT</i>
+                                    </button>
+                                    
+                                    <button 
+                                        ng-show='!operation.currentable && !operation.running' 
+                                        class='btn btn-sm btn-default button-current' disabled>
+                                        <i >{{ !!operation.endDate?'Done':'Unreachable' }}</i>
+                                    </button>
+
+                                    <button 
+                                        ng-disabled="operation.endDate || !section.currentable" 
+                                        id="section-list-{{index}}-button-edit-operation-{{$index + 1}}" 
+                                        ng-click='actionButtonEditOperation(section, operation)' 
+                                        class='btn btn-sm btn-default button-edit'>EDIT
+                                    </button>
+
+                                    <a 
+                                        id="section-list-{{index}}-button-view-only-operation-{{$index + 1}}" 
+                                        href="./operation-view-only.html?operationid={{operation.id}}" 
+                                        target="_blank" 
+                                        class="btn btn-sm btn-default">VIEW</a>
+
+                                    <button 
+                                        id="section-list-{{index}}-buttonremove-operation-{{$index + 1}}" 
+                                        ng-disabled="!operation.currentable || !section.currentable" 
+                                        ng-click='actionButtonRemoveOperation(operation)' 
+                                        class='btn btn-sm btn-danger'>
+                                        REMOVE
+                                    </button>
+                                </td>
+
+                            </tr>
+
+                        </tbody>
+
+                    </table>
+
+                </td>
+            </tr>
+
+        </tfoot>
+
+    </table>
+
+</fieldset>

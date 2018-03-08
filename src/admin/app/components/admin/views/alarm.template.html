@@ -1,0 +1,128 @@
+<div class="container-fluid">
+
+    <div class="row">
+        <div class="col-md-6">
+
+            <div class="scroll-alarm-panel">
+                <table class="table alarm-panel panel panel-default">
+                    <thead>
+                    <tr>
+                        <th>
+                            <span class="glyphicon glyphicon-time"></span>
+                            Time Alarms
+                        </th>
+                        <th colspan="3" ng-show="operationData.operationContext.currentOperation.running">
+                            <button id="time-alarm-add" class="btn btn-sm btn-success pull-right" ng-click="aController.actionButtonAddTimeAlarm()">
+                                <span class="glyphicon glyphicon-plus"></span>Alarm
+                            </button>
+                        </th>
+                    </tr>
+                    <tr>
+                      <th>Name</th>
+                      <th>Start at - Finish at</th>
+                      <th></th>
+                      <th>Action</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="alarm in alarms.timeAlarms | orderBy: 'startTime'">
+                            <td id="time-alarm-data-name-{{$index}}">
+                                {{alarm.name}}
+                            </td>
+
+                            <td id="time-alarm-data-startTime-{{$index}}">
+                                {{alarm.startTime | date:'M/d/yy h:mm a'}} - {{alarm.endTime | date:'M/d/yy h:mm a'}}
+                            </td>
+                            
+                            <td id="time-alarm-data-triggered-{{$index}}" ng-class="alarm.triggered? 'alarm-triggered':'alarm-not-triggered'">
+                                <em>{{alarm.triggered? 'Trigered':'Not Triggered'}}</em>
+                            </td>
+
+                            <td>
+                                <button id="time-alarm-edit-{{$index}}" type="button" ng-click='aController.actionButtonEditAlarm(alarm)' class='btn btn-sm btn-primary' ng-disabled="alarm.triggered">
+                                    <span class="glyphicon glyphicon-pencil"></span>
+                                </button>
+
+                                <button id="time-alarm-remove-{{$index}}" type="button" ng-click='aController.actionButtonRemoveAlarm(alarm)' class='btn btn-sm btn-warning' ng-disabled="alarm.triggered">
+                                    <span class="glyphicon glyphicon-trash"></span>
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+
+        <fieldset class="col-md-6" ng-disabled="operationData.operationContext.currentOperation.type == 'time'">
+            <div class="scroll-alarm-panel">
+                <table class="table alarm-panel panel panel-default">
+                    <thead>
+                    <tr>
+                        <th>
+                            <span class="glyphicon glyphicon-hourglass"></span> / 
+                            <span class="glyphicon glyphicon-scale"></span>
+                            Depth Alarms
+                        </th>
+                        <th colspan="5" ng-show="operationData.operationContext.currentOperation.running">
+                            <button id="depth-alarm-add" class="btn btn-sm btn-success pull-right" ng-click="aController.actionButtonAddDepthAlarm()">
+                                <span class="glyphicon glyphicon-plus"></span>Alarm
+                            </button>
+                        </th>
+                    </tr>
+                    <tr>
+                      <th>Desc.</th>
+                      <th>Name</th>
+                      <th class="text-center">Exclude from performance?</th>
+                      <th>Start at - Finish at (m)</th>
+                      <th></th>
+                      <th>Action</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="alarm in alarms.depthAlarms | orderBy: 'startTime'">
+                            <td>
+
+                                <span class="glyphicon glyphicon-arrow-down" ng-if="alarm.tripin && !alarm.tripout" uib-popover="Trip In Direction" popover-trigger="'mouseenter'"></span>
+                                <span class="glyphicon glyphicon-arrow-up" ng-if="!alarm.tripin && alarm.tripout" uib-popover="Trip Out Direction" popover-trigger="'mouseenter'"></span>
+                                <span class="glyphicon glyphicon-sort" ng-if="alarm.tripin && alarm.tripout" uib-popover="Trip In/Out Direction" popover-trigger="'mouseenter'"></span>  
+                                -
+                                <span class="glyphicon glyphicon-hourglass" ng-if="alarm.alarmType == 'depth' && alarm.isDurationAlarm" uib-popover="Duration Alarm" popover-trigger="'mouseenter'"></span>
+                                <span class="glyphicon glyphicon-scale" ng-if="alarm.alarmType == 'depth' && !alarm.isDurationAlarm" uib-popover="Speed Restriction Alarm" popover-trigger="'mouseenter'"></span>
+                                <span class="glyphicon glyphicon-time" ng-if="alarm.alarmType == 'time'" uib-popover="Time Alarm" popover-trigger="'mouseenter'"></span>
+                            </td>
+                            
+                            <td id="depth-alarm-data-name-{{$index}}">
+                                {{ alarm.name }}
+                            </td>
+                            
+                            <td id="depth-alarm-data-hasvre-{{$index}}">
+                                <p class="text-center">{{ alarm.hasvre? 'No':'Yes' }} </p>
+                            </td>
+
+                            <td id="depth-alarm-data-startDepth-{{$index}}">
+                                {{ alarm.startDepth | number:2 }} - {{ alarm.endDepth | number:2 }}
+                            </td>
+
+                            <td id="depth-alarm-data-triggered-{{$index}}" ng-class="alarm.triggered? 'alarm-triggered':'alarm-not-triggered'">
+                                <em>{{alarm.triggered? 'Trigered':'Not Triggered'}}</em>
+                            </td>
+
+                            <td>
+                                <button id="depth-alarm-edit-{{$index}}" type="button" ng-click='aController.actionButtonEditAlarm(alarm)' class='btn btn-sm btn-primary' ng-disabled="alarm.triggered">
+                                    <span class="glyphicon glyphicon-pencil"></span>
+                                </button>
+
+                                <button id="depth-alarm-remove-{{$index}}" type="button" ng-click='aController.actionButtonRemoveAlarm(alarm)' class='btn btn-sm btn-warning' ng-disabled="alarm.triggered">
+                                    <span class="glyphicon glyphicon-trash"></span>
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </fieldset>
+
+    </div>
+
+</div>

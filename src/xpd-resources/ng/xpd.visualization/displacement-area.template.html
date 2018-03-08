@@ -1,0 +1,28 @@
+<svg xmlns='http://www.w3.org/2000/svg' version='1.1' width='100%' ng-attr-height='{{svg.height}}'
+     xpd-view-box="svg.viewBox" class="xpd-displacement-area-container">
+
+    <g ng-attr-transform="translate(80, {{ yPosition(tick) }})" ng-repeat="tick in yPositionTicks">
+        <line x1="0" y1="0" x2="20" y2="0" stroke="white" stroke-width="1"/>
+        <text x="20" y="-2" fill=" white" text-anchor="end">{{tick}} s</text>
+    </g>
+
+    <g ng-if="vcruising && time && accelerationTimeLimit"
+       ng-attr-transform="translate({{ xPosition(vcruising * 3600) }}, 20)">
+        <line x1="0" y1="0" x2="0" ng-attr-y2="{{ yPosition(time - accelerationTimeLimit) }}" stroke="white"
+              stroke-width="1"/>
+        <text x="0" y="0" fill=" white" text-anchor="middle">{{vcruising * 3600 | number : 0}}</text>
+    </g>
+
+
+    <polygon
+            ng-attr-points="{{ xPosition(0) }},{{ yPosition(0) }} {{ xPosition(vcruising * 3600) }},{{ yPosition(accelerationTimeLimit) }} {{ xPosition(vcruising * 3600) }},{{ yPosition(time - decelerationTimeLimit) }} {{ xPosition(0) }}, {{ yPosition(time) }}"
+            fill="#7fc1db"/>
+
+    <g ng-attr-transform="translate({{ xPosition(vcruising * 3600) * 0.7 }}, {{ yPosition(time/2) }})">
+        <text ng-if="vcruising && time" x="0" y="0" fill=" white " transform="rotate(90)" text-anchor="middle">Block
+            Speed
+        </text>
+    </g>
+
+
+</svg>

@@ -1,0 +1,98 @@
+
+<form name="uwController.uwForm">
+    
+    <div class="modal-content">
+
+        <div class="modal-header" ng-if="modalData.function.id == 1">
+            <h3>{{ (!modalData.id)?'Add':'Edit' }} <strong>{{ (modalData.function.name)?modalData.function.name:modalData.function.text }}</strong> </h3>    
+        </div>
+        <div class="modal-header" ng-if="modalData.function.id != 1">
+            <h3>{{ (!modalData.id)?'Add':'Edit' }} <strong>{{ (modalData.function.name)?modalData.function.name:modalData.function.text }}</strong> Staff</h3>
+        </div>
+
+        <div class="modal-body">
+                
+                <div 
+                    class="form-group" 
+                    ng-class="{ 'has-error' : uwController.uwForm.name.$invalid && !uwController.uwForm.name.$pristine }">
+                    <label for="name">Name:</label>
+                    <input 
+                        name="name" 
+                        id="name" 
+                        type="text" 
+                        class="form-control input-sm" 
+                        ng-model="modalData.name"
+                        required/>
+                </div>
+                
+                <div 
+                    class="form-group" 
+                    ng-class="{ 'has-error' : (uwController.uwForm.identification.$invalid && !uwController.uwForm.identification.$pristine) || duplicatedIdentification }">
+                    <label for="identification">Id:</label>
+                    <input 
+                        name="identification" 
+                        id="identification" 
+                        type="number" 
+                        min="1"
+                        class="form-control input-sm"
+                        ng-model="modalData.identification" 
+                        required/>
+                    <small ng-if="duplicatedIdentification">This ID Already Exists</small>
+                </div>
+                
+                <div class="form-group">
+                    <label for="uploadedFile">Photo:</label>
+                    <input 
+                        type="file" 
+                        id="uploadedFile" 
+                        name="uploadedFile"
+                        onchange="angular.element(this).scope().actionSelectPhoto(this.files)"/>
+                </div>
+
+                <div class="well well-sm">
+
+                    <div class="media">
+                        <div class="media-left media-middle">
+                            <img ng-if="imagePath != null" src="data:image/png;base64, {{ imagePath }}" class="media-object member-form-photo">
+                        </div>
+                        <div class="media-body">
+                            <h4 class="media-heading">{{(modalData.function.name)?modalData.function.name:modalData.function.text }}</h4>
+                            <div><strong>Id: </strong>{{ modalData.identification }}</div>    
+                            <div><strong>Name: </strong>{{ modalData.name }}</div>
+                        </div>
+                    </div>
+            
+                </div>
+
+
+        </div>
+
+        <div class="modal-footer">
+        
+            <button 
+                ng-if="modalData.id != null" 
+                class="btn btn-primary" 
+                type="submit" 
+                ng-click="uwController.actionButtonAdd()"
+                ng-disabled="uwController.uwForm.$invalid || duplicatedIdentification">Update
+            </button>
+
+            <button 
+                ng-if="modalData.id == null" 
+                class="btn btn-success" 
+                type="submit" 
+                ng-click="uwController.actionButtonAdd()"
+                ng-disabled="uwController.uwForm.$invalid || duplicatedIdentification">Add
+            </button>
+            
+            <button ng-if="modalData.id != null" class="btn btn-danger" ng-click="uwController.actionButtonRemove()">
+                Remove
+            </button>
+            
+            <button class="btn btn-secondary" ng-click="uwController.actionButtonCancel()">Done</button>
+        
+        </div>
+
+    </div>
+
+</form>

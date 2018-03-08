@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <title>XPD Admin</title>
+    
+    <link rel="shortcut icon" href="/assets/favicon/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="/assets/favicon/favicon.ico" type="image/x-icon">
+    
+    <!-- build:vendorcss -->
+    <link rel="stylesheet" href="/node_modules/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/node_modules/angular-toastr/dist/angular-toastr.css" />
+    <!-- endbuild -->
+
+    <!-- build:basecss -->
+    <link rel="stylesheet" href="/xpd-resources/css/xpd.css">
+    <!-- endbuild -->
+ 
+    <!-- build:accessdata -->
+    <script type="text/javascript" src="/accessdata.js"></script>
+    <!-- endbuild -->
+	
+	<!-- build:vendorjs -->	
+    <script type="text/javascript" src="/node_modules/angular/angular.min.js"></script>
+
+    <script type="text/javascript" src="/node_modules/angular-ui-bootstrap/dist/ui-bootstrap.js"></script>
+    <script type="text/javascript" src="/node_modules/angular-ui-bootstrap/dist/ui-bootstrap-tpls.js"></script>
+    <script type="text/javascript" src="/node_modules/angular-animate/angular-animate.min.js"></script>
+    
+    <script type="text/javascript" src="/node_modules/angular-toastr/dist/angular-toastr.tpls.js"></script>
+
+    <script type="text/javascript" src="/node_modules/ngstorage/ngStorage.min.js"></script>
+
+    <!-- endbuild -->
+	
+	<!-- build:basejs -->
+    <script type="text/javascript" src="/xpd-resources/ng/xpd.dialog/xpd.dialog.module.js"></script>
+    <script type="text/javascript" src="/xpd-resources/ng/xpd.dialog/xpd.dialog.factory.js"></script>
+
+    <script type="text/javascript" src="/xpd-resources/ng/xpd.access/accessfactory.module.js"></script>
+    <script type="text/javascript" src="/xpd-resources/ng/xpd.access/accessfactory.directive.js"></script>
+    <script type="text/javascript" src="/xpd-resources/ng/xpd.access/security-interceptor.factory.js"></script>
+    <script type="text/javascript" src="/xpd-resources/ng/xpd.access/accessfactory.factory.js"></script>
+
+    <script type="text/javascript" src="/xpd-resources/ng/xpd.setupapi/setupapi.module.js"></script>
+    <script type="text/javascript" src="/xpd-resources/ng/xpd.setupapi/setupapi.service.js"></script>
+    <script type="text/javascript" src="/xpd-resources/ng/xpd.setupapi/operation-setupapi.service.js"></script>
+    <script type="text/javascript" src="/xpd-resources/ng/xpd.setupapi/well-setupapi.service.js"></script>
+    <script type="text/javascript" src="/xpd-resources/ng/xpd.setupapi/schedule-setupapi.service.js"></script>
+    <script type="text/javascript" src="/xpd-resources/ng/xpd.setupapi/alarm-setupapi.service.js"></script>
+
+    <script type="text/javascript" src="./app/components/well-view-only/well-view-only.module.js"></script>
+    <script type="text/javascript" src="./app/components/well-view-only/well-view-only.controller.js"></script>
+    
+        <!-- endbuild -->
+
+</head>
+
+<body ng-app="xpd.wellviewonly" ng-controller="WellViewOnlyController as wvoController">
+
+<header>
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <img class="xpd-header-logo" src="../xpd-resources/img/xpd-logo.png"/>
+            </div>
+            
+            <ul class="nav navbar-nav navbar-right">
+                <li class="xpd-view-only-exit-button-bg">   
+                    <a nref="#" onclick="window.close();" >
+                         Exit <span class="glyphicon glyphicon-log-out"></span>  
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+</header>
+
+<div class="container-fluid">
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title"><b>Well Name: </b>{{dados.currentWell.name}} <b ng-if="dados.currentWell.current">(CURRENT)</b>
+            </h3>
+        </div>
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-md-3">
+                    <table class="table borderless">
+                        <tr>
+                            <th>Air Gap:</th>
+                            <td>{{dados.currentWell.airGap}} m</td>
+                            <th>Water Depth:</th>
+                            <td>
+                                <span ng-if="!dados.currentWell.onshore">{{dados.currentWell.waterDepth}} m</span>
+                                <span ng-if="dados.currentWell.onshore"><i>Onshore</i></span>
+                            </td>
+
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <table class="table">
+                <caption>
+                    Sections
+                </caption>
+                <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Size (in)</th>
+                    <th>MD Top (m)</th>
+                    <th>MD Bottom (m)</th>
+                     <!-- <th>Casing Outer Diameter</th>
+                    <th>Casing Inner Diameter</th>  -->
+                </tr>
+                </thead>
+
+                <tbody>
+                <tr ng-repeat="section in dados.sectionList | orderBy : 'id' track by section.id">
+                    <td>{{section.name}}</td>
+                    <td>{{section.size}}</td>
+                    <td>{{section.mdTop}}</td>
+                    <td>{{section.mdBottom}}</td>
+                     <!-- <td>{{section.outerDiameter}}</td>
+                    <td>{{section.innerDiameter}}</td>  -->
+                </tr>
+                <tr ng-if="dados.sectionList.length === 0">
+                    <td colspan="4"> No Sections</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+</body>
+
+</html>

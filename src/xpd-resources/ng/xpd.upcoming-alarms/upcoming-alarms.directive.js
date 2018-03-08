@@ -1,0 +1,87 @@
+(function () {
+	'use strict';
+
+	angular.module('xpd.upcoming-alarms', [])
+		.directive('upcomingAlarms', upcomingAlarms);
+
+	upcomingAlarms.$inject = [];
+
+	function upcomingAlarms() {
+
+		return {
+			restrict: 'AE',
+			scope: {
+				currentDirection: '=',
+				currentBitDepth: '=',
+				alarmContext: '='
+			},
+			templateUrl: '../xpd-resources/ng/xpd.upcoming-alarms/upcoming-alarms.template.html',
+			link: link
+		};
+
+		function link(scope, elem, attrs) {
+
+			scope.nextAlarms = [];
+			scope.alarmListSorted;
+			scope.tripinAlarms;
+			scope.tripoutAlarms;
+
+			scope.$watch('currentBitDepth', function (newBitDepth) {
+				if(newBitDepth)
+					alarmListGenerate(newBitDepth, scope.currentDirection.tripin);
+			}, true);
+
+			scope.$watch('currentDirection', function (newDirection) {
+				alarmListGenerate(scope.currentBitDepth, newDirection.tripin);
+			}, true);
+
+			scope.$watch('alarmContext', function () {
+				alarmListGenerate(scope.currentBitDepth, scope.currentDirection.tripin);
+			}, true);
+
+			function alarmListGenerate(bitDepth, direction) {
+				scope.alarmListSorted = getAlarmByDirectionSorted(direction);
+				listNextAlarms(bitDepth);
+			}
+
+			function getAlarmByDirectionSorted(direction) {
+
+				if (direction && scope.alarmContext.tripin) {
+					return scope.alarmContext.tripin.sort((a, b) => {
+						return a.startDepth - b.startDepth;
+					});
+				} else if (scope.alarmContext.tripout){
+					return scope.alarmContext.tripout.sort((a, b) => {
+						return b.startDepth - a.startDepth;
+					});
+				}
+			}
+
+			function listNextAlarms(currentBitDepth) {
+
+				scope.nextAlarms = [];
+
+				if (!currentBitDepth && scope.alarmListSorted)
+					scope.nextAlarms = scope.alarmListSorted.slice(0, 3);
+				else {
+					for (var i in scope.alarmListSorted) {
+
+						var alarm = scope.alarmListSorted[i];
+
+						if (scope.currentDirection.tripin && alarm.startDepth >= currentBitDepth)
+							scope.nextAlarms.push(alarm);
+
+						if (!scope.currentDirection.tripin && alarm.startDepth <= currentBitDepth)
+							scope.nextAlarms.push(alarm);
+
+						if (scope.nextAlarms.length == 3)
+							break;
+					}
+				}
+			}
+
+		}
+
+	}
+
+})();

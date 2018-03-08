@@ -1,0 +1,41 @@
+<form name="form">
+    <div class="modal-header">
+        <span 
+            class="btn glyphicon glyphicon-remove pull-right"
+            ng-click="fnController.modalActionButtonClose()">
+        </span>
+        <h4 class="modal-title">Failure / Delay List</h4>
+    </div>
+    
+    <div class="modal-body">
+    	<table class="table table-bordered xpd-operation-table table-fixed-header">
+    		<thead>
+    			<tr>
+                    <th class="col-md-1">NPT</th>
+                    <th class="col-md-2">Category</th>
+                    <th class="col-md-1">Duration</th>
+                    <th class="col-md-3">Start</th>
+                    <th class="col-md-3">End</th>
+                    <th class="col-md-2">Description</th>
+    			</tr>
+    		</thead>
+        </table>
+
+        <div class="div-table-fixed">
+            <table class="table table-bordered xpd-operation-table">
+        		<tbody>
+        			<tr class="center-align-list" ng-repeat="failure in failuresData.modalData.category.failures" ng-class="{ 'in-npt': failure.npt }">
+                        <td class="col-md-1">
+                            <span ng-class="{'glyphicon glyphicon-ok':(failure.npt), '':(!failure.npt)}"></span>
+                        </td>
+                        <td class="col-md-2">{{failuresData.modalData.category.initial +' - '+  failuresData.modalData.category.name}}</td>
+                        <td class="col-md-1">{{failure.time | secondsToHourMinutes}}</td>
+                        <td class="col-md-3">{{failure.startTime | date:'MM/dd/yyyy HH:mm:ss'}}</td>
+                        <td class="col-md-3">{{failure.endTime | date:'MM/dd/yyyy HH:mm:ss'}}</td>
+                        <td class="col-md-2">{{failure.description}}</td>
+        			</tr>
+        		</tbody>
+        	</table>
+        </div>
+    </div>
+</form>

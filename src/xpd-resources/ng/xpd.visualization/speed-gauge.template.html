@@ -1,0 +1,84 @@
+<svg xmlns='http://www.w3.org/2000/svg' version='1.1' width='100%' ng-attr-height='{{ svg.height }}'
+     xpd-view-box="svg.viewBox">
+
+    <g ng-show="readings.blockPosition" class="xpd-speed-gauge-container"
+       ng-attr-transform="translate(0, {{ yPosition(readings.blockPosition) }})">
+
+        <!-- LINE TO MATCH TRIP RULER -->
+        <line class="xpd-speed-gauge-reading-tick" x1="35" y1="0" x2="200" y2="0"/>
+        <line class="xpd-speed-gauge-reading-tick-ticker" x1="35" y1="0" x2="55" y2="0"/>
+
+        <!-- BLOCK POSITION IN THE MIDDLE OF GAUGE -->
+        <text class="xpd-speed-gauge-readings-text" x="35" y="-5">{{ readings.blockPosition | number : 2 }}</text>
+
+        <!-- MOVE UP/DOWN FLAG -->
+        <text ng-if="(calculated.blockPosition - readings.blockPosition) > 1"
+              class="xpd-speed-gauge-text xpd-speed-gauge-text-up" x="0" y="-70">MOVE UP
+        </text>
+        <text ng-if="(readings.blockPosition - calculated.blockPosition) > 1"
+              class="xpd-speed-gauge-text xpd-speed-gauge-text-up" x="0" y="80">MOVE DOWN
+        </text>
+
+        <!-- ALARM AND MESSAGE ICON -->
+        <use x="35" y="5" xlink:href="#alarm" class="xpd-speed-gauge-alarm"
+             ng-class="{'xpd-speed-gauge-has-alarm': hasAlarm}"/>
+        <use x="55" y="6" xlink:href="#message" class="xpd-speed-gauge-message"
+             ng-class="{'xpd-speed-gauge-has-message': hasMessage}"/>
+
+        <!-- MARKER FOR GAUGE -->
+        <path y="-50" id="speed-gauge-bg-arc" class="xpd-speed-gauge-bg-arc"/>
+        <path y="-50" id="speed-gauge-arc" class="xpd-speed-gauge-arc"/>
+
+        <!-- GAUGE TICKS -->
+        <g transform="translate(45, 0)" class="xpd-speed-gauge-arc-ticks">
+
+            <!--text dy=".4em" x="20" y="-75" class="xpd-speed-gauge-arc-ticks-lg">1</text-->
+            <text dy=".4em" x="30" y="-55" class="xpd-speed-gauge-arc-ticks-sm">0.75</text>
+            <text dy=".4em" x="40" y="-35" class="xpd-speed-gauge-arc-ticks-lg">0.5</text>
+            <text dy=".4em" x="45" y="-15" class="xpd-speed-gauge-arc-ticks-sm">0.25</text>
+
+            <text dy=".4em" x="45" y="15" class="xpd-speed-gauge-arc-ticks-sm">-0.25</text>
+            <text dy=".4em" x="40" y="35" class="xpd-speed-gauge-arc-ticks-lg">-0.5</text>
+            <text dy=".4em" x="30" y="55" class="xpd-speed-gauge-arc-ticks-sm">-0.75</text>
+            <!--text dy=".4em" x="20" y="75" class="xpd-speed-gauge-arc-ticks-lg">-1</text-->
+        </g>
+
+
+        <!-- SPEED BAR TICKS -->
+        <text ng-repeat="(key, value) in speedYTicks" class="xpd-speed-gauge-ruler-tick-text" x="15"
+              ng-attr-y="{{ speedYPosition(value) }}" dy=".4em">{{ value }}
+        </text>
+
+        <!-- SPEED BAR -->
+        <line ng-if="readings.blockSpeed" x1="25" y1="52" x2="25"
+              ng-attr-y2="{{ speedBarPosition(readings.blockSpeed) }}" stroke="#9fc" stroke-width="10"/>
+
+        <!-- MASK BAR -->
+        <g ng-repeat="(key, value) in speedYTicks" ng-attr-transform="translate(20, {{speedYPosition(value)}})">
+
+            <rect x="0" y="0" width="10" height="3" fill="black"/>
+            <rect x="0" y="-7" width="10" height="7" fill="none" stroke="#9fc" stroke-width="1"/>
+
+            <rect ng-if="value < 5000" x="0" y="-10" width="10" height="3" fill="black"/>
+            <rect ng-if="value < 5000" x="0" y="-17" width="10" height="7" fill="none" stroke="#9fc" stroke-width="1"/>
+
+        </g>
+
+        <!-- <text ng-if="!!currentAlarm && !currentAlarm.hasvre"
+              class="xpd-speed-gauge-text-vre xpd-speed-gauge-no-vre" x="65" y="35">NO VRE
+        </text> -->
+
+    </g>
+
+    <defs>
+        <svg id="message" version="1.1" viewBox="0 0 1692 1657.973" width="15" height="15" preserveAspectRatio="none">
+            <path d="M1216.598,1657.973c-15.035,0-29.926-4.822-41.984-14.746l-439.527-361.254H158.332    C71.515,1281.973,0,1209.012,0,1120.074V160.168C0,71.627,71.515,0.973,158.332,0.973h1374.836    c87.743,0,158.832,70.655,158.832,159.195v959.909c0,88.938-71.089,161.896-158.832,161.896H1282v309.93    c0,25.561-14.415,48.826-37.528,59.744C1235.479,1655.892,1226.173,1657.973,1216.598,1657.973z M158.332,132.973    c-13.953,0-25.332,11.52-25.332,27.195v959.906c0,15.805,11.615,29.898,25.332,29.898H758.77c15.311,0,29.89,4.95,41.715,14.674    L1150,1451.998v-236.699c0-36.49,30.096-65.326,66.586-65.326h316.582c14.123,0,26.832-14.639,26.832-29.896V160.168    c0-15.146-12.457-27.195-26.832-27.195H158.332z"/>
+        </svg>
+
+        <svg id="alarm" version="1.1" viewBox="0 0 512 512" width="15" height="15" preserveAspectRatio="none">
+            <path d="M256,35.11L0,476.89h512L256,35.11z M256,93.484l205.216,354.138H50.786L256,93.484z M231.901,423.156h48.2v-46.583h-48.2  V423.156z M230.772,186.359v60.228l13.379,110.803h24.019l13.06-110.803v-60.228H230.772L230.772,186.359z"/>
+        </svg>
+
+    </defs>
+</svg>
+
