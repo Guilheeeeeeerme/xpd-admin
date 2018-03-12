@@ -19,8 +19,7 @@ module.exports = function (gulp) {
 				basecss: '../xpd-resources/css/base-reports.css',
 				basejs: '../xpd-resources/js/base-reports.js',
 				vendorcss: 'css/vendor-reports.css',
-				vendorjs: 'js/vendor-reports.js',
-				accessdata: XPD_HOME + '/accessdata.js'
+				vendorjs: 'js/vendor-reports.js'
 			}))
 			.pipe(gulp.dest('./dist/admin/pages/'));
 	});

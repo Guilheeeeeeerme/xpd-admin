@@ -2,6 +2,7 @@ var express = require('express');
 var fs = require('fs');
 var https = require('https');
 var path = require('path');
+var PORT = 4300;
 
 var app = express();
 
@@ -37,8 +38,8 @@ app.use(function (req, res, next) {
 app.use('/node_modules', express.static('node_modules'))
 app.use('/', express.static('src'))
 
-server.listen(8082, '0.0.0.0', onServerReady);
+server.listen(PORT, '0.0.0.0', onServerReady);
 
 function onServerReady() {
-	console.log('Server started at: https://%s:%s', '127.0.0.1', 8082);
+	console.log('Server started at: https://%s:%s', '127.0.0.1', PORT);
 }

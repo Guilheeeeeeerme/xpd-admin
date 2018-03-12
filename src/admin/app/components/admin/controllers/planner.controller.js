@@ -143,7 +143,7 @@
 				var accelerationTimeLimit = $scope.dados.settings[stateName][eventType].targetAccelerationTimeLimit;
 				var decelerationTimeLimit = $scope.dados.settings[stateName][eventType].targetDecelerationTimeLimit;
 
-				var vcruising = vCruisingCalculator.calculate( (displacement/time) , time, accelerationTimeLimit, decelerationTimeLimit);
+				var vcruising = vCruisingCalculator.calculate((displacement / time), time, accelerationTimeLimit, decelerationTimeLimit);
 
 				$scope.dados.settings[stateName][eventType].vcruising = vcruising;
 
@@ -171,7 +171,7 @@
 		}
 
 		function selectActivityOnInit(index, stateName, eventType) {
-			if(index == 0)
+			if (index == 0)
 				actionSelectActivityToPlan(stateName, eventType);
 		}
 
@@ -192,21 +192,38 @@
 
 		}
 
+		function prepareTimeSlices(timeSlices) {
+
+			var timeOrder = 1;
+
+			for (var i in timeSlices) {
+				var timeSlice = timeSlices[i];
+
+				timeSlice.timeOrder = timeOrder;
+				
+				if(timeSlice.percentage > 0){
+					timeOrder++;
+				}
+
+				timeSlice.operation = {
+					id: $scope.operationData.operationContext.currentOperation.id
+				};
+
+			}
+
+			return timeSlices;
+
+		}
+
 		function actionButtonApplyConn() {
 			dialogFactory.showConfirmDialog('Are you sure you want to apply this change?', function () {
 
 				try {
 
-					$scope.dados.timeSlices.tripin.map(addOperationInfo);
-					$scope.dados.timeSlices.tripout.map(addOperationInfo);
-
-					function addOperationInfo(slice) {
-						slice.operation = {
-							id: $scope.operationData.operationContext.currentOperation.id
-						};
-						return slice;
-					}
-
+					$scope.dados.timeSlices.tripin = prepareTimeSlices($scope.dados.timeSlices.tripin);
+					//.map(addOperationInfo);
+					$scope.dados.timeSlices.tripout = prepareTimeSlices($scope.dados.timeSlices.tripout);
+					//.map(addOperationInfo);
 					operationDataFactory.emitUpdateTimeSlices($scope.dados.timeSlices);
 
 				} catch (e) {

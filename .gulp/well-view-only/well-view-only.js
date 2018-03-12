@@ -20,8 +20,7 @@ module.exports = function (gulp) {
 					basecss: '../xpd-resources/css/base-well-view-only.css',
 					basejs: '../xpd-resources/js/base-well-view-only.js',
 					vendorcss: 'css/vendor-well-view-only.css',
-					vendorjs: 'js/vendor-well-view-only.js',
-					accessdata: XPD_HOME + '/accessdata.js'
+					vendorjs: 'js/vendor-well-view-only.js'
 				}
 				))
 			.pipe(gulp.dest('./dist/admin/pages/'));

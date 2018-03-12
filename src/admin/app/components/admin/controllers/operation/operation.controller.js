@@ -46,10 +46,12 @@
 					loadOperationSetup(response.data);
 				});
 			} else {
-				operationSetupAPIService.getOperationQueue($routeParams.wellId, function (result) {
-					$scope.dados.operationQueue = result.filter((op)=>{
-						return op.type == operation.type;
-					});
+				operationSetupAPIService.getOperationQueue($routeParams.wellId, function (operationQueue) {
+
+					$scope.dados.operationQueue = operationQueue;
+					// $scope.dados.operationQueue = operationQueue.filter((operation) => {
+					// 	return operation.type == operation.type;
+					// });
 					operationSetupAPIService.getDefaultFields(operation.type, loadOperationSetup);
 				});
 			}
@@ -86,6 +88,36 @@
 				id: $routeParams.sectionId
 			};
 
+			var afterRiser = false;
+			var lastSectionId = null;
+
+			try{
+
+				for( const op of $scope.dados.operationQueue ) {
+
+					if(op.type == 'riser'){
+						afterRiser = true;
+						break;
+					}
+
+					if(lastSectionId != op.section.id){
+
+						if(lastSectionId == $routeParams.sectionId){
+							break;
+						}
+
+						lastSectionId = $routeParams.sectionId;
+
+					}
+
+
+				};
+
+			}catch(e){
+				console.error(e);
+			}
+
+			$scope.dados.afterRiser = afterRiser;
 			$scope.dados.operation = operation;
 
 			//OPERATION CONFIGURATION
@@ -224,6 +256,9 @@
 			function bhaFormCalcs(param) {
 
 				switch (param) {
+				case 'startHoleDepth':
+					$scope.dados.operation.holeDepth = $scope.dados.operation.startHoleDepth;
+					break;
 				case 'numberOfDPPerStand':
 				case 'averageDPLength':
 					$scope.dados.operation.averageStandLength = +$scope.dados.operation.numberOfDPPerStand * +$scope.dados.operation.averageDPLength;

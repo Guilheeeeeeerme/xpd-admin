@@ -6,7 +6,14 @@
         </div> -->
     </div>
 
-    <div class="col-md-12 panel panel-default" >
+    <div class="col-md-12 panel panel-default" ng-if="!(dados.operation.afterRiser || dados.afterRiser)">
+        <operation-contract-info-table operation="dados.operation"  class="table table-condensed" state="Open Sea" state-id="openSea"
+            contract-params="dados.operation.contractParams" trip-unit="m/h" trip-required conn-unit="Con/h"
+            conn-required contract-form="operationController.contract"
+            ui-popover="htmlPopover"/>
+    </div>
+
+    <div class="col-md-12 panel panel-default" ng-if="dados.operation.afterRiser || dados.afterRiser">
         <operation-contract-info-table operation="dados.operation"  class="table table-condensed" state="Cased Well" state-id="cased"
             contract-params="dados.operation.contractParams" trip-unit="m/h" trip-required conn-unit="Con/h"
             conn-required contract-form="operationController.contract"

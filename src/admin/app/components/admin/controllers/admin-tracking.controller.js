@@ -42,7 +42,7 @@
 
 			var modalOption = document.querySelector('.slips-to-slips-dropdown-menu');
 
-    		modalOption.style.top = ($event.clientY) + 'px';
+    		modalOption.style.top = ($event.clientY - 60) + 'px';
     		modalOption.style.left = ($event.clientX) + 'px';
 
     		if (!$scope.flags.modalFailureLessonLearned) {

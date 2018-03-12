@@ -19,8 +19,7 @@ module.exports = function (gulp) {
 				basecss: '../xpd-resources/css/base-operation-view-only.css',
 				basejs: '../xpd-resources/js/base-operation-view-only.js',
 				vendorcss: 'css/vendor-operation-view-only.css',
-				vendorjs: 'js/vendor-operation-view-only.js',
-				accessdata: XPD_HOME + '/accessdata.js'
+				vendorjs: 'js/vendor-operation-view-only.js'
 			}))
 			.pipe(gulp.dest('./dist/admin/pages/'));
 	});
