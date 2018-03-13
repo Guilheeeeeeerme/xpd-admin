@@ -97,6 +97,7 @@
 				{0:/makeup/i, 1:/make up/i},
 				{0:/laydown/i, 1:/lay down/i},
 				{0:/cased/i, 1:/cased well/i},
+				{0:/opensea/i, 1:/open sea/i},
 				{0:/drilling/i, 1:/drilling run/i},
 				{0:/openhole/i, 1:/open hole/i}
 				// {0:/inBreakDPInterval/i, 1:/In Break DP Interval/i}
