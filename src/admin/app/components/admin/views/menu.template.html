@@ -173,7 +173,7 @@
                     <td class="equilibrium-time-table-text">
                         <span ng-if="operationData.bitDepthContext.usingXpd == true">Using XPD</span>
                         <button 
-                            ng-disabled="!operationData.bitDepthContext.xpdBitDepth" 
+                            ng-disabled="operationData.bitDepthContext.xpdBitDepth  == null" 
                             ng-if="operationData.bitDepthContext.usingXpd == false" 
                             class="btn btn-default" 
                             ng-click="mController.actionButtonSetBitDepthMode(true)">Use XPD
