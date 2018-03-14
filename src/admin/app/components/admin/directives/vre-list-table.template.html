@@ -1,0 +1,44 @@
+<div class="general-vre-container"
+     ng-class="{'positive-vre':(vreData.totalVRE>0), 'negative-vre':(vreData.totalVRE<=0)}">
+    VRE: {{vreData.totalVRE | percentage:2 }}
+</div>
+<div ng-repeat="(key, eventVre) in vreData.categories" class="xpd-vre-list">
+    <div class="row">
+        <div class="col-md-4 col-sm-4 col-xs-4">
+            <label>{{ eventVre.vreTypeDescription }}</label>
+        </div>
+        <div class="col-md-8 col-sm-8 col-xs-8 text-right">
+            <span ng-if="eventVre.vreType!='other'"
+                  ng-class="{'positive-vre':(eventVre.vre>0), 'negative-vre':(eventVre.vre<0)}">
+                {{ eventVre.vre | percentage:2 }}
+            </span>
+            <span ng-if="eventVre.vreType=='other'">
+                {{ eventVre.time | secondsToHourMinutesSeconds }}
+            </span>
+            <!-- ({{ eventVre.time | secondsToHourMinutesSeconds }}) -->
+            <span class="glyphicon vre-list-collapse" ng-click="collapseButtonClick(eventVre.vreType)"
+                  ng-if="showCollapse(eventVre)"
+                  ng-class="{'glyphicon-plus':!isCollapse[eventVre.vreType], 'glyphicon-minus':isCollapse[eventVre.vreType]}"></span>
+        </div>
+    </div>
+    <table class="table-condensed table-bordered vre-log-list" uib-collapse="!isCollapse[eventVre.vreType]"
+           width="100%">
+        <!-- <thead>
+            <tr>
+                <th>Name</th>
+                <th>Time</th>
+                <th>VRE</th>
+            </tr>
+        </thead> -->
+        <tbody>
+
+        <tr ng-repeat="(keyVre, vre) in eventVre.vreList">
+            <td>{{vre.vreTypeDescription}}</td>
+            <td>{{vre.time | secondsToHourMinutesSeconds}}</td>
+            <td ng-class="{'positive-vre-td':(vre.vre>0), 'negative-vre-td':(vre.vre<0)}">
+                {{ (vre.vre > 0?"+":"") + (vre.vre) | percentage:2}}
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>

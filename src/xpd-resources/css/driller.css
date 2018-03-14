@@ -1,0 +1,1040 @@
+/**
+* TYPE SCALE - Perfect Fourth
+*/
+
+html {
+    font-size: 1em;
+}
+
+body {
+    overflow: hidden;
+    background-color: white;
+    font-weight: 400;
+    line-height: 1.45;
+    color: #333;
+}
+
+p {
+    /* margin-bottom: 1.3em; */
+    margin-bottom: 0;
+}
+
+h1,
+h2,
+h3,
+h4 {
+    margin: 1.414em 0 0.5em;
+    font-weight: inherit;
+    line-height: 1.2;
+}
+
+h1 {
+    margin-top: 0;
+    font-size: 3.157em;
+}
+
+h2 {
+    font-size: 2.369em;
+}
+
+h3 {
+    font-size: 1.777em;
+}
+
+h4 {
+    font-size: 1.333em;
+}
+
+small,
+.font_small {
+    font-size: 0.75em;
+}
+
+
+/**
+ * PURE HTML
+ */
+
+html,
+body {
+    height: 100%;
+}
+
+body {
+    background: url('../img/driller/bg.png');
+    color: #4b7f88;
+    padding: 6px;
+}
+
+h2 {
+    font-family: AgencyFB;
+    -webkit-text-stroke: 1.5px #517f89;
+    -webkit-text-fill-color: transparent;
+    margin: 0 0 0 10px;
+}
+
+
+/**
+* CLEAR FIX
+*/
+
+.cf:before,
+.cf:after {
+    content: " ";
+    display: table;
+}
+
+.cf:after {
+    clear: both;
+}
+
+
+/**
+ * DRILLER CONTAINER
+ */
+
+@media screen and (orientation: portrait) {
+    .driller-container-left-col {
+        width: 45%;
+    }
+    .driller-container-right-col {
+        width: 55%;
+    }
+}
+
+@media screen and (orientation: landscape) {
+    .driller-container-left-col {
+        width: 70%;
+    }
+    .driller-container-right-col {
+        width: 30%;
+    }
+}
+
+.driller-container {
+    padding: 0;
+    height: 100%;
+}
+
+.driller-container-col {
+    height: 100%;
+    float: left;
+    border-width: 2px 0;
+    border-style: solid;
+    border-color: #456c75;
+    position: relative;
+}
+
+.driller-container-left-col {
+    padding-right: 20px;
+    height: 100%;
+}
+
+.driller-container-right-col {
+    display: flex;
+    flex-direction: column;
+}
+
+
+/*.driller-container-left-col::before, .driller-container-left-col::after{
+    content: "";
+    position: absolute;
+    width: 100%;
+    background-color: transparent;
+    border-width: 0 67px 0 42px;
+    border-style: solid;
+    border-color: black;
+    height: 2px;
+}*/
+
+.driller-container-left-col::before {
+    top: -2px;
+}
+
+.driller-container-left-col::after {
+    bottom: -2px;
+    border-style: solid;
+    border-color: black;
+}
+
+.driller-container-right-col::before,
+.driller-container-right-col::after {
+    content: "";
+    position: absolute;
+    width: 3%;
+    height: 2px;
+    background-color: black;
+    right: 0;
+}
+
+.driller-container-right-col::before {
+    top: -2px;
+}
+
+.driller-container-right-col::after {
+    bottom: -2px;
+}
+
+.driller-section {
+    position: relative;
+    padding: 20px 0;
+    display: flex;
+    /*margin-bottom: 30px;*/
+    margin: 0;
+}
+
+@media screen and (orientation: portrait) {
+    .driller-section {
+        flex-direction: column;
+    }
+    .driller-section.event-section {
+        flex-direction: row;
+    }
+    .driller-component {
+        flex: 0.5;
+    }
+}
+
+@media screen and (orientation: landscape) {
+    .driller-section {
+        flex-direction: row;
+    }
+    .driller-component {
+        flex: 0.5;
+    }
+    .driller-section .driller-component {
+        border-left: 0;
+        border-right: 2px solid #456c75;
+    }
+    .driller-section .driller-component:first-child {
+        border-left: 2px solid #456c75;
+    }
+}
+
+.blockspeed-ruler-section {
+    height: 100%;
+    flex: 1;
+    border-left: 0;
+    border-top: 0;
+    border-right: 2px solid #456c75;
+}
+
+.performance-section {
+    /* flex: 0.25; */
+    height: 50%;
+    display: block;
+    /*margin-bottom: 75px;*/
+}
+
+@media screen and (orientation: landscape) {
+    .performance-section {
+        display: flex;
+    }
+    .team-score-component {
+        height: 100%;
+    }
+}
+
+.communication-section {
+    /*flex: 0.25;*/
+    height: 50%;
+}
+
+.event-section {
+    /*flex: 0.5;*/
+    height: 50%;
+}
+
+
+/**
+ * DRILLER SECTION
+ */
+
+.driller-component {
+    position: relative;
+    margin-right: 10px;
+    border-right: 2px solid #456c75;
+    border-width: 2px;
+    border-style: solid;
+    border-color: #456c75;
+    border-bottom: 0;
+}
+
+.driller-component-content {
+    /* display: flex; */
+    flex-direction: row;
+    padding: 10px;
+    height: 100%;
+}
+
+.driller-component-header {
+    position: absolute;
+    /*background: url('../img/driller/bg.png');*/
+    background-color: black;
+    top: -18px;
+    left: -12px;
+    z-index: 1;
+}
+
+.driller-component-header h2::before {
+    border-top: 15px solid black;
+    content: "";
+    margin: 0 auto;
+    position: absolute;
+    top: 56%;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 95%;
+    z-index: -1;
+}
+
+.driller-component::after {
+    content: "";
+    position: absolute;
+    width: 15px;
+    height: 15px;
+    right: -5px;
+    top: -8px;
+    background-color: black;
+}
+
+.driller-component-col {
+    padding-top: 3%;
+    height: 100%;
+}
+
+
+/**
+  * COMMUNICATION SECTION
+ */
+
+@media screen and (orientation: portrait) {
+    .communication-component {
+        font-family: AgencyFB;
+        padding: 20px;
+        padding-bottom: 10px;
+        padding-top: 26px;
+    }
+    .warning-communication-component {
+        height: 60%;
+        
+    }
+    .messages-communication-component .time-operation-manager{
+        height: 39%;
+        font-family: AgencyFB;
+        margin-top: 26px;
+        padding-bottom: 20px;
+    }
+}
+
+@media screen and (orientation: landscape) {
+    .communication-component {
+        font-family: AgencyFB;
+        padding: 20px;
+        padding-bottom: 10px;
+    }
+}
+
+
+/**
+  * EVENT SECTION
+  */
+
+.event-barchart-component {
+    /*height: 100%;*/
+}
+
+.trip-barchart-component {
+    border-left: 0;
+}
+
+.drillship-status-container {
+    flex-grow: 0.25;
+    flex-basis: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+
+/**
+  * BLOCK SPEED RULER
+  */
+
+.operation-xpd-logo {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    display: inline;
+}
+
+
+/**
+  * PERFORMANCE DRILLSHIP
+  */
+
+.performance-drillship-component {
+    height: 46%;
+}
+
+@media screen and (orientation: landscape) {
+    .performance-drillship-component {
+        height: 100%;
+    }
+}
+
+.performance-drillship-component .driller-component-header {}
+
+.operation-manager-container {
+    flex: 0.275;
+    /* padding-bottom: 50px; */
+    overflow: hidden;
+    /*float: left;
+    width: 27.5%;*/
+}
+
+.drillship-status-container {
+    flex-grow: 0.275;
+    flex-basis: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.drillship-status-placeholder {
+    max-width: 65%;
+    max-height: 65%;
+    margin:0 auto;
+    margin-bottom: 10px;
+}
+
+
+/* ######################### */
+
+/* LEFT COL */
+
+.driller-container-left-col {
+    padding-right: 0;
+}
+
+.driller-component-content {
+    padding: 2px 8px 2px 5px;
+}
+
+/* ========= */
+.performance-section {
+    height: 53%;
+}
+
+.communication-section {
+    padding-bottom: 2%;
+    height: 47%;
+}
+
+.performance-drillship-component {
+    height: 46%;
+}
+
+/**
+* Operation info 
+*/
+
+.xpd-operation-manager {
+    margin: 0;
+    font-family: AgencyFB;
+    font-weight: bolder;
+    width: 100%
+}
+
+.current-operation {
+    background-color: #3e9eb3;
+    color: #fff;
+}
+
+.xpd-operation-manager-container {
+    display: flex;
+}
+
+.xpd-operation-manager-container > fieldset{
+    margin-top: 3%;
+    width: 100%;
+}
+
+/* .xpd-operation-manager > tbody > tr > td { */
+.xpd-operation-manager > tbody > tr > td {
+    padding: 1%;
+    border: 2px solid #517f89;
+    line-height: 1.2;
+    font-family: AgencyFB;
+}
+
+.xpd-operation-manager .current-operation {
+    border-left: 0;
+}
+
+.xpd-operation-manager .operation-direction {
+    width: 10%;
+    padding: 4%;
+    border-right-color: #3e9eb3;
+    color: #fff;
+    background-color: #3e9eb3;
+    /* animation: blinker 5s linear infinite; */
+    /* animation-name: example;
+    animation-duration: 4s;
+    animation-iteration-count: infinite; */
+}
+
+/* @keyframes example {
+    0%   {color: #fff;}
+    50%  {color: #4285F4;}
+    100%  {color: #fff;}
+    50%  {color: #4285F4;}
+    0%  {color:#fff;}
+} */
+
+.xpd-operation-manager .operation-direction > span {
+    padding-top: 1%;
+}
+
+.xpd-operation-manager .next-operation {
+    text-align: center;
+}
+
+.xpd-operation-actions-button {
+    margin: 2% 0;
+    font-family: AgencyFB;
+}
+
+.xpd-operation-actions-button > button{
+    border: 0;
+    border: 1px solid #517f89;
+    font-weight: bold; 
+    width: 100%;
+    line-height: 95%;
+}
+
+.current-operation-name {
+    font-size: 0.7em;
+}
+
+/**
+* Start Button
+*/
+
+.xpd-operation-actions-button, .btn-success {
+    background-color: #213c2f;
+}
+
+.xpd-operation-actions-button, .btn-success:active:hover {
+    cursor: pointer;
+    background-color: #2e4d3e;
+    border: 1px solid #517f89;
+}
+
+.xpd-operation-actions-button, .btn-success:focus {
+    cursor: pointer;
+    background-color: #2e4d3e;
+    border: 1px solid #517f89;
+}
+
+/**
+* Stop button
+*/
+.xpd-operation-actions-button, .btn-danger {
+    background-color: #821919;
+}
+
+.xpd-operation-actions-button, .btn-danger:active:hover {
+    cursor: pointer;
+    background-color: #971e1a;
+    border: 1px solid #517f89;
+}
+
+.xpd-operation-actions-button, .btn-danger:focus {
+    cursor: pointer;
+    background-color: #971e1a;
+    border: 1px solid #517f89;
+}
+
+/**
+* Bit Depth
+*/
+.data-bit-depth {
+    padding: 2%;
+}
+
+.data-bit-depth-content {
+    margin-bottom: 0;
+    margin-top: 1%;
+    text-align: center;
+    display: flex;
+}
+
+.data-bit-depth-title {
+    width: 100%;
+    font-size: 1.5em;
+}
+
+.data-sso-box {
+    padding-right: 1.1%;
+    margin: 2%;
+    width: 40%;
+    font-size: 1em;
+}
+
+/**
+* SCORE GAUGE
+*/
+.consistence-component {
+    height: 55%;
+}
+
+.consistence-component > div > h2 {
+    display: none;
+}
+
+.score-gauge-container {
+    padding-top: 0;
+    margin-top: -4%;
+    fill: #da7070;
+}
+
+/**
+* Alarm (Warning / Message)
+*/
+.warning-communication-component {
+    padding: 2%;
+    height: 49%;
+}
+
+.list-alarm {
+    margin-top: 2%;
+}
+
+/* RIGHT COL */
+
+.event-conn-container {
+    height: 93%;
+}
+
+.xpd-time-operation-content{
+    padding: 3%;
+}
+
+.xpd-time-operation-manager{
+    padding: 0;
+}
+
+.xpd-time-operation-manager-cell:hover {
+    border: 2px solid #456c75;
+}
+
+.xpd-time-operation-manager-cell span:hover {
+    background-color: transparent;
+}
+
+.operation-manager-cell-driller {
+    background-color: #e89313;
+}
+
+.operation-manager-cell-driller span{
+    padding: 6% 0;
+    color: #000;
+}
+    
+.operation-manager-cell-driller span:hover {
+    background-color: #eba132;
+}
+
+/* disabled */
+.operation-manager-cell-driller-disabled {
+    font-size: 4em;
+    width: 100%;
+    height: 100%;
+    background: transparent;
+}
+
+.operation-manager-cell-driller-disabled:hover {
+    background: transparent;
+}
+
+.operation-manager-cell-driller-disabled span {
+    padding: 6% 0;
+    color: #777;
+}
+
+.operation-manager-cell-driller-disabled span:hover {
+    padding: 6% 0;
+    color: #777;
+}
+
+.operation-xpd-logo {
+    display: none;
+}
+
+/**
+* Conn Col
+*/
+.event-conn-container > .conn-ruler-chart-container {
+    width: 63%;
+}
+
+.event-conn-container > .trip-ruler-chart-container {
+    width: 37%;
+}
+
+.event-conn-container > .trip-ruler-chart-container .trip-ruler-chart > svg {
+    padding: 2%;
+}
+
+/**
+* Trip Col
+*/
+.speed-gauge-chart-container {
+    width: 40%;
+}
+
+.trip-ruler-chart-container {
+    width: 60%;
+}
+
+.event-trip-container {
+    height: 95%;
+}
+
+.event-trip-container > .speed-gauge-chart-container {
+    height: 95%;
+}
+
+.event-trip-container > .speed-gauge-chart-container > .speed-gauge-chart > svg {
+    height: 100%;
+    margin-top: 1%;
+    padding: 2%;
+}
+
+.event-trip-container > .trip-ruler-chart-container > .trip-ruler-chart > svg {
+    height: 100%;
+    margin-top: 1%;
+    padding: 2%;
+}
+
+.event-trip-container .driller-in-slips-chart-container,
+.event-trip-container .trip-time-target{
+    font-size: 3em;
+    width: 100%;
+    height: 5%;
+}
+
+.event-trip-container .driller-in-slips-chart-container{
+    height: 3%;
+}
+.event-trip-container .trip-time-target{
+    font-size: 2.6em;
+    height: 7%;
+}
+
+.event-trip-container .driller-in-slips-chart-container > .in-slips-chart{
+    padding: 0;
+    margin-top: 0;
+    height: 100%;
+}
+
+.in-slips-chart .progress {
+    height: 10px;
+}
+
+.trip-time-target{
+    font-size: 3em;
+    color: #93c2cc;
+    text-align: center;
+    font-weight: bolder;
+    font-family: AgencyFB;
+}
+
+.xpd-time-chronometers {
+    font-size: 2.6em;
+}
+
+.xpd-trip-ruler-mark-text {
+    font-size: 0.7em;
+}
+
+/**
+ * TEAM SCORE
+ */
+.team-score-component {
+    height: 50%;
+}
+
+@media screen and (orientation: landscape) {
+    .team-score-component {
+        height: 100%;
+    }
+}
+
+.bravo-team-component .member-perfomance-container {
+    padding-top: 0;
+    height: 50%;
+}
+
+.team-score-component .driller-component-content {
+    padding-top: 25px;
+    display: block;
+}
+
+.bravo-team-component {
+    box-sizing: border-box;
+    overflow: hidden;
+    width: 100%;
+    height: 100%;
+}
+
+.team-member-col {
+    height: 50%;
+    width: 25%;
+    float: left;
+    padding: 0 5px;
+}
+
+.team-member-row img {
+    object-fit: contain;
+    margin: 10px 1px;
+    flex: 1 1 auto;
+}
+
+.team-member-row {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
+
+/**
+ * Cortina do Alarm
+ */
+
+.driller-aside-window-class .modal-dialog {
+    width: 45%
+}
+
+.driller-aside-window-class .modal-content{
+    background-color: #e5e5e5;
+    min-height: 100vh;
+    font-family: AgencyFB;
+}
+
+.driller-aside-window-class .modal-content .modal-header{
+    color: #707070;
+    border-bottom: solid thin #707070;
+    background-color: #FFFFFF;
+}
+
+.driller-aside-window-class .modal-content .modal-body{
+    padding-bottom: 70px;
+    background-color: #e5e5e5;
+}
+
+.driller-aside-window-class .modal-content .modal-body li.media{
+    color: #707070;
+    background-color: #ffffff;
+    padding: 10px;
+    box-shadow: 0.5px 0.5px 0.5px 0.5px #707070;
+}
+
+.btn-alarm {
+    font-size: 21px;
+}
+
+.modal-header-alarm {
+    padding: 15px 0px;
+}
+
+.modal-title-alarm {
+    padding-left: 15px;
+}
+
+/**
+* TELAS ADAPTÁVEIS
+*/
+
+@media screen and (max-height: 1920px) {
+    
+    .xpd-operation-manager {
+        font-size: 2.7em;
+    }
+
+    .operation-state {
+        font-size: 0.8em;
+    }
+
+    .operation-direction {
+        font-size: 2em;
+    }
+
+    /**
+    *  start / Stop button
+    */
+    .xpd-operation-actions-button > button{
+        font-size: 3.2em;
+    }
+
+    /**
+    * Bit Depth
+    */
+    .data-bit-depth-title {
+        font-size: 2.2em;
+    }
+
+    .data-sso-box {
+        font-size: 2.2em;
+    }
+
+    /**
+    * Alarm (Warning / Message)
+    */
+    .alarm-icon {
+        font-size: 0.8em;
+    }
+
+    .list-alarm .media {
+        font-size: 1.7em;
+    }
+
+    /**
+    * Time Manager
+    */
+    .xpd-time-operation-manager-cell span {
+        font-size: 1.1em;
+    }
+    
+    /* RIGHT COL */
+
+}
+
+@media screen and (max-height: 970px) {
+    
+    /* LEFT COL */
+
+    .driller-component-header h2 {
+        font-size: 1.2em;
+    }
+
+    /* ========= */
+
+    .xpd-operation-manager {
+        font-size: 1.6em;
+    }
+
+    /* .operation-direction {
+        font-size: 1em;
+    }
+
+    .operation-name {
+        font-size: 0.7em;
+    }*/
+
+    .operation-state {
+        font-size: 0.8em;
+    }
+    
+
+    /**
+    * Start / Stop Button
+    */
+    .xpd-operation-actions-button > button{
+        font-size: 1.6em;
+    }
+
+    /**
+    * Bit Depth
+    */
+    .data-bit-depth-title {
+        font-size: 1.5em;
+    }
+
+    .data-sso-box {
+        font-size: 1.2em;
+    }
+
+    /**
+    * Alarm (Warning / Message)
+    */
+    .alarm-icon {
+        font-size: 1em;
+    }
+
+    .alarm-content h4{
+        font-size: 1.5em;
+    }
+
+    .alarm-content span{
+        font-size: 1.2em;
+        line-height: 60%;
+    }
+
+    .list-alarm .media {
+        font-size: 1em;
+    }
+
+    /**
+    * Time Manager
+    */
+    .xpd-time-operation-manager-cell span {
+        font-size: 0.5em;
+	}
+    
+    /* RIGHT COL */
+
+    /**
+    * Conn Col
+    */
+    .xpd-conn-chronometers-top {
+		font-size: 2.6em;
+    }
+
+    .event-conn-container .xpd-trip-ruler-mark-text {
+        font-size: 0.9em;
+    }
+
+    .xpd-conn-ruler-event-name {
+        font-size: 0.9em;
+    }
+
+    /**
+    * Trip Col
+    */
+    .event-trip-container .xpd-trip-ruler-tick-text {
+        font-size: 0.6em;
+    }
+}
+
+
+
+/**
+* Upcoming alarms
+*/
+.upcoming-alarms-content {
+    max-height: 35%;
+    padding: 1%;
+}
+
+
+upcoming-alarms{
+    display: block;
+    height: 100%;
+    width: 100%;
+    font-family: AgencyFB;
+    overflow: overlay;
+}
+
+upcoming-alarms thead th{
+    font-size: 1.5em;
+}
+
+upcoming-alarms tbody{
+    font-size: 1em;
+    text-align: center;
+}
+
+upcoming-alarms tbody th{
+    background-color: #acd7ca;
+    color: black;
+}

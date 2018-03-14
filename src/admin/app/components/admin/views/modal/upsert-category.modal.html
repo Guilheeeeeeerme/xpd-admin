@@ -1,0 +1,34 @@
+<div class="modal-content">
+<!-- <pre> {{newNode | json}} </pre> -->
+
+    <div class="modal-header" ng-if="newNode.id">
+        <h4 class="modal-title" >Update Category</h4>
+    </div>
+    <div class="modal-header" ng-if="!newNode.id">
+        <h4 class="modal-title" >Add new Category</h4>
+    </div>
+    <div class="modal-body">
+
+        <form name="modal">
+            <div class="form-group" ng-class="{ 'has-error': modal.name.$dirty && modal.name.$invalid}">
+                <label for="recipient-name" class="control-label">Name:*</label>
+                <input ng-model="newNode.name" type="text" name="name" class="form-control" required/>
+            </div>
+
+            <div class="form-group" ng-class="{ 'has-error': modal.initial.$dirty && modal.initial.$invalid}">
+                <label for="recipient-name" class="control-label">Initials:*</label>
+                <input ng-model="newNode.initial" type="text" name="initial" class="form-control" maxlength="3" required/>
+            </div>
+        </form>
+
+    </div>
+    <div class="modal-footer">
+
+        <button type="submit" class="btn btn-primary"
+                ng-click="controller.modalActionButtonSave();"
+                ng-disabled="modal.$invalid">
+            Save
+        </button>
+        <button type="button" class="btn btn-secondary" ng-click="controller.modalActionButtonClose()">Cancel</button>
+    </div>
+</div>

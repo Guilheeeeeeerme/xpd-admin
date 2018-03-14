@@ -1,0 +1,178 @@
+<div class="xpd-admin-col">
+
+    <div class="col-md-6 xpd-admin-col-content out-of-slips-indicators-container">
+
+        <table class="table table-condensed equilibrium-time-table">
+
+            <thead>
+
+                <tr class="current-elevator-bit-depth-cicle-row">
+                    <th class="equilibrium-time-table-title" colspan="4">Data Aquisition
+                        <access-factory-directive></access-factory-directive>
+                    </th>
+                </tr>
+
+                <tr>
+                    <th class="equilibrium-time-table-label">Status</th>
+                    <th class="equilibrium-time-table-label">Mode</th>
+                    <th class="equilibrium-time-table-label">IP</th>
+                    <th class="equilibrium-time-table-label">Port</th>
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+                <tr class="current-elevator-bit-depth-cicle-row">
+
+                    <td class="equilibrium-time-table-text">
+                        <span class="glyphicon glyphicon-transfer data-acquisition-status-icon" ng-class="{'status-open': (acquisitionData.currentStatus==='open'), 'status-close':(acquisitionData.currentStatus==='closed')}">    
+                        </span>
+                    </td>
+
+                    <td class="equilibrium-time-table-text">{{ acquisitionData.mode }}</td>
+
+                    <td class="equilibrium-time-table-text">{{ acquisitionData.ip }}</td>
+
+                    <td class="equilibrium-time-table-text">{{ acquisitionData.port }}</td>
+
+                </tr>
+
+            </tbody>
+
+            <tfoot>
+
+                <tr ng-if="operationData.dataAcquisitionContext.delayOnReading == true">
+                    <th class="equilibrium-time-table-title" colspan="4">
+                        <span class="bellow-poor-text glyphicon glyphicon-exclamation-sign"></span> Reading With Delay !!!
+                    </th>
+                </tr>
+
+                <tr ng-if="operationData.dataAcquisitionContext.delayOnReading != true">
+                    <th class="equilibrium-time-table-title" colspan="4">
+                        <span class="above-optimum-text glyphicon glyphicon-ok"></span> Readings Without Delay !!!
+                    </th>
+                </tr>
+
+            </tfoot>
+
+        </table>
+
+        <table ng-show="!dados.acquisitionJson" class="table table-condensed equilibrium-time-table">
+            <thead>
+
+                <tr>
+                    <th class="equilibrium-time-table-title" colspan="5">
+                        Incoming Reading
+                        <button ng-click="daController.changeViewAcquisition()">Json/Table</button>
+                    </th>
+                </tr>
+
+                <tr>
+                    <th class="equilibrium-time-table-label">Block Position (m)</th>
+                    <th class="equilibrium-time-table-label">Bit Depth (m)</th>
+                    <th class="equilibrium-time-table-label">Block Speed (m/s)</th>
+                    <th class="equilibrium-time-table-label">HookLoad (klb)</th>
+                    <th class="equilibrium-time-table-label">Timestamp</th>
+                </tr>
+
+            </thead>
+
+            <tbody>
+                <td class="equilibrium-time-table-text">{{ acquisitionData.currentReading.blockPosition | number:2}}</td>
+                <td class="equilibrium-time-table-text">{{ acquisitionData.currentReading.bitDepth | number:2}}</td>
+                <td class="equilibrium-time-table-text">{{ acquisitionData.currentReading.blockSpeed | number:2}}</td>
+                <td class="equilibrium-time-table-text">{{ acquisitionData.currentReading.hookload }}</td>
+                <td class="equilibrium-time-table-text">{{ acquisitionData.currentReading.timestamp }}</td>
+            </tbody>
+
+        </table>
+
+        <div ng-show="dados.acquisitionJson">
+            <table class="table table-condensed equilibrium-time-table">
+                <thead>
+                    <tr>
+                        <th class="equilibrium-time-table-title" colspan="6">
+                            Data Aquisition Context
+                            <button ng-click="daController.changeViewAcquisition()">Json/Table</button>
+                        </th>
+                    </tr>
+                </thead>
+            </table>
+
+            <pre>{{ acquisitionData | json }}</pre>
+        </div>
+
+    </div>
+
+    <!-- ======================================================= -->
+
+    <div class="col-md-6 xpd-admin-col-content">
+
+        <table class="table table-condensed equilibrium-time-table">
+
+            <thead>
+
+                <tr class="current-elevator-bit-depth-cicle-row">
+                    <th class="equilibrium-time-table-title" colspan="2">System Require Readings</th>
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+                <tr class="current-elevator-bit-depth-cicle-row">
+                    <td class="equilibrium-time-table-text readings-is-acquired" ng-class="(readingData.isAcquiring)? 'glyphicon glyphicon-ok' : 'glyphicon glyphicon-remove'"></td>
+                    <td class="equilibrium-time-table-text">{{ (readingData.bitDepth)? (readingData.bitDepth | number:2) : 'None' }}</td>
+                </tr>
+
+            </tbody>
+
+        </table>
+
+        <table ng-show="!dados.readingJson" class="table table-condensed equilibrium-time-table">
+            <thead>
+                <tr>
+                    <th class="equilibrium-time-table-title" colspan="5">
+                        System Actual Reading
+                        <button ng-click="daController.changeViewReading()">Json/Table</button>
+                    </th>
+                </tr>
+
+                <tr>
+                    <th class="equilibrium-time-table-label">Block Position (m)</th>
+                    <th class="equilibrium-time-table-label">Bit Depth (m)</th>
+                    <th class="equilibrium-time-table-label">Block Speed (m/s)</th>
+                    <th class="equilibrium-time-table-label">HookLoad (klb)</th>
+                    <th class="equilibrium-time-table-label">Timestamp</th>
+                </tr>
+            </thead>
+            <tbody>
+                <td class="equilibrium-time-table-text">{{ readingData.currentReading.blockPosition | number:2}}</td>
+                <td class="equilibrium-time-table-text">{{ readingData.currentReading.bitDepth | number:2}}</td>
+                <td class="equilibrium-time-table-text">{{ readingData.currentReading.blockSpeed | number:2}}</td>
+                <td class="equilibrium-time-table-text">{{ readingData.currentReading.hookload }}</td>
+                <td class="equilibrium-time-table-text">{{ readingData.currentReading.timestamp }}</td>
+
+            </tbody>
+
+        </table>
+
+        <div ng-show="dados.readingJson">
+            <table class="table table-condensed equilibrium-time-table">
+                <thead>
+                    <tr>
+                        <th class="equilibrium-time-table-title">
+                            Data Aquisition Context
+                            <button ng-click="daController.changeViewReading()">Json/Table</button>
+                        </th>
+                    </tr>
+                </thead>
+            </table>
+
+            <pre>{{ readingData | json }}</pre>
+        </div>
+
+    </div>
+
+</div>

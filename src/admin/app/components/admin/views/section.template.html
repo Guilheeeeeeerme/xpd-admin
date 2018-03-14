@@ -1,0 +1,88 @@
+<div class="panel panel-default xpd-setup-panel padding-bottom-container">
+
+    <div class="panel-heading">
+        <button 
+            id="setup-section-add-section" 
+            class="btn btn-sm btn-success pull-right button-add-section" 
+            ng-click="sectionController.actionButtonAddSection()">
+            <span class="glyphicon glyphicon-plus"></span> Section
+        </button>
+
+        <h3 class="panel-title"><strong> {{well.name}} </strong>
+            <span class="label label-danger" ng-if="well.id != operationData.wellContext.currentWell.id">Not the current Well !!!</span>
+            /<strong> Section </strong> 
+        </h3>
+
+    </div>
+
+    <div class="panel-body">
+
+        <ul class="list-group">
+
+            <li class="list-group-item" ng-show="dados.sectionList == null || dados.sectionList.length == 0">
+                No section registered
+            </li>
+
+            <li class="list-group-item"
+                ng-repeat="(index, section) in dados.sectionList"
+                xpd-section-list
+                index="index+1"
+                section="section"
+                well="well"
+                current-well="operationData.wellContext.currentWell"
+				opened-section="openedSections[section.id]"
+				action-button-make-current="sectionController.actionButtonMakeCurrent"
+				last-section="dados.sectionList[index-1]"
+                next-section="dados.sectionList[index+1]"
+                swap-section="sectionController.swapSection"
+                action-button-edit-section="sectionController.actionButtonEditSection"
+                action-button-remove-section="sectionController.actionButtonRemoveSection"
+                action-button-add-operation="sectionController.actionButtonAddOperation"
+                action-button-edit-operation="sectionController.actionButtonEditOperation"
+                action-button-remove-operation="sectionController.actionButtonRemoveOperation"
+                swap-operation="sectionController.swapOperation"></li>
+
+            <!-- <li class="list-group-item">
+                <button class="btn btn-sm btn-success" ng-click="sectionController.actionButtonAddSection()">
+                    <span class="glyphicon glyphicon-plus"></span> Add Section
+                </button>
+            </li> -->
+        </ul>
+
+
+    </div>
+
+    <div class="panel-footer xpd-setup-footer">
+        <div class="container">
+
+            <div class="pull-left">
+                <a class="btn btn-default" href="#/setup" id="setup-section-back-to-well-list">
+                    <span class="glyphicon glyphicon-chevron-left"></span> Back to Well list
+                </a>
+            </div>
+            <!-- <div class="pull-right">
+                <a class="btn btn-primary" href="#/team" id="setup-section-go-to-agenda">Go to Agenda
+                    <span class="glyphicon glyphicon-chevron-right"></span>
+                </a>
+            </div> -->
+        </div>
+    </div>
+
+</div>
+
+<!--footer class="xpd-footer">
+
+    <div class="container">
+
+        <div class="pull-left">
+            <a class="btn btn-default" href="#/setup">
+                <span class="glyphicon glyphicon-chevron-left"></span> Back to Well list</a>
+        </div>
+        <div class="pull-right">
+            <a class="btn btn-primary" href="#/team">Go to Agenda
+                <span class="glyphicon glyphicon-chevron-right"></span>
+            </a>
+        </div>
+    </div>
+
+</footer-->

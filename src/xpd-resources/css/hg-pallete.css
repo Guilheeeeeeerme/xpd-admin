@@ -1,0 +1,44 @@
+
+/******************************************/
+.highcharts-graph.zone-bellow-poor {
+	stroke: #ff0000;
+}
+.highcharts-area.zone-bellow-poor {
+	fill: #ff0000;
+}
+.highcharts-point.zone-bellow-poor {
+	fill: #ff0000;
+}
+
+/******************************************/
+.highcharts-graph.zone-bellow-standard {
+	stroke: #00ff00;
+}
+.highcharts-area.zone-bellow-standard {
+	fill: #00ff00;
+}
+.highcharts-point.zone-bellow-standard {
+	fill: #00ff00;
+}
+
+/******************************************/
+.highcharts-graph.zone-bellow-optimum {
+	stroke: #0000ff;
+}
+.highcharts-area.zone-bellow-optimum {
+	fill: #0000ff;
+}
+.highcharts-point.zone-bellow-optimum {
+	fill: #0000ff;
+}
+
+/******************************************/
+.highcharts-graph.zone-above-optimum {
+	stroke: #ffffff;
+}
+.highcharts-area.zone-above-optimum {
+	fill: #ffffff;
+}
+.highcharts-point.zone-above-optimum{
+	fill: #ffffff;
+}

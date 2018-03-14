@@ -1,0 +1,63 @@
+<form name="updateEventForm">
+
+    <div class="modal-content">
+
+        <div class="modal-header">
+            <h4 class="modal-title">Update Event Information</h4>
+        </div>
+        <div class="modal-body">
+
+            <table class="table table-sm">
+                <tr>
+                    <th>Event:</th>
+                    <td>{{selectedEvent.eventType==="CONN"?"Connection":"Trip"}}</td>
+                </tr>
+                <tr>
+                    <th>Start Time:</th>
+                    <td>{{selectedEvent.startTime | date:'MM/dd/yyyy HH:mm:ss'}}</td>
+                </tr>
+                <tr>
+                    <th>End Time:</th>
+                    <td>{{selectedEvent.endTime | date:'MM/dd/yyyy HH:mm:ss'}} ( {{ (selectedEvent.duration / 1000) |
+                        secondsToHourMinutesSeconds}})
+                    </td>
+                </tr>
+                <tr>
+                    <th>Initial Joint:</th>
+                    <td>{{selectedEvent.initJoint}}</td>
+                </tr>
+                <tr>
+                    <th>Finish Joint:</th>
+                    <td>{{selectedEvent.finishJoint}}</td>
+                </tr>
+                <tr>
+                    <th>Consistence:</th>
+                    <td>{{selectedEvent.score}}</td>
+                </tr>
+            </table>
+
+            <div class="form-group" ng-class="{ 'has-error': updateEventForm.justification.$invalid }">
+                <label for="justification">Justification</label>
+                <textarea name="justification" id="justification" class="form-control"
+                          ng-model="selectedEvent.justification" ng-required="selectedEvent.useful == false"></textarea>
+            </div>
+
+            <span class="error" ng-if="updateEventForm.justification.$invalid">Justification required</span>
+
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" ng-model="selectedEvent.useful"> Valid Reading
+                </label>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-default" ng-click="trackingUpdateTimesController.actionButtonClose()">
+                Close
+            </button>
+            <button type="button" class="btn btn-primary" ng-click="trackingUpdateTimesController.actionButtonSave()"
+                    ng-disabled="updateEventForm.$invalid">Save changes
+            </button>
+        </div>
+    </div>
+
+</form>

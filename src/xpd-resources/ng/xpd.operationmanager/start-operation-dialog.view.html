@@ -1,0 +1,23 @@
+<div class="modal-content">
+    <form class="navbar-form" name="beforeStartOperationForm">
+        <div class="modal-header">
+            <h3>Confirm Start Bit Depth</h3>
+        </div>
+
+        <div class="modal-body">
+            <p>The operation <strong>{{currentOperation.name}}</strong> will start at the Bit Depth <strong>{{startBitDepth}}m.</strong></p><p>If you want to change the Operation Start Bit Depth, please fill the field bellow with the new value.</p>
+            <div class="input-group" ng-class="{ 'has-error': beforeStartOperationForm.startBitDepth.$invalid  && !beforeStartOperationForm.startBitDepth.$pristine }">
+
+                <input class="form-control" type="number" name="startBitDepth" min="0" ng-model="startBitDepth" placeholder="Start Bit Depth">
+                <span class="input-group-addon" id="basic-addon2">m</span>
+            </div>
+
+        </div>
+
+        <div class="modal-footer">
+            <button class="btn btn-primary" ng-disabled="beforeStartOperationForm.$invalid" type="button" ng-click="onClickOK(currentOperation, startBitDepth)">Confirm</button>
+            <button type="button" class="btn btn-warning" ng-click="closeModal()">Cancel</button>
+        </div>
+
+    </form>
+</div>

@@ -1,0 +1,83 @@
+<form name="modal">
+	<div class="modal-header splitted-header">
+		<div class="splitted-modal-col">
+			Lesson Learned
+
+			<div class="best-practices-switch">
+	            <label class="switch">
+	                <input type="checkbox" ng-model="selectedLessonLearned.bestPractices" ng-init="selectedLessonLearned.bestPractices = !!selectedLessonLearned.bestPractices">
+	                <div class="slider round"></div>
+	            </label>
+	            <label class="best-practices-switch-label">Best Practices</label>
+	        </div>
+		</div>
+		<div class="splitted-modal-col">
+			Description
+		</div>
+	</div>
+
+	<div class="modal-body splitted-body">
+		<div class="container-fluid">
+			<div class="splitted-modal-col">
+				<table class="table table-bordered xpd-operation-table">
+					<thead>
+						<tr>
+							<th colspan="2">
+								Period
+							</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<th>Start:</td>
+							<td>
+								<div class="form-inline" ng-class="{ 'has-error': modal.startTime.$dirty && modal.startTime.$invalid }">
+									<input class="form-control" type="datetime-local" name="startTime" ng-model="selectedLessonLearned.startTime" required></input>
+								</div>
+							</td>
+						</tr>
+						<tr>
+							<th>End:</td>
+							<td>
+								<div class="form-inline" ng-class="{ 'has-error': modal.endTime.$dirty && modal.endTime.$invalid }">
+									<input class="form-control" type="datetime-local" ng-model="selectedLessonLearned.endTime" name="endTime" min="{{selectedLessonLearned.startTime}}"></input>
+								</div>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div class="splitted-modal-col">
+				<textarea class="form-control" rows="6" ng-model="selectedLessonLearned.description"></textarea>
+			</div>
+
+			<div class="xpd-operation-content-category">
+				<p>{{ lessonLearned.breadcrumbs }}</p>
+				<div class="tree-content xpd-operation-modal-category-list">
+					<div
+						data-angular-treeview="true"
+					  	data-tree-id="mytree"
+					  	data-tree-model="selectedLessonLearned.roleList"
+					  	data-node-selected="selectedLessonLearned.selected"
+					  	data-controller="mllController"
+					  	data-category-controller="llcController"
+					  	data-select-template="tracking">
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="modal-footer">
+		<div class="container-fluid">
+			<div class="text-right">
+				<button class="btn btn-primary" ng-disabled="modal.$invalid || !selectedLessonLearned.lessonLearnedCategory.id" ng-click="mllController.modalActionButtonSave();">
+					Save
+				</button>
+				<button class="btn btn-default" ng-click="mllController.modalActionButtonClose()">
+					Cancel
+				</button>
+			</div>
+		</div>
+	</div>
+</form>

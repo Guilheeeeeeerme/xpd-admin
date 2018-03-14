@@ -1,0 +1,62 @@
+<a class="list-group-item disabled" ng-if='showArchived'>
+    <h4 class="list-group-item-heading">{{heading}}<span class="badge pull-right">{{alarmsList.length}}</span>
+    </h4>
+</a>
+
+<table class="table alarm-panel panel panel-default alarm-list-table" ng-if='showArchived'>
+    <thead>
+        <tr>
+            <th>Desc.</th>
+            <th>Name</th>
+            <th class="text-center">Exclude from performance?</th>
+            <th>Start at - Finish at</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr ng-repeat="alarm in alarmsList | orderBy: ['startDepth', 'startTime']" ng-class="{'active': alarmsToImport.id == alarm.id}">
+            
+            <td>
+                <span class="glyphicon glyphicon-arrow-down" ng-if="alarm.tripin && !alarm.tripout" uib-popover="Trip In Direction" popover-trigger="'mouseenter'"></span>
+                <span class="glyphicon glyphicon-arrow-up" ng-if="!alarm.tripin && alarm.tripout" uib-popover="Trip Out Direction" popover-trigger="'mouseenter'"></span>
+                <span class="glyphicon glyphicon-sort" ng-if="alarm.tripin && alarm.tripout" uib-popover="Trip In/Out Direction" popover-trigger="'mouseenter'"></span>
+                -
+                
+                <span class="glyphicon glyphicon-hourglass" ng-if="alarm.alarmType == 'depth' && alarm.isDurationAlarm" uib-popover="Duration Alarm" popover-trigger="'mouseenter'"></span>
+                <span class="glyphicon glyphicon-scale" ng-if="alarm.alarmType == 'depth' && !alarm.isDurationAlarm" uib-popover="Speed Restriction Alarm" popover-trigger="'mouseenter'"></span>
+                <span class="glyphicon glyphicon-time" ng-if="alarm.alarmType == 'time'" uib-popover="Time Alarm" popover-trigger="'mouseenter'"></span>
+            </td>
+            
+            <td id="saved-alarm-list-data-name-{{$index + 1}}">{{alarm.name}}</td>
+            
+            <td id="saved-alarm-list-data-hasvre-{{$index + 1}}">
+                <p class="text-center">{{ alarm.hasvre? 'No':'Yes' }} </p>
+            </td>
+
+            <td id="saved-alarm-list-data-time-{{$index + 1}}" ng-if="alarm.alarmType == 'time'">
+                {{alarm.startTime | date:'M/d/yy h:mm a'}} - {{alarm.endTime | date:'M/d/yy h:mm a'}}
+            </td>
+
+            <td id="saved-alarm-list-data-depth-{{$index + 1}}" ng-if="alarm.alarmType == 'depth'">
+                {{alarm.startDepth | number:2}} (m) - {{alarm.endDepth | number:2}} (m)
+            </td>
+
+            <!-- <td>
+            </td> -->
+
+            <td>
+                <button id="saved-alarm-list-click-alarm-{{$index + 1}}" type="button"
+                    ng-click='actionClickButton(alarm)'class='btn btn-sm btn-warning'
+                    uib-popover="{{popover}} Alarm" popover-trigger="'mouseenter'">
+                    <span class="glyphicon {{buttomIcon}}"></span>
+                </button>
+
+                <button id="saved-alarm-list-import-alarm-{{$index + 1}}" ng-if="actionImportButton" type="button"
+                    ng-click='actionImportButton(alarm)' class='btn btn-sm btn-info'
+                    uib-popover="Import Alarm" popover-trigger="'mouseenter'">
+                    <span class="glyphicon glyphicon-arrow-right"></span>
+                </button>
+            </td>
+        </tr>
+    </tbody>
+</table>

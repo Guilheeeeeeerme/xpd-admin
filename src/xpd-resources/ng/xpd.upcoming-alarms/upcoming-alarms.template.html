@@ -1,0 +1,19 @@
+<table class="table" ng-if="nextAlarms.length != 0">
+	<tbody>
+		<tr ng-repeat="(key, alarm) in nextAlarms">
+			<th>{{key+1}}</th>
+			<td>at {{alarm.startDepth | number:2}} m</td>
+			<td>{{alarm.name}}</td>
+		</tr>
+	</tbody>
+</table>
+
+<table class="table" ng-if="nextAlarms.length == 0">
+	<thead>
+		<tr>
+			<th>
+				NO ALARMS PREDICTED
+			</th>
+		</tr>
+	</thead>
+</table>

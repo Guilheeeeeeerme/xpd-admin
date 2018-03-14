@@ -1,0 +1,64 @@
+<style>
+
+    .contract-time-input {
+        padding: 0%;
+    }
+
+    .contract-time-input input {
+        display: inline-block;
+        width: 30%;
+        padding: 0;
+        text-align: center;
+    }
+
+</style>
+
+<input
+    style="display: none" 
+    type="number"
+    name="{{name}}"
+    disabled="{{disabled}}"
+    required="{{required}}"
+    ng-model="ngModel" 
+    min="{{min ? min : lastMin}}"
+    max="{{max ? max : lastMax}}"
+    input-time
+    at-least= "{{atLeast}}"
+    at-most= "{{atMost}}"
+    xpd-form-validation="contractTimeForm">
+
+<div class="contract-time-input">
+
+    <input 
+        class="form-control input-sm"
+        placeholder="HH" 
+        type="number" 
+        ng-disabled="{{disabled}}"
+        ng-required="{{required}}"
+        min="0" 
+        ng-model="hours" 
+        ng-change="watchInput()"> :
+    
+    <input 
+        class="form-control input-sm"
+        placeholder="mm" 
+        type="number" 
+        ng-disabled="{{disabled}}"
+        ng-required="{{required}}" 
+        min="0" 
+        max="60" 
+        ng-model="minutes" 
+        ng-change="watchInput()"> :
+    
+    <input 
+        class="form-control input-sm"
+        placeholder="ss" 
+        type="number" 
+        ng-disabled="{{disabled}}"
+        ng-required="{{required}}" 
+        min="0" 
+        max="60" 
+        ng-model="seconds" 
+        ng-change="watchInput()">
+
+</div>

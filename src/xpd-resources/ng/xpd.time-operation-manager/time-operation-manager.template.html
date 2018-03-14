@@ -1,0 +1,82 @@
+<fieldset ng-disabled="!currentOperation" style="height: 100%">
+    
+    <div class="xpd-time-operation-manager col-md-12" role="tablist">
+
+        <!--###################################################################################################-->
+        <!--###################################################################################################-->
+
+        <div ng-if="true == false" role="presentation" class="xpd-time-operation-manager-cell"
+            ng-class="view ? 'operation-manager-cell-admin' : 'operation-manager-cell-driller'">
+            <span ng-if="currentOperation.tripin" id="xpd-operation-manager-start-makeup" ng-click="onClickStartMakeUp()">Start Make Up</span>
+        </div>
+
+        <div role="presentation" class="xpd-time-operation-manager-cell"
+            ng-class="view ? 'operation-manager-cell-admin' : 'operation-manager-cell-driller'"
+            ng-if="currentState == 'makeUp'">
+            <span id="xpd-operation-manager-finish-makeup" ng-click="onClickFinishMakeUp()">Finish Make Up</span>
+        </div>
+
+        <div role="presentation" class="xpd-time-operation-manager-cell"
+            ng-class="view ? 'operation-manager-cell-admin' : 'operation-manager-cell-driller-disabled'"
+            ng-if="currentState != 'makeUp' && currentOperation.type == 'bha' && currentDirection.tripin && !currentAlarm.isDurationAlarm">
+            <span id="xpd-operation-manager-finish-makeup">Make Up Finished</span>
+        </div>
+
+        <div role="presentation" class="xpd-time-operation-manager-cell"
+            ng-class="view ? 'operation-manager-cell-admin' : 'operation-manager-cell-driller'"
+            ng-if="currentOperation != null && currentOperation.running == true && !currentDirection.tripin && currentDirection.tripin != null && currentState != 'layDown' && (currentOperation.type == 'bha' || currentOperation.type == 'riser')"
+            ng-show="(!currentAlarm) || (currentAlarm && !currentAlarm.isDurationAlarm)">
+            <span id="xpd-operation-manager-start-laydown" ng-click="onClickStartLayDown()">Start Lay Down</span>
+        </div>
+
+
+        <div ng-if="currentState == 'layDown'" role="presentation" class="xpd-time-operation-manager-cell"
+            ng-class="view ? 'operation-manager-cell-admin' : 'operation-manager-cell-driller'">
+            <span id="xpd-operation-manager-finsh-laydown" ng-click="onClickFinishLayDown()">Finish Lay Down</span>
+        </div>
+
+        <div ng-if="currentAlarm && currentAlarm.isDurationAlarm" role="presentation" class="xpd-time-operation-manager-cell"
+            ng-class="view ? 'operation-manager-cell-admin' : 'operation-manager-cell-driller'">
+            <span id="xpd-operation-manager-finish-duration-alarm" ng-click="onClickFinishDurationAlarm()">Finish Duration Alarm</span>
+        </div>
+
+
+        <!--###################################################################################################-->
+        <!--###################################################################################################-->
+
+        <div role="presentation" class="xpd-time-operation-manager-cell" 
+            ng-if="currentOperation.running == true && currentOperation.type == 'casing' && !currentOperation.cementingFinished && currentState != 'cementation' && operationData.bitDepthContext.bitDepth < currentOperation.length" 
+            ng-class="view ? 'operation-manager-cell-admin' : 'operation-manager-cell-driller-disabled'" 
+            ng-show="(!currentAlarm) || (currentAlarm && !currentAlarm.isDurationAlarm)">
+            <span id="xpd-operation-manager-start-cementing">
+                Start Cementation
+            </span>
+        </div>
+        
+        <div role="presentation" class="xpd-time-operation-manager-cell" 
+            ng-if="currentOperation.running == true && currentOperation.type == 'casing' && !currentOperation.cementingFinished && currentState != 'cementation' && operationData.bitDepthContext.bitDepth >= currentOperation.length" 
+            ng-class="view ? 'operation-manager-cell-admin' : 'operation-manager-cell-driller'" 
+            ng-show="(!currentAlarm) || (currentAlarm && !currentAlarm.isDurationAlarm)">
+            <span id="xpd-operation-manager-start-cementing" ng-click="actionButtonStartCementation(operationData.bitDepthContext.bitDepth)">
+                Start Cementation
+            </span>
+        </div>
+
+        <div role="presentation" class="xpd-time-operation-manager-cell"
+            ng-class="view ? 'operation-manager-cell-admin' : 'operation-manager-cell-driller'"
+            ng-if="currentOperation.running == true && currentOperation.type == 'casing' && !currentOperation.cementingFinished && currentState == 'cementation'">
+            <span id="xpd-operation-manager-stop-cementing" ng-click="actionButtonStopCementation()">
+                Finish Cementation
+            </span>
+        </div>
+
+        <div role="presentation" class="xpd-time-operation-manager-cell"
+            ng-class="view ? 'operation-manager-cell-admin' : 'operation-manager-cell-driller-disabled'"
+            ng-if="currentOperation.running == true && currentOperation.type == 'casing' && currentOperation.cementingFinished && currentState != 'cementation'">
+            <span id="xpd-operation-manager-stop-cementing">
+                Cementation Finished
+            </span>
+        </div>
+    </div>
+
+</fieldset>

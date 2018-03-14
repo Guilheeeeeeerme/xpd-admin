@@ -1,0 +1,166 @@
+<fieldset ng-if="!drillerView" ng-disabled="!currentOperation">
+
+    <ul class="nav xpd-operation-manager" ng-class="{'nav-stacked': stacked, 'nav-pills': !stacked}" role="tablist">
+
+        <li role="presentation" class="xpd-operation-manager-cell disabled">
+            <a ng-if="currentOperation != null">{{ currentOperation.name ? currentOperation.name:"Nameless" }}</a>
+
+            <a ng-if="currentOperation == null">No operation</a>
+
+            <div ng-if="currentState" class="current-state-label">{{currentState}}</div>
+        </li>
+
+        <!--###################################################################################################-->
+        <!--###################################################################################################-->
+        <!--###################################################################################################-->
+        <!--###################################################################################################-->
+        <!--###################################################################################################-->
+
+        <li role="presentation" class="xpd-operation-manager-cell" ng-if="currentOperation != null">
+            <a ng-if="!currentOperation.running" ng-click="clickStartOperation()">Start</a>
+            <a ng-if="currentOperation.running" ng-click="actionButtonFinishOperation()">Stop</a>
+        </li>
+
+        <!--###################################################################################################-->
+        <!--###################################################################################################-->
+        <!--###################################################################################################-->
+        <!--###################################################################################################-->
+        <!--###################################################################################################-->
+
+        <li role="presentation" class="xpd-operation-manager-cell">
+
+            <a uib-popover-template="operationQueuePopover.templateUrl" popover-class="xpd-operation-manager-popover"
+               popover-placement="{{popoverPlacement || 'bottom-right'}}" popover-trigger="'mouseenter'"
+               class="glyphicon glyphicon-th-list"></a>
+
+        </li>
+
+        <li ng-if="true == false" role="presentation" class="xpd-operation-manager-cell">
+            <a ng-if="currentOperation.tripin" ng-click="onClickStartMakeUp()">Start Make Up</a>
+        </li>
+
+        <li role="presentation" class="xpd-operation-manager-cell" ng-if="currentState == 'makeUp'">
+            <a ng-click="onClickFinishMakeUp()">Finish Make Up</a>
+        </li>
+
+        <li ng-if="currentState != 'makeUp' && currentOperation.running == true && currentDirection.tripin && currentDirection.tripin !=null && (currentOperation.type == 'bha' || currentOperation.type == 'riser')" role="presentation" class="xpd-operation-manager-cell disabled">
+            <a>Make Up Finished</a>
+        </li>
+
+        <li ng-if="currentOperation != null && currentOperation.running == true  && !currentDirection.tripin && currentDirection.tripin != null && currentState != 'layDown' && (currentOperation.type == 'bha' || currentOperation.type == 'riser')" role="presentation" class="xpd-operation-manager-cell">
+            <a ng-click="onClickStartLayDown()">Start Lay Down</a>
+        </li>
+
+
+        <li ng-if="currentState == 'layDown'" role="presentation" class="xpd-operation-manager-cell">
+            <a ng-click="onClickFinishLayDown()">Finish Lay Down</a>
+        </li>
+
+
+        <!--###################################################################################################-->
+        <!--###################################################################################################-->
+        <!--###################################################################################################-->
+        <!--###################################################################################################-->
+        <!--###################################################################################################-->
+
+        <li role="presentation" class="xpd-operation-manager-cell"
+            ng-if="currentOperation.running == true && currentOperation.type == 'casing' && !currentOperation.cementingFinished 
+            && currentBitDepth >= currentOperation.length">
+            <a ng-if="currentState != 'cementation'" ng-click="actionButtonStartCementation(currentBitDepth)">
+                Start Cementation</a>
+            <a ng-if="currentState == 'cementation'" ng-click="actionButtonStopCementation()">
+                Stop Cementation</a>
+        </li>
+
+        <li role="presentation" class="xpd-operation-manager-cell disabled"
+            ng-if="currentOperation.running == true && currentOperation.type == 'casing' && currentOperation.cementingFinished">
+            <a>Cementing Finished</a>
+        </li>
+    </ul>
+
+</fieldset>
+
+<fieldset ng-if="drillerView">
+    <!-- <pre>{{currentOperation | json}}</pre> -->
+
+    <table class="table xpd-operation-manager">
+        <tbody>
+            <tr>
+                <td ng-if="currentOperation != null && currentOperation.running" class="operation-direction">
+                    <span ng-if="currentEvent.eventType == 'TIME'" class="glyphicon glyphicon-time ng-scope"></span>
+                    <span ng-if="currentEvent.eventType !='TIME' && !currentDirection.tripin" class="glyphicon glyphicon-arrow-up ng-scope"></span>
+                    <span ng-if="currentEvent.eventType !='TIME' && currentDirection.tripin" class="glyphicon glyphicon-arrow-down ng-scope"></span>
+                </td>
+                <td ng-if="currentOperation != null" class="current-operation">
+                    <span ng-if="!currentOperation.running" class="operation-name">Current Operation: </span>
+                    <span class="operation-name">{{ currentOperation.name ? currentOperation.name:"Nameless" }}</span>
+                    <br>
+                    <span class="operation-state">{{currentEvent.label}}</span>
+                </td>
+
+                <td ng-if="currentOperation == null">
+                    No operation
+                </td>
+
+            </tr>
+
+			<!-- <tr ng-if="currentState">
+				<td>
+					{{(currentDirection.tripin) ? 'TRIP IN -' : 'TRIP OUT -'}} {{currentState}}
+				</td>
+			</tr> -->
+
+        </tbody>
+    </table>
+    
+	<div class="xpd-operation-actions-button">
+		<button
+			type="button" class="btn btn-success"
+			ng-if="currentOperation && !currentOperation.running"
+			ng-click="clickStartOperation()">
+            <p>START</p>
+            <span class="current-operation-name">{{ currentOperation.name ? currentOperation.name:"Nameless" }}</tspan>
+		</button>
+		<button
+			type="button" class="btn btn-danger"
+			ng-if="currentOperation.running"
+			ng-click="actionButtonFinishOperation()">
+            <p>STOP</p>
+			<span>{{ currentOperation.name ? currentOperation.name:"Nameless" }}</tspan>
+		</button>
+	</div>
+
+	<table class="table xpd-operation-manager">
+		<tbody>
+			<tr class="xpd-operation-manager-table">
+				<td ng-if="currentState" class="next-operation">
+					Next Op. {{operationQueue[1].name}}
+				</td>
+			</tr>
+		</tbody>
+	</table>
+
+</fieldset>
+
+<script type="text/ng-template" id="operationQueueTemplate.html">
+
+    <table class="table table-condensed equilibrium-time-table">
+        <thead>
+        <tr>
+            <th class="equilibrium-time-table-title" colspan="2">Operation Queue</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="operation in operationQueue" ng-class="{'active':operation.current}">
+            <td class="equilibrium-time-table-label">{{ operation.name }}</td>
+            <td class="equilibrium-time-table-text">{{ operation.type | uppercase }}</td>
+        </tr>
+        </tbody>
+        <tfoot>
+        <tr ng-if="operation != null || operation.length == 0">
+            <td class="equilibrium-time-table-label" colspan="2">No Operation</td>
+        </tr>
+        </tfoot>
+    </table>
+
+</script>

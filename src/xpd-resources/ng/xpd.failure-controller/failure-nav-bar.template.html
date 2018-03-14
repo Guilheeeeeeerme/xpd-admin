@@ -1,0 +1,24 @@
+<div class="input-group failure-on-going-nav-bar">
+
+	<div ng-class="failureClass">
+
+        <div class="category-content">
+            <div class="failure-title text-center" ng-class="failureClass">
+                {{failureTitle}}
+            </div>
+            <div ng-show="enableFinishFailure">
+                <button class="add-failure-on-going btn btn-primary glyphicon glyphicon-stop" id="failure-nav-bar-finish-failure" ng-click="actionButtonFinishFailureOnGoing()"></button>
+            </div>
+            <div>
+                <button class="add-failure-on-going btn btn-primary glyphicon glyphicon-plus" id="failure-nav-bar-open-list" ng-click="actionButtonOpenFailureLessonModal()"></button>
+            </div>
+        </div>
+
+        <div ng-show="enableFinishFailure" class="category-content" ng-class="categoryClass">
+            <div class="failure-category text-center">
+                {{failureCategory}}
+            </div>
+        </div>
+
+    </div>
+</div>

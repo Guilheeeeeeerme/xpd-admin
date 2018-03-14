@@ -1,0 +1,71 @@
+<form name="usForm">
+
+    <div class="modal-content">
+
+    <div class="modal-header">
+        <h3>Delete <strong>ALL</strong> schedules of this member </h3>
+    </div>
+
+        <div class="modal-body">
+
+            <table class="table">
+				<tbody>
+					<tr>
+						<td>
+							<h4>Start Date</h4>
+						</td>
+						<td>
+							<div class="col-md-6" max="modalData.endDate" uib-datepicker name="startDate" ng-model="modalData.startDate" required></div>
+						</td>
+						<td>
+							<div class="col-md-6" max="modalData.endDate" uib-timepicker name="startDate" ng-model="modalData.startDate" hour-step="1"
+							    minute-step="30" show-meridian="true" required></div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<h4>End Date</h4>
+						</td>
+						<td>
+							<div class="col-md-6" min="modalData.startDate" uib-datepicker name="endDate" ng-model="modalData.endDate" required></div>
+						</td>
+						<td>
+							<div class="col-md-6" min="modalData.startDate" uib-timepicker name="endDate" ng-model="modalData.endDate" hour-step="1"
+							    minute-step="30" show-meridian="true" required></div>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+
+
+            <!-- <div class="xpd-date-picker row" ng-class="{ 'has-error' : uwController.usForm.startDate.$invalid && !uwController.usForm.startDate.$pristine }">
+                <h4>
+                    <strong class="pull-right">{{ modalData.startDate | date : 'medium' }}</strong>
+                </h4>
+                <div class="col-md-6" max="modalData.endDate" uib-datepicker name="startDate" ng-model="modalData.startDate" required></div>
+                <div class="col-md-6" max="modalData.endDate" uib-timepicker name="startDate" ng-model="modalData.startDate" hour-step="1" minute-step="30" show-meridian="true" required></div>
+            </div>
+            
+            <div class="xpd-date-picker row" ng-class="{ 'has-error' : uwController.usForm.endDate.$invalid && !uwController.usForm.endDate.$pristine }">
+                <h4><strong class="pull-right">{{ modalData.endDate | date : 'medium' }}</strong>
+                </h4>
+                <div class="col-md-6" min="modalData.startDate" uib-datepicker name="endDate" ng-model="modalData.endDate" required></div>
+                <div class="col-md-6" min="modalData.startDate" uib-timepicker name="endDate" ng-model="modalData.endDate" hour-step="1" minute-step="30" show-meridian="true" required></div>
+            </div> -->
+
+        </div>
+
+        <div class="modal-footer">
+            <button class="btn btn-danger"
+                    ng-disabled="(modalData.endDate < modalData.startDate)"
+                    ng-click="actionButtonRemove()">Delete Interval
+            </button>
+
+            <button class="btn btn-secondary"
+                    ng-click="actionButtonCancel()">Cancel
+            </button>
+        </div>
+
+    </div>
+
+</form>        

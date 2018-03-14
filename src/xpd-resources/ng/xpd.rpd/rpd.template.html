@@ -1,0 +1,104 @@
+<table id="rpd" class="table" style='background: white; color: black'>
+
+    <thead>
+        <tr>
+            <th colspan='2'>Sonda: </th>
+            <th colspan='2'>{{ rig }} </th>
+            <th colspan='2'>Poço: </th>
+            <th colspan='7'>{{ well }} </th>
+            <th colspan='3' rowspan='2'>Logo</th>
+        </tr>
+
+        <tr>
+            <th colspan='2'>Número do ADP: </th>
+            <th colspan='2'>{{ adpNumber }}</th>
+            <th colspan='2'>Data: </th>
+            <th colspan='2'>{{ date }}</th>
+            <th colspan='2'>Hora: </th>
+            <th colspan='3'>{{ time }} </th>
+        </tr>
+
+        <tr>
+            <th colspan='2'>Sondador Dia: </th>
+            <th colspan='2'>{{ dayDriller }} ( 06:00 - 18:00 )</th>
+            <th colspan='2'>Sondador Noite: </th>
+            <th colspan='2'>{{ nightDriller }} ( 18:00 - 06:00 )</th>
+        </tr>
+
+        <tr>
+            <th colspan='2'>Horas</th>
+            <th>Tempo</th>
+            <th>Atividade</th>
+            <th colspan='12'>Operações</th>
+        </tr>
+
+    </thead>
+
+    <tbody>
+        <tr ng-repeat="stateInfo in toStateArray(tasks)">
+
+            <td>{{ stateInfo.startTime | date: 'short' }}</td>
+            <td>{{ stateInfo.endTime | date: 'short' }}</td>
+            <td>{{ (stateInfo.duration / 1000) | secondsToHourMinutesSeconds }}</td>
+
+            <td ng-if="stateInfo.attr != 'time'">{{ stateInfo.attr | uppercase }} de {{ stateInfo.startBitDepth | number: .2 }} até {{ stateInfo.endBitDepth |
+                number: .2 }} m.
+            </td>
+
+            <td ng-if="stateInfo.attr == 'time'">
+                de {{ stateInfo.startTime | date: 'shortTime' }} até {{ stateInfo.endTime | date: 'shortTime' }}.
+            </td>
+
+            <td colspan='12'>    
+                <div ng-repeat="failure in getFailures(stateInfo)">
+                    {{ failure.description }} ( de {{ failure.startTime | date: 'shortTime' }} até {{ failure.endTime
+                    | date: 'shortTime' }} )
+                    <!-- {{ failure.npt?'(NPT) ':'' }}  -->
+                </div>
+
+                <div ng-repeat="alarm in getAlarms(stateInfo)">{{ alarm.name }}</div>
+
+                <div ng-if="stateInfo.children[direction]" ng-repeat="direction in [true, false]">
+
+                    <div ng-if="stateInfo.children[direction].children['TRIP']">
+                        Trip {{ direction?'in':'out' }} em {{ stateInfo.attr | uppercase }}, um total de {{ stateInfo.children[direction].children['TRIP'].joints
+                        }} junta(s). Tempo gasto: {{ stateInfo.children[direction].children['TRIP'].duration / 1000 | secondsToHourMinutesSeconds
+                        }}
+                    </div>
+
+                    <div ng-if="stateInfo.children[direction].children['CONN']">
+                        {{ direction?'Conexões':'Desconexões' }} em {{ stateInfo.attr | uppercase }}, um total de {{ stateInfo.children[direction].children['CONN'].joints
+                        }} junta(s). Tempo gasto: {{ stateInfo.children[direction].children['CONN'].duration / 1000 | secondsToHourMinutesSeconds
+                        }}
+                    </div>
+
+                    <div ng-repeat="timeEvent in stateInfo.children[direction].children['TIME'].values">
+
+                        <p ng-if="timeEvent.state == 'layDown'">Procedimento de Quebra de {{ timeEvent.operation.type | uppercase }}</p>
+                        <p ng-if="timeEvent.state == 'makeUp'">Procedimento de Montagem de {{ timeEvent.operation.type | uppercase }}</p>
+                        <p ng-if="timeEvent.state == 'cementation'">Procedimento de Cimentação</p>
+                        <p ng-if="timeEvent.state == 'time'">Tempo destinado para {{ timeEvent.operation.name }} </p>
+
+                        <p ng-if="timeEvent.durationAlarm != null">
+                            Pausa por planejada de {{ (1 / timeEvent.voptimum) | secondsToHourMinutesSeconds }} para {{ timeEvent.durationAlarm.name }}
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </td>
+
+        </tr>
+
+    </tbody>
+
+    <tfoot>
+        <tr>
+            <th colspan="2">Total</th>
+            <th>{{ (tasks.duration / 1000) | secondsToHourMinutesSeconds }}</th>
+            <th colspan='13'></th>
+        </tr>
+    </tfoot>
+
+</table>

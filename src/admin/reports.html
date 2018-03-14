@@ -1,0 +1,181 @@
+<!DOCTYPE>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>XPD Reports</title>
+
+	<link rel="shortcut icon" href="/assets/favicon/favicon.ico" type="image/x-icon">
+	<link rel="icon" href="/assets/favicon/favicon.ico" type="image/x-icon">
+	
+
+	<!-- build:vendorcss -->
+	<link rel="stylesheet" href="/node_modules/bootstrap/dist/css/bootstrap.min.css">
+	<link rel="stylesheet" href="/node_modules/angular-toastr/dist/angular-toastr.css" />
+	<!-- endbuild -->
+
+    <!-- build:basecss -->
+	<link rel="stylesheet" href="./assets/css/dhtmlxgantt.css">
+	<link rel="stylesheet" href="./assets/css/dhtmlxgantt_broadway.css">
+
+	<link rel="stylesheet" href="/xpd-resources/css/xpd.css">
+	<link rel="stylesheet" href="/xpd-resources/css/admin.css">
+	<link rel="stylesheet" href="./assets/css/reports.css">
+	<link rel="stylesheet" href="/xpd-resources/css/hg-pallete.css">
+	<link rel="stylesheet" href="/xpd-resources/ng/xpd.visualization/xpd-visualization.css">
+	<link rel="stylesheet" href="/xpd-resources/ng/angular.treeview/css/angular.treeview.css">
+	<!-- endbuild -->
+	
+	<!-- build:vendorjs -->	
+	<script type='text/javascript' src='/node_modules/socket.io-client/dist/socket.io.js'></script>
+	<script type="text/javascript" src="/node_modules/angular/angular.min.js"></script>
+
+
+	<script type="text/javascript" src="/node_modules/angular-ui-bootstrap/dist/ui-bootstrap.js"></script>
+	<script type="text/javascript" src="/node_modules/angular-ui-bootstrap/dist/ui-bootstrap-tpls.js"></script>
+
+	<script type="text/javascript" src="/node_modules/angular-route/angular-route.min.js"></script>
+
+	<script type="text/javascript" src="/node_modules/angular-animate/angular-animate.min.js"></script>
+	
+	<script type="text/javascript" src="/node_modules/angular-toastr/dist/angular-toastr.tpls.js"></script>
+	
+	<script type="text/javascript" src="/node_modules/angular-spinner/dist/angular-spinner.min.js"></script>
+
+	<script type="text/javascript" src="/node_modules/ngstorage/ngStorage.min.js"></script>
+
+	<!-- endbuild -->
+	
+	<!-- build:basejs -->
+	<script type="text/javascript" src="/xpd-resources/ng/xpd.dialog/xpd.dialog.module.js"></script>
+	<script type="text/javascript" src="/xpd-resources/ng/xpd.dialog/xpd.dialog.factory.js"></script>
+
+	<script type="text/javascript" src="/xpd-resources/ng/xpd.spinner/xpd.spinner.js"></script>
+
+    <script type="text/javascript" src="../xpd-resources/ng/xpd.access/accessfactory.module.js"></script>
+    <script type="text/javascript" src="/xpd-resources/ng/xpd.access/accessfactory.directive.js"></script>
+    <script type="text/javascript" src="../xpd-resources/ng/xpd.access/security-interceptor.factory.js"></script>
+    <script type="text/javascript" src="../xpd-resources/ng/xpd.access/accessfactory.factory.js"></script>
+
+    <script type="text/javascript" src="/xpd-resources/ng/xpd.menu-confirmation/menu-confirmation.module.js"></script>
+    <script type="text/javascript" src="/xpd-resources/ng/xpd.menu-confirmation/menu-confirmation.factory.js"></script>
+
+	<script type="text/javascript" src="../xpd-resources/ng/xpd.setupapi/setupapi.module.js"></script>
+	<script type="text/javascript" src="../xpd-resources/ng/xpd.setupapi/setupapi.service.js"></script>
+	<script type="text/javascript" src="../xpd-resources/ng/xpd.setupapi/reports-setupapi.service.js"></script>
+	<script type="text/javascript" src="../xpd-resources/ng/xpd.setupapi/eventlog-setupapi.service.js"></script>
+	<script type="text/javascript" src="../xpd-resources/ng/xpd.setupapi/operation-setupapi.service.js"></script>
+	<script type="text/javascript" src="/xpd-resources/ng/xpd.setupapi/failure-setupapi.service.js"></script>
+	<script type="text/javascript" src="/xpd-resources/ng/xpd.setupapi/lessonlearned-setupapi.service.js"></script>
+
+	<script type="text/javascript" src="../xpd-resources/ng/xpd.filters/xpd-filter.module.js"></script>
+	<script type="text/javascript" src="../xpd-resources/ng/xpd.filters/percentage.filter.js"></script>
+	
+	<script type="text/javascript" src="../xpd-resources/ng/d3/d3.module.js"></script>
+	<script type="text/javascript" src="../xpd-resources/ng/d3/d3.service.js"></script>
+	
+	<script type="text/javascript" src="../xpd-resources/ng/highcharts/highcharts.module.js"></script>
+	<script type="text/javascript" src="../xpd-resources/ng/highcharts/highcharts.service.js"></script>
+	
+	<script type="text/javascript" src="/xpd-resources/ng/socket.io/socketio.module.js"></script>
+	<script type="text/javascript" src="/xpd-resources/ng/socket.io/socket.factory.js"></script>
+
+	<script type="text/javascript" src="/xpd-resources/ng/xpd.communication/communication.module.js"></script>
+	<script type="text/javascript" src="/xpd-resources/ng/xpd.communication/operation-communication.factory.js"></script>
+	<script type="text/javascript" src="/xpd-resources/ng/xpd.communication/operation-server-data.factory.js"></script>
+
+	<script type="text/javascript" src="/xpd-resources/ng/xpd.modal.laydown-confirmation/xpd.modal.laydown-confirmation.directive.js"></script>
+
+	<script type="text/javascript" src="/xpd-resources/ng/xpd.modal.failure/xpd-modal-failure.module.js"></script>
+	<script type="text/javascript" src="/xpd-resources/ng/xpd.modal.failure/xpd-modal-failure.factory.js"></script>
+	<script type="text/javascript" src="/xpd-resources/ng/xpd.modal.failure/xpd-modal-failure.controller.js"></script>
+
+	<script type="text/javascript" src="/xpd-resources/ng/xpd.modal.lessonlearned/xpd-modal-lessonlearned.module.js"></script>
+	<script type="text/javascript" src="/xpd-resources/ng/xpd.modal.lessonlearned/xpd-modal-lessonlearned.factory.js"></script>
+	<script type="text/javascript" src="/xpd-resources/ng/xpd.modal.lessonlearned/xpd-modal-lessonlearned.controller.js"></script>
+
+	<script type="text/javascript" src="/xpd-resources/ng/xpd.failure-controller/failure-controller.module.js"></script>
+
+	<script type="text/javascript" src="/xpd-resources/ng/xpd.failure-controller/failure-nav-bar.directive.js"></script>
+
+	<script type="text/javascript" src="/xpd-resources/ng/xpd.admin-nav-bar/admin-nav-bar.directive.js"></script>
+
+	<script type="text/javascript" src="../xpd-resources/ng/angular.treeview/angular.treeview.js"></script>
+	
+	<script type="text/javascript" src="./app/components/reports/reports.module.js"></script>
+	<script type="text/javascript" src="./app/components/reports/directives/table-period.directive.js"></script>
+	<script type="text/javascript" src="./app/components/reports/directives/vre-bar-chart.directive.js"></script>
+	<script type="text/javascript" src="./app/components/reports/directives/vre-score-bar-chart.directive.js"></script>
+	<script type="text/javascript" src="./app/components/reports/directives/event-duration-histogram.directive.js"></script>
+	<script type="text/javascript" src="./app/components/reports/directives/needle-report.directive.js"></script>
+
+	<script type="text/javascript" src="./app/components/reports/directives/failures-npt-chart.directive.js"></script>
+	<script type="text/javascript" src="./app/components/reports/directives/failures-pareto-chart.directive.js"></script>
+	<script type="text/javascript" src="./app/components/reports/directives/lessons-pareto-chart.directive.js"></script>
+	<script type="text/javascript" src="./app/components/reports/directives/lessons-learned-chart.directive.js"></script>
+
+	<script type="text/javascript" src="./app/components/reports/directives/bit-depth-time.directive.js"></script>
+	
+	<script type="text/javascript" src="./app/components/reports/reports.controller.js"></script>
+	<script type="text/javascript" src="./app/components/reports/reports.config.js"></script>
+
+	<script type="text/javascript" src="./app/components/reports/controllers/vre-report.controller.js"></script>
+	<script type="text/javascript" src="./app/components/reports/controllers/vre-score.controller.js"></script>
+	<script type="text/javascript" src="./app/components/reports/controllers/histogram-report.controller.js"></script>
+	<script type="text/javascript" src="./app/components/reports/controllers/needle-report.controller.js"></script>
+
+	<script type="text/javascript" src="./app/components/reports/controllers/failures-npt.controller.js"></script>
+	<script type="text/javascript" src="./app/components/reports/controllers/lessons-learned.controller.js"></script>
+
+	<script type="text/javascript" src="./app/components/reports/controllers/bit-depth-time.controller.js"></script>
+	
+	<script type="text/javascript" src="./app/components/admin/controllers/failures.controller.js"></script>
+
+	<script type="text/javascript" src="./app/components/admin/controllers/lesson-learned.controller.js"></script>
+
+	<script type="text/javascript" src="./app/components/admin/controllers/tabs-failure-lesson.controller.js"></script>
+	<!-- endbuild -->
+</head>
+
+<body ng-app="xpd.reports" ng-controller="ReportsController as rController">
+
+	<laydown-confirmation ng-show="false" dismissable="true"></laydown-confirmation>
+
+	<nav class="navbar navbar-default navbar-fixed-top xpd-admin-nav"
+		xpd-admin-nav-bar
+		nav-origin="report">
+	</nav>
+
+	<section class="xpd-admin-section">
+
+		<div class="container-fluid">
+			<div class="row">
+				<div class="col-md-2">
+
+					<div class="vre-nav-bar">
+
+						<h1 class="xpd-member-box-title">Operation Reports</h1>
+						
+						<ul class="nav nav-pills nav-stacked">Select Report
+							<li ng-repeat="report in reportsData.reportList">
+								<a href="{{report.url}}">{{report.type}}</a>
+							</li>
+						</ul>
+						
+					</div>
+				</div>
+				
+				<!--  -->
+				<div class="empty-value-report-message has-error" ng-if="( reportsData.failuresOnInterval | filter: { npt:true } ).length > 0">
+					There are <strong>{{ ( reportsData.failuresOnInterval | filter: { npt:true } ).length }}</strong> NPT(s) on this interval
+				</div>
+
+				<div class="col-md-10" ng-view></div>
+
+			</div>
+		</div>
+	</section>
+</body>
+
+</html>
