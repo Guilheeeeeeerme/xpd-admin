@@ -30,20 +30,22 @@
     <path class="xpd-trip-ruler-tick xpd-trip-ruler-tick-fancy" ng-attr-d="M13 0 l0 {{ svg.viewBoxHeight }}"/>
     <path class="xpd-trip-ruler-tick xpd-trip-ruler-tick-fancy" ng-attr-d="M37 0 l0 {{ svg.viewBoxHeight }}"/>
 
-    <text ng-attr-y="{{ ( yPosition(operation.stickUp) ) || 0 }}" x="61"
-          class="xpd-trip-ruler-target-text-empty xpd-trip-ruler-mark-text" dy="0.25em">
-        Stick Up
-    </text>
+    <g ng-if="operation.type != 'time'">
+        <text ng-attr-y="{{ ( yPosition(operation.stickUp) ) || 0 }}" x="61"
+            class="xpd-trip-ruler-target-text-empty xpd-trip-ruler-mark-text" dy="0.25em">
+            Stick Up
+        </text>
 
-    <text ng-attr-y="{{ ( yPosition(dpLimitLabel) ) || 0 }}" x="61"
-          class="xpd-trip-ruler-target-text-empty xpd-trip-ruler-mark-text" dy="0.25em">
-        D. Pipe Limit
-    </text>
+        <text ng-attr-y="{{ ( yPosition(dpLimitLabel) ) || 0 }}" x="61"
+            class="xpd-trip-ruler-target-text-empty xpd-trip-ruler-mark-text" dy="0.25em">
+            D. Pipe Limit
+        </text>
 
-    <text ng-attr-y="{{ ( yPosition(upperStopLabel) ) || 0 }}" x="61"
-          class="xpd-trip-ruler-target-text-empty xpd-trip-ruler-mark-text" dy="0.25em">
-        Upper Stop
-    </text>
+        <text ng-attr-y="{{ ( yPosition(upperStopLabel) ) || 0 }}" x="61"
+            class="xpd-trip-ruler-target-text-empty xpd-trip-ruler-mark-text" dy="0.25em">
+            Upper Stop
+        </text>
+    </g>
 
     <g ng-if="_expectedAlarmChanging && _expectedAlarmChanging.length > 0" ng-repeat="expected in _expectedAlarmChanging">
 
