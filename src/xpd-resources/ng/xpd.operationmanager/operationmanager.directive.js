@@ -45,7 +45,7 @@
 			scope.onClickFinishLayDown = onClickFinishLayDown;
 
 
-			var modalInstance;
+			var modalBitDepth;
 
 			if(!attrs.view || attrs.view != 'driller')
 				scope.drillerView = false;
@@ -54,32 +54,34 @@
 
 			function clickStartOperation(){
 
-				if (scope.currentOperation.type == 'riser') {
-					if (scope.currentOperation.metaType == 'ascentRiser') {
-						scope.startBitDepth = scope.currentOperation.startHoleDepth;
-						scope.currentOperation.tripin = false;
-					} else {
-						scope.startBitDepth = scope.currentOperation.startBitDepth;
-					}
-				} else {
-					scope.startBitDepth = scope.currentOperation.startBitDepth;
-				}
+				scope.actionButtonStartOperation(scope.currentOperation);
+
+				// if (scope.currentOperation.type == 'riser') {
+				// 	if (scope.currentOperation.metaType == 'ascentRiser') {
+				// 		scope.startBitDepth = scope.currentOperation.startHoleDepth;
+				// 		scope.currentOperation.tripin = false;
+				// 	} else {
+				// 		scope.startBitDepth = scope.currentOperation.startBitDepth;
+				// 	}
+				// } else {
+				// 	scope.startBitDepth = scope.currentOperation.startBitDepth;
+				// }
 				
-				// scope.startBitDepth = scope.currentOperation.startBitDepth;
+				// // scope.startBitDepth = scope.currentOperation.startBitDepth;
 
-				modalInstance = $uibModal.open({
-					keyboard: false,
-					backdrop: 'static',
-    				animation: true,
-    				size: 'md',
-    				templateUrl: '../xpd-resources/ng/xpd.operationmanager/start-operation-dialog.view.html',
-					scope: scope
+				// modalBitDepth = $uibModal.open({
+				// 	keyboard: false,
+				// 	backdrop: 'static',
+    			// 	animation: true,
+    			// 	size: 'md',
+    			// 	templateUrl: '../xpd-resources/ng/xpd.operationmanager/start-operation-dialog.view.html',
+				// 	scope: scope
 
-    			});
+    			// });
 			}
 
 			function closeModal(){
-				modalInstance.close();
+				modalBitDepth.close();
 			}
 
 			function onClickOK(operation, startBitDepth){

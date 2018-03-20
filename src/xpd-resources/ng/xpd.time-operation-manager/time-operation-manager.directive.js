@@ -59,7 +59,11 @@
 			var modalInstance;
 
 			function closeModal(){
-				modalInstance.close();
+				try{
+					modalInstance.close();
+				}catch(e){
+					console.error(e);
+				}
 			}
 
 			function onClickOK(operation, startBitDepth){

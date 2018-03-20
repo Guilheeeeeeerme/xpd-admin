@@ -1,6 +1,6 @@
 <form name="operationController.info">
     
-        <div class="col-md-4">
+        <div class="col-md-3">
             <div class="list-group">
                 <a class="list-group-item disabled">Defaults</a>
                 <a class="list-group-item" ng-click="operationController.actionTimeOperationItemClick(false, 'slipAndCut', 'Slip and Cut', 2)">
@@ -21,7 +21,7 @@
             </div>
         </div>
 
-        <div class="col-md-8">
+        <div class="col-md-9">
     
             <div class="panel-default">
     
@@ -31,7 +31,7 @@
                         <label for="name">Name*</label>
 
                         <input type="text" class="form-control"
-                            id="name" maxlength="30" xpd-form-validation="operationController.info"
+                            id="name" maxlength="50" xpd-form-validation="operationController.info"
                             ng-model="dados.operation.name" autofocus="true"
                             name="name" required ng-disabled="dados.operation.custom == false">
                     </div>

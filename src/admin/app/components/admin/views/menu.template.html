@@ -181,7 +181,7 @@
                     </td>
                     <td class="equilibrium-time-table-text">{{ operationData.bitDepthContext.xpdBitDepth | number: 2 }}</td>
                 </tr>
-                <tr>
+                <tr ng-if="operationData.bitDepthContext.usingXpd == true">
                     <th class="equilibrium-time-table-label"></th>
                     <th class="equilibrium-time-table-label">
                         <fieldset ng-disabled="operationData.alarmContext.currentAlarm.isDurationAlarm">
