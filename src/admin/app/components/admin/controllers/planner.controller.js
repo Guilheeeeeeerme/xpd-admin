@@ -9,9 +9,9 @@
 
 	angular.module('xpd.admin').controller('PlannerController', plannerController);
 
-	plannerController.$inject = ['$scope', 'operationDataFactory', 'dialogFactory', 'vCruisingCalculator'];
+	plannerController.$inject = ['$scope', '$filter', 'operationDataFactory', 'dialogFactory', 'vCruisingCalculator'];
 
-	function plannerController($scope, operationDataFactory, dialogFactory, vCruisingCalculator) {
+	function plannerController($scope, $filter, operationDataFactory, dialogFactory, vCruisingCalculator) {
 
 		var vm = this;
 
@@ -54,14 +54,15 @@
 		loadOperationStates();
 		loadTimeSlice();
 
-		function loadTimeSlice() {
+		function loadTimeSlice(t) {
 
 			if (!$scope.operationData.timeSlicesContext || !$scope.operationData.timeSlicesContext.timeSlices) {
 				$scope.dados.timeSlices = null;
 				return;
 			}
-
+			
 			$scope.dados.timeSlices = angular.copy($scope.operationData.timeSlicesContext.timeSlices);
+			
 		}
 
 		function loadOperationStates() {
@@ -203,6 +204,9 @@
 				
 				if(timeSlice.percentage > 0){
 					timeOrder++;
+				} else {
+					timeSlice.enabled = false;
+					timeSlice.canDelete = true;
 				}
 
 				timeSlice.operation = {
@@ -226,8 +230,11 @@
 					//.map(addOperationInfo);
 					operationDataFactory.emitUpdateTimeSlices($scope.dados.timeSlices);
 
-				} catch (e) {
+					$scope.dados.timeSlices.tripin = $filter('filter')($scope.dados.timeSlices.tripin, returnValidTimeSlices);
+					$scope.dados.timeSlices.tripout = $filter('filter')($scope.dados.timeSlices.tripout, returnValidTimeSlices);
 
+				} catch (e) {
+					// 
 				}
 
 				actionButtonApply();
@@ -254,6 +261,10 @@
 			var connDuration = stateSettings.CONN.targetTime * 1000;
 
 			return tripDuration + connDuration;
+		}
+
+		function returnValidTimeSlices(timeSlice) {
+			return timeSlice.percentage > 0;
 		}
 
 	}
