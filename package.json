@@ -8,11 +8,11 @@
     "start": "npm run serve",
     "serve": "node index.js",
     "build": "shx rm -rf dist && gulp && shx cp src/index.html dist/",
-    "compile": "shx rm -rf installer && node installer.js",
+    "compile": "shx rm -rf installer bin && node installer.js",
     "build-all": "npm run build && npm run compile",
-    "pack": "npm run build && npm run pack-admin && npm run pack-driller",
-    "pack-driller": "electron-packager dist/driller Driller --platform win32 --arch all --out /.xpd/dist --overwrite --icon dist/driller/assets/icon/logo.ico",
-    "pack-admin": "electron-packager dist/admin Admin --platform win32 --arch all --out /.xpd/dist --overwrite --icon dist/admin/assets/icon/logo.ico"
+    "pack": "npm run build && npm run pack-admin && npm run pack-driller && npm run compile",
+    "pack-driller": "electron-packager dist/driller Driller --platform win32 --arch all --out build --overwrite --icon dist/driller/assets/icon/logo.ico",
+    "pack-admin": "electron-packager dist/admin Admin --platform win32 --arch all --out build --overwrite --icon dist/admin/assets/icon/logo.ico"
   },
   "dependencies": {
     "angular": "1.5.9",

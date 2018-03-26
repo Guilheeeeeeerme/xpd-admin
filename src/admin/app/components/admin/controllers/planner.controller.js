@@ -54,7 +54,7 @@
 		loadOperationStates();
 		loadTimeSlice();
 
-		function loadTimeSlice(t) {
+		function loadTimeSlice() {
 
 			if (!$scope.operationData.timeSlicesContext || !$scope.operationData.timeSlicesContext.timeSlices) {
 				$scope.dados.timeSlices = null;
