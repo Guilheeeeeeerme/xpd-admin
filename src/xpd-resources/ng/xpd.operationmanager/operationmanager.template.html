@@ -35,25 +35,42 @@
 
         </li>
 
-        <li ng-if="true == false" role="presentation" class="xpd-operation-manager-cell">
-            <a ng-if="currentOperation.tripin" ng-click="onClickStartMakeUp()">Start Make Up</a>
+        <li ng-if="true == false"
+            role="presentation"
+            class="xpd-operation-manager-cell">
+                <a ng-if="currentOperation.tripin" ng-click="onClickStartMakeUp()">Start Make Up</a>
         </li>
 
-        <li role="presentation" class="xpd-operation-manager-cell" ng-if="currentState == 'makeUp'">
-            <a ng-click="onClickFinishMakeUp()">Finish Make Up</a>
+        <li role="presentation"
+            class="xpd-operation-manager-cell"
+            ng-if="currentState == 'makeUp'">
+                <a ng-click="onClickFinishMakeUp()">Finish Make Up</a>
         </li>
 
-        <li ng-if="currentState != 'makeUp' && currentOperation.running == true && currentDirection.tripin && currentDirection.tripin !=null && (currentOperation.type == 'bha' || currentOperation.type == 'riser')" role="presentation" class="xpd-operation-manager-cell disabled">
-            <a>Make Up Finished</a>
+        <li ng-if="currentState != 'makeUp' && currentOperation.running == true && currentDirection.tripin && currentDirection.tripin !=null && (currentOperation.type == 'bha' || currentOperation.type == 'riser') && !currentAlarm.isDurationAlarm"
+            role="presentation"
+            class="xpd-operation-manager-cell disabled">
+                <a>Make Up Finished</a>
         </li>
 
-        <li ng-if="currentOperation != null && currentOperation.running == true  && !currentDirection.tripin && currentDirection.tripin != null && currentState != 'layDown' && (currentOperation.type == 'bha' || currentOperation.type == 'riser')" role="presentation" class="xpd-operation-manager-cell">
-            <a ng-click="onClickStartLayDown()">Start Lay Down</a>
+        <li ng-if="currentOperation != null && currentOperation.running == true  && !currentDirection.tripin && currentDirection.tripin != null && currentState != 'layDown' && (currentOperation.type == 'bha' || currentOperation.type == 'riser')"
+            role="presentation"
+            class="xpd-operation-manager-cell"
+            ng-show="!currentAlarm">
+                <a ng-click="onClickStartLayDown()">Start Lay Down</a>
         </li>
 
 
-        <li ng-if="currentState == 'layDown'" role="presentation" class="xpd-operation-manager-cell">
-            <a ng-click="onClickFinishLayDown()">Finish Lay Down</a>
+        <li ng-if="currentState == 'layDown'"
+            role="presentation"
+            class="xpd-operation-manager-cell">
+                <a ng-click="onClickFinishLayDown()">Finish Lay Down</a>
+        </li>
+
+        <li ng-if="currentAlarm.isDurationAlarm"
+            role="presentation"
+            class="xpd-operation-manager-cell">
+                <a ng-click="onClickFinishDurationAlarm()">Finish Duration Alarm</a>
         </li>
 
 
@@ -65,7 +82,7 @@
 
         <li role="presentation" class="xpd-operation-manager-cell"
             ng-if="currentOperation.running == true && currentOperation.type == 'casing' && !currentOperation.cementingFinished 
-            && currentBitDepth >= currentOperation.length">
+            && currentBitDepth >= (currentOperation.endBitDepth - currentOperation.length)" ng-show="!currentAlarm">
             <a ng-if="currentState != 'cementation'" ng-click="actionButtonStartCementation(currentBitDepth)">
                 Start Cementation</a>
             <a ng-if="currentState == 'cementation'" ng-click="actionButtonStopCementation()">
