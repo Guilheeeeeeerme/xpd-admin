@@ -82,7 +82,7 @@
 
         <li role="presentation" class="xpd-operation-manager-cell"
             ng-if="currentOperation.running == true && currentOperation.type == 'casing' && !currentOperation.cementingFinished 
-            && currentBitDepth >= currentOperation.length" ng-show="!currentAlarm">
+            && currentBitDepth >= (currentOperation.endBitDepth - currentOperation.length)" ng-show="!currentAlarm">
             <a ng-if="currentState != 'cementation'" ng-click="actionButtonStartCementation(currentBitDepth)">
                 Start Cementation</a>
             <a ng-if="currentState == 'cementation'" ng-click="actionButtonStopCementation()">
