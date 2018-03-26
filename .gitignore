@@ -1,3 +1,5 @@
 node_modules/
 dist/
 installer/
+build/
+bin/
