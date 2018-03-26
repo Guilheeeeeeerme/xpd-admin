@@ -68,10 +68,10 @@
 
 						var alarm = scope.alarmListSorted[i];
 
-						if (scope.currentDirection.tripin && alarm.startDepth >= currentBitDepth)
+						if (scope.currentDirection.tripin && alarm.startDepth >= currentBitDepth && (!alarm.triggered || alarm.alwaysTripin))
 							scope.nextAlarms.push(alarm);
 
-						if (!scope.currentDirection.tripin && alarm.startDepth <= currentBitDepth)
+						if (!scope.currentDirection.tripin && alarm.startDepth <= currentBitDepth && (!alarm.triggered || alarm.alwaysTripout))
 							scope.nextAlarms.push(alarm);
 
 						if (scope.nextAlarms.length == 3)
