@@ -12,6 +12,7 @@
 				'currentOperation': '=',
 				'operationQueue': '=',
 				'lastSection': '=',
+				'currentAlarm': '=',
 				'currentState': '=',
 				'currentEvent': '=',
 				'currentDirection': '=',
@@ -25,6 +26,7 @@
 				'actionButtonStartLayDown': '=',
 				'actionButtonFinishMakeUp': '=',
 				'actionButtonFinishLayDown': '=',
+				'actionButtonFinishDurationAlarm': '=',
 			},
 			restrict: 'EA',
 			link: link,
@@ -43,6 +45,7 @@
 			scope.onClickStartLayDown = onClickStartLayDown;
 			scope.onClickFinishMakeUp = onClickFinishMakeUp;
 			scope.onClickFinishLayDown = onClickFinishLayDown;
+			scope.onClickFinishDurationAlarm = onClickFinishDurationAlarm;
 
 
 			var modalBitDepth;
@@ -104,6 +107,10 @@
 
 			function onClickFinishLayDown(){
 				dialogFactory.showCriticalDialog({templateHtml: 'This action will end operation. Are you sure you want to finish ' + checkIsBhaOrBOP() + ' Lay Down?'}, finishLayDown);
+			}
+
+			function onClickFinishDurationAlarm() {
+				dialogFactory.showConfirmDialog('Are you sure you want to finish this duration alarm? This action cannot be undone.', scope.actionButtonFinishDurationAlarm);
 			}
 
 			function checkIsBhaOrBOP(){

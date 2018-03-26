@@ -62,6 +62,7 @@
 		vm.actionButtonStartLayDown = actionButtonStartLayDown;
 		vm.actionButtonFinishMakeUp = actionButtonFinishMakeUp;
 		vm.actionButtonFinishLayDown = actionButtonFinishLayDown;
+		vm.actionButtonFinishDurationAlarm = actionButtonFinishDurationAlarm;
 
 		//* ALARM *//
 		vm.finishDurationAlarm = finishDurationAlarm;
@@ -233,6 +234,10 @@
 		function actionButtonFinishLayDown() {
 			// console.log('actionButtonFinishLayDown()');
 			operationDataFactory.emitFinishLayDown();
+		}
+
+		function actionButtonFinishDurationAlarm() {
+			operationDataFactory.emitFinishDurationAlarm();
 		}
 
 		function actionButtonCloseAlarmsAcknowledgementModal() {

@@ -127,10 +127,11 @@
 							<xpd-operation-manager view="driller" display="stacked" popover-placement="bottom-left" current-bit-depth="operationData.bitDepthContext"
 							 current-state="operationData.stateContext.currentState" current-event="operationData.eventContext.currentEvent" current-direction="operationData.directionContext"
 							 current-operation='operationData.operationContext.currentOperation' operation-queue='operationData.operationQueueContext.operationQueue'
-							 last-section='operationData.operationQueueContext.lastSection' action-button-start-operation='tController.actionButtonStartOperation'
+							 last-section='operationData.operationQueueContext.lastSection' current-alarm='operationData.alarmContext.currentAlarm'
+							 action-button-start-operation='tController.actionButtonStartOperation' action-button-finish-duration-alarm="tController.actionButtonFinishDurationAlarm"
 							 action-button-finish-operation='tController.actionButtonFinishOperation' action-button-start-cementation="tController.actionButtonStartCementation"
-							 action-button-stop-cementation="tController.actionButtonStopCementation" action-button-start-bha-make-up="tController.actionButtonStartBhaMakeUp"
-							 action-button-start-bha-lay-down="tController.actionButtonStartBhaLayDown" action-button-finish-bha-make-up="tController.actionButtonFinishBhaMakeUp"
+							 action-button-stop-cementation="tController.actionButtonStopCementation" action-button-start-bha-make-up="tController.actionButtonStartMakeUp"
+							 action-button-start-bha-lay-down="tController.actionButtonStartLayDown" action-button-finish-bha-make-up="tController.actionButtonFinishBhaMakeUp"
 							 action-button-finish-bha-lay-down="tController.actionButtonFinishBhaLayDown">
 							</xpd-operation-manager>
 
