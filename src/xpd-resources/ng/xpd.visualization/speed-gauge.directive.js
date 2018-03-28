@@ -15,6 +15,7 @@
 				operation: '=',
 				hasAlarm: '=',
 				hasMessage: '=',
+				safetySpeedLimit: '=',
 				// currentAlarm: '='
 			},
 			link: function (scope, element, attrs) {
@@ -66,8 +67,7 @@
 						// BARRAS AZUIS DE BLOCK SPEED
 						scope.speedBarPosition = speedBarPosition;
 
-						scope.speedYPosition = d3.scale.linear().domain([5000, 0]).range([-50, 50]);
-						scope.speedYTicks = scope.speedYPosition.ticks(5);
+						buildSpeedBar(scope.safetySpeedLimit);
 
 						// DESLOCAMENTO DO GAUGE
 						scope.speedGaugePosition = d3.scale.linear().domain([-1, 1]).range([speedGaugeDisplacementEnd, speedGaugeDisplacementStart]);
@@ -89,9 +89,11 @@
 							scope.speedGauge.ticks.push(scope.yPosition(i));
 						}
 
-						scope.$watchGroup(['readings.blockPosition', 'calculated.blockPosition'], function (newValues) {
+						scope.$watchGroup(['readings.blockPosition', 'calculated.blockPosition', 'safetySpeedLimit'], function (newValues) {
 							var readingBlockPosition = newValues[0];
 							var calculatedBlockPosition = newValues[1];
+
+							buildSpeedBar(newValues[2]);
 
 							if (readingBlockPosition != null && calculatedBlockPosition != null) {
 								redrawAccDisplacementArc(+calculatedBlockPosition - readingBlockPosition);
@@ -130,6 +132,11 @@
 								return arc(d);
 							};
 						});
+					}
+
+					function buildSpeedBar(safetySpeedLimit) {
+						scope.speedYPosition = d3.scale.linear().domain([(safetySpeedLimit * 3600), 0]).range([-50, 50]).clamp(true);
+						scope.speedYTicks = scope.speedYPosition.ticks(5);
 					}
 				});
 
