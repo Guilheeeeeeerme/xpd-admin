@@ -49,29 +49,50 @@
 					startChartAt: new Date().getTime(),
 				};
 
-				let holeDepth = null;
+				var startPointAt;
 
-				$scope.results.map(function (result) {
+				$scope.results.map(function (chartData) {
+					mergedData.startChartAt = Math.min(mergedData.startChartAt, chartData.startChartAt);
+				});
 
-					if (!mergedData.startChartAt) {
-						mergedData.startChartAt = result.startChartAt;
-					} else {
-						mergedData.startChartAt = Math.min(result.startChartAt, mergedData.startChartAt);
-					}
+				startPointAt = mergedData.startChartAt;
+
+				$scope.results.map(function (chartData) {
+					chartData.bitDepthPlannedPoints.data = chartData.bitDepthPlannedPoints.events.map(function(event){
+						var point = [
+							startPointAt,
+							event.startBitDepth,
+						];
+
+						startPointAt += (event.duration * 1000);
+
+						return point;
+					});
+				});
+
+				var holeDepth = null;
+
+				$scope.results.map(function (chartData) {
+
+					// if (!mergedData.startChartAt) {
+					// 	mergedData.startChartAt = result.startChartAt;
+					// } else {
+					// 	mergedData.startChartAt = Math.min(result.startChartAt, mergedData.startChartAt);
+					// }
 
 					if (!mergedData.bitDepthExecutedPoints) {
-						mergedData.bitDepthExecutedPoints = result.bitDepthExecutedPoints;
-					} else if (result.bitDepthExecutedPoints.data.length && result.bitDepthExecutedPoints.events.length) {
-						mergedData.bitDepthExecutedPoints.data = [...mergedData.bitDepthExecutedPoints.data, ...result.bitDepthExecutedPoints.data];
-						mergedData.bitDepthExecutedPoints.events = [...mergedData.bitDepthExecutedPoints.events, ...result.bitDepthExecutedPoints.events];
+						mergedData.bitDepthExecutedPoints = chartData.bitDepthExecutedPoints;
+					} else if (chartData.bitDepthExecutedPoints.data.length && chartData.bitDepthExecutedPoints.events.length) {
+						mergedData.bitDepthExecutedPoints.data = [...mergedData.bitDepthExecutedPoints.data, ...chartData.bitDepthExecutedPoints.data];
+						mergedData.bitDepthExecutedPoints.events = [...mergedData.bitDepthExecutedPoints.events, ...chartData.bitDepthExecutedPoints.events];
 					}
 
 
 					if (!mergedData.holeDepthPoints) {
-						mergedData.holeDepthPoints = result.holeDepthPoints;
-					} else if (result.holeDepthPoints.data.length) {
+						mergedData.holeDepthPoints = chartData.holeDepthPoints;
+					} else if (chartData.holeDepthPoints.data.length) {
 
-						result.holeDepthPoints.data = result.holeDepthPoints.data.map(function (data) {
+						chartData.holeDepthPoints.data = chartData.holeDepthPoints.data.map(function (data) {
 							if (!holeDepth) {
 								holeDepth = data[1];
 							} else {
@@ -82,23 +103,23 @@
 							return data;
 						});
 
-						mergedData.holeDepthPoints.data = [...mergedData.holeDepthPoints.data, ...result.holeDepthPoints.data];
+						mergedData.holeDepthPoints.data = [...mergedData.holeDepthPoints.data, ...chartData.holeDepthPoints.data];
 					}
 
 					if (!mergedData.sectionsBands) {
-						mergedData.sectionsBands = result.sectionsBands;
+						mergedData.sectionsBands = chartData.sectionsBands;
 					}
 				});
 
-				let startChartAt = angular.copy(mergedData.startChartAt);
+				// let startChartAt = angular.copy(mergedData.startChartAt);
 
 				$scope.results.map(function (result) {
 
-					result.bitDepthPlannedPoints.data = result.bitDepthPlannedPoints.data.map(function (data, index) {
-						data.x = startChartAt;
-						startChartAt += (result.bitDepthPlannedPoints.events[index].duration * 1000);
-						return data;
-					});
+					// result.bitDepthPlannedPoints.data = result.bitDepthPlannedPoints.data.map(function (data, index) {
+					// 	data.x = startChartAt;
+					// 	startChartAt += (result.bitDepthPlannedPoints.events[index].duration * 1000);
+					// 	return data;
+					// });
 
 					if (!mergedData.bitDepthPlannedPoints) {
 						mergedData.bitDepthPlannedPoints = result.bitDepthPlannedPoints;

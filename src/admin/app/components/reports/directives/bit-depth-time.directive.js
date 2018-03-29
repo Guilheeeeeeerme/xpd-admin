@@ -148,6 +148,7 @@
 
 					if (bitDepthPlannedPoints) {
 						bitDepthPlannedPoints.zIndex = 2;
+						bitDepthPlannedPoints.step = true;
 						bitDepthVsTimeChart.addSeries(bitDepthPlannedPoints);
 					}
 
@@ -160,8 +161,8 @@
 				}
 
 				/**
-			 *	Events
-			 **/
+				 *	Events
+				**/
 
 				function unmarkLastPoint(){
 					if(!lastPoint)
