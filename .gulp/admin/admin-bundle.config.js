@@ -138,7 +138,8 @@ exports.styles = {
 	vendor: [
 		'./node_modules/bootstrap/dist/css/bootstrap.min.css',
 		'./node_modules/angular-aside/dist/css/angular-aside.min.css',
-		'./node_modules/angular-toastr/dist/angular-toastr.css'
+		'./node_modules/angular-toastr/dist/angular-toastr.css',
+		'./node_modules/font-awesome/css/font-awesome.min.css'
 	],
 	base: [
 		'./src/admin/assets/css/dhtmlxgantt.css',
