@@ -82,11 +82,11 @@
 
         <li role="presentation" class="xpd-operation-manager-cell"
             ng-if="currentOperation.running == true && currentOperation.type == 'casing' && !currentOperation.cementingFinished 
-            && currentBitDepth >= (currentOperation.endBitDepth - currentOperation.length)" ng-show="!currentAlarm">
-            <a ng-if="currentState != 'cementation'" ng-click="actionButtonStartCementation(currentBitDepth)">
+            && bitDepthContext.bitDepth >= (currentOperation.endBitDepth - currentOperation.length)" ng-show="!currentAlarm">
+            <a ng-if="currentState != 'cementation'" ng-click="actionButtonStartCementation(bitDepthContext.bitDepth)">
                 Start Cementation</a>
-            <a ng-if="currentState == 'cementation'" ng-click="actionButtonStopCementation()">
-                Stop Cementation</a>
+            <a ng-if="currentState == 'cementation'" ng-click="onClickStopCementation()">
+                 Finish Cementation</a>
         </li>
 
         <li role="presentation" class="xpd-operation-manager-cell disabled"
@@ -98,7 +98,6 @@
 </fieldset>
 
 <fieldset ng-if="drillerView">
-    <!-- <pre>{{currentOperation | json}}</pre> -->
 
     <table class="table xpd-operation-manager">
         <tbody>

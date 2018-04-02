@@ -46,6 +46,7 @@
 			scope.onClickStartLayDown = onClickStartLayDown;
 			scope.onClickFinishMakeUp = onClickFinishMakeUp;
 			scope.onClickFinishLayDown = onClickFinishLayDown;
+			scope.onClickStopCementation = onClickStopCementation;
 			scope.onClickFinishDurationAlarm = onClickFinishDurationAlarm;
 
 			scope.actionButtonStartCementation = actionButtonStartCementation;
@@ -81,11 +82,23 @@
 			}
 
 			function onClickFinishMakeUp(){
-				dialogFactory.showCriticalDialog({templateHtml: 'This action will set bit depth at <b>' + scope.currentOperation.length + '</b>m. Are you sure you want to finish ' + checkIsBhaOrBOP() + ' Make Up?'}, finishMakeUp);
+				if (scope.operationData.bitDepthContext.bitDepth < scope.operationData.operationContext.currentOperation.length) {
+					messageBitDepth(scope.operationData.operationContext.currentOperation.length);
+				} else {
+					dialogFactory.showCriticalDialog({ templateHtml: 'This action will set bit depth at <b>' + scope.operationData.operationContext.currentOperation.length + '</b>m. Are you sure you want to finish ' + checkIsBhaOrBOP() + ' Make Up?'}, finishMakeUp);
+				}
 			}
 
 			function onClickFinishLayDown(){
 				dialogFactory.showCriticalDialog('This action will end operation. Are you sure you want to finish ' + checkIsBhaOrBOP() + ' Lay Down?', finishLayDown);
+			}
+
+			function onClickStopCementation() {
+				if (scope.operationData.bitDepthContext.bitDepth < scope.operationData.operationContext.currentOperation.endBitDepth) {
+					messageBitDepth(scope.operationData.operationContext.currentOperation.endBitDepth);
+				} else {
+					scope.actionButtonStopCementation();
+				}
 			}
 
 			function onClickFinishDurationAlarm(){
@@ -123,7 +136,8 @@
 			}
 
 			function finishMakeUp() {
-				dialogFactory.showConfirmDialog('Are you sure you want to finish Make Up? This action cannot be undone.', scope.actionButtonFinishMakeUp);
+				console.log('teste do botão')
+				// dialogFactory.showConfirmDialog('Are you sure you want to finish Make Up? This action cannot be undone.', scope.actionButtonFinishMakeUp);
 			}
 
 			function finishLayDown() {
@@ -149,6 +163,20 @@
 
 			function actionButtonFinishDurationAlarm(){
 				operationDataFactory.emitFinishDurationAlarm();
+			}
+
+			function messageBitDepth(acceptableBitDepth) {
+				var bitDepthOrigin;
+
+				if (scope.operationData.bitDepthContext.usingXpd) {
+					bitDepthOrigin = 'XPD';
+				} else {
+					bitDepthOrigin = 'RIG';
+				}
+
+				dialogFactory.showMessageDialog(
+					{ templateHtml: 'You are using <b>' + bitDepthOrigin + '</b> bit depth, and your current position is <b>' + scope.operationData.bitDepthContext.bitDepth + '</b>m,  please move the bit depth to <b>' + acceptableBitDepth + '</b>m for proceed.' },
+				);
 			}
 
 			elem[0].className = elem[0].className + ' xpd-operation-manager-container';

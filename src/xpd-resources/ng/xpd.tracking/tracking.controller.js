@@ -118,7 +118,7 @@
 		}
 
 		function startCementation() {
-			dialogFactory.showConfirmDialog('Are you sure you want to start the Cementing Procedure? This action cannot be undone.');
+			dialogFactory.showConfirmDialog('Are you sure you want to start the Cementing Procedure? This action cannot be undone.', operationDataFactory.emitStartCementation);
 		}
 
 		function actionClickFailuresButton() {
