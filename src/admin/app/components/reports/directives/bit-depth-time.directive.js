@@ -129,7 +129,7 @@
 							series: {
 								turboThreshold: 0,
 								pointStart: 2010,
-								connectNulls: true,
+								connectNulls: false,
 								point: {
 									events: {
 										mouseOver: onChartHover,
@@ -148,6 +148,7 @@
 
 					if (bitDepthPlannedPoints) {
 						bitDepthPlannedPoints.zIndex = 2;
+						bitDepthPlannedPoints.step = true;
 						bitDepthVsTimeChart.addSeries(bitDepthPlannedPoints);
 					}
 
@@ -160,8 +161,8 @@
 				}
 
 				/**
-			 *	Events
-			 **/
+				 *	Events
+				**/
 
 				function unmarkLastPoint(){
 					if(!lastPoint)
@@ -277,10 +278,22 @@
 					}
 
 					if(executedOfPoint){
-						var executedEvent = getEventFromPointOfASerie(executedOfPoint, bitDepthVsTimeChart.series[1]);
+
+						var executedEvent = null;
+						var pointIndex = null;
+
+						for(var index in bitDepthVsTimeChart.series[1].hcEvents){
+							var tempEvent = bitDepthVsTimeChart.series[1].hcEvents[index][0];
+							if(tempEvent.id == executedOfPoint.id){
+								executedEvent = tempEvent;
+								pointIndex = index;
+							}
+						}
+
+						// var executedEvent = getEventFromPointOfASerie(executedOfPoint, bitDepthVsTimeChart.series[1]);
 						executedEvent = setEndEventDate(
 							executedEvent,
-							executedOfPoint.index,
+							pointIndex,
 							bitDepthVsTimeChart.series[1].points
 						);
 					}
