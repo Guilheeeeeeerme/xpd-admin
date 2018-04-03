@@ -19,6 +19,40 @@
             </h3>
         </div>
 
+        <div class="col-md-3">
+            <div ng-class="{ 'dropdown': !open, 'dropdown open': open }"  ng-init="open = false" >
+
+                <a class="btn btn-sm fa fa-calculator" ng-click="open = !open"></a>
+            
+                <ul class="dropdown-menu col-md-12">
+                    <div class="form-group col-md-12">
+                        <label>Unit:</label>
+                        <select class="form-control" ng-model="unit">
+                            <option value="min">min. to m/h</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group col-md-12">
+                        <label>Value:</label>
+                        <input type="number" class="form-control"
+                            ng-model="value"
+                            ng-change="operationController.calcContractParamsConverter(value, unit)">
+                    </div>
+
+                    <div class="form-group col-md-11">
+                        <label>Result:
+                            <input id="result" type="text" value="{{dados.result}}">
+                            <a class="btn fa fa-copy" ng-click="operationController.myFunction()"></a>
+                        </label>
+                    </div>
+
+                </ul>
+
+            </div>
+        </div>
+
+       
+
         <!-- <div class="col-md-3 form-group-sm">
             <label for="sort" class="col-sm-2 control-label">Import:</label>
             <div class="col-sm-10">

@@ -28,7 +28,8 @@
 
 		$scope.dados = {
 			section: operation.section,
-			operationQueue: null
+			operationQueue: null,
+			result: 0,
 		};
 
 		/**
@@ -167,6 +168,10 @@
 			vm.validateGeneralInfo = validateGeneralInfo;
 
 			vm.actionTimeOperationItemClick = actionTimeOperationItemClick;
+
+			vm.calcContractParamsConverter = calcContractParamsConverter;
+			vm.myFunction = myFunction;
+			
 
 			function validateGeneralInfo() {
 				angular.forEach(vm.info.$error.required, function (field) {
@@ -450,10 +455,31 @@
 			modalInstance.close();
 		}
 
-		function actionButtonCancelCallback() {
-			$scope.dados.selectedOperation = '';
-			modalInstance.close();
+		function calcContractParamsConverter(value, unit) {
+
+			if(unit == 'min')
+				$scope.dados.result = minutesToMetersPerHour(value);
+
 		}
+
+		function minutesToMetersPerHour(value) {
+			if(value <= 0)
+				return 0;
+
+			return ( (1 * $scope.dados.operation.averageStandLength) / value ) * 60;
+		}
+
+		function myFunction(value) {
+			/* Get the text field */
+			var copyText = document.getElementById("result");
+
+			// /* Select the text field */
+			copyText.select();
+
+			/* Copy the text inside the text field */
+			document.execCommand("copy");
+		}
+
 	}
 
 })();

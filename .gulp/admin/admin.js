@@ -64,8 +64,11 @@ module.exports = function (gulp) {
 	});
 
 	gulp.task('admin-vendor-fonts', function () {
-		return gulp.src('./node_modules/bootstrap/fonts/**/*')
-			.pipe(gulp.dest('./dist/admin/pages/fonts/'));
+		return gulp.src([
+			'./node_modules/bootstrap/fonts/**/*',
+			'./node_modules/font-awesome/fonts/*'
+		])
+		.pipe(gulp.dest('./dist/admin/pages/fonts/'));
 	});
 
 	gulp.task('admin-base-js', function () {
