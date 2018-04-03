@@ -39,6 +39,8 @@
 
 			// template: generateModalTemplate(title, message, MESSAGE_DIALOG);
 	
+			title = (!title) ? 'Message': title;
+
 			message = processMessage(message);
 
 			var modalOptions = generateModalOptions(message, callback, null);

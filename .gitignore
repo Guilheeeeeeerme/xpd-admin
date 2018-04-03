@@ -3,3 +3,4 @@ dist/
 installer/
 build/
 bin/
+package-lock.json

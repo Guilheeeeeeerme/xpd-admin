@@ -5,14 +5,13 @@
   "main": "index.js",
   "scripts": {
     "lint": "eslint --fix . || exit 0",
-    "start": "npm run serve",
-    "serve": "node index.js",
+    "start": "npm run build && electron dist/admin",
     "build": "shx rm -rf dist && gulp && shx cp src/index.html dist/",
     "compile": "shx rm -rf installer bin && node installer.js",
     "build-all": "npm run build && npm run compile",
-    "pack": "npm run build && npm run pack-admin && npm run pack-driller && npm run compile",
+    "pack": "npm run build && npm run pack-admin && npm run compile",
     "pack-driller": "electron-packager dist/driller Driller --platform win32 --arch all --out build --overwrite --icon dist/driller/assets/icon/logo.ico",
-    "pack-admin": "electron-packager dist/admin Admin --platform win32 --arch all --out build --overwrite --icon dist/admin/assets/icon/logo.ico"
+    "pack-admin": "electron-packager dist/admin Admin --platform win32 --arch x64 --out build --overwrite --icon dist/admin/assets/icon/logo.ico"
   },
   "dependencies": {
     "angular": "1.5.9",

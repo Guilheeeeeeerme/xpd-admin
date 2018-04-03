@@ -50,6 +50,7 @@
 
 			scope.actionButtonStartCementation = actionButtonStartCementation;
 			scope.actionButtonStopCementation = actionButtonStopCementation;
+			scope.actionDisabledCementation = actionDisabledCementation;
 			scope.actionButtonStartMakeUp = actionButtonStartMakeUp;
 			scope.actionButtonStartLayDown = actionButtonStartLayDown;
 			scope.actionButtonFinishMakeUp = actionButtonFinishMakeUp;
@@ -81,7 +82,11 @@
 			}
 
 			function onClickFinishMakeUp(){
-				dialogFactory.showCriticalDialog({templateHtml: 'This action will set bit depth at <b>' + scope.currentOperation.length + '</b>m. Are you sure you want to finish ' + checkIsBhaOrBOP() + ' Make Up?'}, finishMakeUp);
+				if (scope.operationData.bitDepthContext.bitDepth < scope.operationData.operationContext.currentOperation.length) {
+					messageBitDepth(scope.operationData.operationContext.currentOperation.length);
+				} else {
+					dialogFactory.showCriticalDialog({ templateHtml: 'This action will set bit depth at <b>' + scope.operationData.operationContext.currentOperation.length + '</b>m. Are you sure you want to finish ' + checkIsBhaOrBOP() + ' Make Up?'}, finishMakeUp);
+				}
 			}
 
 			function onClickFinishLayDown(){
@@ -104,6 +109,10 @@
 
 			function actionButtonStopCementation() {
 				dialogFactory.showCriticalDialog('Are you sure you want to stop the Cementing Procedure? This action cannot be undone.', operationDataFactory.emitStopCementation);
+			}
+
+			function actionDisabledCementation() {
+				messageBitDepth((scope.currentOperation.endBitDepth - scope.currentOperation.length));
 			}
 
 			function checkIsBhaOrBOP(){
@@ -149,6 +158,20 @@
 
 			function actionButtonFinishDurationAlarm(){
 				operationDataFactory.emitFinishDurationAlarm();
+			}
+
+			function messageBitDepth(acceptableBitDepth) {
+				var bitDepthOrigin;
+
+				if (scope.operationData.bitDepthContext.usingXpd) {
+					bitDepthOrigin = 'XPD';
+				} else {
+					bitDepthOrigin = 'RIG';
+				}
+
+				dialogFactory.showMessageDialog(
+					{ templateHtml: 'You are using <b>' + bitDepthOrigin + '</b> bit depth, and your current position is <b>' + scope.operationData.bitDepthContext.bitDepth + '</b>m,  please move the bit depth to <b>' + acceptableBitDepth + '</b>m to proceed.' },
+				);
 			}
 
 			elem[0].className = elem[0].className + ' xpd-operation-manager-container';

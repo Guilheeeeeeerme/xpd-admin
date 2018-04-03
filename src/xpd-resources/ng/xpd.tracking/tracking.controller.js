@@ -105,9 +105,10 @@
 			dialogFactory.showConfirmDialog('Finish running operation?', operationDataFactory.emitFinishRunningOperation);
 		}
 
-		function actionButtonStartCementation(currentBitDepth) {
+		function actionButtonStartCementation() {
 
 			var operationEndBitDepth = $scope.operationData.operationContext.currentOperation.endBitDepth;
+			var currentBitDepth = $scope.operationData.bitDepthContext.bitDepth;
 
 			if (operationEndBitDepth > currentBitDepth)
 				dialogFactory.showCriticalDialog({
@@ -118,7 +119,7 @@
 		}
 
 		function startCementation() {
-			dialogFactory.showConfirmDialog('Are you sure you want to start the Cementing Procedure? This action cannot be undone.');
+			dialogFactory.showConfirmDialog('Are you sure you want to start the Cementing Procedure? This action cannot be undone.', operationDataFactory.emitStartCementation);
 		}
 
 		function actionClickFailuresButton() {

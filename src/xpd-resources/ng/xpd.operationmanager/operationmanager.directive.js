@@ -16,7 +16,7 @@
 				'currentState': '=',
 				'currentEvent': '=',
 				'currentDirection': '=',
-				'currentBitDepth': '=',
+				'bitDepthContext': '=',
 				'popoverPlacement': '@',
 				'actionButtonStartOperation': '=',
 				'actionButtonFinishOperation': '=',
@@ -45,6 +45,7 @@
 			scope.onClickStartLayDown = onClickStartLayDown;
 			scope.onClickFinishMakeUp = onClickFinishMakeUp;
 			scope.onClickFinishLayDown = onClickFinishLayDown;
+			scope.actionDisabledCementation = actionDisabledCementation;
 			scope.onClickFinishDurationAlarm = onClickFinishDurationAlarm;
 
 
@@ -102,11 +103,20 @@
 			}
 
 			function onClickFinishMakeUp(){
-				dialogFactory.showCriticalDialog({templateHtml: 'This action will set bit depth at <b>' + scope.currentOperation.length + '</b>m. Are you sure you want to finish ' + checkIsBhaOrBOP() + ' Make Up?'}, finishMakeUp);
+				if (scope.bitDepthContext.bitDepth < scope.currentOperation.length) {
+					messageBitDepth(scope.currentOperation.length);
+				} else {
+					dialogFactory.showCriticalDialog({templateHtml: 'This action will set bit depth at <b>' + scope.currentOperation.length + '</b>m. Are you sure you want to finish ' + checkIsBhaOrBOP() + ' Make Up?'}, finishMakeUp);
+				}
+				
 			}
 
 			function onClickFinishLayDown(){
 				dialogFactory.showCriticalDialog({templateHtml: 'This action will end operation. Are you sure you want to finish ' + checkIsBhaOrBOP() + ' Lay Down?'}, finishLayDown);
+			}
+
+			function actionDisabledCementation() {
+				messageBitDepth((scope.currentOperation.endBitDepth - scope.currentOperation.length));
 			}
 
 			function onClickFinishDurationAlarm() {
@@ -117,7 +127,6 @@
 				return (scope.currentOperation.type == 'bha' ? 'BHA' : 'BOP');
 			}
 
-			
 			function startMakeUp() {
 				dialogFactory.showConfirmDialog('Are you sure you want to start Make Up? This action cannot be undone.', scope.actionButtonStartMakeUp);
 			}
@@ -132,6 +141,20 @@
 
 			function finishLayDown() {
 				dialogFactory.showConfirmDialog('Are you sure you want to finish Lay Down? This action cannot be undone.', scope.actionButtonFinishLayDown);
+			}
+
+			function messageBitDepth(acceptableBitDepth) {
+				var bitDepthOrigin;
+
+				if (scope.bitDepthContext.usingXpd) {
+					bitDepthOrigin = 'XPD';
+				} else {
+					bitDepthOrigin = 'RIG';
+				}
+
+				dialogFactory.showMessageDialog(
+					{ templateHtml: 'You are using <b>' + bitDepthOrigin + '</b> bit depth, and your current position is <b>' + scope.bitDepthContext.bitDepth + '</b>m,  please move the bit depth to <b>' + acceptableBitDepth + '</b>m to proceed.' },
+				);
 			}
 
     		scope.operationQueuePopover = {
