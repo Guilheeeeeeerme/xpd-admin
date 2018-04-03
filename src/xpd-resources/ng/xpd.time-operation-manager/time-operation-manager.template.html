@@ -48,7 +48,7 @@
             ng-if="currentOperation.running == true && currentOperation.type == 'casing' && !currentOperation.cementingFinished && currentState != 'cementation' && operationData.bitDepthContext.bitDepth < (currentOperation.endBitDepth - currentOperation.length)" 
             ng-class="view ? 'operation-manager-cell-admin' : 'operation-manager-cell-driller-disabled'" 
             ng-show="(!currentAlarm) || (currentAlarm && !currentAlarm.isDurationAlarm)">
-            <span id="xpd-operation-manager-start-cementing">
+            <span id="xpd-operation-manager-start-cementing" ng-click="actionDisabledCementation()">
                 Start Cementation
             </span>
         </div>

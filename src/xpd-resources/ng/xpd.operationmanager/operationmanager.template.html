@@ -80,13 +80,32 @@
         <!--###################################################################################################-->
         <!--###################################################################################################-->
 
+        <li role="presentation" class="xpd-operation-manager-cell disabled"
+            ng-if="currentOperation.running == true && currentOperation.type == 'casing' 
+            && !currentOperation.cementingFinished && currentState != 'cementation'
+            && bitDepthContext.bitDepth < (currentOperation.endBitDepth - currentOperation.length)">
+            <a ng-click="actionDisabledCementation()">
+                Start Cementation
+            </a>
+        </li>
+
         <li role="presentation" class="xpd-operation-manager-cell"
-            ng-if="currentOperation.running == true && currentOperation.type == 'casing' && !currentOperation.cementingFinished 
+            ng-if="currentOperation.running == true && currentOperation.type == 'casing'
+            && !currentOperation.cementingFinished && currentState != 'cementation'
+            && bitDepthContext.bitDepth >= (currentOperation.endBitDepth - currentOperation.length)
             && bitDepthContext.bitDepth >= (currentOperation.endBitDepth - currentOperation.length)" ng-show="!currentAlarm">
-            <a ng-if="currentState != 'cementation'" ng-click="actionButtonStartCementation(bitDepthContext.bitDepth)">
-                Start Cementation</a>
-            <a ng-if="currentState == 'cementation'" ng-click="onClickStopCementation()">
-                 Finish Cementation</a>
+            <a ng-click="actionButtonStartCementation(bitDepthContext.bitDepth)">
+                Start Cementation
+            </a>
+        </li>
+
+        <li role="presentation" class="xpd-operation-manager-cell"
+            ng-if="currentOperation.running == true && currentOperation.type == 'casing'
+            && !currentOperation.cementingFinished && currentState == 'cementation'
+            && bitDepthContext.bitDepth >= (currentOperation.endBitDepth - currentOperation.length)" ng-show="!currentAlarm">
+            <a ng-click="onClickStopCementation()">
+                Finish Cementation
+            </a>
         </li>
 
         <li role="presentation" class="xpd-operation-manager-cell disabled"

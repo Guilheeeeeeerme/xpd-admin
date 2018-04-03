@@ -51,6 +51,7 @@
 
 			scope.actionButtonStartCementation = actionButtonStartCementation;
 			scope.actionButtonStopCementation = actionButtonStopCementation;
+			scope.actionDisabledCementation = actionDisabledCementation;
 			scope.actionButtonStartMakeUp = actionButtonStartMakeUp;
 			scope.actionButtonStartLayDown = actionButtonStartLayDown;
 			scope.actionButtonFinishMakeUp = actionButtonFinishMakeUp;
@@ -119,6 +120,10 @@
 				dialogFactory.showCriticalDialog('Are you sure you want to stop the Cementing Procedure? This action cannot be undone.', operationDataFactory.emitStopCementation);
 			}
 
+			function actionDisabledCementation() {
+				messageBitDepth((scope.currentOperation.endBitDepth - scope.currentOperation.length));
+			}
+
 			function checkIsBhaOrBOP(){
 				return (scope.operationData.operationContext.currentOperation.type == 'bha' ? 'BHA' : 'BOP');
 			}
@@ -136,8 +141,7 @@
 			}
 
 			function finishMakeUp() {
-				console.log('teste do botão')
-				// dialogFactory.showConfirmDialog('Are you sure you want to finish Make Up? This action cannot be undone.', scope.actionButtonFinishMakeUp);
+				dialogFactory.showConfirmDialog('Are you sure you want to finish Make Up? This action cannot be undone.', scope.actionButtonFinishMakeUp);
 			}
 
 			function finishLayDown() {

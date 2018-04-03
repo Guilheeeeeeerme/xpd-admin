@@ -46,6 +46,7 @@
 			scope.onClickFinishMakeUp = onClickFinishMakeUp;
 			scope.onClickFinishLayDown = onClickFinishLayDown;
 			scope.onClickStopCementation = onClickStopCementation;
+			scope.actionDisabledCementation = actionDisabledCementation;
 			scope.onClickFinishDurationAlarm = onClickFinishDurationAlarm;
 
 
@@ -121,6 +122,10 @@
 				} else {
 					scope.actionButtonStopCementation();
 				}
+			}
+
+			function actionDisabledCementation() {
+				messageBitDepth((scope.currentOperation.endBitDepth - scope.currentOperation.length));
 			}
 
 			function onClickFinishDurationAlarm() {
