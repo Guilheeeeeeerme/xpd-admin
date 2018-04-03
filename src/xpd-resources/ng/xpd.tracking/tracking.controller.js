@@ -105,9 +105,10 @@
 			dialogFactory.showConfirmDialog('Finish running operation?', operationDataFactory.emitFinishRunningOperation);
 		}
 
-		function actionButtonStartCementation(currentBitDepth) {
+		function actionButtonStartCementation() {
 
 			var operationEndBitDepth = $scope.operationData.operationContext.currentOperation.endBitDepth;
+			var currentBitDepth = $scope.operationData.bitDepthContext.bitDepth;
 
 			if (operationEndBitDepth > currentBitDepth)
 				dialogFactory.showCriticalDialog({

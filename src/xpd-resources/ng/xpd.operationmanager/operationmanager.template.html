@@ -94,7 +94,7 @@
             && !currentOperation.cementingFinished && currentState != 'cementation'
             && bitDepthContext.bitDepth >= (currentOperation.endBitDepth - currentOperation.length)
             && bitDepthContext.bitDepth >= (currentOperation.endBitDepth - currentOperation.length)" ng-show="!currentAlarm">
-            <a ng-click="actionButtonStartCementation(bitDepthContext.bitDepth)">
+            <a ng-click="actionButtonStartCementation()">
                 Start Cementation
             </a>
         </li>
@@ -103,7 +103,7 @@
             ng-if="currentOperation.running == true && currentOperation.type == 'casing'
             && !currentOperation.cementingFinished && currentState == 'cementation'
             && bitDepthContext.bitDepth >= (currentOperation.endBitDepth - currentOperation.length)" ng-show="!currentAlarm">
-            <a ng-click="onClickStopCementation()">
+            <a ng-click="actionButtonStopCementation()">
                 Finish Cementation
             </a>
         </li>

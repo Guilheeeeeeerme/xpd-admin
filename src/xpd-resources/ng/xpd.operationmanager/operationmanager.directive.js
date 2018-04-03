@@ -45,7 +45,6 @@
 			scope.onClickStartLayDown = onClickStartLayDown;
 			scope.onClickFinishMakeUp = onClickFinishMakeUp;
 			scope.onClickFinishLayDown = onClickFinishLayDown;
-			scope.onClickStopCementation = onClickStopCementation;
 			scope.actionDisabledCementation = actionDisabledCementation;
 			scope.onClickFinishDurationAlarm = onClickFinishDurationAlarm;
 
@@ -116,14 +115,6 @@
 				dialogFactory.showCriticalDialog({templateHtml: 'This action will end operation. Are you sure you want to finish ' + checkIsBhaOrBOP() + ' Lay Down?'}, finishLayDown);
 			}
 
-			function onClickStopCementation() {
-				if (scope.bitDepthContext.bitDepth < scope.currentOperation.endBitDepth) {
-					messageBitDepth(scope.currentOperation.endBitDepth);
-				} else {
-					scope.actionButtonStopCementation();
-				}
-			}
-
 			function actionDisabledCementation() {
 				messageBitDepth((scope.currentOperation.endBitDepth - scope.currentOperation.length));
 			}
@@ -136,7 +127,6 @@
 				return (scope.currentOperation.type == 'bha' ? 'BHA' : 'BOP');
 			}
 
-			
 			function startMakeUp() {
 				dialogFactory.showConfirmDialog('Are you sure you want to start Make Up? This action cannot be undone.', scope.actionButtonStartMakeUp);
 			}
@@ -163,7 +153,7 @@
 				}
 
 				dialogFactory.showMessageDialog(
-					{ templateHtml: 'You are using <b>' + bitDepthOrigin + '</b> bit depth, and your current position is <b>' + scope.bitDepthContext.bitDepth + '</b>m,  please move the bit depth to <b>' + acceptableBitDepth + '</b>m for proceed.' },
+					{ templateHtml: 'You are using <b>' + bitDepthOrigin + '</b> bit depth, and your current position is <b>' + scope.bitDepthContext.bitDepth + '</b>m,  please move the bit depth to <b>' + acceptableBitDepth + '</b>m to proceed.' },
 				);
 			}
 

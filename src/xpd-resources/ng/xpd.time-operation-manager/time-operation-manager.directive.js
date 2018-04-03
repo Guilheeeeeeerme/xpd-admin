@@ -95,11 +95,7 @@
 			}
 
 			function onClickStopCementation() {
-				if (scope.operationData.bitDepthContext.bitDepth < scope.operationData.operationContext.currentOperation.endBitDepth) {
-					messageBitDepth(scope.operationData.operationContext.currentOperation.endBitDepth);
-				} else {
-					scope.actionButtonStopCementation();
-				}
+				scope.actionButtonStopCementation();
 			}
 
 			function onClickFinishDurationAlarm(){
@@ -179,7 +175,7 @@
 				}
 
 				dialogFactory.showMessageDialog(
-					{ templateHtml: 'You are using <b>' + bitDepthOrigin + '</b> bit depth, and your current position is <b>' + scope.operationData.bitDepthContext.bitDepth + '</b>m,  please move the bit depth to <b>' + acceptableBitDepth + '</b>m for proceed.' },
+					{ templateHtml: 'You are using <b>' + bitDepthOrigin + '</b> bit depth, and your current position is <b>' + scope.operationData.bitDepthContext.bitDepth + '</b>m,  please move the bit depth to <b>' + acceptableBitDepth + '</b>m to proceed.' },
 				);
 			}
 
