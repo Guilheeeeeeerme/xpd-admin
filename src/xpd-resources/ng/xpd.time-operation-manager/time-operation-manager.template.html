@@ -65,7 +65,7 @@
         <div role="presentation" class="xpd-time-operation-manager-cell"
             ng-class="view ? 'operation-manager-cell-admin' : 'operation-manager-cell-driller'"
             ng-if="currentOperation.running == true && currentOperation.type == 'casing' && !currentOperation.cementingFinished && currentState == 'cementation'">
-            <span id="xpd-operation-manager-stop-cementing" ng-click="onClickStopCementation()">
+            <span id="xpd-operation-manager-stop-cementing" ng-click="actionButtonStopCementation()">
                 Finish Cementation
             </span>
         </div>

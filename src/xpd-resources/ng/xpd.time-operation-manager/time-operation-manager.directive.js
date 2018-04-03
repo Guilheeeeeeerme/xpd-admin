@@ -46,7 +46,6 @@
 			scope.onClickStartLayDown = onClickStartLayDown;
 			scope.onClickFinishMakeUp = onClickFinishMakeUp;
 			scope.onClickFinishLayDown = onClickFinishLayDown;
-			scope.onClickStopCementation = onClickStopCementation;
 			scope.onClickFinishDurationAlarm = onClickFinishDurationAlarm;
 
 			scope.actionButtonStartCementation = actionButtonStartCementation;
@@ -92,10 +91,6 @@
 
 			function onClickFinishLayDown(){
 				dialogFactory.showCriticalDialog('This action will end operation. Are you sure you want to finish ' + checkIsBhaOrBOP() + ' Lay Down?', finishLayDown);
-			}
-
-			function onClickStopCementation() {
-				scope.actionButtonStopCementation();
 			}
 
 			function onClickFinishDurationAlarm(){
