@@ -27,13 +27,44 @@
     
                 <form name="operationController.info">
     
-                    <div class="form-group" ng-class="{ 'has-error': operationController.info.name.$invalid  && !operationController.info.name.$pristine }">
+                    <div class="form-group col-md-12" ng-class="{ 'has-error': operationController.info.name.$invalid  && !operationController.info.name.$pristine }">
                         <label for="name">Name*</label>
 
                         <input type="text" class="form-control"
                             id="name" maxlength="50" xpd-form-validation="operationController.info"
                             ng-model="dados.operation.name" autofocus="true"
                             name="name" required ng-disabled="dados.operation.custom == false">
+                    </div>
+
+                    <div class="col-md-6">
+                        <xpd-setup-form-input
+                            form-name = "operationController.info"
+                            label = "Block Weight"
+                            type = "number"
+                            min = "0"
+                            max= "20000"
+                            model = "dados.operation"
+                            name = "blockWeight"
+                            required = "true"
+                            unit = "klb">
+                        </xpd-setup-form-input>
+                    </div>
+
+                    <div class="col-md-6">
+                        <xpd-setup-form-input
+                            form-name = "operationController.info"
+                            label = "Slips Threshold"
+                            xpd-popover-html="htmlSlipsThreshold"
+                            xpd-popover-trigger="mouseenter"
+                            xpd-popover-placement="top"
+                            type = "number"
+                            min = "0"
+                            max= "20000"
+                            model = "dados.operation"
+                            name = "slipsThreshold"
+                            required = "true"
+                            unit = "klb">
+                        </xpd-setup-form-input>
                     </div>
     
                     <div class="col-md-11">
