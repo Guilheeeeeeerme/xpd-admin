@@ -936,6 +936,11 @@ a.view-only-link {
     font-weight: 600;
 }
 
+.no-bit-depth {
+    color: #cc0505;
+    font-weight: bold;
+}
+
 .data-sso-box{
     width: 75px;
     margin:0 auto;
