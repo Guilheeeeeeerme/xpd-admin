@@ -26,12 +26,13 @@ app.use(function (req, res, next) {
 	res.header('Access-Control-Allow-Origin', '*');
 	res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
 
-	if (req.client.authorized) {
-		next();
-	} else {
-		res.writeHead(401);
-		res.end('denied\n');
-	}
+	next();
+	// if (req.client.authorized) {
+	// 	next();
+	// } else {
+	// 	res.writeHead(401);
+	// 	res.end('denied\n');
+	// }
 
 });
 
