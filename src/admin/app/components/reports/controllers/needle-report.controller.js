@@ -112,32 +112,32 @@
 				{0:/time/i, 1:/time/i}
 			];
 
-			activities = activities.map(function(activity){
+			// activities = activities.map(function(activity){
 
-				if(activity.$$operationType)
-					return activity;
+			// 	if(activity.$$operationType)
+			// 		return activity;
 
-				if(activity.activity){			
-					activity = setOperationType(activity, bhaStates, 'bha');
-					activity = setOperationType(activity, casingStates, 'casing');
-					activity = setOperationType(activity, riserStates, 'riser');
-					activity = setOperationType(activity, timeState, 'time');
-				}
+			// 	if(activity.activity){			
+			// 		activity = setOperationType(activity, bhaStates, 'bha');
+			// 		activity = setOperationType(activity, casingStates, 'casing');
+			// 		activity = setOperationType(activity, riserStates, 'riser');
+			// 		activity = setOperationType(activity, timeState, 'time');
+			// 	}
 
-				return activity;
-			});
+			// 	return activity;
+			// });
 
 			for(var i in activities){
-				if (activities[i].$$operationType == 'bha') {
+				if (activities[i].operationType == 'bha') {
 					operationTypes.bha.activities.push(activities[i]);
 					operationTypes.bha.activities = sortActivities(operationTypes.bha.activities, bhaStates);
-				}else if(activities[i].$$operationType == 'casing'){
+				}else if(activities[i].operationType == 'casing'){
 					operationTypes.casing.activities.push(activities[i]);
 					operationTypes.casing.activities = sortActivities(operationTypes.casing.activities, casingStates);
-				}else if(activities[i].$$operationType == 'riser'){
+				}else if(activities[i].operationType == 'riser'){
 					operationTypes.riser.activities.push(activities[i]);
 					operationTypes.riser.activities = sortActivities(operationTypes.riser.activities, riserStates);
-				}else if(activities[i].$$operationType == 'time'){
+				}else if(activities[i].operationType == 'time'){
 					operationTypes.time.activities.push(activities[i]);
 					operationTypes.time.activities = sortActivities(operationTypes.time.activities, timeState);
 				}else{
@@ -210,24 +210,24 @@
 
 		
 
-		function setOperationType(activity, states, type) {
+		// function setOperationType(activity, states, type) {
 
-			if (activity.$$operationType) 
-				return activity;
+		// 	if (activity.$$operationType) 
+		// 		return activity;
 
-			var attr = activity.activity;
+		// 	var attr = activity.activity;
 
-			for(var i in states){
-				if (attr.match(states[i][0]) || attr.match(states[i][1])) {
-					activity.$$operationType = type;
-					break;
-				}
-			}
+		// 	for(var i in states){
+		// 		if (attr.match(states[i][0]) || attr.match(states[i][1])) {
+		// 			activity.$$operationType = type;
+		// 			break;
+		// 		}
+		// 	}
 
-			if (!activity.$$operationType)
-				activity.$$operationType = '';
+		// 	if (!activity.$$operationType)
+		// 		activity.$$operationType = '';
 
-			return activity;
-		}
+		// 	return activity;
+		// }
 	}
 })();
