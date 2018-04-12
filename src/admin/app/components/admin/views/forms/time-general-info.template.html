@@ -135,6 +135,7 @@
                 <div class="col-md-12">
 
                     <time-slices-table
+                        ng-init="dados.operation.timeSlices = ( dados.operation.timeSlices | filter: { tripin: true } )"
                         name = "leftPercentage"
                         time-slice-form = "operationController.info"
                         ng-model = "dados.operation.timeSlices"
