@@ -269,10 +269,6 @@
 
             <div class="col-md-4 xpd-chart-container-content">
 
-                <div ng-if="operationData.eventContext.currentEvent.ssoIndicator" class="data-sso-box">
-                    <div class="data-sso-indicator">SSO SIGNED</div>
-                </div>
-
                 <div class="ship-placeholder-container">
                     <img class="ship-placeholder" photo-api-directive photo-api-directive-photo-name="operationData.wellContext.currentWell.rig.photoPath"
                         photo-api-directive-server-path="tripin/rig-pictures">
@@ -301,6 +297,11 @@
                         </div>
 
                     </div>
+
+                    <div ng-if="operationData.eventContext.currentEvent.ssoIndicator" class="data-sso-box">
+                        <div class="data-sso-indicator">SSO SIGNED</div>
+                    </div>
+                    
                 </div>
 
                 <div ng-if="operationData.shiftContext.onShift[0] != null" member-performance member="operationData.shiftContext.onShift[0].member"></div>
