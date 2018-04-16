@@ -93,6 +93,7 @@ exports.scripts = {
 		'./src/xpd-resources/ng/xpd.section-list/section-list.directive.js',
 		'./src/admin/app/components/admin/directives/vre-list-table.directive.js',
 		'./src/admin/app/components/admin/directives/saved-alarms-list.directive.js',
+		'./src/admin/app/components/admin/directives/old-tracking.directive.js',
 		'./src/admin/app/components/admin/admin.config.js',
 		'./src/xpd-resources/ng/xpd.rpd/rpd.directive.js',
 		'./src/xpd-resources/ng/xpd.modal.failure/xpd-modal-failure.module.js',

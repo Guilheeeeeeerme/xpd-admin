@@ -70,7 +70,9 @@ body {
  *
 
  */
-
+.old-tracking-directive {
+    height: 100%;
+}
 
 .xpd-admin-col-header {
     font-family: AgencyFB;
