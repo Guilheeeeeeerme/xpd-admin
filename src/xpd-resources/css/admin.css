@@ -201,6 +201,7 @@ body {
 }
 
 .tracking-performance-row .ship-placeholder-container {
+    margin-top: 35px;
     height: 50%;
     text-align: center;
 }

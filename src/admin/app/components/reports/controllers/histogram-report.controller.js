@@ -93,56 +93,56 @@
 
 		function groupOperationByState(activities) {
 
-			var bhaStates = [
-				{0:/makeup/i, 1:/make up/i},
-				{0:/laydown/i, 1:/lay down/i},
-				{0:/cased/i, 1:/cased well/i},
-				{0:/opensea/i, 1:/open sea/i},
-				{0:/drilling/i, 1:/drilling run/i},
-				{0:/openhole/i, 1:/open hole/i}
-				// {0:/inBreakDPInterval/i, 1:/In Break DP Interval/i}
-			];
+			// var bhaStates = [
+			// 	{0:/makeup/i, 1:/make up/i},
+			// 	{0:/laydown/i, 1:/lay down/i},
+			// 	{0:/cased/i, 1:/cased well/i},
+			// 	{0:/opensea/i, 1:/open sea/i},
+			// 	{0:/drilling/i, 1:/drilling run/i},
+			// 	{0:/openhole/i, 1:/open hole/i}
+			// 	// {0:/inBreakDPInterval/i, 1:/In Break DP Interval/i}
+			// ];
 
-			var casingStates = [
-				{0:/casing/i, 1:/casing/i},
-				{0:/settlementstring/i, 1:/settlement string/i},
-				{0:/belowshoedepth/i, 1:/below shoe depth/i},
-				{0:/cementing/i, 1:/cementing/i}
-				// {0:/inBreakDPInterval/i, 1:/In Break DP Interval/i}
-			];
+			// var casingStates = [
+			// 	{0:/casing/i, 1:/casing/i},
+			// 	{0:/settlementstring/i, 1:/settlement string/i},
+			// 	{0:/belowshoedepth/i, 1:/below shoe depth/i},
+			// 	{0:/cementing/i, 1:/cementing/i}
+			// 	// {0:/inBreakDPInterval/i, 1:/In Break DP Interval/i}
+			// ];
 
-			var riserStates = [
-				{0:/ascentriser/i, 1:/ascent riser/i},
-				{0:/descentriser/i, 1:/descent riser/i}
-			];
+			// var riserStates = [
+			// 	{0:/ascentriser/i, 1:/ascent riser/i},
+			// 	{0:/descentriser/i, 1:/descent riser/i}
+			// ];
 
-			var timeState = [
-				{0:/time/i, 1:/time/i}
-			];
+			// var timeState = [
+			// 	{0:/time/i, 1:/time/i}
+			// ];
 
-			activities = activities.map(function(activity){
+			// activities = activities.map(function(activity){
 
-				if(activity.$$operationType)
-					return activity;
+			// 	if(activity.$$operationType)
+			// 		return activity;
 
-				if(activity.label){			
-					activity = setOperationType(activity, bhaStates, 'bha');
-					activity = setOperationType(activity, casingStates, 'casing');
-					activity = setOperationType(activity, riserStates, 'riser');
-					activity = setOperationType(activity, timeState, 'time');
-				}
+			// 	if(activity.label){			
+			// 		activity = setOperationType(activity, bhaStates, 'bha');
+			// 		activity = setOperationType(activity, casingStates, 'casing');
+			// 		activity = setOperationType(activity, riserStates, 'riser');
+			// 		activity = setOperationType(activity, timeState, 'time');
+			// 	}
 
-				return activity;
-			});
+			// 	return activity;
+			// });
 
 			for(var i in activities){
-				if (activities[i].$$operationType == 'bha') {
+				if (activities[i].operationType == 'bha') {
 					operationTypes.bha.activities.push(activities[i]);
-				}else if(activities[i].$$operationType == 'casing'){
+				}else if(activities[i].operationType == 'casing'){
 					operationTypes.casing.activities.push(activities[i]);
-				}else if(activities[i].$$operationType == 'riser'){
+				}else if(activities[i].operationType == 'riser'){
 					operationTypes.riser.activities.push(activities[i]);
-				}else if(activities[i].$$operationType == 'time'){
+				}else if(activities[i].operationType == 'time'){
 					operationTypes.time.activities.push(activities[i]);
 				}else{
 					operationTypes.none.activities.push(activities[i]);
@@ -150,25 +150,25 @@
 			}
 		}
 
-		function setOperationType(activity, states, type) {
+		// function setOperationType(activity, states, type) {
 
-			if (activity.$$operationType) 
-				return activity;
+		// 	if (activity.$$operationType) 
+		// 		return activity;
 
-			var attr = activity.label;
+		// 	var attr = activity.label;
 
-			for(var i in states){
-				if (attr.match(states[i][0]) || attr.match(states[i][1])) {
-					activity.$$operationType = type;
-					break;
-				}
-			}
+		// 	for(var i in states){
+		// 		if (attr.match(states[i][0]) || attr.match(states[i][1])) {
+		// 			activity.$$operationType = type;
+		// 			break;
+		// 		}
+		// 	}
 
-			if (!activity.$$operationType)
-				activity.$$operationType = '';
+		// 	if (!activity.$$operationType)
+		// 		activity.$$operationType = '';
 
-			return activity;
-		}
+		// 	return activity;
+		// }
 
 		/*operationSetupAPIService.getDefaultFields("casing", setSampleData);
 
