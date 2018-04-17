@@ -70,7 +70,17 @@ body {
  *
 
  */
+.tracking-content {
+    height: 100%;
+}
 
+.change-trackin-content {
+    position: absolute;
+    bottom: 1px;
+    right: 1px;
+    cursor: pointer;
+    color: #456c75;
+}
 
 .xpd-admin-col-header {
     font-family: AgencyFB;
