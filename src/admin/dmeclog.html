@@ -108,7 +108,7 @@
                     <input type="time" class="form-control" ng-model="dmecStartTime" placeholder="Time">
                 </div>
 
-                <button type="submit" ng-click="dmlController.searchSince()" ng-disabled="!dmecStartDate || !dmecStartTime" class="btn btn-default">Search since</button>
+                <button type="submit" ng-click="dmlController.actionButtonSearchSince()" ng-disabled="!dmecStartDate || !dmecStartTime" class="btn btn-default">Search since</button>
 
                 <div class="form-group" ng-init="chartAutoScroll = true">
                     <label>
@@ -118,7 +118,7 @@
 
             </form>
 
-            <ul class="nav navbar-nav navbar-right">
+            <!-- <ul class="nav navbar-nav navbar-right">
 
                 <li>
                     <div class="form-group">
@@ -140,15 +140,26 @@
                 <li>
                     <a href="#" ng-click="dmlController.openScaleModal()">Config</a>
                 </li>
-            </ul>
+            </ul> -->
 
         </div>
     </nav>
 
     <div id="dmec-scroll" class="container-fuild container-dmec">
 
-        <d3-dmec-chart ng-if="tracks && tracks.length == 8" threads="{{ 4 }}" threshold="threshold" start-time="dmecStartDate" tracks="tracks"
+        <!-- <d3-dmec-chart ng-if="tracks && tracks.length == 8" threads="{{ 4 }}" threshold="threshold" start-time="dmecStartDate" tracks="tracks"
             old-points="oldPoints" new-points="newPoints" auto-scroll="chartAutoScroll">
+        </d3-dmec-chart> -->
+
+        <d3-dmec-chart 
+            threads="{{ 4 }}" 
+            horizontal="false"
+            start-at="dmecStartDate" 
+            end-at="dmecEndTime"
+            zoom-start-at="zoomStartTime" 
+            zoom-end-at="zoomEndTime"
+            readings="readings" 
+            auto-scroll="chartAutoScroll">
         </d3-dmec-chart>
 
     </div>

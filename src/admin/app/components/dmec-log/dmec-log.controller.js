@@ -4,139 +4,27 @@
 	angular.module('xpd.dmeclog')
 		.controller('DMecLogController', DMecLogController);
 
-	DMecLogController.$inject = ['$scope', '$interval', 'readingSetupAPIService', '$uibModal'];
+	DMecLogController.$inject = ['$scope', '$interval', 'readingSetupAPIService'];
 
-	function DMecLogController($scope, $interval, readingSetupAPIService, $modal) {
+	function DMecLogController($scope, $interval, readingSetupAPIService) {
 
 		var vm = this;
+		var reloadTimeout = null;
 
-		vm.searchSince = searchSince;
-		vm.openScaleModal = openScaleModal;
+		var day = (1 * 24 * 3600000);
 
-		var defaultTracks = [{
-			label: 'BLOCK POSITION',
-			min: -10,
-			max: 50,
-			unitMeasure: 'm',
-			param: 'blockPosition',
-			nextParam: true
-		}, {
-			label: 'RATE OF PENETRATION',
-			min: 0,
-			max: 100,
-			unitMeasure: 'm/hr',
-			param: 'rop',
-			nextParam: false
-		}, {
-			label: 'WOB',
-			min: -10,
-			max: 40,
-			unitMeasure: 'klbf',
-			param: 'wob',
-			nextParam: true
-		}, {
-			label: 'HOOKLOAD',
-			min: -10,
-			max: 500,
-			unitMeasure: 'klbf',
-			param: 'hookload',
-			nextParam: false
-		}, {
-			label: 'RPM',
-			min: -10,
-			max: 200,
-			unitMeasure: 'c/min',
-			param: 'rpm',
-			nextParam: true
-		}, {
-			label: 'TORQUE',
-			min: 0,
-			max: 5000,
-			unitMeasure: 'kft.lbf',
-			param: 'torque',
-			nextParam: false
-		}, {
-			label: 'FLOW',
-			min: 0,
-			max: 1200,
-			unitMeasure: 'gal/min',
-			param: 'flow',
-			nextParam: true
-		}, {
-			label: 'STANDPIPE PRESSURE',
-			min: 0,
-			max: 5000,
-			unitMeasure: 'psi',
-			param: 'sppa',
-			nextParam: false
-		}];
+		vm.actionButtonSearchSince = actionButtonSearchSince;
 
-		if(!localStorage.dmecTracks){
-			localStorage.dmecTracks = JSON.stringify(defaultTracks);
-		}
+		var yesterday = new Date().getTime() - (1 * day);
+		yesterday = new Date(yesterday);
+		yesterday.setMilliseconds(0);
+		yesterday.setSeconds(0);
 
-		var tracks = JSON.parse(localStorage.dmecTracks);
+		$scope.dmecStartTime = $scope.dmecStartDate = yesterday;
 
-		$interval(getTick, 1000);
+		searchSince(yesterday);
 
-		$scope.threshold = 3600000 * 0.5;
-
-		setTimeout(function () {
-			location.reload();
-		}, $scope.threshold / 2);
-
-		var maximumRange = new Date().getTime() - (1 * 24 * 3600000);
-		maximumRange = new Date(maximumRange);
-
-		maximumRange.setMilliseconds(0);
-		maximumRange.setSeconds(0);
-
-		$scope.dmecStartTime = $scope.dmecStartDate = maximumRange;
-
-		searchSince();
-
-		function setCurrentReading(currentReading) {
-
-			$scope.currentReading = currentReading;
-
-			if ($scope.tracks)
-				$scope.tracks.map(preparePoints);
-
-			function preparePoints(track) {
-
-				if (!$scope.newPoints) {
-					$scope.newPoints = {};
-				}
-
-				if (!$scope.newPoints[track.param]) {
-					$scope.newPoints[track.param] = [];
-				}
-
-				$scope.newPoints[track.param].push({
-					x: currentReading.timestamp,
-					y: currentReading[track.param] || null,
-					actual: currentReading[track.param] || null
-				});
-
-				$scope.newPoints[track.param] = $scope.newPoints[track.param];
-
-				return track;
-			}
-
-		}
-
-		function getTick() {
-			if($scope.tracks){
-				localStorage.dmecTracks = JSON.stringify($scope.tracks);
-			}
-			readingSetupAPIService.getTick(new Date().getTime(), setCurrentReading);
-		}
-
-		function searchSince() {
-
-			$scope.tracks = null;
-
-			$scope.progress = 0;
+		function actionButtonSearchSince() {
 
 			var from = $scope.dmecStartDate;
 
@@ -145,9 +33,47 @@
 			from.setSeconds($scope.dmecStartTime.getSeconds());
 			from.setMilliseconds($scope.dmecStartTime.getMilliseconds());
 
-			$scope.dmecStartDate = from;
+			$scope.dmecStartTime = $scope.dmecStartDate = from;
 
-			readingSetupAPIService.getAllReadingSince(from.getTime(), readingsFromDatabase);
+			searchSince(from);
+		}
+
+		function searchSince(startTime) {
+
+			if(reloadTimeout){
+				clearTimeout(reloadTimeout);
+			}
+			
+			reloadTimeout = setTimeout(function () {
+				location.reload();
+			}, day / 2);
+
+			$scope.dmecEndTime = new Date(startTime.getTime() + day / 2);
+
+			readingSetupAPIService.getAllReadingSince(startTime.getTime(), readingsFromDatabase);
+		}
+
+		function readingsFromDatabase(readings) {
+			$scope.readings = readings;
+		}
+	}
+
+	function DMecLogControllerOld($scope, $interval, readingSetupAPIService, $modal) {
+
+		var vm = this;
+		vm.openScaleModal = openScaleModal;
+
+		$interval(getTick, 1000);
+
+		$scope.threshold = 3600000 * 0.5;
+
+		searchSince();
+
+		function getTick() {
+			if ($scope.tracks) {
+				localStorage.dmecTracks = JSON.stringify($scope.tracks);
+			}
+			readingSetupAPIService.getTick(new Date().getTime(), setCurrentReading);
 		}
 
 		function readingsFromDatabase(readings) {
