@@ -4,18 +4,18 @@
 	angular.module('xpd.visualization')
 		.directive('d3DmecChart', d3DmecChart);
 
-	d3DmecChart.$inject = ['highchartsService', 'd3Service'];
+	d3DmecChart.$inject = ['d3Service', '$interval', '$timeout', 'readingSetupAPIService', '$uibModal'];
 
-	function d3DmecChart(highchartsService, d3Service) {
+	function d3DmecChart(d3Service, $interval, $timeout, readingSetupAPIService, $modal) {
 		return {
 			restrict: 'E',
 			templateUrl: '../xpd-resources/ng/xpd.visualization/d3-dmec-chart.template.html',
 			scope: {
-				startTime: '=',
-				threshold: '=',
-				oldPoints: '=',
-				newPoints: '=',
-				tracks: '=',
+				startAt: '=',
+				endAt: '=',
+				zoomStartAt: '=',
+				zoomEndAt: '=',
+				readings: '=',
 				autoScroll: '='
 			},
 			link: link
@@ -23,65 +23,234 @@
 
 		function link(scope, element, attrs) {
 
+			var threads = 4;
 			var d3 = null;
-			var bisect = null;
 			var colorScale = null;
-			var height = null;
-			var timeScale = null;
 			var format = null;
-			var startTime = null;
-			var endTime = null;
-			var threads = attrs.threads = Number(attrs.threads) || 4;
-			var viewWidth = element[0].clientWidth;
-			var viewHeight = element[0].offsetHeight;
+			var bisect = null;
 
-			scope.trackXPosition = trackXPosition;
-			scope.handleOverflow = handleOverflow;
-			scope.listenToMouseMove = listenToMouseMove;
+			scope.horizontal = (attrs.horizontal == true || attrs.horizontal == 'true');
+			
+			$interval(getTick, 1000);
 
-			setInterval(scrollIfNeeded, 1000);
+			var defaultTracks = [{
+				label: 'BLOCK POSITION',
+				min: -10,
+				max: 50,
+				unitMeasure: 'm',
+				param: 'blockPosition',
+				nextParam: true
+			}, {
+				label: 'RATE OF PENETRATION',
+				min: 0,
+				max: 100,
+				unitMeasure: 'm/hr',
+				param: 'rop',
+				nextParam: false
+			}, {
+				label: 'WOB',
+				min: -10,
+				max: 40,
+				unitMeasure: 'klbf',
+				param: 'wob',
+				nextParam: true
+			}, {
+				label: 'HOOKLOAD',
+				min: -10,
+				max: 500,
+				unitMeasure: 'klbf',
+				param: 'hookload',
+				nextParam: false
+			}, {
+				label: 'RPM',
+				min: -10,
+				max: 200,
+				unitMeasure: 'c/min',
+				param: 'rpm',
+				nextParam: true
+			}, {
+				label: 'TORQUE',
+				min: 0,
+				max: 5000,
+				unitMeasure: 'kft.lbf',
+				param: 'torque',
+				nextParam: false
+			}, {
+				label: 'FLOW',
+				min: 0,
+				max: 1200,
+				unitMeasure: 'gal/min',
+				param: 'flow',
+				nextParam: true
+			}, {
+				label: 'STANDPIPE PRESSURE',
+				min: 0,
+				max: 5000,
+				unitMeasure: 'psi',
+				param: 'sppa',
+				nextParam: false
+			}];
 
+			if(!localStorage.dmecTracks){
+				localStorage.dmecTracks = JSON.stringify(defaultTracks);
+			}
+
+			scope.tracks = JSON.parse(localStorage.dmecTracks);
+
+			$interval(scrollIfNeeded, 1000);
 			d3Service.d3().then(d3Done);
+
+			scope.openScaleModal = openScaleModal;
+
+			function openScaleModal() {
+				$modal.open({
+					animation: false,
+					keyboard: false,
+					backdrop: 'static',
+					templateUrl: 'app/components/dmec-log/change-scale.template.html',
+					controller: 'ModalChangeScaleController',
+					windowClass: 'change-scale-modal',
+					resolve: {
+						tracks: getTracks
+					}
+				});
+
+				function getTracks() {
+					return scope.tracks;
+				}
+			}
 
 			function d3Done(_d3) {
 				d3 = _d3;
+				listenToMouseMove();
+
 				colorScale = d3.scale.category10();
-				bisect = d3.bisector(function (datum) { return datum.x; }).right;
 				format = d3.format('.1f');
+				bisect = d3.bisector(function (datum) { return datum.x; }).right;
 
-				scope.$watch('tracks', onTracksChange, true);
-				scope.$watch('threshold', onThresholdChange);
+				scope.$watch('startAt', function (startAt) {
+					resize();
+				});
+
+				scope.$watch('endAt', function (endAt) {
+					resize();
+				});
+
+				scope.$watch('zoomStartAt', function (zoomStartAt) {
+					resize();
+				});
+
+				scope.$watch('zoomEndAt', function (zoomEndAt) {
+					resize();
+				});
+
+				scope.$watch('readings', function (readings) {
+					if (readings) {
+						readingsFromDatabase(readings);
+					}
+				});
+
+				scope.$watch('oldPoints', function (oldPoints) {
+					if (oldPoints) {
+						applyOverflow('oldPoints');
+					}
+				});
+
 			}
 
-			function onTracksChange() {
-				scope.dmecTracks = angular.copy(scope.tracks);
-				buildXAxis(+scope.threshold);
-				buildYAxis();
-			}
+			function listenToMouseMove() {
 
-			function onThresholdChange() {
-				try {
-					buildXAxis(+scope.threshold);
-					buildYAxis();
-				} catch (e) {
-					console.error(e);
+				d3.selectAll('.overlay')
+					.on('mousemove', function () {
+						var timestamp = null;
+						if (!scope.horizontal) {
+							timestamp = scope.timeScale.invert(d3.mouse(this)[1]);
+						} else {
+							timestamp = scope.timeScale.invert(d3.mouse(this)[0]);
+						}
+						mousemove(timestamp);
+					});
+
+			}
+			function mousemove(timestamp) {
+
+				d3.selectAll('#crosshair')
+					.attr(((!scope.horizontal) ? 'y1' : 'x1'), scope.timeScale(timestamp))
+					.attr(((!scope.horizontal) ? 'y2' : 'x2'), scope.timeScale(timestamp));
+
+				for (var $index in scope.tracks) {
+
+					try {
+
+						var track = scope.tracks[$index];
+						var bubble = d3.selectAll('#bubble-' + $index);
+						var tooltip = d3.selectAll('#text-' + $index);
+
+						var i = null;
+						var startDatum = null;
+						var endDatum = null;
+
+						if (scope.newPoints && scope.newPoints[track.param] && scope.newPoints[track.param][0] && scope.newPoints[track.param][0].x <= timestamp) {
+							i = bisect(scope.newPoints[track.param], timestamp);
+
+							startDatum = scope.newPoints[track.param][i - 1];
+							endDatum = scope.newPoints[track.param][i];
+
+						} else if (scope.oldPoints && scope.oldPoints[track.param]) {
+							i = bisect(scope.oldPoints[track.param], timestamp);
+
+							startDatum = scope.oldPoints[track.param][i - 1];
+							endDatum = scope.oldPoints[track.param][i];
+						}
+
+						var datum = [startDatum, endDatum].filter(function (_datum) {
+							return (_datum && _datum.y);
+						});
+
+						var point = datum.sort(function (a, b) {
+							return Math.abs(a.x - timestamp) - Math.abs(b.x - timestamp);
+						})[0];
+
+
+						if (point && point.y != null) {
+
+							bubble.attr('style', null);
+							if (!scope.horizontal)
+								bubble.attr('transform', 'translate(' + track.trackScale(point.y) + ', ' + scope.timeScale(timestamp) + ')');
+							else
+								bubble.attr('transform', 'translate(' + scope.timeScale(timestamp) + ', ' + track.trackScale(point.y) + ')');
+
+							tooltip
+								.attr((!scope.horizontal) ? 'x' : 'y', track.trackScale(track.max) - track.trackScale(point.y))
+								.attr((!scope.horizontal) ? 'y' : 'x', (track.labelPosition * 15));
+
+							if (point.actual != null) {
+								tooltip.text(format(point.actual) + ' (' + track.unitMeasure + ')');
+							}
+
+						}
+
+					} catch (e) {
+						bubble.attr('style', 'display: none');
+					}
+
 				}
 			}
 
 			function applyOverflow(trackName) {
 
-				scope.$tracks.map(function (track) {
+				scope.tracks.map(function (track) {
 
-					if (!scope['$' + trackName]) {
-						scope['$' + trackName] = {};
+					if (!scope[trackName]) {
+						scope[trackName] = {};
 					}
-					if (!scope['$' + trackName + 'Path']) {
-						scope['$' + trackName + 'Path'] = {};
+					if (!scope[trackName + 'Path']) {
+						scope[trackName + 'Path'] = {};
 					}
 
 					if (scope[trackName] && scope[trackName][track.param]) {
-						scope['$' + trackName][track.param] = handleOverflow(scope[trackName][track.param], track);
-						scope['$' + trackName + 'Path'][track.param] = track.lineFunction(scope['$' + trackName][track.param]);
+						scope[trackName][track.param] = handleOverflow(scope[trackName][track.param], track);
+						scope[trackName + 'Path'][track.param] = track.lineFunction(scope[trackName][track.param]);
 					}
 
 				});
@@ -89,9 +258,9 @@
 
 			function handleOverflow(points, track) {
 
-				let result = [];
-				let distance = 0;
-				let lastPoint = null;
+				var result = [];
+				var distance = 0;
+				var lastPoint = null;
 
 				while ((track.min + distance) <= track.max) {
 					distance++;
@@ -99,9 +268,9 @@
 
 				points.map(function (pt) {
 
-					const point = angular.copy(pt);
+					var point = angular.copy(pt);
 
-					const empty = {
+					var empty = {
 						x: point.x,
 						y: null,
 						actual: null
@@ -111,7 +280,7 @@
 
 					if (point.y != null) {
 
-						for (let i = 0; i < 2; i++) {
+						for (var i = 0; i < 2; i++) {
 
 							if (point.y < track.min) {
 
@@ -148,233 +317,217 @@
 				return result;
 			}
 
-			function buildXAxis(threshold) {
+			function readingsFromDatabase(readings) {
 
-				threads = attrs.threads = Number(attrs.threads) || 4;
+				var oldPoints = {};
 
-				viewWidth = element[0].clientWidth;
-				viewHeight = element[0].offsetHeight;
+				var lastReadingTime = scope.lastReadingTime = null;
 
-				startTime = scope.startTime.getTime();
-				endTime = new Date().getTime() + (threshold / 2);
+				scope.tracks.map(preparePoints);
 
-				var viewScale = d3.scale.linear()
-					.domain([
-						0,
-						threshold
-					])
-					.range([
-						0,
-						viewHeight
-					]);
+				scope.lastReadingTime = lastReadingTime;
 
-				height = viewScale(endTime) - viewScale(startTime);
+				function preparePoints(track) {
 
-				scope.timeScale = timeScale = d3.scale.linear()
-					.domain([
-						startTime,
-						endTime
-					])
-					.range([
-						0,
-						height
-					]);
+					oldPoints[track.param] = readings.map(convertToXY);
 
-				if (!scope.svg) {
-					scope.svg = {};
+					function convertToXY(point) {
+
+						if (!lastReadingTime || lastReadingTime < point.timestamp) {
+							lastReadingTime = point.timestamp;
+						}
+
+						return {
+							x: point.timestamp,
+							y: point[track.param] || null,
+							actual: point[track.param] || null
+						};
+					}
+
+					return track;
 				}
 
-				scope.svg.xTicks = timeScale.ticks(((endTime - startTime) / threshold) * 5);
-				scope.svg.threads = threads;
-				scope.svg.viewWidth = viewWidth;
-				scope.svg.viewHeight = viewHeight;
-				scope.svg.startTime = startTime;
-				scope.svg.endTime = endTime;
-				scope.svg.height = height;
+				scope.oldPoints = oldPoints;
 
+				resize();
+			}
+
+			function getTick() {
+				if (scope.lastReadingTime != null) {
+					readingSetupAPIService.getTick(scope.lastReadingTime, onNewReading);
+					scope.lastReadingTime += 1000;
+					scope.endAt = new Date(scope.lastReadingTime);
+				}
+			}
+
+			function onNewReading(currentReading) {
+
+				if (scope.tracks)
+					scope.tracks.map(preparePoints);
+
+				applyOverflow('newPoints');
+
+				function preparePoints(track) {
+
+					if (!scope.newPoints) {
+						scope.newPoints = {};
+					}
+
+					if (!scope.newPoints[track.param]) {
+						scope.newPoints[track.param] = [];
+					}
+
+					scope.newPoints[track.param].push({
+						x: currentReading.timestamp,
+						y: currentReading[track.param] || null,
+						actual: currentReading[track.param] || null
+					});
+
+					return track;
+				}
+
+				resize();
+
+			}
+
+			function resize() {
+
+				var zoomStartAt = (scope.zoomStartAt) ? scope.zoomStartAt : scope.startAt;
+				var zoomEndAt = (scope.zoomEndAt) ? scope.zoomEndAt : scope.endAt;
+
+				var viewWidth = element[0].clientWidth;
+				var viewHeight = element[0].offsetHeight;
+
+				var zoomScale = d3.scale.linear()
+					.domain([
+						zoomStartAt.getTime(),
+						zoomEndAt.getTime(),
+					])
+					.range([
+						0,
+						scope.horizontal ? viewWidth : viewHeight
+					]);
+
+				var timeAxisSize = zoomScale(scope.endAt.getTime()) - zoomScale(scope.startAt.getTime());
+
+				scope.timeScale = d3.scale.linear()
+					.domain([
+						scope.startAt.getTime(),
+						scope.endAt.getTime(),
+					])
+					.range([
+						0,
+						timeAxisSize * 0.95
+					]);
+
+				scope.svg = {
+					viewWidth: (scope.horizontal) ? timeAxisSize : viewWidth,
+					viewHeight: (scope.horizontal) ? viewHeight : timeAxisSize,
+					xTicks: scope.timeScale.ticks()
+				};
+
+				scope.tracks = scope.tracks.map(createPath);
+
+				applyOverflow('oldPoints');
+				applyOverflow('newPoints');
+			}
+
+
+
+			function trackXPosition(trackIndex) {
+
+				var numberOfTracks = scope.tracks.length;
+				var tracksPerThread = Math.ceil(numberOfTracks / threads);
+				var relative = Math.floor(trackIndex / tracksPerThread) / threads;
+
+				return (relative * ((scope.horizontal) ? scope.svg.viewHeight : scope.svg.viewWidth));
+			}
+
+			function createPath(track, index) {
+
+				track.color = colorScale(index);
+
+				var trackIndex = index;
+				var startAt = trackXPosition(trackIndex);
+				var endAt = trackXPosition(++trackIndex);
+
+				while (startAt == endAt) {
+					endAt = trackXPosition(++trackIndex);
+				}
+
+				track.labelPosition = index % (scope.tracks.length / threads);
+				track.labelXMin = startAt;
+				track.labelXMax = endAt;
+
+				var trackScale = d3.scale.linear()
+					.domain([track.min, track.max])
+					.range([
+						startAt + ((endAt - startAt) * 0.05),
+						endAt, - ((endAt - startAt) * 0.05)
+					]);
+
+				var lineFunction = d3.svg.line()
+					.defined(isNumber)
+					.x(scaleValue)
+					.y(scaleTime)
+					.interpolate('linear');
+
+				track.id = index;
+				track.lineFunction = lineFunction;
+				track.trackScale = trackScale;
+				track.ticks = trackScale.ticks(5);
+
+				function isNumber(d) {
+					return (angular.isNumber(d.y) && angular.isNumber(d.x));
+				}
+
+				function scaleValue(d) {
+					if (!scope.horizontal)
+						return trackScale(d.y);
+					else
+						return scope.timeScale(d.x);
+				}
+
+				function scaleTime(d) {
+					if (!scope.horizontal)
+						return scope.timeScale(d.x);
+					else
+						return trackScale(d.y);
+				}
+
+				return track;
 			}
 
 			function scrollIfNeeded() {
 
-				const container = document.getElementById('dmec-scroll');
-				container.addEventListener('scroll', moveLegendToTop);
+				var container = document.getElementById('dmec-scroll');
+				container.addEventListener('scroll', moveLegend);
 
-				if (scope.autoScroll == true) {
-					container.scrollTop = container.scrollHeight;
-				} else {
-					scope.autoScroll = false;
-				}
-
-				moveLegendToTop();
-			}
-
-			function moveLegendToTop() {
-				const container = document.getElementById('dmec-scroll');
-				const legend = d3.selectAll('.label');
-				legend.attr('transform', 'translate(0, ' + container.scrollTop + ')');
-			}
-
-			function buildYAxis() {
-
-				var promises = [];
-
-				for (var i in scope.dmecTracks) {
-					let track = scope.dmecTracks[i];
-					promises.push(createPathAsync(track, i));
-				}
-
-				Promise.all(promises).then(function () {
-					scope.$tracks = scope.dmecTracks;
-
-					scope.$watch('newPoints', function () {
-						applyOverflow('newPoints');
-					}, true);
-
-					scope.$watch('oldPoints', function () {
-						applyOverflow('oldPoints');
-					});
-
-				});
-
-			}
-
-			function createPathAsync(track, index) {
-
-				return new Promise(function (resolve, reject) {
-
-					setTimeout(function () {
-
-						track.color = colorScale(index);
-
-						var trackIndex = index;
-						var startAt = trackXPosition(trackIndex);
-						var endAt = trackXPosition(++trackIndex);
-
-						while (startAt == endAt) {
-							endAt = trackXPosition(++trackIndex);
-						}
-
-						track.labelPosition = index % (scope.dmecTracks.length / threads);
-						track.labelXMin = startAt;
-						track.labelXMax = endAt;
-
-						var trackScale = d3.scale.linear()
-							.domain([track.min, track.max])
-							.range([
-								startAt + ((endAt - startAt) * 0.05),
-								endAt, - ((endAt - startAt) * 0.05)
-							]);
-
-						var lineFunction = d3.svg.line()
-							.defined(isNumber)
-							.x(scaleValue)
-							.y(scaleTime)
-							.interpolate('linear');
-
-						track.id = index;
-						track.lineFunction = lineFunction;
-						track.trackScale = trackScale;
-						track.ticks = trackScale.ticks(5);
-
-						resolve();
-
-						function isNumber(d) {
-							return (angular.isNumber(d.y) && angular.isNumber(d.x));
-						}
-
-						function scaleValue(d) {
-							return trackScale(d.y);
-						}
-
-						function scaleTime(d) {
-							return timeScale(d.x);
-						}
-
-					}, 1000);
-
-				});
-			}
-
-			function trackXPosition(trackIndex) {
-
-				var numberOfTracks = scope.dmecTracks.length;
-				var tracksPerThread = Math.ceil(numberOfTracks / threads);
-				var relative = Math.floor(trackIndex / tracksPerThread) / threads;
-
-				return (relative * viewWidth);
-			}
-
-			function listenToMouseMove() {
-
-				d3.selectAll('.overlay')
-					.on('mousemove', function () {
-						const timestamp = timeScale.invert(d3.mouse(this)[1]);
-						mousemove(timestamp);
-					});
-
-			}
-
-
-			function mousemove(timestamp) {
-
-				d3.selectAll('#crosshair')
-					.attr('y1', timeScale(timestamp))
-					.attr('y2', timeScale(timestamp));
-
-				for (let $index in scope.dmecTracks) {
-
-					try {
-
-						var track = scope.dmecTracks[$index];
-						var bubble = d3.selectAll('#bubble-' + $index);
-						var tooltip = d3.selectAll('#text-' + $index);
-
-						let i = null;
-						let startDatum = null;
-						let endDatum = null;
-
-						if (scope.$newPoints && scope.$newPoints[track.param] && scope.$newPoints[track.param][0] && scope.$newPoints[track.param][0].x <= timestamp) {
-							i = bisect(scope.$newPoints[track.param], timestamp);
-
-							startDatum = scope.$newPoints[track.param][i - 1];
-							endDatum = scope.$newPoints[track.param][i];
-
-						} else if (scope.$oldPoints && scope.$oldPoints[track.param]) {
-							i = bisect(scope.$oldPoints[track.param], timestamp);
-
-							startDatum = scope.$oldPoints[track.param][i - 1];
-							endDatum = scope.$oldPoints[track.param][i];
-						}
-
-						const datum = [startDatum, endDatum].filter(function (_datum) {
-							return (_datum && _datum.y);
-						});
-
-						let point = datum.sort(function (a, b) {
-							return Math.abs(a.x - timestamp) - Math.abs(b.x - timestamp);
-						})[0];
-
-
-						if (point && point.y != null) {
-
-							bubble.attr('style', null);
-							bubble.attr('transform', 'translate(' + track.trackScale(point.y) + ', ' + timeScale(timestamp) + ')');
-
-							tooltip
-								.attr('x', track.trackScale(track.max) - track.trackScale(point.y))
-								.attr('y', (track.labelPosition * 15));
-
-							if (point.actual != null) {
-								tooltip.text(format(point.actual) + ' (' + track.unitMeasure + ')');
-							}
-
-						}
-
-					} catch (e) {
-						bubble.attr('style', 'display: none');
-						console.log(e);
+				if (!scope.horizontal) {
+					if (scope.autoScroll == true) {
+						container.scrollTop = container.scrollHeight;
+					} else {
+						scope.autoScroll = false;
 					}
+				} else {
+					if (scope.autoScroll == true) {
+						container.scrollLeft = container.scrollWidth;
+					} else {
+						scope.autoScroll = false;
+					}
+				}
 
+				moveLegend();
+			}
+
+			function moveLegend() {
+				var container = document.getElementById('dmec-scroll');
+				var legend = d3.selectAll('.label');
+
+				if (!scope.horizontal) {
+					legend.attr('transform', 'translate(0, ' + container.scrollTop + ')');
+				} else {
+					legend.attr('transform', 'translate(' + container.scrollLeft + ', 0)');
 				}
 			}
 
