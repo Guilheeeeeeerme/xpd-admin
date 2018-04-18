@@ -1,0 +1,20 @@
+<div class="col-md-12 xpd-chart-container">
+	
+	<div class="xpd-chart-container-content">
+		<div event-chart ng-if="operationData.operationContext.currentOperation && operationData.operationContext.currentOperation.running && operationData.eventContext.currentEvent != null"
+			class="event-chart"	
+			current-operation='operationData.operationContext.currentOperation'
+			events='connectionTimes'
+			event-type="CONN"
+			current-event="operationData.eventContext.currentEvent">
+		</div>
+		<div event-chart ng-if="operationData.operationContext.currentOperation && operationData.operationContext.currentOperation.running && operationData.eventContext.currentEvent != null"
+			class="event-chart"	
+			current-operation='operationData.operationContext.currentOperation'
+			events='tripTimes'
+			event-type="trip"
+			current-event="operationData.eventContext.currentEvent">
+		</div>
+
+	</div>
+</div>

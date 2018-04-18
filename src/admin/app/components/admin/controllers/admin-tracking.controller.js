@@ -149,6 +149,10 @@
 
 			if ($scope.operationData.operationContext.currentOperation != null) {
 				eventlogSetupAPIService.listByType('CONN', $scope.operationData.operationContext.currentOperation.id, 200, function (times) {
+					times.map( function (time) {
+						time.startTime = new Date(time.startTime).getTime();
+					});
+					
 					$scope.dados.connectionTimes = times;
 				});
 			}
@@ -158,6 +162,9 @@
 
 			if ($scope.operationData.operationContext.currentOperation != null) {
 				eventlogSetupAPIService.listByType('TRIP', $scope.operationData.operationContext.currentOperation.id, 200, function (times) {
+					times.map(function (time) {
+						time.startTime = new Date(time.startTime).getTime();
+					});
 					$scope.dados.tripTimes = times;
 				});
 			}

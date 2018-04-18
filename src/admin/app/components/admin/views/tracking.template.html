@@ -14,7 +14,7 @@
 
 <div class="col-md-9 col-sm-6 col-xs-6 tracking-content">
     <old-tracking ng-if="flags.showDMEC == false"></old-tracking>
-    <dmec ng-if="flags.showDMEC == true"></dmec>
+    <dmec ng-if="flags.showDMEC == true" connection-times="dados.connectionTimes" trip-times="dados.tripTimes"></dmec>
 </div>
 
 

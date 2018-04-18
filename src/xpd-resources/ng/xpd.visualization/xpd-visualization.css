@@ -463,6 +463,26 @@
     }
 }
 
+/* EVENTS CHART */
+
+.xpd-events-container {
+    max-height: 100%;
+}
+
+.event-chart {
+    height: 10%;
+}
+
+.x-ticks {
+    font-size: 2px;
+}
+
+.xpd-events-ticks {
+    /* font-size: 0.5em; */
+    fill: #bff0ef;
+    text-anchor: end;
+}
+
 /* TIME BARS */
 
 .xpd-times-container {

@@ -1,0 +1,57 @@
+<svg xmlns='http://www.w3.org/2000/svg' version='1.1' width='100%' ng-attr-height='{{svg.height}}' preserveAspectRatio="none"
+     xpd-view-box="svg.viewBox" class="xpd-events-container">
+
+     <!-- <rect
+        ng-attr-width="{{ getBarSize(event) }}"
+        ng-attr-height="{{ bar.height }}"
+        ng-attr-fill="{{ getFillColor(event) }}" stroke="none"
+        ng-click="actionBarClick($event, event)"
+        ng-dblclick="actionBarDoubleClick($event, event)"
+        class="xpd-times-bar"
+        ng-class="{'xpd-times-selected-bar':(event.id === selectedEvent.id)}"/> -->
+
+
+    <!-- <g class="rect-bar" ng-attr-transform="{{'translate('+xScale(events[1].startTime)+', 10)'}}">
+        <rect ng-attr-width="{{ getBarSize(events[1]) }}" height="10" ng-attr-fill="{{ getFillColor(events[1]) }}" stroke="none">
+        </rect>    
+    </g> -->
+
+     <!-- transform="translate(-1000, 10)" -->
+    <g>
+        <g class="rect-bar" ng-repeat="(key, event) in events | orderBy: 'startTime' track by event.id"
+            ng-attr-transform="{{'translate('+xScale(event.startTime)+', 0)'}}">
+
+            <rect 
+                ng-attr-y="{{ gatBarProperties(event).position }}"
+                ng-attr-width="{{ gatBarProperties(event).width }}"
+                ng-attr-height="{{ gatBarProperties(event).height }}"
+                ng-attr-fill="{{ gatBarProperties(event).color }}" stroke="none">
+            </rect>
+        </g>
+
+        <g id="current-event" ng-attr-transform="{{'translate('+xScale(currentEvent.startTime)+', 0)'}}">
+            <!-- <rect 
+                ng-attr-y="{{ gatBarProperties(currentEvent).position }}"
+                ng-attr-width="{{ gatBarProperties(currentEvent).width }}"
+                ng-attr-height="{{ gatBarProperties(currentEvent).height }}"
+                ng-attr-fill="{{ gatBarProperties(currentEvent).color }}" stroke="none">
+            </rect> -->
+            <rect id="current-event-bar"></rect>
+        </g>
+    </g>
+
+    
+
+    <!-- <g class="x-ticks">
+        <g ng-repeat="(key, tick) in xTicks" ng-attr-transform="{{'translate('+xScale(tick)+', 30) rotate(45)'}}"> 
+            <text x="0" y="0"            
+                class="xpd-events-ticks xpd-times-tick-x">{{ tick | date : 'hh:mm:ss' : '+0000' }}
+            </text>
+        </g>
+    </g> -->
+
+    <!-- <text ng-repeat="(key, tick) in yTicks" ng-attr-y="{{ yScale(tick) }}" x="5"
+          class="xpd-events-ticks xpd-times-tick-y">{{ tick }}
+    </text> -->
+
+</svg>
