@@ -30,6 +30,8 @@
 				}
 			}
 
+			localStorage.dmecTracks = JSON.stringify(tracks);
+
 			$modalInstance.close();
 		}
 

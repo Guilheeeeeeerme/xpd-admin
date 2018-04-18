@@ -1,39 +1,62 @@
-<svg ng-if="$tracks" id="d3-svg" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
- xmlns:svg="http://www.w3.org/2000/svg" xmlns="http://www.w3.org/2000/svg" version='1.1' ng-attr-width='{{ svg.viewWidth }}'
- ng-attr-height='{{ svg.height }}'>
 
-	<g class="horizontal-ticks">
+<a href="#" style="position: fixed;right: 10;bottom: 10;" ng-click="openScaleModal()">Config</a>
+
+<svg ng-if="tracks" id="d3-svg" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+ xmlns:svg="http://www.w3.org/2000/svg" xmlns="http://www.w3.org/2000/svg" version='1.1' ng-attr-width='{{ svg.viewWidth }}'
+ ng-attr-height='{{ svg.viewHeight }}'>
+
+	<g class="time-ticks" ng-if="!horizontal">
 		<g ng-repeat="tick in svg.xTicks" ng-attr-transform="translate(0, {{ timeScale(tick) }} )">
 			<text x="2" y="-2">{{ tick | date: 'short' }}</text>
 			<line x1="0" y1="0" ng-attr-x2='{{ svg.viewWidth }}' y2="0" stroke="black" stroke-opacity="0.2" stroke-width="0.1em" />
 		</g>
 	</g>
 
-	<g class="vertical-ticks">
-		<g ng-repeat="( $index, track ) in $tracks">
+	<g class="time-ticks" ng-if="horizontal">
+		<g ng-repeat="tick in svg.xTicks" ng-attr-transform="translate({{ timeScale(tick) }}, 0)">
+			<text x="2" ng-attr-y='{{ svg.viewHeight }}'>{{ tick | date: 'short' }}</text>
+			<line y1="0" x1="0" ng-attr-y2='{{ svg.viewHeight }}' x2="0" stroke="black" stroke-opacity="0.2" stroke-width="0.1em" />
+		</g>
+	</g>
+
+	<g class="range-ticks" ng-if="!horizontal">
+		<g ng-repeat="track in tracks">
 			<line ng-repeat="tick in track.ticks" ng-attr-x1='{{ track.trackScale(tick) }}' ng-attr-x2='{{ track.trackScale(tick) }}'
-			 y1="0" ng-attr-y2='{{ svg.height }}' stroke="black" stroke-opacity="0.2" stroke-width="0.1em" />
-			<line ng-attr-x1='{{ track.labelXMin }}' ng-attr-x2='{{ track.labelXMin }}' y1="0" ng-attr-y2='{{ svg.height }}' stroke="black"
+			 y1="0" ng-attr-y2='{{ svg.viewHeight }}' stroke="black" stroke-opacity="0.2" stroke-width="0.1em" />
+			<line ng-attr-x1='{{ track.labelXMin }}' ng-attr-x2='{{ track.labelXMin }}' y1="0" ng-attr-y2='{{ svg.viewHeight }}' stroke="black"
+			 stroke-opacity="0.5" stroke-width="0.2em" />
+		</g>
+	</g>
+
+	<g class="range-ticks" ng-if="horizontal">
+		<g ng-repeat="track in tracks">
+			<line ng-repeat="tick in track.ticks" ng-attr-y1='{{ track.trackScale(tick) }}' ng-attr-y2='{{ track.trackScale(tick) }}'
+			 x1="0" ng-attr-x2='{{ svg.viewWidth }}' stroke="black" stroke-opacity="0.2" stroke-width="0.1em" />
+			<line ng-attr-y1='{{ track.labelXMin }}' ng-attr-y2='{{ track.labelXMin }}' x1="0" ng-attr-x2='{{ svg.viewWidth }}' stroke="black"
 			 stroke-opacity="0.5" stroke-width="0.2em" />
 		</g>
 	</g>
 
 	<g class="old-paths">
-		<path ng-if="$oldPointsPath && $oldPointsPath[track.param]" ng-repeat="( $index, track ) in $tracks" ng-attr-d="{{ $oldPointsPath[track.param] }}"
+		<path ng-if="oldPointsPath && oldPointsPath[track.param]" ng-repeat="( $index, track ) in tracks" ng-attr-d="{{ oldPointsPath[track.param] }}"
 		 fill="none" stroke="{{ track.color }}" stroke-width="0.2em" />
 	</g>
 
 	<g class="new-paths">
-		<path ng-if="$newPointsPath && $newPointsPath[track.param]" ng-repeat="( $index, track ) in $tracks" ng-attr-d="{{ $newPointsPath[track.param] }}"
+		<path ng-if="newPointsPath && newPointsPath[track.param]" ng-repeat="( $index, track ) in tracks" ng-attr-d="{{ newPointsPath[track.param] }}"
 		 fill="none" stroke="{{ track.color }}" stroke-width="0.2em" />
 	</g>
 
-	<g class="crosshair">
+	<g class="crosshair" ng-if="!horizontal">
 		<line x1="0" ng-attr-x2="{{ svg.viewWidth }}" id="crosshair" stroke="black" stroke-opacity="0.5" stroke-width="0.1em" />
 	</g>
 
+	<g class="crosshair" ng-if="horizontal">
+		<line y1="0" ng-attr-y2="{{ svg.viewHeight }}" id="crosshair" stroke="black" stroke-opacity="0.5" stroke-width="0.1em" />
+	</g>
+
 	<g class="bubble-and-tooltip">
-		<g ng-repeat="( $index, track ) in $tracks" ng-if="$tracks && track.labelPosition != null">
+		<g ng-repeat="( $index, track ) in tracks" ng-if="tracks && track.labelPosition != null">
 			<g id="bubble-{{track.id}}">
 				<circle  r="5" fill="none" stroke-width="2" ng-attr-stroke="{{ track.color }}"></circle>
 				<text id="text-{{track.id}}" x="0" y="0" text-anchor="end" alignment-baseline="hanging" stroke-width="1" ng-attr-fill="{{ track.color }}"
@@ -42,17 +65,34 @@
 		</g>
 	</g>
 
-	<g class="top-legend">
-		<g class="label" ng-if="$tracks && track.labelPosition != null" ng-repeat="( $index, track ) in $tracks">
-			<text stroke-width="1" ng-attr-fill="{{ track.color }}" ng-attr-stroke="{{ track.color }}" ng-attr-y="{{ track.labelPosition * 25 }}" alignment-baseline="hanging"
-			 text-anchor="start" ng-attr-x="{{ track.labelXMin + ( (track.labelXMax - track.labelXMin) * 0.05 ) }}">{{ track.min }}</text>
-			<text stroke-width="1" ng-attr-fill="{{ track.color }}" ng-attr-stroke="{{ track.color }}" ng-attr-y="{{ track.labelPosition * 25 }}" alignment-baseline="hanging"
-			 text-anchor="middle" ng-attr-x="{{ track.labelXMin + ((track.labelXMax - track.labelXMin) / 2) }}">{{ track.label }} ( {{ track.unitMeasure }} )</text>
-			<text stroke-width="1" ng-attr-fill="{{ track.color }}" ng-attr-stroke="{{ track.color }}" ng-attr-y="{{ track.labelPosition * 25 }}" alignment-baseline="hanging"
-			 text-anchor="end" ng-attr-x="{{ track.labelXMax - ( (track.labelXMax - track.labelXMin) * 0.05 ) }}">{{ track.max }}</text>
+	<g class="legend" ng-if="!horizontal">
+		<g class="label" ng-if="tracks && track.labelPosition != null" ng-repeat="( $index, track ) in tracks">
+
+			<text stroke-width="1" ng-attr-fill="{{ track.color }}" ng-attr-stroke="{{ track.color }}" ng-attr-y="{{ track.labelPosition * 25 }}"
+			 alignment-baseline="hanging" text-anchor="start" ng-attr-x="{{ track.labelXMin + ( (track.labelXMax - track.labelXMin) * 0.05 ) }}">{{ track.min }}</text>
+
+			<text stroke-width="1" ng-attr-fill="{{ track.color }}" ng-attr-stroke="{{ track.color }}" ng-attr-y="{{ track.labelPosition * 25 }}"
+			 alignment-baseline="hanging" text-anchor="middle" ng-attr-x="{{ track.labelXMin + ((track.labelXMax - track.labelXMin) / 2) }}">{{ track.label }} ( {{ track.unitMeasure }} )</text>
+
+			<text stroke-width="1" ng-attr-fill="{{ track.color }}" ng-attr-stroke="{{ track.color }}" ng-attr-y="{{ track.labelPosition * 25 }}"
+			 alignment-baseline="hanging" text-anchor="end" ng-attr-x="{{ track.labelXMax - ( (track.labelXMax - track.labelXMin) * 0.05 ) }}">{{ track.max }}</text>
 		</g>
 	</g>
 
-	<rect class="overlay" ng-init="listenToMouseMove()" ng-attr-width='{{ svg.viewWidth }}' ng-attr-height='{{ svg.height }}'></rect>
+	<g class="legend" ng-if="horizontal">
+		<g class="label" ng-if="tracks && track.labelPosition != null" ng-repeat="( $index, track ) in tracks">
+
+			<text stroke-width="1" ng-attr-fill="{{ track.color }}" ng-attr-stroke="{{ track.color }}" ng-attr-x="{{ track.labelPosition * 25 }}"
+			 alignment-baseline="hanging" text-anchor="start" ng-attr-y="{{ track.labelXMin + ( (track.labelXMax - track.labelXMin) * 0.05 ) }}">{{ track.min }}</text>
+
+			<text stroke-width="1" ng-attr-fill="{{ track.color }}" ng-attr-stroke="{{ track.color }}" x="0"
+			 ng-attr-alignment-baseline="{{ ($index % 2 == 0)? 'hanging' : 'baseline' }} " text-anchor="start" ng-attr-y="{{ track.labelXMin + ((track.labelXMax - track.labelXMin) / 2) }}">{{ track.label }} ( {{ track.unitMeasure }} )</text>
+
+			<text stroke-width="1" ng-attr-fill="{{ track.color }}" ng-attr-stroke="{{ track.color }}" ng-attr-x="{{ track.labelPosition * 25 }}"
+			 alignment-baseline="hanging" text-anchor="end" ng-attr-y="{{ track.labelXMax - ( (track.labelXMax - track.labelXMin) * 0.05 ) }}">{{ track.max }}</text>
+		</g>
+	</g>
+
+	<rect class="overlay" ng-attr-width='{{ svg.viewWidth }}' ng-attr-height='{{ svg.viewHeight }}'></rect>
 
 </svg>
