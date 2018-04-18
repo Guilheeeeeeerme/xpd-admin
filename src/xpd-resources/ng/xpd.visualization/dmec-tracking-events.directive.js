@@ -2,13 +2,13 @@
 	'use strict';
 
 	angular.module('xpd.visualization')
-		.directive('eventChart', eventChart);
+		.directive('dmecTrackingEvents', dmecTrackingEvents);
 
-	eventChart.$inject = ['d3Service'];
+	dmecTrackingEvents.$inject = ['d3Service'];
 
-	function eventChart(d3Service) {
+	function dmecTrackingEvents(d3Service) {
 		return {
-			templateUrl: '../xpd-resources/ng/xpd.visualization/event-chart.template.html',
+			templateUrl: '../xpd-resources/ng/xpd.visualization/dmec-tracking-events.template.html',
 			scope: {
 				// averageStandLength: '=',
 				// actionBarClick: '=',
@@ -81,11 +81,11 @@
 							bar.color = '#860000';
 						}
 
-						console.log(scope.eventType)
-						console.log(scope.currentEvent.eventType)
+						// console.log(scope.eventType)
+						// console.log(scope.currentEvent.eventType)
 						if(event.id == scope.currentEvent.id && scope.eventType == scope.currentEvent.eventType) {
 							// bar.width = scope.xScale(currentEventDuration(event)) - scope.xScale(0);
-							console.log('bar', bar)
+							// console.log('bar', bar)
 							currentEventBar(bar);
 							// return bar;
 						} else {

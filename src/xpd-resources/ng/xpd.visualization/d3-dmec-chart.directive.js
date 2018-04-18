@@ -1,9 +1,12 @@
 (function () {
 	'use strict';
 
-	angular.module('xpd.visualization')
-		.directive('d3DmecChart', d3DmecChart);
+	var module = angular.module('xpd.visualization');
 
+	module.directive('d3DmecChart', d3DmecChart);
+	module.controller('ModalUpdateDmecTracks', ModalUpdateDmecTracks);
+
+	ModalUpdateDmecTracks.$inject = ['$scope', '$uibModalInstance', 'tracks'];
 	d3DmecChart.$inject = ['d3Service', '$interval', '$timeout', 'readingSetupAPIService', '$uibModal'];
 
 	function d3DmecChart(d3Service, $interval, $timeout, readingSetupAPIService, $modal) {
@@ -21,7 +24,26 @@
 			link: link
 		};
 
+		function workerCommand(name, data) {
+			return {
+				cmd: name,
+				data: data
+			};
+		}
+
+		function getRandomArbitrary(min, max) {
+			return Math.floor(Math.random() * (max - min) + min);
+		}
+
 		function link(scope, element, attrs) {
+
+			var oldWorker = scope.oldWorker = new Worker('../assets/js/dmec-worker.js');
+			var newWorker = scope.newWorker = new Worker('../assets/js/dmec-worker.js');
+
+			oldWorker.postMessage(workerCommand('start'));
+			newWorker.postMessage(workerCommand('start'));
+
+			var chartId = scope.chartId = getRandomArbitrary(100, 999) + '-' + getRandomArbitrary(100, 999) + '-' + getRandomArbitrary(100, 999);
 
 			var threads = 4;
 			var d3 = null;
@@ -30,7 +52,7 @@
 			var bisect = null;
 
 			scope.horizontal = (attrs.horizontal == true || attrs.horizontal == 'true');
-			
+
 			$interval(getTick, 1000);
 
 			var defaultTracks = [{
@@ -91,7 +113,7 @@
 				nextParam: false
 			}];
 
-			if(!localStorage.dmecTracks){
+			if (!localStorage.dmecTracks) {
 				localStorage.dmecTracks = JSON.stringify(defaultTracks);
 			}
 
@@ -108,7 +130,7 @@
 					keyboard: false,
 					backdrop: 'static',
 					templateUrl: 'app/components/dmec-log/change-scale.template.html',
-					controller: 'ModalChangeScaleController',
+					controller: 'ModalUpdateDmecTracks',
 					windowClass: 'change-scale-modal',
 					resolve: {
 						tracks: getTracks
@@ -172,6 +194,7 @@
 					});
 
 			}
+
 			function mousemove(timestamp) {
 
 				d3.selectAll('#crosshair')
@@ -239,21 +262,40 @@
 
 			function applyOverflow(trackName) {
 
-				scope.tracks.map(function (track) {
+				// document.getElementById('result').textContent = e.data;
+				if (trackName == 'newPoints') {
+					scope.newWorker.postMessage(workerCommand('applyOverflow', scope.tracks));
+					scope.newWorker.addEventListener('message', function (e) {
+						console.log({
+							trackName: trackName,
+							path: e.data
+						});
+					}, false);
+				} else {
+					scope.oldWorker.postMessage(workerCommand('applyOverflow', scope.tracks));
+					scope.oldWorker.addEventListener('message', function (e) {
+						console.log({
+							trackName: trackName,
+							path: e.data
+						});
+					}, false);
+				}
 
-					if (!scope[trackName]) {
-						scope[trackName] = {};
-					}
-					if (!scope[trackName + 'Path']) {
-						scope[trackName + 'Path'] = {};
-					}
+				// scope.tracks.map(function (track) {
 
-					if (scope[trackName] && scope[trackName][track.param]) {
-						scope[trackName][track.param] = handleOverflow(scope[trackName][track.param], track);
-						scope[trackName + 'Path'][track.param] = track.lineFunction(scope[trackName][track.param]);
-					}
+				// 	if (!scope[trackName]) {
+				// 		scope[trackName] = {};
+				// 	}
+				// 	if (!scope[trackName + 'Path']) {
+				// 		scope[trackName + 'Path'] = {};
+				// 	}
 
-				});
+				// 	if (scope[trackName] && scope[trackName][track.param]) {
+				// 		scope[trackName][track.param] = handleOverflow(scope[trackName][track.param], track);
+				// 		scope[trackName + 'Path'][track.param] = track.lineFunction(scope[trackName][track.param]);
+				// 	}
+
+				// });
 			}
 
 			function handleOverflow(points, track) {
@@ -500,7 +542,7 @@
 
 			function scrollIfNeeded() {
 
-				var container = document.getElementById('dmec-scroll');
+				var container = document.getElementById(chartId);
 				container.addEventListener('scroll', moveLegend);
 
 				if (!scope.horizontal) {
@@ -521,7 +563,7 @@
 			}
 
 			function moveLegend() {
-				var container = document.getElementById('dmec-scroll');
+				var container = document.getElementById(chartId);
 				var legend = d3.selectAll('.label');
 
 				if (!scope.horizontal) {
@@ -533,6 +575,39 @@
 
 		}
 
+	}
+	function ModalUpdateDmecTracks($scope, $modalInstance, tracks) {
+
+		$scope.viewData = {
+			trackList: []
+		};
+
+		$scope.viewData.trackList = angular.copy(tracks);
+
+		$scope.actionButtonConfirm = actionButtonConfirm;
+		$scope.actionButtonClose = actionButtonClose;
+
+		function actionButtonConfirm() {
+
+			// updating tracks
+			for (var i in $scope.viewData.trackList) {
+				if (+tracks[i].min != +$scope.viewData.trackList[i].min) {
+					tracks[i].min = +$scope.viewData.trackList[i].min;
+				}
+
+				if (+tracks[i].max != +$scope.viewData.trackList[i].max) {
+					tracks[i].max = +$scope.viewData.trackList[i].max;
+				}
+			}
+
+			localStorage.dmecTracks = JSON.stringify(tracks);
+
+			$modalInstance.close();
+		}
+
+		function actionButtonClose() {
+			$modalInstance.close();
+		}
 	}
 
 })();

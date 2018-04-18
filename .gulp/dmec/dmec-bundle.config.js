@@ -22,7 +22,6 @@ exports.scripts = {
 		'./src/xpd-resources/ng/highcharts/highcharts.module.js',
 		'./src/xpd-resources/ng/highcharts/highcharts.service.js',
 		'./src/xpd-resources/ng/xpd.visualization/xpd-visualization.module.js',
-		'./src/xpd-resources/ng/xpd.visualization/d3-dmec-chart-worker-service.js',
 		'./src/xpd-resources/ng/xpd.visualization/d3-dmec-chart.directive.js',
 		'./src/xpd-resources/ng/xpd.dialog/xpd.dialog.module.js',
 		'./src/xpd-resources/ng/xpd.dialog/xpd.dialog.factory.js',
@@ -35,7 +34,6 @@ exports.scripts = {
 		'./src/xpd-resources/ng/xpd.setupapi/setupapi.service.js',
 		'./src/xpd-resources/ng/xpd.setupapi/reading-setupapi.service.js',
 		'./src/admin/app/components/dmec-log/dmec-log.module.js',
-		'./src/admin/app/components/dmec-log/change-scale.controller.js',
 		'./src/admin/app/components/dmec-log/dmec-log.controller.js',
 	]
 };

@@ -108,7 +108,7 @@
 				keyboard: false,
 				backdrop: 'static',
 				templateUrl: 'app/components/dmec-log/change-scale.template.html',
-				controller: 'ModalChangeScaleController',
+				controller: 'ModalUpdateDmecTracks',
 				windowClass: 'change-scale-modal',
 				resolve: {
 					tracks: getTracks

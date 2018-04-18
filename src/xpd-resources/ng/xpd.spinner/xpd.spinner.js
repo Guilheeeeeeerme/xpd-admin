@@ -1,4 +1,4 @@
-(function() {
+(function () {
 
 	'use strict';
 
@@ -11,55 +11,74 @@
 
 	function spinnerConfig($httpProvider, usSpinnerConfigProvider) {
 
-		if(!document.getElementById('xpd-spinner')){
+		if (!document.getElementById('xpd-spinner')) {
 			document.body.innerHTML += '<span us-spinner spinner-key="xpd-spinner"></span>';
 		}
 
-    	$httpProvider.interceptors.push('httpInterceptor');
+		$httpProvider.interceptors.push('httpInterceptor');
 
-    	usSpinnerConfigProvider.setDefaults({
-    		color: 'white'
-    	});
+		usSpinnerConfigProvider.setDefaults({
+			color: 'white'
+		});
 
 	}
 
 
-	httpInterceptor.$inject = ['$q','usSpinnerService'];
+	httpInterceptor.$inject = ['$q', 'usSpinnerService'];
 
 	function httpInterceptor($q, usSpinnerService) {
 
-	    var numLoadings = 0;
+		var numLoadings = 0;
 
-	    return {
-	        request: function (config) {
+		var urlsToExclude = [
+			'/xpd-setup-api/setup/reading/from/',
+			'/xpd-setup-api/setup/reading/tick/'
+		];
 
-	            numLoadings++;
+		function hasSpinner(url) {
 
-	            //console.log('Show loader');
-	            usSpinnerService.spin('xpd-spinner');
-	            return config || $q.when(config);
+			for (var i in urlsToExclude) {
+				if (url.indexOf(urlsToExclude[i]) >= 0) {
+					return false;
+				}
+			}
 
-	        },
-	        response: function (response) {
+			return true;
+		}
 
-	            if ((--numLoadings) === 0) {
-	                //console.log('Hide loader');
-	                usSpinnerService.stop('xpd-spinner');
-	            }
+		return {
+			request: function (config) {
 
-	            return response || $q.when(response);
+				if (hasSpinner(config.url)) {
+					numLoadings++;
+					usSpinnerService.spin('xpd-spinner');
+				}
 
-	        },
-	        responseError: function (response) {
+				return config || $q.when(config);
 
-	            if (!(--numLoadings)) {
-	                //console.log('Hide loader');
-	                usSpinnerService.stop('xpd-spinner');
-	            }
+			},
+			response: function (response) {
 
-	            return $q.reject(response);
-	        }
-	    };
+				if (hasSpinner(response.config.url)) {
+					if ((--numLoadings) === 0) {
+						//console.log('Hide loader');
+						usSpinnerService.stop('xpd-spinner');
+					}
+				}
+
+				return response || $q.when(response);
+
+			},
+			responseError: function (response) {
+
+				if (!(--numLoadings)) {
+					//console.log('Hide loader');
+					usSpinnerService.stop('xpd-spinner');
+				}
+
+				return $q.reject(response);
+			}
+		};
 	}
 
 
