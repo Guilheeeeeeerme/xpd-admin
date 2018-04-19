@@ -1,40 +1,44 @@
 <div class="dmec-tracking-container" ng-if="operationData.operationContext.currentOperation && operationData.operationContext.currentOperation.running">
 
-	<div class="dmec-tracking-row dmec-tracking-row-h-50" >
-			<d3-dmec-chart 
+	<!-- <div class="dmec-tracking-row dmec-tracking-row-h-50" >
+		<d3-dmec-chart 
 			ng-if="showDrillingMecChart" 
 			ng-init="getAllReadingSince(operationData.operationContext.currentOperation.startDate)"
-            threads="{{ 4 }}" 
-            horizontal="true"
-            start-at="operationData.operationContext.currentOperation.startDate" 
-            end-at="dmecEndTime"
-            zoom-start-at="zoomStartTime" 
-            zoom-end-at="zoomEndTime"
-            readings="readings" 
-            auto-scroll="chartAutoScroll">
+			threads="{{ 4 }}" 
+			horizontal="true"
+			start-at="operationData.operationContext.currentOperation.startDate" 
+			end-at="dmecEndTime"
+			zoom-start-at="zoomStartTime" 
+			zoom-end-at="zoomEndTime"
+			readings="readings" 
+			auto-scroll="chartAutoScroll">
         </d3-dmec-chart>
-	</div>
+	</div> -->
 
 	<div class="dmec-tracking-row dmec-tracking-row-h-10">
 
 	</div>
 
 	<div class="dmec-tracking-row dmec-tracking-row-h-25">
-		<!-- <dmec-tracking-events 
-		current-operation='operationData.operationContext.currentOperation' 
-		events='connectionTimes' 
-		event-type="CONN"
-		current-event="operationData.eventContext.currentEvent">
-		</dmec-tracking-events> -->
+		<dmec-tracking-events 
+			tick="operationData.chronometerContext.tick"
+			current-operation='operationData.operationContext.currentOperation' 
+			events='connectionTimes' 
+			event-type="'CONN'"
+			current-event="operationData.eventContext.currentEvent"
+			current-block-position= "operationData.readingContext.currentReading.blockPosition">
+		</dmec-tracking-events>
 	</div>
 
 	<div class="dmec-tracking-row dmec-tracking-row-h-25">
-		<!-- <dmec-tracking-events 
-		current-operation='operationData.operationContext.currentOperation' 
-		events='tripTimes' 
-		event-type="trip"
-		current-event="operationData.eventContext.currentEvent">
-		</dmec-tracking-events> -->
+		<dmec-tracking-events
+			tick="operationData.chronometerContext.tick"
+			current-operation='operationData.operationContext.currentOperation' 
+			events='tripTimes' 
+			event-type="'TRIP'"
+			current-event="operationData.eventContext.currentEvent"
+			current-block-position= "operationData.readingContext.currentReading.blockPosition">
+		</dmec-tracking-events>
 	</div>
 
 	<div class="dmec-tracking-row dmec-tracking-row-h-25">
