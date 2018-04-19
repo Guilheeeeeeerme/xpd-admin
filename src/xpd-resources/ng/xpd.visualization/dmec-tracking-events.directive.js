@@ -10,32 +10,50 @@
 		return {
 			templateUrl: '../xpd-resources/ng/xpd.visualization/dmec-tracking-events.template.html',
 			scope: {
-				// averageStandLength: '=',
-				// actionBarClick: '=',
-				// actionBarDoubleClick: '=',
-				// selectedEvent: '=',
-				// verticalMode: '=?'
+				tick: '=',
 				events: '=',
 				eventType: '=',
 				currentEvent: '=',
-				currentOperation: '='
+				currentOperation: '=',
+				currentBlockPosition: '='
 			},
 			link: function (scope, element, attrs) {
-				var a = 1;
-				
 
+				scope.elementIdGroup = 'current-event-' + scope.eventType;
+				scope.elementIdBar = 'current-event-bar' + scope.eventType;
 				scope.verticalMode = angular.isDefined(scope.verticalMode) ? scope.verticalMode : false;
-
-				scope.dynamicPopover = {
-					content: 'content',
-					title: 'title'
-				};
 
 				d3Service.d3().then(function (d3) {
 
+					scope.events.pop();
 					setViewMode();
 
 					scope.gatBarProperties = gatBarProperties;
+					scope.getEventScale = getEventScale;
+
+					scope.$watch('tick', function (tick) {
+						gatBarProperties(scope.currentEvent);
+					});
+
+
+					function setViewMode() {
+
+						scope.svg = {
+							height: element[0].offsetHeight,
+							width: element[0].clientWidth
+						};
+
+						scope.svgViewHeight = (scope.svg.width * 100) / scope.svg.height;
+
+						scope.svg.viewBox = '0 0 100 ' + scope.svgViewHeight;
+
+						var startDate = new Date(scope.currentOperation.startDate);
+						var mindate = new Date(scope.currentOperation.startDate).getTime();
+						var maxdate = new Date().setHours(startDate.getHours() + 5);
+
+						scope.xScale = d3.scale.linear().domain([mindate, maxdate]).range([0, 100]);
+						scope.xTicks = scope.xScale.ticks();
+					}
 
 					function gatBarProperties(event) {
 
@@ -46,25 +64,32 @@
 							color: '',
 						};
 						var eventDuration;
+						var displacement = null;
+						var isCurrentEvent = null;
 
-						if (event.duration) {
+						if (event.id == scope.currentEvent.id) {
+							isCurrentEvent = true;
+							eventDuration = scope.tick;
+						} else {
+							isCurrentEvent = false;
 							eventDuration = event.duration;
-						} else { // current event
-							// eventDuration = currentEventDuration(event);
 						}
 							
-						bar.width = scope.xScale(eventDuration) - scope.xScale(0);
-						// console.log(bar);
-						
+						bar.width = scope.xScale(eventDuration) - scope.xScale(0);						
 
 						var yScale = d3.scale.linear()
 							.domain([event.vtarget * 2, event.vpoor / 2])
 							.range([scope.svgViewHeight / 5, scope.svgViewHeight])
 							.clamp(true);
 
-						var displacement = 1;
-						if (event.eventType === 'TRIP') {
-							displacement = Math.abs(event.startBlockPosition - event.endBlockPosition);
+						if (event.eventType === 'CONN') {
+							displacement = 1;
+						} else {
+							if(isCurrentEvent){
+								displacement = Math.abs(event.startBlockPosition - scope.currentBlockPosition);
+							} else {
+								displacement = Math.abs(event.startBlockPosition - event.endBlockPosition);
+							}
 						}
 						
 						var actualSpeed = displacement / (eventDuration / 1000);
@@ -81,71 +106,31 @@
 							bar.color = '#860000';
 						}
 
-						// console.log(scope.eventType)
-						// console.log(scope.currentEvent.eventType)
-						if(event.id == scope.currentEvent.id && scope.eventType == scope.currentEvent.eventType) {
-							// bar.width = scope.xScale(currentEventDuration(event)) - scope.xScale(0);
-							// console.log('bar', bar)
+						if(isCurrentEvent && scope.eventType == scope.currentEvent.eventType) {
 							currentEventBar(bar);
-							// return bar;
-						} else {
+						} else if (!isNaN(bar.width) && !isNaN(bar.height)) {
 							return bar;
 						}
 					}
 
-					function setViewMode() {
+					function getEventScale(startTime) {
 
-						scope.svg = {
-							height: element[0].offsetHeight,
-							width: element[0].clientWidth
-						};
-
-						scope.svgViewHeight = (scope.svg.width * 100) / scope.svg.height;
-
-						scope.svg.viewBox = '0 0 100 ' + scope.svgViewHeight;
-						
-						var startDate = new Date(scope.currentOperation.startDate);
-						var mindate = new Date(scope.currentOperation.startDate).getTime();
-						var maxdate = new Date().setHours(startDate.getHours() + 0.5);
-
-						scope.xScale = d3.scale.linear().domain([mindate, maxdate]).range([0, 100]);
-						scope.xTicks = scope.xScale.ticks();
-					}
-
-
-					function currentEventDuration(event) {
-						if(event.id == scope.currentEvent.id) {
-							var duration = new Date().getTime() - new Date(event.startTime).getTime();
-							return duration;
-							// return (new Date().getTime() - duration);
-						}
+						if (!isNaN(scope.xScale(startTime)))
+							return scope.xScale(startTime);
+						else return 0;
 					}
 
 					function currentEventBar(bar) {
-					// 	} else {
-					// 		eventDuration = eventoRolando(event);
-					// 		if (eventDuration != undefined) {
-					// 			// bar.width = scope.xScale(eventoRolando(event)) - scope.xScale(0);
-					// 			// bar.width = scope.xScale(eventDuration) - scope.xScale(0);
-					// 			// console.log('eventDuration', scope.xScale(eventDuration) - scope.xScale(0));
-					// 		} else {
-					// 			eventDuration = 0;
-					// 			bar.width = 0;
-					// 		}
+						var startTime = new Date(scope.currentEvent.startTime);
 
-						if(scope.currentEvent) {
-							var startTime = new Date(scope.currentEvent.startTime);
+						d3.select('#' + scope.elementIdGroup)
+							.attr('transform', 'translate(' + scope.xScale(startTime) + ', 0)');
 
-							d3.select('#current-event')
-								.attr('transform', 'translate(' + scope.xScale(startTime) + ', 0)');
-
-							// console.log('bar', bar);
-							d3.select('#current-event-bar')
-								.attr('y', bar.position)
-								.attr('width', bar.width)
-								.attr('height', bar.height)
-								.attr('fill', bar.color);
-						}
+						d3.select('#' + scope.elementIdBar)
+							.attr('y', bar.position)
+							.attr('width', bar.width)
+							.attr('height', bar.height)
+							.attr('fill', bar.color);
 					}
 				});
 			}

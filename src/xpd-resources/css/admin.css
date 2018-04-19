@@ -1498,29 +1498,29 @@ dmec-tracking dmec-tracking-events > svg  {
     height: 100%;
 }
 
-dmec-tracking > .dmec-tracking-container .dmec-tracking-row {
+/* dmec-tracking > .dmec-tracking-container .dmec-tracking-row {
     display: block;
     width: 100%;
-}
+} */
 
-dmec-tracking > .dmec-tracking-container .dmec-tracking-row.dmec-tracking-row-h-10 { height: 10%; min-height: 10%; max-height: 10%; }
-dmec-tracking > .dmec-tracking-container .dmec-tracking-row.dmec-tracking-row-h-10 { height: 15%; min-height: 15%; max-height: 15%; }
-dmec-tracking > .dmec-tracking-container .dmec-tracking-row.dmec-tracking-row-h-10 { height: 20%; min-height: 20%; max-height: 20%; }
-dmec-tracking > .dmec-tracking-container .dmec-tracking-row.dmec-tracking-row-h-10 { height: 25%; min-height: 25%; max-height: 25%; }
-dmec-tracking > .dmec-tracking-container .dmec-tracking-row.dmec-tracking-row-h-10 { height: 30%; min-height: 30%; max-height: 30%; }
-dmec-tracking > .dmec-tracking-container .dmec-tracking-row.dmec-tracking-row-h-10 { height: 35%; min-height: 35%; max-height: 35%; }
-dmec-tracking > .dmec-tracking-container .dmec-tracking-row.dmec-tracking-row-h-10 { height: 40%; min-height: 40%; max-height: 40%; }
-dmec-tracking > .dmec-tracking-container .dmec-tracking-row.dmec-tracking-row-h-10 { height: 45%; min-height: 45%; max-height: 45%; }
-dmec-tracking > .dmec-tracking-container .dmec-tracking-row.dmec-tracking-row-h-50 { height: 50%; min-height: 50%; max-height: 50%; }
-dmec-tracking > .dmec-tracking-container .dmec-tracking-row.dmec-tracking-row-h-50 { height: 55%; min-height: 55%; max-height: 55%; }
-dmec-tracking > .dmec-tracking-container .dmec-tracking-row.dmec-tracking-row-h-10 { height: 60%; min-height: 60%; max-height: 60%; }
-dmec-tracking > .dmec-tracking-container .dmec-tracking-row.dmec-tracking-row-h-10 { height: 65%; min-height: 65%; max-height: 65%; }
-dmec-tracking > .dmec-tracking-container .dmec-tracking-row.dmec-tracking-row-h-10 { height: 70%; min-height: 70%; max-height: 70%; }
-dmec-tracking > .dmec-tracking-container .dmec-tracking-row.dmec-tracking-row-h-10 { height: 75%; min-height: 75%; max-height: 75%; }
-dmec-tracking > .dmec-tracking-container .dmec-tracking-row.dmec-tracking-row-h-10 { height: 80%; min-height: 80%; max-height: 80%; }
-dmec-tracking > .dmec-tracking-container .dmec-tracking-row.dmec-tracking-row-h-10 { height: 85%; min-height: 85%; max-height: 85%; }
-dmec-tracking > .dmec-tracking-container .dmec-tracking-row.dmec-tracking-row-h-10 { height: 90%; min-height: 90%; max-height: 90%; }
-dmec-tracking > .dmec-tracking-container .dmec-tracking-row.dmec-tracking-row-h-10 { height: 95%; min-height: 95%; max-height: 95%; }
+.dmec-tracking-row.dmec-tracking-row-h-10 { height: 10%; min-height: 10%; max-height: 10%; }
+.dmec-tracking-row.dmec-tracking-row-h-15 { height: 15%; min-height: 15%; max-height: 15%; }
+.dmec-tracking-row.dmec-tracking-row-h-20 { height: 20%; min-height: 20%; max-height: 20%; }
+.dmec-tracking-row.dmec-tracking-row-h-25 { height: 25%; min-height: 25%; max-height: 25%; }
+.dmec-tracking-row.dmec-tracking-row-h-30 { height: 30%; min-height: 30%; max-height: 30%; }
+.dmec-tracking-row.dmec-tracking-row-h-35 { height: 35%; min-height: 35%; max-height: 35%; }
+.dmec-tracking-row.dmec-tracking-row-h-40 { height: 40%; min-height: 40%; max-height: 40%; }
+.dmec-tracking-row.dmec-tracking-row-h-45 { height: 45%; min-height: 45%; max-height: 45%; }
+.dmec-tracking-row.dmec-tracking-row-h-50 { height: 50%; min-height: 50%; max-height: 50%; }
+.dmec-tracking-row.dmec-tracking-row-h-55 { height: 55%; min-height: 55%; max-height: 55%; }
+.dmec-tracking-row.dmec-tracking-row-h-60 { height: 60%; min-height: 60%; max-height: 60%; }
+.dmec-tracking-row.dmec-tracking-row-h-65 { height: 65%; min-height: 65%; max-height: 65%; }
+.dmec-tracking-row.dmec-tracking-row-h-70 { height: 70%; min-height: 70%; max-height: 70%; }
+.dmec-tracking-row.dmec-tracking-row-h-75 { height: 75%; min-height: 75%; max-height: 75%; }
+.dmec-tracking-row.dmec-tracking-row-h-80 { height: 80%; min-height: 80%; max-height: 80%; }
+.dmec-tracking-row.dmec-tracking-row-h-85 { height: 85%; min-height: 85%; max-height: 85%; }
+.dmec-tracking-row.dmec-tracking-row-h-90 { height: 90%; min-height: 90%; max-height: 90%; }
+.dmec-tracking-row.dmec-tracking-row-h-95 { height: 95%; min-height: 95%; max-height: 95%; }
 
 /* dmec-tracking, 
 dmec-tracking .dmec-tracking-row, 
