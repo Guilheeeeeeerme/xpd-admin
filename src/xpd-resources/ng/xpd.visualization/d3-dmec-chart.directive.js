@@ -24,24 +24,11 @@
 			link: link
 		};
 
-		function workerCommand(name, data) {
-			return {
-				cmd: name,
-				data: data
-			};
-		}
-
 		function getRandomArbitrary(min, max) {
 			return Math.floor(Math.random() * (max - min) + min);
 		}
 
 		function link(scope, element, attrs) {
-
-			var oldWorker = scope.oldWorker = new Worker('../assets/js/dmec-worker.js');
-			var newWorker = scope.newWorker = new Worker('../assets/js/dmec-worker.js');
-
-			oldWorker.postMessage(workerCommand('start'));
-			newWorker.postMessage(workerCommand('start'));
 
 			var chartId = scope.chartId = getRandomArbitrary(100, 999) + '-' + getRandomArbitrary(100, 999) + '-' + getRandomArbitrary(100, 999);
 
@@ -166,16 +153,20 @@
 					resize();
 				});
 
-				scope.$watch('readings', function (readings) {
-					if (readings) {
-						readingsFromDatabase(readings);
-					}
+				scope.$watch('readings', function (_readings) {
+					$timeout(function (readings) {
+						if (readings) {
+							readingsFromDatabase(readings);
+						}
+					}, 1000, _readings);
 				});
 
-				scope.$watch('oldPoints', function (oldPoints) {
-					if (oldPoints) {
-						applyOverflow('oldPoints');
-					}
+				scope.$watch('oldPoints', function (_oldPoints) {
+					$timeout(function (oldPoints) {
+						if (oldPoints) {
+							applyOverflow('oldPoints');
+						}
+					}, 1000, _oldPoints);
 				});
 
 			}
@@ -262,40 +253,21 @@
 
 			function applyOverflow(trackName) {
 
-				// document.getElementById('result').textContent = e.data;
-				if (trackName == 'newPoints') {
-					scope.newWorker.postMessage(workerCommand('applyOverflow', scope.tracks));
-					scope.newWorker.addEventListener('message', function (e) {
-						console.log({
-							trackName: trackName,
-							path: e.data
-						});
-					}, false);
-				} else {
-					scope.oldWorker.postMessage(workerCommand('applyOverflow', scope.tracks));
-					scope.oldWorker.addEventListener('message', function (e) {
-						console.log({
-							trackName: trackName,
-							path: e.data
-						});
-					}, false);
-				}
+				scope.tracks.map(function (track) {
 
-				// scope.tracks.map(function (track) {
+					if (!scope[trackName]) {
+						scope[trackName] = {};
+					}
+					if (!scope[trackName + 'Path']) {
+						scope[trackName + 'Path'] = {};
+					}
 
-				// 	if (!scope[trackName]) {
-				// 		scope[trackName] = {};
-				// 	}
-				// 	if (!scope[trackName + 'Path']) {
-				// 		scope[trackName + 'Path'] = {};
-				// 	}
+					if (scope[trackName] && scope[trackName][track.param]) {
+						scope[trackName][track.param] = handleOverflow(scope[trackName][track.param], track);
+						scope[trackName + 'Path'][track.param] = track.lineFunction(scope[trackName][track.param]);
+					}
 
-				// 	if (scope[trackName] && scope[trackName][track.param]) {
-				// 		scope[trackName][track.param] = handleOverflow(scope[trackName][track.param], track);
-				// 		scope[trackName + 'Path'][track.param] = track.lineFunction(scope[trackName][track.param]);
-				// 	}
-
-				// });
+				});
 			}
 
 			function handleOverflow(points, track) {
@@ -361,7 +333,7 @@
 
 			function readingsFromDatabase(readings) {
 
-				var oldPoints = {};
+				var tempPoints = {};
 
 				var lastReadingTime = scope.lastReadingTime = null;
 
@@ -371,7 +343,7 @@
 
 				function preparePoints(track) {
 
-					oldPoints[track.param] = readings.map(convertToXY);
+					tempPoints[track.param] = readings.map(convertToXY);
 
 					function convertToXY(point) {
 
@@ -389,17 +361,18 @@
 					return track;
 				}
 
-				scope.oldPoints = oldPoints;
+				scope.oldPoints = tempPoints;
 
 				resize();
 			}
 
 			function getTick() {
-				if (scope.lastReadingTime != null) {
-					readingSetupAPIService.getTick(scope.lastReadingTime, onNewReading);
-					scope.lastReadingTime += 1000;
-					scope.endAt = new Date(scope.lastReadingTime);
-				}
+				// if (scope.lastReadingTime != null) {
+				// 	readingSetupAPIService.getTick(scope.lastReadingTime, onNewReading);
+				// 	scope.lastReadingTime += 1000;
+				// }else{
+				readingSetupAPIService.getTick(new Date().getTime(), onNewReading);
+				// }
 			}
 
 			function onNewReading(currentReading) {
@@ -437,6 +410,9 @@
 				var zoomStartAt = (scope.zoomStartAt) ? scope.zoomStartAt : scope.startAt;
 				var zoomEndAt = (scope.zoomEndAt) ? scope.zoomEndAt : scope.endAt;
 
+				zoomStartAt = new Date(zoomStartAt);
+				zoomEndAt = new Date(zoomEndAt);
+
 				var viewWidth = element[0].clientWidth;
 				var viewHeight = element[0].offsetHeight;
 
@@ -449,6 +425,9 @@
 						0,
 						scope.horizontal ? viewWidth : viewHeight
 					]);
+
+				scope.endAt = new Date(scope.endAt);
+				scope.startAt = new Date(scope.startAt);
 
 				var timeAxisSize = zoomScale(scope.endAt.getTime()) - zoomScale(scope.startAt.getTime());
 
@@ -470,7 +449,7 @@
 
 				scope.tracks = scope.tracks.map(createPath);
 
-				applyOverflow('oldPoints');
+				$timeout(applyOverflow, 1000, 'oldPoints');
 				applyOverflow('newPoints');
 			}
 
