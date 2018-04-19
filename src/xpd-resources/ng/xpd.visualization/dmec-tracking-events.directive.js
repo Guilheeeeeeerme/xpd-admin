@@ -35,7 +35,6 @@
 						gatBarProperties(scope.currentEvent);
 					});
 
-
 					function setViewMode() {
 
 						scope.svg = {
@@ -49,7 +48,7 @@
 
 						var startDate = new Date(scope.currentOperation.startDate);
 						var mindate = new Date(scope.currentOperation.startDate).getTime();
-						var maxdate = new Date().setHours(startDate.getHours() + 5);
+						var maxdate = new Date().setHours(startDate.getHours() + 11);
 
 						scope.xScale = d3.scale.linear().domain([mindate, maxdate]).range([0, 100]);
 						scope.xTicks = scope.xScale.ticks();
@@ -63,7 +62,7 @@
 							position: 0,
 							color: '',
 						};
-						var eventDuration;
+						var eventDuration = null;
 						var displacement = null;
 						var isCurrentEvent = null;
 
@@ -82,7 +81,7 @@
 							.range([scope.svgViewHeight / 5, scope.svgViewHeight])
 							.clamp(true);
 
-						if (event.eventType === 'CONN') {
+						if (event.eventType === 'CONN' || event.eventType === 'TIME') {
 							displacement = 1;
 						} else {
 							if(isCurrentEvent){

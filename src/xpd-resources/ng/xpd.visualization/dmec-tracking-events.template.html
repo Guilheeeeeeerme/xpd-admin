@@ -2,7 +2,7 @@
      xpd-view-box="svg.viewBox" class="xpd-events-container">
    
     <g>
-        <g class="rect-bar" ng-repeat="(key, event) in events | orderBy: 'startTime' track by event.id"
+        <g class="rect-bar" ng-repeat="(key, event) in events | orderBy: 'startTime'"
             ng-attr-transform="{{'translate('+ getEventScale(event.startTime)+ ', 0)'}}">
 
             <rect 

@@ -8,8 +8,9 @@
 	function dmecTrackingDirective(readingSetupAPIService) {
 		return {
 			scope: {
-				connectionTimes: '=',
-				tripTimes: '='
+				connectionEvents: '=',
+				tripEvents: '=',
+				timeEvents: '='
 			},
 			controller: 'TrackingController',
 			controllerAs: 'atController',
@@ -25,6 +26,7 @@
 			scope.getAllReadingSince = getAllReadingSince;
 			scope.toDate = toDate;
 			scope.showDrillingMecChart = true;
+
 
 			function toDate(arg) {
 				return new Date(arg);

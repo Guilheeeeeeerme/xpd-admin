@@ -23,7 +23,7 @@
 		<dmec-tracking-events 
 			tick="operationData.chronometerContext.tick"
 			current-operation='operationData.operationContext.currentOperation' 
-			events='connectionTimes' 
+			events='connectionEvents' 
 			event-type="'CONN'"
 			current-event="operationData.eventContext.currentEvent"
 			current-block-position= "operationData.readingContext.currentReading.blockPosition">
@@ -34,7 +34,7 @@
 		<dmec-tracking-events
 			tick="operationData.chronometerContext.tick"
 			current-operation='operationData.operationContext.currentOperation' 
-			events='tripTimes' 
+			events='tripEvents' 
 			event-type="'TRIP'"
 			current-event="operationData.eventContext.currentEvent"
 			current-block-position= "operationData.readingContext.currentReading.blockPosition">
@@ -42,6 +42,13 @@
 	</div>
 
 	<div class="dmec-tracking-row dmec-tracking-row-h-25">
-
+		<dmec-tracking-events
+			tick="operationData.chronometerContext.tick"
+			current-operation='operationData.operationContext.currentOperation' 
+			events='timeEvents' 
+			event-type="'TIME'"
+			current-event="operationData.eventContext.currentEvent"
+			current-block-position= "operationData.readingContext.currentReading.blockPosition">
+		</dmec-tracking-events>
 	</div>
 </div>

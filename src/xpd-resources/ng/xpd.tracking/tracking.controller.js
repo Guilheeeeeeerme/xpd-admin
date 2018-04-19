@@ -14,6 +14,10 @@
 		$scope.dados = {
 			connectionTimes: [],
 			tripTimes: [],
+			
+			connectionEvents: [],
+			tripEvents: [],
+			timeEvents: [],
 			currentTime: new Date()
 		};
 

@@ -32,8 +32,9 @@
 		operationDataFactory.addEventListener('adminTrackingController', 'setOnWaitEventListener', buildEventStruture);
 
 		function buildEventStruture() {
-			getConnectionTimes();
-			getTripTimes();
+			getOperationEvents();
+			// getConnectionTimes();
+			// getTripTimes();
 		}
 
 		function actionBarClick($event, eventLog) {
@@ -145,30 +146,54 @@
 			);
 		}
 
-		function getConnectionTimes() {
-
+		function getOperationEvents() {
 			if ($scope.operationData.operationContext.currentOperation != null) {
-				eventlogSetupAPIService.listByType('CONN', $scope.operationData.operationContext.currentOperation.id, 200, function (times) {
-					times.map( function (time) {
-						time.startTime = new Date(time.startTime).getTime();
+				eventlogSetupAPIService.listByOperation($scope.operationData.operationContext.currentOperation.id, function (events) {
+
+					events.map( function (event) {
+						event.startTime = new Date(event.startTime).getTime();
+
+						if(event.eventType == 'CONN')
+							$scope.dados.connectionEvents.push(event);
+						
+						if(event.eventType == 'TRIP')
+							$scope.dados.tripEvents.push(event);
+
+						if(event.eventType == 'TIME')
+							$scope.dados.timeEvents.push(event);
+
 					});
+
+					$scope.dados.connectionTimes = $scope.dados.connectionEvents.slice(-200);
+					$scope.dados.tripTimes = $scope.dados.tripEvents.slice(-200);
+				});
+			}
+		}
+
+		// function getConnectionTimes() {
+
+		// 	if ($scope.operationData.operationContext.currentOperation != null) {
+		// 		eventlogSetupAPIService.listByType('CONN', $scope.operationData.operationContext.currentOperation.id, 200, function (times) {
+		// 			times.map( function (time) {
+		// 				time.startTime = new Date(time.startTime).getTime();
+		// 			});
 					
-					$scope.dados.connectionTimes = times;
-				});
-			}
-		}
+		// 			$scope.dados.connectionTimes = times;
+		// 		});
+		// 	}
+		// }
 
-		function getTripTimes() {
+		// function getTripTimes() {
 
-			if ($scope.operationData.operationContext.currentOperation != null) {
-				eventlogSetupAPIService.listByType('TRIP', $scope.operationData.operationContext.currentOperation.id, 200, function (times) {
-					times.map(function (time) {
-						time.startTime = new Date(time.startTime).getTime();
-					});
-					$scope.dados.tripTimes = times;
-				});
-			}
-		}
+		// 	if ($scope.operationData.operationContext.currentOperation != null) {
+		// 		eventlogSetupAPIService.listByType('TRIP', $scope.operationData.operationContext.currentOperation.id, 200, function (times) {
+		// 			times.map(function (time) {
+		// 				time.startTime = new Date(time.startTime).getTime();
+		// 			});
+		// 			$scope.dados.tripTimes = times;
+		// 		});
+		// 	}
+		// }
 
 		$scope.modalActionButtonClose = function() {
 			$scope.eventFailure = {};
