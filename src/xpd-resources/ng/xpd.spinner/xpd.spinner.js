@@ -32,18 +32,23 @@
 
 		var urlsToExclude = [
 			'/xpd-setup-api/setup/reading/from/',
-			'/xpd-setup-api/setup/reading/tick/'
+			'/xpd-setup-api/setup/reading/tick/',
+			'/xpd-setup-api/setup/event/list-by-type/',
+			'/xpd-setup-api/tripin/rig-pictures/load/'
 		];
 
 		function hasSpinner(url) {
 
+			var result = true;
+
 			for (var i in urlsToExclude) {
 				if (url.indexOf(urlsToExclude[i]) >= 0) {
-					return false;
+					result = false;
+					break;
 				}
 			}
 
-			return true;
+			return result;
 		}
 
 		return {
@@ -61,7 +66,6 @@
 
 				if (hasSpinner(response.config.url)) {
 					if ((--numLoadings) === 0) {
-						//console.log('Hide loader');
 						usSpinnerService.stop('xpd-spinner');
 					}
 				}
@@ -71,9 +75,10 @@
 			},
 			responseError: function (response) {
 
-				if (!(--numLoadings)) {
-					//console.log('Hide loader');
-					usSpinnerService.stop('xpd-spinner');
+				if (hasSpinner(response.config.url)) {
+					if (!(--numLoadings)) {
+						usSpinnerService.stop('xpd-spinner');
+					}
 				}
 
 				return $q.reject(response);
