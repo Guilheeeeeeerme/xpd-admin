@@ -8,8 +8,9 @@
 	function dmecTrackingDirective(readingSetupAPIService, $timeout) {
 		return {
 			scope: {
-				connectionTimes: '=',
-				tripTimes: '='
+				connectionEvents: '=',
+				tripEvents: '=',
+				timeEvents: '='
 			},
 			controller: 'TrackingController',
 			controllerAs: 'atController',

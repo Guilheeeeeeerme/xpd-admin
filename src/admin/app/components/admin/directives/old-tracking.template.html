@@ -9,7 +9,6 @@
                 <div ng-if="operationData.operationContext.currentOperation && operationData.operationContext.currentOperation.running && operationData.eventContext.currentEvent != null"
                     class="xpd-chart" times='dados.connectionTimes' max-seconds="175" max-bars="200" selected-event="selectedEvent"
                     action-bar-double-click="atController.actionBarDoubleClick" action-bar-click="atController.actionBarClick">
-
                 </div>
 
                 <div class="xpd-chart-placeholder" ng-if="!operationData.operationContext.currentOperation.running && operationData.operationContext.currentEvent == null">
@@ -23,6 +22,7 @@
             <div class="xpd-chart-container-header">
                 Slips to Slips (Trip)
             </div>
+
             <div class="xpd-chart-container-content">
                 <div ng-if="operationData.operationContext.currentOperation && operationData.operationContext.currentOperation.running && operationData.eventContext.currentEvent != null"
                     class="xpd-chart" times='dados.tripTimes' max-seconds="100" max-bars="200" action-bar-click="atController.actionBarClick"

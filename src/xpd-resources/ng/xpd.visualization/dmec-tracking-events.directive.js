@@ -32,9 +32,9 @@
 					scope.getEventScale = getEventScale;
 
 					scope.$watch('tick', function (tick) {
-						gatBarProperties(scope.currentEvent);
+						if (scope.currentEvent && scope.eventType == scope.currentEvent.eventType)
+							currentEventBar(buildEventBar(scope.currentEvent, true, tick));
 					});
-
 
 					function setViewMode() {
 
@@ -49,13 +49,17 @@
 
 						var startDate = new Date(scope.currentOperation.startDate);
 						var mindate = new Date(scope.currentOperation.startDate).getTime();
-						var maxdate = new Date().setHours(startDate.getHours() + 5);
+						var maxdate = new Date().setHours(startDate.getHours() + 2);
 
 						scope.xScale = d3.scale.linear().domain([mindate, maxdate]).range([0, 100]);
 						scope.xTicks = scope.xScale.ticks();
 					}
 
 					function gatBarProperties(event) {
+						return buildEventBar(event, false, event.duration);
+					}
+
+					function buildEventBar(event, isCurrentEvent, eventDuration) {
 
 						var bar = {
 							width: 0,
@@ -63,35 +67,26 @@
 							position: 0,
 							color: '',
 						};
-						var eventDuration;
-						var displacement = null;
-						var isCurrentEvent = null;
 
-						if (event.id == scope.currentEvent.id) {
-							isCurrentEvent = true;
-							eventDuration = scope.tick;
-						} else {
-							isCurrentEvent = false;
-							eventDuration = event.duration;
-						}
-							
-						bar.width = scope.xScale(eventDuration) - scope.xScale(0);						
+						var displacement = null;
+
+						bar.width = scope.xScale(eventDuration) - scope.xScale(0);
 
 						var yScale = d3.scale.linear()
 							.domain([event.vtarget * 2, event.vpoor / 2])
 							.range([scope.svgViewHeight / 5, scope.svgViewHeight])
 							.clamp(true);
 
-						if (event.eventType === 'CONN') {
+						if (event.eventType === 'CONN' || event.eventType === 'TIME') {
 							displacement = 1;
 						} else {
-							if(isCurrentEvent){
+							if (isCurrentEvent) {
 								displacement = Math.abs(event.startBlockPosition - scope.currentBlockPosition);
 							} else {
 								displacement = Math.abs(event.startBlockPosition - event.endBlockPosition);
 							}
 						}
-						
+
 						var actualSpeed = displacement / (eventDuration / 1000);
 						bar.height = yScale(actualSpeed);
 						bar.position = scope.svgViewHeight - bar.height;
@@ -106,18 +101,9 @@
 							bar.color = '#860000';
 						}
 
-						if(isCurrentEvent && scope.eventType == scope.currentEvent.eventType) {
-							currentEventBar(bar);
-						} else if (!isNaN(bar.width) && !isNaN(bar.height)) {
+						if (!isNaN(bar.width) && !isNaN(bar.height)) {
 							return bar;
 						}
-					}
-
-					function getEventScale(startTime) {
-
-						if (!isNaN(scope.xScale(startTime)))
-							return scope.xScale(startTime);
-						else return 0;
 					}
 
 					function currentEventBar(bar) {
@@ -131,6 +117,13 @@
 							.attr('width', bar.width)
 							.attr('height', bar.height)
 							.attr('fill', bar.color);
+					}
+
+					function getEventScale(startTime) {
+
+						if (!isNaN(scope.xScale(startTime)))
+							return scope.xScale(startTime);
+						else return 0;
 					}
 				});
 			}

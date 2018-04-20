@@ -11,6 +11,7 @@
 
 		vm.listByType = listByType;
 		vm.listByDate = listByDate;
+		vm.listByOperation = listByOperation;
 
 		function listByType(type, operationId, limit, successCallback, errorCallback) {
 			var url = xpdAccessFactory.getSetupURL() + 'setup/event/list-by-type';
@@ -107,6 +108,30 @@
 					url += '&';
 
 				url += 'xpdmodule=' + $rootScope.XPDmodule;
+			}
+
+			var req = {
+				method: 'GET',
+				url: url
+			};
+
+			$http(req).then(
+	            function(response) {
+	                successCallback && successCallback(response.data.data);
+	            },
+	            function(error){
+	            	setupAPIService.generateToast(error.data, true);
+	                errorCallback && errorCallback(error);
+            	}
+			);
+		}
+
+		function listByOperation(operationId, successCallback, errorCallback) {
+			var url = xpdAccessFactory.getSetupURL() + 'setup/operation/';
+
+			if(operationId){
+				url += operationId;
+				url += '/events';
 			}
 
 			var req = {
