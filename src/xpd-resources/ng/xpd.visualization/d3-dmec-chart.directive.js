@@ -15,14 +15,35 @@
 			templateUrl: '../xpd-resources/ng/xpd.visualization/d3-dmec-chart.template.html',
 			scope: {
 				startAt: '=',
-				endAt: '=',
 				zoomStartAt: '=',
+				onEndAtChange: '=',
 				zoomEndAt: '=',
 				readings: '=',
 				autoScroll: '='
 			},
 			link: link
-		};
+		};		
+
+		function BTree(){
+			this.values = [];
+		}
+
+		BTree.prototype.insert(point, index){
+
+			if(index == null){
+				index = 0;
+			}
+
+			if(!this.values || this,values.length == 0){
+				this.values = [point];
+			}else if(this.values[index] == null || point.x == this.values[index].x){
+				this.values[index] = point;
+			}else if(point.x > this.values[index].x){
+				this.insert(point, ((index * 2) + 2) )
+			}else{
+				this.insert(point, ((index * 2) + 1) )
+			}
+		}
 
 		function getRandomArbitrary(min, max) {
 			return Math.floor(Math.random() * (max - min) + min);
@@ -32,6 +53,7 @@
 
 			scope.element = element[0];
 
+			var bTree = {};
 			var threads = 4;
 			var updateLatency = 1000;
 			var chartId = scope.chartId = getRandomArbitrary(100, 999) + '-' + getRandomArbitrary(100, 999) + '-' + getRandomArbitrary(100, 999);
@@ -107,7 +129,6 @@
 
 				var colorScale = d3.scale.category10();
 				var format = d3.format('.1f');
-				var bisect = d3.bisector(function (datum) { return datum.x; }).right;
 
 				$interval(getTick, updateLatency);
 				$interval(scrollIfNeeded, updateLatency, isHorizontal);
@@ -121,9 +142,10 @@
 
 				scope.openScaleModal = openScaleModal;
 				scope.listenToMouseMove = listenToMouseMove;
+				scope.updateTracks = updateTracks;
 
 				function onDateRangeChange(newDate, oldDate) {
-					console.log('On Date Range Change');
+					//console.log('On Date Range Change');
 					resize(isHorizontal);
 				}
 
@@ -139,10 +161,13 @@
 				function getTick() {
 					if (scope.lastReadingTime != null) {
 						readingSetupAPIService.getTick(scope.lastReadingTime, onCurrentReading);
-						if(!scope.endAt || scope.endAt && new Date(scope.endAt).getTime() < scope.lastReadingTime ){
-							scope.endAt = scope.lastReadingTime;
-						}
+
 						scope.lastReadingTime += updateLatency;
+
+						if (!scope.endAt || new Date(scope.endAt) < scope.lastReadingTime) {
+							scope.endAt = scope.lastReadingTime;
+							scope.onEndAtChange && scope.onEndAtChange(scope.endAt);
+						}
 					}
 				}
 
@@ -155,26 +180,27 @@
 					}
 
 					scope.newPoints = readingsToPoints(scope.currentReadings, scope.tracks);
-					// console.log(scope.newPoints);
 					applyOverflow('newPoints');
 
 				}
 
 				function recomputeOldPoints() {
-					console.log('Recompute Old Points');
-					scope.lastReadingTime = null;
 
-					if(scope.readings){
-						scope.lastReadingTime = new Date(scope.readings[scope.readings.length - 1].timestamp).getTime();
+					if (scope.readings) {
+						scope.readings.map(function (reading) {
+							if (!scope.lastReadingTime || scope.lastReadingTime < reading.timestamp) {
+								scope.lastReadingTime = reading.timestamp;
+							}
+							return reading;
+						});
 					}
 
 					scope.oldPoints = readingsToPoints(scope.readings, scope.tracks);
-					// console.log(scope.oldPoints);
 					applyOverflow('oldPoints');
 				}
 
 				function resize(horizontal) {
-					console.log('Resize');
+					//console.log('Resize');
 
 					try {
 
@@ -187,22 +213,22 @@
 						var viewWidth = scope.element.clientWidth;
 						var viewHeight = scope.element.offsetHeight;
 
-						var zoomScale = d3.scale.linear()
+						var zoomScale = d3.time.scale()
 							.domain([
-								zoomStartAt.getTime(),
-								zoomEndAt.getTime(),
+								zoomStartAt,
+								zoomEndAt,
 							])
 							.range([
 								0,
 								horizontal ? viewWidth : viewHeight
 							]);
 
-						var timeAxisSize = zoomScale(new Date(scope.endAt).getTime()) - zoomScale(new Date(scope.startAt).getTime());
+						var timeAxisSize = zoomScale(new Date(scope.endAt)) - zoomScale(new Date(scope.startAt));
 
-						scope.timeScale = d3.scale.linear()
+						scope.timeScale = d3.time.scale()
 							.domain([
-								new Date(scope.startAt).getTime(),
-								new Date(scope.endAt).getTime(),
+								new Date(scope.startAt),
+								new Date(scope.endAt),
 							])
 							.range([
 								0,
@@ -219,7 +245,7 @@
 						updateTracks();
 
 					} catch (e) {
-						console.log(e);
+						console.error(e);
 					}
 				}
 
@@ -231,22 +257,42 @@
 						return points;
 					}
 
-					tracks.map(preparePoints);
+					readings.map(preparePoints);
 
-					function preparePoints(track) {
+					tracks.map(function (track) {
 
-						points[track.param] = readings.map(convertToXY);
+						if(!bTree[track.param]){
+							bTree[track.param] = new BTree();
+						}
 
-						function convertToXY(point) {
+						bTree[track.param].insert(points[track.param]);
 
-							return {
+						// bTree[track.param] = d3.scale.linear()
+						// 	.domain(points[track.param].map(function (point) {
+						// 		return point.timestamp;
+						// 	}))
+						// 	.range(points[track.param]);
+
+					});
+
+					function preparePoints(point) {
+
+						tracks.map(convertToXY);
+
+						function convertToXY(track) {
+
+							if (!points[track.param]) {
+								points[track.param] = [];
+							}
+
+							points[track.param].push({
 								x: point.timestamp,
 								y: point[track.param] || null,
 								actual: point[track.param] || null
-							};
+							});
+
 						}
 
-						return track;
 					}
 
 					return points;
@@ -256,23 +302,33 @@
 					console.log('listenToMouseMove');
 
 					d3.select(scope.element).selectAll('.overlay')
-						.on('mousemove', function () {
+						// .on('mouseup', mouseEvent)
+						// .on('mouseover', mouseEvent)
+						// .on('mouseenter', mouseEvent)
+						.on('mousemove', mouseEvent);
 
-							var timestamp = null;
-							if (!horizontal) {
-								timestamp = scope.timeScale.invert(d3.mouse(this)[1]);
-							} else {
-								timestamp = scope.timeScale.invert(d3.mouse(this)[0]);
-							}
-							mousemove(timestamp);
+					function mouseEvent() {
 
-						});
+						var position = null;
+						var timestamp = null;
 
-					function mousemove(timestamp) {
+						if (!horizontal) {
+							position = d3.mouse(this)[1];
+							timestamp = scope.timeScale.invert(d3.mouse(this)[1]);
+						} else {
+							position = d3.mouse(this)[0];
+							timestamp = scope.timeScale.invert(d3.mouse(this)[0]);
+						}
 
 						d3.select(scope.element).selectAll('#crosshair')
-							.attr(((!horizontal) ? 'y1' : 'x1'), scope.timeScale(timestamp))
-							.attr(((!horizontal) ? 'y2' : 'x2'), scope.timeScale(timestamp));
+							.attr(((!horizontal) ? 'y1' : 'x1'), position)
+							.attr(((!horizontal) ? 'y2' : 'x2'), position);
+
+						// onMousemove(timestamp, position);
+
+					}
+
+					function onMousemove(timestamp, position) {
 
 						scope.tracks.map(function (track, trackIndex) {
 
@@ -280,32 +336,15 @@
 
 								var bubble = d3.select(scope.element).selectAll('#bubble-' + trackIndex);
 								var tooltip = d3.select(scope.element).selectAll('#text-' + trackIndex);
-
-								var pointIndex = null;
-								var startDatum = null;
-								var endDatum = null;
+								var point = null;
 
 								if (scope.newPoints && scope.newPoints[track.param] && scope.newPoints[track.param][0] && scope.newPoints[track.param][0].x <= timestamp) {
-									pointIndex = bisect(scope.newPoints[track.param], timestamp);
-
-									startDatum = scope.newPoints[track.param][pointIndex - 1];
-									endDatum = scope.newPoints[track.param][pointIndex];
-
+									point = scope.newPoints.bTree[track.param](timestamp);
 								} else if (scope.oldPoints && scope.oldPoints[track.param]) {
-									pointIndex = bisect(scope.oldPoints[track.param], timestamp);
-
-									startDatum = scope.oldPoints[track.param][pointIndex - 1];
-									endDatum = scope.oldPoints[track.param][pointIndex];
+									point = scope.oldPoints.bTree[track.param](timestamp);
 								}
 
-								var datum = [startDatum, endDatum].filter(function (_datum) {
-									return (_datum && _datum.y);
-								});
-
-								var point = datum.sort(function (a, b) {
-									return Math.abs(a.x - timestamp) - Math.abs(b.x - timestamp);
-								})[0];
-
+								console.log(point);
 
 								if (point && point.y != null) {
 
@@ -323,6 +362,8 @@
 										tooltip.text(format(point.actual) + ' (' + track.unitMeasure + ')');
 									}
 
+								}else{
+									bubble.attr('style', 'display: none');
 								}
 
 							} catch (e) {
@@ -429,8 +470,8 @@
 					}
 
 					track.labelPosition = index % (scope.tracks.length / threads);
-					track.labelXMin = startAt;
-					track.labelXMax = endAt;
+					track.labelStartAt = startAt;
+					track.labelEndAt = endAt;
 
 					var trackScale = d3.scale.linear()
 						.domain([track.min, track.max])
@@ -474,9 +515,6 @@
 						var tracksPerThread = Math.ceil(numberOfTracks / threads);
 						var relative = Math.floor(trackIndex / tracksPerThread) / threads;
 						var result = (relative * ((horizontal) ? scope.svg.viewHeight : scope.svg.viewWidth));
-
-						// console.log('f(%s) = %s', trackIndex, result);
-
 						return result;
 					}
 
@@ -530,11 +568,8 @@
 						windowClass: 'change-scale-modal',
 						resolve: {
 							tracks: function () {
-								return scope.tracks;
+								return scope;
 							},
-							updateTracks: function () {
-								return updateTracks;
-							}
 						}
 					});
 				}
@@ -544,13 +579,13 @@
 
 	}
 
-	function ModalUpdateDmecTracks($scope, $modalInstance, tracks, updateTracks) {
+	function ModalUpdateDmecTracks($scope, $modalInstance, tracks) {
 
 		$scope.viewData = {
 			trackList: []
 		};
 
-		$scope.viewData.trackList = angular.copy(tracks);
+		$scope.viewData.trackList = angular.copy(tracks.tracks);
 
 		$scope.actionButtonConfirm = actionButtonConfirm;
 		$scope.actionButtonClose = actionButtonClose;
@@ -559,18 +594,18 @@
 
 			// updating tracks
 			for (var i in $scope.viewData.trackList) {
-				if (+tracks[i].min != +$scope.viewData.trackList[i].min) {
-					tracks[i].min = +$scope.viewData.trackList[i].min;
+				if (+tracks.tracks[i].min != +$scope.viewData.trackList[i].min) {
+					tracks.tracks[i].min = +$scope.viewData.trackList[i].min;
 				}
 
-				if (+tracks[i].max != +$scope.viewData.trackList[i].max) {
-					tracks[i].max = +$scope.viewData.trackList[i].max;
+				if (+tracks.tracks[i].max != +$scope.viewData.trackList[i].max) {
+					tracks.tracks[i].max = +$scope.viewData.trackList[i].max;
 				}
 			}
 
-			localStorage.dmecTracks = JSON.stringify(tracks);
+			localStorage.dmecTracks = JSON.stringify(tracks.tracks);
 
-			updateTracks();
+			tracks.updateTracks();
 
 			$modalInstance.close();
 		}

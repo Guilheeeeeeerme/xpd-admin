@@ -1,22 +1,28 @@
 <div class="dmec-tracking-container" ng-if="operationData.operationContext.currentOperation && operationData.operationContext.currentOperation.running">
 
-	<!-- <div class="dmec-tracking-row dmec-tracking-row-h-50" >
+	<div class="dmec-tracking-row dmec-tracking-row-h-40" >
 		<d3-dmec-chart 
 			ng-if="showDrillingMecChart" 
 			ng-init="getAllReadingSince(operationData.operationContext.currentOperation.startDate)"
 			threads="{{ 4 }}" 
 			horizontal="true"
-			start-at="operationData.operationContext.currentOperation.startDate" 
-			end-at="dmecEndTime"
+			start-at="operationData.operationContext.currentOperation.startDate"
+			on-end-at-change="onEndAtChange"
 			zoom-start-at="zoomStartTime" 
 			zoom-end-at="zoomEndTime"
 			readings="readings" 
 			auto-scroll="chartAutoScroll">
         </d3-dmec-chart>
-	</div> -->
+	</div>
 
 	<div class="dmec-tracking-row dmec-tracking-row-h-10">
-
+		<time-zoom-tool 
+			horizontal="true"
+			start-at="operationData.operationContext.currentOperation.startDate"
+			end-at="endAt"
+			zoom-start-at="zoomStartTime" 
+			zoom-end-at="zoomEndTime">
+		</time-zoom-tool>
 	</div>
 
 	<div class="dmec-tracking-row dmec-tracking-row-h-25">

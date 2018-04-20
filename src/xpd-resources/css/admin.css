@@ -1491,11 +1491,17 @@ dmec-tracking > .dmec-tracking-container,
 dmec-tracking d3-dmec-chart,
 dmec-tracking d3-dmec-chart .container-dmec,
 dmec-tracking d3-dmec-chart .container-dmec svg,
+dmec-tracking time-zoom-tool,
+dmec-tracking time-zoom-tool > svg,
 dmec-tracking dmec-tracking-events,
 dmec-tracking dmec-tracking-events > svg  {
     display: block;
     width: 100%;
     height: 100%;
+}
+
+.dmec-tracking-row{
+    margin-top: 6px;
 }
 
 /* dmec-tracking > .dmec-tracking-container .dmec-tracking-row {

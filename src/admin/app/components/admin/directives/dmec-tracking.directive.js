@@ -3,9 +3,9 @@
 
 	angular.module('xpd.admin').directive('dmecTracking', dmecTrackingDirective);
 
-	dmecTrackingDirective.$inject = ['readingSetupAPIService'];
+	dmecTrackingDirective.$inject = ['readingSetupAPIService', '$timeout'];
 
-	function dmecTrackingDirective(readingSetupAPIService) {
+	function dmecTrackingDirective(readingSetupAPIService, $timeout) {
 		return {
 			scope: {
 				connectionTimes: '=',
@@ -19,41 +19,52 @@
 		};
 
 		function link(scope, element, attrs) {
-			var day = (1 * 24 * 3600000);
-			var reloadTimeout = null;
+			/**
+			 * Util para não precisar ficar calculando esse inferno
+			 */
+			var ONE_DAY = (1 * 24 * 3600000);
 
+			var reloadTimeout = null;
 			scope.getAllReadingSince = getAllReadingSince;
-			scope.toDate = toDate;
+			scope.onEndAtChange = onEndAtChange;
 			scope.showDrillingMecChart = true;
 
-			function toDate(arg) {
-				return new Date(arg);
-			}
-
+			/**
+			 * Quando 'showDrillingMecChart' é true a diretiva aparece
+			 * o ng-init na diretiva dispara o 'getAllReadingSince'
+			 * com o start date da operação
+			 */
 			function getAllReadingSince(startTime) {
+
+				startTime = new Date(startTime);
 
 				if (reloadTimeout) {
 					clearTimeout(reloadTimeout);
 				}
 
-				scope.showDrillingMecChart = true;
-
-				reloadTimeout = setTimeout(function () {
+				reloadTimeout = $timeout(function () {
 					scope.showDrillingMecChart = false;
-					setTimeout(function () {
+
+					$timeout(function () {
 						scope.showDrillingMecChart = true;
 					}, 5000);
-				}, day / 2);
 
-				startTime = toDate(startTime);
-				scope.dmecEndTime = new Date(startTime.getTime() + day / 2);
+				}, ONE_DAY / 2);
 
-				readingSetupAPIService.getAllReadingSince(startTime.getTime(), readingsFromDatabase);
+
+				readingSetupAPIService.getAllReadingSince(startTime.getTime(), function (readings) {
+					scope.readings = readings;
+				});
 			}
 
-			function readingsFromDatabase(readings) {
-				scope.readings = readings;
+			/**
+			 * Toda vez que o DMEC avança por causa do tempo real
+			 * @param {Date} milliseconds 
+			 */
+			function onEndAtChange(milliseconds) {
+				scope.endAt = milliseconds;
 			}
+
 		}
 	}
 })();
