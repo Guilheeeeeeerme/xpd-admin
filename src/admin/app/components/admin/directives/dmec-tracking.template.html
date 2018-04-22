@@ -1,9 +1,11 @@
 <div class="dmec-tracking-container" ng-if="operationData.operationContext.currentOperation && operationData.operationContext.currentOperation.running">
 
-	<div class="dmec-tracking-row dmec-tracking-row-h-40" >
+	<div 
+		class="dmec-tracking-row dmec-tracking-row-h-40" 
+		ng-if="showDrillingMecChart" 
+		ng-init="getAllReadingSince(operationData.operationContext.currentOperation.startDate)" >
+		
 		<d3-dmec-chart 
-			ng-if="showDrillingMecChart" 
-			ng-init="getAllReadingSince(operationData.operationContext.currentOperation.startDate)"
 			threads="{{ 4 }}" 
 			horizontal="true"
 			start-at="operationData.operationContext.currentOperation.startDate"

@@ -7,11 +7,11 @@
 
 <div id="{{ chartId }}" class="container-fuild container-dmec">
 
-	<foreignObject width="10" height="10" requiredExtensions="http://www.w3.org/1999/xhtml">
+	<!-- <foreignObject width="10" height="10" requiredExtensions="http://www.w3.org/1999/xhtml">
       <body xmlns="http://www.w3.org/1999/xhtml">
 		<a href="#" style="position:fixed; right:10; bottom:10;" ng-click="openScaleModal()">Config</a>
       </body>
-    </foreignObject>
+    </foreignObject> -->
 
 
 	<svg ng-if="tracks" id="d3-svg" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
@@ -36,8 +36,8 @@
 			<g ng-repeat="track in tracks">
 				<line ng-repeat="tick in track.ticks" ng-attr-x1='{{ track.trackScale(tick) }}' ng-attr-x2='{{ track.trackScale(tick) }}'
 				 y1="0" ng-attr-y2='{{ svg.viewHeight }}' stroke="black" stroke-opacity="0.2" stroke-width="0.1em" />
-				<line ng-attr-x1='{{ track.labelStartAt }}' ng-attr-x2='{{ track.labelStartAt }}' y1="0" ng-attr-y2='{{ svg.viewHeight }}' stroke="black"
-				 stroke-opacity="0.5" stroke-width="0.2em" />
+				<line ng-attr-x1='{{ track.labelStartAt }}' ng-attr-x2='{{ track.labelStartAt }}' y1="0" ng-attr-y2='{{ svg.viewHeight }}'
+				 stroke="black" stroke-opacity="0.5" stroke-width="0.2em" />
 			</g>
 		</g>
 
@@ -45,19 +45,17 @@
 			<g ng-repeat="track in tracks">
 				<line ng-repeat="tick in track.ticks" ng-attr-y1='{{ track.trackScale(tick) }}' ng-attr-y2='{{ track.trackScale(tick) }}'
 				 x1="0" ng-attr-x2='{{ svg.viewWidth }}' stroke="black" stroke-opacity="0.2" stroke-width="0.1em" />
-				<line ng-attr-y1='{{ track.labelStartAt }}' ng-attr-y2='{{ track.labelStartAt }}' x1="0" ng-attr-x2='{{ svg.viewWidth }}' stroke="white"
-				 stroke-opacity="0.5" stroke-width="0.2em" />
+				<line ng-attr-y1='{{ track.labelStartAt }}' ng-attr-y2='{{ track.labelStartAt }}' x1="0" ng-attr-x2='{{ svg.viewWidth }}'
+				 stroke="white" stroke-opacity="0.5" stroke-width="0.2em" />
 			</g>
 		</g>
 
-		<g class="old-paths">
-			<path ng-if="oldPointsPath && oldPointsPath[track.param]" ng-repeat="track in tracks" ng-attr-d="{{ oldPointsPath[track.param] }}"
-			 fill="none" stroke="{{ track.color }}" stroke-width="0.2em" />
+		<g class="oldPoints">
+			<path id="{{track.param}}" ng-repeat="track in tracks" fill="none" stroke="{{ track.color }}" stroke-width="0.2em" />
 		</g>
 
-		<g class="new-paths">
-			<path ng-if="newPointsPath && newPointsPath[track.param]" ng-repeat="track in tracks" ng-attr-d="{{ newPointsPath[track.param] }}"
-			 fill="none" stroke="{{ track.color }}" stroke-width="0.2em" />
+		<g class="newPoints">
+			<path id="{{track.param}}" ng-repeat="track in tracks" fill="none" stroke="{{ track.color }}" stroke-width="0.2em" />
 		</g>
 
 		<g class="crosshair" ng-if="!horizontal">
@@ -78,8 +76,7 @@
 			</g>
 		</g>
 
-		<g 	class="legend" 
-			ng-if="!horizontal">
+		<g class="legend" ng-if="!horizontal">
 
 			<g class="label" ng-if="tracks && track.labelPosition != null" ng-repeat="track in tracks">
 
@@ -102,44 +99,22 @@
 
 		</g>
 
-		<g 	class="legend" 
-			ng-if="horizontal">
+		<g class="legend" ng-if="horizontal">
 
 			<g class="label" ng-if="tracks && track.labelPosition != null" ng-repeat="track in tracks">
 
-				<text  
-					stroke-width="1"
-					font-size="1.6em" 
-					ng-attr-fill="{{ track.color }}" 
-					stroke="black" 
-					ng-attr-y="{{ track.labelStartAt + ( (track.labelEndAt - track.labelStartAt) * 0.1 )  }}"
-					ng-attr-x="{{ track.labelPosition * 50 }}" 
-					alignment-baseline="middle" 
-					text-anchor="start">
+				<text stroke-width="1" font-size="1.6em" ng-attr-fill="{{ track.color }}" stroke="black" ng-attr-y="{{ track.labelStartAt + ( (track.labelEndAt - track.labelStartAt) * 0.1 )  }}"
+				 ng-attr-x="{{ track.labelPosition * 50 }}" alignment-baseline="middle" text-anchor="start">
 					{{ track.min }}
 				</text>
 
-				<text  
-					stroke-width="1"
-					font-size="1.6em" 
-					ng-attr-fill="{{ track.color }}" 
-					stroke="black" 
-					ng-attr-y="{{ track.labelStartAt + ( ( track.labelEndAt - track.labelStartAt ) * ( (track.labelPosition+1) / 3 ) ) }}"
-					x="0"
-					alignment-baseline="middle" 
-					text-anchor="start">
+				<text stroke-width="1" font-size="1.6em" ng-attr-fill="{{ track.color }}" stroke="black" ng-attr-y="{{ track.labelStartAt + ( ( track.labelEndAt - track.labelStartAt ) * ( (track.labelPosition+1) / 3 ) ) }}"
+				 x="0" alignment-baseline="middle" text-anchor="start">
 					{{ track.label }} ( {{ track.unitMeasure }} )
 				</text>
 
-				<text  
-					stroke-width="1"
-					font-size="1.6em" 
-					ng-attr-fill="{{ track.color }}" 
-					stroke="black" 
-					ng-attr-y="{{ track.labelStartAt + ( (track.labelEndAt - track.labelStartAt) * 0.9 ) }}"
-					ng-attr-x="{{ track.labelPosition * 50 }}"
-					alignment-baseline="middle" 
-					text-anchor="start">
+				<text stroke-width="1" font-size="1.6em" ng-attr-fill="{{ track.color }}" stroke="black" ng-attr-y="{{ track.labelStartAt + ( (track.labelEndAt - track.labelStartAt) * 0.9 ) }}"
+				 ng-attr-x="{{ track.labelPosition * 50 }}" alignment-baseline="middle" text-anchor="start">
 					{{ track.max }}
 				</text>
 
