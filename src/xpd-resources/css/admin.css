@@ -1506,6 +1506,10 @@ dmec-tracking dmec-tracking-events > svg  {
     margin-top: 6px;
 }
 
+.navigator {
+    cursor: col-resize;
+}
+
 /* dmec-tracking > .dmec-tracking-container .dmec-tracking-row {
     display: block;
     width: 100%;

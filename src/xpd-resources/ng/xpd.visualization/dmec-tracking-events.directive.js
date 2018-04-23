@@ -15,10 +15,14 @@
 				eventType: '=',
 				currentEvent: '=',
 				currentOperation: '=',
-				currentBlockPosition: '='
+				currentBlockPosition: '=',
+				zoomStartAt: '=', 
+				zoomEndAt: '='
 			},
 			link: function (scope, element, attrs) {
 
+				scope.mindate = null;
+				scope.maxdate = null;
 				scope.elementIdGroup = 'current-event-' + scope.eventType;
 				scope.elementIdBar = 'current-event-bar' + scope.eventType;
 				scope.verticalMode = angular.isDefined(scope.verticalMode) ? scope.verticalMode : false;
@@ -28,8 +32,22 @@
 					scope.events.pop();
 					setViewMode();
 
-					scope.gatBarProperties = gatBarProperties;
+					scope.getBarProperties = getBarProperties;
 					scope.getEventScale = getEventScale;
+
+					scope.$watch('zoomStartAt', function (startAt) {
+						if(startAt) {
+							scope.mindate = new Date(startAt).getTime();
+							defineScaleChart();
+						}
+					});
+
+					scope.$watch('zoomEndAt', function (endAt) {
+						if(endAt) {
+							scope.maxdate = new Date(endAt).getTime();
+							defineScaleChart();
+						}
+					});
 
 					scope.$watch('tick', function (tick) {
 						if (scope.currentEvent && scope.eventType == scope.currentEvent.eventType)
@@ -48,14 +66,18 @@
 						scope.svg.viewBox = '0 0 100 ' + scope.svgViewHeight;
 
 						var startDate = new Date(scope.currentOperation.startDate);
-						var mindate = new Date(scope.currentOperation.startDate).getTime();
-						var maxdate = new Date().setHours(startDate.getHours() + 2);
+						scope.mindate = new Date(scope.currentOperation.startDate).getTime();
+						scope.maxdate = new Date().setHours(startDate.getHours() + 1);
 
-						scope.xScale = d3.scale.linear().domain([mindate, maxdate]).range([0, 100]);
+						defineScaleChart();
+					}
+
+					function defineScaleChart() {
+						scope.xScale = d3.scale.linear().domain([scope.mindate, scope.maxdate]).range([0, 100]);
 						scope.xTicks = scope.xScale.ticks();
 					}
 
-					function gatBarProperties(event) {
+					function getBarProperties(event) {
 						return buildEventBar(event, false, event.duration);
 					}
 
