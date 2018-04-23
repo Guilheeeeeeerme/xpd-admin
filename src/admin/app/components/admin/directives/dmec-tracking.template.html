@@ -1,7 +1,7 @@
 <div class="dmec-tracking-container" ng-if="operationData.operationContext.currentOperation && operationData.operationContext.currentOperation.running">
 
 	<div class="dmec-tracking-row dmec-tracking-row-h-40" >
-		<d3-dmec-chart 
+		<!-- <d3-dmec-chart 
 			ng-if="showDrillingMecChart" 
 			ng-init="getAllReadingSince(operationData.operationContext.currentOperation.startDate)"
 			threads="{{ 4 }}" 
@@ -12,16 +12,19 @@
 			zoom-end-at="zoomEndTime"
 			readings="readings" 
 			auto-scroll="chartAutoScroll">
-        </d3-dmec-chart>
+        </d3-dmec-chart> -->
 	</div>
+
+	<pre>{{zoomStartAt}}</pre>
+	<pre>{{zoomEndAt}}</pre>
 
 	<div class="dmec-tracking-row dmec-tracking-row-h-10">
 		<time-zoom-tool 
 			horizontal="true"
 			start-at="operationData.operationContext.currentOperation.startDate"
-			end-at="endAt"
-			zoom-start-at="zoomStartTime" 
-			zoom-end-at="zoomEndTime">
+			end-at="operationData.eventContext.currentEvent.startTime"
+			zoom-start-at="zoomStartAt" 
+			zoom-end-at="zoomEndAt">
 		</time-zoom-tool>
 	</div>
 
@@ -32,7 +35,8 @@
 			events='connectionEvents' 
 			event-type="'CONN'"
 			current-event="operationData.eventContext.currentEvent"
-			current-block-position= "operationData.readingContext.currentReading.blockPosition">
+			current-block-position= "operationData.readingContext.currentReading.blockPosition"
+			zoom-start-at="zoomStartAt" zoom-end-at="zoomEndAt">
 		</dmec-tracking-events>
 	</div>
 

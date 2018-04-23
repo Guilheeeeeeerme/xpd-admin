@@ -20,6 +20,10 @@
 		};
 
 		function link(scope, element, attrs) {
+
+			scope.zoomStartAt = null; 
+			scope.zoomEndAt = null;
+
 			/**
 			 * Util para não precisar ficar calculando esse inferno
 			 */

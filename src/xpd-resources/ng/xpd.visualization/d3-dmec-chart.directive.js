@@ -24,26 +24,29 @@
 			link: link
 		};		
 
-		function BTree(){
-			this.values = [];
+		class BTree {
+			constructor() {
+				this.values = [];
+			}
+			insert(point, index) {
+				if (index == null) {
+					index = 0;
+				}
+				if (!this.values || this, values.length == 0) {
+					this.values = [point];
+				}
+				else if (this.values[index] == null || point.x == this.values[index].x) {
+					this.values[index] = point;
+				}
+				else if (point.x > this.values[index].x) {
+					this.insert(point, ((index * 2) + 2));
+				}
+				else {
+					this.insert(point, ((index * 2) + 1));
+				}
+			}
 		}
 
-		BTree.prototype.insert(point, index){
-
-			if(index == null){
-				index = 0;
-			}
-
-			if(!this.values || this,values.length == 0){
-				this.values = [point];
-			}else if(this.values[index] == null || point.x == this.values[index].x){
-				this.values[index] = point;
-			}else if(point.x > this.values[index].x){
-				this.insert(point, ((index * 2) + 2) )
-			}else{
-				this.insert(point, ((index * 2) + 1) )
-			}
-		}
 
 		function getRandomArbitrary(min, max) {
 			return Math.floor(Math.random() * (max - min) + min);
