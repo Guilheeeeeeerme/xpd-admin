@@ -3,55 +3,37 @@
  ng-attr-height='{{ svg.viewHeight }}'>
 
 	<g>
-		<g>
-			<rect id="chart-area" x="0" y="0" fill="white" fill-opacity="0.6" ng-attr-width='{{ svg.viewWidth }}' ng-attr-height='{{ svg.viewHeight }}'/>
-		</g>
+		<rect id="chart-area" x="0" y="0" fill="white" fill-opacity="0.6" ng-attr-width='{{ svg.viewWidth }}' ng-attr-height='{{ svg.viewHeight }}'
+		/>
 	</g>
 
-	<g class="time-ticks" ng-if="!horizontal">
-		<g ng-repeat="tick in xTicks" ng-attr-transform="translate(0, {{ timeScale(tick) }} )">
-			<text alignment-baseline="baseline" y="0" ng-attr-x='{{ svg.viewWidth * 0.25 }}'>{{ tick | date: 'mediumDate' }}</text>     
-			<text alignment-baseline="baseline" y="0" ng-attr-x='{{ svg.viewWidth * 0.75 }}'>{{ tick | date: 'shortTime' }}</text>
-			<line x1="0" y1="0" ng-attr-x2='{{ svg.viewWidth }}' y2="0" stroke="black" stroke-opacity="0.2" stroke-width="0.1em" />
-		</g>
-	</g>
-
-	<g class="time-ticks" ng-if="horizontal">
-		<g ng-repeat="tick in xTicks" ng-attr-transform="translate({{ timeScale(tick) }}, 0)"> 
-			<text alignment-baseline="baseline" x="0" ng-attr-y='{{ svg.viewHeight * 0.25 }}'>{{ tick | date: 'mediumDate' }}</text>        
+	<g class="time-ticks">
+		<g ng-repeat="tick in xTicks" ng-attr-transform="translate({{ timeScale(tick) }}, 0)">
+			<text alignment-baseline="baseline" x="0" ng-attr-y='{{ svg.viewHeight * 0.25 }}'>{{ tick | date: 'mediumDate' }}</text>
 			<text alignment-baseline="baseline" x="0" ng-attr-y='{{ svg.viewHeight * 0.75 }}'>{{ tick | date: 'shortTime' }}</text>
-			<line y1="0" x1="0" ng-attr-y2='{{ svg.viewHeight }}' x2="0" stroke="black" stroke-opacity="0.2" stroke-width="0.1em"/>
+			<line y1="0" x1="0" ng-attr-y2='{{ svg.viewHeight }}' x2="0" stroke="black" stroke-opacity="0.2" stroke-width="0.1em" />
 		</g>
 	</g>
 
-	<g>
-		<rect id="zoom-area" class="navigator" ng-attr-x="{{ startPipePosition }}" y="0" 
-			fill="#6685C2" fill-opacity="0.5" ng-attr-width='{{ endPipePosition - startPipePosition }}'
-			ng-attr-height='{{ svg.viewHeight }}'>
-		</rect>
-
-		<rect class="overlay" fill-opacity="0" ng-attr-width='{{ svg.viewWidth }}' ng-attr-height='{{ svg.viewHeight }}'></rect>
-		
-
-		<!-- <rect class="navigator" x="0" y="0" 
-			fill="red" fill-opacity="0.5" ng-attr-width='{{ startPipePosition }}'
-			ng-attr-height='{{ svg.viewHeight }}'>
-		</rect> -->
-	
-	</g>
 
 	<g>
-		<g>
-			<path fill="#f2f2f2" stroke="#999999" stroke-width="1" d="M -4.5 0.5 L 3.5 0.5 L 3.5 15.5 L -4.5 15.5 L -4.5 0.5 M -1.5 4 L -1.5 12 M 0.5 4 L 0.5 12"
-			id="start-navigator" class="navigator" transform="translate({{ startPipePosition }}, 30)" />
-			
-			<path fill="#f2f2f2" stroke="#999999" stroke-width="1" d="M -4.5 0.5 L 3.5 0.5 L 3.5 15.5 L -4.5 15.5 L -4.5 0.5 M -1.5 4 L -1.5 12 M 0.5 4 L 0.5 12"
-			id="end-navigator" class="navigator" transform="translate({{ endPipePosition }}, 30)" />
+
+		<rect id="zoom-area" class="navigator" y="0" x="0" width="0" ng-attr-height="{{ svg.viewHeight }}" fill="#6685C2" fill-opacity="0.5"
+		/>
+
+		<rect class="overlay" x="0" y="0" fill-opacity="0" ng-attr-width='{{ svg.viewWidth }}' ng-attr-height='{{ svg.viewHeight }}'></rect>
+
+		<g transform="translate( 0, {{ ( svg.viewHeight / 2 ) - 7.5 }})">
+
+			<path fill="#f2f2f2" stroke="#999999" stroke-width="1" d="M -4.5 0.0 L 3.5 0.0 L 3.5 15.0 L -4.5 15.0 L -4.5 0.0 M -1.5 3.5 L -1.5 11.5 M 0.5 3.5 L 0.5 11.5"
+			 id="start-navigator" class="navigator" />
+
+			<path fill="#f2f2f2" stroke="#999999" stroke-width="1" d="M -4.5 0.0 L 3.5 0.0 L 3.5 15.0 L -4.5 15.0 L -4.5 0.0 M -1.5 3.5 L -1.5 11.5 M 0.5 3.5 L 0.5 11.5"
+			 id="end-navigator" class="navigator" />
 		</g>
 
-		
 	</g>
 
-	
+
 
 </svg>
