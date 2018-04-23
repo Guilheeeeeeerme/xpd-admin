@@ -6,10 +6,10 @@
             ng-attr-transform="{{'translate('+ getEventScale(event.startTime)+ ', 0)'}}">
 
             <rect 
-                ng-attr-y="{{ gatBarProperties(event).position }}"
-                ng-attr-width="{{ gatBarProperties(event).width }}"
-                ng-attr-height="{{ gatBarProperties(event).height }}"
-                ng-attr-fill="{{ gatBarProperties(event).color }}" stroke="none">
+                ng-attr-y="{{ getBarProperties(event).position }}"
+                ng-attr-width="{{ getBarProperties(event).width }}"
+                ng-attr-height="{{ getBarProperties(event).height }}"
+                ng-attr-fill="{{ getBarProperties(event).color }}" stroke="none">
             </rect>
         </g>
     </g>

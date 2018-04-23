@@ -2,6 +2,7 @@
 	'use strict';
 
 	var module = angular.module('xpd.visualization');
+	var worker = new Worker('../assets/js/dmec-worker.js');
 
 	module.directive('d3DmecChart', d3DmecChart);
 	module.controller('ModalUpdateDmecTracks', ModalUpdateDmecTracks);
@@ -23,6 +24,7 @@
 			},
 			link: link
 		};
+
 
 
 		function getRandomArbitrary(min, max) {
@@ -233,7 +235,7 @@
 
 						if (tracks != null && tracks.length > 0 && readings != null && readings.length > 0) {
 
-							var worker = new Worker('../assets/js/dmec-worker.js');
+							// var worker = new Worker('../assets/js/dmec-worker.js');
 
 							worker.postMessage({
 								cmd: 'reading-to-points',

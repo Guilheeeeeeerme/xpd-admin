@@ -22,6 +22,7 @@ body {
 }
 
 .xpd-admin-section {
+    overflow: hidden;
     padding-top: 70px;
     min-height: 100vh;
     height: 100vh;
@@ -71,6 +72,7 @@ body {
 
  */
 .tracking-content {
+    overflow: auto;
     height: 100%;
 }
 
@@ -1504,11 +1506,27 @@ dmec-tracking dmec-tracking-events > svg  {
     margin-top: 6px;
 }
 
+.navigator {
+    cursor: col-resize;
+}
+
+.chart-content {
+    margin-bottom: 4%;
+    border-top: solid 1px #436a72;
+}
+
+.dmec-chart-label {
+    display: block;
+    margin-bottom: 0.5%;
+    font-size: 1.2em;
+}
+
 /* dmec-tracking > .dmec-tracking-container .dmec-tracking-row {
     display: block;
     width: 100%;
 } */
 
+.dmec-tracking-row.dmec-tracking-row-h-5 { height: 5%; min-height: 5%; max-height: 5%; }
 .dmec-tracking-row.dmec-tracking-row-h-10 { height: 10%; min-height: 10%; max-height: 10%; }
 .dmec-tracking-row.dmec-tracking-row-h-15 { height: 15%; min-height: 15%; max-height: 15%; }
 .dmec-tracking-row.dmec-tracking-row-h-20 { height: 20%; min-height: 20%; max-height: 20%; }
