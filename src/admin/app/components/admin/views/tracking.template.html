@@ -14,9 +14,8 @@
 
 <div class="col-md-9 col-sm-6 col-xs-6 tracking-content">
     <old-tracking ng-if="flags.showDMEC == false"></old-tracking>
-    <dmec ng-if="flags.showDMEC == true"></dmec>
+    <dmec-tracking ng-if="flags.showDMEC == true" connection-events="dados.connectionEvents" trip-events="dados.tripEvents" time-events="dados.timeEvents"></dmec-tracking>
 </div>
-
 
 <div ng-controller="AdminTrackingController as atController" class="col-md-3 col-sm-6 col-xs-6 xpd-admin-col">
 

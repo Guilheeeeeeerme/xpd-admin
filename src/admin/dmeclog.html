@@ -60,8 +60,8 @@
 
     <!-- XPD VISUALIZATION -->
     <script type="text/javascript" src="/xpd-resources/ng/xpd.visualization/xpd-visualization.module.js"></script>
-    <script type="text/javascript" src="/xpd-resources/ng/xpd.visualization/d3-dmec-chart-worker-service.js"></script>
     <script type="text/javascript" src="/xpd-resources/ng/xpd.visualization/d3-dmec-chart.directive.js"></script>
+	<script type="text/javascript" src="/xpd-resources/ng/xpd.visualization/time-zoom-tool.directive.js"></script>
 
     <!-- XPD DIALOG -->
     <script type="text/javascript" src="/xpd-resources/ng/xpd.dialog/xpd.dialog.module.js"></script>
@@ -83,7 +83,6 @@
 
     <!-- DRILLING MECHANICS MODULE JS -->
     <script type="text/javascript" src="./app/components/dmec-log/dmec-log.module.js"></script>
-    <script type="text/javascript" src="./app/components/dmec-log/change-scale.controller.js"></script>
     <script type="text/javascript" src="./app/components/dmec-log/dmec-log.controller.js"></script>
     <!-- endbuild -->
 
@@ -145,24 +144,13 @@
         </div>
     </nav>
 
-    <div id="dmec-scroll" class="container-fuild container-dmec">
-
-        <!-- <d3-dmec-chart ng-if="tracks && tracks.length == 8" threads="{{ 4 }}" threshold="threshold" start-time="dmecStartDate" tracks="tracks"
+    <!-- <d3-dmec-chart ng-if="tracks && tracks.length == 8" threads="{{ 4 }}" threshold="threshold" start-time="dmecStartDate" tracks="tracks"
             old-points="oldPoints" new-points="newPoints" auto-scroll="chartAutoScroll">
         </d3-dmec-chart> -->
 
-        <d3-dmec-chart 
-            threads="{{ 4 }}" 
-            horizontal="false"
-            start-at="dmecStartDate" 
-            end-at="dmecEndTime"
-            zoom-start-at="zoomStartTime" 
-            zoom-end-at="zoomEndTime"
-            readings="readings" 
-            auto-scroll="chartAutoScroll">
-        </d3-dmec-chart>
-
-    </div>
+    <d3-dmec-chart threads="{{ 4 }}" horizontal="false" start-at="dmecStartDate" end-at="dmecEndTime" zoom-start-at="zoomStartTime"
+        zoom-end-at="zoomEndTime" readings="readings" auto-scroll="chartAutoScroll">
+    </d3-dmec-chart>
 
 </body>
 

@@ -1,0 +1,21 @@
+<svg xmlns='http://www.w3.org/2000/svg' version='1.1' width='100%' ng-attr-height='{{svg.height}}' preserveAspectRatio="none"
+     xpd-view-box="svg.viewBox" class="xpd-events-container">
+   
+    <g>
+        <g class="rect-bar" ng-repeat="(key, event) in events | orderBy: 'startTime'"
+            ng-attr-transform="{{'translate('+ getEventScale(event.startTime)+ ', 0)'}}">
+
+            <rect 
+                ng-attr-y="{{ gatBarProperties(event).position }}"
+                ng-attr-width="{{ gatBarProperties(event).width }}"
+                ng-attr-height="{{ gatBarProperties(event).height }}"
+                ng-attr-fill="{{ gatBarProperties(event).color }}" stroke="none">
+            </rect>
+        </g>
+    </g>
+
+    <g id="{{elementIdGroup}}" ng-if="currentEvent != null" ng-attr-transform="{{'translate('+ getEventScale(currentEvent.startTime) +', 0)'}}">
+        <rect id="{{elementIdBar}}"></rect>
+    </g>
+
+</svg>

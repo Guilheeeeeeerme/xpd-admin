@@ -12,11 +12,6 @@ d3-dmec-chart{
 	display: block;
 	height: 100%;
 }
-  
-.overlay {
-	fill: none;
-	pointer-events: all;
-}
 
 /* .d3-dmec-chart{
 

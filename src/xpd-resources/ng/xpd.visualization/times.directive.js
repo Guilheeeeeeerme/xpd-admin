@@ -11,6 +11,7 @@
 			templateUrl: '../xpd-resources/ng/xpd.visualization/times.template.html',
 			scope: {
 				times: '=',
+				maxBars: '=',
 				averageStandLength: '=',
 				actionBarClick: '=',
 				actionBarDoubleClick: '=',
@@ -22,7 +23,7 @@
 					content: 'content',
 					title: 'title'
 				};
-
+			
 				d3Service.d3().then(function (d3) {
 
 					scope.svg = {

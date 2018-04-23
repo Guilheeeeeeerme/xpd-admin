@@ -1,0 +1,25 @@
+<svg xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+ xmlns:svg="http://www.w3.org/2000/svg" xmlns="http://www.w3.org/2000/svg" version='1.1' ng-attr-width='{{ svg.viewWidth }}'
+ ng-attr-height='{{ svg.viewHeight }}'>
+
+	<rect x="0" y="0" fill="white" fill-opacity="0.6" ng-attr-width='{{ svg.viewWidth }}' ng-attr-height='{{ svg.viewHeight }}'
+	/>
+
+	<g class="time-ticks" ng-if="!horizontal">
+		<g ng-repeat="tick in xTicks" ng-attr-transform="translate(0, {{ timeScale(tick) }} )">
+			<text alignment-baseline="baseline" y="0" ng-attr-x='{{ svg.viewWidth * 0.25 }}'>{{ tick | date: 'mediumDate' }}</text>     
+			<text alignment-baseline="baseline" y="0" ng-attr-x='{{ svg.viewWidth * 0.75 }}'>{{ tick | date: 'shortTime' }}</text>
+			<line x1="0" y1="0" ng-attr-x2='{{ svg.viewWidth }}' y2="0" stroke="black" stroke-opacity="0.2" stroke-width="0.1em" />
+		</g>
+	</g>
+
+	<g class="time-ticks" ng-if="horizontal">
+		<g ng-repeat="tick in xTicks" ng-attr-transform="translate({{ timeScale(tick) }}, 0)"> 
+			<text alignment-baseline="baseline" x="0" ng-attr-y='{{ svg.viewHeight * 0.25 }}'>{{ tick | date: 'mediumDate' }}</text>        
+			<text alignment-baseline="baseline" x="0" ng-attr-y='{{ svg.viewHeight * 0.75 }}'>{{ tick | date: 'shortTime' }}</text>
+			<line y1="0" x1="0" ng-attr-y2='{{ svg.viewHeight }}' x2="0" stroke="black" stroke-opacity="0.2" stroke-width="0.1em" />
+		</g>
+	</g>
+
+
+</svg>
