@@ -22,6 +22,7 @@ body {
 }
 
 .xpd-admin-section {
+    overflow: hidden;
     padding-top: 70px;
     min-height: 100vh;
     height: 100vh;
@@ -71,6 +72,7 @@ body {
 
  */
 .tracking-content {
+    overflow: auto;
     height: 100%;
 }
 
