@@ -73,7 +73,7 @@
 					}
 
 					function defineScaleChart() {
-						scope.xScale = d3.scale.linear().domain([scope.mindate, scope.maxdate]).range([0, 100]);
+						scope.xScale = d3.scale.linear().domain([scope.mindate, scope.maxdate]).range([0, 95]);
 						scope.xTicks = scope.xScale.ticks();
 					}
 
@@ -131,10 +131,10 @@
 					function currentEventBar(bar) {
 						var startTime = new Date(scope.currentEvent.startTime);
 
-						d3.select('#' + scope.elementIdGroup)
+						d3.select(element[0]).select('#' + scope.elementIdGroup)
 							.attr('transform', 'translate(' + scope.xScale(startTime) + ', 0)');
 
-						d3.select('#' + scope.elementIdBar)
+						d3.select(element[0]).select('#' + scope.elementIdBar)
 							.attr('y', bar.position)
 							.attr('width', bar.width)
 							.attr('height', bar.height)

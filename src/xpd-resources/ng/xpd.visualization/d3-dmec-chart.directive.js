@@ -115,8 +115,8 @@
 				$interval(getTick, updateLatency);
 				$interval(scrollIfNeeded, updateLatency, isHorizontal);
 
-				scope.$watch('zoomStartAt', onDateRangeChange);
-				scope.$watch('zoomEndAt', onDateRangeChange);
+				scope.$watch('zoomStartAt', onZoomChange);
+				scope.$watch('zoomEndAt', onZoomChange);
 				scope.$watch('startAt', onDateRangeChange);
 				scope.$watch('endAt', onEndAtChange);
 
@@ -129,6 +129,13 @@
 				function onDateRangeChange(newDate, oldDate) {
 					// console.log('onDateRangeChange');
 					resize(isHorizontal);
+				}
+
+				function onZoomChange() {
+					onDateRangeChange();
+
+					try { draw('oldPoints'); } catch (e) { };
+					try { draw('newPoints'); } catch (e) { };
 				}
 
 				function onEndAtChange() {
@@ -179,11 +186,15 @@
 
 					try {
 
-						var endAt = scope.endAt || new Date();
-						var startAt = scope.startAt || new Date();
+
+						var endAt = (scope.endAt) ? scope.endAt : new Date();
+						var startAt = (scope.startAt) ? scope.startAt : new Date();
 
 						var zoomStartAt = (scope.zoomStartAt) ? scope.zoomStartAt : startAt;
 						var zoomEndAt = (scope.zoomEndAt) ? scope.zoomEndAt : endAt;
+
+						startAt = new Date(startAt);
+						endAt = new Date(endAt);
 
 						zoomStartAt = new Date(zoomStartAt);
 						zoomEndAt = new Date(zoomEndAt);
@@ -191,34 +202,25 @@
 						var viewWidth = scope.element.clientWidth;
 						var viewHeight = scope.element.offsetHeight;
 
-						var zoomScale = d3.time.scale()
+						var timeScale = d3.time.scale()
 							.domain([
 								zoomStartAt,
 								zoomEndAt,
 							])
 							.range([
 								0,
-								horizontal ? viewWidth : viewHeight
+								horizontal ? (viewWidth * 0.95) : (viewHeight * 0.95)
 							]);
 
-						var timeAxisSize = zoomScale(new Date(endAt)) - zoomScale(new Date(startAt));
-
-						scope.timeScale = d3.time.scale()
-							.domain([
-								new Date(startAt),
-								new Date(endAt),
-							])
-							.range([
-								0,
-								timeAxisSize * 0.95
-							]);
+						var timeAxisSize = Math.abs(timeScale(endAt) - timeScale(startAt));
 
 						scope.svg = {
 							viewWidth: (horizontal) ? timeAxisSize : viewWidth,
 							viewHeight: (horizontal) ? viewHeight : timeAxisSize
 						};
 
-						scope.xTicks = scope.timeScale.ticks();
+						scope.timeScale = timeScale;
+						scope.xTicks = timeScale.ticks();
 
 						updateTracks();
 
@@ -253,7 +255,6 @@
 				}
 
 				function updateTracks() {
-					// console.log('updateTracks');
 
 					scope.tracks = scope.tracks.map(function (track, index) {
 						return configTrackProperties(track, index, isHorizontal);
@@ -275,11 +276,21 @@
 						track.labelStartAt = labelStartAt;
 						track.labelEndAt = labelEndAt;
 
-						var trackScale = d3.scale.linear()
+						var x1 = (track.min);
+						var x2 = (track.max);
+						var y1 = (labelStartAt + ((labelEndAt - labelStartAt) * 0.05));
+						var y2 = (labelEndAt - ((labelEndAt - labelStartAt) * 0.05));
+						var m = (y2 - y1) / (x2 - x1);
+
+						function trackScale(x) {
+							return (m * (x - x1)) + y1;
+						}
+
+						var createTicks = d3.scale.linear()
 							.domain([track.min, track.max])
 							.range([
 								labelStartAt + ((labelEndAt - labelStartAt) * 0.05),
-								labelEndAt, - ((labelEndAt - labelStartAt) * 0.05)
+								labelEndAt - ((labelEndAt - labelStartAt) * 0.05)
 							]);
 
 						var lineFunction = d3.svg.line()
@@ -291,7 +302,7 @@
 						track.id = index;
 						track.lineFunction = lineFunction;
 						track.trackScale = trackScale;
-						track.ticks = trackScale.ticks(5);
+						track.ticks = createTicks.ticks(5);
 
 						function isNumber(d) {
 							return (angular.isNumber(d.y) && angular.isNumber(d.x));
@@ -388,7 +399,7 @@
 								}
 
 								for (var i in points) {
-									if ( (points[i].x / 1000) >= (timestamp / 1000)) {
+									if ((points[i].x / 1000) >= (timestamp / 1000)) {
 										point = points[i];
 										break;
 									}
@@ -428,7 +439,6 @@
 				}
 
 				function draw(trackName) {
-					// console.log('draw("%s")', trackName);
 
 					scope.tracks.map(function (track) {
 						scope[trackName][track.param] = handleOverflow(scope[trackName][track.param], track);
