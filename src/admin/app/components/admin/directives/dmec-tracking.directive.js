@@ -21,13 +21,14 @@
 
 		function link(scope, element, attrs) {
 
-			scope.zoomStartAt = null; 
-			scope.zoomEndAt = null;
-
 			/**
 			 * Util para não precisar ficar calculando esse inferno
 			 */
 			var ONE_DAY = (1 * 24 * 3600000);
+			var now = new Date().getTime();
+
+			scope.zoomEndAt = new Date(now); 
+			scope.zoomStartAt = new Date(now - ONE_DAY);
 
 			var reloadTimeout = null;
 			scope.getAllReadingSince = getAllReadingSince;

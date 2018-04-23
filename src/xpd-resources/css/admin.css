@@ -1515,6 +1515,7 @@ dmec-tracking dmec-tracking-events > svg  {
     width: 100%;
 } */
 
+.dmec-tracking-row.dmec-tracking-row-h-5 { height: 5%; min-height: 5%; max-height: 5%; }
 .dmec-tracking-row.dmec-tracking-row-h-10 { height: 10%; min-height: 10%; max-height: 10%; }
 .dmec-tracking-row.dmec-tracking-row-h-15 { height: 15%; min-height: 15%; max-height: 15%; }
 .dmec-tracking-row.dmec-tracking-row-h-20 { height: 20%; min-height: 20%; max-height: 20%; }
