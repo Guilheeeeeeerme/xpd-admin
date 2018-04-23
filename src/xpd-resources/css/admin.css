@@ -1510,6 +1510,17 @@ dmec-tracking dmec-tracking-events > svg  {
     cursor: col-resize;
 }
 
+.chart-content {
+    margin-bottom: 4%;
+    border-top: solid 1px #436a72;
+}
+
+.dmec-chart-label {
+    display: block;
+    margin-bottom: 0.5%;
+    font-size: 1.2em;
+}
+
 /* dmec-tracking > .dmec-tracking-container .dmec-tracking-row {
     display: block;
     width: 100%;
