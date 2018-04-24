@@ -122,7 +122,7 @@
 
 		</g>
 
-		<rect class="overlay" ng-if="listenToMouseMove != null" ng-init="listenToMouseMove(horizontal)" ng-attr-width='{{ svg.viewWidth }}'
+		<rect ng-click="openScaleModal()" class="overlay" ng-if="listenToMouseMove != null" ng-init="listenToMouseMove(horizontal)" ng-attr-width='{{ svg.viewWidth }}'
 		 ng-attr-height='{{ svg.viewHeight }}'></rect>
 
 	</svg>

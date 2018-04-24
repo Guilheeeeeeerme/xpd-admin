@@ -126,6 +126,8 @@
 				scope.openScaleModal = openScaleModal;
 				scope.listenToMouseMove = listenToMouseMove;
 				scope.updateTracks = updateTracks;
+				scope.recomputeOldPoints = recomputeOldPoints;
+				scope.recomputeNewPoints = recomputeNewPoints;
 
 				function onDateRangeChange(newDate, oldDate) {
 					// console.log('onDateRangeChange');
@@ -158,11 +160,18 @@
 				}
 
 				function recomputeOldPoints() {
-					// console.log('recomputeOldPoints');
 
 					readingsToPoints(scope.readings, scope.tracks).then(function (oldPoints) {
 						scope.oldPoints = oldPoints;
 						draw('oldPoints');
+					});
+				}
+
+				function recomputeNewPoints() {
+
+					readingsToPoints(scope.currentReadings, scope.tracks).then(function (newPoints) {
+						scope.newPoints = newPoints;
+						draw('newPoints');
 					});
 				}
 
@@ -175,11 +184,7 @@
 						scope.currentReadings = [currentReading];
 					}
 
-					readingsToPoints(scope.currentReadings, scope.tracks).then(function (newPoints) {
-						scope.newPoints = newPoints;
-						draw('newPoints');
-					});
-
+					recomputeNewPoints();
 				}
 
 				function resize(horizontal) {
@@ -231,7 +236,6 @@
 				}
 
 				function readingsToPoints(readings, tracks) {
-					// console.log('readingsToPoints');
 
 					return $q(function (resolve, reject) {
 
@@ -597,6 +601,8 @@
 			localStorage.dmecTracks = JSON.stringify(tracks.tracks);
 
 			tracks.updateTracks();
+			tracks.recomputeOldPoints();
+			tracks.recomputeNewPoints();
 
 			$modalInstance.close();
 		}

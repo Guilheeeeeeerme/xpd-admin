@@ -27,8 +27,8 @@
 			var ONE_DAY = (1 * 24 * 3600000);
 			var now = new Date().getTime();
 
-			scope.zoomEndAt = new Date(now); 
-			scope.zoomStartAt = new Date(now - ONE_DAY);
+			scope.zoomEndAt = new Date( now ); 
+			scope.zoomStartAt = new Date( now - ONE_DAY / 24 );
 
 			var reloadTimeout = null;
 			scope.getAllReadingSince = getAllReadingSince;
