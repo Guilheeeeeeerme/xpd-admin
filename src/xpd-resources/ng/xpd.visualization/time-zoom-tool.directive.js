@@ -12,6 +12,7 @@
 			restrict: 'E',
 			templateUrl: '../xpd-resources/ng/xpd.visualization/time-zoom-tool.template.html',
 			scope: {
+				bitDepthList: '=',
 				startAt: '=',
 				endAt: '=',
 				zoomStartAt: '=',
@@ -174,6 +175,68 @@
 						};
 
 						scope.xTicks = scope.timeScale.ticks();
+
+						var minDepth = 0;
+						var maxDepth = 0;
+
+						var bitDepthList = scope.bitDepthList || [];
+
+						for (let i in bitDepthList) {
+							if (bitDepthList[i].y != null) {
+								// console.log('bitDepthList', bitDepthList)[i].y;
+
+								if (bitDepthList[i].y > maxDepth) {
+									maxDepth = bitDepthList[i].y;
+								}
+								if (bitDepthList[i].y < minDepth) {
+									minDepth = bitDepthList[i].y;
+								}
+							}
+						}
+
+						var depthScale = d3.scale.linear()
+							.domain([minDepth, maxDepth])
+							.range([
+								0,
+								viewHeight
+							]);
+
+						var lineFunction = d3.svg.line()
+							// .defined(function (d) {				
+							// 	return (angular.isNumber(d.y) && angular.isNumber(d.x));
+							// })
+							.x(function (d) {
+								return scope.timeScale(d.x);
+							})
+							.y(function (d) {
+								if(d.y == null)
+									return null;
+								return depthScale(d.y);
+							})
+							.interpolate('linear');
+
+						var plotList = [];
+
+						plotList.push({
+							y: maxDepth,
+							x: startAt
+						});
+
+						for (let i in bitDepthList) {
+							plotList.push(bitDepthList[i]);
+						}
+
+						plotList.push({
+							y: maxDepth,
+							x: endAt
+						});
+
+						var d = lineFunction(plotList);
+
+						d3.select(scope.element)
+							.selectAll('#bit-depth-path')
+							.attr('d', d);
+
 
 					} catch (e) {
 						console.error(e);

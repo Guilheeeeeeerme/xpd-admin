@@ -3,8 +3,7 @@
  ng-attr-height='{{ svg.viewHeight }}'>
 
 	<g>
-		<rect id="chart-area" x="0" y="0" fill="white" fill-opacity="0.6" ng-attr-width='{{ svg.viewWidth }}' ng-attr-height='{{ svg.viewHeight }}'
-		/>
+		<!-- <rect id="chart-area" x="0" y="0" fill="white" fill-opacity="0.6" ng-attr-width='{{ svg.viewWidth }}' ng-attr-height='{{ svg.viewHeight }}'/> -->
 	</g>
 
 	<g class="time-ticks">
@@ -13,6 +12,10 @@
 			<text alignment-baseline="baseline" x="0" ng-attr-y='{{ svg.viewHeight * 0.75 }}'>{{ tick | date: 'shortTime' }}</text>
 			<line y1="0" x1="0" ng-attr-y2='{{ svg.viewHeight }}' x2="0" stroke="black" stroke-opacity="0.2" stroke-width="0.1em" />
 		</g>
+	</g>
+
+	<g class="bit-depth-line">
+		<path fill="#f00" stroke="#999999" stroke-width="1" id="bit-depth-path"/>
 	</g>
 
 
