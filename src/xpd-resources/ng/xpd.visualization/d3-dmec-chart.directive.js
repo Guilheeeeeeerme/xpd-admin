@@ -20,7 +20,10 @@
 				onEndAtChange: '=',
 				zoomEndAt: '=',
 				readings: '=',
-				autoScroll: '='
+				autoScroll: '=',
+				connectionEvents: '=',
+				tripEvents: '=',
+				timeEvents: '='
 			},
 			link: link
 		};
@@ -92,6 +95,12 @@
 		}
 
 		function link(scope, element, attrs) {
+
+			// setInterval(function () {
+			// 	console.log('connectionEvents', scope.connectionEvents);
+			// 	console.log('tripEvents', scope.tripEvents);
+			// 	console.log('timeEvents', scope.timeEvents);
+			// }, 1000);
 
 			scope.element = element[0];
 

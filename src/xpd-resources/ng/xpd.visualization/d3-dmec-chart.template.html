@@ -18,6 +18,25 @@
 	 xmlns:svg="http://www.w3.org/2000/svg" xmlns="http://www.w3.org/2000/svg" version='1.1' ng-attr-width='{{ svg.viewWidth }}'
 	 ng-attr-height='{{ svg.viewHeight }}'>
 
+		 <g>
+			<rect ng-repeat="event in connectionEvents" 
+				ng-if="event.duration > 0" 
+				ng-attr-width="{{ timeScale(event.duration) - timeScale(0) }}" 
+				ng-attr-height="{{ svg.viewHeight }}" 
+				ng-attr-x="{{ timeScale(event.startTime) }}" 
+				fill="#0000ff" 
+				fill-opacity="0.25"
+				y="0"/>
+			<rect ng-repeat="event in tripEvents" 		
+				ng-if="event.duration > 0" 
+				ng-attr-width="{{ timeScale(event.duration) - timeScale(0) }}" 
+				ng-attr-height="{{ svg.viewHeight }}" 
+				ng-attr-x="{{ timeScale(event.startTime) }}" 
+				fill="#00ff00" 
+				fill-opacity="0.25"
+				y="0"/>
+		</g>
+
 		<g class="time-ticks" ng-if="!horizontal">
 			<g ng-repeat="tick in xTicks" ng-attr-transform="translate(0, {{ timeScale(tick) }} )">
 				<text x="2" y="-2">{{ tick | date: 'short' }}</text>
@@ -122,7 +141,7 @@
 
 		</g>
 
-		<rect ng-click="openScaleModal()" class="overlay" ng-if="listenToMouseMove != null" ng-init="listenToMouseMove(horizontal)" ng-attr-width='{{ svg.viewWidth }}'
+		<rect ng-dblclick="openScaleModal()" class="overlay" ng-if="listenToMouseMove != null" ng-init="listenToMouseMove(horizontal)" ng-attr-width='{{ svg.viewWidth }}'
 		 ng-attr-height='{{ svg.viewHeight }}'></rect>
 
 	</svg>
