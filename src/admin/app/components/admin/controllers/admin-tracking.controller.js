@@ -150,8 +150,32 @@
 			if ($scope.operationData.operationContext.currentOperation != null) {
 				eventlogSetupAPIService.listByOperation($scope.operationData.operationContext.currentOperation.id, function (events) {
 
+					$scope.dados.bitDepthByEvents = [];
+					$scope.dados.connectionEvents = [];
+					$scope.dados.tripEvents = [];
+					$scope.dados.timeEvents = [];
+					$scope.dados.connectionTimes = [];
+					$scope.dados.tripTimes = [];
+
 					events.map( function (event) {
 						event.startTime = new Date(event.startTime).getTime();
+						event.endTime = new Date(event.endTime).getTime();
+
+						if (event.eventType != 'TIME' && event.duration) {
+							$scope.dados.bitDepthByEvents.push({
+								x: event.startTime,
+								y: event.startBitDepth,
+							});
+							$scope.dados.bitDepthByEvents.push({
+								x: event.endTime,
+								y: event.endBitDepth
+							});
+							$scope.dados.bitDepthByEvents.push({
+								x: event.endTime,
+								y: null
+							});
+
+						}
 
 						if(event.eventType == 'CONN')
 							$scope.dados.connectionEvents.push(event);

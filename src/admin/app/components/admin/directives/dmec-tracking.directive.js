@@ -8,6 +8,7 @@
 	function dmecTrackingDirective(readingSetupAPIService, $timeout) {
 		return {
 			scope: {
+				bitDepthByEvents: '=',
 				connectionEvents: '=',
 				tripEvents: '=',
 				timeEvents: '='
