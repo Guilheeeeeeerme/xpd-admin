@@ -91,6 +91,7 @@
 		}
 
 		function actionClickFailuresButton(){
+			console.log('actionClickFailuresButton');
 			var operationId = $scope.operationData.operationContext.currentOperation.id;
 			var start = new Date(startTime);
 			var end = new Date(endTime);
@@ -162,6 +163,10 @@
 						event.endTime = new Date(event.endTime).getTime();
 
 						if (event.eventType != 'TIME' && event.duration) {
+							$scope.dados.bitDepthByEvents.push({
+								x: event.startTime,
+								y: null
+							});
 							$scope.dados.bitDepthByEvents.push({
 								x: event.startTime,
 								y: event.startBitDepth,
