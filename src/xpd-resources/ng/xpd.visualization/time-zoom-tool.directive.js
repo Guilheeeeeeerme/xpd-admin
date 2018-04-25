@@ -45,6 +45,8 @@
 				getEndZoomElement().on('mousedown', mouseDown);
 				getEndZoomElement().on('mouseup', mouseUp);
 
+				d3.select(scope.element).select('.overlay').on('dblclick', dblclick);
+
 				function moveZoomElement() {
 
 					if (selectedElement) {
@@ -131,12 +133,20 @@
 					moveZoomElement();
 				}
 
+				function dblclick() {
+
+					var currentPosition = d3.mouse(this)[0];
+					scope.mindate = scope.timeScale.invert(d3.mouse(this)[0] - 40);
+					scope.maxdate = scope.timeScale.invert(d3.mouse(this)[0] + 40);
+
+					scope.zoomStartAt = scope.mindate;
+					scope.zoomEndAt = scope.maxdate;
+				}
+
 				function onDateRangeChange(newDate, oldDate) {
 					resize();
 					moveZoomElement();
 				}
-
-
 
 				function getStartZoomElement() {
 					var startZoomElement = d3.select(scope.element).selectAll('#start-navigator');
@@ -174,7 +184,7 @@
 							viewHeight: viewHeight
 						};
 
-						scope.xTicks = scope.timeScale.ticks();
+						scope.xTicks = scope.timeScale.ticks(6);
 
 						var minDepth = 0;
 						var maxDepth = 0;
@@ -183,8 +193,6 @@
 
 						for (let i in bitDepthList) {
 							if (bitDepthList[i].y != null) {
-								// console.log('bitDepthList', bitDepthList)[i].y;
-
 								if (bitDepthList[i].y > maxDepth) {
 									maxDepth = bitDepthList[i].y;
 								}
@@ -210,28 +218,12 @@
 							})
 							.y(function (d) {
 								if(d.y == null)
-									return null;
+									return depthScale(maxDepth);
 								return depthScale(d.y);
 							})
 							.interpolate('linear');
 
-						var plotList = [];
-
-						plotList.push({
-							y: maxDepth,
-							x: startAt
-						});
-
-						for (let i in bitDepthList) {
-							plotList.push(bitDepthList[i]);
-						}
-
-						plotList.push({
-							y: maxDepth,
-							x: endAt
-						});
-
-						var d = lineFunction(plotList);
+						var d = lineFunction(bitDepthList);
 
 						d3.select(scope.element)
 							.selectAll('#bit-depth-path')

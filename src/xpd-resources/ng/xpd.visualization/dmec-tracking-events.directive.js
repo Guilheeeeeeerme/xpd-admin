@@ -4,9 +4,9 @@
 	angular.module('xpd.visualization')
 		.directive('dmecTrackingEvents', dmecTrackingEvents);
 
-	dmecTrackingEvents.$inject = ['d3Service'];
+	dmecTrackingEvents.$inject = ['$uibModal', 'd3Service', 'failureModal', 'lessonLearnedModal'];
 
-	function dmecTrackingEvents(d3Service) {
+	function dmecTrackingEvents($uibModal, d3Service, failureModal, lessonLearnedModal) {
 		return {
 			templateUrl: '../xpd-resources/ng/xpd.visualization/dmec-tracking-events.template.html',
 			scope: {
@@ -17,15 +17,17 @@
 				currentOperation: '=',
 				currentBlockPosition: '=',
 				zoomStartAt: '=', 
-				zoomEndAt: '='
+				zoomEndAt: '=',
 			},
 			link: function (scope, element, attrs) {
 
+				scope.element = element[0];
 				scope.mindate = null;
 				scope.maxdate = null;
 				scope.elementIdGroup = 'current-event-' + scope.eventType;
 				scope.elementIdBar = 'current-event-bar' + scope.eventType;
-				scope.verticalMode = angular.isDefined(scope.verticalMode) ? scope.verticalMode : false;
+				scope.selectedEvent = null;
+				// scope.verticalMode = angular.isDefined(scope.verticalMode) ? scope.verticalMode : false;
 
 				d3Service.d3().then(function (d3) {
 
@@ -34,6 +36,9 @@
 
 					scope.getBarProperties = getBarProperties;
 					scope.getEventScale = getEventScale;
+					scope.actionOpenDetailsModal = actionOpenDetailsModal;
+					scope.actionOpenFailuresModal = actionOpenFailuresModal;
+					scope.actionOpenLessonsLearnedModal = actionOpenLessonsLearnedModal;
 
 					scope.$watch('zoomStartAt', function (startAt) {
 						if(startAt) {
@@ -53,6 +58,10 @@
 						if (scope.currentEvent && scope.eventType == scope.currentEvent.eventType)
 							currentEventBar(buildEventBar(scope.currentEvent, true, tick));
 					});
+
+					getEventZoomElement().on('dblclick', dblclick);
+					getEventZoomElement().on('mousedown', rightClick);
+					
 
 					function setViewMode() {
 
@@ -147,6 +156,101 @@
 							return scope.xScale(startTime);
 						else return 0;
 					}
+
+					function getEventZoomElement() {
+						var startZoomElement = d3.select(scope.element).selectAll('.overlay');
+						return startZoomElement;
+					}
+
+					function dblclick() {
+						console.log('dblclick');
+
+						var currentPosition = d3.mouse(this)[0];
+						scope.mindate = scope.xScale.invert(d3.mouse(this)[0] - 20);
+						scope.maxdate = scope.xScale.invert(d3.mouse(this)[0] + 20);
+
+						scope.zoomStartAt = scope.mindate;
+						scope.zoomEndAt = scope.maxdate;
+						
+						defineScaleChart();
+					}
+
+					function rightClick() {
+
+						d3.select(scope.element).selectAll('.dropdown').classed('open', false);
+						
+						if(d3.event.button == 2) {
+							var selectedEvent = scope.events[d3.event.toElement.id];
+
+							if (selectedEvent) {
+								
+								scope.selectedEvent = selectedEvent;
+
+								d3.select(scope.element).selectAll('.dropdown')
+									.style('top', d3.event.clientY + 'px')
+									.style('left', d3.event.clientX + 'px')
+									.classed('open', true);
+							}
+						}
+
+					}
+
+					function actionOpenDetailsModal() {
+						console.log('actionOpenDetailsModal')
+						// scope.$modalInstance = $uibModal.open({
+						// 	animation: true,
+						// 	keyboard: false,
+						// 	backdrop: 'static',
+						// 	size: 'modal-sm',
+						// 	windowClass: 'xpd-operation-modal',
+						// 	templateUrl: 'app/components/admin/views/modal/event.modal.html',
+						// 	controller: 'FailuresController as fController',
+						// 	scope: scope
+						// });
+					}
+
+					function actionOpenFailuresModal() {
+
+						var event = {
+							operation: {
+								id: scope.selectedEvent.operation.id
+							},
+							startTime: new Date(scope.selectedEvent.startTime),
+							endTime: new Date(scope.selectedEvent.endTime)
+						};
+
+						failureModal.open(
+							event,
+							function() {
+								console.log('success');
+							},
+							function() {
+								console.log('error');
+							}
+						);
+					}
+
+					function actionOpenLessonsLearnedModal() {
+
+						var event = {
+							operation: {
+								id: scope.selectedEvent.operation.id
+							},
+							startTime: new Date(scope.selectedEvent.startTime),
+							endTime: new Date(scope.selectedEvent.endTime)
+						};
+
+						lessonLearnedModal.open(
+							event,
+							function () {
+								console.log('success');
+							},
+							function () {
+								console.log('error');
+							}
+						);
+					}
+
 				});
 			}
 		};
