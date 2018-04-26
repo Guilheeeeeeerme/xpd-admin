@@ -29,8 +29,6 @@
 			link: link
 		};
 
-
-
 		function getRandomArbitrary(min, max) {
 			return Math.floor(Math.random() * (max - min) + min);
 		}
@@ -117,22 +115,16 @@
 				var colorScale = d3.scale.category10();
 				var format = d3.format('.1f');
 
-				$interval(scrollIfNeeded, updateLatency, isHorizontal);
-
-				scope.$watch('onReading', onReadingChange);
-
-				scope.$watch('zoomStartAt', onZoomChange);
-				scope.$watch('zoomEndAt', onZoomChange);
-				scope.$watch('startAt', onDateRangeChange);
-				scope.$watch('endAt', onDateRangeChange);
-
-				scope.$watch('readings', onReadingsListReady);
+				$interval(regularVerifications, updateLatency, isHorizontal);
 
 				scope.openScaleModal = openScaleModal;
 				scope.listenToMouseMove = listenToMouseMove;
 				scope.updateTracks = updateTracks;
-				scope.recomputeOldPoints = recomputeOldPoints;
-				scope.recomputeNewPoints = recomputeNewPoints;
+				scope.drawOldPoints = drawOldPoints;
+				scope.drawNewPoints = drawNewPoints;
+				
+				/** Realtime */
+				scope.$watch('onReading', onReadingChange);
 
 				function onReadingChange(onReading) {
 					if (onReading) {
@@ -140,41 +132,7 @@
 					}
 				}
 
-				function onDateRangeChange(newDate, oldDate) {
-					// console.log('onDateRangeChange');
-					resize(isHorizontal);
-				}
-
-				function onZoomChange() {
-					onDateRangeChange();
-
-					try { draw('oldPoints'); } catch (e) { };
-					try { draw('newPoints'); } catch (e) { };
-				}
-
-				function onReadingsListReady() {
-					// console.log('onReadingsListReady');
-					recomputeOldPoints();
-				}
-
-				function recomputeOldPoints() {
-
-					readingsToPoints(scope.readings, scope.tracks).then(function (oldPoints) {
-						scope.oldPoints = oldPoints;
-						draw('oldPoints');
-					});
-				}
-
-				function recomputeNewPoints() {
-
-					readingsToPoints(scope.currentReadings, scope.tracks).then(function (newPoints) {
-						scope.newPoints = newPoints;
-						draw('newPoints');
-					});
-				}
-
 				function onCurrentReading(currentReading) {
-					// console.log('onCurrentReading');
 
 					try {
 						scope.currentReadings.push(currentReading);
@@ -182,68 +140,104 @@
 						scope.currentReadings = [currentReading];
 					}
 
-					recomputeNewPoints();
+					drawNewPoints();
 				}
 
-				function resize(horizontal) {
-					// console.log('resize');
+				function drawNewPoints() {
+					readingsToPoints(scope.currentReadings, scope.tracks).then(function (newPoints) {
+						scope.newPoints = newPoints;
+						draw('newPoints');
+					});
+				}
 
-					try {
+				/** 
+				 * Readings history 
+				 */
+				scope.$watch('readings', onReadingsListReady);
 
-						var endAt = (new Date(scope.endAt) == 'Invalid Date') ? null : new Date(scope.endAt);
-						var startAt = (new Date(scope.startAt) == 'Invalid Date') ? null : new Date(scope.startAt);
+				function onReadingsListReady() {
+					drawOldPoints();
+				}
 
-						var zoomStartAt = (new Date(scope.zoomStartAt) == 'Invalid Date') ? startAt : scope.zoomStartAt;
-						var zoomEndAt = (new Date(scope.zoomEndAt) == 'Invalid Date') ? endAt : scope.zoomEndAt;
+				function drawOldPoints() {
 
-						if (endAt == null) {
-							console.log('Missing Param "endAt" ');
-							return;
-						}
+					readingsToPoints(scope.readings, scope.tracks).then(function (oldPoints) {
+						scope.oldPoints = oldPoints;
+						draw('oldPoints');
+					});
+				}
 
-						if (startAt == null) {
-							console.log('Missing Param "startAt" ');
-							return;
-						}
+				/** 
+				 * Atemporal 
+				 */
+				scope.$watch('zoomStartAt', onZoomChange);
+				scope.$watch('zoomEndAt', onZoomChange);
+				scope.$watch('startAt', onDateRangeChange);
+				scope.$watch('endAt', onDateRangeChange);
 
-						if (zoomStartAt == null) {
-							console.log('Missing Param "zoomStartAt" ');
-							return;
-						}
+				function onZoomChange() {
+					onDateRangeChange();
+				}
 
-						if (zoomEndAt == null) {
-							console.log('Missing Param "zoomEndAt" ');
-							return;
-						}
+				function onDateRangeChange(newDate, oldDate) {
+					buildTimeAxis(isHorizontal);
+				}
 
-						var viewWidth = scope.element.clientWidth;
-						var viewHeight = scope.element.offsetHeight;
+				/**
+				 * When Tracks Change
+				 */
+				scope.$watch('tracks', updateTracks);
 
-						var timeScale = d3.time.scale()
-							.domain([
-								zoomStartAt,
-								zoomEndAt,
-							])
-							.range([
-								0,
-								horizontal ? (viewWidth * 0.95) : (viewHeight * 0.95)
-							]);
+				function buildTimeAxis(horizontal) {
 
-						var timeAxisSize = timeScale(endAt) - timeScale(startAt);
+					var endAt = (new Date(scope.endAt) == 'Invalid Date') ? null : new Date(scope.endAt);
+					var startAt = (new Date(scope.startAt) == 'Invalid Date') ? null : new Date(scope.startAt);
 
-						scope.svg = {
-							viewWidth: (horizontal) ? timeAxisSize : viewWidth,
-							viewHeight: (horizontal) ? viewHeight : timeAxisSize
-						};
+					var zoomStartAt = (new Date(scope.zoomStartAt) == 'Invalid Date') ? startAt : scope.zoomStartAt;
+					var zoomEndAt = (new Date(scope.zoomEndAt) == 'Invalid Date') ? endAt : scope.zoomEndAt;
 
-						scope.timeScale = timeScale;
-						scope.xTicks = timeScale.ticks(6);
-
-						updateTracks();
-
-					} catch (e) {
-						console.error(e);
+					if (endAt == null) {
+						console.error('Missing Param "endAt" ');
+						return;
 					}
+
+					if (startAt == null) {
+						console.error('Missing Param "startAt" ');
+						return;
+					}
+
+					if (zoomStartAt == null) {
+						console.error('Missing Param "zoomStartAt" ');
+						return;
+					}
+
+					if (zoomEndAt == null) {
+						console.error('Missing Param "zoomEndAt" ');
+						return;
+					}
+
+					var viewWidth = scope.element.clientWidth;
+					var viewHeight = scope.element.offsetHeight;
+
+					var timeScale = d3.time.scale()
+						.domain([
+							zoomStartAt,
+							zoomEndAt,
+						])
+						.range([
+							0,
+							horizontal ? (viewWidth * 0.95) : (viewHeight * 0.95)
+						]);
+
+					var timeAxisSize = timeScale(endAt) - timeScale(startAt);
+
+					scope.svg = {
+						viewWidth: (horizontal) ? timeAxisSize : viewWidth,
+						viewHeight: (horizontal) ? viewHeight : timeAxisSize
+					};
+
+					scope.timeScale = timeScale;
+					scope.xTicks = timeScale.ticks(6);
 				}
 
 				function readingsToPoints(readings, tracks) {
@@ -272,7 +266,11 @@
 
 				function updateTracks() {
 
-					scope.tracks = scope.tracks.map(function (track, index) {
+					if(!scope.tracks){
+						return;
+					}
+
+					scope.$tracks = scope.tracks.map(function (track, index) {
 						return configTrackProperties(track, index, isHorizontal);
 					});
 
@@ -336,15 +334,63 @@
 
 						function trackPosition(trackIndex) {
 
+							var viewWidth = scope.element.clientWidth;
+							var viewHeight = scope.element.offsetHeight;
+
 							var numberOfTracks = scope.tracks.length;
 							var tracksPerThread = Math.ceil(numberOfTracks / threads);
 							var relative = Math.floor(trackIndex / tracksPerThread) / threads;
-							var result = (relative * ((horizontal) ? scope.svg.viewHeight : scope.svg.viewWidth));
+							var result = (relative * ((horizontal) ? viewHeight : viewWidth));
 							return result;
 						}
 
 						return track;
 					}
+				}
+
+				function draw(trackName) {
+
+					if (scope[trackName]) {
+
+						worker.postMessage({
+							cmd: 'handle-overflow',
+							tracks: scope.tracks.map(function (track) {
+
+								return {
+									param: track.param,
+									min: track.min,
+									max: track.max
+								};
+							}),
+							trackName: trackName,
+							points: scope[trackName]
+						});
+
+						var promise = new Promise(function (resolve, reject) {
+							worker.addEventListener('message', function (event) {
+								if (event.data.cmd == 'handle-overflow') {
+									resolve(event.data);
+								}
+							}, false);
+						});
+
+
+						promise.then(function (data) {
+
+							var points = data.points;
+							var processedTrackName = data.trackName;
+
+							scope.tracks.map(function (track) {
+								d3.select(scope.element)
+									.selectAll('.' + processedTrackName)
+									.selectAll('#' + track.param)
+									.attr('d', track.lineFunction(points[track.param]));
+							});
+
+						});
+
+					}
+
 				}
 
 				function listenToMouseMove(horizontal) {
@@ -434,50 +480,12 @@
 
 				}
 
-				function draw(trackName) {
-
-					if (scope[trackName]) {
-						worker.postMessage({
-							cmd: 'handle-overflow',
-							tracks: scope.tracks.map(function (t) {
-								return {
-									param: t.param,
-									min: t.min,
-									max: t.max
-								};
-							}),
-							trackName: trackName,
-							points: scope[trackName]
-						});
-
-						scope[trackName + 'Promise'] = new Promise(function (resolve, reject) {
-							worker.addEventListener('message', function (event) {
-								if (event.data.cmd == 'handle-overflow') {
-									resolve(event.data);
-								}
-							}, false);
-						});
-
-						scope[trackName + 'Promise'].then(function (data) {
-
-							var points = data.points;
-							var trackName = data.trackName;
-
-							scope.tracks.map(function (track) {
-								d3.select(scope.element)
-									.selectAll('.' + trackName)
-									.selectAll('#' + track.param)
-									.attr('d', track.lineFunction(points[track.param]));
-							});
-
-						});
-
-					}
-
-				}
-
 				function getScrollContainer() {
 					return document.getElementById(chartId);
+				}
+
+				function regularVerifications(horizontal) {
+					scrollIfNeeded(horizontal);
 				}
 
 				function scrollIfNeeded(horizontal) {
@@ -561,8 +569,8 @@
 			localStorage.dmecTracks = JSON.stringify(tracks.tracks);
 
 			tracks.updateTracks();
-			tracks.recomputeOldPoints();
-			tracks.recomputeNewPoints();
+			tracks.drawOldPoints();
+			tracks.drawNewPoints();
 
 			$modalInstance.close();
 		}

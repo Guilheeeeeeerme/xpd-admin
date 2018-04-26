@@ -4,8 +4,16 @@
 
 (function () {
 
+	function getRandomArbitrary(min, max) {
+		return Math.floor(Math.random() * (max - min) + min);
+	}
+
 	addEventListener('message', function (e) {
 		var data = e.data;
+
+		// var threadId = getRandomArbitrary(0, 1000) + ' ' + data.cmd;
+		// var startTime = new Date().getTime();
+		// console.log('%s começou', threadId);
 
 		switch (data.cmd) {
 
@@ -32,6 +40,9 @@
 			console.log('[Worker] Unable to handle ', data);
 			break;
 		}
+
+		// var endTime = new Date().getTime();
+		// console.log('%s terminou [%s ms]', threadId, (endTime - startTime));
 
 	}, false);
 
