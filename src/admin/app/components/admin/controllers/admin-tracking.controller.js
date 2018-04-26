@@ -117,7 +117,7 @@
 		function getOperationEvents() {
 			if ($scope.operationData.operationContext.currentOperation != null) {
 
-				
+
 				eventlogSetupAPIService.listByType(null, $scope.operationData.operationContext.currentOperation.id, null, function (events) {
 
 					$scope.dados.bitDepthByEvents = [];

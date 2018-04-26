@@ -150,6 +150,30 @@
 			);
 		}
 
+		function listTrackingEventByOperation(operationId, successCallback, errorCallback) {
+			var url = xpdAccessFactory.getSetupURL() + 'setup/operation/';
+
+			if (operationId) {
+				url += operationId;
+				url += '/tracking-events';
+			}
+
+			var req = {
+				method: 'GET',
+				url: url
+			};
+
+			$http(req).then(
+				function (response) {
+					successCallback && successCallback(response.data.data);
+				},
+				function (error) {
+					setupAPIService.generateToast(error.data, true);
+					errorCallback && errorCallback(error);
+				}
+			);
+		}
+
 	}
 
 })();
