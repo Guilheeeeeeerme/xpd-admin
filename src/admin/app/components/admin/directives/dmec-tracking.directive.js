@@ -23,13 +23,14 @@
 		function link(scope, element, attrs) {
 
 
-			var ONE_DAY = (1 * 24 * 3600000);
+			var ONE_HOUR = 3600000;
+			var ONE_DAY = 24 * ONE_HOUR;
 			var updateLatency = 1000;
 			var getTickInterval;
 
-			setTimeout(function(){
+			setTimeout(function () {
 				location.reload();
-			}, (ONE_DAY / 48) );
+			}, (ONE_HOUR / 2) );
 
 			scope.actionButtonUseOperationStartDate = actionButtonUseOperationStartDate;
 			scope.actionButtonSubmitDmecRange = actionButtonSubmitDmecRange;
@@ -84,19 +85,23 @@
 			}
 
 			function actionButtonSubmitDmecRange() {
-				localStorage.setItem('dmecTrackingInputRangeForm', JSON.stringify(scope.inputRangeForm) );
+				localStorage.setItem('dmecTrackingInputRangeForm', JSON.stringify(scope.inputRangeForm));
 				initializeComponent();
 			}
 
 			function getTick() {
 
-				var now = new Date().getTime();
-				scope.dmecTrackingEndAt = now;
-				moveZoomRealtime(scope.dmecTrackingEndAt);
+				if (scope.inputRangeForm.realtime) {
 
-				scope.onReading = new Promise(function (resolve, reject) {
-					readingSetupAPIService.getTick((now - updateLatency), resolve, reject);
-				});
+					var now = new Date().getTime();
+					scope.dmecTrackingEndAt = now;
+					moveZoomRealtime(scope.dmecTrackingEndAt);
+
+					scope.onReading = new Promise(function (resolve, reject) {
+						readingSetupAPIService.getTick((now - updateLatency), resolve, reject);
+					});
+
+				}
 
 			}
 
@@ -136,7 +141,7 @@
 					};
 				}
 
-				if(inputRangeForm && inputRangeForm.startTime){
+				if (inputRangeForm && inputRangeForm.startTime) {
 					inputRangeForm.startTime = new Date(inputRangeForm.startTime);
 				}
 
