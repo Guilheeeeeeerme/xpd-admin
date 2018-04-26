@@ -31,7 +31,9 @@
 
 				var selectedElement;
 				var selectedElementId;
-				var overlay;
+				var clickedPosition;
+				var clickedPositionStartx;
+				var clickedPositionEndx;
 
 				scope.$watch('startAt', onDateRangeChange);
 				scope.$watch('endAt', onDateRangeChange);
@@ -39,13 +41,16 @@
 				scope.$watch('zoomStartAt', moveZoomElement);
 				scope.$watch('zoomEndAt', moveZoomElement);
 
+				getZoomAreaElement().on('mousedown', mouseDown);
+				getZoomAreaElement().on('mouseup', mouseUp);
+
 				getStartZoomElement().on('mousedown', mouseDown);
 				getStartZoomElement().on('mouseup', mouseUp);
 
 				getEndZoomElement().on('mousedown', mouseDown);
 				getEndZoomElement().on('mouseup', mouseUp);
 
-				d3.select(scope.element).select('.overlay').on('dblclick', dblclick);
+				getOverlayElement().on('dblclick', dblclick);
 
 				function moveZoomElement() {
 
@@ -77,12 +82,22 @@
 
 				function mouseDown() {
 
+					clickedPosition = d3.mouse(this)[0];
 					selectedElement = d3.select(this);
 					selectedElementId = d3.select(this).attr('id');
 
+					var startt = d3.transform(getStartZoomElement().attr('transform'));
+					clickedPositionStartx = startt.translate[0];
+
+					var endt = d3.transform(getEndZoomElement().attr('transform'));
+					clickedPositionEndx = endt.translate[0];
+
 					selectedElement.classed('active', true);
 
-					overlay = d3.select(scope.element).selectAll('.overlay')
+					getOverlayElement()
+						.on('mousemove', mouseMove)
+						.on('mouseup', mouseUp);
+					getZoomAreaElement()
 						.on('mousemove', mouseMove)
 						.on('mouseup', mouseUp);
 				}
@@ -92,17 +107,22 @@
 					if (selectedElementId == 'start-navigator') {
 						scope.startPipePosition = d3.mouse(this)[0];
 						getStartZoomElement().attr('transform', 'translate( ' + d3.mouse(this)[0] + ', 0 )');
-					} else {
+					} else if (selectedElementId == 'end-navigator') {
 						scope.endPipePosition = d3.mouse(this)[0];
 						getEndZoomElement().attr('transform', 'translate( ' + d3.mouse(this)[0] + ', 0 )');
+					} else {
+						var diff = d3.mouse(this)[0] - clickedPosition;
+						getStartZoomElement().attr('transform', 'translate( ' + (clickedPositionStartx + diff) + ', 0 )');
+						getEndZoomElement().attr('transform', 'translate( ' + (clickedPositionEndx + diff) + ', 0 )');
 					}
 
 					moveZoomArea();
+
 				}
 
 				function moveZoomArea() {
 
-					var zoomArea = d3.select(scope.element).selectAll('#zoom-area');
+					var zoomArea = getZoomAreaElement();
 
 					var startt = d3.transform(getStartZoomElement().attr('transform')),
 						startx = startt.translate[0];
@@ -127,7 +147,8 @@
 					scope.zoomEndAt = new Date(Math.max(endx, startx));
 
 					selectedElement.classed('active', false);
-					overlay.on('mousemove', null).on('mouseup', null);
+					getOverlayElement().on('mousemove', null).on('mouseup', null);
+					getZoomAreaElement().on('mousemove', null).on('mouseup', null);
 					selectedElement = null;
 
 					moveZoomElement();
@@ -148,14 +169,20 @@
 					moveZoomElement();
 				}
 
+				function getOverlayElement() {
+					return d3.select(scope.element).selectAll('.overlay');
+				}
+
 				function getStartZoomElement() {
-					var startZoomElement = d3.select(scope.element).selectAll('#start-navigator');
-					return startZoomElement;
+					return d3.select(scope.element).selectAll('#start-navigator');
 				}
 
 				function getEndZoomElement() {
-					var endZoomElement = d3.select(scope.element).selectAll('#end-navigator');
-					return endZoomElement;
+					return d3.select(scope.element).selectAll('#end-navigator');
+				}
+
+				function getZoomAreaElement() {
+					return d3.select(scope.element).selectAll('#zoom-area');
 				}
 
 
@@ -191,7 +218,7 @@
 
 						var bitDepthList = scope.bitDepthList || [];
 
-						for (let i in bitDepthList) {
+						for (var i in bitDepthList) {
 							if (bitDepthList[i].y != null) {
 								if (bitDepthList[i].y > maxDepth) {
 									maxDepth = bitDepthList[i].y;
@@ -217,7 +244,7 @@
 								return scope.timeScale(d.x);
 							})
 							.y(function (d) {
-								if(d.y == null)
+								if (d.y == null)
 									return depthScale(maxDepth);
 								return depthScale(d.y);
 							})

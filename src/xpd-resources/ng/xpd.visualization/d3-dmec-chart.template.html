@@ -7,13 +7,6 @@
 
 <div id="{{ chartId }}" class="container-fuild container-dmec">
 
-	<!-- <foreignObject width="10" height="10" requiredExtensions="http://www.w3.org/1999/xhtml">
-      <body xmlns="http://www.w3.org/1999/xhtml">
-		<a href="#" style="position:fixed; right:10; bottom:10;" ng-click="openScaleModal()">Config</a>
-      </body>
-    </foreignObject> -->
-
-
 	<svg ng-if="tracks" id="d3-svg" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
 	 xmlns:svg="http://www.w3.org/2000/svg" xmlns="http://www.w3.org/2000/svg" version='1.1' ng-attr-width='{{ svg.viewWidth }}'
 	 ng-attr-height='{{ svg.viewHeight }}'>
@@ -46,8 +39,8 @@
 
 		<g class="time-ticks" ng-if="horizontal">
 			<g ng-repeat="tick in xTicks" ng-attr-transform="translate({{ timeScale(tick) }}, 0)">
-				<text x="2" ng-attr-y='{{ svg.viewHeight }}'>{{ tick | date: 'short' }}</text>
-				<line y1="0" x1="0" ng-attr-y2='{{ svg.viewHeight }}' x2="0" stroke="black" stroke-opacity="0.2" stroke-width="0.1em" />
+				<text x="2" ng-attr-y='{{ svg.viewHeight }}' fill="white">{{ tick | date: 'short' }}</text>
+				<line y1="0" x1="0" ng-attr-y2='{{ svg.viewHeight }}' x2="0" stroke="white" stroke-opacity="0.2" stroke-width="0.1em" />
 			</g>
 		</g>
 
