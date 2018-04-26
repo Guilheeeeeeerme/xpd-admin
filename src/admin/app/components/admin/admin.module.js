@@ -14,6 +14,7 @@
 		'xpd.filters',
 		'xpd.contractTimeInput',
 		'angularTreeview',
+		'xpd.modal-event-details',
 		'xpd.modal-failure',
 		'xpd.modal-lessonlearned',
 		'highcharts',

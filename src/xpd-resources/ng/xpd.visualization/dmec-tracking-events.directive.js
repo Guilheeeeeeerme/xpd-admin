@@ -4,9 +4,9 @@
 	angular.module('xpd.visualization')
 		.directive('dmecTrackingEvents', dmecTrackingEvents);
 
-	dmecTrackingEvents.$inject = ['$uibModal', 'd3Service', 'failureModal', 'lessonLearnedModal'];
+	dmecTrackingEvents.$inject = ['$uibModal', 'd3Service', 'eventDetailsModal', 'failureModal', 'lessonLearnedModal'];
 
-	function dmecTrackingEvents($uibModal, d3Service, failureModal, lessonLearnedModal) {
+	function dmecTrackingEvents($uibModal, d3Service, eventDetailsModal, failureModal, lessonLearnedModal) {
 		return {
 			templateUrl: '../xpd-resources/ng/xpd.visualization/dmec-tracking-events.template.html',
 			scope: {
@@ -83,7 +83,7 @@
 					}
 
 					function defineScaleChart() {
-						scope.xScale = d3.scale.linear().domain([scope.mindate, scope.maxdate]).range([0, 100]);
+						scope.xScale = d3.scale.linear().domain([scope.mindate, scope.maxdate]).range([0, 95]);
 						scope.xTicks = scope.xScale.ticks();
 					}
 
@@ -141,10 +141,10 @@
 					function currentEventBar(bar) {
 						var startTime = new Date(scope.currentEvent.startTime);
 
-						d3.select('#' + scope.elementIdGroup)
+						d3.select(element[0]).select('#' + scope.elementIdGroup)
 							.attr('transform', 'translate(' + scope.xScale(startTime) + ', 0)');
 
-						d3.select('#' + scope.elementIdBar)
+						d3.select(element[0]).select('#' + scope.elementIdBar)
 							.attr('y', bar.position)
 							.attr('width', bar.width)
 							.attr('height', bar.height)
@@ -177,45 +177,38 @@
 
 					function rightClick() {
 
-						d3.select(scope.element).selectAll('.dropdown').classed('open', false);
+						closeDetailsMenu();
 						
 						if(d3.event.button == 2) {
-							var selectedEvent = scope.events[d3.event.toElement.id];
+							var selectedEvent = scope.events[d3.event.toElement.id]; //id aqui é o index
 
 							if (selectedEvent) {
-								
 								scope.selectedEvent = selectedEvent;
-
-								d3.select(scope.element).selectAll('.dropdown')
-									.style('top', d3.event.clientY + 'px')
-									.style('left', d3.event.clientX + 'px')
-									.classed('open', true);
+								openDetailsMenu();
 							}
 						}
 
 					}
 
+					function openDetailsMenu() {
+						d3.select(scope.element).selectAll('.dropdown')
+							.style('top', d3.event.clientY + 'px')
+							.style('left', d3.event.clientX + 'px')
+							.classed('open', true);
+					}
+
+					function closeDetailsMenu() {
+						d3.select(scope.element).selectAll('.dropdown').classed('open', false);
+					}
+
 					function actionOpenDetailsModal() {
-						scope.actionEventDetail();
-						console.log('actionOpenDetailsModal');
 
-						// scope.eventFailure = scope.selectedEvent;
-
-						// scope.$modalInstance = $uibModal.open({
-						// 	animation: true,
-						// 	keyboard: false,
-						// 	backdrop: 'static',
-						// 	size: 'modal-sm',
-						// 	windowClass: 'xpd-operation-modal',
-						// 	templateUrl: 'app/components/admin/views/modal/event.modal.html',
-						// 	controller: 'FailuresController as fController',
-						// 	scope: scope
-						// });
+						eventDetailsModal.open(scope.selectedEvent);
+						closeDetailsMenu();
 					}
 
 					scope.modalActionButtonClose = function () {
 						scope.eventFailure = {};
-
 						scope.$modalInstance.close();
 					};
 
@@ -230,6 +223,8 @@
 								console.log('error');
 							}
 						);
+
+						closeDetailsMenu();
 					}
 
 					function actionOpenLessonsLearnedModal() {
@@ -243,6 +238,8 @@
 								console.log('error');
 							}
 						);
+
+						closeDetailsMenu();
 					}
 
 					function getEvent() {

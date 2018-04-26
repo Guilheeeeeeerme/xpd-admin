@@ -2,7 +2,7 @@
 
 	'use strict',
 
-	angular.module('xpd.modal-failure').controller('modalFailureController', modalFailureController);
+		angular.module('xpd.modal-failure').controller('modalFailureController', modalFailureController);
 
 	modalFailureController.$inject = ['$scope', '$uibModalInstance', 'setupAPIService', 'failureSetupAPIService', 'selectedFailure', 'insertCallback', 'updateCallback', 'dialogFactory', 'operationDataFactory'];
 
@@ -17,7 +17,7 @@
 		$scope.now = now;
 		$scope.keepTimeBeforeNow = keepTimeBeforeNow;
 
-		
+
 		operationDataFactory.operationData = [];
 
 		$scope.category = {
@@ -36,38 +36,38 @@
 		getFailuresOnGoing();
 
 		function getCategoryList() {
-		    setupAPIService.getList(
-		        'setup/category',
-		        function(response){
-		        	getCategoryListSuccessCallback(response.data);
-		        }
-		    );
+			setupAPIService.getList(
+				'setup/category',
+				function (response) {
+					getCategoryListSuccessCallback(response.data);
+				}
+			);
 		}
 
-		function toMilli(param){
+		function toMilli(param) {
 			var date = new Date(param);
 			return date.getTime();
 		}
 
-		function now(){
+		function now() {
 			var now = new Date();
 			now.setSeconds(0);
 			now.setMilliseconds(0);
 			return now;
 		}
 
-		function keepTimeBeforeNow(){
+		function keepTimeBeforeNow() {
 			var currentTime = now();
 
-			if( $scope.selectedFailure.endTime && toMilli($scope.selectedFailure.endTime) > currentTime.getTime() ){
+			if ($scope.selectedFailure.endTime && toMilli($scope.selectedFailure.endTime) > currentTime.getTime()) {
 				$scope.selectedFailure.endTime = currentTime;
 			}
 		}
 
 
-		function getFailuresOnGoing(){
+		function getFailuresOnGoing() {
 
-			failureSetupAPIService.listFailuresOnGoing(function(response){
+			failureSetupAPIService.listFailuresOnGoing(function (response) {
 				if (response.length == 0)
 					$scope.selectedFailure.onGoingFlag = true;
 				else
@@ -75,22 +75,22 @@
 			});
 		}
 
-		function getCategoryListSuccessCallback(result){
-		    roleList = result;
-		    makeTreeStructure(roleList);
+		function getCategoryListSuccessCallback(result) {
+			roleList = result;
+			makeTreeStructure(roleList);
 		}
 
 		function getCategoryListErrorCallback(error) {
-		    console.log(error);
+			console.log(error);
 		}
 
 		function modalActionButtonSave() {
 			var failure = $scope.selectedFailure;
 
 			if (failure.onGoing) {
-				
+
 				operationDataFactory.emitStartFailureOnGoing(failure);
-				
+
 				operationDataFactory.addEventListener('modalFailureController', 'setOnGoingFailureListener', insertFailureSuccessCallback);
 
 				operationDataFactory.addEventListener('modalFailureController', 'setOnErrorInsertFailureListener', insertFailureErrorCallback);
@@ -98,7 +98,7 @@
 			} else {
 				if (!failure.id) {
 					registerFailure(failure);
-				} else{
+				} else {
 					updateFailure(failure);
 				}
 			}
@@ -107,10 +107,10 @@
 
 		function registerFailure(failure) {
 			setupAPIService.insertObject(
-	             'setup/failure',
-	             failure,
-	             insertFailureSuccessCallback,
-	             insertFailureErrorCallback
+				'setup/failure',
+				failure,
+				insertFailureSuccessCallback,
+				insertFailureErrorCallback
 			);
 		}
 
@@ -129,7 +129,7 @@
 				'setup/failure',
 				failure,
 				updateFailureSuccessCallback,
-	            insertFailureErrorCallback
+				insertFailureErrorCallback
 			);
 		}
 
@@ -142,7 +142,7 @@
 			$uibModalInstance.close();
 		}
 
-		function actionOnGoingCheckboxClick(value){
+		function actionOnGoingCheckboxClick(value) {
 			$scope.selectedFailure.onGoing = value;
 
 			if (value) {
@@ -152,37 +152,37 @@
 
 		function makeTreeStructure(data) {
 
-		    var objList = data;
-		    var categoryData = [];
+			var objList = data;
+			var categoryData = [];
 
-		    for (var i in objList) {
-		    	if ($scope.selectedFailure.category){
+			for (var i in objList) {
+				if ($scope.selectedFailure.category) {
 
-			        if ($scope.selectedFailure.category.id != null) {
-	    				if ($scope.selectedFailure.category.id == objList[i].id) {
-	    					objList[i].selected = true;
-	    					$scope.category.lastSelected = objList[i];
-	    				}else{
-	    					objList[i].selected = false;
-	    				}
-	    			}
-	    		}else{
-	    			objList[i].selected = false;
-	    		}
+					if ($scope.selectedFailure.category.id != null) {
+						if ($scope.selectedFailure.category.id == objList[i].id) {
+							objList[i].selected = true;
+							$scope.category.lastSelected = objList[i];
+						} else {
+							objList[i].selected = false;
+						}
+					}
+				} else {
+					objList[i].selected = false;
+				}
 
-		        objList[i].children = [];
+				objList[i].children = [];
 
-		        var currentObj = objList[i];
+				var currentObj = objList[i];
 
-		        // child to parent
-		        if (currentObj.parentId == null || currentObj.parentId == undefined) {
-		            categoryData.push(objList[i]);
-		        }else{
-		            objList[currentObj.parentId].children.push(currentObj);
-		        }
-		    }
+				// child to parent
+				if (currentObj.parentId == null || currentObj.parentId == undefined) {
+					categoryData.push(objList[i]);
+				} else {
+					objList[currentObj.parentId].children.push(currentObj);
+				}
+			}
 
-		    $scope.category.roleList = categoryData;
+			$scope.category.roleList = categoryData;
 		}
 
 		function actionClickSelectItem(node) {
@@ -206,12 +206,12 @@
 
 			var objList = roleList;
 			var parentNode = node.parentId;
-			var breadcrumbs = node.initial+ ' - ' +node.name;
+			var breadcrumbs = node.initial + ' - ' + node.name;
 
 			for (var i in objList) {
 				if (parentNode > 1) {
-					breadcrumbs =  objList[parentNode].initial+ ' - ' +objList[parentNode].name + ' > ' + breadcrumbs;
-				}else{
+					breadcrumbs = objList[parentNode].initial + ' - ' + objList[parentNode].name + ' > ' + breadcrumbs;
+				} else {
 					$scope.category.breadcrumbs += ' > ' + breadcrumbs;
 					return;
 				}

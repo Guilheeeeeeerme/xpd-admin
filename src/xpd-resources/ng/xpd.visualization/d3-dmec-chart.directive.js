@@ -8,19 +8,23 @@
 	module.controller('ModalUpdateDmecTracks', ModalUpdateDmecTracks);
 
 	ModalUpdateDmecTracks.$inject = ['$scope', '$uibModalInstance', 'tracks'];
-	d3DmecChart.$inject = ['d3Service', '$q', '$interval', '$timeout', 'readingSetupAPIService', '$uibModal'];
+	d3DmecChart.$inject = ['d3Service', '$q', '$interval', '$timeout', '$uibModal'];
 
-	function d3DmecChart(d3Service, $q, $interval, $timeout, readingSetupAPIService, $modal) {
+	function d3DmecChart(d3Service, $q, $interval, $timeout, $modal) {
 		return {
 			restrict: 'E',
 			templateUrl: '../xpd-resources/ng/xpd.visualization/d3-dmec-chart.template.html',
 			scope: {
 				startAt: '=',
 				zoomStartAt: '=',
-				onEndAtChange: '=',
+				endAt: '=',
+				onReading: '=',
 				zoomEndAt: '=',
 				readings: '=',
-				autoScroll: '='
+				autoScroll: '=',
+				connectionEvents: '=',
+				tripEvents: '=',
+				timeEvents: '='
 			},
 			link: link
 		};
@@ -113,29 +117,39 @@
 				var colorScale = d3.scale.category10();
 				var format = d3.format('.1f');
 
-				$interval(getTick, updateLatency);
 				$interval(scrollIfNeeded, updateLatency, isHorizontal);
 
-				scope.$watch('zoomStartAt', onDateRangeChange);
-				scope.$watch('zoomEndAt', onDateRangeChange);
+				scope.$watch('onReading', onReadingChange);
+
+				scope.$watch('zoomStartAt', onZoomChange);
+				scope.$watch('zoomEndAt', onZoomChange);
 				scope.$watch('startAt', onDateRangeChange);
-				scope.$watch('endAt', onEndAtChange);
+				scope.$watch('endAt', onDateRangeChange);
 
 				scope.$watch('readings', onReadingsListReady);
 
 				scope.openScaleModal = openScaleModal;
 				scope.listenToMouseMove = listenToMouseMove;
 				scope.updateTracks = updateTracks;
+				scope.recomputeOldPoints = recomputeOldPoints;
+				scope.recomputeNewPoints = recomputeNewPoints;
+
+				function onReadingChange(onReading) {
+					if (onReading) {
+						onReading.then(onCurrentReading);
+					}
+				}
 
 				function onDateRangeChange(newDate, oldDate) {
 					// console.log('onDateRangeChange');
 					resize(isHorizontal);
 				}
 
-				function onEndAtChange() {
-					// console.log('onEndAtChange');
-					scope.onEndAtChange && scope.onEndAtChange(scope.endAt);
+				function onZoomChange() {
 					onDateRangeChange();
+
+					try { draw('oldPoints'); } catch (e) { };
+					try { draw('newPoints'); } catch (e) { };
 				}
 
 				function onReadingsListReady() {
@@ -143,19 +157,19 @@
 					recomputeOldPoints();
 				}
 
-				function getTick() {
-					// console.log('getTick');
-					var endAt = new Date().getTime();
-					readingSetupAPIService.getTick((endAt - updateLatency), onCurrentReading);
-					scope.endAt = endAt;
-				}
-
 				function recomputeOldPoints() {
-					// console.log('recomputeOldPoints');
 
 					readingsToPoints(scope.readings, scope.tracks).then(function (oldPoints) {
 						scope.oldPoints = oldPoints;
 						draw('oldPoints');
+					});
+				}
+
+				function recomputeNewPoints() {
+
+					readingsToPoints(scope.currentReadings, scope.tracks).then(function (newPoints) {
+						scope.newPoints = newPoints;
+						draw('newPoints');
 					});
 				}
 
@@ -168,11 +182,7 @@
 						scope.currentReadings = [currentReading];
 					}
 
-					readingsToPoints(scope.currentReadings, scope.tracks).then(function (newPoints) {
-						scope.newPoints = newPoints;
-						draw('newPoints');
-					});
-
+					recomputeNewPoints();
 				}
 
 				function resize(horizontal) {
@@ -180,46 +190,54 @@
 
 					try {
 
-						var endAt = scope.endAt || new Date();
-						var startAt = scope.startAt || new Date();
+						var endAt = (new Date(scope.endAt) == 'Invalid Date') ? null : new Date(scope.endAt);
+						var startAt = (new Date(scope.startAt) == 'Invalid Date') ? null : new Date(scope.startAt);
 
-						var zoomStartAt = (scope.zoomStartAt) ? scope.zoomStartAt : startAt;
-						var zoomEndAt = (scope.zoomEndAt) ? scope.zoomEndAt : endAt;
+						var zoomStartAt = (new Date(scope.zoomStartAt) == 'Invalid Date') ? startAt : scope.zoomStartAt;
+						var zoomEndAt = (new Date(scope.zoomEndAt) == 'Invalid Date') ? endAt : scope.zoomEndAt;
 
-						zoomStartAt = new Date(zoomStartAt);
-						zoomEndAt = new Date(zoomEndAt);
+						if (endAt == null) {
+							console.log('Missing Param "endAt" ');
+							return;
+						}
+
+						if (startAt == null) {
+							console.log('Missing Param "startAt" ');
+							return;
+						}
+
+						if (zoomStartAt == null) {
+							console.log('Missing Param "zoomStartAt" ');
+							return;
+						}
+
+						if (zoomEndAt == null) {
+							console.log('Missing Param "zoomEndAt" ');
+							return;
+						}
 
 						var viewWidth = scope.element.clientWidth;
 						var viewHeight = scope.element.offsetHeight;
 
-						var zoomScale = d3.time.scale()
+						var timeScale = d3.time.scale()
 							.domain([
 								zoomStartAt,
 								zoomEndAt,
 							])
 							.range([
 								0,
-								horizontal ? viewWidth : viewHeight
+								horizontal ? (viewWidth * 0.95) : (viewHeight * 0.95)
 							]);
 
-						var timeAxisSize = zoomScale(new Date(endAt)) - zoomScale(new Date(startAt));
-
-						scope.timeScale = d3.time.scale()
-							.domain([
-								new Date(startAt),
-								new Date(endAt),
-							])
-							.range([
-								0,
-								timeAxisSize * 0.95
-							]);
+						var timeAxisSize = timeScale(endAt) - timeScale(startAt);
 
 						scope.svg = {
 							viewWidth: (horizontal) ? timeAxisSize : viewWidth,
 							viewHeight: (horizontal) ? viewHeight : timeAxisSize
 						};
 
-						scope.xTicks = scope.timeScale.ticks();
+						scope.timeScale = timeScale;
+						scope.xTicks = timeScale.ticks(6);
 
 						updateTracks();
 
@@ -229,13 +247,10 @@
 				}
 
 				function readingsToPoints(readings, tracks) {
-					// console.log('readingsToPoints');
 
 					return $q(function (resolve, reject) {
 
 						if (tracks != null && tracks.length > 0 && readings != null && readings.length > 0) {
-
-							// var worker = new Worker('../assets/js/dmec-worker.js');
 
 							worker.postMessage({
 								cmd: 'reading-to-points',
@@ -244,7 +259,9 @@
 							});
 
 							worker.addEventListener('message', function (event) {
-								resolve(event.data.points);
+								if (event.data.cmd == 'reading-to-points') {
+									resolve(event.data.points);
+								}
 							}, false);
 
 						}
@@ -254,7 +271,6 @@
 				}
 
 				function updateTracks() {
-					// console.log('updateTracks');
 
 					scope.tracks = scope.tracks.map(function (track, index) {
 						return configTrackProperties(track, index, isHorizontal);
@@ -280,7 +296,7 @@
 							.domain([track.min, track.max])
 							.range([
 								labelStartAt + ((labelEndAt - labelStartAt) * 0.05),
-								labelEndAt, - ((labelEndAt - labelStartAt) * 0.05)
+								labelEndAt - ((labelEndAt - labelStartAt) * 0.05)
 							]);
 
 						var lineFunction = d3.svg.line()
@@ -335,9 +351,9 @@
 					// console.log('listenToMouseMove');
 
 					d3.select(scope.element).selectAll('.overlay')
-						.on('mousemove', mouseEvent);
+						.on('mousemove', mousemove);
 
-					function mouseEvent() {
+					function mousemove() {
 
 						var position = null;
 						var timestamp = null;
@@ -360,40 +376,34 @@
 
 					function onMousemove(timestamp, position) {
 
-						scope.tracks.map(function (track, trackIndex) {
+						worker.postMessage({
+							cmd: 'find-point',
+							timestamp: timestamp,
+							tracks: scope.tracks.map(function (t) { return { param: t.param }; }),
+							oldPoints: scope.oldPoints,
+							newPoints: scope.newPoints
+						});
 
-							var point = null;
-							var points = [];
-							var bubble = d3.select(scope.element).selectAll('#bubble-' + trackIndex);
-							var tooltip = d3.select(scope.element).selectAll('#text-' + trackIndex);
-
-							bubble.attr('style', 'display: none');
-							tooltip.attr('style', 'display: none');
-
-							try {
-
-								if (scope.oldPoints &&
-									scope.oldPoints[track.param] &&
-									scope.oldPoints[track.param].length &&
-									scope.oldPoints[track.param][0].x <= timestamp &&
-									scope.oldPoints[track.param][scope.oldPoints[track.param].length - 1].x >= timestamp) {
-
-									points = scope.oldPoints[track.param];
-								} else if (scope.newPoints &&
-									scope.newPoints[track.param] &&
-									scope.newPoints[track.param].length &&
-									scope.newPoints[track.param][0].x <= timestamp &&
-									scope.newPoints[track.param][scope.newPoints[track.param].length - 1].x >= timestamp) {
-
-									points = scope.newPoints;
+						var promise = new Promise(function (resolve, reject) {
+							worker.addEventListener('message', function (event) {
+								if (event.data.cmd == 'find-point') {
+									var reading = event.data.points;
+									resolve(event.data.points);
 								}
+							}, false);
+						});
 
-								for (var i in points) {
-									if ( (points[i].x / 1000) >= (timestamp / 1000)) {
-										point = points[i];
-										break;
-									}
-								}
+						promise.then(function (reading) {
+
+							scope.tracks.map(function (track, trackIndex) {
+
+								var bubble = d3.select(scope.element).selectAll('#bubble-' + trackIndex);
+								var tooltip = d3.select(scope.element).selectAll('#text-' + trackIndex);
+
+								bubble.attr('style', 'display: none');
+								tooltip.attr('style', 'display: none');
+
+								var point = reading[track.param];
 
 								if (point && point.y != null) {
 
@@ -417,11 +427,7 @@
 									bubble.attr('style', 'display: none');
 								}
 
-							} catch (e) {
-								console.error(e);
-								bubble.attr('style', 'display: none');
-							}
-
+							});
 						});
 
 					}
@@ -429,75 +435,43 @@
 				}
 
 				function draw(trackName) {
-					// console.log('draw("%s")', trackName);
 
-					scope.tracks.map(function (track) {
-						scope[trackName][track.param] = handleOverflow(scope[trackName][track.param], track);
-						d3.select(scope.element)
-							.selectAll('.' + trackName)
-							.selectAll('#' + track.param)
-							.attr('d', track.lineFunction(scope[trackName][track.param]));
-					});
+					if (scope[trackName]) {
+						worker.postMessage({
+							cmd: 'handle-overflow',
+							tracks: scope.tracks.map(function (t) {
+								return {
+									param: t.param,
+									min: t.min,
+									max: t.max
+								};
+							}),
+							trackName: trackName,
+							points: scope[trackName]
+						});
 
-					function handleOverflow(points, track) {
-
-						var result = [];
-						var distance = 0;
-						var lastPoint = null;
-
-						while ((track.min + distance) <= track.max) {
-							distance++;
-						}
-
-						points.map(function (pt) {
-
-							var point = angular.copy(pt);
-
-							var empty = {
-								x: point.x,
-								y: null,
-								actual: null
-							};
-
-							point.overflow = 0;
-
-							if (point.y != null) {
-
-								for (var i = 0; i < 2; i++) {
-
-									if (point.y < track.min) {
-
-										while (point.y < track.min) {
-											point.overflow++;
-											point.y += distance;
-										}
-
-									}
-
-									if (point.y > track.max) {
-
-										while (point.y > track.max) {
-											point.overflow--;
-											point.y -= distance;
-										}
-
-									}
-
+						scope[trackName + 'Promise'] = new Promise(function (resolve, reject) {
+							worker.addEventListener('message', function (event) {
+								if (event.data.cmd == 'handle-overflow') {
+									resolve(event.data);
 								}
+							}, false);
+						});
 
-							}
+						scope[trackName + 'Promise'].then(function (data) {
 
-							if (lastPoint != null && lastPoint.overflow != point.overflow) {
-								result.push(empty);
-							}
+							var points = data.points;
+							var trackName = data.trackName;
 
-							lastPoint = point;
-
-							result.push(point);
+							scope.tracks.map(function (track) {
+								d3.select(scope.element)
+									.selectAll('.' + trackName)
+									.selectAll('#' + track.param)
+									.attr('d', track.lineFunction(points[track.param]));
+							});
 
 						});
 
-						return result;
 					}
 
 				}
@@ -587,6 +561,8 @@
 			localStorage.dmecTracks = JSON.stringify(tracks.tracks);
 
 			tracks.updateTracks();
+			tracks.recomputeOldPoints();
+			tracks.recomputeNewPoints();
 
 			$modalInstance.close();
 		}
