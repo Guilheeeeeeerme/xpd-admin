@@ -1,23 +1,71 @@
-<div class="dmec-tracking-container" ng-if="operationData.operationContext.currentOperation && operationData.operationContext.currentOperation.running">
+<div class="dmec-tracking-container" ng-if="operationData.operationContext.currentOperation && operationData.operationContext.currentOperation.running"
+ ng-init="initializeComponent()">
 
-	<div 
-		class="dmec-tracking-row dmec-tracking-row-h-40 chart-content" 
-		ng-if="showDrillingMecChart" 
-		ng-init="getAllReadingSince(operationData.operationContext.currentOperation.startDate)" >
-		
+	<uib-accordion>
+		<div uib-accordion-group class="panel-default" is-open="status.isCustomHeaderOpen">
+
+			<uib-accordion-heading>
+				Filter
+				<i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': status.isCustomHeaderOpen, 'glyphicon-chevron-right': !status.isCustomHeaderOpen}"></i>
+			</uib-accordion-heading>
+
+			<form name="inputRange.form">
+
+				<div class="checkbox">
+					<label>
+						<input name="realtime" ng-model="inputRangeForm.realtime" type="checkbox"> Real Time
+					</label>
+				</div>
+
+				<div ng-if="!inputRangeForm.realtime">
+
+					<div class="form-group">
+						<label for="startTime">From:</label>
+						<input ng-model="inputRangeForm.startTime" type="datetime-local" class="form-control"
+						 required min="{{ operationData.operationContext.currentOperation.startDate | date:'yyyy-MM-ddTHH:mm' }}" name="startTime"
+						 id="startTime">
+					</div>
+
+
+					<button type="submit" ng-click="actionButtonUseOperationStartDate(operationData.operationContext.currentOperation.startDate)"
+					 class="btn btn-default">Use Operation Start Time ({{ operationData.operationContext.currentOperation.startDate | date: 'medium' }})</button>
+
+				</div>
+
+				<div ng-if="inputRangeForm.realtime">
+
+					<div class="form-group">
+						<label for="last">Last:</label>
+						<input ng-model="inputRangeForm.last" type="number" class="form-control" required name="last" id="last">
+					</div>
+
+					<div class="form-group">
+						<select ng-model="inputRangeForm.toMilliseconds" class="form-control" required name="toMilliseconds" id="toMilliseconds">
+							<option value="86400000">Days</option>
+							<option value="3600000">Hours</option>
+							<option value="60000">Minutes</option>
+							<option value="1000">Seconds</option>
+						</select>
+					</div>
+
+				</div>
+
+				<button type="submit" ng-click="actionButtonSubmitDmecRange()" ng-disabled="inputRange.form.$invalid" class="btn btn-default">Submit</button>
+
+			</form>
+		</div>
+
+	</uib-accordion>
+
+	<div class="dmec-tracking-row dmec-tracking-row-h-40 chart-content">
+
 		<div class="xpd-chart-container-header dmec-chart-label">
 			DMEC
 		</div>
 
-		<d3-dmec-chart 
-			threads="{{ 4 }}" 
-			horizontal="true"
-			start-at="operationData.operationContext.currentOperation.startDate"
-			on-end-at-change="onEndAtChange"
-			zoom-start-at="zoomStartAt" 
-			zoom-end-at="zoomEndAt"
-			readings="readings" 
-			auto-scroll="chartAutoScroll">
+		<d3-dmec-chart threads="{{ 4 }}" horizontal="true" start-at="dmecTrackingStartAt" end-at="dmecTrackingEndAt" on-reading="onReading"
+		 zoom-start-at="zoomStartAt" zoom-end-at="zoomEndAt" readings="readings" connection-events="connectionEvents" trip-events="tripEvents"
+		 time-events="timeEvents" auto-scroll="chartAutoScroll">
 		</d3-dmec-chart>
 
 	</div>
@@ -28,63 +76,49 @@
 			Zoom
 		</div>
 
-		<time-zoom-tool 
-			horizontal="true"
-			start-at="operationData.operationContext.currentOperation.startDate"
-			end-at="endAt"
-			zoom-start-at="zoomStartAt" 
-			zoom-end-at="zoomEndAt">
+		<time-zoom-tool bit-depth-list="bitDepthByEvents" horizontal="true" start-at="dmecTrackingStartAt" end-at="dmecTrackingEndAt"
+		 zoom-start-at="zoomStartAt" zoom-end-at="zoomEndAt">
 		</time-zoom-tool>
 	</div>
 
-	<div class="dmec-tracking-row dmec-tracking-row-h-25 chart-content">
+	<div class="dmec-tracking-row dmec-tracking-row-h-15 chart-content">
 
 		<div class="xpd-chart-container-header dmec-chart-label">
-			 Slips to Slips (Conn)
+			Slips to Slips (Conn)
 		</div>
 
-		<dmec-tracking-events 
-			tick="operationData.chronometerContext.tick"
-			current-operation='operationData.operationContext.currentOperation' 
-			events='connectionEvents' 
-			event-type="'CONN'"
-			current-event="operationData.eventContext.currentEvent"
-			current-block-position= "operationData.readingContext.currentReading.blockPosition"
-			zoom-start-at="zoomStartAt" zoom-end-at="zoomEndAt">
+		<dmec-tracking-events tick="operationData.chronometerContext.tick" current-operation='operationData.operationContext.currentOperation'
+		 events='connectionEvents' event-type="'CONN'" current-event="operationData.eventContext.currentEvent" current-block-position="operationData.readingContext.currentReading.blockPosition"
+		 zoom-start-at="zoomStartAt" zoom-end-at="zoomEndAt">
 		</dmec-tracking-events>
 	</div>
 
-	<div class="dmec-tracking-row dmec-tracking-row-h-25 chart-content">
+	<div class="dmec-tracking-row dmec-tracking-row-h-15 chart-content">
 
 		<div class="xpd-chart-container-header dmec-chart-label">
-			 Slips to Slips (Trip)
+			Slips to Slips (Trip)
 		</div>
 
-		<dmec-tracking-events
-			tick="operationData.chronometerContext.tick"
-			current-operation='operationData.operationContext.currentOperation' 
-			events='tripEvents' 
-			event-type="'TRIP'"
-			current-event="operationData.eventContext.currentEvent"
-			current-block-position= "operationData.readingContext.currentReading.blockPosition"
-			zoom-start-at="zoomStartAt" zoom-end-at="zoomEndAt">
+		<dmec-tracking-events tick="operationData.chronometerContext.tick" current-operation='operationData.operationContext.currentOperation'
+		 events='tripEvents' event-type="'TRIP'" current-event="operationData.eventContext.currentEvent" current-block-position="operationData.readingContext.currentReading.blockPosition"
+		 zoom-start-at="zoomStartAt" zoom-end-at="zoomEndAt">
 		</dmec-tracking-events>
 	</div>
 
-	<div class="dmec-tracking-row dmec-tracking-row-h-25 chart-content">
+	<div class="dmec-tracking-row dmec-tracking-row-h-15 chart-content">
 
 		<div class="xpd-chart-container-header dmec-chart-label">
-			 Slips to Slips (Time)
+			Time
 		</div>
-
-		<dmec-tracking-events
-			tick="operationData.chronometerContext.tick"
-			current-operation='operationData.operationContext.currentOperation' 
+		<!-- <dmec-tracking-events 
+			tick="operationData.chronometerContext.tick" 
+			current-operation='operationData.operationContext.currentOperation'		 
 			events='timeEvents' 
-			event-type="'TIME'"
-			current-event="operationData.eventContext.currentEvent"
-			current-block-position= "operationData.readingContext.currentReading.blockPosition"
-			zoom-start-at="zoomStartAt" zoom-end-at="zoomEndAt">
-		</dmec-tracking-events>
+		 	event-type="'TIME'" 
+		 	current-event="operationData.eventContext.currentEvent" 
+		 	current-block-position="operationData.readingContext.currentReading.blockPosition"		 
+		 	zoom-start-at="zoomStartAt" 
+		 	zoom-end-at="zoomEndAt">
+		</dmec-tracking-events> -->
 	</div>
 </div>

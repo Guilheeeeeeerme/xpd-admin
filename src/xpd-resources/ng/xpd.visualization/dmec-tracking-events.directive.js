@@ -4,9 +4,9 @@
 	angular.module('xpd.visualization')
 		.directive('dmecTrackingEvents', dmecTrackingEvents);
 
-	dmecTrackingEvents.$inject = ['d3Service'];
+	dmecTrackingEvents.$inject = ['$uibModal', 'd3Service', 'eventDetailsModal', 'failureModal', 'lessonLearnedModal'];
 
-	function dmecTrackingEvents(d3Service) {
+	function dmecTrackingEvents($uibModal, d3Service, eventDetailsModal, failureModal, lessonLearnedModal) {
 		return {
 			templateUrl: '../xpd-resources/ng/xpd.visualization/dmec-tracking-events.template.html',
 			scope: {
@@ -17,15 +17,18 @@
 				currentOperation: '=',
 				currentBlockPosition: '=',
 				zoomStartAt: '=', 
-				zoomEndAt: '='
+				zoomEndAt: '=',
+				actionEventDetail: '='
 			},
 			link: function (scope, element, attrs) {
 
+				scope.element = element[0];
 				scope.mindate = null;
 				scope.maxdate = null;
 				scope.elementIdGroup = 'current-event-' + scope.eventType;
 				scope.elementIdBar = 'current-event-bar' + scope.eventType;
-				scope.verticalMode = angular.isDefined(scope.verticalMode) ? scope.verticalMode : false;
+				scope.selectedEvent = null;
+				// scope.verticalMode = angular.isDefined(scope.verticalMode) ? scope.verticalMode : false;
 
 				d3Service.d3().then(function (d3) {
 
@@ -34,6 +37,9 @@
 
 					scope.getBarProperties = getBarProperties;
 					scope.getEventScale = getEventScale;
+					scope.actionOpenDetailsModal = actionOpenDetailsModal;
+					scope.actionOpenFailuresModal = actionOpenFailuresModal;
+					scope.actionOpenLessonsLearnedModal = actionOpenLessonsLearnedModal;
 
 					scope.$watch('zoomStartAt', function (startAt) {
 						if(startAt) {
@@ -54,6 +60,10 @@
 							currentEventBar(buildEventBar(scope.currentEvent, true, tick));
 					});
 
+					getEventZoomElement().on('dblclick', dblclick);
+					getEventZoomElement().on('mousedown', rightClick);
+					
+
 					function setViewMode() {
 
 						scope.svg = {
@@ -73,7 +83,7 @@
 					}
 
 					function defineScaleChart() {
-						scope.xScale = d3.scale.linear().domain([scope.mindate, scope.maxdate]).range([0, 100]);
+						scope.xScale = d3.scale.linear().domain([scope.mindate, scope.maxdate]).range([0, 95]);
 						scope.xTicks = scope.xScale.ticks();
 					}
 
@@ -131,10 +141,10 @@
 					function currentEventBar(bar) {
 						var startTime = new Date(scope.currentEvent.startTime);
 
-						d3.select('#' + scope.elementIdGroup)
+						d3.select(element[0]).select('#' + scope.elementIdGroup)
 							.attr('transform', 'translate(' + scope.xScale(startTime) + ', 0)');
 
-						d3.select('#' + scope.elementIdBar)
+						d3.select(element[0]).select('#' + scope.elementIdBar)
 							.attr('y', bar.position)
 							.attr('width', bar.width)
 							.attr('height', bar.height)
@@ -147,6 +157,104 @@
 							return scope.xScale(startTime);
 						else return 0;
 					}
+
+					function getEventZoomElement() {
+						var startZoomElement = d3.select(scope.element).selectAll('.overlay');
+						return startZoomElement;
+					}
+
+					function dblclick() {
+
+						var currentPosition = d3.mouse(this)[0];
+						scope.mindate = scope.xScale.invert(d3.mouse(this)[0] - 20);
+						scope.maxdate = scope.xScale.invert(d3.mouse(this)[0] + 20);
+
+						scope.zoomStartAt = scope.mindate;
+						scope.zoomEndAt = scope.maxdate;
+						
+						defineScaleChart();
+					}
+
+					function rightClick() {
+
+						closeDetailsMenu();
+						
+						if(d3.event.button == 2) {
+							var selectedEvent = scope.events[d3.event.toElement.id]; //id aqui é o index
+
+							if (selectedEvent) {
+								scope.selectedEvent = selectedEvent;
+								openDetailsMenu();
+							}
+						}
+
+					}
+
+					function openDetailsMenu() {
+						d3.select(scope.element).selectAll('.dropdown')
+							.style('top', d3.event.clientY + 'px')
+							.style('left', d3.event.clientX + 'px')
+							.classed('open', true);
+					}
+
+					function closeDetailsMenu() {
+						d3.select(scope.element).selectAll('.dropdown').classed('open', false);
+					}
+
+					function actionOpenDetailsModal() {
+
+						eventDetailsModal.open(scope.selectedEvent);
+						closeDetailsMenu();
+					}
+
+					scope.modalActionButtonClose = function () {
+						scope.eventFailure = {};
+						scope.$modalInstance.close();
+					};
+
+					function actionOpenFailuresModal() {
+
+						failureModal.open(
+							getEvent(),
+							function() {
+								console.log('success');
+							},
+							function() {
+								console.log('error');
+							}
+						);
+
+						closeDetailsMenu();
+					}
+
+					function actionOpenLessonsLearnedModal() {
+
+						lessonLearnedModal.open(
+							getEvent(),
+							function () {
+								console.log('success');
+							},
+							function () {
+								console.log('error');
+							}
+						);
+
+						closeDetailsMenu();
+					}
+
+					function getEvent() {
+						
+						var event = {
+							operation: {
+								id: scope.selectedEvent.operation.id
+							},
+							startTime: new Date(scope.selectedEvent.startTime),
+							endTime: new Date(scope.selectedEvent.endTime)
+						};
+
+						return event;
+					}
+
 				});
 			}
 		};

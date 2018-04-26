@@ -1,11 +1,14 @@
-<svg xmlns='http://www.w3.org/2000/svg' version='1.1' width='100%' ng-attr-height='{{svg.height}}' preserveAspectRatio="none"
+<svg oncontextmenu="return false" xmlns='http://www.w3.org/2000/svg' version='1.1' ng-attr-width='{{svg.width}}' ng-attr-height='{{svg.height}}' preserveAspectRatio="none"
      xpd-view-box="svg.viewBox" class="xpd-events-container">
    
-    <g>
+    <rect class="overlay" width="100%" height="100%"></rect>
+
+    <g class="overlay">
         <g class="rect-bar" ng-repeat="(key, event) in events | orderBy: 'startTime'"
             ng-attr-transform="{{'translate('+ getEventScale(event.startTime)+ ', 0)'}}">
 
             <rect 
+                ng-attr-id="{{key}}"
                 ng-attr-y="{{ getBarProperties(event).position }}"
                 ng-attr-width="{{ getBarProperties(event).width }}"
                 ng-attr-height="{{ getBarProperties(event).height }}"
@@ -14,8 +17,25 @@
         </g>
     </g>
 
-    <g id="{{elementIdGroup}}" ng-if="currentEvent != null" ng-attr-transform="{{'translate('+ getEventScale(currentEvent.startTime) +', 0)'}}">
+    <g id="{{elementIdGroup}}" ng-if="currentEvent != null"
+        class="overlay" oncontextmenu="return false"
+        ng-attr-transform="{{'translate('+ getEventScale(currentEvent.startTime) +', 0)'}}">
         <rect id="{{elementIdBar}}"></rect>
+
     </g>
 
 </svg>
+
+<div class="btn-group slips-to-slips-dropdown-menu" uib-dropdown>
+    <ul uib-dropdown-menu role="menu">
+        <li role="menuitem">
+            <a ng-click="actionOpenDetailsModal()" id="times-bar-click-details">Details</a>
+        </li>
+        <li role="menuitem">
+            <a ng-click="actionOpenFailuresModal()" id="times-bar-click-failures">Failures</a>
+        </li>
+        <li role="menuitem">
+            <a ng-click="actionOpenLessonsLearnedModal()" id="times-bar-click-lessons">Lessons Learned</a>
+        </li>
+    </ul>
+</div>

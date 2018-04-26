@@ -15,6 +15,7 @@
 			connectionTimes: [],
 			tripTimes: [],
 			
+			bitDepthByEvents: [],
 			connectionEvents: [],
 			tripEvents: [],
 			timeEvents: [],

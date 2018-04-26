@@ -7,16 +7,28 @@
 
 <div id="{{ chartId }}" class="container-fuild container-dmec">
 
-	<!-- <foreignObject width="10" height="10" requiredExtensions="http://www.w3.org/1999/xhtml">
-      <body xmlns="http://www.w3.org/1999/xhtml">
-		<a href="#" style="position:fixed; right:10; bottom:10;" ng-click="openScaleModal()">Config</a>
-      </body>
-    </foreignObject> -->
-
-
 	<svg ng-if="tracks" id="d3-svg" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
 	 xmlns:svg="http://www.w3.org/2000/svg" xmlns="http://www.w3.org/2000/svg" version='1.1' ng-attr-width='{{ svg.viewWidth }}'
 	 ng-attr-height='{{ svg.viewHeight }}'>
+
+		 <g>
+			<rect ng-repeat="event in connectionEvents" 
+				ng-if="event.duration > 0" 
+				ng-attr-width="{{ timeScale(event.duration) - timeScale(0) }}" 
+				ng-attr-height="{{ svg.viewHeight }}" 
+				ng-attr-x="{{ timeScale(event.startTime) }}" 
+				fill="#0000ff" 
+				fill-opacity="0.25"
+				y="0"/>
+			<rect ng-repeat="event in tripEvents" 		
+				ng-if="event.duration > 0" 
+				ng-attr-width="{{ timeScale(event.duration) - timeScale(0) }}" 
+				ng-attr-height="{{ svg.viewHeight }}" 
+				ng-attr-x="{{ timeScale(event.startTime) }}" 
+				fill="#00ff00" 
+				fill-opacity="0.25"
+				y="0"/>
+		</g>
 
 		<g class="time-ticks" ng-if="!horizontal">
 			<g ng-repeat="tick in xTicks" ng-attr-transform="translate(0, {{ timeScale(tick) }} )">
@@ -27,8 +39,8 @@
 
 		<g class="time-ticks" ng-if="horizontal">
 			<g ng-repeat="tick in xTicks" ng-attr-transform="translate({{ timeScale(tick) }}, 0)">
-				<text x="2" ng-attr-y='{{ svg.viewHeight }}'>{{ tick | date: 'short' }}</text>
-				<line y1="0" x1="0" ng-attr-y2='{{ svg.viewHeight }}' x2="0" stroke="black" stroke-opacity="0.2" stroke-width="0.1em" />
+				<text x="2" ng-attr-y='{{ svg.viewHeight }}' fill="white">{{ tick | date: 'short' }}</text>
+				<line y1="0" x1="0" ng-attr-y2='{{ svg.viewHeight }}' x2="0" stroke="white" stroke-opacity="0.2" stroke-width="0.1em" />
 			</g>
 		</g>
 
@@ -122,7 +134,7 @@
 
 		</g>
 
-		<rect class="overlay" ng-if="listenToMouseMove != null" ng-init="listenToMouseMove(horizontal)" ng-attr-width='{{ svg.viewWidth }}'
+		<rect ng-dblclick="openScaleModal()" class="overlay" ng-if="listenToMouseMove != null" ng-init="listenToMouseMove(horizontal)" ng-attr-width='{{ svg.viewWidth }}'
 		 ng-attr-height='{{ svg.viewHeight }}'></rect>
 
 	</svg>

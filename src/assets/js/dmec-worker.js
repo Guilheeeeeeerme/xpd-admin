@@ -9,73 +9,144 @@
 
 		switch (data.cmd) {
 
-			case 'reading-to-points':
-				var readings = data.readings;
-				var tracks = data.tracks;
-
-				var points = readingsToPoints(readings, tracks);
-				this.postMessage({
-					cmd: 'points',
-					points: points
-				});
-
-				// var bTree = prepareBTree(readings, tracks);
-				// this.postMessage({
-				// 	cmd: 'bTree',
-				// 	bTree: bTree
-				// });
-
-				break;
-			default:
-				console.log('[Worker] Unable to handle ', data);
-				break;
+		case 'find-point':
+			this.postMessage({
+				cmd: 'find-point',
+				points: getPoint(data.timestamp, data.tracks, data.oldPoints, data.newPoints)
+			});
+			break;
+		case 'handle-overflow':
+			this.postMessage({
+				cmd: 'handle-overflow',
+				trackName: data.trackName,
+				points: overflowPoints(data.tracks, data.points)
+			});
+			break;
+		case 'reading-to-points':
+			this.postMessage({
+				cmd: 'reading-to-points',
+				points: readingsToPoints(data.readings, data.tracks)
+			});
+			break;
+		default:
+			console.log('[Worker] Unable to handle ', data);
+			break;
 		}
 
 	}, false);
 
-	function prepareBTree(readings, tracks) {
+	function overflowPoints(tracks, points) {
 
-		var bTree = {};
+		var result = {};
 
-		var half1 = Math.ceil(readings.length / 2);
-		var half2 = Math.floor(readings.length / 2);
+		tracks.map(function (track) {
+			result[track.param] = handleOverflow(points[track.param], track);
+		});
 
-		while (half1 >= 0) {
+		return result;
 
-			tracks.map(convertToXY);
+		function handleOverflow(points, track) {
 
-			function convertToXY(track) {
+			var result = [];
+			var distance = 0;
+			var lastPoint = null;
 
-				if (!bTree[track.param]) {
-					bTree[track.param] = new BTree();
-				}
-
-				if (readings[half1]) {
-					bTree[track.param].insert({
-						x: readings[half1].timestamp,
-						y: readings[half1][track.param] || null,
-						actual: readings[half1][track.param] || null
-					});
-				}
-
-				if (readings[half2]) {
-					bTree[track.param].insert({
-						x: readings[half2].timestamp,
-						y: readings[half2][track.param] || null,
-						actual: readings[half2][track.param] || null
-					});
-				}
-
+			if( ( track.min >= 0 && track.max >= 0 ) || ( track.min <= 0 && track.max <= 0 ) ){
+				distance = Math.abs(track.min - track.max);
+			} else{
+				distance = Math.abs(track.min - 0) - Math.abs(track.max - 0);
 			}
 
-			half1--;
-			half2++;
+			points.map(function (point) {
 
+				var empty = {
+					x: point.x,
+					y: null,
+					actual: null
+				};
+
+				point.overflow = 0;
+
+				if (point.y != null) {
+
+					for (var i = 0; i < 2; i++) {
+
+						if (point.y < track.min) {
+
+							while (point.y < track.min) {
+								point.overflow++;
+								point.y += distance;
+							}
+
+						}
+
+						if (point.y > track.max) {
+
+							while (point.y > track.max) {
+								point.overflow--;
+								point.y -= distance;
+							}
+
+						}
+
+					}
+
+				}
+
+				if (lastPoint != null && lastPoint.overflow != point.overflow) {
+					result.push(empty);
+				}
+
+				lastPoint = point;
+
+				result.push(point);
+
+			});
+
+			return result;
 		}
-
-		return bTree;
-
 	}
+
+	function getPoint(timestamp, tracks, oldPoints, newPoints) {
+
+		var reading = {};
+
+		tracks.map(function (track, trackIndex) {
+
+			var points = [];
+			var point = null;
+
+
+			if (oldPoints &&
+				oldPoints[track.param] &&
+				oldPoints[track.param].length &&
+				oldPoints[track.param][0].x <= timestamp &&
+				oldPoints[track.param][oldPoints[track.param].length - 1].x >= timestamp) {
+
+				points = oldPoints[track.param];
+			} else if (newPoints &&
+				newPoints[track.param] &&
+				newPoints[track.param].length &&
+				newPoints[track.param][0].x <= timestamp &&
+				newPoints[track.param][newPoints[track.param].length - 1].x >= timestamp) {
+
+				points = newPoints[track.param];
+			}
+
+			for (var i in points) {
+				if ((points[i].x / 1000) >= (timestamp / 1000)) {
+					point = points[i];
+					break;
+				}
+			}
+
+			reading[track.param] = point;
+
+		});
+
+		return reading;
+	}
+
 
 	function readingsToPoints(readings, tracks) {
 		var points = {};
@@ -106,125 +177,6 @@
 
 		return points;
 
-	}
-
-	class BTree {
-
-		constructor() {
-			this.values = {};
-		}
-
-		insert(point, index) {
-
-			if (index == null) {
-				index = 0;
-			}
-
-			if (!this.values[index] || point.x == this.values[index].x) {
-				this.values[index] = point;
-			} else if (point.x > this.values[index].x) {
-				this.insert(point, this.rightOf(index));
-			} else {
-				this.insert(point, this.leftOf(index));
-			}
-
-			var alturaDireita = this.height(this.rightOf(index));
-			var alturaEsquerda = this.height(this.leftOf(index));
-
-			if ((alturaEsquerda - alturaDireita) == 2) {
-
-				var subAlturaEsquerda = this.height(this.leftOf(this.leftOf(index)));
-				var subAlturaDireita = this.height(this.leftOf(this.rightOf(index)));
-
-				if ((subAlturaEsquerda - subAlturaDireita) == 1) {
-					this.turnRigth(index);
-				} else {
-					this.turnLeft(this.leftOf(index));
-					this.turnRigth(index);
-				}
-
-			} else if ((alturaDireita - alturaEsquerda) == 2) {
-
-				var subAlturaDireita = this.height(this.rightOf(this.rightOf(index)));
-				var subAlturaEsquerda = this.height(this.rightOf(this.leftOf(index)));
-
-				if ((subAlturaDireita - subAlturaEsquerda) == 1) {
-					this.turnLeft(index);
-				} else {
-					this.turnRigth(this.rightOf(index));
-					this.turnLeft(index);
-				}
-
-			}
-
-		}
-
-		turnLeft(index) {
-			var x = this.values[index];
-			var y = this.values[this.rightOf(index)];
-			var z = this.values[this.rightOf(this.rightOf(index))];
-
-			delete this.values[index];
-			delete this.values[this.rightOf(index)];
-			delete this.values[this.rightOf(this.rightOf(index))];
-
-			this.values[index] = y;
-			this.values[this.rightOf(index)] = x;
-			this.values[this.leftOf(index)] = z;
-		}
-
-		turnRigth(index) {
-			var x = this.values[index];
-			var y = this.values[this.leftOf(index)];
-			var z = this.values[this.leftOf(this.leftOf(index))];
-
-			delete this.values[index];
-			delete this.values[this.leftOf(index)];
-			delete this.values[this.leftOf(this.leftOf(index))];
-
-			this.values[index] = y;
-			this.values[this.rightOf(index)] = z;
-			this.values[this.leftOf(index)] = x;
-		}
-
-		leftOf(index) {
-			return ((index * 2) + 1);
-		}
-
-		rightOf(index) {
-			return ((index * 2) + 2);
-		}
-
-		height(index) {
-			if (!this.values[index]) {
-				return 0;
-			} else {
-				var alturaDireita = this.height(this.rightOf(index));
-				var alturaEsquerda = this.height(this.leftOf(index));
-				return 1 + Math.max(alturaEsquerda, alturaDireita);
-			}
-		}
-
-		search(timestamp, index) {
-
-			let next = null
-
-			if (index == null) {
-				index = 0;
-			}
-
-			if (!this.values[index]) {
-				return null;
-			}
-
-			if (timestamp > this.values[index].x) {
-				next = (this.search(timestamp, this.rightOf(index)));
-			} else if (timestamp < this.values[index].x) {
-				next = (this.search(timestamp, this.leftOf(index)));
-			}
-
-			return (next != null) ? next : this.values[index];
-		}
 	}
 
 })();

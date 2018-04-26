@@ -12,6 +12,7 @@
 			restrict: 'E',
 			templateUrl: '../xpd-resources/ng/xpd.visualization/time-zoom-tool.template.html',
 			scope: {
+				bitDepthList: '=',
 				startAt: '=',
 				endAt: '=',
 				zoomStartAt: '=',
@@ -30,7 +31,9 @@
 
 				var selectedElement;
 				var selectedElementId;
-				var overlay;
+				var clickedPosition;
+				var clickedPositionStartx;
+				var clickedPositionEndx;
 
 				scope.$watch('startAt', onDateRangeChange);
 				scope.$watch('endAt', onDateRangeChange);
@@ -38,11 +41,16 @@
 				scope.$watch('zoomStartAt', moveZoomElement);
 				scope.$watch('zoomEndAt', moveZoomElement);
 
+				getZoomAreaElement().on('mousedown', mouseDown);
+				getZoomAreaElement().on('mouseup', mouseUp);
+
 				getStartZoomElement().on('mousedown', mouseDown);
 				getStartZoomElement().on('mouseup', mouseUp);
 
 				getEndZoomElement().on('mousedown', mouseDown);
 				getEndZoomElement().on('mouseup', mouseUp);
+
+				getOverlayElement().on('dblclick', dblclick);
 
 				function moveZoomElement() {
 
@@ -65,6 +73,8 @@
 					zoomStartAt = new Date(Math.min(zoomStartAt.getTime(), zoomEndAt.getTime()));
 					zoomEndAt = new Date(Math.max(zoomStartAt.getTime(), zoomEndAt.getTime()));
 
+					// getElementById('start-date-navigator').attr('transform', 'translate( ' + scope.timeScale(zoomStartAt) + ', -5 )');
+
 					getStartZoomElement().attr('transform', 'translate( ' + scope.timeScale(zoomStartAt) + ', 0 )');
 					getEndZoomElement().attr('transform', 'translate( ' + scope.timeScale(zoomEndAt) + ', 0 )');
 
@@ -74,12 +84,22 @@
 
 				function mouseDown() {
 
+					clickedPosition = d3.mouse(this)[0];
 					selectedElement = d3.select(this);
 					selectedElementId = d3.select(this).attr('id');
 
+					var startt = d3.transform(getStartZoomElement().attr('transform'));
+					clickedPositionStartx = startt.translate[0];
+
+					var endt = d3.transform(getEndZoomElement().attr('transform'));
+					clickedPositionEndx = endt.translate[0];
+
 					selectedElement.classed('active', true);
 
-					overlay = d3.select(scope.element).selectAll('.overlay')
+					getOverlayElement()
+						.on('mousemove', mouseMove)
+						.on('mouseup', mouseUp);
+					getZoomAreaElement()
 						.on('mousemove', mouseMove)
 						.on('mouseup', mouseUp);
 				}
@@ -89,17 +109,23 @@
 					if (selectedElementId == 'start-navigator') {
 						scope.startPipePosition = d3.mouse(this)[0];
 						getStartZoomElement().attr('transform', 'translate( ' + d3.mouse(this)[0] + ', 0 )');
-					} else {
+						// getElementById('start-date-navigator').attr('transform', 'translate( ' + d3.mouse(this)[0] + ', 10 )');
+					} else if (selectedElementId == 'end-navigator') {
 						scope.endPipePosition = d3.mouse(this)[0];
 						getEndZoomElement().attr('transform', 'translate( ' + d3.mouse(this)[0] + ', 0 )');
+					} else {
+						var diff = d3.mouse(this)[0] - clickedPosition;
+						getStartZoomElement().attr('transform', 'translate( ' + (clickedPositionStartx + diff) + ', 0 )');
+						getEndZoomElement().attr('transform', 'translate( ' + (clickedPositionEndx + diff) + ', 0 )');
 					}
 
 					moveZoomArea();
+
 				}
 
 				function moveZoomArea() {
 
-					var zoomArea = d3.select(scope.element).selectAll('#zoom-area');
+					var zoomArea = getZoomAreaElement();
 
 					var startt = d3.transform(getStartZoomElement().attr('transform')),
 						startx = startt.translate[0];
@@ -124,10 +150,21 @@
 					scope.zoomEndAt = new Date(Math.max(endx, startx));
 
 					selectedElement.classed('active', false);
-					overlay.on('mousemove', null).on('mouseup', null);
+					getOverlayElement().on('mousemove', null).on('mouseup', null);
+					getZoomAreaElement().on('mousemove', null).on('mouseup', null);
 					selectedElement = null;
 
 					moveZoomElement();
+				}
+
+				function dblclick() {
+
+					var currentPosition = d3.mouse(this)[0];
+					scope.mindate = scope.timeScale.invert(d3.mouse(this)[0] - 40);
+					scope.maxdate = scope.timeScale.invert(d3.mouse(this)[0] + 40);
+
+					scope.zoomStartAt = scope.mindate;
+					scope.zoomEndAt = scope.maxdate;
 				}
 
 				function onDateRangeChange(newDate, oldDate) {
@@ -135,16 +172,24 @@
 					moveZoomElement();
 				}
 
+				function getOverlayElement() {
+					return d3.select(scope.element).selectAll('.overlay');
+				}
 
+				// function getElementById(id) {
+				// 	return d3.select(scope.element).selectAll('#' + id);
+				// }
 
 				function getStartZoomElement() {
-					var startZoomElement = d3.select(scope.element).selectAll('#start-navigator');
-					return startZoomElement;
+					return d3.select(scope.element).selectAll('#start-navigator');
 				}
 
 				function getEndZoomElement() {
-					var endZoomElement = d3.select(scope.element).selectAll('#end-navigator');
-					return endZoomElement;
+					return d3.select(scope.element).selectAll('#end-navigator');
+				}
+
+				function getZoomAreaElement() {
+					return d3.select(scope.element).selectAll('#zoom-area');
 				}
 
 
@@ -173,7 +218,51 @@
 							viewHeight: viewHeight
 						};
 
-						scope.xTicks = scope.timeScale.ticks();
+						scope.xTicks = scope.timeScale.ticks(6);
+
+						var minDepth = 0;
+						var maxDepth = 0;
+
+						var bitDepthList = scope.bitDepthList || [];
+
+						for (var i in bitDepthList) {
+							if (bitDepthList[i].y != null) {
+								if (bitDepthList[i].y > maxDepth) {
+									maxDepth = bitDepthList[i].y;
+								}
+								if (bitDepthList[i].y < minDepth) {
+									minDepth = bitDepthList[i].y;
+								}
+							}
+						}
+
+						var depthScale = d3.scale.linear()
+							.domain([minDepth, maxDepth])
+							.range([
+								0,
+								viewHeight
+							]);
+
+						var lineFunction = d3.svg.line()
+							// .defined(function (d) {				
+							// 	return (angular.isNumber(d.y) && angular.isNumber(d.x));
+							// })
+							.x(function (d) {
+								return scope.timeScale(d.x);
+							})
+							.y(function (d) {
+								if (d.y == null)
+									return depthScale(maxDepth);
+								return depthScale(d.y);
+							})
+							.interpolate('linear');
+
+						var d = lineFunction(bitDepthList);
+
+						d3.select(scope.element)
+							.selectAll('#bit-depth-path')
+							.attr('d', d);
+
 
 					} catch (e) {
 						console.error(e);

@@ -3,11 +3,12 @@
 
 	angular.module('xpd.admin').directive('dmecTracking', dmecTrackingDirective);
 
-	dmecTrackingDirective.$inject = ['readingSetupAPIService', '$timeout'];
+	dmecTrackingDirective.$inject = ['readingSetupAPIService', '$timeout', '$interval'];
 
-	function dmecTrackingDirective(readingSetupAPIService, $timeout) {
+	function dmecTrackingDirective(readingSetupAPIService, $timeout, $interval) {
 		return {
 			scope: {
+				bitDepthByEvents: '=',
 				connectionEvents: '=',
 				tripEvents: '=',
 				timeEvents: '='
@@ -21,55 +22,127 @@
 
 		function link(scope, element, attrs) {
 
-			/**
-			 * Util para não precisar ficar calculando esse inferno
-			 */
+
 			var ONE_DAY = (1 * 24 * 3600000);
-			var now = new Date().getTime();
+			var updateLatency = 1000;
+			var getTickInterval;
 
-			scope.zoomEndAt = new Date(now); 
-			scope.zoomStartAt = new Date(now - ONE_DAY);
+			setTimeout(function(){
+				location.reload();
+			}, (ONE_DAY / 48) );
 
-			var reloadTimeout = null;
-			scope.getAllReadingSince = getAllReadingSince;
-			scope.onEndAtChange = onEndAtChange;
-			scope.showDrillingMecChart = true;
+			scope.actionButtonUseOperationStartDate = actionButtonUseOperationStartDate;
+			scope.actionButtonSubmitDmecRange = actionButtonSubmitDmecRange;
+			scope.initializeComponent = initializeComponent;
 
-			/**
-			 * Quando 'showDrillingMecChart' é true a diretiva aparece
-			 * o ng-init na diretiva dispara o 'getAllReadingSince'
-			 * com o start date da operação
-			 */
+			function initializeComponent() {
+
+				var endAt = new Date().getTime();
+				var intervalToShow = 0;
+				var inputRangeForm = scope.inputRangeForm = getInputRangeForm();
+				scope.readings = [];
+
+				if (inputRangeForm.realtime) {
+					intervalToShow = (+inputRangeForm.last * +inputRangeForm.toMilliseconds);
+					scope.dmecTrackingStartAt = getAllReadingSince(new Date(endAt - intervalToShow));
+				} else {
+					scope.dmecTrackingStartAt = getAllReadingSince(new Date(inputRangeForm.startTime));
+				}
+
+				intervalToShow = endAt - new Date(scope.dmecTrackingStartAt).getTime();
+				scope.dmecTrackingEndAt = new Date(endAt);
+				scope.zoomEndAt = new Date(endAt);
+				scope.zoomStartAt = new Date(endAt - (intervalToShow / 2));
+
+				if (angular.isDefined(getTickInterval)) {
+					$interval.cancel(getTickInterval);
+					getTickInterval = undefined;
+				}
+
+				getTickInterval = $interval(getTick, updateLatency);
+
+			}
+
+			function moveZoomRealtime(newZoomEndAt) {
+
+				if (scope.inputRangeForm && scope.inputRangeForm.realtime) {
+					var timeDiff = new Date(newZoomEndAt).getTime() - new Date(scope.zoomEndAt).getTime();
+					scope.zoomStartAt = new Date(new Date(scope.zoomStartAt).getTime() + timeDiff);
+					scope.zoomEndAt = new Date(new Date(scope.zoomEndAt).getTime() + timeDiff);
+				}
+
+			}
+
+			function actionButtonUseOperationStartDate(startDate) {
+
+				if (scope.inputRangeForm.useOperationStartDate) {
+					scope.inputRangeForm.startTime = new Date(startDate);
+					scope.inputRangeForm.startTime.setMilliseconds(0);
+					scope.inputRangeForm.startTime.setSeconds(0);
+				}
+
+			}
+
+			function actionButtonSubmitDmecRange() {
+				localStorage.setItem('dmecTrackingInputRangeForm', JSON.stringify(scope.inputRangeForm) );
+				initializeComponent();
+			}
+
+			function getTick() {
+
+				var now = new Date().getTime();
+				scope.dmecTrackingEndAt = now;
+				moveZoomRealtime(scope.dmecTrackingEndAt);
+
+				scope.onReading = new Promise(function (resolve, reject) {
+					readingSetupAPIService.getTick((now - updateLatency), resolve, reject);
+				});
+
+			}
+
 			function getAllReadingSince(startTime) {
 
 				startTime = new Date(startTime);
+				var operationStartDate = new Date(scope.operationData.operationContext.currentOperation.startDate);
 
-				if (reloadTimeout) {
-					clearTimeout(reloadTimeout);
+				if (startTime.getTime() < operationStartDate.getTime()) {
+					startTime = operationStartDate;
 				}
 
-				reloadTimeout = $timeout(function () {
-					scope.showDrillingMecChart = false;
+				readingSetupAPIService.getAllReadingSince(startTime.getTime(), setReadings);
 
-					$timeout(function () {
-						scope.showDrillingMecChart = true;
-					}, 5000);
-
-				}, ONE_DAY / 2);
-
-
-				readingSetupAPIService.getAllReadingSince(startTime.getTime(), function (readings) {
-					scope.readings = readings;
-				});
+				return startTime;
 			}
 
-			/**
-			 * Toda vez que o DMEC avança por causa do tempo real
-			 * @param {Date} milliseconds 
-			 */
-			function onEndAtChange(milliseconds) {
-				scope.endAt = milliseconds;
+			function setReadings(readings) {
+				scope.readings = readings || [];
 			}
+
+			function getInputRangeForm() {
+
+				var inputRangeForm;
+
+				try {
+					inputRangeForm = JSON.parse(localStorage.getItem('dmecTrackingInputRangeForm'));
+				} catch (e) {
+					inputRangeForm = null;
+				}
+
+				if (!inputRangeForm) {
+					inputRangeForm = {
+						realtime: true,
+						last: 30,
+						toMilliseconds: '60000',
+					};
+				}
+
+				if(inputRangeForm && inputRangeForm.startTime){
+					inputRangeForm.startTime = new Date(inputRangeForm.startTime);
+				}
+
+				return inputRangeForm;
+			}
+
 
 		}
 	}
