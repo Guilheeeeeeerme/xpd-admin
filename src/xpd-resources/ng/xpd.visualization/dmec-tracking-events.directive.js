@@ -18,6 +18,7 @@
 				currentBlockPosition: '=',
 				zoomStartAt: '=', 
 				zoomEndAt: '=',
+				actionEventDetail: '='
 			},
 			link: function (scope, element, attrs) {
 
@@ -163,7 +164,6 @@
 					}
 
 					function dblclick() {
-						console.log('dblclick');
 
 						var currentPosition = d3.mouse(this)[0];
 						scope.mindate = scope.xScale.invert(d3.mouse(this)[0] - 20);
@@ -196,7 +196,11 @@
 					}
 
 					function actionOpenDetailsModal() {
-						console.log('actionOpenDetailsModal')
+						scope.actionEventDetail();
+						console.log('actionOpenDetailsModal');
+
+						// scope.eventFailure = scope.selectedEvent;
+
 						// scope.$modalInstance = $uibModal.open({
 						// 	animation: true,
 						// 	keyboard: false,
@@ -209,18 +213,16 @@
 						// });
 					}
 
+					scope.modalActionButtonClose = function () {
+						scope.eventFailure = {};
+
+						scope.$modalInstance.close();
+					};
+
 					function actionOpenFailuresModal() {
 
-						var event = {
-							operation: {
-								id: scope.selectedEvent.operation.id
-							},
-							startTime: new Date(scope.selectedEvent.startTime),
-							endTime: new Date(scope.selectedEvent.endTime)
-						};
-
 						failureModal.open(
-							event,
+							getEvent(),
 							function() {
 								console.log('success');
 							},
@@ -232,6 +234,19 @@
 
 					function actionOpenLessonsLearnedModal() {
 
+						lessonLearnedModal.open(
+							getEvent(),
+							function () {
+								console.log('success');
+							},
+							function () {
+								console.log('error');
+							}
+						);
+					}
+
+					function getEvent() {
+						
 						var event = {
 							operation: {
 								id: scope.selectedEvent.operation.id
@@ -240,15 +255,7 @@
 							endTime: new Date(scope.selectedEvent.endTime)
 						};
 
-						lessonLearnedModal.open(
-							event,
-							function () {
-								console.log('success');
-							},
-							function () {
-								console.log('error');
-							}
-						);
+						return event;
 					}
 
 				});

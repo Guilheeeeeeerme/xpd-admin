@@ -1,3 +1,4 @@
+<button ng-click="tController.actionBarDoubleClick()"></button>
 <div class="dmec-tracking-container" ng-if="operationData.operationContext.currentOperation && operationData.operationContext.currentOperation.running">
 
 	<div 
@@ -51,7 +52,8 @@
 			event-type="'CONN'"
 			current-event="operationData.eventContext.currentEvent"
 			current-block-position= "operationData.readingContext.currentReading.blockPosition"
-			zoom-start-at="zoomStartAt" zoom-end-at="zoomEndAt">
+			zoom-start-at="zoomStartAt" zoom-end-at="zoomEndAt"
+			action-event-detail="atController.actionBarDoubleClick">
 		</dmec-tracking-events>
 	</div>
 
