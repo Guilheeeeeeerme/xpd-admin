@@ -17,28 +17,28 @@
 
 		switch (data.cmd) {
 
-			case 'find-point':
-				this.postMessage({
-					cmd: 'find-point',
-					points: getPoint(data.timestamp, data.tracks, data.oldPoints, data.newPoints)
-				});
-				break;
-			case 'handle-overflow':
-				this.postMessage({
-					cmd: 'handle-overflow',
-					trackName: data.trackName,
-					points: overflowPoints(data.tracks, data.points)
-				});
-				break;
-			case 'reading-to-points':
-				this.postMessage({
-					cmd: 'reading-to-points',
-					points: readingsToPoints(data.readings, data.tracks)
-				});
-				break;
-			default:
-				console.log('[Worker] Unable to handle ', data);
-				break;
+		case 'find-point':
+			this.postMessage({
+				cmd: 'find-point',
+				points: getPoint(data.timestamp, data.tracks, data.oldPoints, data.newPoints)
+			});
+			break;
+		case 'handle-overflow':
+			this.postMessage({
+				cmd: 'handle-overflow',
+				trackName: data.trackName,
+				points: overflowPoints(data.tracks, data.points)
+			});
+			break;
+		case 'reading-to-points':
+			this.postMessage({
+				cmd: 'reading-to-points',
+				points: readingsToPoints(data.readings, data.tracks)
+			});
+			break;
+		default:
+			console.log('[Worker] Unable to handle ', data);
+			break;
 		}
 
 		// var endTime = new Date().getTime();
