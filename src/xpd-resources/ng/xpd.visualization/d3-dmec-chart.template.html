@@ -7,7 +7,7 @@
 
 <div id="{{ chartId }}" class="container-fuild container-dmec">
 
-	<svg ng-if="tracks" id="d3-svg" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+	<svg ng-if="$tracks" id="d3-svg" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
 	 xmlns:svg="http://www.w3.org/2000/svg" xmlns="http://www.w3.org/2000/svg" version='1.1' ng-attr-width='{{ svg.viewWidth }}'
 	 ng-attr-height='{{ svg.viewHeight }}'>
 
@@ -45,7 +45,7 @@
 		</g>
 
 		<g class="range-ticks" ng-if="!horizontal">
-			<g ng-repeat="track in tracks">
+			<g ng-repeat="track in $tracks">
 				<line ng-repeat="tick in track.ticks" ng-attr-x1='{{ track.trackScale(tick) }}' ng-attr-x2='{{ track.trackScale(tick) }}'
 				 y1="0" ng-attr-y2='{{ svg.viewHeight }}' stroke="black" stroke-opacity="0.2" stroke-width="0.1em" />
 				<line ng-attr-x1='{{ track.labelStartAt }}' ng-attr-x2='{{ track.labelStartAt }}' y1="0" ng-attr-y2='{{ svg.viewHeight }}'
@@ -54,7 +54,7 @@
 		</g>
 
 		<g class="range-ticks" ng-if="horizontal">
-			<g ng-repeat="track in tracks">
+			<g ng-repeat="track in $tracks">
 				<line ng-repeat="tick in track.ticks" ng-attr-y1='{{ track.trackScale(tick) }}' ng-attr-y2='{{ track.trackScale(tick) }}'
 				 x1="0" ng-attr-x2='{{ svg.viewWidth }}' stroke="black" stroke-opacity="0.2" stroke-width="0.1em" />
 				<line ng-attr-y1='{{ track.labelStartAt }}' ng-attr-y2='{{ track.labelStartAt }}' x1="0" ng-attr-x2='{{ svg.viewWidth }}'
@@ -63,11 +63,11 @@
 		</g>
 
 		<g class="oldPoints">
-			<path id="{{track.param}}" ng-repeat="track in tracks" fill="none" stroke="{{ track.color }}" stroke-width="0.2em" />
+			<path id="{{track.param}}" ng-repeat="track in $tracks" fill="none" stroke="{{ track.color }}" stroke-width="0.2em" />
 		</g>
 
 		<g class="newPoints">
-			<path id="{{track.param}}" ng-repeat="track in tracks" fill="none" stroke="{{ track.color }}" stroke-width="0.2em" />
+			<path id="{{track.param}}" ng-repeat="track in $tracks" fill="none" stroke="{{ track.color }}" stroke-width="0.2em" />
 		</g>
 
 		<g class="crosshair" ng-if="!horizontal">
@@ -79,7 +79,7 @@
 		</g>
 
 		<g class="bubble-and-tooltip">
-			<g ng-repeat="track in tracks" ng-if="tracks && track.labelPosition != null">
+			<g ng-repeat="track in $tracks" ng-if="$tracks && track.labelPosition != null">
 				<g id="bubble-{{track.id}}" style="display: none;">
 					<circle r="5" fill="none" stroke-width="2" ng-attr-stroke="{{ track.color }}"></circle>
 					<text id="text-{{track.id}}" x="0" y="0" text-anchor="end" alignment-baseline="hanging" stroke-width="1" ng-attr-fill="{{ track.color }}"
@@ -90,7 +90,7 @@
 
 		<g class="legend" ng-if="!horizontal">
 
-			<g class="label" ng-if="tracks && track.labelPosition != null" ng-repeat="track in tracks">
+			<g class="label" ng-if="$tracks && track.labelPosition != null" ng-repeat="track in $tracks">
 
 				<text stroke-width="1" ng-attr-fill="{{ track.color }}" ng-attr-stroke="{{ track.color }}" ng-attr-x="{{ track.labelStartAt + ( (track.labelEndAt - track.labelStartAt) * 0.1 )  }}"
 				 ng-attr-y="{{ track.labelPosition * 25 }}" alignment-baseline="hanging" text-anchor="start">
@@ -113,7 +113,7 @@
 
 		<g class="legend" ng-if="horizontal">
 
-			<g class="label" ng-if="tracks && track.labelPosition != null" ng-repeat="track in tracks">
+			<g class="label" ng-if="$tracks && track.labelPosition != null" ng-repeat="track in $tracks">
 
 				<text stroke-width="1" font-size="1.6em" ng-attr-fill="{{ track.color }}" stroke="black" ng-attr-y="{{ track.labelStartAt + ( (track.labelEndAt - track.labelStartAt) * 0.1 )  }}"
 				 ng-attr-x="{{ track.labelPosition * 50 }}" alignment-baseline="middle" text-anchor="start">
