@@ -11,7 +11,7 @@
 			open: open
 		};
 
-		function open(selectedEvent){
+		function open(eventId){
 
 			return $uibModal.open({
 				keyboard: false,
@@ -21,8 +21,8 @@
 				templateUrl: '../xpd-resources/ng/xpd.modal.event-details/xpd-modal-event-details.template.html',
 				controller: 'modalEventDetailsController as medController',
 				resolve: {
-					selectedEvent: function () {
-						return selectedEvent;
+					eventId: function () {
+						return eventId;
 					}
 				}
 			});

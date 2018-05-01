@@ -50,44 +50,45 @@
 					};
 
 					function getBarSize(event) {
-						var duration = event.duration / 1000;
-						var displacement = 1;
+						// var duration = event.duration / 1000;
+						// var displacement = 1;
 
-						if (event.eventType === 'TRIP') {
-							displacement = Math.abs(event.startBlockPosition - event.endBlockPosition);
-						}
+						// if (event.eventType === 'TRIP') {
+						// 	displacement = Math.abs(event.startBlockPosition - event.endBlockPosition);
+						// }
 
 						var scale = d3.scale.linear()
-							.domain([event.voptimum, event.vstandard, event.vpoor])
+							.domain([event.vtarget * 2, event.vpoor / 2]) //.domain([event.voptimum, event.vstandard, event.vpoor])
 							.range([20, 40, 60]);
 
-						var actualSpeed = displacement / duration;
+						// var actualSpeed = displacement / duration;
 
-						var size = scale(actualSpeed);
+						var size = scale(event.actualSpeed);
 						return (size <= 10) ? 10 : size;
 
 					}
 
 					function getFillColor(event) {
+						return event.performanceColor;
 
-						var duration = event.duration / 1000;
-						var displacement = 1;
+						// var duration = event.duration / 1000;
+						// var displacement = 1;
 
-						if (event.eventType === 'TRIP') {
-							displacement = Math.abs(event.startBlockPosition - event.endBlockPosition);
-						}
+						// if (event.eventType === 'TRIP') {
+						// 	displacement = Math.abs(event.startBlockPosition - event.endBlockPosition);
+						// }
 
-						const actualSpeed = displacement / duration;
+						// const actualSpeed = displacement / duration;
 
-						if (actualSpeed >= event.voptimum) {
-							return '#73b9c6';
-						} else if (actualSpeed < event.voptimum && actualSpeed >= event.vstandard) {
-							return '#0FA419';
-						} else if (actualSpeed < event.vstandard && actualSpeed >= event.vpoor) {
-							return '#ffe699';
-						} else {
-							return '#860000';
-						}
+						// if (actualSpeed >= event.voptimum) {
+						// 	return '#73b9c6';
+						// } else if (actualSpeed < event.voptimum && actualSpeed >= event.vstandard) {
+						// 	return '#0FA419';
+						// } else if (actualSpeed < event.vstandard && actualSpeed >= event.vpoor) {
+						// 	return '#ffe699';
+						// } else {
+						// 	return '#860000';
+						// }
 
 					}
 				});

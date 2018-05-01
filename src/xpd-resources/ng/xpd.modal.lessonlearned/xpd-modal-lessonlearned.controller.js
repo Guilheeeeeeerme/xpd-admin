@@ -2,9 +2,9 @@
 
 	'use strict',
 
-	angular.module('xpd.modal-lessonlearned').controller('modalLessonLearnedController', modalLessonLearnedController);
+		angular.module('xpd.modal-lessonlearned').controller('modalLessonLearnedController', modalLessonLearnedController);
 
-	modalLessonLearnedController.$inject = ['$scope', '$uibModalInstance', 'setupAPIService','selectedLessonLearned', 'insertCallback', 'updateCallback'];
+	modalLessonLearnedController.$inject = ['$scope', '$uibModalInstance', 'setupAPIService', 'selectedLessonLearned', 'insertCallback', 'updateCallback'];
 
 	function modalLessonLearnedController($scope, $uibModalInstance, setupAPIService, selectedLessonLearned, insertCallback, updateCallback) {
 
@@ -28,22 +28,22 @@
 		getLessonLearnedCategoryList();
 
 		function getLessonLearnedCategoryList() {
-		    setupAPIService.getList(
-		        'setup/lessonlearned_category',
-		        function(response){
-		        	getLessonLearnedCategoryListSuccessCallback(response.data);
-		        },
-		        getLessonLearnedCategoryListErrorCallback
-		    );
+			setupAPIService.getList(
+				'setup/lessonlearned_category',
+				function (response) {
+					getLessonLearnedCategoryListSuccessCallback(response.data);
+				},
+				getLessonLearnedCategoryListErrorCallback
+			);
 		}
 
-		function getLessonLearnedCategoryListSuccessCallback(result){
-		    roleList = result;
-		    makeTreeStructure(roleList);
+		function getLessonLearnedCategoryListSuccessCallback(result) {
+			roleList = result;
+			makeTreeStructure(roleList);
 		}
 
 		function getLessonLearnedCategoryListErrorCallback(error) {
-		    console.log(error);
+			console.log(error);
 		}
 
 		function modalActionButtonSave() {
@@ -51,20 +51,36 @@
 
 			if (!lessonLearned.id) {
 				registerLessonLearned(lessonLearned);
-			}else{
+			} else {
 				updateLessonLearned(lessonLearned);
 			}
 
 		}
 
 		function registerLessonLearned(lessonLearned) {
-			insertCallback && insertCallback(lessonLearned);
+			setupAPIService.insertObject(
+				'setup/lessonlearned',
+				lessonLearned,
+				lessonLearnedSuccessCallback,
+				lessonLearnedErrorCallback
+			);
+		}
+
+		function updateLessonLearned(lessonLearned) {
+			setupAPIService.updateObject(
+				'setup/lessonlearned',
+				lessonLearned,
+				lessonLearnedSuccessCallback,
+				lessonLearnedErrorCallback
+			);
+		}
+
+		function lessonLearnedSuccessCallback(result) {
 			$uibModalInstance.close();
 		}
 
-		function updateLessonLearned(selectedLessonLearned) {
-			updateCallback && updateCallback(selectedLessonLearned);
-			$uibModalInstance.close();
+		function lessonLearnedErrorCallback(error) {
+			console.log('Error on insert/update Lesson Learned!');
 		}
 
 		function modalActionButtonClose() {
@@ -73,36 +89,36 @@
 
 		function makeTreeStructure(data) {
 
-		    var objList = data;
-		    var lessonLearnedCategoryData = [];
+			var objList = data;
+			var lessonLearnedCategoryData = [];
 
-		    for (var i in objList) {
-		    	if ($scope.selectedLessonLearned.lessonLearnedCategory){
-			        if ($scope.selectedLessonLearned.lessonLearnedCategory.id != null) {
-	    				if ($scope.selectedLessonLearned.lessonLearnedCategory.id == objList[i].id) {
-	    					objList[i].selected = true;
-	    					$scope.lessonLearned.lastSelected = objList[i];
-	    				}else{
-	    					objList[i].selected = false;
-	    				}
-	    			}
-	    		}else{
-	    			objList[i].selected = false;
-	    		}
+			for (var i in objList) {
+				if ($scope.selectedLessonLearned.lessonLearnedCategory) {
+					if ($scope.selectedLessonLearned.lessonLearnedCategory.id != null) {
+						if ($scope.selectedLessonLearned.lessonLearnedCategory.id == objList[i].id) {
+							objList[i].selected = true;
+							$scope.lessonLearned.lastSelected = objList[i];
+						} else {
+							objList[i].selected = false;
+						}
+					}
+				} else {
+					objList[i].selected = false;
+				}
 
-		        objList[i].children = [];
+				objList[i].children = [];
 
-		        var currentObj = objList[i];
+				var currentObj = objList[i];
 
-		        // child to parent
-		        if (currentObj.parentId == null || currentObj.parentId == undefined) {
-		            lessonLearnedCategoryData.push(objList[i]);
-		        }else{
-		            objList[currentObj.parentId].children.push(currentObj);
-		        }
-		    }
+				// child to parent
+				if (currentObj.parentId == null || currentObj.parentId == undefined) {
+					lessonLearnedCategoryData.push(objList[i]);
+				} else {
+					objList[currentObj.parentId].children.push(currentObj);
+				}
+			}
 
-		    $scope.selectedLessonLearned.roleList = lessonLearnedCategoryData;
+			$scope.selectedLessonLearned.roleList = lessonLearnedCategoryData;
 		}
 
 		function actionClickSelectItem(node) {
@@ -126,12 +142,12 @@
 
 			var objList = roleList;
 			var parentNode = node.parentId;
-			var breadcrumbs = node.initial+ ' - ' +node.name;
+			var breadcrumbs = node.initial + ' - ' + node.name;
 
 			for (var i in objList) {
 				if (parentNode > 1) {
-					breadcrumbs =  objList[parentNode].initial+ ' - ' +objList[parentNode].name + ' > ' + breadcrumbs;
-				}else{
+					breadcrumbs = objList[parentNode].initial + ' - ' + objList[parentNode].name + ' > ' + breadcrumbs;
+				} else {
 					$scope.lessonLearned.breadcrumbs += ' > ' + breadcrumbs;
 					return;
 				}
