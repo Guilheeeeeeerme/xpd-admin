@@ -55,7 +55,7 @@
 
 		function actionBarDoubleClick($event, eventLog){
 
-			eventDetailsModal.open(eventLog);
+			eventDetailsModal.open(eventLog.id);
 		}
 
 		function actionClickFailuresButton(){
