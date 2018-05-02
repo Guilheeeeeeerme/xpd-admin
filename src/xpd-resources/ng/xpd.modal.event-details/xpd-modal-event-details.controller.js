@@ -4,17 +4,26 @@
 
 	angular.module('xpd.modal-event-details').controller('modalEventDetailsController', modalEventDetailsController);
 
-	modalEventDetailsController.$inject = ['$scope', '$uibModalInstance', 'selectedEvent'];
+	modalEventDetailsController.$inject = ['$scope', '$uibModalInstance', 'eventlogSetupAPIService', 'eventId'];
 
-	function modalEventDetailsController($scope, $uibModalInstance, selectedEvent) {
+	function modalEventDetailsController($scope, $uibModalInstance, eventlogSetupAPIService, eventId) {
 		var vm = this;
 
-		$scope.selectedEvent = angular.copy(selectedEvent);
+		var selectedEvent = null;
 		$scope.eventDetails = {};
 
 		vm.modalActionButtonClose = modalActionButtonClose;
 
-		prepareEventToModal();
+		getEventById();
+
+		function getEventById() {
+			eventlogSetupAPIService.getWithDetails(eventId, function (response) {
+				selectedEvent = response;
+				prepareEventToModal();
+			});
+		}
+
+		// prepareEventToModal();
 
 		function prepareEventToModal() {
 

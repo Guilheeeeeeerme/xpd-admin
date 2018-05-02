@@ -9,10 +9,10 @@
 
             <rect 
                 ng-attr-id="{{key}}"
-                ng-attr-y="{{ getBarProperties(event).position }}"
-                ng-attr-width="{{ getBarProperties(event).width }}"
-                ng-attr-height="{{ getBarProperties(event).height }}"
-                ng-attr-fill="{{ getBarProperties(event).color }}" stroke="none">
+                ng-attr-y="{{ getPositionBar(event) }}"
+                ng-attr-width="{{ getWidthBar(event.duration) }}"
+                ng-attr-height="{{ getHeightBar(event) }}"
+                ng-attr-fill="{{ event.performanceColor }}" stroke="none">
             </rect>
         </g>
     </g>

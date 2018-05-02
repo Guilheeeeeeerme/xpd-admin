@@ -35,7 +35,9 @@
 					scope.events.pop();
 					setViewMode();
 
-					scope.getBarProperties = getBarProperties;
+					scope.getWidthBar = getWidthBar;
+					scope.getHeightBar = getHeightBar;
+					scope.getPositionBar = getPositionBar;
 					scope.getEventScale = getEventScale;
 					scope.actionOpenDetailsModal = actionOpenDetailsModal;
 					scope.actionOpenFailuresModal = actionOpenFailuresModal;
@@ -57,7 +59,7 @@
 
 					scope.$watch('tick', function (tick) {
 						if (scope.currentEvent && scope.eventType == scope.currentEvent.eventType)
-							currentEventBar(buildEventBar(scope.currentEvent, true, tick));
+							currentEventBar(buildCurrentEventBar(scope.currentEvent, true, tick));
 					});
 
 					getEventZoomElement().on('dblclick', dblclick);
@@ -87,11 +89,30 @@
 						scope.xTicks = scope.xScale.ticks();
 					}
 
-					function getBarProperties(event) {
-						return buildEventBar(event, false, event.duration);
+					function getWidthBar(eventDuration) {
+						var width = scope.xScale(eventDuration) - scope.xScale(0);
+						if (!isNaN(width))
+							return width;
 					}
 
-					function buildEventBar(event, isCurrentEvent, eventDuration) {
+					function getHeightBar(event) {
+
+						var yScale = d3.scale.linear()
+							.domain([event.vtarget * 2, event.vpoor / 2])
+							.range([scope.svgViewHeight / 5, scope.svgViewHeight])
+							.clamp(true);
+
+						var height = yScale(event.actualSpeed);
+						if (!isNaN(height)) {
+							return height;
+						}
+					}
+
+					function getPositionBar(event) {
+						return scope.svgViewHeight - getHeightBar(event);
+					}
+
+					function buildCurrentEventBar(event, isCurrentEvent, eventDuration) {
 
 						var bar = {
 							width: 0,
@@ -102,32 +123,23 @@
 
 						var displacement = null;
 
-						bar.width = scope.xScale(eventDuration) - scope.xScale(0);
-
-						var yScale = d3.scale.linear()
-							.domain([event.vtarget * 2, event.vpoor / 2])
-							.range([scope.svgViewHeight / 5, scope.svgViewHeight])
-							.clamp(true);
+						bar.width = getWidthBar(eventDuration);
 
 						if (event.eventType === 'CONN' || event.eventType === 'TIME') {
 							displacement = 1;
 						} else {
-							if (isCurrentEvent) {
-								displacement = Math.abs(event.startBlockPosition - scope.currentBlockPosition);
-							} else {
-								displacement = Math.abs(event.startBlockPosition - event.endBlockPosition);
-							}
+							displacement = Math.abs(event.startBlockPosition - scope.currentBlockPosition);
 						}
 
-						var actualSpeed = displacement / (eventDuration / 1000);
-						bar.height = yScale(actualSpeed);
+						event.actualSpeed = displacement / (eventDuration / 1000);
+						bar.height = getHeightBar(event);
 						bar.position = scope.svgViewHeight - bar.height;
 
-						if (actualSpeed >= event.voptimum) {
+						if (event.actualSpeed >= event.voptimum) {
 							bar.color = '#73b9c6';
-						} else if (actualSpeed < event.voptimum && actualSpeed >= event.vstandard) {
+						} else if (event.actualSpeed < event.voptimum && event.actualSpeed >= event.vstandard) {
 							bar.color = '#0FA419';
-						} else if (actualSpeed < event.vstandard && actualSpeed >= event.vpoor) {
+						} else if (event.actualSpeed < event.vstandard && event.actualSpeed >= event.vpoor) {
 							bar.color = '#ffe699';
 						} else {
 							bar.color = '#860000';
@@ -202,8 +214,7 @@
 					}
 
 					function actionOpenDetailsModal() {
-
-						eventDetailsModal.open(scope.selectedEvent);
+						eventDetailsModal.open(scope.selectedEvent.id);
 						closeDetailsMenu();
 					}
 
@@ -246,7 +257,7 @@
 						
 						var event = {
 							operation: {
-								id: scope.selectedEvent.operation.id
+								id: scope.currentOperation.id
 							},
 							startTime: new Date(scope.selectedEvent.startTime),
 							endTime: new Date(scope.selectedEvent.endTime)

@@ -109,33 +109,27 @@
 			setupAPIService.insertObject(
 				'setup/failure',
 				failure,
-				insertFailureSuccessCallback,
-				insertFailureErrorCallback
+				failureSuccessCallback,
+				failureErrorCallback
 			);
-		}
-
-		function insertFailureSuccessCallback(result) {
-			insertCallback && insertCallback(result);
-			$uibModalInstance.close();
-		}
-
-		function insertFailureErrorCallback(error) {
-			/*console.log('NPT error!');*/
-			dialogFactory.showConfirmDialog('NPT already exists in this time interval!');
 		}
 
 		function updateFailure(failure) {
 			setupAPIService.updateObject(
 				'setup/failure',
 				failure,
-				updateFailureSuccessCallback,
-				insertFailureErrorCallback
+				failureSuccessCallback,
+				failureErrorCallback
 			);
 		}
 
-		function updateFailureSuccessCallback(result) {
-			updateCallback && updateCallback(result);
+		function failureSuccessCallback(result) {
 			$uibModalInstance.close();
+		}
+
+		function failureErrorCallback(error) {
+			/*console.log('NPT error!');*/
+			dialogFactory.showConfirmDialog('NPT already exists in this time interval!');
 		}
 
 		function modalActionButtonClose() {
