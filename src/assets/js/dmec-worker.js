@@ -113,7 +113,13 @@
 		tracks.map(function (track, trackIndex) {
 
 			var point = null;
-			var points = oldPoints[track.param];
+			var points = [];
+
+			try {
+				points = points.concat(oldPoints[track.param]);
+			} catch (e) {
+				// faça nada
+			}
 
 			try {
 				points = points.concat(newPoints[track.param]);

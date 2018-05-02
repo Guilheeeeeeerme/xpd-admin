@@ -12,6 +12,8 @@
 		vm.listByType = listByType;
 		vm.listByDate = listByDate;
 		vm.listByOperation = listByOperation;
+		vm.listTrackingEventByOperation = listTrackingEventByOperation;
+		vm.getWithDetails = getWithDetails;
 
 		function listByType(type, operationId, limit, successCallback, errorCallback) {
 			var url = xpdAccessFactory.getSetupURL() + 'setup/event/list-by-type';
@@ -147,6 +149,50 @@
 	            	setupAPIService.generateToast(error.data, true);
 	                errorCallback && errorCallback(error);
             	}
+			);
+		}
+
+		function listTrackingEventByOperation(operationId, successCallback, errorCallback) {
+			var url = xpdAccessFactory.getSetupURL() + 'setup/operation/';
+
+			if (operationId) {
+				url += operationId;
+				url += '/tracking-events';
+			}
+
+			var req = {
+				method: 'GET',
+				url: url
+			};
+
+			$http(req).then(
+				function (response) {
+					successCallback && successCallback(response.data.data);
+				},
+				function (error) {
+					setupAPIService.generateToast(error.data, true);
+					errorCallback && errorCallback(error);
+				}
+			);
+		}
+
+		function getWithDetails(eventId, successCallback, errorCallback) {
+			var url = xpdAccessFactory.getSetupURL() + 'setup/event/';
+			url += eventId + '/details';
+
+			var req = {
+				method: 'GET',
+				url: url
+			};
+
+			$http(req).then(
+				function (response) {
+					successCallback && successCallback(response.data.data);
+				},
+				function (error) {
+					setupAPIService.generateToast(error.data, true);
+					errorCallback && errorCallback(error);
+				}
 			);
 		}
 

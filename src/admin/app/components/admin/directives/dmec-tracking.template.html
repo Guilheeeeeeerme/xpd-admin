@@ -99,7 +99,7 @@
 			Zoom
 		</div>
 
-		<time-zoom-tool bit-depth-list="bitDepthByEvents" horizontal="true" start-at="dmecTrackingStartAt" end-at="dmecTrackingEndAt"
+		<time-zoom-tool is-zooming-callback="isZooming" bit-depth-list="bitDepthByEvents" horizontal="true" start-at="dmecTrackingStartAt" end-at="dmecTrackingEndAt"
 		 zoom-start-at="zoomStartAt" zoom-end-at="zoomEndAt">
 		</time-zoom-tool>
 	</div>
@@ -110,10 +110,10 @@
 			Slips to Slips (Conn)
 		</div>
 
-		<!-- <dmec-tracking-events tick="operationData.chronometerContext.tick" current-operation='operationData.operationContext.currentOperation'
+		<dmec-tracking-events tick="operationData.chronometerContext.tick" current-operation='operationData.operationContext.currentOperation'
 		 events='connectionEvents' event-type="'CONN'" current-event="operationData.eventContext.currentEvent" current-block-position="operationData.readingContext.currentReading.blockPosition"
 		 zoom-start-at="zoomStartAt" zoom-end-at="zoomEndAt">
-		</dmec-tracking-events> -->
+		</dmec-tracking-events>
 
 	</div>
 
@@ -123,10 +123,10 @@
 			Slips to Slips (Trip)
 		</div>
 
-		<!-- <dmec-tracking-events tick="operationData.chronometerContext.tick" current-operation='operationData.operationContext.currentOperation'
+		<dmec-tracking-events tick="operationData.chronometerContext.tick" current-operation='operationData.operationContext.currentOperation'
 		 events='tripEvents' event-type="'TRIP'" current-event="operationData.eventContext.currentEvent" current-block-position="operationData.readingContext.currentReading.blockPosition"
 		 zoom-start-at="zoomStartAt" zoom-end-at="zoomEndAt">
-		</dmec-tracking-events> -->
+		</dmec-tracking-events>
 
 	</div>
 
@@ -136,10 +136,16 @@
 			Time
 		</div>
 
-		<!-- <dmec-tracking-events tick="operationData.chronometerContext.tick" current-operation='operationData.operationContext.currentOperation'
-		 events='timeEvents' event-type="'TIME'" current-event="operationData.eventContext.currentEvent" current-block-position="operationData.readingContext.currentReading.blockPosition"
-		 zoom-start-at="zoomStartAt" zoom-end-at="zoomEndAt">
-		</dmec-tracking-events> -->
+		<dmec-tracking-events 
+			tick="operationData.chronometerContext.tick" 
+			current-operation='operationData.operationContext.currentOperation'		 
+			events='timeEvents' 
+		 	event-type="'TIME'" 
+		 	current-event="operationData.eventContext.currentEvent" 
+		 	current-block-position="operationData.readingContext.currentReading.blockPosition"		 
+		 	zoom-start-at="zoomStartAt" 
+		 	zoom-end-at="zoomEndAt">
+		</dmec-tracking-events>
 
 	</div>
 </div>

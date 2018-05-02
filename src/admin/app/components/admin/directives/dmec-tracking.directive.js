@@ -31,6 +31,8 @@
 				location.reload();
 			}, (ONE_HOUR / 2) );
 
+			scope.zoomIsLocked = false;
+			scope.isZooming = isZooming;
 			scope.actionButtonUseOperationStartDate = actionButtonUseOperationStartDate;
 			scope.actionButtonSubmitDmecRange = actionButtonSubmitDmecRange;
 			scope.initializeComponent = initializeComponent;
@@ -61,6 +63,11 @@
 				getTickInterval = $interval(getTick, updateLatency);
 
 			}
+
+			function isZooming(lockZoom){
+				scope.zoomIsLocked = lockZoom;
+			}
+	
 
 			function moveZoomRealtime() {
 				var now = new Date();
@@ -93,7 +100,9 @@
 					scope.dmecTrackingEndAt = now;
 
 					if(scope.inputRangeForm.keepZoomAtTheEnd){
-						moveZoomRealtime();
+						if(!scope.zoomIsLocked){
+							moveZoomRealtime();
+						}
 					}
 
 					scope.onReading = $q(function (resolve, reject) {

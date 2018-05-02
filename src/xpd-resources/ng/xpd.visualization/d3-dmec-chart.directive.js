@@ -170,22 +170,22 @@
 
 				function onZoomStartAtChange(newDate, oldDate) {
 					if (newDate && new Date(newDate).getTime() !== new Date(oldDate).getTime()) {
-						zoom();
+						handleZoom();
 					}
 				}
 				function onZoomEndAtChange(newDate, oldDate) {
 					if (newDate && new Date(newDate).getTime() !== new Date(oldDate).getTime()) {
-						zoom();
+						handleZoom();
 					}
 				}
 				function onStartAtChange(newDate, oldDate) {
 					if (newDate && new Date(newDate).getTime() !== new Date(oldDate).getTime()) {
-						zoom();
+						handleZoom();
 					}
 				}
 				function onEndAtChange(newDate, oldDate) {
 					if (newDate && new Date(newDate).getTime() !== new Date(oldDate).getTime()) {
-						zoom();
+						handleZoom();
 					}
 				}
 
@@ -221,10 +221,10 @@
 					scope.svg.viewWidth = viewWidth;
 					scope.svg.viewHeight = viewHeight;
 
-					scope.timeScale = timeScale;
+					scope.zoomScale = scope.timeScale = timeScale;
 				}
 
-				function zoom() {
+				function handleZoom() {
 
 					var endAt = (new Date(scope.endAt) == 'Invalid Date') ? null : new Date(scope.endAt);
 					var startAt = (new Date(scope.startAt) == 'Invalid Date') ? null : new Date(scope.startAt);
@@ -261,7 +261,7 @@
 						scope.svg.viewBox = '0 ' + scope.timeScale(zoomStartAt) + ' ' + scope.svg.viewWidth + ' ' + scope.svg.zoomArea;
 					}
 
-					scope.zoomScale = d3.time.scale()
+					var zoomScale = d3.time.scale()
 						.domain([
 							new Date(zoomStartAt),
 							new Date(zoomEndAt),
@@ -271,7 +271,8 @@
 							scope.timeScale(zoomEndAt)
 						]);
 
-					scope.xTicks = scope.zoomScale.ticks(6);
+					scope.xTicks = zoomScale.ticks(6);
+					scope.zoomScale = zoomScale;
 
 				}
 

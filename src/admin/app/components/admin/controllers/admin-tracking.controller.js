@@ -55,7 +55,7 @@
 
 		function actionBarDoubleClick($event, eventLog){
 
-			eventDetailsModal.open(eventLog);
+			eventDetailsModal.open(eventLog.id);
 		}
 
 		function actionClickFailuresButton(){
@@ -117,9 +117,7 @@
 		function getOperationEvents() {
 			if ($scope.operationData.operationContext.currentOperation != null) {
 
-				
-				eventlogSetupAPIService.listByType(null, $scope.operationData.operationContext.currentOperation.id, null, function (events) {
-
+				eventlogSetupAPIService.listTrackingEventByOperation($scope.operationData.operationContext.currentOperation.id, function (trackingEvents) {
 					$scope.dados.bitDepthByEvents = [];
 					$scope.dados.connectionEvents = [];
 					$scope.dados.tripEvents = [];
@@ -127,7 +125,7 @@
 					$scope.dados.connectionTimes = [];
 					$scope.dados.tripTimes = [];
 
-					events.map( function (event) {
+					trackingEvents.map(function (event) {
 						event.startTime = new Date(event.startTime).getTime();
 						event.endTime = new Date(event.endTime).getTime();
 
@@ -151,19 +149,20 @@
 
 						}
 
-						if(event.eventType == 'CONN')
+						if (event.eventType == 'CONN')
 							$scope.dados.connectionEvents.push(event);
-						
-						if(event.eventType == 'TRIP')
+
+						if (event.eventType == 'TRIP')
 							$scope.dados.tripEvents.push(event);
 
-						if(event.eventType == 'TIME')
+						if (event.eventType == 'TIME')
 							$scope.dados.timeEvents.push(event);
 
 					});
 
 					$scope.dados.connectionTimes = $scope.dados.connectionEvents.slice(-200);
 					$scope.dados.tripTimes = $scope.dados.tripEvents.slice(-200);
+					
 				});
 			}
 		}
