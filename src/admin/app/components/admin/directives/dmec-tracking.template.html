@@ -87,7 +87,7 @@
 		</div>
 
 		<d3-dmec-chart threads="{{ 4 }}" horizontal="true" start-at="dmecTrackingStartAt" end-at="dmecTrackingEndAt" on-reading="onReading"
-		 zoom-start-at="zoomStartAt" zoom-end-at="zoomEndAt" readings="readings" connection-events="connectionEvents" trip-events="tripEvents"
+		 zoom-start-at="zoomStartAt" zoom-end-at="zoomEndAt" on-reading-since="onReadingSince" connection-events="connectionEvents" trip-events="tripEvents"
 		 time-events="timeEvents" auto-scroll="chartAutoScroll">
 		</d3-dmec-chart>
 
@@ -110,10 +110,11 @@
 			Slips to Slips (Conn)
 		</div>
 
-		<dmec-tracking-events tick="operationData.chronometerContext.tick" current-operation='operationData.operationContext.currentOperation'
+		<!-- <dmec-tracking-events tick="operationData.chronometerContext.tick" current-operation='operationData.operationContext.currentOperation'
 		 events='connectionEvents' event-type="'CONN'" current-event="operationData.eventContext.currentEvent" current-block-position="operationData.readingContext.currentReading.blockPosition"
 		 zoom-start-at="zoomStartAt" zoom-end-at="zoomEndAt">
-		</dmec-tracking-events>
+		</dmec-tracking-events> -->
+
 	</div>
 
 	<div class="dmec-tracking-row dmec-tracking-row-h-15 chart-content">
@@ -122,10 +123,11 @@
 			Slips to Slips (Trip)
 		</div>
 
-		<dmec-tracking-events tick="operationData.chronometerContext.tick" current-operation='operationData.operationContext.currentOperation'
+		<!-- <dmec-tracking-events tick="operationData.chronometerContext.tick" current-operation='operationData.operationContext.currentOperation'
 		 events='tripEvents' event-type="'TRIP'" current-event="operationData.eventContext.currentEvent" current-block-position="operationData.readingContext.currentReading.blockPosition"
 		 zoom-start-at="zoomStartAt" zoom-end-at="zoomEndAt">
-		</dmec-tracking-events>
+		</dmec-tracking-events> -->
+
 	</div>
 
 	<div class="dmec-tracking-row dmec-tracking-row-h-15 chart-content">
@@ -134,10 +136,10 @@
 			Time
 		</div>
 
-		<dmec-tracking-events tick="operationData.chronometerContext.tick" current-operation='operationData.operationContext.currentOperation'
+		<!-- <dmec-tracking-events tick="operationData.chronometerContext.tick" current-operation='operationData.operationContext.currentOperation'
 		 events='timeEvents' event-type="'TIME'" current-event="operationData.eventContext.currentEvent" current-block-position="operationData.readingContext.currentReading.blockPosition"
 		 zoom-start-at="zoomStartAt" zoom-end-at="zoomEndAt">
-		</dmec-tracking-events>
+		</dmec-tracking-events> -->
 
 	</div>
 </div>

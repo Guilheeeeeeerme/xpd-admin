@@ -3,9 +3,9 @@
 
 	angular.module('xpd.admin').directive('dmecTracking', dmecTrackingDirective);
 
-	dmecTrackingDirective.$inject = ['readingSetupAPIService', '$timeout', '$interval'];
+	dmecTrackingDirective.$inject = ['readingSetupAPIService', '$timeout', '$interval', '$q'];
 
-	function dmecTrackingDirective(readingSetupAPIService, $timeout, $interval) {
+	function dmecTrackingDirective(readingSetupAPIService, $timeout, $interval, $q) {
 		return {
 			scope: {
 				bitDepthByEvents: '=',
@@ -21,7 +21,6 @@
 		};
 
 		function link(scope, element, attrs) {
-
 
 			var ONE_HOUR = 3600000;
 			var ONE_DAY = 24 * ONE_HOUR;
@@ -41,7 +40,6 @@
 				var endAt = new Date().getTime();
 				var intervalToShow = 0;
 				var inputRangeForm = scope.inputRangeForm = getInputRangeForm();
-				scope.readings = [];
 
 				if (inputRangeForm.realtime) {
 					intervalToShow = (+inputRangeForm.last * +inputRangeForm.toMilliseconds);
@@ -98,7 +96,7 @@
 						moveZoomRealtime();
 					}
 
-					scope.onReading = new Promise(function (resolve, reject) {
+					scope.onReading = $q(function (resolve, reject) {
 						readingSetupAPIService.getTick((now - updateLatency), resolve, reject);
 					});
 
@@ -115,13 +113,11 @@
 					startTime = operationStartDate;
 				}
 
-				readingSetupAPIService.getAllReadingSince(startTime.getTime(), setReadings);
+				scope.onReadingSince = $q(function (resolve, reject) {
+					readingSetupAPIService.getAllReadingSince(startTime.getTime(), resolve, reject);
+				});
 
 				return startTime;
-			}
-
-			function setReadings(readings) {
-				scope.readings = readings || [];
 			}
 
 			function getInputRangeForm() {

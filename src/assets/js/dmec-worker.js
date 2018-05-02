@@ -80,26 +80,14 @@
 
 				if (point.y != null) {
 
-					for (var i = 0; i < 2; i++) {
+					while (point.y < track.min) {
+						point.overflow++;
+						point.y += distance;
+					}
 
-						if (point.y < track.min) {
-
-							while (point.y < track.min) {
-								point.overflow++;
-								point.y += distance;
-							}
-
-						}
-
-						if (point.y > track.max) {
-
-							while (point.y > track.max) {
-								point.overflow--;
-								point.y -= distance;
-							}
-
-						}
-
+					while (point.y > track.max) {
+						point.overflow--;
+						point.y -= distance;
 					}
 
 				}
@@ -126,10 +114,10 @@
 
 			var point = null;
 			var points = oldPoints[track.param];
-			
-			try{
+
+			try {
 				points = points.concat(newPoints[track.param]);
-			}catch(e){
+			} catch (e) {
 				// faça nada
 			}
 
@@ -195,6 +183,8 @@
 				if (!points[track.param]) {
 					points[track.param] = [];
 				}
+
+				// points[track.param].push(xyPoint);
 
 				if (points[track.param].length >= 2 &&
 					points[track.param][points[track.param].length - 1].y == xyPoint.y &&

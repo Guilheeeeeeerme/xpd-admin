@@ -16,11 +16,11 @@
 			templateUrl: '../xpd-resources/ng/xpd.visualization/d3-dmec-chart.template.html',
 			scope: {
 				startAt: '=',
-				zoomStartAt: '=',
 				endAt: '=',
-				onReading: '=',
+				zoomStartAt: '=',
 				zoomEndAt: '=',
-				readings: '=',
+				onReading: '=',
+				onReadingSince: '=',
 				autoScroll: '=',
 				connectionEvents: '=',
 				tripEvents: '=',
@@ -28,10 +28,6 @@
 			},
 			link: link
 		};
-
-		function getRandomArbitrary(min, max) {
-			return Math.floor(Math.random() * (max - min) + min);
-		}
 
 		function getDefaultTracks(min, max) {
 			return [{
@@ -97,9 +93,7 @@
 
 			scope.element = element[0];
 
-			var threads = 4;
-			var updateLatency = 1000;
-			var chartId = scope.chartId = getRandomArbitrary(100, 999) + '-' + getRandomArbitrary(100, 999) + '-' + getRandomArbitrary(100, 999);
+			var threads = (!isNaN(Number(attrs.threads))) ? Number(attrs.threads) : 4;
 			var isHorizontal = scope.horizontal = (attrs.horizontal == true || attrs.horizontal == 'true');
 
 			if (!localStorage.dmecTracks) {
@@ -115,92 +109,122 @@
 				var colorScale = d3.scale.category10();
 				var format = d3.format('.1f');
 
-				$interval(regularVerifications, updateLatency, isHorizontal);
-
-				scope.openScaleModal = openScaleModal;
-				scope.listenToMouseMove = listenToMouseMove;
-				scope.updateTracks = updateTracks;
-				
-				/** Realtime */
+				/** 
+				 * Realtime 
+				 */
 				scope.$watch('onReading', onReadingChange);
-
-				function onReadingChange(onReading) {
-					if (onReading) {
-						onReading.then(onCurrentReading);
-					}
-				}
-
-				function onCurrentReading(currentReading) {
-
-					if(!scope.currentReadings){
-						scope.currentReadings = [];
-					}
-
-					scope.currentReadings.push(currentReading);
-
-					drawNewPoints();
-				}
-
-				function drawNewPoints() {
-					readingsToPoints(scope.currentReadings, scope.tracks).then(function (newPoints) {
-						scope.newPoints = newPoints;
-
-						// if(!scope.newPoints){
-						// 	scope.newPoints = newPoints;
-						// }
-
-						// for(var attr in newPoints){
-						// 	if(!scope.newPoints[attr]){
-						// 		scope.newPoints[attr] = newPoints[attr];
-						// 	}else{
-						// 		scope.newPoints[attr].push(newPoints[attr].pop());
-						// 	}
-						// }
-
-						draw('newPoints');
-					
-					});
-				}
 
 				/** 
 				 * Readings history 
 				 */
-				scope.$watch('readings', onReadingsListReady);
-
-				function onReadingsListReady() {
-					drawOldPoints();
-				}
-
-				function drawOldPoints() {
-
-					readingsToPoints(scope.readings, scope.tracks).then(function (oldPoints) {
-						scope.oldPoints = oldPoints;
-						draw('oldPoints');
-					});
-				}
+				scope.$watch('onReadingSince', onReadingSinceChange);
 
 				/** 
 				 * Atemporal 
 				 */
-				scope.$watch('zoomStartAt', onZoomChange);
-				scope.$watch('zoomEndAt', onZoomChange);
-				scope.$watch('startAt', onDateRangeChange);
-				scope.$watch('endAt', onDateRangeChange);
+				scope.$watch('zoomStartAt', onZoomStartAtChange, true);
+				scope.$watch('zoomEndAt', onZoomEndAtChange, true);
+				scope.$watch('startAt', onStartAtChange, true);
+				scope.$watch('endAt', onEndAtChange, true);
 
-				function onZoomChange() {
-					onDateRangeChange();
+				scope.openScaleModal = openScaleModal;
+				scope.listenToMouseMove = listenToMouseMove;
+				scope.buildTracksAxis = buildTracksAxis;
+
+				buildTimeAxis();
+				buildTracksAxis();
+
+				/**Real Time Readings */
+				function onReadingChange(onReading) {
+					if (onReading) {
+						onReading.then(function (currentReading) {
+
+							if (!scope.currentReadings) {
+								scope.currentReadings = [];
+							}
+
+							scope.currentReadings.push(currentReading);
+
+							readingsToPoints(scope.currentReadings, scope.tracks).then(function (newPoints) {
+								scope.newPoints = newPoints;
+								draw('newPoints');
+							});
+
+						});
+					}
 				}
 
-				function onDateRangeChange(newDate, oldDate) {
-					buildTimeAxis(isHorizontal);
+				/**Readings history */
+				function onReadingSinceChange(onReadingSince) {
+					if (onReadingSince) {
+						onReadingSince.then(function (readings) {
+							scope.readings = readings;
+
+							readingsToPoints(scope.readings, scope.tracks).then(function (oldPoints) {
+								scope.oldPoints = oldPoints;
+								draw('oldPoints');
+							});
+						});
+					}
 				}
 
-				/**
-				 * When Tracks Change
-				 */
-				scope.$watch('tracks', updateTracks);
+				function onZoomStartAtChange(newDate, oldDate) {
+					if (newDate && new Date(newDate).getTime() !== new Date(oldDate).getTime()) {
+						zoom();
+					}
+				}
+				function onZoomEndAtChange(newDate, oldDate) {
+					if (newDate && new Date(newDate).getTime() !== new Date(oldDate).getTime()) {
+						zoom();
+					}
+				}
+				function onStartAtChange(newDate, oldDate) {
+					if (newDate && new Date(newDate).getTime() !== new Date(oldDate).getTime()) {
+						zoom();
+					}
+				}
+				function onEndAtChange(newDate, oldDate) {
+					if (newDate && new Date(newDate).getTime() !== new Date(oldDate).getTime()) {
+						zoom();
+					}
+				}
 
-				function buildTimeAxis(horizontal) {
+				function buildTimeAxis() {
+
+					if (!scope.startAt) {
+						console.error('Missing Param "startAt" ');
+						return;
+					}
+
+					if (!scope.endAt) {
+						console.error('Missing Param "endAt" ');
+						return;
+					}
+
+					var viewWidth = scope.element.clientWidth;
+					var viewHeight = scope.element.offsetHeight;
+
+					var timeScale = d3.time.scale()
+						.domain([
+							new Date(scope.startAt),
+							new Date(scope.endAt),
+						])
+						.range([
+							0,
+							isHorizontal ? (viewWidth * 0.95) : (viewHeight * 0.95)
+						]);
+
+					if (!scope.svg) {
+						scope.svg = {};
+					}
+
+					scope.svg.viewWidth = viewWidth;
+					scope.svg.viewHeight = viewHeight;
+
+					scope.timeScale = timeScale;
+				}
+
+				function zoom() {
 
 					var endAt = (new Date(scope.endAt) == 'Invalid Date') ? null : new Date(scope.endAt);
 					var startAt = (new Date(scope.startAt) == 'Invalid Date') ? null : new Date(scope.startAt);
@@ -228,70 +252,39 @@
 						return;
 					}
 
-					var viewWidth = scope.element.clientWidth;
-					var viewHeight = scope.element.offsetHeight;
+					scope.svg.startAt = scope.timeScale(zoomStartAt);
+					scope.svg.zoomArea = (scope.timeScale(zoomEndAt) - scope.timeScale(zoomStartAt));
 
-					var timeScale = d3.time.scale()
+					if (isHorizontal) {
+						scope.svg.viewBox = scope.timeScale(zoomStartAt) + ' 0 ' + scope.svg.zoomArea + ' ' + scope.svg.viewHeight;
+					} else {
+						scope.svg.viewBox = '0 ' + scope.timeScale(zoomStartAt) + ' ' + scope.svg.viewWidth + ' ' + scope.svg.zoomArea;
+					}
+
+					scope.zoomScale = d3.time.scale()
 						.domain([
-							zoomStartAt,
-							zoomEndAt,
+							new Date(zoomStartAt),
+							new Date(zoomEndAt),
 						])
 						.range([
-							0,
-							horizontal ? (viewWidth * 0.95) : (viewHeight * 0.95)
+							scope.timeScale(zoomStartAt),
+							scope.timeScale(zoomEndAt)
 						]);
 
-					var timeAxisSize = timeScale(endAt) - timeScale(startAt);
-
-					scope.svg = {
-						viewWidth: (horizontal) ? timeAxisSize : viewWidth,
-						viewHeight: (horizontal) ? viewHeight : timeAxisSize
-					};
-
-					scope.timeScale = timeScale;
-					scope.xTicks = timeScale.ticks(6);
-
-					updateTracks();
-				}
-
-				function readingsToPoints(readings, tracks) {
-
-					return $q(function (resolve, reject) {
-
-						if (tracks != null && tracks.length > 0 && readings != null && readings.length > 0) {
-
-							worker.postMessage({
-								cmd: 'reading-to-points',
-								tracks: tracks.map(function (t) { return { param: t.param }; }),
-								readings: readings
-							});
-
-							worker.addEventListener('message', function (event) {
-								if (event.data.cmd == 'reading-to-points') {
-									resolve(event.data.points);
-								}
-							}, false);
-
-						}
-
-					});
+					scope.xTicks = scope.zoomScale.ticks(6);
 
 				}
 
-				function updateTracks() {
-
-					if(!scope.tracks){
-						return;
-					}
+				function buildTracksAxis() {
 
 					scope.$tracks = scope.tracks.map(function (track, index) {
 						return configTrackProperties(track, index, isHorizontal);
 					});
-					
-					try { draw('oldPoints'); } catch(e){  }
-					try { draw('newPoints'); } catch(e){  }
 
-					function configTrackProperties(track, index, horizontal) {
+					try { draw('newPoints'); } catch (e) { }
+					try { draw('oldPoints'); } catch (e) { }
+
+					function configTrackProperties(track, index, isHorizontal) {
 
 						track.color = colorScale(index);
 
@@ -323,15 +316,15 @@
 						track.id = index;
 						track.lineFunction = lineFunction;
 						track.trackScale = trackScale;
-						track.ticks = trackScale.ticks(5);
+						track.ticks = trackScale.ticks(4);
 
 						function isNumber(d) {
-							return (angular.isNumber(d.y) && angular.isNumber(d.x));
+							return (!isNaN(d.y) && !isNaN(d.x));
 						}
 
 						function scaleValue(d) {
 							var x;
-							if (!horizontal)
+							if (!isHorizontal)
 								x = trackScale(d.y);
 							else
 								x = scope.timeScale(d.x);
@@ -341,7 +334,7 @@
 
 						function scaleTime(d) {
 							var y;
-							if (!horizontal)
+							if (!isHorizontal)
 								y = scope.timeScale(d.x);
 							else
 								y = trackScale(d.y);
@@ -351,13 +344,13 @@
 
 						function trackPosition(trackIndex) {
 
-							var viewWidth = scope.element.clientWidth;
-							var viewHeight = scope.element.offsetHeight;
+							var viewWidth = scope.svg.viewWidth;
+							var viewHeight = scope.svg.viewHeight;
 
 							var numberOfTracks = scope.tracks.length;
 							var tracksPerThread = Math.ceil(numberOfTracks / threads);
 							var relative = Math.floor(trackIndex / tracksPerThread) / threads;
-							var result = (relative * ((horizontal) ? viewHeight : viewWidth));
+							var result = (relative * ((isHorizontal) ? viewHeight : viewWidth));
 							return result;
 						}
 
@@ -383,14 +376,13 @@
 							points: scope[trackName]
 						});
 
-						var promise = new Promise(function (resolve, reject) {
+						var promise = $q(function (resolve, reject) {
 							worker.addEventListener('message', function (event) {
 								if (event.data.cmd == 'handle-overflow') {
 									resolve(event.data);
 								}
 							}, false);
 						});
-
 
 						promise.then(function (data) {
 
@@ -410,8 +402,31 @@
 
 				}
 
-				function listenToMouseMove(horizontal) {
-					// console.log('listenToMouseMove');
+				function readingsToPoints(readings, tracks) {
+
+					return $q(function (resolve, reject) {
+
+						if (tracks != null && tracks.length > 0 && readings != null && readings.length > 0) {
+
+							worker.postMessage({
+								cmd: 'reading-to-points',
+								tracks: tracks.map(function (t) { return { param: t.param }; }),
+								readings: readings
+							});
+
+							worker.addEventListener('message', function (event) {
+								if (event.data.cmd == 'reading-to-points') {
+									resolve(event.data.points);
+								}
+							}, false);
+
+						}
+
+					});
+
+				}
+
+				function listenToMouseMove() {
 
 					d3.select(scope.element).selectAll('.overlay')
 						.on('mousemove', mousemove);
@@ -421,17 +436,17 @@
 						var position = null;
 						var timestamp = null;
 
-						if (!horizontal) {
+						if (!isHorizontal) {
 							position = d3.mouse(this)[1];
-							timestamp = scope.timeScale.invert(d3.mouse(this)[1]);
+							timestamp = scope.zoomScale.invert(d3.mouse(this)[1]);
 						} else {
 							position = d3.mouse(this)[0];
-							timestamp = scope.timeScale.invert(d3.mouse(this)[0]);
+							timestamp = scope.zoomScale.invert(d3.mouse(this)[0]);
 						}
 
 						d3.select(scope.element).selectAll('#crosshair')
-							.attr(((!horizontal) ? 'y1' : 'x1'), position)
-							.attr(((!horizontal) ? 'y2' : 'x2'), position);
+							.attr(((!isHorizontal) ? 'y1' : 'x1'), position)
+							.attr(((!isHorizontal) ? 'y2' : 'x2'), position);
 
 						onMousemove(timestamp, position);
 
@@ -447,7 +462,7 @@
 							newPoints: scope.newPoints
 						});
 
-						var promise = new Promise(function (resolve, reject) {
+						var promise = $q(function (resolve, reject) {
 							worker.addEventListener('message', function (event) {
 								if (event.data.cmd == 'find-point') {
 									var reading = event.data.points;
@@ -473,14 +488,14 @@
 									bubble.attr('style', null);
 									tooltip.attr('style', null);
 
-									if (!horizontal)
+									if (!isHorizontal)
 										bubble.attr('transform', 'translate(' + track.trackScale(point.y) + ', ' + scope.timeScale(timestamp) + ')');
 									else
 										bubble.attr('transform', 'translate(' + scope.timeScale(timestamp) + ', ' + track.trackScale(point.y) + ')');
 
 									tooltip
-										.attr((!horizontal) ? 'x' : 'y', track.trackScale(track.max) - track.trackScale(point.y))
-										.attr((!horizontal) ? 'y' : 'x', (track.labelPosition * 15));
+										.attr((!isHorizontal) ? 'x' : 'y', track.trackScale(track.max) - track.trackScale(point.y))
+										.attr((!isHorizontal) ? 'y' : 'x', (track.labelPosition * 15));
 
 									if (point.actual != null) {
 										tooltip.text(format(point.actual) + ' (' + track.unitMeasure + ')');
@@ -495,47 +510,6 @@
 
 					}
 
-				}
-
-				function getScrollContainer() {
-					return document.getElementById(chartId);
-				}
-
-				function regularVerifications(horizontal) {
-					scrollIfNeeded(horizontal);
-				}
-
-				function scrollIfNeeded(horizontal) {
-
-					var container = getScrollContainer();
-					container.addEventListener('scroll', moveLegend);
-
-					if (!horizontal) {
-						if (scope.autoScroll == true) {
-							container.scrollTop = container.scrollHeight;
-						} else {
-							scope.autoScroll = false;
-						}
-					} else {
-						if (scope.autoScroll == true) {
-							container.scrollLeft = container.scrollWidth;
-						} else {
-							scope.autoScroll = false;
-						}
-					}
-
-					moveLegend(horizontal);
-				}
-
-				function moveLegend(horizontal) {
-					var container = getScrollContainer();
-					var legend = d3.select(scope.element).selectAll('.label');
-
-					if (!horizontal) {
-						legend.attr('transform', 'translate(0, ' + container.scrollTop + ')');
-					} else {
-						legend.attr('transform', 'translate(' + container.scrollLeft + ', 0)');
-					}
 				}
 
 				function openScaleModal() {
@@ -585,7 +559,7 @@
 
 			localStorage.dmecTracks = JSON.stringify(tracks.tracks);
 
-			tracks.updateTracks();
+			tracks.buildTracksAxis();
 
 			$modalInstance.close();
 		}

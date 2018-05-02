@@ -2,12 +2,6 @@ body {
 	padding-top: 60px;
 }
 
-.container-dmec{
-	overflow: auto;
-	height: 100%;
-	width: 100%;
-}
-
 d3-dmec-chart{
 	display: block;
 	height: 100%;
