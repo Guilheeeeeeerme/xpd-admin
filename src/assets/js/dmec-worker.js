@@ -62,9 +62,9 @@
 			var distance = 0;
 			var lastPoint = null;
 
-			if( ( track.min >= 0 && track.max >= 0 ) || ( track.min <= 0 && track.max <= 0 ) ){
+			if ((track.min >= 0 && track.max >= 0) || (track.min <= 0 && track.max <= 0)) {
 				distance = Math.abs(track.min - track.max);
-			} else{
+			} else {
 				distance = Math.abs(track.min - 0) - Math.abs(track.max - 0);
 			}
 
@@ -80,26 +80,14 @@
 
 				if (point.y != null) {
 
-					for (var i = 0; i < 2; i++) {
+					while (point.y < track.min) {
+						point.overflow++;
+						point.y += distance;
+					}
 
-						if (point.y < track.min) {
-
-							while (point.y < track.min) {
-								point.overflow++;
-								point.y += distance;
-							}
-
-						}
-
-						if (point.y > track.max) {
-
-							while (point.y > track.max) {
-								point.overflow--;
-								point.y -= distance;
-							}
-
-						}
-
+					while (point.y > track.max) {
+						point.overflow--;
+						point.y -= distance;
 					}
 
 				}
@@ -124,32 +112,50 @@
 
 		tracks.map(function (track, trackIndex) {
 
-			var points = [];
 			var point = null;
+			var points = [];
 
-
-			if (oldPoints &&
-				oldPoints[track.param] &&
-				oldPoints[track.param].length &&
-				oldPoints[track.param][0].x <= timestamp &&
-				oldPoints[track.param][oldPoints[track.param].length - 1].x >= timestamp) {
-
-				points = oldPoints[track.param];
-			} else if (newPoints &&
-				newPoints[track.param] &&
-				newPoints[track.param].length &&
-				newPoints[track.param][0].x <= timestamp &&
-				newPoints[track.param][newPoints[track.param].length - 1].x >= timestamp) {
-
-				points = newPoints[track.param];
+			try {
+				points = points.concat(oldPoints[track.param]);
+			} catch (e) {
+				// faça nada
 			}
 
-			for (var i in points) {
-				if ((points[i].x / 1000) >= (timestamp / 1000)) {
-					point = points[i];
-					break;
+			try {
+				points = points.concat(newPoints[track.param]);
+			} catch (e) {
+				// faça nada
+			}
+
+			while (points && points.length > 2) {
+
+				var half = Math.ceil(points.length / 2);
+
+				var firstHalf = points.slice(0, half);
+				var lastHalf = points.slice(-1 * half);
+
+				if (lastHalf &&
+					lastHalf.length &&
+					timestamp >= lastHalf[0].x) {
+
+					points = lastHalf;
+				} else if (firstHalf &&
+					firstHalf.length &&
+					timestamp >= firstHalf[0].x) {
+
+					points = firstHalf;
 				}
+
 			}
+
+			point = points[0];
+
+			// for (var i in points) {
+			// 	if ((points[i].x / 1000) >= (timestamp / 1000)) {
+			// 		point = points[i];
+			// 		break;
+			// 	}
+			// }
 
 			reading[track.param] = point;
 
@@ -168,19 +174,31 @@
 
 			tracks.map(convertToXY);
 
+			// tracks.map(function(track){
+			// 	console.log(track.param + ': ' + points[track.param].length + ' from ' + readings.length);
+			// });
+
 			function convertToXY(track) {
 
 				var xyPoint = {
 					x: reading.timestamp,
 					y: reading[track.param] || null,
 					actual: reading[track.param] || null
-				}
+				};
 
 				if (!points[track.param]) {
 					points[track.param] = [];
 				}
 
-				points[track.param].push(xyPoint);
+				// points[track.param].push(xyPoint);
+
+				if (points[track.param].length >= 2 &&
+					points[track.param][points[track.param].length - 1].y == xyPoint.y &&
+					points[track.param][points[track.param].length - 2].y == xyPoint.y) {
+					points[track.param][points[track.param].length - 1] = xyPoint;
+				} else {
+					points[track.param].push(xyPoint);
+				}
 
 			}
 

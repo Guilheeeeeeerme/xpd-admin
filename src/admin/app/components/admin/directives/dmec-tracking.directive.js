@@ -3,9 +3,9 @@
 
 	angular.module('xpd.admin').directive('dmecTracking', dmecTrackingDirective);
 
-	dmecTrackingDirective.$inject = ['readingSetupAPIService', '$timeout', '$interval'];
+	dmecTrackingDirective.$inject = ['readingSetupAPIService', '$timeout', '$interval', '$q'];
 
-	function dmecTrackingDirective(readingSetupAPIService, $timeout, $interval) {
+	function dmecTrackingDirective(readingSetupAPIService, $timeout, $interval, $q) {
 		return {
 			scope: {
 				bitDepthByEvents: '=',
@@ -22,7 +22,6 @@
 
 		function link(scope, element, attrs) {
 
-
 			var ONE_HOUR = 3600000;
 			var ONE_DAY = 24 * ONE_HOUR;
 			var updateLatency = 1000;
@@ -32,6 +31,8 @@
 				location.reload();
 			}, (ONE_HOUR / 2) );
 
+			scope.zoomIsLocked = false;
+			scope.isZooming = isZooming;
 			scope.actionButtonUseOperationStartDate = actionButtonUseOperationStartDate;
 			scope.actionButtonSubmitDmecRange = actionButtonSubmitDmecRange;
 			scope.initializeComponent = initializeComponent;
@@ -41,7 +42,6 @@
 				var endAt = new Date().getTime();
 				var intervalToShow = 0;
 				var inputRangeForm = scope.inputRangeForm = getInputRangeForm();
-				scope.readings = [];
 
 				if (inputRangeForm.realtime) {
 					intervalToShow = (+inputRangeForm.last * +inputRangeForm.toMilliseconds);
@@ -64,14 +64,17 @@
 
 			}
 
-			function moveZoomRealtime(newZoomEndAt) {
+			function isZooming(lockZoom){
+				scope.zoomIsLocked = lockZoom;
+			}
+	
 
-				if (scope.inputRangeForm && scope.inputRangeForm.realtime) {
-					var timeDiff = new Date(newZoomEndAt).getTime() - new Date(scope.zoomEndAt).getTime();
-					scope.zoomStartAt = new Date(new Date(scope.zoomStartAt).getTime() + timeDiff);
-					scope.zoomEndAt = new Date(new Date(scope.zoomEndAt).getTime() + timeDiff);
-				}
+			function moveZoomRealtime() {
+				var now = new Date();
+				var zoom = new Date(scope.zoomEndAt).getTime() - new Date(scope.zoomStartAt).getTime();
 
+				scope.zoomStartAt = new Date(now.getTime() - zoom);
+				scope.zoomEndAt = now;
 			}
 
 			function actionButtonUseOperationStartDate(startDate) {
@@ -86,7 +89,7 @@
 
 			function actionButtonSubmitDmecRange() {
 				localStorage.setItem('dmecTrackingInputRangeForm', JSON.stringify(scope.inputRangeForm));
-				initializeComponent();
+				location.reload();
 			}
 
 			function getTick() {
@@ -95,9 +98,14 @@
 
 					var now = new Date().getTime();
 					scope.dmecTrackingEndAt = now;
-					moveZoomRealtime(scope.dmecTrackingEndAt);
 
-					scope.onReading = new Promise(function (resolve, reject) {
+					if(scope.inputRangeForm.keepZoomAtTheEnd){
+						if(!scope.zoomIsLocked){
+							moveZoomRealtime();
+						}
+					}
+
+					scope.onReading = $q(function (resolve, reject) {
 						readingSetupAPIService.getTick((now - updateLatency), resolve, reject);
 					});
 
@@ -114,13 +122,11 @@
 					startTime = operationStartDate;
 				}
 
-				readingSetupAPIService.getAllReadingSince(startTime.getTime(), setReadings);
+				scope.onReadingSince = $q(function (resolve, reject) {
+					readingSetupAPIService.getAllReadingSince(startTime.getTime(), resolve, reject);
+				});
 
 				return startTime;
-			}
-
-			function setReadings(readings) {
-				scope.readings = readings || [];
 			}
 
 			function getInputRangeForm() {

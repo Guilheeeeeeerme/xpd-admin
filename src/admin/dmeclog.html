@@ -62,6 +62,7 @@
     <script type="text/javascript" src="/xpd-resources/ng/xpd.visualization/xpd-visualization.module.js"></script>
     <script type="text/javascript" src="/xpd-resources/ng/xpd.visualization/d3-dmec-chart.directive.js"></script>
 	<script type="text/javascript" src="/xpd-resources/ng/xpd.visualization/time-zoom-tool.directive.js"></script>
+    <script type="text/javascript" src="/xpd-resources/ng/xpd.visualization/xpd-view-box.directive.js"></script>
 
     <!-- XPD DIALOG -->
     <script type="text/javascript" src="/xpd-resources/ng/xpd.dialog/xpd.dialog.module.js"></script>
@@ -90,7 +91,8 @@
 
 <body ng-app="xpd.dmeclog" ng-controller="DMecLogController as dmlController">
 
-    <nav class="navbar navbar-default navbar-fixed-top">
+    <nav class="navbar navbar-default navbar-fixed-top dmec-navbar">
+        
         <div class="container-fluid">
 
             <div class="navbar-header">
@@ -98,58 +100,108 @@
             </div>
 
             <form class="navbar-form navbar-left">
+                <uib-accordion>
+                    <div uib-accordion-group class="panel-default" is-open="status.isCustomHeaderOpen">
+            
+                        <uib-accordion-heading>
+                            Filter
+            
+                            <span class="well well-sm">
+                                <strong>
+                                    Full range
+                                </strong>
+                                {{ dmecTrackingStartAt | date:'MM/dd/yyyy HH:mm' }} - {{ ( (dmecTrackingStartAt | date:'MM/dd/yyyy') != (dmecTrackingEndAt
+                                | date:'MM/dd/yyyy') )? ( dmecTrackingEndAt | date:'MM/dd/yyyy HH:mm' ) : (dmecTrackingEndAt | date:'HH:mm') }}
+                            </span>
+            
+            
+                            <span class="well well-sm">
+                                <strong>
+                                    Zooming at
+                                </strong>
+                                {{ zoomStartAt | date:'MM/dd/yyyy HH:mm' }} - {{ ( (zoomStartAt | date:'MM/dd/yyyy') != (zoomEndAt | date:'MM/dd/yyyy') )?
+                                ( zoomEndAt | date:'MM/dd/yyyy HH:mm' ) : (zoomEndAt | date:'HH:mm:ss') }}
+                            </span>
+            
+                            <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': status.isCustomHeaderOpen, 'glyphicon-chevron-right': !status.isCustomHeaderOpen}"></i>
+                        </uib-accordion-heading>
+            
+                        <form name="inputRange.form">
+            
+                            <div class="checkbox">
+                                <label>
+                                    <input name="realtime" ng-model="inputRangeForm.realtime" type="checkbox"> Real Time
+                                </label>
+                            </div>
+            
+                            <div ng-if="!inputRangeForm.realtime">
+            
+                                <div class="form-group">
+                                    <label for="startTime">From:</label>
+                                    <input ng-model="inputRangeForm.startTime" type="datetime-local" class="form-control" required min="{{ operationData.operationContext.currentOperation.startDate | date:'yyyy-MM-ddTHH:mm' }}"
+                                     name="startTime" id="startTime">
+                                </div>
+                            </div>
 
-                <div class="form-group">
-                    <input type="date" class="form-control" ng-model="dmecStartDate" placeholder="Date">
-                </div>
-
-                <div class="form-group">
-                    <input type="time" class="form-control" ng-model="dmecStartTime" placeholder="Time">
-                </div>
-
-                <button type="submit" ng-click="dmlController.actionButtonSearchSince()" ng-disabled="!dmecStartDate || !dmecStartTime" class="btn btn-default">Search since</button>
-
-                <div class="form-group" ng-init="chartAutoScroll = true">
-                    <label>
-                        <input type="checkbox" ng-model="chartAutoScroll" name="chartAutoScroll" ng-true-value="true" ng-false-value="false">Auto Scroll
-                    </label>
-                </div>
-
+                            <div ng-if="inputRangeForm.realtime">
+            
+                                <div class="checkbox">
+                                    <label>
+                                        <input name="realtime" ng-model="inputRangeForm.keepZoomAtTheEnd" type="checkbox"> Zoom at the end
+                                    </label>
+                                </div>
+            
+                                <div class="form-group">
+                                    <label for="last">Last:</label>
+                                    <input ng-model="inputRangeForm.last" type="number" class="form-control" required name="last" id="last">
+                                </div>
+            
+                                <div class="form-group">
+                                    <select ng-model="inputRangeForm.toMilliseconds" class="form-control" required name="toMilliseconds" id="toMilliseconds">
+                                        <option value="86400000">Days</option>
+                                        <option value="3600000">Hours</option>
+                                        <option value="60000">Minutes</option>
+                                        <option value="1000">Seconds</option>
+                                    </select>
+                                </div>
+            
+                            </div>
+            
+                            <button type="submit" ng-click="actionButtonSubmitDmecRange()" ng-disabled="inputRange.form.$invalid" class="btn btn-default">Submit</button>
+            
+                        </form>
+                    </div>
+            
+                </uib-accordion>
             </form>
 
-            <!-- <ul class="nav navbar-nav navbar-right">
-
-                <li>
-                    <div class="form-group">
-                        <input type="range" class="form-control" ng-model="threshold" min="600000" max="604800000">
-                    </div>
-                </li>
-
-
-                <li>
-                    <div class="checkbox">
-                    </div>
-                </li>
-
-                <li>
-                    <a href="#">
-                        {{ threshold / 1000 | secondsToHourMinutesSeconds }}
-                    </a>
-                </li>
-                <li>
-                    <a href="#" ng-click="dmlController.openScaleModal()">Config</a>
-                </li>
-            </ul> -->
-
         </div>
+    
     </nav>
-
-    <!-- <d3-dmec-chart ng-if="tracks && tracks.length == 8" threads="{{ 4 }}" threshold="threshold" start-time="dmecStartDate" tracks="tracks"
-            old-points="oldPoints" new-points="newPoints" auto-scroll="chartAutoScroll">
-        </d3-dmec-chart> -->
-
-    <d3-dmec-chart threads="{{ 4 }}" horizontal="false" start-at="dmecStartDate" end-at="dmecEndTime" zoom-start-at="zoomStartTime"
-        zoom-end-at="zoomEndTime" readings="readings" auto-scroll="chartAutoScroll">
+    
+    <time-zoom-tool 
+        horizontal="true" 
+        is-zooming-callback="isZooming"
+        start-at="dmecTrackingStartAt" 
+        end-at="dmecTrackingEndAt"    
+        zoom-start-at="zoomStartAt" 
+        zoom-end-at="zoomEndAt">
+    </time-zoom-tool>
+    
+    <d3-dmec-chart 
+        ng-init="dmecTrackingStartAt && dmecTrackingEndAt"
+        threads="{{ 4 }}" 
+        horizontal="false" 
+        start-at="dmecTrackingStartAt" 
+        end-at="dmecTrackingEndAt" 
+        on-reading="onReading"
+        zoom-start-at="zoomStartAt" 
+        zoom-end-at="zoomEndAt" 
+        on-reading-since="onReadingSince" 
+        connection-events="connectionEvents" 
+        trip-events="tripEvents"
+        time-events="timeEvents" 
+        auto-scroll="chartAutoScroll">
     </d3-dmec-chart>
 
 </body>

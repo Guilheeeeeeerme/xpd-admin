@@ -2,7 +2,7 @@
 
 	'use strict',
 
-		angular.module('xpd.modal-lessonlearned').controller('modalLessonLearnedController', modalLessonLearnedController);
+	angular.module('xpd.modal-lessonlearned').controller('modalLessonLearnedController', modalLessonLearnedController);
 
 	modalLessonLearnedController.$inject = ['$scope', '$uibModalInstance', 'setupAPIService', 'selectedLessonLearned', 'insertCallback', 'updateCallback'];
 

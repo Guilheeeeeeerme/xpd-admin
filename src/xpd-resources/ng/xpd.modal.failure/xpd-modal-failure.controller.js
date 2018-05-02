@@ -2,7 +2,7 @@
 
 	'use strict',
 
-		angular.module('xpd.modal-failure').controller('modalFailureController', modalFailureController);
+	angular.module('xpd.modal-failure').controller('modalFailureController', modalFailureController);
 
 	modalFailureController.$inject = ['$scope', '$uibModalInstance', 'setupAPIService', 'failureSetupAPIService', 'selectedFailure', 'insertCallback', 'updateCallback', 'dialogFactory', 'operationDataFactory'];
 

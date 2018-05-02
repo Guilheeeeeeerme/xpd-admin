@@ -4,120 +4,126 @@
 	angular.module('xpd.dmeclog')
 		.controller('DMecLogController', DMecLogController);
 
-	DMecLogController.$inject = ['$scope', '$interval', 'readingSetupAPIService'];
+	DMecLogController.$inject = ['$scope', '$interval', '$q', 'readingSetupAPIService'];
 
-	function DMecLogController($scope, $interval, readingSetupAPIService) {
+	function DMecLogController($scope, $interval, $q, readingSetupAPIService) {
 
-		var vm = this;
-		var reloadTimeout = null;
+		var ONE_HOUR = 3600000;
+		var ONE_DAY = 24 * ONE_HOUR;
+		var updateLatency = 1000;
+		var getTickInterval;
 
-		var day = (1 * 24 * 3600000);
+		setTimeout(function () {
+			location.reload();
+		}, (ONE_HOUR / 2) );
 
-		vm.actionButtonSearchSince = actionButtonSearchSince;
+		$scope.zoomIsLocked = false;
+		$scope.actionButtonSubmitDmecRange = actionButtonSubmitDmecRange;
+		$scope.isZooming = isZooming;
+		
+		initializeComponent();
 
-		var yesterday = new Date().getTime() - (1 * day);
-		yesterday = new Date(yesterday);
-		yesterday.setMilliseconds(0);
-		yesterday.setSeconds(0);
-
-		$scope.dmecStartTime = $scope.dmecStartDate = yesterday;
-
-		searchSince(yesterday);
-
-		function actionButtonSearchSince() {
-
-			var from = $scope.dmecStartDate;
-
-			from.setHours($scope.dmecStartTime.getHours());
-			from.setMinutes($scope.dmecStartTime.getMinutes());
-			from.setSeconds($scope.dmecStartTime.getSeconds());
-			from.setMilliseconds($scope.dmecStartTime.getMilliseconds());
-
-			$scope.dmecStartTime = $scope.dmecStartDate = from;
-
-			searchSince(from);
-		}
-
-		function searchSince(startTime) {
-
-			if(reloadTimeout){
-				clearTimeout(reloadTimeout);
-			}
+		function initializeComponent() {
 			
-			reloadTimeout = setTimeout(function () {
-				location.reload();
-			}, day / 2);
+			var endAt = new Date().getTime();
+			var intervalToShow = 0;
+			var inputRangeForm = $scope.inputRangeForm = getInputRangeForm();
 
-			$scope.dmecEndTime = new Date(startTime.getTime() + day / 2);
+			if (inputRangeForm.realtime) {
+				intervalToShow = (+inputRangeForm.last * +inputRangeForm.toMilliseconds);
+				$scope.dmecTrackingStartAt = getAllReadingSince(new Date(endAt - intervalToShow));
+			} else {
+				$scope.dmecTrackingStartAt = getAllReadingSince(new Date(inputRangeForm.startTime));
+			}
 
-			readingSetupAPIService.getAllReadingSince(startTime.getTime(), readingsFromDatabase);
+			intervalToShow = endAt - new Date($scope.dmecTrackingStartAt).getTime();
+			$scope.dmecTrackingEndAt = new Date(endAt);
+			$scope.zoomEndAt = new Date(endAt);
+			$scope.zoomStartAt = new Date(endAt - (intervalToShow / 2));
+
+			if (angular.isDefined(getTickInterval)) {
+				$interval.cancel(getTickInterval);
+				getTickInterval = undefined;
+			}
+
+			getTickInterval = $interval(getTick, updateLatency);
+
 		}
 
-		function readingsFromDatabase(readings) {
-			$scope.readings = readings;
+		function isZooming(lockZoom){
+			$scope.zoomIsLocked = lockZoom;
 		}
-	}
 
-	function DMecLogControllerOld($scope, $interval, readingSetupAPIService, $modal) {
+		function moveZoomRealtime() {
+						
+			var now = new Date();
+			var zoom = new Date($scope.zoomEndAt).getTime() - new Date($scope.zoomStartAt).getTime();
 
-		var vm = this;
-		vm.openScaleModal = openScaleModal;
+			$scope.zoomStartAt = new Date(now.getTime() - zoom);
+			$scope.zoomEndAt = now;
+		}
 
-		$interval(getTick, 1000);
-
-		$scope.threshold = 3600000 * 0.5;
-
-		searchSince();
+		function actionButtonSubmitDmecRange() {			
+			localStorage.setItem('dmecInputRangeForm', JSON.stringify($scope.inputRangeForm));
+			location.reload();
+		}
 
 		function getTick() {
-			if ($scope.tracks) {
-				localStorage.dmecTracks = JSON.stringify($scope.tracks);
-			}
-			readingSetupAPIService.getTick(new Date().getTime(), setCurrentReading);
-		}
+			
+			if ($scope.inputRangeForm.realtime) {
 
-		function readingsFromDatabase(readings) {
+				var now = new Date().getTime();
+				$scope.dmecTrackingEndAt = now;
 
-			let newTracks = angular.copy(tracks);
-			let oldPoints = {};
-
-			newTracks = newTracks.map(preparePoints);
-
-			function preparePoints(track) {
-
-				oldPoints[track.param] = readings.map(convertToXY);
-
-				function convertToXY(point) {
-					return {
-						x: point.timestamp,
-						y: point[track.param] || null,
-						actual: point[track.param] || null
-					};
+				if($scope.inputRangeForm.keepZoomAtTheEnd){
+					
+					if(!$scope.zoomIsLocked){
+						moveZoomRealtime();
+					}
 				}
 
-				return track;
+				$scope.onReading = $q(function (resolve, reject) {
+					readingSetupAPIService.getTick((now - updateLatency), resolve, reject);
+				});
+
 			}
 
-			$scope.oldPoints = oldPoints;
-			$scope.tracks = newTracks;
 		}
 
-		function openScaleModal() {
-			$modal.open({
-				animation: false,
-				keyboard: false,
-				backdrop: 'static',
-				templateUrl: 'app/components/dmec-log/change-scale.template.html',
-				controller: 'ModalUpdateDmecTracks',
-				windowClass: 'change-scale-modal',
-				resolve: {
-					tracks: getTracks
-				}
+		function getAllReadingSince(startTime) {
+			
+			startTime = new Date(startTime);
+
+			$scope.onReadingSince = $q(function (resolve, reject) {
+				readingSetupAPIService.getAllReadingSince(startTime.getTime(), resolve, reject);
 			});
 
-			function getTracks() {
-				return $scope.tracks;
+			return startTime;
+		}
+
+		function getInputRangeForm() {
+			
+			var inputRangeForm;
+
+			try {
+				inputRangeForm = JSON.parse(localStorage.getItem('dmecInputRangeForm'));
+			} catch (e) {
+				inputRangeForm = null;
 			}
+
+			if (!inputRangeForm) {
+				inputRangeForm = {
+					realtime: true,
+					last: 30,
+					toMilliseconds: '60000',
+				};
+			}
+
+			if (inputRangeForm && inputRangeForm.startTime) {
+				inputRangeForm.startTime = new Date(inputRangeForm.startTime);
+			}
+
+			return inputRangeForm;
 		}
 
 	}

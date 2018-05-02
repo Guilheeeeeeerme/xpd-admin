@@ -1,142 +1,150 @@
-<style>
-	.overlay {
-		fill: none;
-		pointer-events: all;
-	}
-</style>
+<svg ng-if="$tracks" xmlns="http://www.w3.org/2000/svg" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"
+ xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:svg="http://www.w3.org/2000/svg" version='1.1' ng-attr-width='{{ svg.viewWidth }}'
+ ng-attr-height='{{ svg.viewHeight }}'>
 
-<div id="{{ chartId }}" class="container-fuild container-dmec">
-
-	<svg ng-if="$tracks" id="d3-svg" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-	 xmlns:svg="http://www.w3.org/2000/svg" xmlns="http://www.w3.org/2000/svg" version='1.1' ng-attr-width='{{ svg.viewWidth }}'
-	 ng-attr-height='{{ svg.viewHeight }}'>
-
-		 <g>
-			<rect ng-repeat="event in connectionEvents" 
-				ng-if="event.duration > 0" 
-				ng-attr-width="{{ timeScale(event.duration) - timeScale(0) }}" 
-				ng-attr-height="{{ svg.viewHeight }}" 
-				ng-attr-x="{{ timeScale(event.startTime) }}" 
-				fill="#0000ff" 
-				fill-opacity="0.25"
-				y="0"/>
-			<rect ng-repeat="event in tripEvents" 		
-				ng-if="event.duration > 0" 
-				ng-attr-width="{{ timeScale(event.duration) - timeScale(0) }}" 
-				ng-attr-height="{{ svg.viewHeight }}" 
-				ng-attr-x="{{ timeScale(event.startTime) }}" 
-				fill="#00ff00" 
-				fill-opacity="0.25"
-				y="0"/>
+	<rect class="dmec-bg" fill="#030303" fill-opacity="0.3" x="0" y="0" ng-attr-width='{{ svg.viewWidth }}' ng-attr-height='{{ svg.viewHeight }}'>
+	</rect>
+	
+	<!-- Events in background -->
+	<svg ng-attr-width='{{ svg.viewWidth }}' ng-attr-height='{{ svg.viewHeight }}' preserveAspectRatio="none" xpd-view-box="svg.viewBox">
+		<g class="events-bg" ng-if="horizontal">
+			<rect ng-repeat="event in connectionEvents" ng-if="event.duration > 0" class="events-bg-conn" ng-attr-width="{{ timeScale(event.duration) - timeScale(0) }}"
+			 ng-attr-height="{{ svg.viewHeight }}" ng-attr-x="{{ timeScale(event.startTime) }}" y="0" fill="#a0a0a0" fill-opacity="0.1"
+			/>
+			<rect ng-repeat="event in tripEvents" ng-if="event.duration > 0" class="events-bg-trip" ng-attr-width="{{ timeScale(event.duration) - timeScale(0) }}"
+			 ng-attr-height="{{ svg.viewHeight }}" ng-attr-x="{{ timeScale(event.startTime) }}" y="0" fill="#e1e1e1" fill-opacity="0.1"
+			/>
 		</g>
 
-		<g class="time-ticks" ng-if="!horizontal">
-			<g ng-repeat="tick in xTicks" ng-attr-transform="translate(0, {{ timeScale(tick) }} )">
-				<text x="2" y="-2">{{ tick | date: 'short' }}</text>
-				<line x1="0" y1="0" ng-attr-x2='{{ svg.viewWidth }}' y2="0" stroke="black" stroke-opacity="0.2" stroke-width="0.1em" />
+		<g class="events-bg" ng-if="!horizontal">
+			<rect ng-repeat="event in connectionEvents" ng-if="event.duration > 0" class="events-bg-conn" ng-attr-height="{{ timeScale(event.duration) - timeScale(0) }}"
+			 ng-attr-width="{{ svg.viewWidth }}" ng-attr-y="{{ timeScale(event.startTime) }}" x="0" fill="#a0a0a0" fill-opacity="0.1"
+			/>
+			<rect ng-repeat="event in tripEvents" ng-if="event.duration > 0" class="events-bg-trip" ng-attr-height="{{ timeScale(event.duration) - timeScale(0) }}"
+			 ng-attr-width="{{ svg.viewWidth }}" ng-attr-y="{{ timeScale(event.startTime) }}" x="0" fill="#e1e1e1" fill-opacity="0.1"
+			/>
+		</g>
+	</svg>
+
+	<svg ng-attr-width='{{ svg.viewWidth }}' ng-attr-height='{{ svg.viewHeight }}' preserveAspectRatio="none" xpd-view-box="svg.viewBox">
+		
+		<!-- x axis ticks -->
+		<g class="time-ticks">
+			<g 	ng-repeat="tick in xTicks" 
+				ng-attr-transform="translate( {{ horizontal? timeScale(tick): 0 }}, {{ horizontal? 0: timeScale(tick) }} )">
+				<text y="2" x="-2">{{ tick | date: 'short' }}</text>
+				<line 
+					x1="0" 
+					y1="0" 
+					ng-attr-x2='{{ horizontal? 0: svg.viewWidth }}' 
+					ng-attr-y2='{{ horizontal? svg.viewHeight: 0 }}' 
+					stroke="#e9e9e9"
+					stroke-opacity="0.2" 
+				 	stroke-width="1" />
 			</g>
 		</g>
 
-		<g class="time-ticks" ng-if="horizontal">
-			<g ng-repeat="tick in xTicks" ng-attr-transform="translate({{ timeScale(tick) }}, 0)">
-				<text x="2" ng-attr-y='{{ svg.viewHeight }}' fill="white">{{ tick | date: 'short' }}</text>
-				<line y1="0" x1="0" ng-attr-y2='{{ svg.viewHeight }}' x2="0" stroke="white" stroke-opacity="0.2" stroke-width="0.1em" />
-			</g>
-		</g>
-
-		<g class="range-ticks" ng-if="!horizontal">
+		<!-- y axis ticks -->
+		<g class="range-ticks">
 			<g ng-repeat="track in $tracks">
-				<line ng-repeat="tick in track.ticks" ng-attr-x1='{{ track.trackScale(tick) }}' ng-attr-x2='{{ track.trackScale(tick) }}'
-				 y1="0" ng-attr-y2='{{ svg.viewHeight }}' stroke="black" stroke-opacity="0.2" stroke-width="0.1em" />
-				<line ng-attr-x1='{{ track.labelStartAt }}' ng-attr-x2='{{ track.labelStartAt }}' y1="0" ng-attr-y2='{{ svg.viewHeight }}'
-				 stroke="black" stroke-opacity="0.5" stroke-width="0.2em" />
-			</g>
-		</g>
-
-		<g class="range-ticks" ng-if="horizontal">
-			<g ng-repeat="track in $tracks">
-				<line ng-repeat="tick in track.ticks" ng-attr-y1='{{ track.trackScale(tick) }}' ng-attr-y2='{{ track.trackScale(tick) }}'
-				 x1="0" ng-attr-x2='{{ svg.viewWidth }}' stroke="black" stroke-opacity="0.2" stroke-width="0.1em" />
-				<line ng-attr-y1='{{ track.labelStartAt }}' ng-attr-y2='{{ track.labelStartAt }}' x1="0" ng-attr-x2='{{ svg.viewWidth }}'
-				 stroke="white" stroke-opacity="0.5" stroke-width="0.2em" />
+				<line 
+					ng-repeat="tick in track.ticks" 
+					ng-attr-transform="translate( {{ horizontal? 0: track.trackScale(tick) }}, {{ horizontal? track.trackScale(tick): 0 }} )"
+					x1='0' 
+					y1='0'
+					ng-attr-x2='{{ horizontal? svg.viewWidth: 0  }}' 
+					ng-attr-y2='{{ horizontal? 0: svg.viewHeight }}' 
+					stroke="#e9e9e9" 
+					stroke-opacity="0.2" 
+					stroke-width="1" />
 			</g>
 		</g>
 
 		<g class="oldPoints">
-			<path id="{{track.param}}" ng-repeat="track in $tracks" fill="none" stroke="{{ track.color }}" stroke-width="0.2em" />
+			<path id="{{ track.param }}" ng-repeat="track in $tracks" fill="none" stroke="{{ track.color }}" stroke-width="2" />
 		</g>
 
 		<g class="newPoints">
-			<path id="{{track.param}}" ng-repeat="track in $tracks" fill="none" stroke="{{ track.color }}" stroke-width="0.2em" />
+			<path id="{{ track.param }}" ng-repeat="track in $tracks" fill="none" stroke="{{ track.color }}" stroke-width="2" />
 		</g>
-
-		<g class="crosshair" ng-if="!horizontal">
-			<line x1="0" ng-attr-x2="{{ svg.viewWidth }}" id="crosshair" stroke="black" stroke-opacity="0.5" stroke-width="0.1em" />
-		</g>
-
-		<g class="crosshair" ng-if="horizontal">
-			<line y1="0" ng-attr-y2="{{ svg.viewHeight }}" id="crosshair" stroke="white" stroke-opacity="0.5" stroke-width="0.1em" />
-		</g>
-
-		<g class="bubble-and-tooltip">
-			<g ng-repeat="track in $tracks" ng-if="$tracks && track.labelPosition != null">
-				<g id="bubble-{{track.id}}" style="display: none;">
-					<circle r="5" fill="none" stroke-width="2" ng-attr-stroke="{{ track.color }}"></circle>
-					<text id="text-{{track.id}}" x="0" y="0" text-anchor="end" alignment-baseline="hanging" stroke-width="1" ng-attr-fill="{{ track.color }}"
-					 ng-attr-stroke="{{ track.color }}"></text>
-				</g>
-			</g>
-		</g>
-
-		<g class="legend" ng-if="!horizontal">
-
-			<g class="label" ng-if="$tracks && track.labelPosition != null" ng-repeat="track in $tracks">
-
-				<text stroke-width="1" ng-attr-fill="{{ track.color }}" ng-attr-stroke="{{ track.color }}" ng-attr-x="{{ track.labelStartAt + ( (track.labelEndAt - track.labelStartAt) * 0.1 )  }}"
-				 ng-attr-y="{{ track.labelPosition * 25 }}" alignment-baseline="hanging" text-anchor="start">
-					{{ track.min }}
-				</text>
-
-				<text stroke-width="1" ng-attr-fill="{{ track.color }}" ng-attr-stroke="{{ track.color }}" ng-attr-x="{{ track.labelStartAt + ( (track.labelEndAt - track.labelStartAt) * 0.5 ) }}"
-				 ng-attr-y="{{ track.labelPosition * 25 }}" alignment-baseline="hanging" text-anchor="middle">
-					{{ track.label }} ( {{ track.unitMeasure }} )
-				</text>
-
-				<text stroke-width="1" ng-attr-fill="{{ track.color }}" ng-attr-stroke="{{ track.color }}" ng-attr-x="{{ track.labelStartAt + ( (track.labelEndAt - track.labelStartAt) * 0.9 ) }}"
-				 ng-attr-y="{{ track.labelPosition * 25 }}" alignment-baseline="hanging" text-anchor="end">
-					{{ track.max }}
-				</text>
-
-			</g>
-
-		</g>
-
-		<g class="legend" ng-if="horizontal">
-
-			<g class="label" ng-if="$tracks && track.labelPosition != null" ng-repeat="track in $tracks">
-
-				<text stroke-width="1" font-size="1.6em" ng-attr-fill="{{ track.color }}" stroke="black" ng-attr-y="{{ track.labelStartAt + ( (track.labelEndAt - track.labelStartAt) * 0.1 )  }}"
-				 ng-attr-x="{{ track.labelPosition * 50 }}" alignment-baseline="middle" text-anchor="start">
-					{{ track.min }}
-				</text>
-
-				<text stroke-width="1" font-size="1.6em" ng-attr-fill="{{ track.color }}" stroke="black" ng-attr-y="{{ track.labelStartAt + ( ( track.labelEndAt - track.labelStartAt ) * ( (track.labelPosition+1) / 3 ) ) }}"
-				 x="0" alignment-baseline="middle" text-anchor="start">
-					{{ track.label }} ( {{ track.unitMeasure }} )
-				</text>
-
-				<text stroke-width="1" font-size="1.6em" ng-attr-fill="{{ track.color }}" stroke="black" ng-attr-y="{{ track.labelStartAt + ( (track.labelEndAt - track.labelStartAt) * 0.9 ) }}"
-				 ng-attr-x="{{ track.labelPosition * 50 }}" alignment-baseline="middle" text-anchor="start">
-					{{ track.max }}
-				</text>
-
-			</g>
-
-		</g>
-
-		<rect ng-dblclick="openScaleModal()" class="overlay" ng-if="listenToMouseMove != null" ng-init="listenToMouseMove(horizontal)" ng-attr-width='{{ svg.viewWidth }}'
-		 ng-attr-height='{{ svg.viewHeight }}'></rect>
-
 	</svg>
 
-</div>
+	<!-- Following the mouse -->
+	<g class="crosshair" ng-if="!horizontal">
+		<line x1="0" ng-attr-x2="{{ svg.viewWidth }}" id="crosshair" stroke="black" stroke-opacity="0.5" stroke-width="0.1em" />
+	</g>
+
+	<g class="crosshair" ng-if="horizontal">
+		<line y1="0" ng-attr-y2="{{ svg.viewHeight }}" id="crosshair" stroke="white" stroke-opacity="0.5" stroke-width="0.1em" />
+	</g>
+
+	<g class="bubble-and-tooltip">
+		<g 	ng-repeat="track in $tracks" 
+			ng-if="$tracks && track.labelPosition != null">
+			<g id="bubble-{{track.id}}" style="display: none;">
+				<circle r="5" fill="none" stroke-width="2" ng-attr-stroke="{{ track.color }}"></circle>
+				<text id="text-{{track.id}}" x="0" y="0" text-anchor="end" alignment-baseline="hanging" stroke-width="1" ng-attr-fill="{{ track.color }}"
+				 ng-attr-stroke="{{ track.color }}"></text>
+			</g>
+		</g>
+	</g>
+
+	<g class="legend" ng-if="!horizontal">
+
+		<g class="label" ng-if="$tracks && track.labelPosition != null" ng-repeat="track in $tracks">
+
+			<text stroke-width="1" ng-attr-fill="{{ track.color }}" ng-attr-stroke="{{ track.color }}" ng-attr-x="{{ track.labelStartAt + ( (track.labelEndAt - track.labelStartAt) * 0.1 )  }}"
+			 ng-attr-y="{{ track.labelPosition * 25 }}" alignment-baseline="hanging" text-anchor="start">
+				{{ track.min }}
+			</text>
+
+			<text stroke-width="1" ng-attr-fill="{{ track.color }}" ng-attr-stroke="{{ track.color }}" ng-attr-x="{{ track.labelStartAt + ( (track.labelEndAt - track.labelStartAt) * 0.5 ) }}"
+			 ng-attr-y="{{ track.labelPosition * 25 }}" alignment-baseline="hanging" text-anchor="middle">
+				{{ track.label }} ( {{ track.unitMeasure }} )
+			</text>
+
+			<text stroke-width="1" ng-attr-fill="{{ track.color }}" ng-attr-stroke="{{ track.color }}" ng-attr-x="{{ track.labelStartAt + ( (track.labelEndAt - track.labelStartAt) * 0.9 ) }}"
+			 ng-attr-y="{{ track.labelPosition * 25 }}" alignment-baseline="hanging" text-anchor="end">
+				{{ track.max }}
+			</text>
+
+		</g>
+
+	</g>
+
+	<g class="legend" ng-if="horizontal">
+
+		<g class="label" ng-if="$tracks && track.labelPosition != null" ng-repeat="track in $tracks">
+
+			<text stroke-width="0.5" font-size="1.6em" ng-attr-fill="{{ track.color }}" stroke="black" ng-attr-y="{{ track.labelStartAt + ( (track.labelEndAt - track.labelStartAt) * 0.1 )  }}"
+			 ng-attr-x="{{ (track.labelPosition * 50) }}" alignment-baseline="middle" text-anchor="start">
+				{{ track.min }}
+			</text>
+
+			<text stroke-width="0.5" font-size="1.6em" ng-attr-fill="{{ track.color }}" stroke="black" ng-attr-y="{{ track.labelStartAt + ( ( track.labelEndAt - track.labelStartAt ) * ( (track.labelPosition+1) / 3 ) ) }}"
+			 x="0" alignment-baseline="middle" text-anchor="start">
+				{{ track.label }} ( {{ track.unitMeasure }} )
+			</text>
+
+			<text stroke-width="0.5" font-size="1.6em" ng-attr-fill="{{ track.color }}" stroke="black" ng-attr-y="{{ track.labelStartAt + ( (track.labelEndAt - track.labelStartAt) * 0.9 ) }}"
+			 ng-attr-x="{{ (track.labelPosition * 50) }}" alignment-baseline="middle" text-anchor="start">
+				{{ track.max }}
+			</text>
+
+		</g>
+
+	</g>
+
+	<rect 
+		ng-if="listenToMouseMove != null" 
+		style="fill: none; pointer-events: all;" 
+		class="overlay" 
+		ng-dblclick="openScaleModal()"
+		ng-init="listenToMouseMove()" 
+		x="0" 
+		y="0"
+		ng-attr-width='{{ svg.viewWidth }}' 
+		ng-attr-height='{{ svg.viewHeight }}'>
+	</rect>
+
+</svg>

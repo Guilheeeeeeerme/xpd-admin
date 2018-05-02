@@ -5,13 +5,14 @@
 
 	module.directive('timeZoomTool', timeZoomTool);
 
-	timeZoomTool.$inject = ['d3Service'];
+	timeZoomTool.$inject = ['$timeout', 'd3Service'];
 
-	function timeZoomTool(d3Service) {
+	function timeZoomTool($timeout, d3Service) {
 		return {
 			restrict: 'E',
 			templateUrl: '../xpd-resources/ng/xpd.visualization/time-zoom-tool.template.html',
 			scope: {
+				isZoomingCallback: '=',
 				bitDepthList: '=',
 				startAt: '=',
 				endAt: '=',
@@ -84,6 +85,12 @@
 
 				function mouseDown() {
 
+					try {
+						scope.isZoomingCallback(true);
+					} catch(e){
+						// faça nada
+					}
+
 					clickedPosition = d3.mouse(this)[0];
 					selectedElement = d3.select(this);
 					selectedElementId = d3.select(this).attr('id');
@@ -139,6 +146,14 @@
 				}
 
 				function mouseUp() {
+
+					try {
+						$timeout(function(){
+							scope.isZoomingCallback(false);
+						}, 1000);
+					} catch(e){
+						// faça nada
+					}
 
 					var startt = d3.transform(getStartZoomElement().attr('transform')),
 						startx = scope.timeScale.invert(startt.translate[0]);

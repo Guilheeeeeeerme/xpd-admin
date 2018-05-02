@@ -6,6 +6,24 @@
 
 			<uib-accordion-heading>
 				Filter
+
+				<span class="well well-sm">
+					<strong>
+						Full range
+					</strong>
+					{{ dmecTrackingStartAt | date:'MM/dd/yyyy HH:mm' }} - {{ ( (dmecTrackingStartAt | date:'MM/dd/yyyy') != (dmecTrackingEndAt
+					| date:'MM/dd/yyyy') )? ( dmecTrackingEndAt | date:'MM/dd/yyyy HH:mm' ) : (dmecTrackingEndAt | date:'HH:mm') }}
+				</span>
+
+
+				<span class="well well-sm">
+					<strong>
+						Zooming at
+					</strong>
+					{{ zoomStartAt | date:'MM/dd/yyyy HH:mm' }} - {{ ( (zoomStartAt | date:'MM/dd/yyyy') != (zoomEndAt | date:'MM/dd/yyyy') )?
+					( zoomEndAt | date:'MM/dd/yyyy HH:mm' ) : (zoomEndAt | date:'HH:mm:ss') }}
+				</span>
+
 				<i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': status.isCustomHeaderOpen, 'glyphicon-chevron-right': !status.isCustomHeaderOpen}"></i>
 			</uib-accordion-heading>
 
@@ -21,9 +39,8 @@
 
 					<div class="form-group">
 						<label for="startTime">From:</label>
-						<input ng-model="inputRangeForm.startTime" type="datetime-local" class="form-control"
-						 required min="{{ operationData.operationContext.currentOperation.startDate | date:'yyyy-MM-ddTHH:mm' }}" name="startTime"
-						 id="startTime">
+						<input ng-model="inputRangeForm.startTime" type="datetime-local" class="form-control" required min="{{ operationData.operationContext.currentOperation.startDate | date:'yyyy-MM-ddTHH:mm' }}"
+						 name="startTime" id="startTime">
 					</div>
 
 
@@ -33,6 +50,12 @@
 				</div>
 
 				<div ng-if="inputRangeForm.realtime">
+
+					<div class="checkbox">
+						<label>
+							<input name="realtime" ng-model="inputRangeForm.keepZoomAtTheEnd" type="checkbox"> Zoom at the end
+						</label>
+					</div>
 
 					<div class="form-group">
 						<label for="last">Last:</label>
@@ -64,7 +87,7 @@
 		</div>
 
 		<d3-dmec-chart threads="{{ 4 }}" horizontal="true" start-at="dmecTrackingStartAt" end-at="dmecTrackingEndAt" on-reading="onReading"
-		 zoom-start-at="zoomStartAt" zoom-end-at="zoomEndAt" readings="readings" connection-events="connectionEvents" trip-events="tripEvents"
+		 zoom-start-at="zoomStartAt" zoom-end-at="zoomEndAt" on-reading-since="onReadingSince" connection-events="connectionEvents" trip-events="tripEvents"
 		 time-events="timeEvents" auto-scroll="chartAutoScroll">
 		</d3-dmec-chart>
 
@@ -76,7 +99,7 @@
 			Zoom
 		</div>
 
-		<time-zoom-tool bit-depth-list="bitDepthByEvents" horizontal="true" start-at="dmecTrackingStartAt" end-at="dmecTrackingEndAt"
+		<time-zoom-tool is-zooming-callback="isZooming" bit-depth-list="bitDepthByEvents" horizontal="true" start-at="dmecTrackingStartAt" end-at="dmecTrackingEndAt"
 		 zoom-start-at="zoomStartAt" zoom-end-at="zoomEndAt">
 		</time-zoom-tool>
 	</div>
@@ -91,6 +114,7 @@
 		 events='connectionEvents' event-type="'CONN'" current-event="operationData.eventContext.currentEvent" current-block-position="operationData.readingContext.currentReading.blockPosition"
 		 zoom-start-at="zoomStartAt" zoom-end-at="zoomEndAt">
 		</dmec-tracking-events>
+
 	</div>
 
 	<div class="dmec-tracking-row dmec-tracking-row-h-15 chart-content">
@@ -103,6 +127,7 @@
 		 events='tripEvents' event-type="'TRIP'" current-event="operationData.eventContext.currentEvent" current-block-position="operationData.readingContext.currentReading.blockPosition"
 		 zoom-start-at="zoomStartAt" zoom-end-at="zoomEndAt">
 		</dmec-tracking-events>
+
 	</div>
 
 	<div class="dmec-tracking-row dmec-tracking-row-h-15 chart-content">
