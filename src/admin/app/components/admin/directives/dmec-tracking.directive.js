@@ -109,16 +109,16 @@
 						readingSetupAPIService.getTick((now - updateLatency), resolve, reject);
 					});
 
-					// scope.onReading.then(function (data) {						
-					// 	if(scope.bitDepthByEvents != null && scope.maxDepth != null) {
-					// 		scope.maxDepth = Math.max(scope.maxDepth, data.bitDepth);
-
-					// 		scope.bitDepthByEvents.push({
-					// 			x: data.timestamp,
-					// 			y: data.bitDepth
-					// 		});
-					// 	}						
-					// });
+					scope.onReading.then(function (data) {						
+						scope.maxDepth = Math.max(scope.maxDepth, data.bitDepth);
+						
+						if (scope.bitDepthPoints) {
+							scope.bitDepthPoints.push({
+								x: data.timestamp,
+								y: data.bitDepth
+							});
+						}
+					});
 
 				}
 
@@ -133,7 +133,7 @@
 					startTime = operationStartDate;
 				}
 
-				scope.bitDepthByEvents = null;
+				scope.bitDepthPoints = null;
 				scope.maxDepth = null;				
 
 				scope.onReadingSince = $q(function (resolve, reject) {
@@ -141,18 +141,7 @@
 				});
 
 				scope.onReadingSince.then(function (data) {
-					
-					scope.bitDepthByEvents = data.map(function (event) {
-						if (!scope.maxDepth)
-							scope.maxDepth = data[0].bitDepth;
-						else
-							scope.maxDepth = Math.max(scope.maxDepth, event.bitDepth);
-
-						return {
-							x: event.timestamp,
-							y: event.bitDepth
-						};							
-					});					
+					scope.bitDepthPoints = generateBitDepthPoints(data);
 				});
 
 				return startTime;
@@ -184,6 +173,30 @@
 			}
 
 
+			function generateBitDepthPoints(data) {
+				var points = [];
+
+				if (!scope.maxDepth)
+					scope.maxDepth = data[0].bitDepth;
+
+				points.push({
+					x: data[0].timestamp,
+					y: null
+				});
+
+				data.map(function (event) {
+					if (event.bitDepth)
+						scope.maxDepth = Math.max(scope.maxDepth, event.bitDepth);
+
+					points.push({
+						x: event.timestamp,
+						y: event.bitDepth
+					});
+
+				});
+
+				return points;
+			}
 		}
 	}
 })();

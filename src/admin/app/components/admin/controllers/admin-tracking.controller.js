@@ -126,28 +126,6 @@
 					$scope.dados.tripTimes = [];
 
 					trackingEvents.map(function (event) {
-						event.startTime = new Date(event.startTime).getTime();
-						event.endTime = new Date(event.endTime).getTime();
-
-						// if (event.eventType != 'TIME' && event.duration) {
-						// 	$scope.dados.bitDepthByEvents.push({
-						// 		x: event.startTime,
-						// 		y: null
-						// 	});
-						// 	$scope.dados.bitDepthByEvents.push({
-						// 		x: event.startTime,
-						// 		y: event.startBitDepth,
-						// 	});
-						// 	$scope.dados.bitDepthByEvents.push({
-						// 		x: event.endTime,
-						// 		y: event.endBitDepth
-						// 	});
-						// 	$scope.dados.bitDepthByEvents.push({
-						// 		x: event.endTime,
-						// 		y: null
-						// 	});
-
-						// }
 
 						if (event.eventType == 'CONN')
 							$scope.dados.connectionEvents.push(event);
