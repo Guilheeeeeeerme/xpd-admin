@@ -58,6 +58,7 @@
 				startPointAt = mergedData.startChartAt;
 
 				$scope.results.map(function (chartData) {
+					
 					chartData.bitDepthPlannedPoints.data = chartData.bitDepthPlannedPoints.events.map(function(event){
 						var point = [
 							startPointAt,
@@ -73,7 +74,7 @@
 				var holeDepth = null;
 
 				$scope.results.map(function (chartData) {
-
+					
 					// if (!mergedData.startChartAt) {
 					// 	mergedData.startChartAt = result.startChartAt;
 					// } else {
@@ -91,14 +92,13 @@
 					if (!mergedData.holeDepthPoints) {
 						mergedData.holeDepthPoints = chartData.holeDepthPoints;
 					} else if (chartData.holeDepthPoints.data.length) {
+						
+						if(!holeDepth)
+							holeDepth = mergedData.holeDepthPoints.data[mergedData.holeDepthPoints.data.length-1][1];
 
 						chartData.holeDepthPoints.data = chartData.holeDepthPoints.data.map(function (data) {
-							if (!holeDepth) {
-								holeDepth = data[1];
-							} else {
-								holeDepth = Math.max(holeDepth, data[1]);
-								data[1] = holeDepth;
-							}
+							holeDepth = Math.max(holeDepth, data[1]);
+							data[1] = holeDepth;							
 
 							return data;
 						});
