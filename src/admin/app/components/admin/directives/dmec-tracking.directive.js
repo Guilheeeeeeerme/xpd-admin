@@ -8,7 +8,7 @@
 	function dmecTrackingDirective(readingSetupAPIService, $timeout, $interval, $q) {
 		return {
 			scope: {
-				bitDepthByEvents: '=',
+				// bitDepthByEvents: '=',
 				connectionEvents: '=',
 				tripEvents: '=',
 				timeEvents: '='
@@ -109,6 +109,17 @@
 						readingSetupAPIService.getTick((now - updateLatency), resolve, reject);
 					});
 
+					// scope.onReading.then(function (data) {						
+					// 	if(scope.bitDepthByEvents != null && scope.maxDepth != null) {
+					// 		scope.maxDepth = Math.max(scope.maxDepth, data.bitDepth);
+
+					// 		scope.bitDepthByEvents.push({
+					// 			x: data.timestamp,
+					// 			y: data.bitDepth
+					// 		});
+					// 	}						
+					// });
+
 				}
 
 			}
@@ -122,8 +133,26 @@
 					startTime = operationStartDate;
 				}
 
+				scope.bitDepthByEvents = null;
+				scope.maxDepth = null;				
+
 				scope.onReadingSince = $q(function (resolve, reject) {
 					readingSetupAPIService.getAllReadingSince(startTime.getTime(), resolve, reject);
+				});
+
+				scope.onReadingSince.then(function (data) {
+					
+					scope.bitDepthByEvents = data.map(function (event) {
+						if (!scope.maxDepth)
+							scope.maxDepth = data[0].bitDepth;
+						else
+							scope.maxDepth = Math.max(scope.maxDepth, event.bitDepth);
+
+						return {
+							x: event.timestamp,
+							y: event.bitDepth
+						};							
+					});					
 				});
 
 				return startTime;

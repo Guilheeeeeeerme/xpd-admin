@@ -16,9 +16,9 @@
     
     <old-tracking ng-if="flags.showDMEC == false"></old-tracking>
     
+    <!-- bit-depth-by-events="dados.bitDepthByEvents" -->
     <dmec-tracking 
         ng-if="flags.showDMEC == true" 
-        bit-depth-by-events="dados.bitDepthByEvents"
         connection-events="dados.connectionEvents" 
         trip-events="dados.tripEvents" 
         time-events="dados.timeEvents">

@@ -18,6 +18,8 @@
 				endAt: '=',
 				zoomStartAt: '=',
 				zoomEndAt: '=',
+				minDepth: '=',
+				maxDepth: '=',
 			},
 			link: link
 		};
@@ -235,24 +237,29 @@
 
 						scope.xTicks = scope.timeScale.ticks(6);
 
-						var minDepth = 0;
-						var maxDepth = 0;
+						// var minDepth = 0;
+						// var maxDepth = 0;
 
 						var bitDepthList = scope.bitDepthList || [];
 
-						for (var i in bitDepthList) {
-							if (bitDepthList[i].y != null) {
-								if (bitDepthList[i].y > maxDepth) {
-									maxDepth = bitDepthList[i].y;
-								}
-								if (bitDepthList[i].y < minDepth) {
-									minDepth = bitDepthList[i].y;
-								}
-							}
-						}
+						// x: time
+						// y: bitDepth
+						// for (var i in bitDepthList) {
+
+						// 	if (bitDepthList[i].bitDepth != null) {
+
+						// 		if (bitDepthList[i].y > maxDepth) {
+						// 			maxDepth = bitDepthList[i].y;
+						// 		}
+						// 		if (bitDepthList[i].y < minDepth) {
+						// 			minDepth = bitDepthList[i].y;
+						// 		}
+						// 	}
+						// }
+						console.log(scope.maxDepth);
 
 						var depthScale = d3.scale.linear()
-							.domain([minDepth, maxDepth])
+							.domain([scope.minDepth, scope.maxDepth])
 							.range([
 								0,
 								viewHeight
@@ -267,7 +274,7 @@
 							})
 							.y(function (d) {
 								if (d.y == null)
-									return depthScale(maxDepth);
+									return depthScale(scope.maxDepth);
 								return depthScale(d.y);
 							})
 							.interpolate('linear');
