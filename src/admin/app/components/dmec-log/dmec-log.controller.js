@@ -94,9 +94,34 @@
 			
 			startTime = new Date(startTime);
 
+			/**
+			 * TODO: fazer quantas requisições de 12 em 12 horas forem necessárias de agora até AGORA
+			 */
+			/**
+			 * Reading since vai virar um Promise.all (VER COMO É ISSO COM O $q)
+			 */
 			$scope.onReadingSince = $q(function (resolve, reject) {
+
+				/**
+				 * TODO: adicionar o parametro TO
+				 */
 				readingSetupAPIService.getAllReadingSince(startTime.getTime(), resolve, reject);
 			});
+
+			/**
+			 * Exemplo
+			 * 
+			 * var promiseList = [];
+			 * 
+			 * while(startTime < endTime){
+			 * 		promiseList.push( $q(funciton (){ ....... from, to, .....) )
+			 *      startTime += 12 horas
+			 * }
+			 * 
+			 * Promise.all(promiseList).then(function(results){
+			 * 	$scope.onReadingSince = mergeResults(results)
+			 * });
+			 */
 
 			return startTime;
 		}
