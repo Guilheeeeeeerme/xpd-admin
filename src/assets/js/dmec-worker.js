@@ -127,7 +127,7 @@
 				// faça nada
 			}
 
-			while (points && points.length > 2) {
+			while (points && points.length > 1) {
 
 				var half = Math.ceil(points.length / 2);
 
@@ -137,25 +137,19 @@
 				if (lastHalf &&
 					lastHalf.length &&
 					timestamp >= lastHalf[0].x) {
-
+					
 					points = lastHalf;
-				} else if (firstHalf &&
-					firstHalf.length &&
-					timestamp >= firstHalf[0].x) {
 
+				} else {
 					points = firstHalf;
 				}
 
 			}
 
-			point = points[0];
-
-			// for (var i in points) {
-			// 	if ((points[i].x / 1000) >= (timestamp / 1000)) {
-			// 		point = points[i];
-			// 		break;
-			// 	}
-			// }
+			for (var i in points) {
+				point = points[i];
+				break;
+			}
 
 			reading[track.param] = point;
 

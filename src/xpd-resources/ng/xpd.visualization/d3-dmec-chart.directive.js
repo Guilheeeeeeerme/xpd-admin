@@ -173,16 +173,19 @@
 						handleZoom();
 					}
 				}
+
 				function onZoomEndAtChange(newDate, oldDate) {
 					if (newDate && new Date(newDate).getTime() !== new Date(oldDate).getTime()) {
 						handleZoom();
 					}
 				}
+
 				function onStartAtChange(newDate, oldDate) {
 					if (newDate && new Date(newDate).getTime() !== new Date(oldDate).getTime()) {
 						handleZoom();
 					}
 				}
+
 				function onEndAtChange(newDate, oldDate) {
 					if (newDate && new Date(newDate).getTime() !== new Date(oldDate).getTime()) {
 						handleZoom();
@@ -211,7 +214,7 @@
 						])
 						.range([
 							0,
-							isHorizontal ? (viewWidth * 0.95) : (viewHeight * 0.95)
+							isHorizontal ? (viewWidth) : (viewHeight)
 						]);
 
 					if (!scope.svg) {
@@ -267,8 +270,8 @@
 							new Date(zoomEndAt),
 						])
 						.range([
-							scope.timeScale(zoomStartAt),
-							scope.timeScale(zoomEndAt)
+							0,
+							isHorizontal ? (scope.svg.viewWidth) : (scope.svg.viewHeight)
 						]);
 
 					scope.xTicks = zoomScale.ticks(6);
@@ -282,8 +285,12 @@
 						return configTrackProperties(track, index, isHorizontal);
 					});
 
-					try { draw('newPoints'); } catch (e) { }
-					try { draw('oldPoints'); } catch (e) { }
+					try { draw('newPoints'); } catch (e) {
+						// faça nada
+					}
+					try { draw('oldPoints'); } catch (e) {
+						// faça nada
+					}
 
 					function configTrackProperties(track, index, isHorizontal) {
 
@@ -312,7 +319,7 @@
 							.defined(isNumber)
 							.x(scaleValue)
 							.y(scaleTime)
-							.interpolate('linear');
+							.interpolate('step');
 
 						track.id = index;
 						track.lineFunction = lineFunction;
@@ -352,6 +359,7 @@
 							var tracksPerThread = Math.ceil(numberOfTracks / threads);
 							var relative = Math.floor(trackIndex / tracksPerThread) / threads;
 							var result = (relative * ((isHorizontal) ? viewHeight : viewWidth));
+
 							return result;
 						}
 
@@ -473,11 +481,15 @@
 						});
 
 						promise.then(function (reading) {
+							
+							// console.log('------------------------------------');
+							// console.log('------------------------------------');
+							// console.log('------------------------------------');
 
-							scope.tracks.map(function (track, trackIndex) {
+							scope.tracks.map(function (track) {
 
-								var bubble = d3.select(scope.element).selectAll('#bubble-' + trackIndex);
-								var tooltip = d3.select(scope.element).selectAll('#text-' + trackIndex);
+								var bubble = d3.select(scope.element).selectAll('#bubble-' + track.param);
+								var tooltip = d3.select(scope.element).selectAll('#text-' + track.param);
 
 								bubble.attr('style', 'display: none');
 								tooltip.attr('style', 'display: none');
@@ -486,13 +498,15 @@
 
 								if (point && point.y != null) {
 
+									// console.log(track.param, new Date(timestamp), point);
+
 									bubble.attr('style', null);
 									tooltip.attr('style', null);
 
 									if (!isHorizontal)
-										bubble.attr('transform', 'translate(' + track.trackScale(point.y) + ', ' + scope.timeScale(timestamp) + ')');
+										bubble.attr('transform', 'translate(' + track.trackScale(point.y) + ', ' + /*scope.timeScale(timestamp)*/ position + ')');
 									else
-										bubble.attr('transform', 'translate(' + scope.timeScale(timestamp) + ', ' + track.trackScale(point.y) + ')');
+										bubble.attr('transform', 'translate(' + /*scope.timeScale(timestamp)*/ position + ', ' + track.trackScale(point.y) + ')');
 
 									tooltip
 										.attr((!isHorizontal) ? 'x' : 'y', track.trackScale(track.max) - track.trackScale(point.y))
