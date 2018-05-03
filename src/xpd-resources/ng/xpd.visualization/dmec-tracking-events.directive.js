@@ -22,6 +22,8 @@
 			},
 			link: function (scope, element, attrs) {
 
+				var lastBarColor;
+				var lastElement;
 				scope.element = element[0];
 				scope.mindate = null;
 				scope.maxdate = null;
@@ -64,6 +66,8 @@
 
 					getEventZoomElement().on('dblclick', dblclick);
 					getEventZoomElement().on('mousedown', rightClick);
+					getEventZoomElement().on('mouseover', mouseOver);
+					getEventZoomElement().on('mouseout', mouseOut);
 					
 
 					function setViewMode() {
@@ -200,6 +204,22 @@
 							}
 						}
 
+					}
+
+					function mouseOver(d, i) {
+						
+						if(i != 0) { // permite que apenas as barras sofrem alterações
+							var elem = d3.event.toElement;
+							lastElement = elem;
+							lastBarColor = d3.select(elem).attr('fill');
+
+							d3.select(elem).style('fill', 'white');
+							d3.select(elem).style('fill-opacity', '0.8');
+						}
+					}
+
+					function mouseOut() {
+						d3.select(lastElement).style('fill', lastBarColor);
 					}
 
 					function openDetailsMenu() {

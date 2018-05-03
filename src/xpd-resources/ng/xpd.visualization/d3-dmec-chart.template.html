@@ -26,13 +26,32 @@
 		</g>
 	</svg>
 
+	<!-- y axis ticks -->
+	<g class="range-ticks">
+		<g ng-repeat="track in $tracks">
+			<line 
+				ng-repeat="tick in track.ticks" 
+				ng-attr-transform="translate( {{ horizontal? 0: track.trackScale(tick) }}, {{ horizontal? track.trackScale(tick): 0 }} )"
+				x1='0' 
+				y1='0' 
+				ng-attr-x2='{{ horizontal? svg.viewWidth: 0  }}' 
+				ng-attr-y2='{{ horizontal? 0: svg.viewHeight }}' 
+				stroke="#e9e9e9" 
+				stroke-opacity="0.2" 
+				stroke-width="1" />
+		</g>
+	</g>
+
 	<svg ng-attr-width='{{ svg.viewWidth }}' ng-attr-height='{{ svg.viewHeight }}' preserveAspectRatio="none" xpd-view-box="svg.viewBox">
 		
 		<!-- x axis ticks -->
 		<g class="time-ticks">
 			<g 	ng-repeat="tick in xTicks" 
 				ng-attr-transform="translate( {{ horizontal? timeScale(tick): 0 }}, {{ horizontal? 0: timeScale(tick) }} )">
-				<text y="2" x="-2">{{ tick | date: 'short' }}</text>
+				<text 
+					ng-attr-x='{{ horizontal? 0: svg.viewWidth }}' 
+					ng-attr-y='{{ horizontal? svg.viewHeight: 0 }}' >
+					{{ tick | date: 'short' }}</text>
 				<line 
 					x1="0" 
 					y1="0" 
@@ -44,28 +63,14 @@
 			</g>
 		</g>
 
-		<!-- y axis ticks -->
-		<g class="range-ticks">
-			<g ng-repeat="track in $tracks">
-				<line 
-					ng-repeat="tick in track.ticks" 
-					ng-attr-transform="translate( {{ horizontal? 0: track.trackScale(tick) }}, {{ horizontal? track.trackScale(tick): 0 }} )"
-					x1='0' 
-					y1='0'
-					ng-attr-x2='{{ horizontal? svg.viewWidth: 0  }}' 
-					ng-attr-y2='{{ horizontal? 0: svg.viewHeight }}' 
-					stroke="#e9e9e9" 
-					stroke-opacity="0.2" 
-					stroke-width="1" />
-			</g>
-		</g>
-
 		<g class="oldPoints">
-			<path id="{{ track.param }}" ng-repeat="track in $tracks" fill="none" stroke="{{ track.color }}" stroke-width="2" />
+			<path id="{{ track.param }}" ng-repeat="track in $tracks" fill="none" stroke="{{ track.color }}" 
+			ng-attr-stroke-width="{{ 2 * ( horizontal? ( svg.zoomArea/ svg.viewWidth ) : ( svg.zoomArea / svg.viewHeight ) ) }}" />
 		</g>
 
 		<g class="newPoints">
-			<path id="{{ track.param }}" ng-repeat="track in $tracks" fill="none" stroke="{{ track.color }}" stroke-width="2" />
+			<path id="{{ track.param }}" ng-repeat="track in $tracks" fill="none" stroke="{{ track.color }}" 
+			ng-attr-stroke-width="{{ 2 * ( horizontal? ( svg.zoomArea/ svg.viewWidth ) : ( svg.zoomArea / svg.viewHeight ) ) }}" />
 		</g>
 	</svg>
 
@@ -81,9 +86,9 @@
 	<g class="bubble-and-tooltip">
 		<g 	ng-repeat="track in $tracks" 
 			ng-if="$tracks && track.labelPosition != null">
-			<g id="bubble-{{track.id}}" style="display: none;">
+			<g id="bubble-{{track.param}}" style="display: none;">
 				<circle r="5" fill="none" stroke-width="2" ng-attr-stroke="{{ track.color }}"></circle>
-				<text id="text-{{track.id}}" x="0" y="0" text-anchor="end" alignment-baseline="hanging" stroke-width="1" ng-attr-fill="{{ track.color }}"
+				<text id="text-{{track.param}}" x="0" y="0" text-anchor="end" alignment-baseline="hanging" stroke-width="1" ng-attr-fill="{{ track.color }}"
 				 ng-attr-stroke="{{ track.color }}"></text>
 			</g>
 		</g>
