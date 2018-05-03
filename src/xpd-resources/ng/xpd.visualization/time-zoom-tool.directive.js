@@ -13,11 +13,13 @@
 			templateUrl: '../xpd-resources/ng/xpd.visualization/time-zoom-tool.template.html',
 			scope: {
 				isZoomingCallback: '=',
-				bitDepthList: '=',
+				bitDepthPoints: '=',
 				startAt: '=',
 				endAt: '=',
 				zoomStartAt: '=',
 				zoomEndAt: '=',
+				minDepth: '=',
+				maxDepth: '=',
 			},
 			link: link
 		};
@@ -256,24 +258,10 @@
 
 						scope.xTicks = scope.timeScale.ticks(6);
 
-						var minDepth = 0;
-						var maxDepth = 0;
-
-						var bitDepthList = scope.bitDepthList || [];
-
-						for (var i in bitDepthList) {
-							if (bitDepthList[i].y != null) {
-								if (bitDepthList[i].y > maxDepth) {
-									maxDepth = bitDepthList[i].y;
-								}
-								if (bitDepthList[i].y < minDepth) {
-									minDepth = bitDepthList[i].y;
-								}
-							}
-						}
+						var bitDepthPoints = scope.bitDepthPoints || [];
 
 						var depthScale = d3.scale.linear()
-							.domain([minDepth, maxDepth])
+							.domain([scope.minDepth, scope.maxDepth])
 							.range([
 								0,
 								viewHeight
@@ -288,12 +276,12 @@
 							})
 							.y(function (d) {
 								if (d.y == null)
-									return depthScale(maxDepth);
+									return depthScale(scope.maxDepth);
 								return depthScale(d.y);
 							})
 							.interpolate('linear');
 
-						var d = lineFunction(bitDepthList);
+						var d = lineFunction(bitDepthPoints);
 
 						d3.select(scope.element)
 							.selectAll('#bit-depth-path')
