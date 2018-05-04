@@ -327,7 +327,11 @@
 						track.ticks = trackScale.ticks(4);
 
 						function isNumber(d) {
-							return (!isNaN(d.y) && !isNaN(d.x));
+							
+							var isDefined = (d.y != null && d.x != null);
+							var isNumber = (angular.isNumber(d.y) && angular.isNumber(d.x));
+
+							return isDefined && isNumber;
 						}
 
 						function scaleValue(d) {
@@ -369,8 +373,6 @@
 
 				function draw(trackName) {
 					
-					// console.log('draw(%s)', trackName);
-
 					if (scope[trackName]) {
 
 						worker.postMessage({
@@ -399,11 +401,6 @@
 
 							var points = data.points;
 							var processedTrackName = data.trackName;
-
-							console.log({
-								points: points,
-								processedTrackName: processedTrackName
-							});
 
 							scope.tracks.map(function (track) {
 								d3.select(scope.element)
@@ -505,7 +502,15 @@
 
 								if (point && point.y != null) {
 
-									// console.log(track.param, new Date(timestamp), point);
+									var distance = Math.abs(track.max - track.min);
+
+									while (point.y < track.min) {
+										point.y += distance;
+									}
+
+									while (point.y > track.max) {
+										point.y -= distance;
+									}
 
 									bubble.attr('style', null);
 									tooltip.attr('style', null);

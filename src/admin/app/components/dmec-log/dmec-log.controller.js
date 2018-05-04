@@ -1,4 +1,3 @@
-import { start } from "repl";
 
 (function () {
 	'use strict';
@@ -95,58 +94,43 @@ import { start } from "repl";
 		function getAllReadingSince(startTime) {
 			
 			startTime = new Date(startTime);
-			var endTime = new Date(startTime);
-			endTime.setHours(startTime.getHours() + 12);
-
-			// var currentTime = new Date().getTime();
-
+			
+			var loopLimit = new Date();
+			var loopStartTime = new Date(startTime);
+			var loopEndTime = new Date(startTime);
+			
 			var promiseList = [];
 
-			// while (endTime < currentTime) {
-			// 	endTime = new Date(startTime.getHours() + 12);
+			while (loopEndTime.getTime() < loopLimit.getTime()) {
 
-			// 	if(endTime.getTime() > currentTime)
-			// 		endTime = currentTime;
+				loopEndTime.setHours(loopStartTime.getHours() + 12);
+
+				if (loopEndTime.getTime() > loopLimit.getTime()) {
+					loopEndTime = loopLimit;
+				}
 
 				promiseList.push($q(function (resolve, reject) {
-					readingSetupAPIService.getAllReadingByStartEndTime(startTime.getTime(), endTime.getTime(), resolve, reject);
+					readingSetupAPIService.getAllReadingByStartEndTime(loopStartTime.getTime(), loopEndTime.getTime(), resolve, reject);
 				}));
 
-				// startTime = new Date(endTime);
-			// }
+				loopStartTime = new Date(loopEndTime);
+			}
 
-			// $q.all(promiseList).then(function (results) {
-			// 	console.log(results);
-			// })
 
-			/**
-			 * TODO: fazer quantas requisições de 12 em 12 horas forem necessárias de agora até AGORA
-			 */
-			/**
-			 * Reading since vai virar um Promise.all (VER COMO É ISSO COM O $q)
-			 */
 			$scope.onReadingSince = $q(function (resolve, reject) {
 
-				/**
-				 * TODO: adicionar o parametro TO
-				 */
-				readingSetupAPIService.getAllReadingSince(startTime.getTime(), resolve, reject);
-			});
+				$q.all(promiseList).then(function (readings) {
 
-			/**
-			 * Exemplo
-			 * 
-			 * var promiseList = [];
-			 * 
-			 * while(startTime < endTime){
-			 * 		promiseList.push( $q(funciton (){ ....... from, to, .....) )
-			 *      startTime += 12 horas
-			 * }
-			 * 
-			 * Promise.all(promiseList).then(function(results){
-			 * 	$scope.onReadingSince = mergeResults(results)
-			 * });
-			 */
+					var parsedReadings = [];
+
+					for (var i in readings) {
+						parsedReadings = parsedReadings.concat(readings[i]);
+					}
+
+					resolve(parsedReadings);
+				});
+
+			});
 
 			return startTime;
 		}

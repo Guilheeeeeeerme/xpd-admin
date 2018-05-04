@@ -47,15 +47,12 @@
 	}, false);
 
 	function overflowPoints(tracks, points) {
-		console.log('overflowPoints Init')
 
 		var result = {};
 
 		tracks.map(function (track) {
 			result[track.param] = handleOverflow(points[track.param], track);
 		});
-
-		console.log('overflowPoints Return')
 
 		return result;
 
@@ -67,11 +64,7 @@
 
 			distance = Math.abs(track.max - track.min);
 
-			console.log('handleOverflow Init %s', points.length);
-			console.log('distance', distance)
-			
-
-			points.map(function (point, index) {
+			points.map(function (point) {
 
 				var empty = {
 					x: point.x,
@@ -87,9 +80,7 @@
 						point.overflow++;
 						point.y += distance;
 					}
-
-					// console.log('maior', point.y, track.max, distance);
-					// console.log(point.y -= distance);
+					
 					while (point.y > track.max) {
 						point.overflow--;
 						point.y -= distance;
@@ -106,8 +97,6 @@
 				result.push(point);
 
 			});
-
-			console.log('handleOverflow Return')
 
 			return result;
 		}
@@ -175,10 +164,6 @@
 
 			tracks.map(convertToXY);
 
-			// tracks.map(function(track){
-			// 	console.log(track.param + ': ' + points[track.param].length + ' from ' + readings.length);
-			// });
-
 			function convertToXY(track) {
 
 				var xyPoint = {
@@ -204,8 +189,6 @@
 			}
 
 		}
-
-		// console.log('points', points);
 
 		return points;
 

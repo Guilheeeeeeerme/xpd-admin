@@ -180,9 +180,9 @@
 				scope.bitDepthPoints = null;
 				scope.maxDepth = null;
 
-				// scope.onReadingSince.then(function (data) {
-				// 	scope.bitDepthPoints = generateBitDepthPoints(data);
-				// });
+				scope.onReadingSince.then(function (data) {
+					scope.bitDepthPoints = generateBitDepthPoints(data);
+				});
 
 				return startTime;
 			}
@@ -215,7 +215,6 @@
 
 			function generateBitDepthPoints(readings) {
 				var points = [];
-				scope.maxDepth = null;
 
 				readings.map(function (reading) {
 
