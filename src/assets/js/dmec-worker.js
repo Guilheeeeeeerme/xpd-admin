@@ -62,11 +62,7 @@
 			var distance = 0;
 			var lastPoint = null;
 
-			if ((track.min >= 0 && track.max >= 0) || (track.min <= 0 && track.max <= 0)) {
-				distance = Math.abs(track.min - track.max);
-			} else {
-				distance = Math.abs(track.min - 0) - Math.abs(track.max - 0);
-			}
+			distance = Math.abs(track.max - track.min);
 
 			points.map(function (point) {
 
@@ -84,7 +80,7 @@
 						point.overflow++;
 						point.y += distance;
 					}
-
+					
 					while (point.y > track.max) {
 						point.overflow--;
 						point.y -= distance;
@@ -167,10 +163,6 @@
 		function preparePoints(reading) {
 
 			tracks.map(convertToXY);
-
-			// tracks.map(function(track){
-			// 	console.log(track.param + ': ' + points[track.param].length + ' from ' + readings.length);
-			// });
 
 			function convertToXY(track) {
 

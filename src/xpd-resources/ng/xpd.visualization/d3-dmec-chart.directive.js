@@ -319,7 +319,7 @@
 							.defined(isNumber)
 							.x(scaleValue)
 							.y(scaleTime)
-							.interpolate('step');
+							.interpolate('step-after');
 
 						track.id = index;
 						track.lineFunction = lineFunction;
@@ -327,7 +327,11 @@
 						track.ticks = trackScale.ticks(4);
 
 						function isNumber(d) {
-							return (!isNaN(d.y) && !isNaN(d.x));
+							
+							var isDefined = (d.y != null && d.x != null);
+							var isNumber = (angular.isNumber(d.y) && angular.isNumber(d.x));
+
+							return isDefined && isNumber;
 						}
 
 						function scaleValue(d) {
@@ -368,7 +372,7 @@
 				}
 
 				function draw(trackName) {
-
+					
 					if (scope[trackName]) {
 
 						worker.postMessage({
@@ -498,7 +502,15 @@
 
 								if (point && point.y != null) {
 
-									// console.log(track.param, new Date(timestamp), point);
+									var distance = Math.abs(track.max - track.min);
+
+									while (point.y < track.min) {
+										point.y += distance;
+									}
+
+									while (point.y > track.max) {
+										point.y -= distance;
+									}
 
 									bubble.attr('style', null);
 									tooltip.attr('style', null);

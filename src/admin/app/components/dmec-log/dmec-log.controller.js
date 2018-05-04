@@ -1,3 +1,4 @@
+
 (function () {
 	'use strict';
 
@@ -93,9 +94,42 @@
 		function getAllReadingSince(startTime) {
 			
 			startTime = new Date(startTime);
+			
+			var loopLimit = new Date();
+			var loopStartTime = new Date(startTime);
+			var loopEndTime = new Date(startTime);
+			
+			var promiseList = [];
+
+			while (loopEndTime.getTime() < loopLimit.getTime()) {
+
+				loopEndTime.setHours(loopStartTime.getHours() + 12);
+
+				if (loopEndTime.getTime() > loopLimit.getTime()) {
+					loopEndTime = loopLimit;
+				}
+
+				promiseList.push($q(function (resolve, reject) {
+					readingSetupAPIService.getAllReadingByStartEndTime(loopStartTime.getTime(), loopEndTime.getTime(), resolve, reject);
+				}));
+
+				loopStartTime = new Date(loopEndTime);
+			}
+
 
 			$scope.onReadingSince = $q(function (resolve, reject) {
-				readingSetupAPIService.getAllReadingSince(startTime.getTime(), resolve, reject);
+
+				$q.all(promiseList).then(function (readings) {
+
+					var parsedReadings = [];
+
+					for (var i in readings) {
+						parsedReadings = parsedReadings.concat(readings[i]);
+					}
+
+					resolve(parsedReadings);
+				});
+
 			});
 
 			return startTime;
