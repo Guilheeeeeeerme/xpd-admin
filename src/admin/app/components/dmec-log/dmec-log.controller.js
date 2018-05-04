@@ -1,3 +1,5 @@
+import { start } from "repl";
+
 (function () {
 	'use strict';
 
@@ -93,6 +95,29 @@
 		function getAllReadingSince(startTime) {
 			
 			startTime = new Date(startTime);
+			var endTime = new Date(startTime);
+			endTime.setHours(startTime.getHours() + 12);
+
+			// var currentTime = new Date().getTime();
+
+			var promiseList = [];
+
+			// while (endTime < currentTime) {
+			// 	endTime = new Date(startTime.getHours() + 12);
+
+			// 	if(endTime.getTime() > currentTime)
+			// 		endTime = currentTime;
+
+				promiseList.push($q(function (resolve, reject) {
+					readingSetupAPIService.getAllReadingByStartEndTime(startTime.getTime(), endTime.getTime(), resolve, reject);
+				}));
+
+				// startTime = new Date(endTime);
+			// }
+
+			// $q.all(promiseList).then(function (results) {
+			// 	console.log(results);
+			// })
 
 			/**
 			 * TODO: fazer quantas requisições de 12 em 12 horas forem necessárias de agora até AGORA

@@ -11,6 +11,7 @@
 
 		vm.getAllReadingSince = getAllReadingSince;
 		vm.getTick = getTick;
+		vm.getAllReadingByStartEndTime = getAllReadingByStartEndTime;
 
 		function getAllReadingSince(from, successCallback, errorCallback) {
 			var req = {
@@ -50,6 +51,27 @@
 	            	setupAPIService.generateToast(error.data, true);
 	                errorCallback && errorCallback(error);
             	}
+			);
+		}
+
+		function getAllReadingByStartEndTime(from, to, successCallback, errorCallback) {
+			var req = {
+				method: 'GET',
+				cache: true,
+				url: xpdAccessFactory.getSetupURL() + 'setup/reading/from/' + from + '/to/' + to,
+				headers: {
+					'Content-Type': 'application/json'
+				}
+			};
+
+			$http(req).then(
+				function (response) {
+					successCallback && successCallback(response.data);
+				},
+				function (error) {
+					setupAPIService.generateToast(error.data, true);
+					errorCallback && errorCallback(error);
+				}
 			);
 		}
 	}

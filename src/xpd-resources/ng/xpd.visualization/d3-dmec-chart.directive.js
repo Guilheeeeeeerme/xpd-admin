@@ -319,7 +319,7 @@
 							.defined(isNumber)
 							.x(scaleValue)
 							.y(scaleTime)
-							.interpolate('step');
+							.interpolate('step-after');
 
 						track.id = index;
 						track.lineFunction = lineFunction;
@@ -368,6 +368,8 @@
 				}
 
 				function draw(trackName) {
+					
+					// console.log('draw(%s)', trackName);
 
 					if (scope[trackName]) {
 
@@ -397,6 +399,11 @@
 
 							var points = data.points;
 							var processedTrackName = data.trackName;
+
+							console.log({
+								points: points,
+								processedTrackName: processedTrackName
+							});
 
 							scope.tracks.map(function (track) {
 								d3.select(scope.element)
