@@ -141,6 +141,7 @@
 
 				loopStartTime.setMinutes(0);
 				loopStartTime.setSeconds(0);
+				loopStartTime.setMilliseconds(0);
 
 				if (loopStartTime.getHours() < 12) {
 					loopStartTime.setHours(0);

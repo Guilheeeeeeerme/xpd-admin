@@ -58,7 +58,7 @@
 			var req = {
 				method: 'GET',
 				cache: true,
-				url: xpdAccessFactory.getSetupURL() + 'setup/reading/from/' + from + '/to/' + to,
+				url: xpdAccessFactory.getSetupURL() + 'setup/reading/from/' + from + ( (to)? ('/to/' + to) : ''),
 				headers: {
 					'Content-Type': 'application/json'
 				}
