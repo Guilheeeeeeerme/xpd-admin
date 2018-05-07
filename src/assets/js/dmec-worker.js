@@ -93,7 +93,7 @@
 
 				if (lastPoint != null && lastPoint.overflow != point.overflow) {
 					if(tempPoint){
-						result.push(tempPoint);tempPoint
+						result.push(tempPoint);tempPoint;
 					}
 					result.push(empty);
 				}
