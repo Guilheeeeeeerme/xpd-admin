@@ -156,8 +156,7 @@
 					var loopEndTimestamp = loopEndTime.getTime();
 
 					if (loopEndTime.getTime() > loopLimit.getTime()) {
-						loopEndTimestamp = loopLimit.getTime();
-						// loopEndTimestamp = null;
+						loopEndTimestamp = null;
 					}
 
 					promiseList.push($q(function (resolve, reject) {
