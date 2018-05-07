@@ -73,15 +73,18 @@
 				};
 
 				point.overflow = 0;
+				var tempPoint = null;
 
 				if (point.y != null) {
 
 					while (point.y < track.min) {
+						tempPoint = JSON.parse(JSON.stringify(point));
 						point.overflow++;
 						point.y += distance;
 					}
 					
 					while (point.y > track.max) {
+						tempPoint = JSON.parse(JSON.stringify(point));
 						point.overflow--;
 						point.y -= distance;
 					}
@@ -89,6 +92,9 @@
 				}
 
 				if (lastPoint != null && lastPoint.overflow != point.overflow) {
+					if(tempPoint){
+						result.push(tempPoint);tempPoint
+					}
 					result.push(empty);
 				}
 

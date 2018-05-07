@@ -124,6 +124,13 @@
 					var parsedReadings = [];
 
 					for (var i in readings) {
+
+						if(readings[i] && readings[i][0] && readings[i][0].timestamp){
+							parsedReadings.push({
+								timestamp: readings[i][0].timestamp
+							});
+						}
+						
 						parsedReadings = parsedReadings.concat(readings[i]);
 					}
 
