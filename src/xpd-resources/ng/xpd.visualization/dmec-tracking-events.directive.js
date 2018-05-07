@@ -36,11 +36,10 @@
 
 					scope.events.pop();
 					setViewMode();
-
-					scope.getWidthBar = getWidthBar;
-					scope.getHeightBar = getHeightBar;
-					scope.getPositionBar = getPositionBar;
-					scope.getEventScale = getEventScale;
+					scope.getBarWidth = getBarWidth;
+					scope.getBarHeight = getBarHeight;
+					scope.getBarPosition = getBarPosition;
+					scope.getBarXPosition = getBarXPosition;
 					scope.actionOpenDetailsModal = actionOpenDetailsModal;
 					scope.actionOpenFailuresModal = actionOpenFailuresModal;
 					scope.actionOpenLessonsLearnedModal = actionOpenLessonsLearnedModal;
@@ -89,17 +88,17 @@
 					}
 
 					function defineScaleChart() {
-						scope.xScale = d3.scale.linear().domain([scope.mindate, scope.maxdate]).range([0, 95]);
+						scope.xScale = d3.scale.linear().domain([scope.mindate, scope.maxdate]).range([0, 100]);
 						scope.xTicks = scope.xScale.ticks();
 					}
 
-					function getWidthBar(eventDuration) {
+					function getBarWidth(eventDuration) {
 						var width = scope.xScale(eventDuration) - scope.xScale(0);
 						if (!isNaN(width))
 							return width;
 					}
 
-					function getHeightBar(event) {
+					function getBarHeight(event) {
 
 						var yScale = d3.scale.linear()
 							.domain([event.vtarget * 2, event.vpoor / 2])
@@ -112,8 +111,12 @@
 						}
 					}
 
-					function getPositionBar(event) {
-						return scope.svgViewHeight - getHeightBar(event);
+					function getBarPosition(event) {
+						return scope.svgViewHeight - getBarHeight(event);
+					}
+
+					function getBarXPosition(startTime){
+						return scope.xScale(new Date(startTime));
 					}
 
 					function buildCurrentEventBar(event, isCurrentEvent, eventDuration) {
@@ -127,7 +130,7 @@
 
 						var displacement = null;
 
-						bar.width = getWidthBar(eventDuration);
+						bar.width = getBarWidth(eventDuration);
 
 						if (event.eventType === 'CONN' || event.eventType === 'TIME') {
 							displacement = 1;
@@ -136,7 +139,7 @@
 						}
 
 						event.actualSpeed = displacement / (eventDuration / 1000);
-						bar.height = getHeightBar(event);
+						bar.height = getBarHeight(event);
 						bar.position = scope.svgViewHeight - bar.height;
 
 						if (event.actualSpeed >= event.voptimum) {
@@ -165,13 +168,6 @@
 							.attr('width', bar.width)
 							.attr('height', bar.height)
 							.attr('fill', bar.color);
-					}
-
-					function getEventScale(startTime) {
-
-						if (!isNaN(scope.xScale(startTime)))
-							return scope.xScale(startTime);
-						else return 0;
 					}
 
 					function getEventZoomElement() {

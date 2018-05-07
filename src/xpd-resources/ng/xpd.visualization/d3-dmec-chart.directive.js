@@ -130,9 +130,14 @@
 				scope.openScaleModal = openScaleModal;
 				scope.listenToMouseMove = listenToMouseMove;
 				scope.buildTracksAxis = buildTracksAxis;
+				scope.timeScaleFromString = timeScaleFromString;
 
 				buildTimeAxis();
 				buildTracksAxis();
+
+				function timeScaleFromString(startTime){
+					return scope.timeScale(new Date(startTime));
+				}
 
 				/**Real Time Readings */
 				function onReadingChange(onReading) {
@@ -311,15 +316,15 @@
 						var trackScale = d3.scale.linear()
 							.domain([track.min, track.max])
 							.range([
-								labelStartAt + ((labelEndAt - labelStartAt) * 0.05),
-								labelEndAt - ((labelEndAt - labelStartAt) * 0.05)
+								labelStartAt + ((labelEndAt - labelStartAt) * 0.01),
+								labelEndAt - ((labelEndAt - labelStartAt) * 0.01)
 							]);
 
 						var lineFunction = d3.svg.line()
 							.defined(isNumber)
 							.x(scaleValue)
 							.y(scaleTime)
-							.interpolate('step-after');
+							.interpolate('linear');
 
 						track.id = index;
 						track.lineFunction = lineFunction;
