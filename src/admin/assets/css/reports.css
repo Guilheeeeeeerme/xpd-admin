@@ -2,6 +2,12 @@ body {
 	font-family: AgencyFB;
 }
 
+.child-element-spacing {
+    overflow: auto;
+    height: 100%;
+    padding-bottom: 7%;
+}
+
 .child-element-spacing > div:nth-child(2){
     margin-top: 25px;
 }
