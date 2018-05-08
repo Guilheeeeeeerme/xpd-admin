@@ -1,4 +1,4 @@
-<div class="dmec-tracking-container" ng-if="operationData.operationContext.currentOperation && operationData.operationContext.currentOperation.running"
+<div class="dmec-tracking-container" ng-if="currentOperation && currentOperation.running"
  ng-init="initializeComponent()">
 
 	<uib-accordion>
@@ -39,13 +39,13 @@
 
 					<div class="form-group">
 						<label for="startTime">From:</label>
-						<input ng-model="inputRangeForm.startTime" type="datetime-local" class="form-control" required min="{{ operationData.operationContext.currentOperation.startDate | date:'yyyy-MM-ddTHH:mm' }}"
+						<input ng-model="inputRangeForm.startTime" type="datetime-local" class="form-control" required min="{{ currentOperation.startDate | date:'yyyy-MM-ddTHH:mm' }}"
 						 name="startTime" id="startTime">
 					</div>
 
 
-					<button type="submit" ng-click="actionButtonUseOperationStartDate(operationData.operationContext.currentOperation.startDate)"
-					 class="btn btn-default">Use Operation Start Time ({{ operationData.operationContext.currentOperation.startDate | date: 'medium' }})</button>
+					<button type="submit" ng-click="actionButtonUseOperationStartDate(currentOperation.startDate)"
+					 class="btn btn-default">Use Operation Start Time ({{ currentOperation.startDate | date: 'medium' }})</button>
 
 				</div>
 
@@ -86,9 +86,20 @@
 			DMEC
 		</div>
 
-		<d3-dmec-chart threads="{{ 4 }}" horizontal="true" start-at="dmecTrackingStartAt" end-at="dmecTrackingEndAt" on-reading="onReading"
-		 zoom-start-at="zoomStartAt" zoom-end-at="zoomEndAt" on-reading-since="onReadingSince" connection-events="connectionEvents" trip-events="tripEvents"
-		 time-events="timeEvents" auto-scroll="chartAutoScroll">
+		<d3-dmec-chart 
+			ng-if="dmecTrackingStartAt && dmecTrackingEndAt && zoomStartAt && zoomEndAt"
+			threads="{{ 4 }}" 
+			horizontal="true" 
+			start-at="dmecTrackingStartAt" 
+			end-at="dmecTrackingEndAt" 
+			on-reading="onReading"
+		 	zoom-start-at="zoomStartAt" 
+		 	zoom-end-at="zoomEndAt" 
+		 	on-reading-since="onReadingSince"
+		 	connection-events="connectionEvents" 
+		 	trip-events="tripEvents"
+		 	time-events="timeEvents" 
+		 	auto-scroll="chartAutoScroll">
 		</d3-dmec-chart>
 
 	</div>
@@ -99,8 +110,17 @@
 			Zoom
 		</div>
 
-		<time-zoom-tool is-zooming-callback="isZooming" bit-depth-points="bitDepthPoints" horizontal="true" start-at="dmecTrackingStartAt" end-at="dmecTrackingEndAt"
-		 zoom-start-at="zoomStartAt" zoom-end-at="zoomEndAt" min-depth="0" max-depth="maxDepth">
+		<time-zoom-tool 
+			ng-if="dmecTrackingStartAt && dmecTrackingEndAt && zoomStartAt && zoomEndAt"
+			is-zooming-callback="isZooming" 
+			bit-depth-points="bitDepthPoints" 
+			horizontal="true" 
+			start-at="dmecTrackingStartAt" 
+			end-at="dmecTrackingEndAt"
+			zoom-start-at="zoomStartAt" 
+			zoom-end-at="zoomEndAt" 
+			min-depth="0" 
+			max-depth="maxDepth">
 		</time-zoom-tool>
 	</div>
 
@@ -110,9 +130,15 @@
 			Slips to Slips (Conn)
 		</div>
 
-		<dmec-tracking-events tick="operationData.chronometerContext.tick" current-operation='operationData.operationContext.currentOperation'
-		 events='connectionEvents' event-type="'CONN'" current-event="operationData.eventContext.currentEvent" current-block-position="operationData.readingContext.currentReading.blockPosition"
-		 zoom-start-at="zoomStartAt" zoom-end-at="zoomEndAt">
+		<dmec-tracking-events 
+			tick="currentTick" 
+			current-operation='currentOperation'		 
+			events='connectionEvents' 
+		 	event-type="'CONN'" 
+		 	current-event="currentEvent" 
+		 	current-block-position="currentBlockPosition"
+		 	zoom-start-at="zoomStartAt" 
+		 	zoom-end-at="zoomEndAt">
 		</dmec-tracking-events>
 
 	</div>
@@ -123,9 +149,15 @@
 			Slips to Slips (Trip)
 		</div>
 
-		<dmec-tracking-events tick="operationData.chronometerContext.tick" current-operation='operationData.operationContext.currentOperation'
-		 events='tripEvents' event-type="'TRIP'" current-event="operationData.eventContext.currentEvent" current-block-position="operationData.readingContext.currentReading.blockPosition"
-		 zoom-start-at="zoomStartAt" zoom-end-at="zoomEndAt">
+		<dmec-tracking-events 
+			tick="currentTick" 
+			current-operation='currentOperation'
+			events='tripEvents' 
+			event-type="'TRIP'" 
+			current-event="currentEvent" 
+			current-block-position="currentBlockPosition"
+			zoom-start-at="zoomStartAt" 
+			zoom-end-at="zoomEndAt">
 		</dmec-tracking-events>
 
 	</div>
@@ -137,15 +169,16 @@
 		</div>
 
 		<dmec-tracking-events 
-			tick="operationData.chronometerContext.tick" 
-			current-operation='operationData.operationContext.currentOperation'		 
+			tick="currentTick" 
+			current-operation='currentOperation'		 
 			events='timeEvents' 
 		 	event-type="'TIME'" 
-		 	current-event="operationData.eventContext.currentEvent" 
-		 	current-block-position="operationData.readingContext.currentReading.blockPosition"		 
+		 	current-event="currentEvent" 
+		 	current-block-position="currentBlockPosition"		 
 		 	zoom-start-at="zoomStartAt" 
 		 	zoom-end-at="zoomEndAt">
 		</dmec-tracking-events>
 
 	</div>
+
 </div>

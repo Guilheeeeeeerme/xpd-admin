@@ -9,7 +9,7 @@
 
 		var vm = this;
 
-		var eventStartTime, eventEndTime, eventId, operationId;
+		var eventStartTime, eventEndTime, eventId;
 
 		vm.actionOpenDropdownMenu = actionOpenDropdownMenu;
 		vm.actionClickEventDetailsButton = actionClickEventDetailsButton;
@@ -28,34 +28,15 @@
 
 		function buildEventStruture(context) {
 
-			if ($scope.operationData != null && 
-				$scope.operationData.operationContext && 
-				$scope.operationData.operationContext.currentOperation && 
+			if ($scope.operationData != null &&
+				$scope.operationData.operationContext &&
+				$scope.operationData.operationContext.currentOperation &&
 				$scope.operationData.operationContext.currentOperation.running) {
 
-				if(operationId != $scope.operationData.operationContext.currentOperation.id){
-					operationId = $scope.operationData.operationContext.currentOperation.id;
-
-					listTrackingEventByOperation(operationId).then(function(trackingEvents){
-
-						$scope.dados.connectionEvents = [];
-						$scope.dados.tripEvents = [];
-						$scope.dados.timeEvents = [];
-						$scope.dados.connectionTimes = [];
-						$scope.dados.tripTimes = [];
-
-						organizeEventsOnLists(trackingEvents);
-					
-					});
-
-				}
+				listTrackingEventByOperation($scope.operationData.operationContext.currentOperation.id).then(organizeEventsOnLists);
 
 			}
 
-
-
-			// getConnectionTimes();
-			// getTripTimes();
 		}
 
 		function actionOpenDropdownMenu($event, eventLog) {
@@ -79,7 +60,7 @@
 			eventDetailsModal.open(eventId);
 		}
 
-		function actionClickFailuresButton(){
+		function actionClickFailuresButton() {
 			failureModal.open(
 				getSelectedEvent(),
 				insertFailureCallback,
@@ -87,7 +68,7 @@
 			);
 		}
 
-		function actionClickLessonsLearnedButton(){
+		function actionClickLessonsLearnedButton() {
 			lessonLearnedModal.open(
 				getSelectedEvent(),
 				insertLessonLearnedCallback,
@@ -111,24 +92,24 @@
 			return selectedEvent;
 		}
 
-		function insertFailureCallback(failure){
+		function insertFailureCallback(failure) {
 			console.log('Insert Failure Successfully!');
 		}
 
-		function updateFailureCallback(failure){
+		function updateFailureCallback(failure) {
 			setupAPIService.updateObject(
 				'setup/failure',
 				failure
 			);
 		}
 
-		function insertLessonLearnedCallback(lessonLearned){
+		function insertLessonLearnedCallback(lessonLearned) {
 			setupAPIService.insertObject(
 				'setup/lessonlearned',
 				lessonLearned);
 		}
 
-		function updateLessonLearnedCallback(lessonLearned){
+		function updateLessonLearnedCallback(lessonLearned) {
 			setupAPIService.updateObject(
 				'setup/lessonlearned',
 				lessonLearned
@@ -136,79 +117,39 @@
 		}
 
 		function listTrackingEventByOperation(operationId) {
-			return $q(function(resolve, reject){
+			return $q(function (resolve, reject) {
 				eventlogSetupAPIService.listTrackingEventByOperation(operationId, resolve, reject);
 			});
 		}
 
-		function addOrUpdateEvent(events, event) {
-			var exists = false;
-
-			events = events.map(function(e){
-				if(e.id == event.id){
-					exists = true;
-					return event;
-				}else{
-					return e;
-				}
-			});
-
-			if(!exists){
-				events.push(event);
-			}
-
-			return events;
-
-		}
-
 		function organizeEventsOnLists(trackingEvents) {
+
+			$scope.dados.connectionEvents = [];
+			$scope.dados.tripEvents = [];
+			$scope.dados.timeEvents = [];
+			$scope.dados.connectionTimes = [];
+			$scope.dados.tripTimes = [];
 
 			trackingEvents.map(function (event) {
 
-				if(event.id && event.duration){
+				if (event.id && event.duration) {
 
 					if (event.eventType == 'CONN')
-						$scope.dados.connectionEvents = addOrUpdateEvent($scope.dados.connectionEvents, event);
+						$scope.dados.connectionEvents.push(event);
 
 					if (event.eventType == 'TRIP')
-						$scope.dados.tripEvents = addOrUpdateEvent($scope.dados.tripEvents, event);
+						$scope.dados.tripEvents.push(event);
 
 					if (event.eventType == 'TIME')
-						$scope.dados.timeEvents = addOrUpdateEvent($scope.dados.timeEvents, event);					
-				
-				}
+						$scope.dados.timeEvents.push(event);
 
+				}
 
 			});
 
 			$scope.dados.connectionTimes = $scope.dados.connectionEvents.slice(-200);
 			$scope.dados.tripTimes = $scope.dados.tripEvents.slice(-200);
-		
+
 		}
-
-		// function getConnectionTimes() {
-
-		// 	if ($scope.operationData.operationContext.currentOperation != null) {
-		// 		eventlogSetupAPIService.listByType('CONN', $scope.operationData.operationContext.currentOperation.id, 200, function (times) {
-		// 			times.map( function (time) {
-		// 				time.startTime = new Date(time.startTime).getTime();
-		// 			});
-					
-		// 			$scope.dados.connectionTimes = times;
-		// 		});
-		// 	}
-		// }
-
-		// function getTripTimes() {
-
-		// 	if ($scope.operationData.operationContext.currentOperation != null) {
-		// 		eventlogSetupAPIService.listByType('TRIP', $scope.operationData.operationContext.currentOperation.id, 200, function (times) {
-		// 			times.map(function (time) {
-		// 				time.startTime = new Date(time.startTime).getTime();
-		// 			});
-		// 			$scope.dados.tripTimes = times;
-		// 		});
-		// 	}
-		// }
 	}
 })();

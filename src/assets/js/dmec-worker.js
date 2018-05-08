@@ -112,26 +112,32 @@
 
 		var reading = {};
 
-		tracks.map(function (track, trackIndex) {
+		tracks.map(function (track) {
 
-			var point = null;
-			var points = [];
-			var firstHalf = [];
-			var lastHalf = [];
+			var points = [];			
 
-			try {
-				firstHalf = firstHalf.concat(newPoints[track.param]);
-			} catch (e) {
-				firstHalf = [];
+			if(newPoints && 
+				newPoints[track.param] && 
+				newPoints[track.param].length && 
+				timestamp >= newPoints[track.param][0].x) {
+				
+				points = newPoints[track.param];
+
+			} else {
+				if(oldPoints && 
+					oldPoints[track.param] && 
+					oldPoints[track.param].length){
+
+					points = oldPoints[track.param];
+				}
 			}
 
-			try {
-				lastHalf = lastHalf.concat(oldPoints[track.param]);
-			} catch (e) {
-				lastHalf = [];
-			}
+			while(points && points.length > 1) {
 
-			while(true) {
+				var half = Math.ceil(points.length / 2);
+
+				var firstHalf = points.slice(0, half);
+				var lastHalf = points.slice(-1 * half);
 
 				if (lastHalf &&
 					lastHalf.length &&
@@ -143,24 +149,9 @@
 					points = firstHalf;
 				}
 
-				if(points && points.length > 1){
-					var half = Math.ceil(points.length / 2);
-
-					firstHalf = points.slice(0, half);
-					lastHalf = points.slice(-1 * half);
-				}else{
-					break;
-				}
-
-
 			}
 
-			for (var i in points) {
-				point = points[i];
-				break;
-			}
-
-			reading[track.param] = point;
+			reading[track.param] = points[0] || null;
 
 		});
 

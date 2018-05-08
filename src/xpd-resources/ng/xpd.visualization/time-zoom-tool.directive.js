@@ -5,9 +5,9 @@
 
 	module.directive('timeZoomTool', timeZoomTool);
 
-	timeZoomTool.$inject = ['$timeout', '$filter', 'd3Service'];
+	timeZoomTool.$inject = ['$timeout', '$interval', '$filter', 'd3Service'];
 
-	function timeZoomTool($timeout, $filter, d3Service) {
+	function timeZoomTool($timeout, $interval, $filter, d3Service) {
 		return {
 			restrict: 'E',
 			templateUrl: '../xpd-resources/ng/xpd.visualization/time-zoom-tool.template.html',
@@ -44,8 +44,6 @@
 				scope.$watch('zoomStartAt', moveZoomElement);
 				scope.$watch('zoomEndAt', moveZoomElement);
 
-				scope.$watch('bitDepthPoints', resize);
-
 				getZoomAreaElement().on('mousedown', mouseDown);
 				getZoomAreaElement().on('mouseup', mouseUp);
 
@@ -56,6 +54,15 @@
 				getEndZoomElement().on('mouseup', mouseUp);
 
 				getOverlayElement().on('dblclick', dblclick);
+				
+				buildTimeAxis();
+				var resizeInterval = $interval(buildTimeAxis, 1000);
+
+				scope.$on('$destroy', function() {
+					if (resizeInterval) {
+						$interval.cancel(resizeInterval);
+					}
+				});
 
 				function moveZoomElement() {
 
@@ -149,9 +156,7 @@
 				function mouseUp() {
 
 					try {
-						$timeout(function () {
-							scope.isZoomingCallback(false);
-						}, 1000);
+						$timeout(scope.isZoomingCallback, 1000, false);
 					} catch (e) {
 						// faça nada
 					}
@@ -184,7 +189,6 @@
 				}
 
 				function onDateRangeChange(newDate, oldDate) {
-					resize();
 					moveZoomElement();
 				}
 
@@ -233,12 +237,30 @@
 				}
 
 
-				function resize() {
+				function buildTimeAxis() {
+
+					if (selectedElement) {
+						return;
+					}
 
 					try {
 
 						var startAt = new Date(scope.startAt);
 						var endAt = new Date(scope.endAt);
+
+						var zoomStartAt = new Date(scope.zoomStartAt);
+						var zoomEndAt = new Date(scope.zoomEndAt);
+
+						var startDiff = Math.abs( zoomStartAt.getTime() - startAt.getTime() ) / 2;
+						var endDiff = Math.abs( zoomEndAt.getTime() - endAt.getTime() ) / 2;
+
+						// if ( startAt.getTime() < ( zoomStartAt.getTime() - startDiff ) ){
+						startAt = new Date( zoomStartAt.getTime() - startDiff );
+						// }
+						
+						// if ( endAt.getTime() > ( zoomEndAt.getTime() + endDiff ) ){
+						endAt = new Date( zoomEndAt.getTime() + endDiff );
+						// }
 
 						var viewWidth = scope.element.clientWidth;
 						var viewHeight = scope.element.offsetHeight;

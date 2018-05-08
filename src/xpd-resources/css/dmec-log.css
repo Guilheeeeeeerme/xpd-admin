@@ -15,6 +15,7 @@ d3-dmec-chart {
 	margin-top: 5vh;
 	margin-bottom: 5vh;
 	width: 100vw;
+	background: black;
 }
 
 time-zoom-tool {

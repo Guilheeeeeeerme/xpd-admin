@@ -16,7 +16,6 @@
 		function getAllReadingSince(from, successCallback, errorCallback) {
 			var req = {
 				method: 'GET',
-				cache: true,
 				url: xpdAccessFactory.getSetupURL() + 'setup/reading/from/' + from,
 				headers: {
 					'Content-Type': 'application/json'
@@ -57,7 +56,6 @@
 		function getAllReadingByStartEndTime(from, to, successCallback, errorCallback) {
 			var req = {
 				method: 'GET',
-				cache: true,
 				url: xpdAccessFactory.getSetupURL() + 'setup/reading/from/' + from + ( (to)? ('/to/' + to) : ''),
 				headers: {
 					'Content-Type': 'application/json'

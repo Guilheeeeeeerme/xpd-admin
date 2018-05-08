@@ -10,10 +10,12 @@
 			scope: {
 				connectionEvents: '=',
 				tripEvents: '=',
-				timeEvents: '='
+				timeEvents: '=',
+				currentOperation: '=',
+				currentEvent: '=',
+				currentTick: '=',
+				currentBlockPosition: '='
 			},
-			controller: 'TrackingController',
-			controllerAs: 'atController',
 			restrict: 'AE',
 			templateUrl: 'app/components/admin/directives/dmec-tracking.template.html',
 			link: link
@@ -23,29 +25,33 @@
 
 			var ONE_HOUR = 3600000;
 			var ONE_DAY = 24 * ONE_HOUR;
-			var updateLatency = 1000;
+			var updateLatency = 5000;
 			var getTickInterval;
 
-			var resetPage = $timeout(function () {
-				location.reload();
-			}, (ONE_HOUR / 2) );
+			var resetPage = $timeout(reload, (ONE_HOUR / 2) );
 
 			
-			scope.$on('$destroy', function() {
-        		if (resetPage) {
-            		$timeout.cancel(resetPage);
-        		}
-        		if (getTickInterval) {
-            		$interval.cancel(getTickInterval);
-        		}
-    		});
+			scope.$on('$destroy', destroy );
 
 			scope.zoomIsLocked = false;
 			scope.isZooming = isZooming;
 			scope.actionButtonUseOperationStartDate = actionButtonUseOperationStartDate;
 			scope.actionButtonSubmitDmecRange = actionButtonSubmitDmecRange;
 			scope.initializeComponent = initializeComponent;
+			
+			function reload() {
+				location.reload();
+			}
 
+			function destroy() {
+        		if (resetPage) {
+            		$timeout.cancel(resetPage);
+        		}
+        		if (getTickInterval) {
+            		$interval.cancel(getTickInterval);
+        		}
+    		}
+			
 			function initializeComponent() {
 
 				var endAt = new Date().getTime();
@@ -137,7 +143,7 @@
 
 				startTime = new Date(startTime);
 
-				var operationStartDate = new Date(scope.operationData.operationContext.currentOperation.startDate);
+				var operationStartDate = new Date(scope.currentOperation.startDate);
 
 				if (startTime.getTime() < operationStartDate.getTime()) {
 					startTime = operationStartDate;

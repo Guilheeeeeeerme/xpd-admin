@@ -14,24 +14,28 @@
 		var updateLatency = 1000;
 		var getTickInterval;
 
-		var resetPage = $timeout(function () {
-			location.reload();
-		}, (ONE_HOUR / 2) );
+		var resetPage = $timeout(reload, (ONE_HOUR / 2) );
 			
-		$scope.$on('$destroy', function() {
-    		if (resetPage) {
-        		$timeout.cancel(resetPage);
-    		}
-    		if (getTickInterval) {
-        		$interval.cancel(getTickInterval);
-    		}
-		});
+		$scope.$on('$destroy', destroy );
 
 		$scope.zoomIsLocked = false;
 		$scope.actionButtonSubmitDmecRange = actionButtonSubmitDmecRange;
 		$scope.isZooming = isZooming;
 		
 		initializeComponent();
+
+		function destroy() {
+    		if (resetPage) {
+        		$timeout.cancel(resetPage);
+    		}
+    		if (getTickInterval) {
+        		$interval.cancel(getTickInterval);
+    		}
+		}
+
+		function reload () {
+			location.reload();
+		}
 
 		function initializeComponent() {
 			

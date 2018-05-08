@@ -1,4 +1,4 @@
-<div ng-controller="AdminTrackingController as atController" class="col-md-8 col-sm-12 xpd-admin-col">
+<div class="col-md-8 col-sm-12 xpd-admin-col">
     <div class="xpd-admin-col-content">
 
         <div class="col-md-4 col-sm-4 col-xs-4 xpd-chart-container">
@@ -6,12 +6,12 @@
                 Slips to Slips (Conn)
             </div>
             <div class="xpd-chart-container-content">
-                <div ng-if="operationData.operationContext.currentOperation && operationData.operationContext.currentOperation.running && operationData.eventContext.currentEvent != null"
-                    class="xpd-chart" times='dados.connectionTimes' max-seconds="175" max-bars="200" selected-event="selectedEvent"
-                    action-open-dropdown-menu="atController.actionOpenDropdownMenu">
+                <div ng-if="currentOperation && currentOperation.running && currentEvent != null"
+                    class="xpd-chart" times='connectionTimes' max-seconds="175" max-bars="200" selected-event="selectedEvent"
+                    action-open-dropdown-menu="actionOpenDropdownMenu">
                 </div>
 
-                <div class="xpd-chart-placeholder" ng-if="!operationData.operationContext.currentOperation.running && operationData.operationContext.currentEvent == null">
+                <div class="xpd-chart-placeholder" ng-if="!currentOperation.running">
                     <span class="xpd-chart-placeholder-text">No running operation</span>
                 </div>
             </div>
@@ -24,13 +24,13 @@
             </div>
 
             <div class="xpd-chart-container-content">
-                <div ng-if="operationData.operationContext.currentOperation && operationData.operationContext.currentOperation.running && operationData.eventContext.currentEvent != null"
-                    class="xpd-chart" times='dados.tripTimes' max-seconds="100" max-bars="200" action-open-dropdown-menu="atController.actionOpenDropdownMenu"
+                <div ng-if="currentOperation && currentOperation.running && currentEvent != null"
+                    class="xpd-chart" times='tripTimes' max-seconds="100" max-bars="200" action-open-dropdown-menu="actionOpenDropdownMenu"
                     selected-event="selectedEvent">
 
                 </div>
 
-                <div class="xpd-chart-placeholder" ng-if="!operationData.operationContext.currentOperation.running && operationData.operationContext.currentEvent == null">
+                <div class="xpd-chart-placeholder" ng-if="!currentOperation.running">
                     <span class="xpd-chart-placeholder-text">No running operation</span>
                 </div>
             </div>
@@ -40,13 +40,13 @@
         <div class="btn-group slips-to-slips-dropdown-menu" uib-dropdown is-open="flags.openDropdownMenu">
             <ul uib-dropdown-menu role="menu">
                 <li role="menuitem">
-                    <a ng-click="atController.actionClickEventDetailsButton()" id="times-bar-click-details">Details</a>
+                    <a ng-click="actionClickEventDetailsButton()" id="times-bar-click-details">Details</a>
                 </li>
                 <li role="menuitem">
-                    <a ng-click="atController.actionClickFailuresButton()" id="times-bar-click-failures">Failures</a>
+                    <a ng-click="actionClickFailuresButton()" id="times-bar-click-failures">Failures</a>
                 </li>
                 <li role="menuitem">
-                    <a ng-click="atController.actionClickLessonsLearnedButton()" id="times-bar-click-lessons">Lessons Learned</a>
+                    <a ng-click="actionClickLessonsLearnedButton()" id="times-bar-click-lessons">Lessons Learned</a>
                 </li>
             </ul>
         </div>
@@ -55,11 +55,11 @@
 
             <div class="xpd-chart-container-content">
 
-                <div ng-if="operationData.operationContext.currentOperation.running && operationData.eventContext.currentEvent != null" block-speed="operationData.blockSpeedContext"
+                <div ng-if="currentOperation.running && currentEvent != null" block-speed="blockSpeedContext"
                     class="xpd-chart">
                 </div>
 
-                <div class="xpd-chart-placeholder" ng-if="!operationData.operationContext.currentOperation.running && operationData.operationContext.currentEvent == null">
+                <div class="xpd-chart-placeholder" ng-if="!currentOperation.running">
                     <span class="xpd-chart-placeholder-text">No running operation</span>
                 </div>
 
@@ -79,7 +79,7 @@
         </div>
 
         <div class="col-md-4 times-event-header text-right">
-            <span class="glyphicon glyphicon-remove" ng-click="atController.actionEventModalButtonClose()"></span>
+            <span class="glyphicon glyphicon-remove" ng-click="actionEventModalButtonClose()"></span>
         </div>
 
         <span class="glyphicon glyphicon-triangle-left selected-arrow"></span>
@@ -121,16 +121,16 @@
             </div>
         </div>
         <div class="col-md-12 times-event-footer">
-            <button class="btn btn-primary btn-sm" ng-click="atController.actionEventModalButtonSave(selectedEvent)">Save
+            <button class="btn btn-primary btn-sm" ng-click="actionEventModalButtonSave(selectedEvent)">Save
             </button>
         </div>
     </div>
 
 </div>
 
-<div ng-controller="AdminTrackingController as atController" class="col-md-4 col-sm-6 col-xs-6 xpd-chart-container">
+<div class="col-md-4 col-sm-6 col-xs-6 xpd-chart-container">
 
-    <div class="xpd-chart-placeholder" ng-if="!operationData.operationContext.currentOperation.running && operationData.eventContext.currentEvent == null">
+    <div class="xpd-chart-placeholder" ng-if="!currentOperation.running && currentEvent == null">
         <span class="xpd-chart-placeholder-text">No running operation</span>
     </div>
 
@@ -143,49 +143,48 @@
     </div>
 
     <!-- TRIP -->
-    <div ng-if="operationData.eventContext.currentEvent.eventType == 'TRIP'" class="xpd-chart-container-content event-trip-container">
+    <div ng-if="currentEvent.eventType == 'TRIP'" class="xpd-chart-container-content event-trip-container">
 
         <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 speed-gauge-chart-container">
 
-            <!-- current-alarm="operationData.alarmContext.currentAlarm" -->
             <div speed-gauge class="speed-gauge-chart"
                 has-alarm="flags.hasAlarm"
                 has-message="flags.hasMessage"
-                readings='operationData.readingContext.currentReading'
-                calculated='operationData.elevatorTargetContext.currentCalculated'
-                operation='operationData.operationContext.currentOperation'
-                safety-speed-limit="operationData.elevatorTargetContext.safetySpeedLimit">
+                readings='currentReading'
+                calculated='currentCalculated'
+                operation='currentOperation'
+                safety-speed-limit="safetySpeedLimit">
             </div>
 
         </div>
 
         <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 trip-ruler-chart-container">
 
-            <div trip-ruler show-slow-down="flags.showSlowDown" class="trip-ruler-chart" readings='operationData.readingContext.currentReading'
-                calculated='operationData.elevatorTargetContext.currentCalculated' current-event="{{operationData.eventContext.currentEvent}}"
-                operation='operationData.operationContext.currentOperation' expected-changing="operationData.stateContext.changingStatesList"
-                expected-alarm-changing="operationData.alarmContext.changingAlarmsList" unreachable="operationData.elevatorTargetContext.unreachable">
+            <div trip-ruler show-slow-down="flags.showSlowDown" class="trip-ruler-chart" readings='currentReading'
+                calculated='currentCalculated' current-event="{{currentEvent}}"
+                operation='currentOperation' expected-changing="changingStatesList"
+                expected-alarm-changing="changingAlarmsList" unreachable="unreachable">
             </div>
 
         </div>
 
         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 in-slips-chart-container">
 
-            <div in-slips class="in-slips-chart" calculated='operationData.elevatorTargetContext.currentTimeCalculated' target='operationData.operationContext.currentOperation.inSlips'>
+            <div in-slips class="in-slips-chart" calculated='currentTimeCalculated' target='currentOperation.inSlips'>
             </div>
 
-            <!-- <div class="col-md-12" ng-if="operationData.stateContext.currentState" xpd-time-operation-manager view='admin'>
+            <!-- <div class="col-md-12" ng-if="currentState" xpd-time-operation-manager view='admin'>
             </div> -->
         </div>
 
     </div>
 
     <!-- CONN -->
-    <div ng-if="operationData.eventContext.currentEvent != null && (operationData.eventContext.currentEvent.eventType == 'CONN' || operationData.eventContext.currentEvent.eventType == 'TIME')"
+    <div ng-if="currentEvent != null && (currentEvent.eventType == 'CONN' || currentEvent.eventType == 'TIME')"
         class="event-conn-container">
 
         <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8 conn-ruler-chart-container">
-            <div conn-ruler class=" conn-ruler-chart" chronometer="( operationData.chronometerContext.tick / 1000 )" vtarget-duration='operationData.chronometerContext.expected' time-blocks="dados.timeBlocks"
+            <div conn-ruler class=" conn-ruler-chart" chronometer="( currentTick / 1000 )" vtarget-duration='taskExpectedDuration' time-blocks="timeBlocks"
                 flash-go-div="dController.flashGoDiv">
             </div>
 
@@ -193,25 +192,25 @@
 
         <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 trip-ruler-chart-container">
 
-            <div trip-ruler show-slow-down="flags.showSlowDown" class=" trip-ruler-chart" readings='operationData.readingContext.currentReading'
-                calculated='operationData.elevatorTargetContext.currentCalculated' current-event="{{operationData.eventContext.currentEvent}}"
-                operation='operationData.operationContext.currentOperation'>
+            <div trip-ruler show-slow-down="flags.showSlowDown" class=" trip-ruler-chart" readings='currentReading'
+                calculated='currentCalculated' current-event="{{currentEvent}}"
+                operation='currentOperation'>
             </div>
 
         </div>
 
 
-        <!-- <div class="col-md-12" ng-if="operationData.stateContext.currentState" xpd-time-operation-manager view='admin'>
+        <!-- <div class="col-md-12" ng-if="currentState" xpd-time-operation-manager view='admin'>
         </div> -->
 
     </div>
 
     <!--WAIT -->
-    <div ng-if="operationData.operationContext.currentOperation != null && operationData.operationContext.currentOperation.running && operationData.eventContext.currentEvent != null && operationData.eventContext.currentEvent.eventType == 'WAIT'"
+    <div ng-if="currentOperation != null && currentOperation.running && currentEvent != null && currentEvent.eventType == 'WAIT'"
         class="event-conn-container">
 
         <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8 conn-ruler-chart-container">
-            <div conn-ruler class=" conn-ruler-chart" chronometer="( operationData.chronometerContext.tick / 1000 )" vtarget-duration='operationData.chronometerContext.expected' time-blocks="dados.timeBlocks"
+            <div conn-ruler class=" conn-ruler-chart" chronometer="( currentTick / 1000 )" vtarget-duration='taskExpectedDuration' time-blocks="timeBlocks"
                 flash-go-div="dController.flashGoDiv">
             </div>
 
@@ -219,24 +218,24 @@
 
         <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 trip-ruler-chart-container">
 
-            <div trip-ruler show-slow-down="flags.showSlowDown" class=" trip-ruler-chart" readings='operationData.readingContext.currentReading'
-                calculated='operationData.elevatorTargetContext.currentCalculated' current-event="{{operationData.eventContext.currentEvent}}"
-                operation='operationData.operationContext.currentOperation'>
+            <div trip-ruler show-slow-down="flags.showSlowDown" class=" trip-ruler-chart" readings='currentReading'
+                calculated='currentCalculated' current-event="{{currentEvent}}"
+                operation='currentOperation'>
             </div>
 
         </div>
 
     </div>
 
-    <div ng-if="operationData.operationContext.currentOperation && operationData.operationContext.currentOperation.running"
+    <div ng-if="currentOperation && currentOperation.running"
         class="xpd-conn-chronometers xpd-conn-chronometers-top">
-        <span ng-class="{'trip-time-target-overtime': ( operationData.chronometerContext.tick / 1000 ) > operationData.chronometerContext.expected }">
-            {{ ( operationData.chronometerContext.tick / 1000 ) | secondsToHourMinutesSeconds }}
+        <span ng-class="{'trip-time-target-overtime': ( currentTick / 1000 ) > taskExpectedDuration }">
+            {{ ( currentTick / 1000 ) | secondsToHourMinutesSeconds }}
         </span>
-        <span ng-if="operationData.chronometerContext.expected != null">
-            / {{operationData.chronometerContext.expected | secondsToHourMinutesSeconds}}
+        <span ng-if="taskExpectedDuration != null">
+            / {{taskExpectedDuration | secondsToHourMinutesSeconds}}
         </span>
-        <span ng-if="operationData.chronometerContext.expected == null">
+        <span ng-if="taskExpectedDuration == null">
             / &infin;
         </span>
     </div>
