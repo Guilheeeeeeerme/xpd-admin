@@ -3,13 +3,13 @@
 
 	angular.module('xpd.admin').controller('AdminTrackingController', adminTrackingController);
 
-	adminTrackingController.$inject = ['$scope', '$uibModal', 'operationDataFactory', 'eventDetailsModal', 'failureModal', 'eventlogSetupAPIService', 'lessonLearnedModal', 'setupAPIService', 'dialogFactory', '$rootScope'];
+	adminTrackingController.$inject = ['$scope', '$uibModal', '$q', 'operationDataFactory', 'eventDetailsModal', 'failureModal', 'eventlogSetupAPIService', 'lessonLearnedModal', 'setupAPIService', 'dialogFactory', '$rootScope'];
 
-	function adminTrackingController($scope, $uibModal, operationDataFactory, eventDetailsModal, failureModal, eventlogSetupAPIService, lessonLearnedModal, setupAPIService, dialogFactory, $rootScope) {
+	function adminTrackingController($scope, $uibModal, $q, operationDataFactory, eventDetailsModal, failureModal, eventlogSetupAPIService, lessonLearnedModal, setupAPIService, dialogFactory, $rootScope) {
 
 		var vm = this;
 
-		var eventStartTime, eventEndTime, eventId;
+		var eventStartTime, eventEndTime, eventId, operationId;
 
 		vm.actionOpenDropdownMenu = actionOpenDropdownMenu;
 		vm.actionClickEventDetailsButton = actionClickEventDetailsButton;
@@ -24,13 +24,36 @@
 		buildEventStruture();
 
 		operationDataFactory.addEventListener('adminTrackingController', 'setOnEventChangeListener', buildEventStruture);
-		operationDataFactory.addEventListener('adminTrackingController', 'setOnCurrentEventListener', buildEventStruture);
-		operationDataFactory.addEventListener('adminTrackingController', 'setOnNoCurrentEventListener', buildEventStruture);
-		operationDataFactory.addEventListener('adminTrackingController', 'setOnEventLogUpdateListener', buildEventStruture);
-		operationDataFactory.addEventListener('adminTrackingController', 'setOnWaitEventListener', buildEventStruture);
+		operationDataFactory.addEventListener('adminTrackingController', 'setOnParallelEventChangeListener', buildEventStruture);
 
-		function buildEventStruture() {
-			getOperationEvents();
+		function buildEventStruture(context) {
+
+			if ($scope.operationData != null && 
+				$scope.operationData.operationContext && 
+				$scope.operationData.operationContext.currentOperation && 
+				$scope.operationData.operationContext.currentOperation.running) {
+
+				if(operationId != $scope.operationData.operationContext.currentOperation.id){
+					operationId = $scope.operationData.operationContext.currentOperation.id;
+
+					listTrackingEventByOperation(operationId).then(function(trackingEvents){
+
+						$scope.dados.connectionEvents = [];
+						$scope.dados.tripEvents = [];
+						$scope.dados.timeEvents = [];
+						$scope.dados.connectionTimes = [];
+						$scope.dados.tripTimes = [];
+
+						organizeEventsOnLists(trackingEvents);
+					
+					});
+
+				}
+
+			}
+
+
+
 			// getConnectionTimes();
 			// getTripTimes();
 		}
@@ -112,35 +135,55 @@
 			);
 		}
 
-		function getOperationEvents() {
-			if ($scope.operationData.operationContext.currentOperation != null) {
+		function listTrackingEventByOperation(operationId) {
+			return $q(function(resolve, reject){
+				eventlogSetupAPIService.listTrackingEventByOperation(operationId, resolve, reject);
+			});
+		}
 
-				eventlogSetupAPIService.listTrackingEventByOperation($scope.operationData.operationContext.currentOperation.id, function (trackingEvents) {
-					// $scope.dados.bitDepthByEvents = [];
-					$scope.dados.connectionEvents = [];
-					$scope.dados.tripEvents = [];
-					$scope.dados.timeEvents = [];
-					$scope.dados.connectionTimes = [];
-					$scope.dados.tripTimes = [];
+		function addOrUpdateEvent(events, event) {
+			var exists = false;
 
-					trackingEvents.map(function (event) {
+			events = events.map(function(e){
+				if(e.id == event.id){
+					exists = true;
+					return event;
+				}else{
+					return e;
+				}
+			});
 
-						if (event.eventType == 'CONN')
-							$scope.dados.connectionEvents.push(event);
-
-						if (event.eventType == 'TRIP')
-							$scope.dados.tripEvents.push(event);
-
-						if (event.eventType == 'TIME')
-							$scope.dados.timeEvents.push(event);
-
-					});
-
-					$scope.dados.connectionTimes = $scope.dados.connectionEvents.slice(-200);
-					$scope.dados.tripTimes = $scope.dados.tripEvents.slice(-200);
-					
-				});
+			if(!exists){
+				events.push(event);
 			}
+
+			return events;
+
+		}
+
+		function organizeEventsOnLists(trackingEvents) {
+
+			trackingEvents.map(function (event) {
+
+				if(event.id && event.duration){
+
+					if (event.eventType == 'CONN')
+						$scope.dados.connectionEvents = addOrUpdateEvent($scope.dados.connectionEvents, event);
+
+					if (event.eventType == 'TRIP')
+						$scope.dados.tripEvents = addOrUpdateEvent($scope.dados.tripEvents, event);
+
+					if (event.eventType == 'TIME')
+						$scope.dados.timeEvents = addOrUpdateEvent($scope.dados.timeEvents, event);					
+				
+				}
+
+
+			});
+
+			$scope.dados.connectionTimes = $scope.dados.connectionEvents.slice(-200);
+			$scope.dados.tripTimes = $scope.dados.tripEvents.slice(-200);
+		
 		}
 
 		// function getConnectionTimes() {

@@ -7,59 +7,34 @@
 	
 	<!-- Events in background -->
 	<svg ng-attr-width='{{ svg.viewWidth }}' ng-attr-height='{{ svg.viewHeight }}' preserveAspectRatio="none" xpd-view-box="svg.viewBox">
-		<g class="events-bg" ng-if="horizontal">
+		<g class="events-bg" >
+			
 			<rect 
 				ng-repeat="event in connectionEvents" 
 				ng-if="event.duration > 0" 
 				class="events-bg-conn" 
-				ng-attr-width="{{ timeScale(event.duration) - timeScale(0) }}"
-				ng-attr-height="{{ svg.viewHeight }}" 
-				ng-attr-x="{{ timeScaleFromString(event.startTime) }}" 
-				y="0" 
-				fill="none" 
-				stroke="orange" 
-				stroke-opacity="1"
+				ng-attr-width="{{ horizontal ? ( timeScale(event.duration) - timeScale(0) ) : ( svg.viewWidth ) }}"
+				ng-attr-height="{{ horizontal ? ( svg.viewHeight ):( timeScale(event.duration) - timeScale(0) ) }}" 
+				ng-attr-x="{{ horizontal ? ( timeScaleFromString(event.startTime) ) : ( 0 ) }}" 
+				ng-attr-y="{{ horizontal ? ( 0 ) : ( timeScaleFromString(event.startTime) ) }}" 
+				stroke="none" 
+				fill="orange" 
+				fill-opacity="0.25"
 			/>
-			<rect 
-				ng-repeat="event in tripEvents" 
-				ng-if="event.duration > 0" 
-				class="events-bg-trip" 
-				ng-attr-width="{{ timeScale(event.duration) - timeScale(0) }}"
-			 	ng-attr-height="{{ svg.viewHeight }}" 
-			 	ng-attr-x="{{ timeScaleFromString(event.startTime) }}" 
-			 	y="0" 
-				fill="none" 
-				stroke="pink" 
-				stroke-opacity="1"
-			/>
-		</g>
 
-		<g class="events-bg" ng-if="!horizontal">
-			<rect 
-				ng-repeat="event in connectionEvents" 
-				ng-if="event.duration > 0" 
-				class="events-bg-conn" 
-				ng-attr-height="{{ timeScale(event.duration) - timeScale(0) }}"
-			 	ng-attr-width="{{ svg.viewWidth }}" 
-			 	ng-attr-y="{{ timeScaleFromString(event.startTime) }}" 
-			 	x="0" 
-				fill="none" 
-				stroke="orange" 
-				stroke-opacity="1"
-			/>
 			<rect 
 				ng-repeat="event in tripEvents" 
 				ng-if="event.duration > 0" 
 				class="events-bg-trip" 
-				ng-attr-height="{{ timeScale(event.duration) - timeScale(0) }}"
-				ng-attr-width="{{ svg.viewWidth }}" 
-				ng-attr-y="{{ timeScaleFromString(event.startTime) }}" 
-				x="0" 
-				fill="none" 
-				stroke="pink" 
-				stroke-opacity="1"
+				ng-attr-width="{{ horizontal ? ( timeScale(event.duration) - timeScale(0) ) : ( svg.viewWidth ) }}"
+			 	ng-attr-height="{{ horizontal ? ( svg.viewHeight ) : ( timeScale(event.duration) - timeScale(0) ) }}" 
+			 	ng-attr-x="{{ horizontal ? ( timeScaleFromString(event.startTime) ) : ( 0 ) }}" 
+			 	ng-attr-y="{{ horizontal ? ( 0 ) : ( timeScaleFromString(event.startTime) ) }}" 
+				stroke="none" 
+				fill="pink" 
+				fill-opacity="0.25"
 			/>
-		</g>
+
 	</svg>
 
 	<!-- y axis ticks -->
@@ -97,10 +72,10 @@
 		<g class="time-ticks">
 			<g 	ng-repeat="tick in xTicks" 
 				ng-attr-transform="translate( {{ horizontal? timeScale(tick): 0 }}, {{ horizontal? 0: timeScale(tick) }} )">
-				<text 
+				<!-- <text 
 					ng-attr-x='{{ horizontal? 0: svg.viewWidth }}' 
 					ng-attr-y='{{ horizontal? svg.viewHeight: 0 }}' >
-					{{ tick | date: 'short' }}</text>
+					{{ tick | date: 'short' }}</text> -->
 				<line 
 					x1="0" 
 					y1="0" 
@@ -119,14 +94,14 @@
 			<path 
 			id="{{ track.param }}" ng-repeat="track in $tracks" fill="none" stroke="{{ track.color }}" 
 			ng-attr-clip-path="url(#myClip-{{ track.param }})" 
-			ng-attr-stroke-width="{{ 2 * ( horizontal? ( svg.zoomArea/ svg.viewWidth ) : ( svg.zoomArea / svg.viewHeight ) ) }}" />
+			ng-attr-stroke-width="{{ 3 * ( horizontal? ( svg.zoomArea/ svg.viewWidth ) : ( svg.zoomArea / svg.viewHeight ) ) }}" />
 		</g>
 
 		<g class="newPoints">
 			<path 
 			id="{{ track.param }}" ng-repeat="track in $tracks" fill="none" stroke="{{ track.color }}" 
 			ng-attr-clip-path="url(#myClip-{{ track.param }})" 
-			ng-attr-stroke-width="{{ 2 * ( horizontal? ( svg.zoomArea/ svg.viewWidth ) : ( svg.zoomArea / svg.viewHeight ) ) }}" />
+			ng-attr-stroke-width="{{ 3 * ( horizontal? ( svg.zoomArea/ svg.viewWidth ) : ( svg.zoomArea / svg.viewHeight ) ) }}" />
 		</g>
 	</svg>
 

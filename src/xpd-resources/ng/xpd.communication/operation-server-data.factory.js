@@ -74,6 +74,7 @@
 		stateContext: 'state',
 		chronometerContext: 'chronometer',
 		eventContext: 'event',
+		parallelEventContext: 'parallelEvent',
 		jointContext: 'jointLog',
 		operationProgressContext: 'operationProgress',
 		elevatorTargetContext: 'elevatorTarget',
@@ -502,6 +503,18 @@
 		function setOnNoCurrentJointListener(jointContext) {
 			loadContext('jointContext', jointContext);
 			loadEventListenersCallback('setOnNoCurrentJointListener', jointContext);
+		}
+
+
+
+		/**
+         * EVENT
+         */
+		communicationChannel.setOnParallelEventChangeListener && communicationChannel.setOnParallelEventChangeListener(setOnParallelEventChangeListener);
+
+		function setOnParallelEventChangeListener(parallelEventContext) {
+			loadContext('parallelEventContext', parallelEventContext);
+			loadEventListenersCallback('setOnParallelEventChangeListener', parallelEventContext);
 		}
 
 		/**

@@ -116,25 +116,22 @@
 
 			var point = null;
 			var points = [];
+			var firstHalf = [];
+			var lastHalf = [];
 
 			try {
-				points = points.concat(oldPoints[track.param]);
+				firstHalf = firstHalf.concat(newPoints[track.param]);
 			} catch (e) {
-				// faça nada
+				firstHalf = [];
 			}
 
 			try {
-				points = points.concat(newPoints[track.param]);
+				lastHalf = lastHalf.concat(oldPoints[track.param]);
 			} catch (e) {
-				// faça nada
+				lastHalf = [];
 			}
 
-			while (points && points.length > 1) {
-
-				var half = Math.ceil(points.length / 2);
-
-				var firstHalf = points.slice(0, half);
-				var lastHalf = points.slice(-1 * half);
+			while(true) {
 
 				if (lastHalf &&
 					lastHalf.length &&
@@ -145,6 +142,16 @@
 				} else {
 					points = firstHalf;
 				}
+
+				if(points && points.length > 1){
+					var half = Math.ceil(points.length / 2);
+
+					firstHalf = points.slice(0, half);
+					lastHalf = points.slice(-1 * half);
+				}else{
+					break;
+				}
+
 
 			}
 

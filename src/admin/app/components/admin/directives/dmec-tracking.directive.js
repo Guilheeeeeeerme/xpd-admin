@@ -26,9 +26,19 @@
 			var updateLatency = 1000;
 			var getTickInterval;
 
-			setTimeout(function () {
+			var resetPage = $timeout(function () {
 				location.reload();
 			}, (ONE_HOUR / 2) );
+
+			
+			scope.$on('$destroy', function() {
+        		if (resetPage) {
+            		$timeout.cancel(resetPage);
+        		}
+        		if (getTickInterval) {
+            		$interval.cancel(getTickInterval);
+        		}
+    		});
 
 			scope.zoomIsLocked = false;
 			scope.isZooming = isZooming;
@@ -56,7 +66,6 @@
 
 				if (angular.isDefined(getTickInterval)) {
 					$interval.cancel(getTickInterval);
-					getTickInterval = undefined;
 				}
 
 				getTickInterval = $interval(getTick, updateLatency);
