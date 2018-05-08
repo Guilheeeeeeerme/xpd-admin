@@ -9,10 +9,10 @@
 
 		var vm = this;
 
-		var startTime, endTime;
+		var eventStartTime, eventEndTime, eventId;
 
-		vm.actionBarClick = actionBarClick;
-		vm.actionBarDoubleClick = actionBarDoubleClick;
+		vm.actionOpenDropdownMenu = actionOpenDropdownMenu;
+		vm.actionClickEventDetailsButton = actionClickEventDetailsButton;
 		vm.actionClickFailuresButton = actionClickFailuresButton;
 		vm.actionClickLessonsLearnedButton = actionClickLessonsLearnedButton;
 
@@ -35,51 +35,49 @@
 			// getTripTimes();
 		}
 
-		function actionBarClick($event, eventLog) {
-			// $event.preventDefault();
-			$event.stopPropagation();
+		function actionOpenDropdownMenu($event, eventLog) {
 
 			var modalOption = document.querySelector('.slips-to-slips-dropdown-menu');
 
-			modalOption.style.top = ($event.clientY - 60) + 'px';
+			modalOption.style.top = ($event.clientY) + 'px';
 			modalOption.style.left = ($event.clientX) + 'px';
 
-			if (!$scope.flags.modalFailureLessonLearned) {
-				$scope.flags.modalFailureLessonLearned = !$scope.flags.modalFailureLessonLearned;
+			if (!$scope.flags.openDropdownMenu) {
+				$scope.flags.openDropdownMenu = !$scope.flags.openDropdownMenu;
 			}
 
-			startTime = eventLog.startTime;
-			endTime = eventLog.endTime;
+			eventId = eventLog.id;
+			eventStartTime = eventLog.startTime;
+			eventEndTime = eventLog.endTime;
 
 		}
 
-		function actionBarDoubleClick($event, eventLog){
-
-			eventDetailsModal.open(eventLog.id);
+		function actionClickEventDetailsButton() {
+			eventDetailsModal.open(eventId);
 		}
 
 		function actionClickFailuresButton(){
-			var operationId = $scope.operationData.operationContext.currentOperation.id;
-			var start = new Date(startTime);
-			var end = new Date(endTime);
-
-			var selectedFailure = {
-				operation: {
-					'id': operationId
-				},
-				startTime: start,
-				endTime: end
-			};
-
-			failureModal.open(selectedFailure, insertFailureCallback, updateFailureCallback);
+			failureModal.open(
+				getSelectedEvent(),
+				insertFailureCallback,
+				updateFailureCallback
+			);
 		}
 
 		function actionClickLessonsLearnedButton(){
-			var operationId = $scope.operationData.operationContext.currentOperation.id;
-			var start = new Date(startTime);
-			var end = new Date(endTime);
+			lessonLearnedModal.open(
+				getSelectedEvent(),
+				insertLessonLearnedCallback,
+				updateLessonLearnedCallback
+			);
+		}
 
-			var selectedLessonLearned = {
+		function getSelectedEvent() {
+			var operationId = $scope.operationData.operationContext.currentOperation.id;
+			var start = new Date(eventStartTime);
+			var end = new Date(eventEndTime);
+
+			var selectedEvent = {
 				operation: {
 					'id': operationId
 				},
@@ -87,7 +85,7 @@
 				endTime: end
 			};
 
-			lessonLearnedModal.open(selectedLessonLearned, insertLessonLearnedCallback, updateLessonLearnedCallback);
+			return selectedEvent;
 		}
 
 		function insertFailureCallback(failure){
