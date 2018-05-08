@@ -8,7 +8,6 @@
 	function dmecTrackingDirective(readingSetupAPIService, $timeout, $interval, $q) {
 		return {
 			scope: {
-				// bitDepthByEvents: '=',
 				connectionEvents: '=',
 				tripEvents: '=',
 				timeEvents: '='
@@ -109,7 +108,7 @@
 						readingSetupAPIService.getTick((now - updateLatency), resolve, reject);
 					});
 
-					scope.onReading.then(function (data) {						
+					scope.onReading.then(function (data) {
 						scope.maxDepth = Math.max(scope.maxDepth, data.bitDepth);
 						
 						if (scope.bitDepthPoints) {
@@ -157,7 +156,6 @@
 					var loopEndTimestamp = loopEndTime.getTime();
 
 					if (loopEndTime.getTime() > loopLimit.getTime()) {
-						// loopEndTimestamp = loopLimit.getTime();
 						loopEndTimestamp = null;
 					}
 

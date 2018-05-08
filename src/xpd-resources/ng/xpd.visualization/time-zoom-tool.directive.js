@@ -44,6 +44,8 @@
 				scope.$watch('zoomStartAt', moveZoomElement);
 				scope.$watch('zoomEndAt', moveZoomElement);
 
+				scope.$watch('bitDepthPoints', resize);
+
 				getZoomAreaElement().on('mousedown', mouseDown);
 				getZoomAreaElement().on('mouseup', mouseUp);
 
@@ -258,7 +260,19 @@
 
 						scope.xTicks = scope.timeScale.ticks(6);
 
-						var bitDepthPoints = scope.bitDepthPoints || [];
+						var bitDepthPoints = angular.copy(scope.bitDepthPoints) || [];
+
+						if(bitDepthPoints.length > 0) {
+							bitDepthPoints.unshift({
+								x:bitDepthPoints[0].x,
+								y: scope.maxDepth
+							});
+
+							bitDepthPoints.push({
+								x: bitDepthPoints[bitDepthPoints.length-1].x,
+								y: scope.maxDepth
+							});
+						}
 
 						var depthScale = d3.scale.linear()
 							.domain([scope.minDepth, scope.maxDepth])
