@@ -8,7 +8,7 @@
             <div class="xpd-chart-container-content">
                 <div ng-if="operationData.operationContext.currentOperation && operationData.operationContext.currentOperation.running && operationData.eventContext.currentEvent != null"
                     class="xpd-chart" times='dados.connectionTimes' max-seconds="175" max-bars="200" selected-event="selectedEvent"
-                    action-bar-double-click="atController.actionBarDoubleClick" action-bar-click="atController.actionBarClick">
+                    action-open-dropdown-menu="atController.actionOpenDropdownMenu">
                 </div>
 
                 <div class="xpd-chart-placeholder" ng-if="!operationData.operationContext.currentOperation.running && operationData.operationContext.currentEvent == null">
@@ -25,8 +25,8 @@
 
             <div class="xpd-chart-container-content">
                 <div ng-if="operationData.operationContext.currentOperation && operationData.operationContext.currentOperation.running && operationData.eventContext.currentEvent != null"
-                    class="xpd-chart" times='dados.tripTimes' max-seconds="100" max-bars="200" action-bar-click="atController.actionBarClick"
-                    action-bar-double-click="atController.actionBarDoubleClick" selected-event="selectedEvent" average-stand-length='operationData.operationContext.currentOperation.averageStandLength'>
+                    class="xpd-chart" times='dados.tripTimes' max-seconds="100" max-bars="200" action-open-dropdown-menu="atController.actionOpenDropdownMenu"
+                    selected-event="selectedEvent">
 
                 </div>
 
@@ -37,8 +37,11 @@
 
         </div>
 
-        <div class="btn-group slips-to-slips-dropdown-menu" uib-dropdown is-open="flags.modalFailureLessonLearned">
+        <div class="btn-group slips-to-slips-dropdown-menu" uib-dropdown is-open="flags.openDropdownMenu">
             <ul uib-dropdown-menu role="menu">
+                <li role="menuitem">
+                    <a ng-click="atController.actionClickEventDetailsButton()" id="times-bar-click-details">Details</a>
+                </li>
                 <li role="menuitem">
                     <a ng-click="atController.actionClickFailuresButton()" id="times-bar-click-failures">Failures</a>
                 </li>
