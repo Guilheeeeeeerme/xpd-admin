@@ -1494,8 +1494,6 @@ input:checked + .slider{
 dmec-tracking,
 dmec-tracking > .dmec-tracking-container,
 dmec-tracking d3-dmec-chart,
-dmec-tracking d3-dmec-chart,
-dmec-tracking d3-dmec-chart svg,
 dmec-tracking time-zoom-tool,
 dmec-tracking time-zoom-tool > svg,
 dmec-tracking dmec-tracking-events,

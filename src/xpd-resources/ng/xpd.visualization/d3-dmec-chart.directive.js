@@ -24,84 +24,81 @@
 			link: link
 		};
 
-		function getDefaultTracks(min, max) {
-
-			return [{
-				label: 'BLOCK POSITION',
-				min: -10,
-				max: 50,
-				unitMeasure: 'm',
-				param: 'blockPosition',
-				nextParam: true
-			}, {
-				label: 'RATE OF PENETRATION',
-				min: 0,
-				max: 100,
-				unitMeasure: 'm/hr',
-				param: 'rop',
-				nextParam: false
-			}, {
-				label: 'WOB',
-				min: -10,
-				max: 40,
-				unitMeasure: 'klbf',
-				param: 'wob',
-				nextParam: true
-			}, {
-				label: 'HOOKLOAD',
-				min: -10,
-				max: 500,
-				unitMeasure: 'klbf',
-				param: 'hookload',
-				nextParam: false
-			}, {
-				label: 'RPM',
-				min: -10,
-				max: 200,
-				unitMeasure: 'c/min',
-				param: 'rpm',
-				nextParam: true
-			}, {
-				label: 'TORQUE',
-				min: 0,
-				max: 5000,
-				unitMeasure: 'kft.lbf',
-				param: 'torque',
-				nextParam: false
-			}, {
-				label: 'FLOW',
-				min: 0,
-				max: 1200,
-				unitMeasure: 'gal/min',
-				param: 'flow',
-				nextParam: true
-			}, {
-				label: 'STANDPIPE PRESSURE',
-				min: 0,
-				max: 5000,
-				unitMeasure: 'psi',
-				param: 'sppa',
-				nextParam: false
-			}];
-		}
-
 		function link(scope, element, attrs) {
 
-			d3Service.d3().then(d3Done);
+			if (!localStorage.dmecTracks) {
+				localStorage.dmecTracks = JSON.stringify(getDefaultTracks());
+			}
 
-			function d3Done(d3) {
+			var tracks = JSON.parse(localStorage.dmecTracks);
+			var threads = (!isNaN(Number(attrs.threads))) ? Number(attrs.threads) : 4;
+			var isHorizontal = scope.horizontal = (attrs.horizontal == true || attrs.horizontal == 'true');
 
-				var tracks = getDefaultTracks();
+			/** 
+			 * Readings history 
+			 */
+			scope.$watch('onReadingSince', onReadingSinceChange);
 
-				var threads = (!isNaN(Number(attrs.threads))) ? Number(attrs.threads) : 4;
+
+			/**
+			 * Real History
+			 */
+			function onReadingSinceChange(onReadingSince) {
+				if (onReadingSince) {
+
+					onReadingSince.then(function (readings) {
+
+						readingsToPoints(readings, tracks).then(function (points) {
+
+							d3Service.d3().then(function (d3) {
+
+								createChart(d3, points);
+
+							});
+
+						});
+
+					});
+				}
+			}
+
+			function readingsToPoints(readings, tracks) {
+
+				return $q(function (resolve, reject) {
+
+					if (tracks != null && tracks.length > 0 && readings != null && readings.length > 0) {
+
+						worker.postMessage({
+							cmd: 'reading-to-points',
+							tracks: tracks.map(function (t) { return { param: t.param }; }),
+							readings: readings
+						});
+
+						worker.addEventListener('message', function (event) {
+							if (event.data.cmd == 'reading-to-points') {
+								resolve(event.data.points);
+							}
+						}, false);
+
+					}
+
+				});
+
+			}
+
+			function createChart(d3, initialPoints) {
+
+				var readings = [];
 				var colorScale = d3.scale.category10();
 				var format = d3.format('.1f');
-				var isHorizontal = scope.horizontal = (attrs.horizontal == true || attrs.horizontal == 'true');
 
 				scope.svg = {
 					viewWidth: element[0].clientWidth,
 					viewHeight: element[0].offsetHeight
 				};
+
+				scope.openScaleModal = openScaleModal;
+				scope.listenToMouseMove = listenToMouseMove;
 
 				scope.timeScale = d3.time.scale()
 					.domain([
@@ -114,60 +111,39 @@
 					]);
 
 				/** 
-				 * Realtime 
-				 */
-				scope.$watch('onReading', onReadingChange);
-
-				/** 
-				 * Readings history 
-				 */
-				scope.$watch('onReadingSince', onReadingSinceChange);
-
-				/** 
 				 * Atemporal 
 				 */
 				scope.$watch('zoomStartAt', handleZoom, true);
 				scope.$watch('zoomEndAt', handleZoom, true);
 
-				scope.openScaleModal = openScaleModal;
-				scope.listenToMouseMove = listenToMouseMove;
-
-				buildTracksAxis();
-
-				/**
-				 * Real Time Readings
+				/** 
+				 * Readings history 
 				 */
-				function onReadingChange(onReading) {
+				scope.$watch('onReading', onReadingChange);
 
-					if (onReading) {
-
-						onReading.then(function (currentReading) {
-
-							if (!scope.currentReadings) {
-								scope.currentReadings = [];
-							}
-
-							scope.currentReadings.push(currentReading);
-
-							readingsToPoints(scope.currentReadings, tracks).then(function (points) {
-								scope.newPoints = points;
-								draw('newPoints');
-							});
-
-						});
-					}
-				}
+				configTracks(tracks);
+				draw('oldPoints', initialPoints);		
 
 				/**
 				 * Real History
 				 */
-				function onReadingSinceChange(onReadingSince) {
-					if (onReadingSince) {
-						onReadingSince.then(function (readings) {
+				function onReadingChange(onReading) {
+					if (onReading) {
+
+						onReading.then(function (reading) {
+
+							if(!readings){
+								readings = [];
+							}
+
+							readings.push(reading);
+
+							console.log(reading);
 
 							readingsToPoints(readings, tracks).then(function (points) {
-								scope.oldPoints = points;
-								draw('oldPoints');
+
+								draw('newPoints', points);		
+
 							});
 
 						});
@@ -198,17 +174,12 @@
 
 				}
 
-				function buildTracksAxis() {
-
-					if (!localStorage.dmecTracks) {
-						localStorage.dmecTracks = JSON.stringify(getDefaultTracks());
-					}
-
-					tracks = JSON.parse(localStorage.dmecTracks);
+				function configTracks(tracks) {
 
 					scope.$tracks = tracks.map(function (track, index) {
 						return configTrackProperties(track, index, isHorizontal);
 					});
+
 
 					function configTrackProperties(track, index, isHorizontal) {
 
@@ -289,71 +260,47 @@
 					}
 				}
 
-				function draw(trackName) {
+				function draw(trackName, points) {
 
-					if (scope[trackName]) {
+					worker.postMessage({
+						cmd: 'handle-overflow',
+						tracks: tracks.map(function (track) {
 
-						worker.postMessage({
-							cmd: 'handle-overflow',
-							tracks: tracks.map(function (track) {
+							return {
+								param: track.param,
+								min: track.min,
+								max: track.max
+							};
+						}),
+						trackName: trackName,
+						points: points
+					});
 
-								return {
-									param: track.param,
-									min: track.min,
-									max: track.max
-								};
-							}),
-							trackName: trackName,
-							points: scope[trackName]
+					var promise = $q(function (resolve, reject) {
+						worker.addEventListener('message', function (event) {
+							if (event.data.cmd == 'handle-overflow') {
+								resolve(event.data);
+							}
+						}, false);
+					});
+
+					promise.then(function (data) {
+
+						var points = data.points;
+						var processedTrackName = data.trackName;
+
+						tracks.map(function (track) {
+							d3.select(element[0])
+								.selectAll('.' + processedTrackName)
+								.selectAll('#' + track.param)
+								.attr('d', track.lineFunction(points[track.param]));
 						});
 
-						var promise = $q(function (resolve, reject) {
-							worker.addEventListener('message', function (event) {
-								if (event.data.cmd == 'handle-overflow') {
-									resolve(event.data);
-								}
-							}, false);
-						});
-
-						promise.then(function (data) {
-
-							var points = data.points;
-							var processedTrackName = data.trackName;
-
-							tracks.map(function (track) {
-								d3.select(element[0])
-									.selectAll('.' + processedTrackName)
-									.selectAll('#' + track.param)
-									.attr('d', track.lineFunction(points[track.param]));
-							});
-
-						});
-
-					}
+					});
 
 				}
 
-				function readingsToPoints(readings, tracks) {
-
-					return $q(function (resolve, reject) {
-
-						if (tracks != null && tracks.length > 0 && readings != null && readings.length > 0) {
-
-							worker.postMessage({
-								cmd: 'reading-to-points',
-								tracks: tracks.map(function (t) { return { param: t.param }; }),
-								readings: readings
-							});
-
-							worker.addEventListener('message', function (event) {
-								if (event.data.cmd == 'reading-to-points') {
-									resolve(event.data.points);
-								}
-							}, false);
-
-						}
-
-					});
+				function listenToMouseMoveOld() {
 
 				}
 
@@ -389,7 +336,7 @@
 							cmd: 'find-point',
 							timestamp: timestamp,
 							tracks: tracks.map(function (t) { return { param: t.param }; }),
-							oldPoints: scope.oldPoints,
+							oldPoints: initialPoints,
 							newPoints: scope.newPoints
 						});
 
@@ -472,9 +419,7 @@
 							},
 							onTracksChange: function () {
 								return function () {
-									buildTracksAxis();
-									draw('newPoints');
-									draw('oldPoints');
+									location.reload();
 								};
 							},
 						}
@@ -482,6 +427,67 @@
 				}
 			}
 
+		}
+
+		function getDefaultTracks(min, max) {
+
+			return [{
+				label: 'BLOCK POSITION',
+				min: -10,
+				max: 50,
+				unitMeasure: 'm',
+				param: 'blockPosition',
+				nextParam: true
+			}, {
+				label: 'RATE OF PENETRATION',
+				min: 0,
+				max: 100,
+				unitMeasure: 'm/hr',
+				param: 'rop',
+				nextParam: false
+			}, {
+				label: 'WOB',
+				min: -10,
+				max: 40,
+				unitMeasure: 'klbf',
+				param: 'wob',
+				nextParam: true
+			}, {
+				label: 'HOOKLOAD',
+				min: -10,
+				max: 500,
+				unitMeasure: 'klbf',
+				param: 'hookload',
+				nextParam: false
+			}, {
+				label: 'RPM',
+				min: -10,
+				max: 200,
+				unitMeasure: 'c/min',
+				param: 'rpm',
+				nextParam: true
+			}, {
+				label: 'TORQUE',
+				min: 0,
+				max: 5000,
+				unitMeasure: 'kft.lbf',
+				param: 'torque',
+				nextParam: false
+			}, {
+				label: 'FLOW',
+				min: 0,
+				max: 1200,
+				unitMeasure: 'gal/min',
+				param: 'flow',
+				nextParam: true
+			}, {
+				label: 'STANDPIPE PRESSURE',
+				min: 0,
+				max: 5000,
+				unitMeasure: 'psi',
+				param: 'sppa',
+				nextParam: false
+			}];
 		}
 
 	}

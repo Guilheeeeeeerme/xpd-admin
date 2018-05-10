@@ -18,6 +18,8 @@
 				endAt: '=',
 				zoomStartAt: '=',
 				zoomEndAt: '=',
+				setZoomStartAt: '=',
+				setZoomEndAt: '=',
 				minDepth: '=',
 				maxDepth: '=',
 			},
@@ -56,13 +58,14 @@
 				getOverlayElement().on('dblclick', dblclick);
 				
 				buildTimeAxis();
-				var resizeInterval = $interval(buildTimeAxis, 1000);
 
-				scope.$on('$destroy', function() {
-					if (resizeInterval) {
-						$interval.cancel(resizeInterval);
-					}
-				});
+				// var resizeInterval = $interval(buildTimeAxis, 1000);
+
+				// scope.$on('$destroy', function() {
+				// 	if (resizeInterval) {
+				// 		$interval.cancel(resizeInterval);
+				// 	}
+				// });
 
 				function moveZoomElement() {
 
@@ -167,8 +170,8 @@
 					var endt = d3.transform(getEndZoomElementTransform()),
 						endx = scope.timeScale.invert(endt.translate[0]);
 
-					scope.zoomStartAt = new Date(Math.min(endx, startx));
-					scope.zoomEndAt = new Date(Math.max(endx, startx));
+					scope.setZoomStartAt(new Date(Math.min(endx, startx)));
+					scope.setZoomEndAt(new Date(Math.max(endx, startx)));
 
 					selectedElement.classed('active', false);
 					getOverlayElement().on('mousemove', null).on('mouseup', null);
@@ -184,8 +187,8 @@
 					scope.mindate = scope.timeScale.invert(d3.mouse(this)[0] - 40);
 					scope.maxdate = scope.timeScale.invert(d3.mouse(this)[0] + 40);
 
-					scope.zoomStartAt = scope.mindate;
-					scope.zoomEndAt = scope.maxdate;
+					scope.setZoomStartAt(scope.mindate);
+					scope.setZoomEndAt(scope.maxdate);
 				}
 
 				function onDateRangeChange(newDate, oldDate) {

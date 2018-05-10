@@ -30,7 +30,6 @@
 
 			var resetPage = $timeout(reload, (ONE_HOUR / 2) );
 
-			
 			scope.$on('$destroy', destroy );
 
 			scope.zoomIsLocked = false;
@@ -38,6 +37,9 @@
 			scope.actionButtonUseOperationStartDate = actionButtonUseOperationStartDate;
 			scope.actionButtonSubmitDmecRange = actionButtonSubmitDmecRange;
 			scope.initializeComponent = initializeComponent;
+
+			scope.setZoomStartAt = setZoomStartAt;
+			scope.setZoomEndAt = setZoomEndAt;
 			
 			function reload() {
 				location.reload();
@@ -50,8 +52,16 @@
         		if (getTickInterval) {
             		$interval.cancel(getTickInterval);
         		}
-    		}
+			}
 			
+			function setZoomStartAt(zoomStartAt){
+				scope.zoomStartAt = new Date(zoomStartAt);
+			}
+
+			function setZoomEndAt(zoomEndAt){
+				scope.zoomEndAt = new Date(zoomEndAt);
+			}
+
 			function initializeComponent() {
 
 				var endAt = new Date().getTime();
@@ -175,7 +185,10 @@
 					}
 
 					promiseList.push($q(function (resolve, reject) {
-						readingSetupAPIService.getAllReadingByStartEndTime(loopStartTime.getTime(), loopEndTimestamp, resolve, reject);
+						readingSetupAPIService.getAllReadingByStartEndTime(loopStartTime.getTime(), loopEndTimestamp, resolve, function(){
+							console.log('Falhou a request');
+							resolve([]);
+						});
 					}));
 
 					loopStartTime = new Date(loopEndTime);

@@ -72,33 +72,35 @@
 					actual: null
 				};
 
-				point.overflow = 0;
-				var tempPoint = null;
-
 				if (point.y != null) {
+
+					point.overflow = 0;
+					var tempPoint = null;
 
 					while (point.y < track.min) {
 						tempPoint = JSON.parse(JSON.stringify(point));
 						point.overflow++;
 						point.y += distance;
 					}
-					
+
 					while (point.y > track.max) {
 						tempPoint = JSON.parse(JSON.stringify(point));
 						point.overflow--;
 						point.y -= distance;
 					}
 
-				}
-
-				if (lastPoint != null && lastPoint.overflow != point.overflow) {
-					if(tempPoint){
-						result.push(tempPoint);tempPoint;
+					if (lastPoint != null && lastPoint.overflow != point.overflow) {
+						if (tempPoint) {
+							result.push(tempPoint); tempPoint;
+						}
+						result.push(empty);
 					}
-					result.push(empty);
-				}
 
-				lastPoint = point;
+					lastPoint = point;
+
+				} else {
+					lastPoint = null;
+				}
 
 				result.push(point);
 
@@ -114,25 +116,25 @@
 
 		tracks.map(function (track) {
 
-			var points = [];			
+			var points = [];
 
-			if(newPoints && 
-				newPoints[track.param] && 
-				newPoints[track.param].length && 
+			if (newPoints &&
+				newPoints[track.param] &&
+				newPoints[track.param].length &&
 				timestamp >= newPoints[track.param][0].x) {
-				
+
 				points = newPoints[track.param];
 
 			} else {
-				if(oldPoints && 
-					oldPoints[track.param] && 
-					oldPoints[track.param].length){
+				if (oldPoints &&
+					oldPoints[track.param] &&
+					oldPoints[track.param].length) {
 
 					points = oldPoints[track.param];
 				}
 			}
 
-			while(points && points.length > 1) {
+			while (points && points.length > 1) {
 
 				var half = Math.ceil(points.length / 2);
 
@@ -142,7 +144,7 @@
 				if (lastHalf &&
 					lastHalf.length &&
 					timestamp >= lastHalf[0].x) {
-					
+
 					points = lastHalf;
 
 				} else {

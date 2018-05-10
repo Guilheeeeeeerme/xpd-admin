@@ -111,7 +111,7 @@
 		</div>
 
 		<time-zoom-tool 
-			ng-if="dmecTrackingStartAt && dmecTrackingEndAt && zoomStartAt && zoomEndAt"
+			ng-if="zoomStartAt && zoomEndAt" 
 			is-zooming-callback="isZooming" 
 			bit-depth-points="bitDepthPoints" 
 			horizontal="true" 
@@ -119,6 +119,8 @@
 			end-at="dmecTrackingEndAt"
 			zoom-start-at="zoomStartAt" 
 			zoom-end-at="zoomEndAt" 
+			set-zoom-start-at="setZoomStartAt" 
+			set-zoom-end-at="setZoomEndAt" 
 			min-depth="0" 
 			max-depth="maxDepth">
 		</time-zoom-tool>
