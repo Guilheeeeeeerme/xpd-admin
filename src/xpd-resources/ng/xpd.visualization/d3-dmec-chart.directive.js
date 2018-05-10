@@ -138,7 +138,7 @@
 
 							readings.push(reading);
 
-							console.log(reading);
+							// console.log(reading);
 
 							readingsToPoints(readings, tracks).then(function (points) {
 
