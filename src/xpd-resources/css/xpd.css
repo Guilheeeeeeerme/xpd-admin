@@ -1029,3 +1029,38 @@ a.view-only-link {
     text-align: center;
     margin-bottom: 5px;
  }
+
+
+
+/**
+* Componente: xpd-admin-nav-bar
+**/
+
+xpd-admin-nav-bar .navbar {
+    border: 0;
+}
+
+xpd-admin-nav-bar,
+xpd-admin-nav-bar .navbar,
+xpd-admin-nav-bar .xpd-nav-button {
+    background-color: transparent;
+}
+
+xpd-admin-nav-bar .xpd-nav-button {
+    border: 2px solid #456c75;
+    padding: 15px;
+    font-family: AgencyFB;
+    font-size: 1.3em;
+    font-weight: bolder;
+    color: #456c75;
+}
+
+xpd-admin-nav-bar .xpd-nav-button {
+    color: #456c75;
+}
+
+xpd-admin-nav-bar .xpd-nav-button:focus,
+xpd-admin-nav-bar .xpd-nav-button:hover {
+    background-color: #456c75;
+    color: white;
+}

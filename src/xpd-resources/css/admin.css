@@ -36,37 +36,6 @@ body {
     top: 5px;
 }
 
-.xpd-admin-nav-bar li {
-    border: 2px solid #456c75;
-    font-family: AgencyFB;
-    font-size: 1.3em;
-    font-weight: bolder;
-}
-
-.xpd-admin-nav-bar a {
-    cursor: pointer;
-    color: #456c75;
-}
-
-.xpd-admin-nav-bar li ul{
-    background-color: #eee;
-    color: #456c75;
-}
-
-.xpd-admin-nav-bar li ul a{
-    cursor: pointer;
-    color: #456c75;
-}
-
-.xpd-admin-nav-bar .dropdown-menu li{
-    border: 0;
-}
-
-.xpd-admin-nav-bar .dropdown-menu>li>a:focus, .xpd-admin-nav-bar .dropdown-menu>li>a:hover{
-    background-color: #456c75;
-    color: white;
-}
-
 /**
  *
 

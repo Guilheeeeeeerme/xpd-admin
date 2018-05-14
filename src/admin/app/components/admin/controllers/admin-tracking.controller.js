@@ -11,6 +11,9 @@
 
 		var eventStartTime, eventEndTime, eventId;
 
+		var eventsPromise = null;
+		var parallelEventsPromise = null;
+
 		vm.actionOpenDropdownMenu = actionOpenDropdownMenu;
 		vm.actionClickEventDetailsButton = actionClickEventDetailsButton;
 		vm.actionClickFailuresButton = actionClickFailuresButton;
@@ -21,22 +24,64 @@
 		operationDataFactory.operationData = [];
 		// $scope.operationData = operationDataFactory.operationData;
 
-		buildEventStruture();
+		loadEvents();
+		loadParallelEvents();
 
-		operationDataFactory.addEventListener('adminTrackingController', 'setOnEventChangeListener', buildEventStruture);
-		operationDataFactory.addEventListener('adminTrackingController', 'setOnParallelEventChangeListener', buildEventStruture);
+		operationDataFactory.addEventListener('adminTrackingController', 'setOnEventChangeListener', loadAllEvents);
+		operationDataFactory.addEventListener('adminTrackingController', 'setOnParallelEventChangeListener', loadAllEvents);
 
-		function buildEventStruture(context) {
+		function loadAllEvents(){
+			loadEvents();
+			loadParallelEvents();
+		}
+
+		function loadEvents(context) {
 
 			if ($scope.operationData != null &&
 				$scope.operationData.operationContext &&
 				$scope.operationData.operationContext.currentOperation &&
 				$scope.operationData.operationContext.currentOperation.running) {
 
-				listTrackingEventByOperation($scope.operationData.operationContext.currentOperation.id).then(organizeEventsOnLists);
+				eventsPromise = listTrackingEventByOperation($scope.operationData.operationContext.currentOperation.id);
+
+				loadingDone();
 
 			}
 
+		}
+
+		function loadParallelEvents(context) {
+
+			if ($scope.operationData != null &&
+				$scope.operationData.operationContext &&
+				$scope.operationData.operationContext.currentOperation &&
+				$scope.operationData.operationContext.currentOperation.running) {
+
+				parallelEventsPromise = listTrackingParallelEventByOperation($scope.operationData.operationContext.currentOperation.id);
+
+				loadingDone();
+
+			}
+
+		}
+
+		function loadingDone(){
+
+			var promises = [eventsPromise, parallelEventsPromise].filter(function(promise){
+				return promise != null;
+			});
+
+			$q.all(promises).then(function(results){
+
+				var events = [];
+
+				for(var i in results){
+					events = events.concat(results[i]);
+				}
+
+				organizeEventsOnLists(events);
+
+			});
 		}
 
 		function actionOpenDropdownMenu($event, eventLog) {
@@ -119,6 +164,12 @@
 		function listTrackingEventByOperation(operationId) {
 			return $q(function (resolve, reject) {
 				eventlogSetupAPIService.listTrackingEventByOperation(operationId, resolve, reject);
+			});
+		}
+
+		function listTrackingParallelEventByOperation(operationId) {
+			return $q(function (resolve, reject) {
+				eventlogSetupAPIService.listTrackingParallelEventByOperation(operationId, resolve, reject);
 			});
 		}
 
