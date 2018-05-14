@@ -56,6 +56,8 @@
 				getEndZoomElement().on('mouseup', mouseUp);
 
 				getOverlayElement().on('dblclick', dblclick);
+
+				scope.$watch('bitDepthPoints', buildTimeAxis, true);
 				
 				buildTimeAxis();
 
