@@ -105,6 +105,14 @@
 
 		}
 
+		function insertFailureSuccessCallback() {
+			$uibModalInstance.close();
+		}
+
+		function insertFailureErrorCallback() {
+			dialogFactory.showConfirmDialog('Error on inserting failure, please try again!');
+		}
+
 		function registerFailure(failure) {
 			setupAPIService.insertObject(
 				'setup/failure',
