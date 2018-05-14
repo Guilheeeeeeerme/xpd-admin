@@ -72,33 +72,35 @@
 					actual: null
 				};
 
-				point.overflow = 0;
-				var tempPoint = null;
-
 				if (point.y != null) {
+
+					point.overflow = 0;
+					var tempPoint = null;
 
 					while (point.y < track.min) {
 						tempPoint = JSON.parse(JSON.stringify(point));
 						point.overflow++;
 						point.y += distance;
 					}
-					
+
 					while (point.y > track.max) {
 						tempPoint = JSON.parse(JSON.stringify(point));
 						point.overflow--;
 						point.y -= distance;
 					}
 
-				}
-
-				if (lastPoint != null && lastPoint.overflow != point.overflow) {
-					if(tempPoint){
-						result.push(tempPoint);tempPoint;
+					if (lastPoint != null && lastPoint.overflow != point.overflow) {
+						if (tempPoint) {
+							result.push(tempPoint); tempPoint;
+						}
+						result.push(empty);
 					}
-					result.push(empty);
-				}
 
-				lastPoint = point;
+					lastPoint = point;
+
+				} else {
+					lastPoint = null;
+				}
 
 				result.push(point);
 
@@ -112,21 +114,24 @@
 
 		var reading = {};
 
-		tracks.map(function (track, trackIndex) {
+		tracks.map(function (track) {
 
-			var point = null;
 			var points = [];
 
-			try {
-				points = points.concat(oldPoints[track.param]);
-			} catch (e) {
-				// faça nada
-			}
+			if (newPoints &&
+				newPoints[track.param] &&
+				newPoints[track.param].length &&
+				timestamp >= newPoints[track.param][0].x) {
 
-			try {
-				points = points.concat(newPoints[track.param]);
-			} catch (e) {
-				// faça nada
+				points = newPoints[track.param];
+
+			} else {
+				if (oldPoints &&
+					oldPoints[track.param] &&
+					oldPoints[track.param].length) {
+
+					points = oldPoints[track.param];
+				}
 			}
 
 			while (points && points.length > 1) {
@@ -139,7 +144,7 @@
 				if (lastHalf &&
 					lastHalf.length &&
 					timestamp >= lastHalf[0].x) {
-					
+
 					points = lastHalf;
 
 				} else {
@@ -148,12 +153,7 @@
 
 			}
 
-			for (var i in points) {
-				point = points[i];
-				break;
-			}
-
-			reading[track.param] = point;
+			reading[track.param] = points[0] || null;
 
 		});
 

@@ -12,12 +12,41 @@
 
 </ul>
 
-<div class="col-md-9 col-sm-6 col-xs-6 tracking-content">
+<div class="col-md-9 col-sm-6 col-xs-6 tracking-content" ng-controller="AdminTrackingController as atController">
     
-    <old-tracking ng-if="flags.showDMEC == false"></old-tracking>
+    <old-tracking 
+        action-event-modal-button-close = "atController.actionEventModalButtonClose" 
+        action-event-modal-button-save = "atController.actionEventModalButtonSave" 
+        action-open-dropdown-menu = "atController.actionOpenDropdownMenu" 
+        action-click-event-details-button = "atController.actionClickEventDetailsButton" 
+        action-click-failures-button = "atController.actionClickFailuresButton" 
+        action-click-lessons-learned-button = "atController.actionClickLessonsLearnedButton" 
+        task-expected-duration="operationData.chronometerContext.expected"
+        current-tick="operationData.chronometerContext.tick" 
+        current-operation = "operationData.operationContext.currentOperation"
+        current-event = "operationData.eventContext.currentEvent"
+        current-reading = "operationData.readingContext.currentReading"
+        current-calculated = "operationData.elevatorTargetContext.currentCalculated"
+        safety-speed-limit = "operationData.elevatorTargetContext.safetySpeedLimit"
+        current-time-calculated = "operationData.elevatorTargetContext.currentTimeCalculated"
+        block-speed-context = "operationData.blockSpeedContext"
+        changing-states-list = "operationData.stateContext.changingStatesList"
+        changing-alarms-list = "operationData.alarmContext.changingAlarmsList"
+        unreachable = "operationData.elevatorTargetContext.unreachable"
+        current-state = "operationData.stateContext.currentState" 
+        connection-times = "dados.connectionTimes"
+        trip-times = "dados.tripTimes"
+        time-blocks = "dados.timeBlocks"
+        flags = "flags"
+        ng-if="flags.showDMEC == false">
+    </old-tracking>
     
     <dmec-tracking 
         ng-if="flags.showDMEC == true" 
+        current-operation="operationData.operationContext.currentOperation" 
+        current-event="operationData.eventContext.currentEvent" 
+        current-tick="operationData.chronometerContext.tick" 
+        current-block-position="operationData.readingContext.currentReading.blockPosition"
         connection-events="dados.connectionEvents" 
         trip-events="dados.tripEvents" 
         time-events="dados.timeEvents">

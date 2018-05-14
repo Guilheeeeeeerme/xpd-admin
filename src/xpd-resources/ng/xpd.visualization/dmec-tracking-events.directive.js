@@ -22,13 +22,15 @@
 			},
 			link: function (scope, element, attrs) {
 
+				var selfTick = null;
+				var lastEventType = null;
 				var lastBarColor;
 				var lastElement;
 				scope.element = element[0];
 				scope.mindate = null;
 				scope.maxdate = null;
 				scope.elementIdGroup = 'current-event-' + scope.eventType;
-				scope.elementIdBar = 'current-event-bar' + scope.eventType;
+				scope.elementIdBar = 'current-event-bar-' + scope.eventType;
 				scope.selectedEvent = null;
 				// scope.verticalMode = angular.isDefined(scope.verticalMode) ? scope.verticalMode : false;
 
@@ -59,8 +61,23 @@
 					});
 
 					scope.$watch('tick', function (tick) {
-						if (scope.currentEvent && scope.eventType == scope.currentEvent.eventType)
+						if (scope.currentEvent && scope.eventType == scope.currentEvent.eventType) {
 							currentEventBar(buildCurrentEventBar(scope.currentEvent, true, tick));
+						}	
+					});
+
+					scope.$watch('currentEvent', function (currentEvent) {
+						if (!lastEventType) {
+							lastEventType = scope.currentEvent.eventType;
+						}
+
+						if (lastEventType != currentEvent.eventType) {
+							d3.selectAll('#current-event-bar-' + lastEventType).remove();
+							d3.selectAll('#current-event-' + lastEventType).append('rect').attr('id', 'current-event-bar-' + lastEventType);
+
+							lastEventType = scope.currentEvent.eventType;
+						}
+
 					});
 
 					getEventZoomElement().on('dblclick', dblclick);
@@ -158,16 +175,21 @@
 					}
 
 					function currentEventBar(bar) {
-						var startTime = new Date(scope.currentEvent.startTime);
+						try {
+							var startTime = new Date(scope.currentEvent.startTime);
 
-						d3.select(element[0]).select('#' + scope.elementIdGroup)
-							.attr('transform', 'translate(' + scope.xScale(startTime) + ', 0)');
+							d3.select(element[0]).select('#' + scope.elementIdGroup)
+								.attr('transform', 'translate(' + scope.xScale(startTime) + ', 0)');
 
-						d3.select(element[0]).select('#' + scope.elementIdBar)
-							.attr('y', bar.position)
-							.attr('width', bar.width)
-							.attr('height', bar.height)
-							.attr('fill', bar.color);
+							d3.select(element[0]).select('#' + scope.elementIdBar)
+								.attr('y', bar.position)
+								.attr('width', bar.width)
+								.attr('height', bar.height)
+								.attr('fill', bar.color);
+						} catch (error) {
+							// faça nada
+						}
+						
 					}
 
 					function getEventZoomElement() {

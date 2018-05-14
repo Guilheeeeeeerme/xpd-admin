@@ -10,10 +10,12 @@
 			scope: {
 				connectionEvents: '=',
 				tripEvents: '=',
-				timeEvents: '='
+				timeEvents: '=',
+				currentOperation: '=',
+				currentEvent: '=',
+				currentTick: '=',
+				currentBlockPosition: '='
 			},
-			controller: 'TrackingController',
-			controllerAs: 'atController',
 			restrict: 'AE',
 			templateUrl: 'app/components/admin/directives/dmec-tracking.template.html',
 			link: link
@@ -23,18 +25,42 @@
 
 			var ONE_HOUR = 3600000;
 			var ONE_DAY = 24 * ONE_HOUR;
-			var updateLatency = 1000;
+			var updateLatency = 5000;
 			var getTickInterval;
 
-			setTimeout(function () {
-				location.reload();
-			}, (ONE_HOUR / 2) );
+			var resetPage = $timeout(reload, (ONE_HOUR / 2) );
+
+			scope.$on('$destroy', destroy );
 
 			scope.zoomIsLocked = false;
 			scope.isZooming = isZooming;
 			scope.actionButtonUseOperationStartDate = actionButtonUseOperationStartDate;
 			scope.actionButtonSubmitDmecRange = actionButtonSubmitDmecRange;
 			scope.initializeComponent = initializeComponent;
+
+			scope.setZoomStartAt = setZoomStartAt;
+			scope.setZoomEndAt = setZoomEndAt;
+			
+			function reload() {
+				location.reload();
+			}
+
+			function destroy() {
+        		if (resetPage) {
+            		$timeout.cancel(resetPage);
+        		}
+        		if (getTickInterval) {
+            		$interval.cancel(getTickInterval);
+        		}
+			}
+			
+			function setZoomStartAt(zoomStartAt){
+				scope.zoomStartAt = new Date(zoomStartAt);
+			}
+
+			function setZoomEndAt(zoomEndAt){
+				scope.zoomEndAt = new Date(zoomEndAt);
+			}
 
 			function initializeComponent() {
 
@@ -56,7 +82,6 @@
 
 				if (angular.isDefined(getTickInterval)) {
 					$interval.cancel(getTickInterval);
-					getTickInterval = undefined;
 				}
 
 				getTickInterval = $interval(getTick, updateLatency);
@@ -128,7 +153,7 @@
 
 				startTime = new Date(startTime);
 
-				var operationStartDate = new Date(scope.operationData.operationContext.currentOperation.startDate);
+				var operationStartDate = new Date(scope.currentOperation.startDate);
 
 				if (startTime.getTime() < operationStartDate.getTime()) {
 					startTime = operationStartDate;
@@ -160,7 +185,10 @@
 					}
 
 					promiseList.push($q(function (resolve, reject) {
-						readingSetupAPIService.getAllReadingByStartEndTime(loopStartTime.getTime(), loopEndTimestamp, resolve, reject);
+						readingSetupAPIService.getAllReadingByStartEndTime(loopStartTime.getTime(), loopEndTimestamp, resolve, function(){
+							console.log('Falhou a request');
+							resolve([]);
+						});
 					}));
 
 					loopStartTime = new Date(loopEndTime);

@@ -64,7 +64,10 @@
 					} else if (path == 'dmeclog.html#/') {
 						window.open('https://' + $location.host() + ':' + $location.port() + '/admin/dmeclog.html#');
 					} else {
-						$location.url(path);
+						if ( !window.location.href.endsWith(path) ){
+							window.open('admin.html#' + path);
+						}
+						// $location.url(path);
 					}
 
 				} else {
@@ -76,7 +79,10 @@
 					} else if (path == 'dmeclog.html#/') {
 						window.open(url + '/pages/' + path);
 					} else {
-						$location.url(path);
+						if ( !window.location.href.endsWith(path) ){
+							window.open('admin.html#' + path);
+						}
+						// $location.url(path);
 					}
 
 				}

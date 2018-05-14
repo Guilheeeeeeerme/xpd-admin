@@ -5,24 +5,37 @@
 	angular.module('xpd.dmeclog')
 		.controller('DMecLogController', DMecLogController);
 
-	DMecLogController.$inject = ['$scope', '$interval', '$q', 'readingSetupAPIService'];
+	DMecLogController.$inject = ['$scope', '$timeout', '$interval', '$q', 'readingSetupAPIService'];
 
-	function DMecLogController($scope, $interval, $q, readingSetupAPIService) {
+	function DMecLogController($scope, $timeout, $interval, $q, readingSetupAPIService) {
 
 		var ONE_HOUR = 3600000;
 		var ONE_DAY = 24 * ONE_HOUR;
 		var updateLatency = 1000;
 		var getTickInterval;
 
-		setTimeout(function () {
-			location.reload();
-		}, (ONE_HOUR / 2) );
+		var resetPage = $timeout(reload, (ONE_HOUR / 2) );
+			
+		$scope.$on('$destroy', destroy );
 
 		$scope.zoomIsLocked = false;
 		$scope.actionButtonSubmitDmecRange = actionButtonSubmitDmecRange;
 		$scope.isZooming = isZooming;
 		
 		initializeComponent();
+
+		function destroy() {
+    		if (resetPage) {
+        		$timeout.cancel(resetPage);
+    		}
+    		if (getTickInterval) {
+        		$interval.cancel(getTickInterval);
+    		}
+		}
+
+		function reload () {
+			location.reload();
+		}
 
 		function initializeComponent() {
 			
