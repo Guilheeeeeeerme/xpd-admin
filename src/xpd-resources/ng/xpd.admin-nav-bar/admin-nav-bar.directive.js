@@ -17,17 +17,17 @@
 			scope: {
 
 			},
-			restrict: 'EA',
+			restrict: 'E',
 			templateUrl: '../xpd-resources/ng/xpd.admin-nav-bar/admin-nav-bar.template.html',
 			link: link
 		};
 
 		function link(scope, element, attrs) {
 
-			if (attrs.navOrigin == 'admin') {
-				scope.onclickItemMenu = onclickItemMenuAdmin;
-			} else {
+			if (attrs.navOrigin == 'report') {
 				scope.onclickItemMenu = onclickItemMenuReport;
+			} else {
+				scope.onclickItemMenu = onclickItemMenuAdmin;
 			}
 
 			operationDataFactory.operationData = [];
@@ -37,79 +37,88 @@
 
 			operationDataFactory.addEventListener('menuConfirmationFactory', 'setOnNoCurrentOperationListener', hidePlanner);
 
-			function onclickItemMenuAdmin(path) {
+			function onclickItemMenuAdmin(path, newTab) {
 				var blockMenu = menuConfirmationFactory.getBlockMenu();
 
 				if (!blockMenu) {
 
-					redirectToPath(path);
+					redirectToPath(path, !!newTab);
 
 				} else {
 					var message = 'Your changes will be lost. Proceed?';
 
 					dialogFactory.showCriticalDialog(message, function () {
 						menuConfirmationFactory.setBlockMenu(false);
-						redirectToPath(path);
+						redirectToPath(path, !!newTab);
 					});
 				}
 			}
 
-			function redirectToPath(path) {
-
-
-				if ($location.port()) {
-
-					if (path == 'reports.html#/') {
-						window.location.href = 'https://' + $location.host() + ':' + $location.port() + '/admin/' + path;
-					} else if (path == 'dmeclog.html#/') {
-						window.open('https://' + $location.host() + ':' + $location.port() + '/admin/dmeclog.html#');
-					} else {
-						if ( !window.location.href.endsWith(path) ){
-							window.open('admin.html#' + path);
-						}
-						// $location.url(path);
-					}
-
-				} else {
-
-					var url = window.location.href.split('pages')[0];
-
-					if (path == 'reports.html#/') {
-						window.location.href = url + '/pages/' + path;
-					} else if (path == 'dmeclog.html#/') {
-						window.open(url + '/pages/' + path);
-					} else {
-						if ( !window.location.href.endsWith(path) ){
-							window.open('admin.html#' + path);
-						}
-						// $location.url(path);
-					}
-
-				}
-			}
-
-			function onclickItemMenuReport(path) {
+			function onclickItemMenuReport(path, newTab) {
 
 				if ($location.port()) {
 					
-					if (path == 'reports.html#/') {
-						$location.url();
-					} else if (path == 'dmeclog.html#/') {
+					if (path == 'dmeclog.html#/') {
 						window.open('https://' + $location.host() + ':' + $location.port() + '/admin/dmeclog.html#');
 					} else {
-						window.location.href = 'https://' + $location.host() + ':' + $location.port() + '/admin/admin.html#' + path;
+						if(newTab){
+							window.open('https://' + $location.host() + ':' + $location.port() + '/admin/admin.html#' + path);
+						}else{
+							window.location.href = 'https://' + $location.host() + ':' + $location.port() + '/admin/admin.html#' + path;
+						}
 					}
 
 				} else {
 
 					var url = window.location.href.split('/pages')[0];					
 
-					if (path == 'reports.html#/') {
-						// window.location.href = url + 'pages/reports.html#/';
-					} else if (path == 'dmeclog.html#/') {
+					if (path == 'dmeclog.html#/') {
 						window.open(url + 'pages/dmeclog.html#');
 					} else {
-						window.location.href = url + 'pages/admin.html#' + path;
+						if(newTab){
+							window.open('https://' + url + 'pages/admin.html#' + path);
+						}else{
+							window.location.href = url + 'pages/admin.html#' + path;
+						}
+					}
+
+				}
+			}
+
+			function redirectToPath(path, newTab) {
+
+				if ($location.port()) {
+
+					if (path == 'dmeclog.html#/') {
+						window.open('https://' + $location.host() + ':' + $location.port() + '/admin/dmeclog.html#');
+					} else if (path == 'reports.html#/') {
+						window.location.href = 'https://' + $location.host() + ':' + $location.port() + '/admin/' + path;
+					} else {
+						if ( !window.location.href.endsWith(path) ){
+							if(newTab){
+								window.open('admin.html#' + path);
+							}else{
+								$location.url(path);
+							}
+						}
+					}
+
+				} else {
+
+					var url = window.location.href.split('pages')[0];
+
+					if (path == 'dmeclog.html#/') {
+						window.open(url + '/pages/' + path);
+					} else if (path == 'reports.html#/') {
+						window.location.href = url + '/pages/' + path;
+					} else {
+						if ( !window.location.href.endsWith(path) ){
+							if(newTab){
+								window.open('admin.html#' + path);
+							}else{
+								$location.url(path);
+							}
+						}
 					}
 
 				}

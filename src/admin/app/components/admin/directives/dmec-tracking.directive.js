@@ -14,7 +14,8 @@
 				currentOperation: '=',
 				currentEvent: '=',
 				currentTick: '=',
-				currentBlockPosition: '='
+				currentBlockPosition: '=',
+				currentReading: '='
 			},
 			restrict: 'AE',
 			templateUrl: 'app/components/admin/directives/dmec-tracking.template.html',
@@ -25,7 +26,7 @@
 
 			var ONE_HOUR = 3600000;
 			var ONE_DAY = 24 * ONE_HOUR;
-			var updateLatency = 5000;
+			var updateLatency = 1000;
 			var getTickInterval;
 
 			var resetPage = $timeout(reload, (ONE_HOUR / 2) );
@@ -130,7 +131,12 @@
 					}
 
 					scope.onReading = $q(function (resolve, reject) {
-						readingSetupAPIService.getTick((now - updateLatency), resolve, reject);
+						var currentReading = scope.currentReading;
+						if(currentReading.timestamp && currentReading.timestamp){
+							currentReading.timestamp = new Date(currentReading.timestamp).getTime();
+							resolve(currentReading);
+						}
+						// readingSetupAPIService.getTick((now - updateLatency), resolve, reject);
 					});
 
 					scope.onReading.then(function (data) {

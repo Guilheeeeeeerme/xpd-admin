@@ -21,12 +21,12 @@
 		operationDataFactory.operationData = [];
 		// $scope.operationData = operationDataFactory.operationData;
 
-		buildEventStruture();
+		loadEvents();
 
-		operationDataFactory.addEventListener('adminTrackingController', 'setOnEventChangeListener', buildEventStruture);
-		operationDataFactory.addEventListener('adminTrackingController', 'setOnParallelEventChangeListener', buildEventStruture);
+		operationDataFactory.addEventListener('adminTrackingController', 'setOnEventChangeListener', loadEvents);
+		operationDataFactory.addEventListener('adminTrackingController', 'setOnParallelEventChangeListener', loadEvents);
 
-		function buildEventStruture(context) {
+		function loadEvents() {
 
 			if ($scope.operationData != null &&
 				$scope.operationData.operationContext &&
@@ -34,7 +34,6 @@
 				$scope.operationData.operationContext.currentOperation.running) {
 
 				listTrackingEventByOperation($scope.operationData.operationContext.currentOperation.id).then(organizeEventsOnLists);
-
 			}
 
 		}
