@@ -138,7 +138,7 @@
         <span class="blockspeed-ruler-go-text">GO!</span>
     </div>
 
-    <div class="blockspeed-ruler-slow-down" ng-show="flags.showSlowDown">
+    <div class="blockspeed-ruler-slow-down" ng-if="currentEvent && currentEvent.eventType == 'TRIP'" ng-show="flags.showSlowDown">
         <span class="blockspeed-ruler-slow-down-text">Exceeding the speed limit!</span>
     </div>
 
