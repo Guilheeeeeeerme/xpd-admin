@@ -188,7 +188,7 @@
 			var promises = [];
 
 			promises.push(new Promise(function (resolve, reject) {
-				eventlogSetupAPIService.listByType('TRIP', operationId, null, function (events) {
+				eventlogSetupAPIService.listByFilters('TRIP', operationId, null, null, null, function (events) {
 					events = events.map(function (event) {
 						return event;
 					});
@@ -197,7 +197,7 @@
 			}));
 
 			promises.push(new Promise(function (resolve, reject) {
-				eventlogSetupAPIService.listByType('CONN', operationId, null, function (events) {
+				eventlogSetupAPIService.listByFilters('CONN', operationId, null, null, null, function (events) {
 					events = events.map(function (event) {
 						return event;
 					});
@@ -206,7 +206,7 @@
 			}));
 
 			promises.push(new Promise(function (resolve, reject) {
-				eventlogSetupAPIService.listByType('TIME', operationId, null, function (events) {
+				eventlogSetupAPIService.listByFilters('TIME', operationId, null, null, null, function (events) {
 					events = events.map(function (event) {
 						return event;
 					});

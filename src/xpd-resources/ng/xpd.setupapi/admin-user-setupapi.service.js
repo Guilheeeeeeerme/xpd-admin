@@ -3,32 +3,32 @@
 
 	angular.module('xpd.setupapi').service('adminUserSetupAPIService', adminUserSetupAPIService);
 
-	adminUserSetupAPIService.$inject = ['$http', 'xpdAccessFactory', 'setupAPIService'];
+	adminUserSetupAPIService.$inject = ['$http', 'xpdAccessFactory'];
 
-	function adminUserSetupAPIService($http, xpdAccessFactory, setupAPIService) {
+	function adminUserSetupAPIService($http, xpdAccessFactory) {
+
+		var BASE_URL = xpdAccessFactory.getSetupURL() + 'setup/admin-user';
 
 		var vm = this;
 
 		vm.authenticate = authenticate;
 
-		function authenticate(object, successCallback, errorCallback) {
+		function authenticate(loginInfo, successCallback, errorCallback) {
 
 			var req = {
 				method: 'POST',
-				url: xpdAccessFactory.getSetupURL() + 'setup/admin-user/login',
+				url: BASE_URL + '/login',
 				headers: {
 					'Content-Type': 'application/json'
 				},
-				data: object
+				data: loginInfo
 			};
 
 			$http(req).then(
 	            function(data) {
-	            	setupAPIService.generateToast(data.data, false);
 	                successCallback && successCallback(data.data);
 	            },
 	            function(error){
-	            	setupAPIService.generateToast(error.data, true);
 	                errorCallback && errorCallback(error);
             	}
 			);

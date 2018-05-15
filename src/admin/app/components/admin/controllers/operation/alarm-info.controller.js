@@ -34,7 +34,7 @@
 			$scope.alarms.historyAlarms = [];
 			$scope.alarms.archivedAlarms = [];
 
-			alarmSetupAPIService.listByType($scope.dados.operation.type, $scope.dados.operation.id, listByTypeCallback);
+			alarmSetupAPIService.getByOperationType($scope.dados.operation.type, $scope.dados.operation.id, listByTypeCallback);
 
 		}
 

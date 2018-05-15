@@ -8,16 +8,17 @@
 
 	function alarmSetupAPIService($http, xpdAccessFactory, setupAPIService) {
 
+		var BASE_URL = xpdAccessFactory.getSetupURL() + 'setup/alarm';
+
 		var vm = this;
-		var apiUrl = xpdAccessFactory.getSetupURL();
 
 		vm.updateArchive = updateArchive;
-		vm.listByType = listByType;
+		vm.getByOperationType = getByOperationType;
 
 		function updateArchive(id, archived, successCallback, errorCallback) {
 			var req = {
 				method: 'GET',
-				url: apiUrl + 'setup/alarm/' + id + '/archive/' + archived
+				url: BASE_URL + '/' + id + '/archive/' + archived
 			};
 			$http(req).then(
 	            function(response) {
@@ -30,11 +31,11 @@
 			);
 		}
 
-		function listByType(type, id, successCallback, errorCallback) {
+		function getByOperationType(type, butNot, successCallback, errorCallback) {
 
 			var req = {
 				method: 'GET',
-				url: apiUrl + 'setup/alarm/of-operations/' + type + '/but-not-id/' + (id || 0)
+				url: BASE_URL + '/of-operations/' + type + '/but-not-id/' + (butNot || 0)
 			};
 			$http(req).then(
 	            function(response) {
