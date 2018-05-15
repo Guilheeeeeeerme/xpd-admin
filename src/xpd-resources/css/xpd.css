@@ -616,7 +616,7 @@ a.view-only-link {
 }
 
 .xpd-setup-panel .panel-body {
-    /*max-height: 100vh;*/
+    max-height: 85vh;
     overflow-y: auto;
     border-radius: 0;
 }
