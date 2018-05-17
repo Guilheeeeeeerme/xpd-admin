@@ -3,9 +3,13 @@
 
 	angular.module('setup.test').controller('alarmSetupTestController', alarmSetupTestController);
 
-	alarmSetupTestController.$inject = ['$scope', 'alarmSetupAPIService'];
+	alarmSetupTestController.$inject = ['$scope', 'alarmSetupAPIService','operationSetupAPIService'];
 
-	function alarmSetupTestController($scope, alarmSetupAPIService) {
+	function alarmSetupTestController($scope, alarmSetupAPIService, operationSetupAPIService) {
+
+		operationSetupAPIService.getList(function(operations){
+			console.log(operations);
+		});
 
 		$scope.dados = {
 
@@ -23,8 +27,7 @@
 				};
 			}
 		);
-
-		console.log(alarmSetupAPIService);
+        
 	}
 
 
