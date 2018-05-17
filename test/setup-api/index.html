@@ -79,28 +79,32 @@
 </head>
 
 <body ng-controller="setupTestController">
+    
+    <div class="col-md-offset-1 col-md-10">
+        <select ng-model="selectedTest" class="form-control">
 
-    <select ng-model="selectedTest">
+            <option value="admin-user">admin-user</option>
+            <option value="alarm">alarm</option>
+            <option value="category">category</option>
+            <option value="eventlog">eventlog</option>
+            <option value="failure">failure</option>
+            <option value="lessonlearned">lessonlearned</option>
+            <option value="master-user">master-user</option>
+            <option value="operation">operation</option>
+            <option value="reading">reading</option>
+            <option value="reports">reports</option>
+            <option value="schedule">schedule</option>
+            <option value="section">section</option>
+            <option value="well">well</option>
 
-        <option value="admin-user">admin-user</option>
-        <option value="alarm">alarm</option>
-        <option value="category">category</option>
-        <option value="eventlog">eventlog</option>
-        <option value="failure">failure</option>
-        <option value="lessonlearned">lessonlearned</option>
-        <option value="master-user">master-user</option>
-        <option value="operation">operation</option>
-        <option value="reading">reading</option>
-        <option value="reports">reports</option>
-        <option value="schedule">schedule</option>
-        <option value="section">section</option>
-        <option value="well">well</option>
+        </select>
 
-    </select>
+        <!-- <h1>/test/setup-api/{{ selectedTest }}-setupapi/{{ selectedTest }}-setupapi.html</h1> -->
 
-    <!-- <h1>/test/setup-api/{{ selectedTest }}-setupapi/{{ selectedTest }}-setupapi.html</h1> -->
+        <ng-include src="'/test/setup-api/'+ selectedTest +'-setupapi/'+ selectedTest +'-setupapi.html'"></ng-include>
 
-    <ng-include src="'/test/setup-api/'+ selectedTest +'-setupapi/'+ selectedTest +'-setupapi.html'"></ng-include>
+    </div>
+    
 
 </body>
 
