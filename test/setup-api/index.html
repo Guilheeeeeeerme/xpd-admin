@@ -43,8 +43,18 @@
 
         function setupTestController($scope) {
 
-            $scope.getPartial = function () {
+            $scope.selectedTest = localStorage.getItem('SETUPAPITEST');
+
+            $scope.$watch('selectedTest',  updateLocalStorage)
+            $scope.getPartial = getPartial;
+            
+            function getPartial () {
                 return '/test/setup-api/' + $scope.selectedTest + '-setupapi/' + $scope.selectedTest + '-setupapi.html';
+            }
+
+            function updateLocalStorage(selectedTest){
+                if(selectedTest)
+                    localStorage.setItem('SETUPAPITEST', selectedTest);
             }
 
         }

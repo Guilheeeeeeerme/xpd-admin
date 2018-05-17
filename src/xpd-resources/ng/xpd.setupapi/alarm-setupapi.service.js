@@ -12,8 +12,33 @@
 
 		var vm = this;
 
+		vm.insertAlarm = insertAlarm;
 		vm.updateArchive = updateArchive;
 		vm.getByOperationType = getByOperationType;
+
+		function insertAlarm(object, successCallback, errorCallback) {
+
+			var modelURL = 'setup/function';
+
+			var req = {
+				method: 'POST',
+				url: xpdAccessFactory.getSetupURL() + modelURL,
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				data: object
+			};
+
+			$http(req).then(
+				function (response) {
+					successCallback && successCallback(response.data.data);
+				},
+				function (error) {
+					setupAPIService.generateToast(error.data, true);
+					errorCallback && errorCallback(error);
+				}
+			);
+		}
 
 		function updateArchive(id, archived, successCallback, errorCallback) {
 			var req = {
