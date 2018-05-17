@@ -5,94 +5,82 @@
 
 	function categorySetupTestController($scope, categorySetupAPIService) {
 
-		$scope.data = {};
+		$scope.data = {
+			successCount: 0,
+			errorCount: 0,
+			responseList: []
+		};
 	
-		// TESTE OK
-		// categorySetupAPIService.getCategoryName(1,
-		// 	function (result) {
-		// 		$scope.data.getCategoryName = {
-		// 			success: result
-		// 		};
-		// 	},
-		// 	function (error) {
-		// 		$scope.data.getCategoryName = {
-		// 			error: error
-		// 		};
-		// 	}
-		// );
+		runTest();
 
-		// TESTE OK
-		// categorySetupAPIService.getList(
-		// 	function (result) {
-		// 		$scope.data.getList = {
-		// 			success: result
-		// 		};
-		// 	},
-		// 	function (error) {
-		// 		$scope.data.getList = {
-		// 			error: error
-		// 		};
-		// 	}
-		// );
+		function runTest() {
+			insertCategory();
+			getCategoryName();
+			getList();
+			// updateCategory();
+		}
 
-		// TESTE OK
-		// var category = {
-		// 	initial: 'C01',
-		// 	name: 'category 1',
-		// 	parentId: 1,
-		// };
-		// categorySetupAPIService.insertObject(category,
-		// 	function (result) {
-		// 		$scope.data.getList = {
-		// 			success: result
-		// 		};
-		// 	},
-		// 	function (error) {
-		// 		$scope.data.getList = {
-		// 			error: error
-		// 		};
-		// 	}
-		// );
+		function insertCategory(callback) {
+			var category = {
+				initial: 'C01',
+				name: 'category 1',
+				parentId: 1,
+			};
 
-		// TESTE OK
-		// var category = {
-		// 	id: 2,
-		// 	initial: 'C02',
-		// 	name: 'category 2',
-		// 	parentId: 1,
-		// };
-		// categorySetupAPIService.removeObject(category,
-		// 	function (result) {
-		// 		$scope.data.getList = {
-		// 			success: result
-		// 		};
-		// 	},
-		// 	function (error) {
-		// 		$scope.data.getList = {
-		// 			error: error
-		// 		};
-		// 	}
-		// );
+			categorySetupAPIService.insertObject(
+				category,
+				(result) => successCallback(result, 'insertObject', updateCategory),
+				(error) => errorCallback(error, 'insertObject')
+			);
+		}
 
-		// TESTE OK
-		// var category = {
-		// 	id: 2,
-		// 	initial: 'C01',
-		// 	name: 'category 1',
-		// 	parentId: 1,
-		// };
-		// categorySetupAPIService.updateObject(category,
-		// 	function (result) {
-		// 		$scope.data.getList = {
-		// 			success: result
-		// 		};
-		// 	},
-		// 	function (error) {
-		// 		$scope.data.getList = {
-		// 			error: error
-		// 		};
-		// 	}
-		// );
+		function getCategoryName() {
+			categorySetupAPIService.getCategoryName(1,
+				(result) => successCallback(result, 'getCategoryName'),
+				(error) => errorCallback(error, 'getCategoryName')
+			);
+		}
 
+		function getList() {
+			categorySetupAPIService.getList(
+				(result) => successCallback(result, 'getList'),
+				(error) => errorCallback(error, 'getList')
+			);
+		}
+
+		function updateCategory(category) {
+				category.initial = 'C02';
+				category.name = 'category 2';
+			
+				categorySetupAPIService.updateObject(category,
+					(result) => successCallback(result, 'updateObject', removeCategory),
+				(error) => errorCallback(error, 'updateObject')
+			);
+		}
+
+		function removeCategory(category) {
+
+			categorySetupAPIService.removeObject(category,
+				(result) => successCallback(result, 'removeObject'),
+				(error) => errorCallback(error, 'removeObject')
+			);
+		}
+
+		function successCallback(result, method, nextTest) {
+
+			$scope.data.responseList.push({
+				method: method,
+				code: 200,
+				status: 'success',
+				data: result,
+			});
+
+			nextTest && nextTest(result);
+		}
+
+		function errorCallback(error, method) {
+			error.data.method = method;
+			$scope.data.responseList.push(error.data);
+		}
 	}
 })();
