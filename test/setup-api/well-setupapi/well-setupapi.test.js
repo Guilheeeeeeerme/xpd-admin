@@ -16,7 +16,7 @@
 			getList();
 		}
 
-		function insertWell(callback) {
+		function insertWell() {
 			var well = {
 				name: "Well Test",
 				current: true,

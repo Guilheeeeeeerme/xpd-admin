@@ -6,8 +6,6 @@
 	function categorySetupTestController($scope, categorySetupAPIService) {
 
 		$scope.data = {
-			successCount: 0,
-			errorCount: 0,
 			responseList: []
 		};
 	
@@ -17,10 +15,9 @@
 			insertCategory();
 			getCategoryName();
 			getList();
-			// updateCategory();
 		}
 
-		function insertCategory(callback) {
+		function insertCategory() {
 			var category = {
 				initial: 'C01',
 				name: 'category 1',
