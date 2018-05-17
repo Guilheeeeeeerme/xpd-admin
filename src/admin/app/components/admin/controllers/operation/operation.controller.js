@@ -3,9 +3,9 @@
 
 	angular.module('xpd.admin').controller('OperationController', operationController);
 
-	operationController.$inject = ['$scope', '$filter', '$routeParams', '$location', '$uibModal', 'alarmSetupAPIService', 'operationDataFactory', 'dialogFactory', 'setupAPIService', 'operationSetupAPIService', 'OperationConfigurationService', 'menuConfirmationFactory'];
+	operationController.$inject = ['$scope', '$filter', '$routeParams', '$location', '$uibModal', 'operationDataFactory', 'dialogFactory', 'wellSetupAPIService', 'sectionSetupAPIService', 'operationSetupAPIService', 'OperationConfigurationService', 'menuConfirmationFactory'];
 
-	function operationController($scope, $filter, $routeParams, $location, $uibModal, alarmSetupAPIService, operationDataFactory, dialogFactory, setupAPIService, operationSetupAPIService, operationConfigurationService, menuConfirmationFactory) {
+	function operationController($scope, $filter, $routeParams, $location, $uibModal, operationDataFactory, dialogFactory, wellSetupAPIService, sectionSetupAPIService, operationSetupAPIService, operationConfigurationService, menuConfirmationFactory) {
 		var vm = this;
 
 		var modalInstance = null;
@@ -17,13 +17,13 @@
 		vm.changeImportedOperation = changeImportedOperation;
 		// vm.changeOperationQueue = changeOperationQueue;
 
-		setupAPIService.getObjectById('setup/well', $routeParams.wellId, function (response) {
-			$scope.well = response.data;
+		wellSetupAPIService.getObjectById($routeParams.wellId, function (well) {
+			$scope.well = well;
 			getOperation();
 		});
 
-		setupAPIService.getObjectById('setup/section', $routeParams.sectionId, function (response) {
-			$scope.section = response.data;
+		sectionSetupAPIService.getObjectById($routeParams.sectionId, function (section) {
+			$scope.section = section;
 		});
 
 		$scope.dados = {
@@ -43,9 +43,7 @@
 
 		function getOperation() {
 			if (operation.id != null) {
-				setupAPIService.getObjectById('setup/operation', operation.id, function (response) {
-					loadOperationSetup(response.data);
-				});
+				operationSetupAPIService.getObjectById(operation.id, loadOperationSetup);
 			} else {
 				operationSetupAPIService.getOperationQueue($routeParams.wellId, function (operationQueue) {
 
@@ -310,13 +308,11 @@
 					operation.contractParams = saveContractParams(operation, operation.contractParams);
 
 					if (operation.id) {
-						setupAPIService.updateObject('setup/operation',
+						operationSetupAPIService.updateObject(
 							operation,
-							function () {
-								updateOperationCallback(operation);
-							});
+							updateOperationCallback);
 					} else {
-						setupAPIService.insertObject('setup/operation',
+						operationSetupAPIService.insertObject(
 							operation,
 							insertOperationCallback);
 
@@ -422,9 +418,7 @@
 		}
 
 		function changeImportedOperation(operationId) {
-			setupAPIService.getObjectById('setup/operation', operationId, (response) => {
-				openModalOperationImport(response.data);
-			});
+			operationSetupAPIService.getObjectById(operationId, openModalOperationImport);
 			
 		}
 

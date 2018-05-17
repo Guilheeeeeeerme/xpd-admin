@@ -5,9 +5,9 @@
 	angular.module('xpd.failure-controller')
 		.controller('LessonLearnedController', LessonLearnedController);
 
-	LessonLearnedController.$inject = ['$scope', 'lessonLearnedModal', '$uibModal', 'setupAPIService', 'operationDataFactory', 'lessonLearnedSetupAPIService', 'dialogFactory'];
+	LessonLearnedController.$inject = ['$scope', 'lessonLearnedModal', '$uibModal', 'lessonLearnedSetupAPIService', 'operationDataFactory', 'dialogFactory'];
 
-	function LessonLearnedController($scope, lessonLearnedModal, $modal, setupAPIService, operationDataFactory, lessonLearnedSetupAPIService, dialogFactory){
+	function LessonLearnedController($scope, lessonLearnedModal, $modal, lessonLearnedSetupAPIService, operationDataFactory, dialogFactory){
     	var vm = this;
 
 		$scope.modalData = {
@@ -30,7 +30,7 @@
 		populateLessionLearnedList();
 
 		function populateLessionLearnedList() {
-			lessonLearnedSetupAPIService.list(
+			lessonLearnedSetupAPIService.getList(
 				getLessonLearnedListSuccessCallback,
 				getLessonLearnedListErrorCallback
 			);
@@ -69,16 +69,14 @@
 		}
 
 		function updateLessonLearnedCallback(lessonlearned){
-			setupAPIService.updateObject(
-				'setup/lessonlearned',
+			lessonLearnedSetupAPIService.updateObject(
 				lessonlearned,
 				populateLessionLearnedList
 			);
 		}
 
 		function insertLessonLearnedCallback(lessonlearned){
-			setupAPIService.insertObject(
-				'setup/lessonlearned',
+			lessonLearnedSetupAPIService.insertObject(
 				lessonlearned,
 				populateLessionLearnedList);
 		}
@@ -92,8 +90,7 @@
 		}
 
 		function removelessonlearned(lessonlearned) {
-			setupAPIService.removeObject(
-				'setup/lessonlearned',
+			lessonLearnedSetupAPIService.removeObject(
 				lessonlearned,
 				removeLessonLearnedSuccessCallback,
 				removeLessonLearnedErrorCallback

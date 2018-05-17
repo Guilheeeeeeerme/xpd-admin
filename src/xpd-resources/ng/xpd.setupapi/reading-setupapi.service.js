@@ -7,6 +7,8 @@
 
 	function readingSetupAPIService($http, xpdAccessFactory, setupAPIService) {
 
+		var BASE_URL = xpdAccessFactory.getSetupURL() + 'setup/reading';
+
 		var vm = this;
 
 		vm.getAllReadingSince = getAllReadingSince;
@@ -16,47 +18,7 @@
 		function getAllReadingSince(from, successCallback, errorCallback) {
 			var req = {
 				method: 'GET',
-				url: xpdAccessFactory.getSetupURL() + 'setup/reading/from/' + from,
-				headers: {
-					'Content-Type': 'application/json'
-				}
-			};
-
-			$http(req).then(
-	            function(response) {
-	                successCallback && successCallback(response.data);
-	            },
-	            function(error){
-	            	setupAPIService.generateToast(error.data, true);
-	                errorCallback && errorCallback(error);
-            	}
-			);
-		}
-
-		function getTick(tick, successCallback, errorCallback) {
-			var req = {
-				method: 'GET',
-				url: xpdAccessFactory.getSetupURL() + 'setup/reading/tick/' + tick,
-				headers: {
-					'Content-Type': 'application/json'
-				}
-			};
-
-			$http(req).then(
-	            function(response) {
-	                successCallback && successCallback(response.data);
-	            },
-	            function(error){
-	            	setupAPIService.generateToast(error.data, true);
-	                errorCallback && errorCallback(error);
-            	}
-			);
-		}
-
-		function getAllReadingByStartEndTime(from, to, successCallback, errorCallback) {
-			var req = {
-				method: 'GET',
-				url: xpdAccessFactory.getSetupURL() + 'setup/reading/from/' + from + ( (to)? ('/to/' + to) : ''),
+				url: BASE_URL + '/from/' + from,
 				headers: {
 					'Content-Type': 'application/json'
 				}
@@ -64,7 +26,47 @@
 
 			$http(req).then(
 				function (response) {
-					successCallback && successCallback(response.data);
+					successCallback && successCallback(response.data.data);
+				},
+				function (error) {
+					setupAPIService.generateToast(error.data, true);
+					errorCallback && errorCallback(error);
+				}
+			);
+		}
+
+		function getTick(tick, successCallback, errorCallback) {
+			var req = {
+				method: 'GET',
+				url: BASE_URL + '/tick/' + tick,
+				headers: {
+					'Content-Type': 'application/json'
+				}
+			};
+
+			$http(req).then(
+				function (response) {
+					successCallback && successCallback(response.data.data);
+				},
+				function (error) {
+					setupAPIService.generateToast(error.data, true);
+					errorCallback && errorCallback(error);
+				}
+			);
+		}
+
+		function getAllReadingByStartEndTime(from, to, successCallback, errorCallback) {
+			var req = {
+				method: 'GET',
+				url: BASE_URL + '/from/' + from + ((to) ? ('/to/' + to) : ''),
+				headers: {
+					'Content-Type': 'application/json'
+				}
+			};
+
+			$http(req).then(
+				function (response) {
+					successCallback && successCallback(response.data.data);
 				},
 				function (error) {
 					setupAPIService.generateToast(error.data, true);

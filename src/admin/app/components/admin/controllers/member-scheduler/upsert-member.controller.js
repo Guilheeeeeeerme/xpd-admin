@@ -6,16 +6,15 @@
 
 	upsertMemberController.$inject = [
 		'$scope', 
-		'setupAPIService', 
-		'photoAPIService', 
 		'scheduleSetupAPIService', 
+		'photoAPIService', 
 		'$uibModalInstance', 
 		'$member', 
 		'removeMemberCallback', 
 		'updateMemberCallback', 
 		'insertMemberCallback'];
 
-	function upsertMemberController($scope, setupAPIService, photoAPIService, scheduleSetupAPIService, $modalInstance, $member, removeMemberCallback, updateMemberCallback, insertMemberCallback) {
+	function upsertMemberController($scope, scheduleSetupAPIService, photoAPIService, $modalInstance, $member, removeMemberCallback, updateMemberCallback, insertMemberCallback) {
 
 		if(!Window.UpsertMemberController)
 			Window.UpsertMemberController = [];
@@ -91,16 +90,14 @@
 
 			if (member.id !== null) {
 
-				setupAPIService.updateObject('setup/member', member, function(response){
-					member = response.data;
+				scheduleSetupAPIService.updateMember(member, function(member){
 					$modalInstance.close();
 					updateMemberCallback(member);
 				});
 
 			} else {
 
-				setupAPIService.insertObject('setup/member', member, function(response){
-					member = response.data;
+				scheduleSetupAPIService.insertMember(member, function(member){
 					$modalInstance.close();
 					insertMemberCallback(member);
 				});
@@ -113,8 +110,7 @@
 
 			var member = {id: $scope.modalData.id};
 			
-			setupAPIService.removeObject('setup/member', member, function(response){
-				member = response.data;
+			scheduleSetupAPIService.removeMember(member, function(member){
 				$modalInstance.close();
 				removeMemberCallback(member);
 			});

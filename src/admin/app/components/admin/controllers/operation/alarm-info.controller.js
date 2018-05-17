@@ -3,9 +3,9 @@
 
 	angular.module('xpd.admin').controller('AlarmInfoController', alarmInfoController);
 
-	alarmInfoController.$inject = ['$scope', '$uibModal', 'setupAPIService', 'alarmSetupAPIService', 'alarmService'];
+	alarmInfoController.$inject = ['$scope', '$uibModal', 'alarmSetupAPIService', 'alarmService'];
 
-	function alarmInfoController($scope, $uibModal, setupAPIService, alarmSetupAPIService, alarmService) {
+	function alarmInfoController($scope, $uibModal, alarmSetupAPIService, alarmService) {
 		var vm = this;
 
 		vm.actionButtonAddAlarm = actionButtonAddAlarm;

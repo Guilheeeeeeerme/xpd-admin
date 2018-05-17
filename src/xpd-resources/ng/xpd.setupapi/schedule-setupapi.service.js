@@ -17,31 +17,276 @@
 		vm.insertScheduleList = insertScheduleList;
 		vm.indentificationExists = indentificationExists;
 
-		function indentificationExists(id, identification, successCallback, errorCallback){
+		vm.getScheduleById = getScheduleById;
+		vm.getMemberById = getMemberById;
+		vm.getFunctionById = getFunctionById;
+
+		vm.insertSchedule = insertSchedule;
+		vm.updateSchedule = updateSchedule;
+		vm.removeSchedule = removeSchedule;
+
+		vm.insertFunction = insertFunction;
+		vm.removeFunction = removeFunction;
+		vm.updateFunction = updateFunction;
+
+		vm.insertMember = insertMember;
+		vm.removeMember = removeMember;
+		vm.updateMember = updateMember;
+
+		/**
+		 * Function
+		 * setup/function
+		 */
+		function getFunctionById(id, successCallback, errorCallback) {
+
+			var modelURL = 'setup/function';
+
+			$http.get(xpdAccessFactory.getSetupURL() + modelURL + '/' + id)
+				.then(
+					function (response) {
+						successCallback && successCallback(response.data.data);
+					},
+					function (error) {
+						setupAPIService.generateToast(error.data, true);
+						errorCallback && errorCallback(error);
+					}
+				);
+
+		}
+
+		function insertFunction(object, successCallback, errorCallback) {
+
+			var modelURL = 'setup/function';
+
+			var req = {
+				method: 'POST',
+				url: xpdAccessFactory.getSetupURL() + modelURL,
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				data: object
+			};
+
+			$http(req).then(
+				function (response) {
+					successCallback && successCallback(response.data.data);
+				},
+				function (error) {
+					setupAPIService.generateToast(error.data, true);
+					errorCallback && errorCallback(error);
+				}
+			);
+		}
+
+		function updateFunction(object, successCallback, errorCallback) {
+
+			var modelURL = 'setup/function';
+
+			var req = {
+				method: 'PUT',
+				url: xpdAccessFactory.getSetupURL() + modelURL + '/' + object.id,
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				data: object
+			};
+
+			$http(req).then(
+				function (response) {
+					successCallback && successCallback(response.data.data);
+				},
+				function (error) {
+					setupAPIService.generateToast(error.data, true);
+					errorCallback && errorCallback(error);
+				}
+			);
+		}
+
+		function removeFunction(object, successCallback, errorCallback) {
+
+			var modelURL = 'setup/function';
+
+			var req = {
+				method: 'PUT',
+				url: xpdAccessFactory.getSetupURL() + modelURL + '/' + object.id,
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				data: object
+			};
+
+			$http(req).then(
+				function (response) {
+					successCallback && successCallback(response.data.data);
+				},
+				function (error) {
+					setupAPIService.generateToast(error.data, true);
+					errorCallback && errorCallback(error);
+				}
+			);
+		}
+
+		/**
+		 * Member
+		 * setup/member
+		 */
+		function updateMember(object, successCallback, errorCallback) {
+
+			var modelURL = 'setup/member';
+
+			var req = {
+				method: 'PUT',
+				url: xpdAccessFactory.getSetupURL() + modelURL + '/' + object.id,
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				data: object
+			};
+
+			$http(req).then(
+				function (response) {
+					successCallback && successCallback(response.data.data);
+				},
+				function (error) {
+					setupAPIService.generateToast(error.data, true);
+					errorCallback && errorCallback(error);
+				}
+			);
+		}
+
+		function getMemberById(id, successCallback, errorCallback) {
+
+			var modelURL = 'setup/member';
+
+			$http.get(xpdAccessFactory.getSetupURL() + modelURL + '/' + id)
+				.then(
+					function (response) {
+						successCallback && successCallback(response.data.data);
+					},
+					function (error) {
+						setupAPIService.generateToast(error.data, true);
+						errorCallback && errorCallback(error);
+					}
+				);
+
+		}
+
+		function indentificationExists(id, identification, successCallback, errorCallback) {
 
 			var req = {
 				method: 'GET',
 				url: apiUrl + 'setup/member/identification-exists/' + identification
 			};
-			
-			if(id){
-				req.url += '/exclude-member/'+id;
+
+			if (id) {
+				req.url += '/exclude-member/' + id;
 			}
 
 			$http(req).then(
-	            function(response) {
-	                successCallback && successCallback(response.data.data);
-	            },
-	            function(error){
-	                errorCallback && errorCallback(error);
-	                setupAPIService.generateToast(error.data, true);
-	            }
+				function (response) {
+					successCallback && successCallback(response.data.data);
+				},
+				function (error) {
+					setupAPIService.generateToast(error.data, true);
+					errorCallback && errorCallback(error);
+				}
 			);
-			
+
+		}
+
+		function insertMember(object, successCallback, errorCallback) {
+
+			var modelURL = 'setup/member';
+
+			var req = {
+				method: 'POST',
+				url: xpdAccessFactory.getSetupURL() + modelURL,
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				data: object
+			};
+
+			$http(req).then(
+				function (response) {
+					successCallback && successCallback(response.data.data);
+				},
+				function (error) {
+					setupAPIService.generateToast(error.data, true);
+					errorCallback && errorCallback(error);
+				}
+			);
+		}
+
+		function removeMember(object, successCallback, errorCallback) {
+
+			var modelURL = 'setup/member';
+
+			var req = {
+				method: 'PUT',
+				url: xpdAccessFactory.getSetupURL() + modelURL + '/' + object.id,
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				data: object
+			};
+
+			$http(req).then(
+				function (response) {
+					successCallback && successCallback(response.data.data);
+				},
+				function (error) {
+					setupAPIService.generateToast(error.data, true);
+					errorCallback && errorCallback(error);
+				}
+			);
+		}
+
+		/**
+		 * Schedule
+		 * setup/schedule
+		 */
+		function getScheduleById(id, successCallback, errorCallback) {
+
+			var modelURL = 'setup/schedule';
+
+			$http.get(xpdAccessFactory.getSetupURL() + modelURL + '/' + id)
+				.then(
+					function (response) {
+						successCallback && successCallback(response.data.data);
+					},
+					function (error) {
+						setupAPIService.generateToast(error.data, true);
+						errorCallback && errorCallback(error);
+					}
+				);
+		}
+
+		function removeSchedule(object, successCallback, errorCallback) {
+
+			var modelURL = 'setup/schedule';
+
+			var req = {
+				method: 'PUT',
+				url: xpdAccessFactory.getSetupURL() + modelURL + '/' + object.id,
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				data: object
+			};
+
+			$http(req).then(
+				function (response) {
+					successCallback && successCallback(response.data.data);
+				},
+				function (error) {
+					setupAPIService.generateToast(error.data, true);
+					errorCallback && errorCallback(error);
+				}
+			);
 		}
 
 		function cleanList(memberId, fromDate, toDate, successCallback, errorCallback) {
-			//dialogFactory.showLoadingDialog();
 
 			var req = {
 				method: 'GET',
@@ -49,19 +294,101 @@
 			};
 
 			$http(req).then(
-	            function(response) {
-	                successCallback && successCallback(response.data.data);
-	            },
-	            function(error){
-	                errorCallback && errorCallback(error);
-	                setupAPIService.generateToast(error.data, true);
-	            }
+				function (response) {
+					successCallback && successCallback(response.data.data);
+				},
+				function (error) {
+					setupAPIService.generateToast(error.data, true);
+					errorCallback && errorCallback(error);
+				}
 			);
 
 		}
+		function insertSchedule(object, successCallback, errorCallback) {
+
+			var modelURL = 'setup/schedule';
+
+			var req = {
+				method: 'POST',
+				url: xpdAccessFactory.getSetupURL() + modelURL,
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				data: object
+			};
+
+			$http(req).then(
+				function (response) {
+					successCallback && successCallback(response.data.data);
+				},
+				function (error) {
+					setupAPIService.generateToast(error.data, true);
+					errorCallback && errorCallback(error);
+				}
+			);
+		}
+
+		function updateSchedule(object, successCallback, errorCallback) {
+
+			var modelURL = 'setup/schedule';
+
+			var req = {
+				method: 'PUT',
+				url: xpdAccessFactory.getSetupURL() + modelURL + '/' + object.id,
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				data: object
+			};
+
+			$http(req).then(
+				function (response) {
+					successCallback && successCallback(response.data.data);
+				},
+				function (error) {
+					setupAPIService.generateToast(error.data, true);
+					errorCallback && errorCallback(error);
+				}
+			);
+		}
+
+		function getOnlyScheduled(fromDate, toDate, successCallback, errorCallback) {
+
+			var url = apiUrl + 'setup/schedule/schedule-by-range-date?';
+			url += 'fromDate=' + fromDate + '&';
+			url += 'toDate=' + toDate;
+
+			$http.get(url)
+				.then(
+					function (response) {
+						successCallback && successCallback(response.data.data);
+					},
+					function (error) {
+						setupAPIService.generateToast(error.data, true);
+						errorCallback && errorCallback(error);
+					}
+				);
+		}
+
+		function fullScheduleByRangeDate(fromDate, toDate, successCallback, errorCallback) {
+
+			var url = apiUrl + 'setup/schedule/full-schedule-by-range-date?';
+			url += 'fromDate=' + fromDate + '&';
+			url += 'toDate=' + toDate;
+
+			$http.get(url)
+				.then(
+					function (response) {
+						successCallback && successCallback(response.data.data);
+					},
+					function (error) {
+						setupAPIService.generateToast(error.data, true);
+						errorCallback && errorCallback(error);
+					}
+				);
+		}
 
 		function getCleanListBySchedule(schedule, successCallback, errorCallback) {
-			//dialogFactory.showLoadingDialog();
 
 			var req = {
 				method: 'POST',
@@ -73,65 +400,14 @@
 			};
 
 			$http(req).then(
-	            function(response) {
-	                // setupAPIService.generateToast(response.data, false);
-	                successCallback && successCallback(response.data.data);
-	            },
-	            function(error){
-	                errorCallback && errorCallback(error);
-	                setupAPIService.generateToast(error.data, true);
-	            }
+				function (response) {
+					successCallback && successCallback(response.data.data);
+				},
+				function (error) {
+					setupAPIService.generateToast(error.data, true);
+					errorCallback && errorCallback(error);
+				}
 			);
-
-		}
-
-		function getOnlyScheduled(fromDate, toDate, successCallback) {
-			//dialogFactory.showLoadingDialog();
-
-			var url = apiUrl + 'setup/schedule/schedule-by-range-date?';
-			url += 'fromDate=' + fromDate + '&';
-			url += 'toDate=' + toDate;
-
-			$http.get(url)
-            	.then(
-	            function(response) {
-	                successCallback && successCallback(response.data.data);	                
-	            },
-	            function(error){
-	            	setupAPIService.generateToast(error.data, true);
-	                errorCallback && errorCallback(error);
-            	}
-				);
-		}
-
-		function fullScheduleByRangeDate(fromDate, toDate, successCallback) {
-			//dialogFactory.showLoadingDialog();
-
-			var url = apiUrl + 'setup/schedule/full-schedule-by-range-date?';
-			url += 'fromDate=' + fromDate + '&';
-			url += 'toDate=' + toDate;
-
-			$http.get(url)
-            	.then(
-	            function(response) {
-	                successCallback && successCallback(response.data.data);	                
-	            },
-	            function(error){
-	            	setupAPIService.generateToast(error.data, true);
-	                errorCallback && errorCallback(error);
-            	}
-				);
-		}
-
-		function defaultErrorCallback(error) {
-			if (error != null && error.status != null && error.status == -1) {
-				console.log('Unable to reach XPD server, please check your connectivity');
-				//dialogFactory.showMessageDialog('Unable to reach XPD server, please check your connectivity', 'Network Error');
-			} else {
-				//dialogFactory.showMessageDialog(error, 'Error');
-				console.log('Schedule Setup API Transaction Error!');
-				console.log(error);
-			}
 
 		}
 
@@ -147,14 +423,13 @@
 			};
 
 			$http(req).then(
-	            function(data) {
-	                successCallback && successCallback(data.data);
-	                setupAPIService.generateToast(data.data, false);
-	            },
-	            function(error){
-	                errorCallback && errorCallback(error);
-	                setupAPIService.generateToast(error.data, true);
-	            }
+				function (response) {
+					successCallback && successCallback(response.data.data);
+				},
+				function (error) {
+					setupAPIService.generateToast(error.data, true);
+					errorCallback && errorCallback(error);
+				}
 			);
 
 		}

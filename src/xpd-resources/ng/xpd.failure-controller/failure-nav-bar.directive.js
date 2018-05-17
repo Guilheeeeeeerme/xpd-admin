@@ -11,9 +11,9 @@
 	angular.module('xpd.failure-controller')
 		.directive('failureNavBar', failureNavBar);
 
-	failureNavBar.$inject = ['$location', '$uibModal', 'operationDataFactory', 'failureSetupAPIService', 'dialogFactory'];
+	failureNavBar.$inject = ['$location', '$uibModal', 'categorySetupAPIService', 'operationDataFactory', 'dialogFactory'];
 
-	function failureNavBar($location, $uibModal, operationDataFactory, failureSetupAPIService, dialogFactory) {
+	function failureNavBar($location, $uibModal, categorySetupAPIService, operationDataFactory, dialogFactory) {
 		return {
 			scope: {
 
@@ -51,7 +51,7 @@
 
 					scope.enableFinishFailure = true;
 
-					failureSetupAPIService.getCategoryName(scope.onGoingFailure.category.id, getCategoryNameSuccessCallback);
+					categorySetupAPIService.getCategoryName(scope.onGoingFailure.category.id, getCategoryNameSuccessCallback);
 					
 				} else {
 					scope.failureClass = '';

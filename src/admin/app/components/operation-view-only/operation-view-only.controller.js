@@ -3,9 +3,9 @@
 
 	angular.module('xpd.operationviewonly').controller('operationviewonlyController', operationviewonlyController);
 
-	operationviewonlyController.$inject = ['$scope', '$filter', '$sce', 'setupAPIService'];
+	operationviewonlyController.$inject = ['$scope', '$filter', '$sce', 'operationSetupAPIService'];
 
-	function operationviewonlyController($scope, $filter, $sce, setupAPIService) {
+	function operationviewonlyController($scope, $filter, $sce, operationSetupAPIService) {
 		$scope.casingTypeSizeItems = [];
 
 		$scope.casingTypeSizeItems = [{
@@ -55,9 +55,9 @@
 
 		$scope.htmlPopover = getHtmlPopOver();
 
-		setupAPIService.getObjectById('setup/operation', operationId, function(response){
-			loadOperationCallback(response.data);
-		},loadOperationErrorCallback);
+		operationSetupAPIService.getObjectById(operationId, 
+			loadOperationCallback,
+			loadOperationErrorCallback);
 
 		function loadOperationCallback(data) {
 

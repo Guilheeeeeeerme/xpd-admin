@@ -25,8 +25,8 @@
 			};
 
 			$http(req).then(
-	            function(data) {
-	                successCallback && successCallback(data.data);
+	            function(response) {
+	                successCallback && successCallback(response.data.data);
 	            },
 	            function(error){
 	                errorCallback && errorCallback(error);

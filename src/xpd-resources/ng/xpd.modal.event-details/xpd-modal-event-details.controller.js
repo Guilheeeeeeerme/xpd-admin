@@ -17,8 +17,8 @@
 		getEventById();
 
 		function getEventById() {
-			eventlogSetupAPIService.getWithDetails(eventId, function (response) {
-				selectedEvent = response;
+			eventlogSetupAPIService.getWithDetails(eventId, function (event) {
+				selectedEvent = event;
 				prepareEventToModal();
 			});
 		}

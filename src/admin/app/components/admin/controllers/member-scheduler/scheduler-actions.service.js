@@ -5,9 +5,9 @@
 	angular.module('xpd.admin')
 		.factory('schedulerActionsService', schedulerActionsService);
 
-	schedulerActionsService.$inject = ['$uibModal', 'setupAPIService', 'operationDataFactory', 'scheduleSetupAPIService', 'dialogFactory'];
+	schedulerActionsService.$inject = ['$uibModal', 'operationDataFactory', 'scheduleSetupAPIService', 'dialogFactory'];
 
-	function schedulerActionsService($modal, setupAPIService, operationDataFactory, scheduleSetupAPIService, dialogFactory) {
+	function schedulerActionsService($modal, operationDataFactory, scheduleSetupAPIService, dialogFactory) {
 
 		var upsertMemberModal;
 		var upsertFunctionModal;
@@ -273,9 +273,7 @@
 						}
 					}
 
-					setupAPIService.updateObject('setup/schedule', schedule, function(response){
-						notifyRealTime(response.data);
-					});
+					scheduleSetupAPIService.updateSchedule(schedule, notifyRealTime);
 
 				});
 
@@ -290,7 +288,7 @@
 			schedule.endDate.setMinutes(0);
 			schedule.endDate.setMilliseconds(0);
 
-			setupAPIService.insertObject('setup/schedule', schedule, insertScheduleCallback);
+			scheduleSetupAPIService.insertSchedule(schedule, insertScheduleCallback);
 			
 		}
 
@@ -376,22 +374,19 @@
 		}
 		
 		function onMemberUpdate(member) {
-			setupAPIService.getObjectById('setup/member', member.memberId, function (response) {
-				member = response.data;
+			scheduleSetupAPIService.getMemberById(member.memberId, function (member) {
 				onUpsertMember(null, member);
 			}, generalError);
 		}
 
 		function onFunctionUpdate(func) {
-			setupAPIService.getObjectById('setup/function', func.functionId, function (response) {
-				func = response.data;
+			scheduleSetupAPIService.getFunctionById(func.functionId, function (func) {
 				onUpsertFunction(func);
 			}, generalError);
 		}
 		
 		function onScheduleUpdate(schedule) {
-			setupAPIService.getObjectById('setup/schedule', schedule.id, function (response) {
-				schedule = response.data;
+			scheduleSetupAPIService.getScheduleById(schedule.id, function (schedule) {
 				onUpsertSchedule(null, schedule);
 			}, generalError);
 		}

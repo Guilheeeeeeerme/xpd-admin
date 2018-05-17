@@ -1,4 +1,4 @@
-(function() {
+(function () {
 	'use strict';
 
 	angular.module('xpd.setupapi')
@@ -20,14 +20,15 @@
 				method: 'GET',
 				url: BASE_URL + '/' + id + '/archive/' + archived
 			};
+			
 			$http(req).then(
-	            function(response) {
-	                successCallback && successCallback(response.data.data);
-	            },
-	            function(error){
-	            	setupAPIService.generateToast(error.data, true);
-	                errorCallback && errorCallback(error);
-            	}
+				function (response) {
+					successCallback && successCallback(response.data.data);
+				},
+				function (error) {
+					setupAPIService.generateToast(error.data, true);
+					errorCallback && errorCallback(error);
+				}
 			);
 		}
 
@@ -37,14 +38,15 @@
 				method: 'GET',
 				url: BASE_URL + '/of-operations/' + type + '/but-not-id/' + (butNot || 0)
 			};
+
 			$http(req).then(
-	            function(response) {
-	                successCallback && successCallback(response.data.data);
-	            },
-	            function(error){
-	            	setupAPIService.generateToast(error.data, true);
-	                errorCallback && errorCallback(error);
-            	}
+				function (response) {
+					successCallback && successCallback(response.data.data);
+				},
+				function (error) {
+					setupAPIService.generateToast(error.data, true);
+					errorCallback && errorCallback(error);
+				}
 			);
 		}
 	}

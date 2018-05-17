@@ -3,9 +3,9 @@
 
 	angular.module('xpd.admin').controller('RpdController', rpdController);
 
-	rpdController.$inject = ['$scope', 'setupAPIService', '$routeParams', '$location', '$filter', 'wellSetupAPIService', 'eventlogSetupAPIService'];
+	rpdController.$inject = ['$scope', '$routeParams', '$location', '$filter', 'wellSetupAPIService', 'eventlogSetupAPIService'];
 
-	function rpdController($scope, setupAPIService, $routeParams, $location, $filter, wellSetupAPIService, eventlogSetupAPIService) {
+	function rpdController($scope, $routeParams, $location, $filter, wellSetupAPIService, eventlogSetupAPIService) {
 
 		$scope.dados = {};
 
@@ -235,8 +235,8 @@
 
 		function loadWellList() {
 			return new Promise(function (resolve, reject) {
-				setupAPIService.getList('setup/well', function (response) {
-					resolve(response.data);
+				wellSetupAPIService.getList(function (wellList) {
+					resolve(wellList);
 				}, reject);
 			});
 		}

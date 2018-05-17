@@ -5,9 +5,9 @@
 	angular.module('xpd.failure-controller')
 		.controller('FailuresController', FailuresController);
 
-	FailuresController.$inject = ['$scope', 'failureModal', '$uibModal', 'setupAPIService', 'operationDataFactory', 'failureSetupAPIService', 'dialogFactory'];
+	FailuresController.$inject = ['$scope', 'failureModal', '$uibModal', 'operationDataFactory', 'failureSetupAPIService', 'dialogFactory'];
 
-	function FailuresController($scope, failureModal, $modal, setupAPIService, operationDataFactory, failureSetupAPIService, dialogFactory){
+	function FailuresController($scope, failureModal, $modal, operationDataFactory, failureSetupAPIService, dialogFactory){
     	var vm = this;
 
 		$scope.modalData = {
@@ -85,8 +85,7 @@
 		}
 
 		function removeFailure(failure) {
-			setupAPIService.removeObject(
-				'setup/failure',
+			failureSetupAPIService.removeObject(
 				failure,
 				removeFailureSuccessCallback,
 				removeFailureErrorCallback

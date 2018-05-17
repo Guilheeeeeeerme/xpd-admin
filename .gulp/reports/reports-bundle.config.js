@@ -26,6 +26,7 @@ exports.scripts = {
 		'./src/xpd-resources/ng/xpd.setupapi/eventlog-setupapi.service.js',
 		'./src/xpd-resources/ng/xpd.setupapi/operation-setupapi.service.js',
 		'./src/xpd-resources/ng/xpd.setupapi/failure-setupapi.service.js',
+		'./src/xpd-resources/ng/xpd.setupapi/category-setupapi.service.js',
 		'./src/xpd-resources/ng/xpd.setupapi/lessonlearned-setupapi.service.js',
 		'./src/xpd-resources/ng/xpd.filters/xpd-filter.module.js',
 		'./src/xpd-resources/ng/xpd.filters/percentage.filter.js',

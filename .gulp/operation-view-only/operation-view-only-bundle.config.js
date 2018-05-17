@@ -18,6 +18,7 @@ exports.scripts = {
 		'./src/xpd-resources/ng/xpd.setupapi/setupapi.service.js',
 		'./src/xpd-resources/ng/xpd.setupapi/operation-setupapi.service.js',
 		'./src/xpd-resources/ng/xpd.setupapi/well-setupapi.service.js',
+		'./src/xpd-resources/ng/xpd.setupapi/section-setupapi.service.js',
 		'./src/xpd-resources/ng/xpd.setupapi/schedule-setupapi.service.js',
 		'./src/xpd-resources/ng/xpd.setupapi/alarm-setupapi.service.js',
 		'./src/xpd-resources/ng/xpd.calculation/calculation.module.js',

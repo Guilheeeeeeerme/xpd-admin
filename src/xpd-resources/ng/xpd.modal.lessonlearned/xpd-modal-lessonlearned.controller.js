@@ -4,9 +4,9 @@
 
 	angular.module('xpd.modal-lessonlearned').controller('modalLessonLearnedController', modalLessonLearnedController);
 
-	modalLessonLearnedController.$inject = ['$scope', '$uibModalInstance', 'setupAPIService', 'selectedLessonLearned', 'insertCallback', 'updateCallback'];
+	modalLessonLearnedController.$inject = ['$scope', '$uibModalInstance', 'lessonLearnedSetupAPIService', 'selectedLessonLearned', 'insertCallback', 'updateCallback'];
 
-	function modalLessonLearnedController($scope, $uibModalInstance, setupAPIService, selectedLessonLearned, insertCallback, updateCallback) {
+	function modalLessonLearnedController($scope, $uibModalInstance, lessonLearnedSetupAPIService, selectedLessonLearned, insertCallback, updateCallback) {
 
 		var vm = this;
 
@@ -28,11 +28,8 @@
 		getLessonLearnedCategoryList();
 
 		function getLessonLearnedCategoryList() {
-			setupAPIService.getList(
-				'setup/lessonlearned_category',
-				function (response) {
-					getLessonLearnedCategoryListSuccessCallback(response.data);
-				},
+			lessonLearnedSetupAPIService.getListCategory(
+				getLessonLearnedCategoryListSuccessCallback,
 				getLessonLearnedCategoryListErrorCallback
 			);
 		}
@@ -58,8 +55,7 @@
 		}
 
 		function registerLessonLearned(lessonLearned) {
-			setupAPIService.insertObject(
-				'setup/lessonlearned',
+			lessonLearnedSetupAPIService.insertObject(
 				lessonLearned,
 				lessonLearnedSuccessCallback,
 				lessonLearnedErrorCallback
@@ -67,8 +63,7 @@
 		}
 
 		function updateLessonLearned(lessonLearned) {
-			setupAPIService.updateObject(
-				'setup/lessonlearned',
+			lessonLearnedSetupAPIService.updateObject(
 				lessonLearned,
 				lessonLearnedSuccessCallback,
 				lessonLearnedErrorCallback
