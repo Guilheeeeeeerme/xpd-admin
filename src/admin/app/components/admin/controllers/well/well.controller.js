@@ -3,9 +3,9 @@
 
 	angular.module('xpd.admin').controller('WellController', wellController);
 
-	wellController.$inject = ['$scope', '$uibModal', 'wellSetupAPIService', 'dialogFactory', 'operationDataFactory'];
+	wellController.$inject = ['$scope', '$uibModal', 'wellSetupAPIService', 'sectionSetupAPIService', 'dialogFactory', 'operationDataFactory'];
 
-	function wellController($scope, $modal, wellSetupAPIService, dialogFactory, operationDataFactory) {
+	function wellController($scope, $modal, wellSetupAPIService, sectionSetupAPIService, dialogFactory, operationDataFactory) {
 
 		var vm = this;
 
@@ -79,7 +79,7 @@
 
 		function actionButtonRemoveWell(well) {
 
-			wellSetupAPIService.getListOfSectionsByWell(well.id, function (sectionList) {
+			sectionSetupAPIService.getListOfSectionsByWell(well.id, function (sectionList) {
 				if (sectionList.length == 0)
 					removeWell(well);
 				else

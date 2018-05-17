@@ -8,13 +8,17 @@
 
 	function sectionSetupAPIService($http, xpdAccessFactory, setupAPIService) {
 
-		var BASE_URL = xpdAccessFactory.getSetupURL() + 'setup/section';
+		// var BASE_URL = xpdAccessFactory.getSetupURL() + 'setup/section';
+		var BASE_URL = 'https://200.235.79.166:8443/xpd-setup-api/setup/section';
+		
 
 		var vm = this;
 
 		vm.getObjectById = getObjectById;
 		vm.insertObject = insertObject;
 		vm.updateObject = updateObject;
+		vm.getListOfSectionsByWell = getListOfSectionsByWell;
+		vm.getListOfOperationsBySection = getListOfOperationsBySection;
 
 		function getObjectById(id, successCallback, errorCallback) {
 
@@ -75,6 +79,39 @@
 					errorCallback && errorCallback(error);
 				}
 			);
+		}
+
+		function getListOfSectionsByWell(wellId, successCallback, errorCallback) {
+
+			var url = BASE_URL + '/list-sections-by-well?wellId=' + wellId;
+
+			$http.get(url)
+				.then(
+					function (response) {
+						successCallback && successCallback(response.data.data);
+					},
+					function (error) {
+						setupAPIService.generateToast(error.data, true);
+						errorCallback && errorCallback(error);
+					}
+				);
+
+		}
+
+		function getListOfOperationsBySection(sectionId, successCallback, errorCallback) {
+
+			var url = BASE_URL + '/' + sectionId + '/operation';
+
+			$http.get(url)
+				.then(
+					function (response) {
+						successCallback && successCallback(response.data.data);
+					},
+					function (error) {
+						setupAPIService.generateToast(error.data, true);
+						errorCallback && errorCallback(error);
+					}
+				);
 		}
 
 	}

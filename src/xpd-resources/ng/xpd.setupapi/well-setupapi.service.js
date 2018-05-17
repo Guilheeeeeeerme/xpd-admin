@@ -12,8 +12,6 @@
 
 		var vm = this;
 
-		vm.getListOfSectionsByWell = getListOfSectionsByWell;
-		vm.getListOfOperationsBySection = getListOfOperationsBySection;
 		vm.getObjectById = getObjectById;
 		vm.insertObject = insertObject;
 		vm.removeObject = removeObject;
@@ -111,41 +109,7 @@
 					}
 				);
 		}
-		
-		// PASSAR PARA DENTRO DO SECTION SETUP API
-		function getListOfSectionsByWell(wellId, successCallback, errorCallback) {
 
-			var url = xpdAccessFactory.getSetupURL() + 'setup/section/list-sections-by-well?wellId=' + wellId;
-
-			$http.get(url)
-				.then(
-					function (response) {
-						successCallback && successCallback(response.data.data);
-					},
-					function (error) {
-						setupAPIService.generateToast(error.data, true);
-						errorCallback && errorCallback(error);
-					}
-				);
-
-		}
-
-		// PASSAR PARA DENTRO DO SECTION SETUP API
-		function getListOfOperationsBySection(sectionId, successCallback, errorCallback) {
-
-			var url = xpdAccessFactory.getSetupURL() + 'setup/section/' + sectionId + '/operation';
-
-			$http.get(url)
-				.then(
-					function (response) {
-						successCallback && successCallback(response.data.data);
-					},
-					function (error) {
-						setupAPIService.generateToast(error.data, true);
-						errorCallback && errorCallback(error);
-					}
-				);
-		}
 	}
 
 })();
