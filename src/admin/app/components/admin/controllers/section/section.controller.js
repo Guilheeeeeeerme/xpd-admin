@@ -150,7 +150,7 @@
 
 			if (section.id != null) {
 				sectionSetupAPIService.updateObject( 
-				section, replaceOnList);
+					section, replaceOnList);
 			} else {
 				section.sectionOrder = $scope.dados.sectionList.length + 1;
 
