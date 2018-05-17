@@ -8,6 +8,7 @@
 	wellSetupAPIService.$inject = ['$http', 'xpdAccessFactory', 'setupAPIService'];
 
 	function wellSetupAPIService($http, xpdAccessFactory, setupAPIService) {
+		var BASE_URL = xpdAccessFactory.getSetupURL() + 'setup/well';
 
 		var vm = this;
 
@@ -20,11 +21,10 @@
 		vm.getList = getList;
 
 		function insertObject(object, successCallback, errorCallback) {
-			var modelURL = 'setup/well';
 
 			var req = {
 				method: 'POST',
-				url: xpdAccessFactory.getSetupURL() + modelURL,
+				url: BASE_URL,
 				headers: {
 					'Content-Type': 'application/json'
 				},
@@ -32,8 +32,8 @@
 			};
 
 			$http(req).then(
-				function (data) {
-					successCallback && successCallback(data.data);
+				function (response) {
+					successCallback && successCallback(response.data.data);
 				},
 				function (error) {
 					setupAPIService.generateToast(error.data, true);
@@ -44,19 +44,18 @@
 		}
 
 		function removeObject(object, successCallback, errorCallback) {
-			var modelURL = 'setup/well';
 
 			var req = {
 				method: 'DELETE',
-				url: xpdAccessFactory.getSetupURL() + modelURL,
+				url: BASE_URL,
 				headers: {
 					'Content-Type': 'application/json'
 				},
 				data: object
 			};
 
-			$http(req).then(function (data) {
-				successCallback && successCallback(data.data);
+			$http(req).then(function (response) {
+				successCallback && successCallback(response.data.data);
 			}, function (error) {
 				setupAPIService.generateToast(error.data, true);
 				errorCallback && errorCallback(error);
@@ -64,11 +63,10 @@
 		}
 
 		function updateObject(object, successCallback, errorCallback) {
-			var modelURL = 'setup/well';
 
 			var req = {
 				method: 'PUT',
-				url: xpdAccessFactory.getSetupURL() + modelURL + '/' + object.id,
+				url: BASE_URL + '/' + object.id,
 				headers: {
 					'Content-Type': 'application/json'
 				},
@@ -76,8 +74,8 @@
 			};
 
 			$http(req).then(
-				function (data) {
-					successCallback && successCallback(data.data);
+				function (response) {
+					successCallback && successCallback(response.data.data);
 				},
 				function (error) {
 					setupAPIService.generateToast(error.data, true);
@@ -87,12 +85,11 @@
 		}
 
 		function getList(successCallback, errorCallback) {
-			var modelURL = 'setup/well';
 
-			$http.get(xpdAccessFactory.getSetupURL() + modelURL + '/list')
+			$http.get(BASE_URL + '/list')
 				.then(
-					function (data) {
-						successCallback && successCallback(data.data);
+					function (response) {
+						successCallback && successCallback(response.data.data);
 					},
 					function (error) {
 						setupAPIService.generateToast(error.data, true);
@@ -102,12 +99,11 @@
 		}
 
 		function getObjectById(id, successCallback, errorCallback) {
-			var modelURL = 'setup/well';
 
-			$http.get(xpdAccessFactory.getSetupURL() + modelURL + '/' + id)
+			$http.get(BASE_URL + '/' + id)
 				.then(
-					function (data) {
-						successCallback && successCallback(data.data);
+					function (response) {
+						successCallback && successCallback(response.data.data);
 					},
 					function (error) {
 						setupAPIService.generateToast(error.data, true);
@@ -115,6 +111,8 @@
 					}
 				);
 		}
+		
+		// PASSAR PARA DENTRO DO SECTION SETUP API
 		function getListOfSectionsByWell(wellId, successCallback, errorCallback) {
 
 			var url = xpdAccessFactory.getSetupURL() + 'setup/section/list-sections-by-well?wellId=' + wellId;
@@ -132,6 +130,7 @@
 
 		}
 
+		// PASSAR PARA DENTRO DO SECTION SETUP API
 		function getListOfOperationsBySection(sectionId, successCallback, errorCallback) {
 
 			var url = xpdAccessFactory.getSetupURL() + 'setup/section/' + sectionId + '/operation';
@@ -146,7 +145,6 @@
 						errorCallback && errorCallback(error);
 					}
 				);
-
 		}
 	}
 
