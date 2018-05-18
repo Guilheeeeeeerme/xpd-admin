@@ -81,7 +81,7 @@
 			$scope.dados.sectionList = [];
 
 			if ($routeParams.wellId != null) {
-				wellSetupAPIService.getListOfSectionsByWell($routeParams.wellId, function (sectionList) {
+				sectionSetupAPIService.getListOfSectionsByWell($routeParams.wellId, function (sectionList) {
 					$scope.dados.sectionList = $filter('orderBy')(sectionList, 'sectionOrder');
 				});
 			}
