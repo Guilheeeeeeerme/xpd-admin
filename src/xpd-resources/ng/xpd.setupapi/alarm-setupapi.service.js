@@ -13,16 +13,59 @@
 		var vm = this;
 
 		vm.insertAlarm = insertAlarm;
+		vm.updateAlarm = updateAlarm;
+		vm.removeAlarm = removeAlarm;
 		vm.updateArchive = updateArchive;
 		vm.getByOperationType = getByOperationType;
 
 		function insertAlarm(object, successCallback, errorCallback) {
 
-			var modelURL = 'setup/function';
-
 			var req = {
 				method: 'POST',
-				url: xpdAccessFactory.getSetupURL() + modelURL,
+				url: BASE_URL,
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				data: object
+			};
+
+			$http(req).then(
+				function (response) {
+					successCallback && successCallback(response.data.data);
+				},
+				function (error) {
+					setupAPIService.generateToast(error.data, true);
+					errorCallback && errorCallback(error);
+				}
+			);
+		}
+
+		function removeAlarm(object, successCallback, errorCallback) {
+
+			var req = {
+				method: 'DELETE',
+				url: BASE_URL + '/' + object.id,
+				headers: {
+					'Content-Type': 'application/json'
+				}
+			};
+
+			$http(req).then(
+				function (response) {
+					successCallback && successCallback(response.data.data);
+				},
+				function (error) {
+					setupAPIService.generateToast(error.data, true);
+					errorCallback && errorCallback(error);
+				}
+			);
+		}
+
+		function updateAlarm(object, successCallback, errorCallback) {
+
+			var req = {
+				method: 'PUT',
+				url: BASE_URL,
 				headers: {
 					'Content-Type': 'application/json'
 				},
