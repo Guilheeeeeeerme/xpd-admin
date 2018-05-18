@@ -8,9 +8,7 @@
 
 	function sectionSetupAPIService($http, xpdAccessFactory, setupAPIService) {
 
-		// var BASE_URL = xpdAccessFactory.getSetupURL() + 'setup/section';
-		var BASE_URL = 'https://200.235.79.166:8443/xpd-setup-api/setup/section';
-		
+		var BASE_URL = xpdAccessFactory.getSetupURL() + 'setup/section';
 
 		var vm = this;
 

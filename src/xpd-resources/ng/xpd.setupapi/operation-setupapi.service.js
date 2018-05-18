@@ -13,7 +13,7 @@
 
 		vm.getDefaultFields = getDefaultFields;
 		vm.getOperationAlarms = getOperationAlarms;
-		vm.getOperationReadings = getOperationReadings;
+		// vm.getOperationReadings = getOperationReadings;
 		vm.getOperationQueue = getOperationQueue;
 		vm.getObjectById = getObjectById;
 		vm.insertObject = insertObject;
@@ -127,20 +127,21 @@
 			);
 		}
 
-		function getOperationReadings(operationId, successCallback, errorCallback) {
+		// function getOperationReadings(operationId, successCallback, errorCallback) {
 
-			$http.get(BASE_URL + '/' + operationId + '/readings')
-				.then(
-					function (response) {
-						successCallback && successCallback(response.data.data);
-					},
-					function (error) {
-						setupAPIService.generateToast(error.data, true);
-						errorCallback && errorCallback(error);
-					}
-				);
-		}
+		// 	$http.get(BASE_URL + '/' + operationId + '/readings')
+		// 		.then(
+		// 			function (response) {
+		// 				successCallback && successCallback(response.data.data);
+		// 			},
+		// 			function (error) {
+		// 				setupAPIService.generateToast(error.data, true);
+		// 				errorCallback && errorCallback(error);
+		// 			}
+		// 		);
+		// }
 
+		// FIXME: Revisar esta rota
 		function getOperationQueue(wellId, successCallback, errorCallback) {
 			$http.get(xpdAccessFactory.getSetupURL() + 'report-service/operations-queue/' + wellId)
 				.then(
