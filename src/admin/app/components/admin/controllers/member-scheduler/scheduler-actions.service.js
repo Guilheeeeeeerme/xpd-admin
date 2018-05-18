@@ -262,11 +262,11 @@
 					shiftHours: new Date(schedule.end_date).getTime() - new Date(schedule.start_date).getTime()
 				};
 
-				scheduleSetupAPIService.getCleanListBySchedule(schedule, function (deletedScheduleIds) {
+				scheduleSetupAPIService.getCleanListBySchedule(schedule, function (deletedScheduleS) {
 
-					while( deletedScheduleIds && deletedScheduleIds.length > 0 ){
+					while( deletedScheduleS && deletedScheduleS.length > 0 ){
 
-						var _schedule = deletedScheduleIds.pop();
+						var _schedule = deletedScheduleS.pop();
 
 						if ( _schedule.id != schedule.id ) {
 							removeFromGantt('schedule', _schedule );

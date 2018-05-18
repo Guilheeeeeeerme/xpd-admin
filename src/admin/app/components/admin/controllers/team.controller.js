@@ -3,17 +3,16 @@
 
 	angular.module('xpd.admin').controller('TeamController', teamController);
 
-	teamController.$inject = ['$scope', 'setupAPIService'];
+	teamController.$inject = ['$scope', 'scheduleSetupAPIService'];
 
-	function teamController($scope, setupAPIService) {
+	function teamController($scope, scheduleSetupAPIService) {
 
 		$scope.team = {
 			members: [],
 			teams: []
 		};
 
-		setupAPIService.getList('setup/member-score', function (members) {
-			members = members.data;
+		scheduleSetupAPIService.getMemberScore(function (members) {
 			
 			$scope.team.teams = members.filter(function(member){
 				return member.function.id == 1;

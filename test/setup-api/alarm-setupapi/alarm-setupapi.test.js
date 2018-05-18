@@ -16,15 +16,18 @@
 
 		test1(function(){
 			$scope.success.push( 'FIM' );
+			$scope.error.push( 'FIM' );
 
 			test2(function(){
 				$scope.success.push( 'FIM' );
+				$scope.error.push( 'FIM' );
 			});
 		});
 
 		function test1(callback){
 
 			$scope.success.push('START');
+			$scope.error.push( 'START' );
 			
 			getOperationList(function(operations){
 
@@ -82,6 +85,7 @@
 		function test2(callback){
 
 			$scope.success.push('START');
+			$scope.error.push('START');
 			
 			getOperationList(function(operations){
 

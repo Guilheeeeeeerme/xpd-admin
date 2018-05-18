@@ -200,7 +200,7 @@
 					$modalInstance.close();
 				});
 			}else{
-				scheduleSetupAPIService.removeObject( { id: schedule.id }, function(schedule){
+				scheduleSetupAPIService.removeSchedule( { id: schedule.id }, function(schedule){
 					$modalInstance.close();
 					removeScheduleCallback(schedule);
 				});
