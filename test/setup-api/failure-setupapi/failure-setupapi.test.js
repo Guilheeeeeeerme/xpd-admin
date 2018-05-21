@@ -13,9 +13,6 @@
 
 		function runTest() {
 			insertFailure();
-			// listFailure();
-			// getSectionsByWell();
-			// getOperationsBySection();
 		}
 
 		function insertFailure() {
@@ -25,8 +22,7 @@
 				npt: true,
 				onGoing: true,
 				operation: {id: 5},
-				startTime: "2018-05-18T12:00:00.000Z",
-				endTime: "2018-05-18T13:00:00.000Z"
+				startTime: new Date(),
 			}
 
 			failureSetupAPIService.insertObject(failure,
@@ -54,10 +50,10 @@
 
 		function updateFailure(failure) {
 			var failure = failure[0];
-			failure.description = "FALHA DE TESTE EDITADA",
+			failure.description = "FALHA DE TESTE EDITADA";
 			failure.npt = false;
 			failure.onGoing = false;
-			failure.endTime = new Date()
+			failure.endTime = new Date();
 
 			failureSetupAPIService.updateObject(failure,
 				(result) => successCallback(result, 'updateObject', getFailuresOnInterval),
@@ -66,10 +62,12 @@
 		}
 
 		function getFailuresOnInterval(failure) {
-			from = new Date(failure.startTime).getTime();
-			to = new Date(failure.endTime).getTime();
+			var failure = angular.copy(failure);
+			from = new Date(failure.startTime);
+			to = new Date();
+			to.setHours(from.getMinutes() + 1);
 
-			failureSetupAPIService.getFailuresOnInterval(from, to,
+			failureSetupAPIService.getFailuresOnInterval(from.getTime(), to.getTime(),
 				(result) => successCallback(result, 'getFailuresOnInterval', listFailure),
 				(error) => errorCallback(error, 'getFailuresOnInterval')
 			);

@@ -46,12 +46,13 @@
 		}
 
 		function updateCategory(category) {
-				category.initial = 'C02';
-				category.name = 'category 2';
-			
-				categorySetupAPIService.updateObject(category,
-					(result) => successCallback(result, 'updateObject', removeCategory),
-				(error) => errorCallback(error, 'updateObject')
+			var category = angular.copy(category);
+			category.initial = 'C02';
+			category.name = 'category 2';
+		
+			categorySetupAPIService.updateObject(category,
+				(result) => successCallback(result, 'updateObject', removeCategory),
+			(error) => errorCallback(error, 'updateObject')
 			);
 		}
 

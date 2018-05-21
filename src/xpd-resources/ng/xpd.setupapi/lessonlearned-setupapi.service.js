@@ -14,7 +14,7 @@
 
 		vm.insertObject = insertObject;
 		vm.updateObject = updateObject;
-		vm.listByOperation = listByOperation;
+		// vm.listByOperation = listByOperation;
 		vm.getList = getList;
 		vm.removeObject = removeObject;
 		vm.removeCategory = removeCategory;
@@ -87,8 +87,8 @@
 		function removeObject(object, successCallback, errorCallback) {
 
 			var req = {
-				method: 'PUT',
-				url: BASE_URL + '/' + object.id,
+				method: 'DELETE',
+				url: BASE_URL,
 				headers: {
 					'Content-Type': 'application/json'
 				},
@@ -106,21 +106,21 @@
 			);
 		}
 
-		function listByOperation(id, successCallback, errorCallback) {
+		// function listByOperation(id, successCallback, errorCallback) {
 
-			var url = BASE_URL + '/list-by-operation/' + id;
+		// 	var url = BASE_URL + '/list-by-operation/' + id;
 
-			$http.get(url)
-				.then(
-					function (response) {
-						successCallback && successCallback(response.data.data);
-					},
-					function (error) {
-						setupAPIService.generateToast(error.data, true);
-						errorCallback && errorCallback(error);
-					}
-				);
-		}
+		// 	$http.get(url)
+		// 		.then(
+		// 			function (response) {
+		// 				successCallback && successCallback(response.data.data);
+		// 			},
+		// 			function (error) {
+		// 				setupAPIService.generateToast(error.data, true);
+		// 				errorCallback && errorCallback(error);
+		// 			}
+		// 		);
+		// }
 
 		function getListCategory(successCallback, errorCallback) {
 			// lessonlearned_category
@@ -141,8 +141,8 @@
 			// lessonlearned_category
 
 			var req = {
-				method: 'PUT',
-				url: BASE_URL + '_category/' + object.id,
+				method: 'DELETE',
+				url: BASE_URL + '_category',
 				headers: {
 					'Content-Type': 'application/json'
 				},
