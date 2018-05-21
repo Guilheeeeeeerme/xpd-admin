@@ -1,155 +1,81 @@
-(function() {
+(function () {
 	'use strict',
 
-	angular.module('xpd.setupapi')
-		.service('setupAPIService', setupAPIService)
-		.config(function(toastrConfig) {
-			angular.extend(toastrConfig, {
-				autoDismiss: true,
-				extendedTimeOut: 3000,
-				maxOpened: 4,
-				newestOnTop: true,
-				preventOpenDuplicates: true,
-				tapToDismiss: true,
-				timeOut: 2000,
-				positionClass: 'toast-bottom-center',
+		angular.module('xpd.setupapi')
+			.service('setupAPIService', setupAPIService)
+			.config(function (toastrConfig) {
+				angular.extend(toastrConfig, {
+					autoDismiss: true,
+					extendedTimeOut: 3000,
+					maxOpened: 4,
+					newestOnTop: true,
+					preventOpenDuplicates: true,
+					tapToDismiss: true,
+					timeOut: 2000,
+					positionClass: 'toast-bottom-center',
+				});
 			});
-		});
 
-	setupAPIService.$inject = ['$http', 'xpdAccessFactory','toastr'];
+	setupAPIService.$inject = ['$http', 'xpdAccessFactory', 'toastr'];
 
 	function setupAPIService($http, xpdAccessFactory, toastr) {
 
 		var vm = this;
 
-		vm.getList = getList;
-		vm.insertObject = insertObject;
-		vm.removeObject = removeObject;
-		vm.updateObject = updateObject;
-		vm.getObjectById = getObjectById;
 		vm.generateToast = generateToast;
+		vm.doRequest = doRequest;
 
-		function getObjectById(modelURL, id, successCallback, errorCallback) {
-			$http.get(xpdAccessFactory.getSetupURL() + modelURL + '/' + id)
-            	.then(
-	            function(data) {
-	                successCallback && successCallback(data.data);
-	            },
-	            function(error){
-	            	generateToast(error.data, true);
-	                errorCallback && errorCallback(error);
-            	}
-				);
-		}
-
-		function getList(modelURL, successCallback, errorCallback) {
-			$http.get(xpdAccessFactory.getSetupURL() + modelURL + '/list')
-            	.then(
-	            function(data) {
-	                successCallback && successCallback(data.data);
-	            },
-	            function(error){
-	            	generateToast(error.data, true);
-	                errorCallback && errorCallback(error);
-            	}
-				);
-		}
-
-		function insertObject(modelURL, object, successCallback, errorCallback) {
-
-			var req = {
-				method: 'POST',
-				url: xpdAccessFactory.getSetupURL() + modelURL,
-				headers: {
-					'Content-Type': 'application/json'
-				},
-				data: object
-			};
+		function doRequest(req, successCallback, errorCallback) {
 
 			$http(req).then(
-	            function(data) {
-	                generateToast(data.data, false);
-	                successCallback && successCallback(data.data);
-	            },
-	            function(error){
-	            	generateToast(error.data, true);
-	                errorCallback && errorCallback(error);
-            	}
-			);
+				function (response) {
+					// console.log( angular.copy( { req: req, response: response} ) );
 
-		}
+					if ( response && response.data && (response.data.isWrappedResponse || response.data.timestamp) ) {
+						successCallback && successCallback(response.data.data);
+					} else {
+						successCallback && successCallback(response.data);
+					}
 
-		function removeObject(modelURL, object, successCallback, errorCallback) {
-
-			var req = {
-				method: 'DELETE',
-				url: xpdAccessFactory.getSetupURL() + modelURL,
-				headers: {
-					'Content-Type': 'application/json'
 				},
-				data: object
-			};
+				function (error) {
+					// console.log( angular.copy( { req: req, response: error} ) );
 
-			$http(req).then(function(data) {
-				generateToast(data.data, false);
-				successCallback && successCallback(data.data);
-			}, function(error){
-				generateToast(error.data, true);
-				errorCallback && errorCallback(error);
-			});
-		}
-
-		function updateObject(modelURL, object, successCallback, errorCallback) {
-
-			var req = {
-				method: 'PUT',
-				url: xpdAccessFactory.getSetupURL() + modelURL + '/' + object.id,
-				headers: {
-					'Content-Type': 'application/json'
-				},
-				data: object
-			};
-
-			$http(req).then(
-	            function(data) {
-	                successCallback && successCallback(data.data);
-	                generateToast(data.data, false);
-	            },
-	            function(error){
-	                generateToast(error.data, true);
-	                errorCallback && errorCallback(error);
-	            }
+					setupAPIService.generateToast(error, true);
+					errorCallback && errorCallback(error);
+				}
 			);
 		}
 
-		function generateToast(data, error){
+		function generateToast(error, showError) {
 
-			if(!error) {
-				toastr.success(data.message);
-			} else{
+			console.log(showError);
 
-				if(!data){
-					data = {
+			if (!showError) {
+				toastr.success(error.message);
+			} else {
+
+				if (!error) {
+					error = {
 						message: 'Insecure Response'
 					};
 				}
 
-				if(!data.message){
-					
-					data = {
-						message: data
+				if (!error.message) {
+
+					error = {
+						message: error
 					};
-					
-					data.message = data.message.split('<body>')[1];
-					data.message = data.message.split('</body>')[0];
-					
-					data.message = data.message.replace(/<[^>]*>/g, '\n');
+
+					error.message = error.message.split('<body>')[1];
+					error.message = error.message.split('</body>')[0];
+
+					error.message = error.message.replace(/<[^>]*>/g, '\n');
 				}
 
-				toastr.error(data.message);
+				toastr.error(error.message);
 			}
 		}
-
 	}
 
 })();

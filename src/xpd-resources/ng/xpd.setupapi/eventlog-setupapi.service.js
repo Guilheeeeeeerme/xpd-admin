@@ -3,9 +3,9 @@
 
 	angular.module('xpd.setupapi').service('eventlogSetupAPIService', eventlogSetupAPIService);
 
-	eventlogSetupAPIService.$inject = ['$http', 'xpdAccessFactory', 'setupAPIService', '$rootScope'];
+	eventlogSetupAPIService.$inject = ['xpdAccessFactory', 'setupAPIService', '$rootScope'];
 
-	function eventlogSetupAPIService($http, xpdAccessFactory, setupAPIService, $rootScope) {
+	function eventlogSetupAPIService(xpdAccessFactory, setupAPIService, $rootScope) {
 
 		var BASE_URL = xpdAccessFactory.getSetupURL() + 'setup/event';
 
@@ -24,15 +24,7 @@
 				url: url
 			};
 
-			$http(req).then(
-				function (response) {
-					successCallback && successCallback(response.data.data);
-				},
-				function (error) {
-					setupAPIService.generateToast(error.data, true);
-					errorCallback && errorCallback(error);
-				}
-			);
+			setupAPIService.doRequest(req, successCallback, errorCallback);
 		}
 
 		function listByFilters(eventType, operationId, limit, fromDate, toDate, successCallback, errorCallback) {
@@ -91,15 +83,7 @@
 				url: url
 			};
 
-			$http(req).then(
-				function (response) {
-					successCallback && successCallback(response.data.data);
-				},
-				function (error) {
-					setupAPIService.generateToast(error.data, true);
-					errorCallback && errorCallback(error);
-				}
-			);
+			setupAPIService.doRequest(req, successCallback, errorCallback);
 		}
 
 		function getWithDetails(eventId, successCallback, errorCallback) {
@@ -111,15 +95,7 @@
 				url: url
 			};
 
-			$http(req).then(
-				function (response) {
-					successCallback && successCallback(response.data.data);
-				},
-				function (error) {
-					setupAPIService.generateToast(error.data, true);
-					errorCallback && errorCallback(error);
-				}
-			);
+			setupAPIService.doRequest(req, successCallback, errorCallback);
 		}
 
 	}

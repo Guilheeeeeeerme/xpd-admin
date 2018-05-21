@@ -5,9 +5,9 @@
 		.service('wellSetupAPIService', wellSetupAPIService);
 
 
-	wellSetupAPIService.$inject = ['$http', 'xpdAccessFactory', 'setupAPIService'];
+	wellSetupAPIService.$inject = ['xpdAccessFactory', 'setupAPIService'];
 
-	function wellSetupAPIService($http, xpdAccessFactory, setupAPIService) {
+	function wellSetupAPIService(xpdAccessFactory, setupAPIService) {
 		var BASE_URL = xpdAccessFactory.getSetupURL() + 'setup/well';
 
 		var vm = this;
@@ -29,15 +29,7 @@
 				data: object
 			};
 
-			$http(req).then(
-				function (response) {
-					successCallback && successCallback(response.data.data);
-				},
-				function (error) {
-					setupAPIService.generateToast(error.data, true);
-					errorCallback && errorCallback(error);
-				}
-			);
+			setupAPIService.doRequest(req, successCallback, errorCallback);
 
 		}
 
@@ -52,12 +44,7 @@
 				data: object
 			};
 
-			$http(req).then(function (response) {
-				successCallback && successCallback(response.data.data);
-			}, function (error) {
-				setupAPIService.generateToast(error.data, true);
-				errorCallback && errorCallback(error);
-			});
+			setupAPIService.doRequest(req, successCallback, errorCallback);
 		}
 
 		function updateObject(object, successCallback, errorCallback) {
@@ -71,43 +58,27 @@
 				data: object
 			};
 
-			$http(req).then(
-				function (response) {
-					successCallback && successCallback(response.data.data);
-				},
-				function (error) {
-					setupAPIService.generateToast(error.data, true);
-					errorCallback && errorCallback(error);
-				}
-			);
+			setupAPIService.doRequest(req, successCallback, errorCallback);
 		}
 
 		function getList(successCallback, errorCallback) {
 
-			$http.get(BASE_URL + '/list')
-				.then(
-					function (response) {
-						successCallback && successCallback(response.data.data);
-					},
-					function (error) {
-						setupAPIService.generateToast(error.data, true);
-						errorCallback && errorCallback(error);
-					}
-				);
+			var req = {
+				method: 'GET',
+				url: BASE_URL + '/list'
+			};
+
+			setupAPIService.doRequest(req, successCallback, errorCallback);
 		}
 
 		function getObjectById(id, successCallback, errorCallback) {
 
-			$http.get(BASE_URL + '/' + id)
-				.then(
-					function (response) {
-						successCallback && successCallback(response.data.data);
-					},
-					function (error) {
-						setupAPIService.generateToast(error.data, true);
-						errorCallback && errorCallback(error);
-					}
-				);
+			var req = {
+				method: 'GET',
+				url: BASE_URL + '/' + id
+			};
+
+			setupAPIService.doRequest(req, successCallback, errorCallback);
 		}
 
 	}

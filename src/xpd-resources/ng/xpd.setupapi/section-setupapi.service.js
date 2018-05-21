@@ -4,9 +4,9 @@
 	angular.module('xpd.setupapi')
 		.service('sectionSetupAPIService', sectionSetupAPIService);
 
-	sectionSetupAPIService.$inject = ['$http', 'xpdAccessFactory', 'setupAPIService'];
+	sectionSetupAPIService.$inject = ['xpdAccessFactory', 'setupAPIService'];
 
-	function sectionSetupAPIService($http, xpdAccessFactory, setupAPIService) {
+	function sectionSetupAPIService(xpdAccessFactory, setupAPIService) {
 
 		var BASE_URL = xpdAccessFactory.getSetupURL() + 'setup/section';
 		
@@ -20,20 +20,14 @@
 		vm.getListOfOperationsBySection = getListOfOperationsBySection;
 
 		function getObjectById(id, successCallback, errorCallback) {
+				
+			var req = {
+				method: 'GET',
+				url: BASE_URL + '/' + id
+			};
 
-			$http.get( BASE_URL + '/' + id)
-				.then(
-					function (response) {
-						successCallback && successCallback(response.data.data);
-					},
-					function (error) {
-						setupAPIService.generateToast(error.data, true);
-						errorCallback && errorCallback(error);
-					}
-				);
+			setupAPIService.doRequest(req, successCallback, errorCallback);
 		}
-
-
 
 		function insertObject(object, successCallback, errorCallback) {
 
@@ -46,15 +40,7 @@
 				data: object
 			};
 
-			$http(req).then(
-				function (response) {
-					successCallback && successCallback(response.data.data);
-				},
-				function (error) {
-					setupAPIService.generateToast(error.data, true);
-					errorCallback && errorCallback(error);
-				}
-			);
+			setupAPIService.doRequest(req, successCallback, errorCallback);
 
 		}
 
@@ -69,48 +55,32 @@
 				data: object
 			};
 
-			$http(req).then(
-				function (response) {
-					successCallback && successCallback(response.data.data);
-				},
-				function (error) {
-					setupAPIService.generateToast(error.data, true);
-					errorCallback && errorCallback(error);
-				}
-			);
+			setupAPIService.doRequest(req, successCallback, errorCallback);
 		}
 
 		function getListOfSectionsByWell(wellId, successCallback, errorCallback) {
 
 			var url = BASE_URL + '/list-sections-by-well?wellId=' + wellId;
 
-			$http.get(url)
-				.then(
-					function (response) {
-						successCallback && successCallback(response.data.data);
-					},
-					function (error) {
-						setupAPIService.generateToast(error.data, true);
-						errorCallback && errorCallback(error);
-					}
-				);
+			var req = {
+				method: 'GET',
+				url: url
+			};
+
+			setupAPIService.doRequest(req, successCallback, errorCallback);
 
 		}
 
 		function getListOfOperationsBySection(sectionId, successCallback, errorCallback) {
 
 			var url = BASE_URL + '/' + sectionId + '/operation';
+			
+			var req = {
+				method: 'GET',
+				url: url
+			};
 
-			$http.get(url)
-				.then(
-					function (response) {
-						successCallback && successCallback(response.data.data);
-					},
-					function (error) {
-						setupAPIService.generateToast(error.data, true);
-						errorCallback && errorCallback(error);
-					}
-				);
+			setupAPIService.doRequest(req, successCallback, errorCallback);
 		}
 
 	}

@@ -4,9 +4,9 @@
 	angular.module('xpd.setupapi')
 		.service('failureSetupAPIService', failureSetupAPIService);
 
-	failureSetupAPIService.$inject = ['$http', 'xpdAccessFactory', 'setupAPIService'];
+	failureSetupAPIService.$inject = ['xpdAccessFactory', 'setupAPIService'];
 
-	function failureSetupAPIService($http, xpdAccessFactory, setupAPIService) {
+	function failureSetupAPIService(xpdAccessFactory, setupAPIService) {
 
 		var BASE_URL = xpdAccessFactory.getSetupURL() + 'setup/failure';
 		
@@ -32,15 +32,7 @@
 				data: failure
 			};
 
-			$http(req).then(
-				function (response) {
-					successCallback && successCallback(response.data.data);
-				},
-				function (error) {
-					setupAPIService.generateToast(error.data, true);
-					errorCallback && errorCallback(error);
-				}
-			);
+			setupAPIService.doRequest(req, successCallback, errorCallback);
 
 		}
 
@@ -55,15 +47,7 @@
 				data: object
 			};
 
-			$http(req).then(
-				function (response) {
-					successCallback && successCallback(response.data.data);
-				},
-				function (error) {
-					setupAPIService.generateToast(error.data, true);
-					errorCallback && errorCallback(error);
-				}
-			);
+			setupAPIService.doRequest(req, successCallback, errorCallback);
 		}
 
 		function insertObject(object, successCallback, errorCallback) {
@@ -77,32 +61,19 @@
 				data: object
 			};
 
-			$http(req).then(
-				function (response) {
-					successCallback && successCallback(response.data.data);
-				},
-				function (error) {
-					setupAPIService.generateToast(error.data, true);
-					errorCallback && errorCallback(error);
-				}
-			);
+			setupAPIService.doRequest(req, successCallback, errorCallback);
 
 		}
 
 		function getFailuresOnInterval(from, to, successCallback, errorCallback) {
-
 			var url = BASE_URL + '/get-by-interval?from=' + from + '&to=' + to;
 
-			$http.get(url)
-				.then(
-					function (response) {
-						successCallback && successCallback(response.data.data);
-					},
-					function (error) {
-						setupAPIService.generateToast(error.data, true);
-						errorCallback && errorCallback(error);
-					}
-				);
+			var req = {
+				method: 'GET',
+				url: url
+			};
+
+			setupAPIService.doRequest(req, successCallback, errorCallback);
 		}
 
 		// function listByOperation(id, successCallback, errorCallback) {
@@ -122,33 +93,25 @@
 		// }
 
 		function listFailuresOnGoing(successCallback, errorCallback) {
-			var url = BASE_URL + '/list-on-going';
+			var url = BASE_URL + '/list-on-going';			
 
-			$http.get(url)
-				.then(
-					function (response) {
-						successCallback && successCallback(response.data.data);
-					},
-					function (error) {
-						setupAPIService.generateToast(error.data, true);
-						errorCallback && errorCallback(error);
-					}
-				);
+			var req = {
+				method: 'GET',
+				url: url
+			};
+
+			setupAPIService.doRequest(req, successCallback, errorCallback);
 		}
 
 		function listFailures(successCallback, errorCallback) {
-			var url = BASE_URL + '/list';
+			var url = BASE_URL + '/list';			
 
-			$http.get(url)
-				.then(
-					function (response) {
-						successCallback && successCallback(response.data.data);
-					},
-					function (error) {
-						setupAPIService.generateToast(error.data, true);
-						errorCallback && errorCallback(error);
-					}
-				);
+			var req = {
+				method: 'GET',
+				url: url
+			};
+
+			setupAPIService.doRequest(req, successCallback, errorCallback);
 		}
 	}
 

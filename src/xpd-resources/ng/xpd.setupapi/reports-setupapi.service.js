@@ -4,9 +4,9 @@
 	angular.module('xpd.setupapi')
 		.service('reportsSetupAPIService', reportsSetupAPIService);
 
-	reportsSetupAPIService.$inject = ['$http', 'xpdAccessFactory', 'setupAPIService'];
+	reportsSetupAPIService.$inject = ['xpdAccessFactory', 'setupAPIService'];
 
-	function reportsSetupAPIService($http, xpdAccessFactory, setupAPIService) {
+	function reportsSetupAPIService(xpdAccessFactory, setupAPIService) {
 		var vm = this;
 
 		vm.getVreList = getVreList;
@@ -26,16 +26,12 @@
 			url += 'from=' + fromDate.getTime();
 			url += '&to=' + toDate.getTime();
 
-			$http.get(url)
-            	.then(
-	            function(response) {
-	                successCallback && successCallback(response.data.data);
-	            },
-	            function(error){
-	            	setupAPIService.generateToast(error.data, true);
-	                errorCallback && errorCallback(error);
-            	}
-				);
+			var req = {
+				method: 'GET',
+				url: url
+			};
+
+			setupAPIService.doRequest(req, successCallback, errorCallback);
 		}
 
 		function getVreScoreList(fromDate, toDate, successCallback, errorCallback) {
@@ -43,146 +39,107 @@
 			url += 'from=' + fromDate.getTime();
 			url += '&to=' + toDate.getTime();
 
-			$http.get(url)
-            	.then(
-	            function(response) {
-	                successCallback && successCallback(response.data.data);
-	            },
-	            function(error){
-	            	setupAPIService.generateToast(error.data, true);
-	                errorCallback && errorCallback(error);
-            	}
-				);
+			var req = {
+				method: 'GET',
+				url: url
+			};
+
+			setupAPIService.doRequest(req, successCallback, errorCallback);
 		}
 
 		function getPlannedGraphicDataOperation(operationId, successCallback, errorCallback) {
-		    var req = {
-		        method: 'GET',
-		        url: xpdAccessFactory.getSetupURL() +
-		            'setup/reports/planned-operation-graphic-data?'
-		            + 'operation-id=' + operationId
-		    };
-		    $http(req).then(
-	            function(response) {
-	                successCallback && successCallback(response.data.data);
-	            },
-	            function(error){
-	            	setupAPIService.generateToast(error.data, true);
-	                errorCallback && errorCallback(error);
-            	}
-			);
+			var req = {
+				method: 'GET',
+				url: xpdAccessFactory.getSetupURL() +
+					'setup/reports/planned-operation-graphic-data?'
+					+ 'operation-id=' + operationId
+			};
+			setupAPIService.doRequest(req, successCallback, errorCallback);
 		}
 
 		function getRealizedGraphicDataOperation(operation_id, successCallback, errorCallback) {
-		    var req = {
-		        method: 'GET',
-		        url: xpdAccessFactory.getSetupURL() +
-		            'setup/reports/realized-operation-graphic-data?'+
-		            'operation-id=' + operation_id
-		    };
-		    $http(req).then(
-	            function(response) {
-	                successCallback && successCallback(response.data.data);
-	            },
-	            function(error){
-	            	setupAPIService.generateToast(error.data, true);
-	                errorCallback && errorCallback(error);
-            	}
-			);
+			var req = {
+				method: 'GET',
+				url: xpdAccessFactory.getSetupURL() +
+					'setup/reports/realized-operation-graphic-data?' +
+					'operation-id=' + operation_id
+			};
+
+			setupAPIService.doRequest(req, successCallback, errorCallback);
 		}
 
-		function getHistogramData(fromDate, toDate, successCallback, errorCallback){
+		function getHistogramData(fromDate, toDate, successCallback, errorCallback) {
 			var url = xpdAccessFactory.getSetupURL() + 'setup/reports/histogram?';
 			url += 'from=' + fromDate.getTime();
 			url += '&to=' + toDate.getTime();
 
-			$http.get(url)
-            	.then(
-	            function(response) {
-	                successCallback && successCallback(response.data.data);
-	            },
-	            function(error){
-	            	setupAPIService.generateToast(error.data, true);
-	                errorCallback && errorCallback(error);
-            	}
-				);
+			var req = {
+				method: 'GET',
+				url: url
+			};
+
+			setupAPIService.doRequest(req, successCallback, errorCallback);
 		}
 
-		function getNeedleDataChart(fromDate, toDate, successCallback, errorCallback){
+		function getNeedleDataChart(fromDate, toDate, successCallback, errorCallback) {
 			var url = xpdAccessFactory.getSetupURL() + 'setup/reports/needle?';
 			url += 'from=' + fromDate.getTime();
 			url += '&to=' + toDate.getTime();
 
-			$http.get(url)
-            	.then(
-	            function(response) {
-	                successCallback && successCallback(response.data.data);
-	            },
-	            function(error){
-	            	setupAPIService.generateToast(error.data, true);
-	                errorCallback && errorCallback(error);
-            	}
-				);
+			var req = {
+				method: 'GET',
+				url: url
+			};
+
+			setupAPIService.doRequest(req, successCallback, errorCallback);
 		}
 
-		function getFailuresNptDataChart(fromDate, toDate, successCallback, errorCallback){
+		function getFailuresNptDataChart(fromDate, toDate, successCallback, errorCallback) {
 			var url = xpdAccessFactory.getSetupURL() + 'setup/reports/failure-category?';
 			url += 'from=' + fromDate.getTime();
 			url += '&to=' + toDate.getTime();
 
-			$http.get(url)
-            	.then(
-	            function(response) {
-	                successCallback && successCallback(response.data.data);
-	            },
-	            function(error){
-	            	setupAPIService.generateToast(error.data, true);
-	                errorCallback && errorCallback(error);
-            	}
-				);
+			var req = {
+				method: 'GET',
+				url: url
+			};
+
+			setupAPIService.doRequest(req, successCallback, errorCallback);
 		}
 
-		function getLessonsLearnedDataChart(fromDate, toDate, successCallback, errorCallback){
+		function getLessonsLearnedDataChart(fromDate, toDate, successCallback, errorCallback) {
 			var url = xpdAccessFactory.getSetupURL() + 'setup/reports/lesson-learned-category?';
 			url += 'from=' + fromDate.getTime();
 			url += '&to=' + toDate.getTime();
 
-			$http.get(url)
-            	.then(
-	            function(response) {
-	                successCallback && successCallback(response.data.data);
-	            },
-	            function(error){
-	            	setupAPIService.generateToast(error.data, true);
-	                errorCallback && errorCallback(error);
-            	}
-				);
+			var req = {
+				method: 'GET',
+				url: url
+			};
+
+			setupAPIService.doRequest(req, successCallback, errorCallback);
 		}
 
-		function getOperationQueue(wellId, successCallback, errorCallback){
+		function getOperationQueue(wellId, successCallback, errorCallback) {
 
-			$http.get(xpdAccessFactory.getReportsAPIURL() + 'bitdepth-vs-time/' + wellId)
-				.then(
-					function (data) {
-						successCallback && successCallback(data.data);
-					},
-					function (error) {
-						errorCallback && errorCallback(error);
-					}
-				);
+			var req = {
+				method: 'GET',
+				url: xpdAccessFactory.getReportsAPIURL() + 'bitdepth-vs-time/' + wellId
+			};
+
+			setupAPIService.doRequest(req, successCallback, errorCallback);
+
 		}
 
-		function getBitDepthChartForOperation(wellId, operationId, successCallback, errorCallback){
+		function getBitDepthChartForOperation(wellId, operationId, successCallback, errorCallback) {
 
-			$http.get(xpdAccessFactory.getReportsAPIURL() + 'bitdepth-vs-time/' + wellId + '/operation/' + operationId)
-				.then(
-					function (data) {
-						successCallback && successCallback(data.data);
-					},
-					function (error) {
-						errorCallback && errorCallback(error);
-					}
-				);
+			var req = {
+				method: 'GET',
+				url: xpdAccessFactory.getReportsAPIURL() + 'bitdepth-vs-time/' + wellId + '/operation/' + operationId
+			};
+
+			setupAPIService.doRequest(req, successCallback, errorCallback);
+
 		}
 
 	}

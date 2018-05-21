@@ -29,9 +29,9 @@
 			var updateLatency = 1000;
 			var getTickInterval;
 
-			var resetPage = $timeout(reload, (ONE_HOUR / 2) );
+			var resetPage = $timeout(reload, (ONE_HOUR / 2));
 
-			scope.$on('$destroy', destroy );
+			scope.$on('$destroy', destroy);
 
 			scope.zoomIsLocked = false;
 			scope.isZooming = isZooming;
@@ -41,25 +41,25 @@
 
 			scope.setZoomStartAt = setZoomStartAt;
 			scope.setZoomEndAt = setZoomEndAt;
-			
+
 			function reload() {
 				location.reload();
 			}
 
 			function destroy() {
-        		if (resetPage) {
-            		$timeout.cancel(resetPage);
-        		}
-        		if (getTickInterval) {
-            		$interval.cancel(getTickInterval);
-        		}
+				if (resetPage) {
+					$timeout.cancel(resetPage);
+				}
+				if (getTickInterval) {
+					$interval.cancel(getTickInterval);
+				}
 			}
-			
-			function setZoomStartAt(zoomStartAt){
+
+			function setZoomStartAt(zoomStartAt) {
 				scope.zoomStartAt = new Date(zoomStartAt);
 			}
 
-			function setZoomEndAt(zoomEndAt){
+			function setZoomEndAt(zoomEndAt) {
 				scope.zoomEndAt = new Date(zoomEndAt);
 			}
 
@@ -89,10 +89,10 @@
 
 			}
 
-			function isZooming(lockZoom){
+			function isZooming(lockZoom) {
 				scope.zoomIsLocked = lockZoom;
 			}
-	
+
 
 			function moveZoomRealtime() {
 				var now = new Date();
@@ -124,24 +124,23 @@
 					var now = new Date().getTime();
 					scope.dmecTrackingEndAt = now;
 
-					if(scope.inputRangeForm.keepZoomAtTheEnd){
-						if(!scope.zoomIsLocked){
+					if (scope.inputRangeForm.keepZoomAtTheEnd) {
+						if (!scope.zoomIsLocked) {
 							moveZoomRealtime();
 						}
 					}
 
 					scope.onReading = $q(function (resolve, reject) {
 						var currentReading = scope.currentReading;
-						if(currentReading.timestamp && currentReading.timestamp){
+						if (currentReading.timestamp && currentReading.timestamp) {
 							currentReading.timestamp = new Date(currentReading.timestamp).getTime();
 							resolve(currentReading);
 						}
-						// readingSetupAPIService.getTick((now - updateLatency), resolve, reject);
 					});
 
 					scope.onReading.then(function (data) {
 						scope.maxDepth = Math.max(scope.maxDepth, data.bitDepth);
-						
+
 						if (scope.bitDepthPoints) {
 							scope.bitDepthPoints.push({
 								x: data.timestamp,
@@ -153,6 +152,12 @@
 
 				}
 
+			}
+
+			function getAllReadingByStartEndTime(startTime, endTime) {
+				return function (resolve, reject) {
+					readingSetupAPIService.getAllReadingByStartEndTime(startTime, endTime, resolve, reject);
+				};
 			}
 
 			function getAllReadingSince(startTime) {
@@ -173,52 +178,68 @@
 				loopStartTime.setSeconds(0);
 				loopStartTime.setMilliseconds(0);
 
-				if (loopStartTime.getHours() < 12) {
-					loopStartTime.setHours(0);
-				} else {
-					loopStartTime.setHours(12);
-				}
-
 				var promiseList = [];
 
 				while (loopEndTime.getTime() < loopLimit.getTime()) {
 
-					loopEndTime.setHours(loopStartTime.getHours() + 12);
+					loopEndTime.setHours(loopStartTime.getHours() + 1);
 					var loopEndTimestamp = loopEndTime.getTime();
 
 					if (loopEndTime.getTime() > loopLimit.getTime()) {
-						loopEndTimestamp = null;
+						loopEndTimestamp = null; // loopLimit.getTime();
 					}
 
-					promiseList.push($q(function (resolve, reject) {
-						readingSetupAPIService.getAllReadingByStartEndTime(loopStartTime.getTime(), loopEndTimestamp, resolve, function(){
-							console.log('Falhou a request');
-							resolve([]);
-						});
-					}));
+					promiseList.push(getAllReadingByStartEndTime(loopStartTime.getTime(), loopEndTimestamp));
 
 					loopStartTime = new Date(loopEndTime);
 				}
 
 				scope.onReadingSince = $q(function (resolve, reject) {
 
-					$q.all(promiseList).then(function (readings) {
+					var parsedReadings = [];
 
-						var parsedReadings = [];
+					function mergeParsedReadings() {
 
-						for (var i in readings) {
+						if (!promiseList || promiseList.length == 0) {
+							resolve(parsedReadings);
+						} else {
+							var promise = promiseList.shift();
 
-							if(readings[i] && readings[i][0] && readings[i][0].timestamp){
-								parsedReadings.push({
-									timestamp: readings[i][0].timestamp
-								});
-							}
-							
-							parsedReadings = parsedReadings.concat(readings[i]);
+							promise(function (readings) {
+
+								if (readings && readings[0] && readings[0].timestamp) {
+									parsedReadings.push({
+										timestamp: readings[0].timestamp
+									});
+									
+									parsedReadings = parsedReadings.concat(readings);
+								}
+
+								mergeParsedReadings();
+
+							}, function () {
+								mergeParsedReadings();
+							});
 						}
+					}
 
-						resolve(parsedReadings);
-					});
+					mergeParsedReadings();
+
+					// $q.all(promiseList).then(function (readings) {
+
+					// 	for (var i in readings) {
+
+					// 		if(readings[i] && readings[i][0] && readings[i][0].timestamp){
+					// 			parsedReadings.push({
+					// 				timestamp: readings[i][0].timestamp
+					// 			});
+					// 		}
+
+					// 		parsedReadings = parsedReadings.concat(readings[i]);
+					// 	}
+
+					// });
+
 
 				});
 

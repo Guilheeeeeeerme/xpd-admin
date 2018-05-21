@@ -16,15 +16,18 @@
 
 		test1(function(){
 			$scope.success.push( 'FIM' );
+			$scope.error.push( 'FIM' );
 
 			test2(function(){
 				$scope.success.push( 'FIM' );
+				$scope.error.push( 'FIM' );
 			});
 		});
 
 		function test1(callback){
 
 			$scope.success.push('START');
+			$scope.error.push( 'START' );
 			
 			getOperationList(function(operations){
 
@@ -82,6 +85,7 @@
 		function test2(callback){
 
 			$scope.success.push('START');
+			$scope.error.push('START');
 			
 			getOperationList(function(operations){
 
@@ -100,7 +104,7 @@
 
 					for(var i = 0; i < 4; i++){
 						promises.push(new Promise(function(resolve, reject){
-							insertAlarm(getRandomAlarm('t', operations[1]), resolve, reject)
+							insertAlarm(getRandomAlarm('t', operations[1]), resolve, reject);
 						}));
 					}
 
@@ -113,7 +117,7 @@
 								$scope.error.push('não funcionou a função but not');
 							}
 						});
-					})
+					});
 
 
 				});

@@ -10,6 +10,7 @@
 		var vm = this;
 
 		var eventStartTime, eventEndTime, eventId;
+		var listTrackingEventByOperationPromise = null;
 
 		vm.actionOpenDropdownMenu = actionOpenDropdownMenu;
 		vm.actionClickEventDetailsButton = actionClickEventDetailsButton;
@@ -33,7 +34,14 @@
 				$scope.operationData.operationContext.currentOperation &&
 				$scope.operationData.operationContext.currentOperation.running) {
 
-				listTrackingEventByOperation($scope.operationData.operationContext.currentOperation.id).then(organizeEventsOnLists);
+				if(!listTrackingEventByOperationPromise){
+					listTrackingEventByOperationPromise = listTrackingEventByOperation($scope.operationData.operationContext.currentOperation.id);
+
+					listTrackingEventByOperationPromise.then(function(trackingEvents){
+						organizeEventsOnLists(trackingEvents);
+						listTrackingEventByOperationPromise = null;
+					});
+				}
 			}
 
 		}
