@@ -3,9 +3,9 @@
 
 	angular.module('xpd.setupapi').service('adminUserSetupAPIService', adminUserSetupAPIService);
 
-	adminUserSetupAPIService.$inject = ['$http', 'xpdAccessFactory'];
+	adminUserSetupAPIService.$inject = ['xpdAccessFactory', 'setupAPIService'];
 
-	function adminUserSetupAPIService($http, xpdAccessFactory) {
+	function adminUserSetupAPIService(xpdAccessFactory, setupAPIService) {
 
 		var BASE_URL = xpdAccessFactory.getSetupURL() + 'setup/admin-user';
 
@@ -24,14 +24,7 @@
 				data: loginInfo
 			};
 
-			$http(req).then(
-	            function(response) {
-	                successCallback && successCallback(response.data.data);
-	            },
-	            function(error){
-	                errorCallback && errorCallback(error);
-            	}
-			);
+			setupAPIService.doRequest(req, successCallback, errorCallback);
 		}
 
 	}

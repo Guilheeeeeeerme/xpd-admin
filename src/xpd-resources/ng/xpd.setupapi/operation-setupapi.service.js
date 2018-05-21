@@ -3,9 +3,9 @@
 
 	angular.module('xpd.setupapi').service('operationSetupAPIService', operationSetupAPIService);
 
-	operationSetupAPIService.$inject = ['$http', 'xpdAccessFactory', 'setupAPIService'];
+	operationSetupAPIService.$inject = ['xpdAccessFactory', 'setupAPIService'];
 
-	function operationSetupAPIService($http, xpdAccessFactory, setupAPIService) {
+	function operationSetupAPIService(xpdAccessFactory, setupAPIService) {
 
 		var BASE_URL = xpdAccessFactory.getSetupURL() + 'setup/operation';
 
@@ -22,44 +22,32 @@
 
 		function getOperationAlarms(operationId, successCallback, errorCallback) {
 
-			$http.get(BASE_URL + '/' + operationId + '/alarms')
-				.then(
-					function (response) {
-						successCallback && successCallback(response.data.data);
-					},
-					function (error) {
-						setupAPIService.generateToast(error.data, true);
-						errorCallback && errorCallback(error);
-					}
-				);
+			var req = {
+				method: 'GET',
+				url: BASE_URL + '/' + operationId + '/alarms'
+			};
+
+			setupAPIService.doRequest(req, successCallback, errorCallback);
 		}
 
 		function getObjectById(id, successCallback, errorCallback) {
+			
+			var req = {
+				method: 'GET',
+				url: BASE_URL + '/' + id
+			};
 
-			$http.get(BASE_URL + '/' + id)
-				.then(
-					function (response) {
-						successCallback && successCallback(response.data.data);
-					},
-					function (error) {
-						setupAPIService.generateToast(error.data, true);
-						errorCallback && errorCallback(error);
-					}
-				);
+			setupAPIService.doRequest(req, successCallback, errorCallback);
 		}
 
 		function getList(successCallback, errorCallback) {
 
-			$http.get(BASE_URL + '/list')
-				.then(
-					function (response) {
-						successCallback && successCallback(response.data.data);
-					},
-					function (error) {
-						setupAPIService.generateToast(error.data, true);
-						errorCallback && errorCallback(error);
-					}
-				);
+			var req = {
+				method: 'GET',
+				url: BASE_URL + '/list'
+			};
+
+			setupAPIService.doRequest(req, successCallback, errorCallback);
 		}
 
 		function insertObject(object, successCallback, errorCallback) {
@@ -73,15 +61,7 @@
 				data: object
 			};
 
-			$http(req).then(
-				function (response) {
-					successCallback && successCallback(response.data.data);
-				},
-				function (error) {
-					setupAPIService.generateToast(error.data, true);
-					errorCallback && errorCallback(error);
-				}
-			);
+			setupAPIService.doRequest(req, successCallback, errorCallback);
 
 		}
 
@@ -96,15 +76,7 @@
 				data: object
 			};
 
-			$http(req).then(
-				function (response) {
-					successCallback && successCallback(response.data.data);
-				},
-				function (error) {
-					setupAPIService.generateToast(error.data, true);
-					errorCallback && errorCallback(error);
-				}
-			);
+			setupAPIService.doRequest(req, successCallback, errorCallback);
 		}
 
 		function getDefaultFields(type, successCallback, errorCallback) {
@@ -116,42 +88,29 @@
 				}
 			};
 
-			$http(req).then(
-				function (response) {
-					successCallback && successCallback(response.data.data);
-				},
-				function (error) {
-					setupAPIService.generateToast(error.data, true);
-					errorCallback && errorCallback(error);
-				}
-			);
+			setupAPIService.doRequest(req, successCallback, errorCallback);
 		}
 
 		function getOperationReadings(operationId, successCallback, errorCallback) {
 
-			$http.get(BASE_URL + '/' + operationId + '/readings')
-				.then(
-					function (response) {
-						successCallback && successCallback(response.data.data);
-					},
-					function (error) {
-						setupAPIService.generateToast(error.data, true);
-						errorCallback && errorCallback(error);
-					}
-				);
+			var req = {
+				method: 'GET',
+				url: BASE_URL + '/' + operationId + '/readings'
+			};
+
+			setupAPIService.doRequest(req, successCallback, errorCallback);
 		}
 
 		function getOperationQueue(wellId, successCallback, errorCallback) {
-			$http.get(xpdAccessFactory.getSetupURL() + 'report-service/operations-queue/' + wellId)
-				.then(
-					function (response) {
-						successCallback && successCallback(response.data.data);
-					},
-					function (error) {
-						setupAPIService.generateToast(error.data, true);
-						errorCallback && errorCallback(error);
-					}
-				);
+
+			
+			var req = {
+				method: 'GET',
+				url: xpdAccessFactory.getSetupURL() + 'report-service/operations-queue/' + wellId
+			};
+
+			setupAPIService.doRequest(req, successCallback, errorCallback);
+			
 		}
 	}
 

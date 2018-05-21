@@ -4,9 +4,9 @@
 	angular.module('xpd.setupapi')
 		.service('scheduleSetupAPIService', scheduleSetupAPIService);
 
-	scheduleSetupAPIService.$inject = ['$http', 'xpdAccessFactory', 'setupAPIService'];
+	scheduleSetupAPIService.$inject = ['xpdAccessFactory', 'setupAPIService'];
 
-	function scheduleSetupAPIService($http, xpdAccessFactory, setupAPIService) {
+	function scheduleSetupAPIService(xpdAccessFactory, setupAPIService) {
 		var vm = this;
 		var apiUrl = xpdAccessFactory.getSetupURL();
 
@@ -39,16 +39,12 @@
 
 			var modelURL = 'setup/function';
 
-			$http.get(xpdAccessFactory.getSetupURL() + modelURL + '/' + id)
-				.then(
-					function (response) {
-						successCallback && successCallback(response.data.data);
-					},
-					function (error) {
-						setupAPIService.generateToast(error.data, true);
-						errorCallback && errorCallback(error);
-					}
-				);
+			var req = {
+				method: 'GET',
+				url: xpdAccessFactory.getSetupURL() + modelURL + '/' + id
+			};
+
+			setupAPIService.doRequest(req, successCallback, errorCallback);
 
 		}
 
@@ -65,15 +61,7 @@
 				data: object
 			};
 
-			$http(req).then(
-				function (response) {
-					successCallback && successCallback(response.data.data);
-				},
-				function (error) {
-					setupAPIService.generateToast(error.data, true);
-					errorCallback && errorCallback(error);
-				}
-			);
+			setupAPIService.doRequest(req, successCallback, errorCallback);
 		}
 
 		function updateFunction(object, successCallback, errorCallback) {
@@ -88,16 +76,8 @@
 				},
 				data: object
 			};
-
-			$http(req).then(
-				function (response) {
-					successCallback && successCallback(response.data.data);
-				},
-				function (error) {
-					setupAPIService.generateToast(error.data, true);
-					errorCallback && errorCallback(error);
-				}
-			);
+			
+			setupAPIService.doRequest(req, successCallback, errorCallback);
 		}
 
 		function removeFunction(object, successCallback, errorCallback) {
@@ -112,16 +92,8 @@
 				},
 				data: {id: object.id }
 			};
-
-			$http(req).then(
-				function (response) {
-					successCallback && successCallback(response.data.data);
-				},
-				function (error) {
-					setupAPIService.generateToast(error.data, true);
-					errorCallback && errorCallback(error);
-				}
-			);
+			
+			setupAPIService.doRequest(req, successCallback, errorCallback);
 		}
 
 		/**
@@ -140,32 +112,20 @@
 				},
 				data: object
 			};
-
-			$http(req).then(
-				function (response) {
-					successCallback && successCallback(response.data.data);
-				},
-				function (error) {
-					setupAPIService.generateToast(error.data, true);
-					errorCallback && errorCallback(error);
-				}
-			);
+			
+			setupAPIService.doRequest(req, successCallback, errorCallback);
 		}
 
 		function getMemberById(id, successCallback, errorCallback) {
 
 			var modelURL = 'setup/member';
 
-			$http.get(xpdAccessFactory.getSetupURL() + modelURL + '/' + id)
-				.then(
-					function (response) {
-						successCallback && successCallback(response.data.data);
-					},
-					function (error) {
-						setupAPIService.generateToast(error.data, true);
-						errorCallback && errorCallback(error);
-					}
-				);
+			var req = {
+				method: 'GET',
+				url: xpdAccessFactory.getSetupURL() + modelURL + '/' + id
+			};
+
+			setupAPIService.doRequest(req, successCallback, errorCallback);
 
 		}
 
@@ -179,16 +139,8 @@
 			if (id) {
 				req.url += '/exclude-member/' + id;
 			}
-
-			$http(req).then(
-				function (response) {
-					successCallback && successCallback(response.data.data);
-				},
-				function (error) {
-					setupAPIService.generateToast(error.data, true);
-					errorCallback && errorCallback(error);
-				}
-			);
+			
+			setupAPIService.doRequest(req, successCallback, errorCallback);
 
 		}
 
@@ -204,16 +156,8 @@
 				},
 				data: object
 			};
-
-			$http(req).then(
-				function (response) {
-					successCallback && successCallback(response.data.data);
-				},
-				function (error) {
-					setupAPIService.generateToast(error.data, true);
-					errorCallback && errorCallback(error);
-				}
-			);
+			
+			setupAPIService.doRequest(req, successCallback, errorCallback);
 		}
 
 		function removeMember(object, successCallback, errorCallback) {
@@ -228,16 +172,8 @@
 				},
 				data: {id: object.id }
 			};
-
-			$http(req).then(
-				function (response) {
-					successCallback && successCallback(response.data.data);
-				},
-				function (error) {
-					setupAPIService.generateToast(error.data, true);
-					errorCallback && errorCallback(error);
-				}
-			);
+			
+			setupAPIService.doRequest(req, successCallback, errorCallback);
 		}
 
 		function getMemberScore(successCallback, errorCallback) {
@@ -251,16 +187,8 @@
 					'Content-Type': 'application/json'
 				}
 			};
-
-			$http(req).then(
-				function (response) {
-					successCallback && successCallback(response.data.data);
-				},
-				function (error) {
-					setupAPIService.generateToast(error.data, true);
-					errorCallback && errorCallback(error);
-				}
-			);
+			
+			setupAPIService.doRequest(req, successCallback, errorCallback);
 		}
 
 		/**
@@ -271,16 +199,12 @@
 
 			var modelURL = 'setup/schedule';
 
-			$http.get(xpdAccessFactory.getSetupURL() + modelURL + '/' + id)
-				.then(
-					function (response) {
-						successCallback && successCallback(response.data.data);
-					},
-					function (error) {
-						setupAPIService.generateToast(error.data, true);
-						errorCallback && errorCallback(error);
-					}
-				);
+			var req = {
+				method: 'GET',
+				url: xpdAccessFactory.getSetupURL() + modelURL + '/' + id
+			};
+
+			setupAPIService.doRequest(req, successCallback, errorCallback);
 		}
 
 		function removeSchedule(object, successCallback, errorCallback) {
@@ -295,16 +219,8 @@
 				},
 				data: {id: object.id }
 			};
-
-			$http(req).then(
-				function (response) {
-					successCallback && successCallback(response.data.data);
-				},
-				function (error) {
-					setupAPIService.generateToast(error.data, true);
-					errorCallback && errorCallback(error);
-				}
-			);
+			
+			setupAPIService.doRequest(req, successCallback, errorCallback);
 		}
 
 		function insertSchedule(object, successCallback, errorCallback) {
@@ -319,16 +235,8 @@
 				},
 				data: object
 			};
-
-			$http(req).then(
-				function (response) {
-					successCallback && successCallback(response.data.data);
-				},
-				function (error) {
-					setupAPIService.generateToast(error.data, true);
-					errorCallback && errorCallback(error);
-				}
-			);
+			
+			setupAPIService.doRequest(req, successCallback, errorCallback);
 		}
 
 		function updateSchedule(object, successCallback, errorCallback) {
@@ -343,16 +251,8 @@
 				},
 				data: object
 			};
-
-			$http(req).then(
-				function (response) {
-					successCallback && successCallback(response.data.data);
-				},
-				function (error) {
-					setupAPIService.generateToast(error.data, true);
-					errorCallback && errorCallback(error);
-				}
-			);
+			
+			setupAPIService.doRequest(req, successCallback, errorCallback);
 		}
 		
 		
@@ -369,16 +269,12 @@
 			url += 'fromDate=' + fromDate + '&';
 			url += 'toDate=' + toDate;
 
-			$http.get(url)
-				.then(
-					function (response) {
-						successCallback && successCallback(response.data.data);
-					},
-					function (error) {
-						setupAPIService.generateToast(error.data, true);
-						errorCallback && errorCallback(error);
-					}
-				);
+			var req = {
+				method: 'GET',
+				url: url
+			};
+
+			setupAPIService.doRequest(req, successCallback, errorCallback);
 		}
 		
 		/**
@@ -393,17 +289,13 @@
 			var url = apiUrl + 'setup/schedule/full-schedule-by-range-date?';
 			url += 'fromDate=' + fromDate + '&';
 			url += 'toDate=' + toDate;
+			
+			var req = {
+				method: 'GET',
+				url: url
+			};
 
-			$http.get(url)
-				.then(
-					function (response) {
-						successCallback && successCallback(response.data.data);
-					},
-					function (error) {
-						setupAPIService.generateToast(error.data, true);
-						errorCallback && errorCallback(error);
-					}
-				);
+			setupAPIService.doRequest(req, successCallback, errorCallback);
 		}
 
 		/**
@@ -423,16 +315,8 @@
 				},
 				data: schedule
 			};
-
-			$http(req).then(
-				function (response) {
-					successCallback && successCallback(response.data.data);
-				},
-				function (error) {
-					setupAPIService.generateToast(error.data, true);
-					errorCallback && errorCallback(error);
-				}
-			);
+			
+			setupAPIService.doRequest(req, successCallback, errorCallback);
 
 		}
 

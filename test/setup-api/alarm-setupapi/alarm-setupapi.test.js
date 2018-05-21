@@ -104,7 +104,7 @@
 
 					for(var i = 0; i < 4; i++){
 						promises.push(new Promise(function(resolve, reject){
-							insertAlarm(getRandomAlarm('t', operations[1]), resolve, reject)
+							insertAlarm(getRandomAlarm('t', operations[1]), resolve, reject);
 						}));
 					}
 
@@ -117,7 +117,7 @@
 								$scope.error.push('não funcionou a função but not');
 							}
 						});
-					})
+					});
 
 
 				});

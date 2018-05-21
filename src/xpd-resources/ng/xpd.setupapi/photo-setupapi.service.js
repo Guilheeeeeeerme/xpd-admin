@@ -20,13 +20,13 @@
 				responseType: 'arraybuffer'
 			};
 
-			$http(request) .then(
-	            function(response) {
-	                successCallback && successCallback(_arrayBufferToBase64(response.data));
-	            },
-	            function(error){
-	                errorCallback && errorCallback(error);
-            	}
+			$http(request).then(
+				function (response) {
+					successCallback && successCallback(_arrayBufferToBase64(response.data));
+				},
+				function (error) {
+					errorCallback && errorCallback(error);
+				}
 			);
 		}
 
@@ -53,14 +53,13 @@
 
 		function getObjectById(modelURL, id, successCallback, errorCallback) {
 			$http.get(xpdAccessFactory.getSetupURL() + modelURL + '/' + id)
-            	.then(
-	            function(response) {
-	                successCallback && successCallback(response.data);
-	            },
-	            function(error){
-	            	generateToast(error.data, true);
-	                errorCallback && errorCallback(error);
-            	}
+				.then(
+					function (response) {
+						successCallback && successCallback(response.data);
+					},
+					function (error) {
+						errorCallback && errorCallback(error);
+					}
 				);
 		}
 
@@ -69,7 +68,7 @@
 			var bytes = new Uint8Array(buffer);
 			var len = bytes.byteLength;
 			for (var i = 0; i < len; i++) {
-			  binary += String.fromCharCode(bytes[i]);
+				binary += String.fromCharCode(bytes[i]);
 			}
 			return window.btoa(binary);
 		}

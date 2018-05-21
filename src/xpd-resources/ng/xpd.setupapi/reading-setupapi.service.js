@@ -3,9 +3,9 @@
 
 	angular.module('xpd.setupapi').service('readingSetupAPIService', readingSetupAPIService);
 
-	readingSetupAPIService.$inject = ['$http', 'xpdAccessFactory', 'setupAPIService'];
+	readingSetupAPIService.$inject = ['xpdAccessFactory', 'setupAPIService'];
 
-	function readingSetupAPIService($http, xpdAccessFactory, setupAPIService) {
+	function readingSetupAPIService(xpdAccessFactory, setupAPIService) {
 
 		var BASE_URL = xpdAccessFactory.getSetupURL() + 'setup/reading';
 
@@ -24,15 +24,7 @@
 				}
 			};
 
-			$http(req).then(
-				function (response) {
-					successCallback && successCallback(response.data.data);
-				},
-				function (error) {
-					setupAPIService.generateToast(error.data, true);
-					errorCallback && errorCallback(error);
-				}
-			);
+			setupAPIService.doRequest(req, successCallback, errorCallback);
 		}
 
 		function getTick(tick, successCallback, errorCallback) {
@@ -44,15 +36,7 @@
 				}
 			};
 
-			$http(req).then(
-				function (response) {
-					successCallback && successCallback(response.data.data);
-				},
-				function (error) {
-					setupAPIService.generateToast(error.data, true);
-					errorCallback && errorCallback(error);
-				}
-			);
+			setupAPIService.doRequest(req, successCallback, errorCallback);
 		}
 
 		function getAllReadingByStartEndTime(from, to, successCallback, errorCallback) {
@@ -64,15 +48,7 @@
 				}
 			};
 
-			$http(req).then(
-				function (response) {
-					successCallback && successCallback(response.data.data);
-				},
-				function (error) {
-					setupAPIService.generateToast(error.data, true);
-					errorCallback && errorCallback(error);
-				}
-			);
+			setupAPIService.doRequest(req, successCallback, errorCallback);
 		}
 	}
 

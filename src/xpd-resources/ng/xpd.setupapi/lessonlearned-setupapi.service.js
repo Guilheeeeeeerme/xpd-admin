@@ -4,9 +4,9 @@
 	angular.module('xpd.setupapi')
 		.service('lessonLearnedSetupAPIService', lessonLearnedSetupAPIService);
 
-	lessonLearnedSetupAPIService.$inject = ['$http', 'xpdAccessFactory', 'setupAPIService'];
+	lessonLearnedSetupAPIService.$inject = ['xpdAccessFactory', 'setupAPIService'];
 
-	function lessonLearnedSetupAPIService($http, xpdAccessFactory, setupAPIService) {
+	function lessonLearnedSetupAPIService(xpdAccessFactory, setupAPIService) {
 
 		var BASE_URL = xpdAccessFactory.getSetupURL() + 'setup/lessonlearned';
 
@@ -27,16 +27,12 @@
 
 			var url = BASE_URL + '/list';
 
-			$http.get(url)
-				.then(
-					function (response) {
-						successCallback && successCallback(response.data.data);
-					},
-					function (error) {
-						setupAPIService.generateToast(error.data, true);
-						errorCallback && errorCallback(error);
-					}
-				);
+			var req = {
+				method: 'GET',
+				url: url
+			};
+
+			setupAPIService.doRequest(req, successCallback, errorCallback);
 		}
 
 		function updateObject(object, successCallback, errorCallback) {
@@ -49,16 +45,8 @@
 				},
 				data: object
 			};
-
-			$http(req).then(
-				function (response) {
-					successCallback && successCallback(response.data.data);
-				},
-				function (error) {
-					setupAPIService.generateToast(error.data, true);
-					errorCallback && errorCallback(error);
-				}
-			);
+			
+			setupAPIService.doRequest(req, successCallback, errorCallback);
 		}
 
 		function insertObject(object, successCallback, errorCallback) {
@@ -72,15 +60,7 @@
 				data: object
 			};
 
-			$http(req).then(
-				function (response) {
-					successCallback && successCallback(response.data.data);
-				},
-				function (error) {
-					setupAPIService.generateToast(error.data, true);
-					errorCallback && errorCallback(error);
-				}
-			);
+			setupAPIService.doRequest(req, successCallback, errorCallback);
 
 		}
 
@@ -95,46 +75,31 @@
 				data: object
 			};
 
-			$http(req).then(
-				function (response) {
-					successCallback && successCallback(response.data.data);
-				},
-				function (error) {
-					setupAPIService.generateToast(error.data, true);
-					errorCallback && errorCallback(error);
-				}
-			);
+			setupAPIService.doRequest(req, successCallback, errorCallback);
 		}
 
 		function listByOperation(id, successCallback, errorCallback) {
 
 			var url = BASE_URL + '/list-by-operation/' + id;
 
-			$http.get(url)
-				.then(
-					function (response) {
-						successCallback && successCallback(response.data.data);
-					},
-					function (error) {
-						setupAPIService.generateToast(error.data, true);
-						errorCallback && errorCallback(error);
-					}
-				);
+			
+			var req = {
+				method: 'GET',
+				url: url
+			};
+
+			setupAPIService.doRequest(req, successCallback, errorCallback);
 		}
 
 		function getListCategory(successCallback, errorCallback) {
 			// lessonlearned_category
 
-			$http.get( BASE_URL + '_category/list')
-				.then(
-					function (response) {
-						successCallback && successCallback(response.data.data);
-					},
-					function (error) {
-						setupAPIService.generateToast(error.data, true);
-						errorCallback && errorCallback(error);
-					}
-				);
+			var req = {
+				method: 'GET',
+				url: BASE_URL + '_category/list'
+			};
+
+			setupAPIService.doRequest(req, successCallback, errorCallback);
 		}
 
 		function removeCategory(object, successCallback, errorCallback) {
@@ -148,16 +113,8 @@
 				},
 				data: object
 			};
-
-			$http(req).then(
-				function (response) {
-					successCallback && successCallback(response.data.data);
-				},
-				function (error) {
-					setupAPIService.generateToast(error.data, true);
-					errorCallback && errorCallback(error);
-				}
-			);
+			
+			setupAPIService.doRequest(req, successCallback, errorCallback);
 
 		}
 
@@ -172,16 +129,8 @@
 				},
 				data: object
 			};
-
-			$http(req).then(
-				function (response) {
-					successCallback && successCallback(response.data.data);
-				},
-				function (error) {
-					setupAPIService.generateToast(error.data, true);
-					errorCallback && errorCallback(error);
-				}
-			);
+			
+			setupAPIService.doRequest(req, successCallback, errorCallback);
 
 		}
 
@@ -197,15 +146,7 @@
 				data: object
 			};
 
-			$http(req).then(
-				function (response) {
-					successCallback && successCallback(response.data.data);
-				},
-				function (error) {
-					setupAPIService.generateToast(error.data, true);
-					errorCallback && errorCallback(error);
-				}
-			);
+			setupAPIService.doRequest(req, successCallback, errorCallback);
 
 
 		}
