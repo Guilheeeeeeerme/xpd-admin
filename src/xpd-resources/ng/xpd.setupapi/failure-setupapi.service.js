@@ -9,6 +9,7 @@
 	function failureSetupAPIService($http, xpdAccessFactory, setupAPIService) {
 
 		var BASE_URL = xpdAccessFactory.getSetupURL() + 'setup/failure';
+		
 
 		var vm = this;
 
