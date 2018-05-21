@@ -49,7 +49,7 @@
 		}
 
 		function updateWell(well) {
-			well.name = 'Well 2';
+			well.name = 'Well Editado';
 			well.airGap = 20;
 			well.waterDepth = 4000;
 			well.current = false;

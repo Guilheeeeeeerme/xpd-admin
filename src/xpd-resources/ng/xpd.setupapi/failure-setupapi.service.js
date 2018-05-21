@@ -9,12 +9,14 @@
 	function failureSetupAPIService(xpdAccessFactory, setupAPIService) {
 
 		var BASE_URL = xpdAccessFactory.getSetupURL() + 'setup/failure';
+		
 
 		var vm = this;
 
+		vm.insertObject = insertObject;
 		vm.updateObject = updateObject;
 		vm.getFailuresOnInterval = getFailuresOnInterval;
-		vm.listByOperation = listByOperation;
+		// vm.listByOperation = listByOperation;
 		vm.listFailuresOnGoing = listFailuresOnGoing;
 		vm.listFailures = listFailures;
 		vm.removeObject = removeObject;
@@ -74,16 +76,21 @@
 			setupAPIService.doRequest(req, successCallback, errorCallback);
 		}
 
-		function listByOperation(id, successCallback, errorCallback) {
-			var url = BASE_URL + '/list-by-operation/' + id;			
+		// function listByOperation(id, successCallback, errorCallback) {
 
-			var req = {
-				method: 'GET',
-				url: url
-			};
+		// 	var url = BASE_URL + '/list-by-operation/' + id;
 
-			setupAPIService.doRequest(req, successCallback, errorCallback);
-		}
+		// 	$http.get(url)
+		// 		.then(
+		// 			function (response) {
+		// 				successCallback && successCallback(response.data.data);
+		// 			},
+		// 			function (error) {
+		// 				setupAPIService.generateToast(error.data, true);
+		// 				errorCallback && errorCallback(error);
+		// 			}
+		// 		);
+		// }
 
 		function listFailuresOnGoing(successCallback, errorCallback) {
 			var url = BASE_URL + '/list-on-going';			

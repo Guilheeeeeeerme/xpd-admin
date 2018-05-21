@@ -13,7 +13,7 @@
 
 		vm.getDefaultFields = getDefaultFields;
 		vm.getOperationAlarms = getOperationAlarms;
-		vm.getOperationReadings = getOperationReadings;
+		// vm.getOperationReadings = getOperationReadings;
 		vm.getOperationQueue = getOperationQueue;
 		vm.getObjectById = getObjectById;
 		vm.insertObject = insertObject;
@@ -91,16 +91,21 @@
 			setupAPIService.doRequest(req, successCallback, errorCallback);
 		}
 
-		function getOperationReadings(operationId, successCallback, errorCallback) {
+		// function getOperationReadings(operationId, successCallback, errorCallback) {
 
-			var req = {
-				method: 'GET',
-				url: BASE_URL + '/' + operationId + '/readings'
-			};
+		// 	$http.get(BASE_URL + '/' + operationId + '/readings')
+		// 		.then(
+		// 			function (response) {
+		// 				successCallback && successCallback(response.data.data);
+		// 			},
+		// 			function (error) {
+		// 				setupAPIService.generateToast(error.data, true);
+		// 				errorCallback && errorCallback(error);
+		// 			}
+		// 		);
+		// }
 
-			setupAPIService.doRequest(req, successCallback, errorCallback);
-		}
-
+		// FIXME: Revisar esta rota
 		function getOperationQueue(wellId, successCallback, errorCallback) {
 
 			
