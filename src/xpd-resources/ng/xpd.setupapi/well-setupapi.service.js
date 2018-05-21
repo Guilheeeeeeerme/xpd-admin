@@ -8,7 +8,7 @@
 	wellSetupAPIService.$inject = ['$http', 'xpdAccessFactory', 'setupAPIService'];
 
 	function wellSetupAPIService($http, xpdAccessFactory, setupAPIService) {
-		var BASE_URL = xpdAccessFactory.getSetupURL() + 'setup/well';
+		var BASE_URL = xpdAccessFactory.getSetupURL() + 'setup/well';		
 
 		var vm = this;
 
