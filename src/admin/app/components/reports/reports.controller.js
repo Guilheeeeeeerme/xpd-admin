@@ -10,9 +10,9 @@
 	angular.module('xpd.reports')
 		.controller('ReportsController', reportsController);
 
-	reportsController.$inject = ['$scope', '$localStorage', 'setupAPIService', 'failureSetupAPIService'];
+	reportsController.$inject = ['$scope', '$localStorage', 'operationSetupAPIService', 'wellSetupAPIService', 'failureSetupAPIService'];
 
-	function reportsController($scope, $localStorage, setupAPIService, failureSetupAPIService) {
+	function reportsController($scope, $localStorage, operationSetupAPIService, wellSetupAPIService, failureSetupAPIService) {
 
 		// --declarations--
 		var vm = this;
@@ -41,9 +41,9 @@
 		
 		getWellList();
 
-		setupAPIService.getList('setup/operation', function(response){
-			currentOperationSuccessCallback(response.data);
-		}, currentOperationErrorCallback);
+		operationSetupAPIService.getList(
+			currentOperationSuccessCallback, 
+			currentOperationErrorCallback);
 
 
 		function setCurrentDate() {
@@ -69,8 +69,8 @@
 
 		// --implements--
 		function getWellList() {
-			setupAPIService.getList('setup/well', function(response){
-				getWellSuccessCallback(response.data);
+			wellSetupAPIService.getList( function(wells){
+				getWellSuccessCallback(wells);
 			}, getWellErrorCallback);
 		}
 
@@ -90,12 +90,12 @@
 			console.log(error);
 		}
 
-		function currentOperationSuccessCallback(result) {
-			$scope.reportsData.operationList = result;
+		function currentOperationSuccessCallback(operationList) {
+			$scope.reportsData.operationList = operationList;
 
-			for (var i = result.length - 1; i >= 0; i--) {
-				if (result[i].current) {
-					$scope.reportsData.currentOperation = result[i];
+			for (var i = operationList.length - 1; i >= 0; i--) {
+				if (operationList[i].current) {
+					$scope.reportsData.currentOperation = operationList[i];
 				}
 			}
 

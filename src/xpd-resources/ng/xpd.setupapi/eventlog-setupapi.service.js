@@ -3,28 +3,41 @@
 
 	angular.module('xpd.setupapi').service('eventlogSetupAPIService', eventlogSetupAPIService);
 
-	eventlogSetupAPIService.$inject = ['$http', 'xpdAccessFactory', 'setupAPIService', '$rootScope'];
+	eventlogSetupAPIService.$inject = ['xpdAccessFactory', 'setupAPIService', '$rootScope'];
 
-	function eventlogSetupAPIService($http, xpdAccessFactory, setupAPIService, $rootScope) {
+	function eventlogSetupAPIService(xpdAccessFactory, setupAPIService, $rootScope) {
+
+		var BASE_URL = xpdAccessFactory.getSetupURL() + 'setup/event';
 
 		var vm = this;
 
-		vm.listByType = listByType;
-		vm.listByDate = listByDate;
-		vm.listByOperation = listByOperation;
 		vm.listTrackingEventByOperation = listTrackingEventByOperation;
+		vm.listByFilters = listByFilters;
 		vm.getWithDetails = getWithDetails;
 
-		function listByType(type, operationId, limit, successCallback, errorCallback) {
-			var url = xpdAccessFactory.getSetupURL() + 'setup/event/list-by-type';
+
+		function listTrackingEventByOperation(operationId, successCallback, errorCallback) {
+			var url = BASE_URL + '/operation/' + operationId + '/tracking-events';
+
+			var req = {
+				method: 'GET',
+				url: url
+			};
+
+			setupAPIService.doRequest(req, successCallback, errorCallback);
+		}
+
+		function listByFilters(eventType, operationId, limit, fromDate, toDate, successCallback, errorCallback) {
+			var url = BASE_URL + '/list-by-type';
+
 			var params = 0;
 
-			if (type || operationId || limit) {
+			if (eventType || operationId || limit || fromDate || fromDate) {
 				url += '?';
 
-				if (type) {
-					url += 'type=' + type;
-					params += 1;
+				if (eventType) {
+					url += 'type=' + eventType;
+					params++;
 				}
 
 				if (operationId) {
@@ -32,7 +45,7 @@
 						url += '&';
 
 					url += 'operation-id=' + operationId;
-					params += 1;
+					params++;
 				}
 
 				if (limit) {
@@ -40,70 +53,23 @@
 						url += '&';
 
 					url += 'limit=' + limit;
-					params += 1;
-				}
-
-				if (params > 0)
-					url += '&';
-
-				url += 'xpdmodule=' + $rootScope.XPDmodule;
-			}
-
-			var req = {
-				method: 'GET',
-				url: url
-			};
-
-			$http(req).then(
-	            function(response) {
-	                successCallback && successCallback(response.data.data);
-	            },
-	            function(error){
-	            	setupAPIService.generateToast(error.data, true);
-	                errorCallback && errorCallback(error);
-            	}
-			);
-		}
-
-		function listByDate(type, operationId, limit, fromDate, toDate, successCallback, errorCallback) {
-			var url = xpdAccessFactory.getSetupURL() + 'setup/event/list-by-type';
-			var params= 0;
-
-			if(type || operationId || limit){
-				url += '?';
-
-				if(type){
-					url += 'type=' + type;
-					params += 1;
-				}
-
-				if(operationId){
-					if(params>0)
-						url+='&';
-
-					url += 'operation-id='+operationId;
-					params += 1;
-				}
-
-				if(limit){
-					if(params>0)
-						url+='&';
-                    
-					url += 'limit='+limit;
+					params++;
 				}
 
 				if (fromDate) {
 					if (params > 0)
 						url += '&';
 
-					url += 'from='+fromDate.getTime();
+					url += 'from=' + fromDate.getTime();
+					params++;
 				}
 
 				if (toDate) {
 					if (params > 0)
 						url += '&';
 
-					url += 'to='+toDate.getTime();
+					url += 'to=' + toDate.getTime();
+					params++;
 				}
 
 				if (params > 0)
@@ -117,83 +83,19 @@
 				url: url
 			};
 
-			$http(req).then(
-	            function(response) {
-	                successCallback && successCallback(response.data.data);
-	            },
-	            function(error){
-	            	setupAPIService.generateToast(error.data, true);
-	                errorCallback && errorCallback(error);
-            	}
-			);
-		}
-
-		function listByOperation(operationId, successCallback, errorCallback) {
-			var url = xpdAccessFactory.getSetupURL() + 'setup/operation/';
-
-			if(operationId){
-				url += operationId;
-				url += '/events';
-			}
-
-			var req = {
-				method: 'GET',
-				url: url
-			};
-
-			$http(req).then(
-	            function(response) {
-	                successCallback && successCallback(response.data.data);
-	            },
-	            function(error){
-	            	setupAPIService.generateToast(error.data, true);
-	                errorCallback && errorCallback(error);
-            	}
-			);
-		}
-
-		function listTrackingEventByOperation(operationId, successCallback, errorCallback) {
-			var url = xpdAccessFactory.getSetupURL() + 'setup/operation/';
-
-			if (operationId) {
-				url += operationId;
-				url += '/tracking-events';
-			}
-
-			var req = {
-				method: 'GET',
-				url: url
-			};
-
-			$http(req).then(
-				function (response) {
-					successCallback && successCallback(response.data.data);
-				},
-				function (error) {
-					setupAPIService.generateToast(error.data, true);
-					errorCallback && errorCallback(error);
-				}
-			);
+			setupAPIService.doRequest(req, successCallback, errorCallback);
 		}
 
 		function getWithDetails(eventId, successCallback, errorCallback) {
-			var url = xpdAccessFactory.getSetupURL() + 'setup/event/';
-			url += eventId + '/details';
+			var url = BASE_URL;
+			url += '/' + eventId + '/details';
 
 			var req = {
 				method: 'GET',
 				url: url
 			};
 
-			$http(req).then(
-				function (response) {
-					successCallback && successCallback(response.data.data);
-				},
-				function (error) {
-					setupAPIService.generateToast(error.data, true);
-					errorCallback && errorCallback(error);
-				}
-			);
+			setupAPIService.doRequest(req, successCallback, errorCallback);
 		}
 
 	}

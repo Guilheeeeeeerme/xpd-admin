@@ -6,7 +6,7 @@
 
 	bitDepthTimeController.$inject = ['$scope', '$routeParams', 'reportsSetupAPIService'];
 
-	function bitDepthTimeController($scope, $routeParams, reportSetupAPIService) {
+	function bitDepthTimeController($scope, $routeParams, reportsSetupAPIService) {
 
 		var vm = this;
 
@@ -30,7 +30,7 @@
 		}
 
 		function renderChart() {
-			reportSetupAPIService.getOperationQueue($scope.wellId, getOperationQueue, error);
+			reportsSetupAPIService.getOperationQueue($scope.wellId, getOperationQueue, error);
 		}
 
 		function runQueue(results) {
@@ -141,7 +141,7 @@
 			results = results.map(function (result) {
 				return function () {
 					return new Promise(function (resolve, reject) {
-						reportSetupAPIService.getBitDepthChartForOperation($scope.wellId, result.id, resolve, reject);
+						reportsSetupAPIService.getBitDepthChartForOperation($scope.wellId, result.id, resolve, reject);
 					});
 				};
 			});

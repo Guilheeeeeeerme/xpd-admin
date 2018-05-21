@@ -29,11 +29,10 @@
 
 				((eventType == 'connections') ? $scope.slipsToSlipsData.type = 'CONN' : $scope.slipsToSlipsData.type = 'TRIP');
 
-				eventlogSetupAPIService
-                	.listByDate($scope.slipsToSlipsData.type, operationId, null, null, null,
+				eventlogSetupAPIService.listByFilters($scope.slipsToSlipsData.type, operationId, null, null, null,
                 	   getEventTimesSuccessCallback,
                 	   getEventTimesErrorCallback
-					);
+				);
 			}
 		}
 
@@ -58,8 +57,7 @@
 		function onChangePeriod(fromDate ,toDate) {
 
         	if (operationId != null) {
-        	    eventlogSetupAPIService
-        	    	.listByType('CONN', operationId, null, $scope.slipsToSlipsData.fromDate, $scope.slipsToSlipsData.toDate,
+        	    eventlogSetupAPIService.listByFilters('CONN', operationId, null, $scope.slipsToSlipsData.fromDate, $scope.slipsToSlipsData.toDate,
         	    		onChangePeriodSuccessCallback,
         	    		onChangePeriodErrorCallback
     	    		);

@@ -1456,6 +1456,15 @@ input:checked + .slider{
 .in-slips-chart .progress {
     height: 10px;
 }
+
+/**
+ * RPD
+ */
+.shift-report {
+    height: 100vh;
+    overflow: auto
+}
+
 /**
     DMEC
 */

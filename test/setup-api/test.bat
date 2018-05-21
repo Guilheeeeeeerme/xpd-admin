@@ -1,0 +1,15 @@
+/test/setup-api/admin-user-setupapi/admin-user-setupapi.test.js
+/test/setup-api/alarm-setupapi/alarm-setupapi.test.js
+/test/setup-api/category-setupapi/category-setupapi.test.js
+/test/setup-api/eventlog-setupapi/eventlog-setupapi.test.js
+/test/setup-api/failure-setupapi/failure-setupapi.test.js
+/test/setup-api/lessonlearned-setupapi/lessonlearned-setupapi.test.js
+/test/setup-api/master-user-setupapi/master-user-setupapi.test.js
+/test/setup-api/operation-setupapi/operation-setupapi.test.js
+/test/setup-api/photo-setupapi/photo-setupapi.test.js
+/test/setup-api/reading-setupapi/reading-setupapi.test.js
+/test/setup-api/reports-setupapi/reports-setupapi.test.js
+/test/setup-api/schedule-setupapi/schedule-setupapi.test.js
+/test/setup-api/section-setupapi/section-setupapi.test.js
+/test/setup-api/setupapi/setupapi.test.js
+/test/setup-api/well-setupapi/well-setupapi.test.js

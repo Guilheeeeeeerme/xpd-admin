@@ -3,9 +3,9 @@
 
 	angular.module('xpd.setupapi').service('masterUserSetupAPIService', masterUserSetupAPIService);
 
-	masterUserSetupAPIService.$inject = ['$http', 'xpdAccessFactory', 'setupAPIService'];
+	masterUserSetupAPIService.$inject = ['xpdAccessFactory', 'setupAPIService'];
 
-	function masterUserSetupAPIService($http, xpdAccessFactory, setupAPIService) {
+	function masterUserSetupAPIService(xpdAccessFactory, setupAPIService) {
 
 		var MASTER_USERNAME = 'admin';
 
@@ -27,16 +27,7 @@
 				data: object
 			};
 
-			$http(req).then(
-	            function(response) {
-	            	setupAPIService.generateToast(response.data, true);
-	                successCallback && successCallback(response.data.data);
-	            },
-	            function(error){
-	            	setupAPIService.generateToast(error.data, true);
-	                errorCallback && errorCallback(error);
-            	}
-			);
+			setupAPIService.doRequest(req, successCallback, errorCallback);
 		}
 
 	}

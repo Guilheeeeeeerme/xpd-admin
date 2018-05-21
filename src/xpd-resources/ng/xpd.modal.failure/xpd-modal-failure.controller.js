@@ -4,9 +4,9 @@
 
 	angular.module('xpd.modal-failure').controller('modalFailureController', modalFailureController);
 
-	modalFailureController.$inject = ['$scope', '$uibModalInstance', 'setupAPIService', 'failureSetupAPIService', 'selectedFailure', 'insertCallback', 'updateCallback', 'dialogFactory', 'operationDataFactory'];
+	modalFailureController.$inject = ['$scope', '$uibModalInstance', 'categorySetupAPIService', 'failureSetupAPIService', 'selectedFailure', 'insertCallback', 'updateCallback', 'dialogFactory', 'operationDataFactory'];
 
-	function modalFailureController($scope, $uibModalInstance, setupAPIService, failureSetupAPIService, selectedFailure, insertCallback, updateCallback, dialogFactory, operationDataFactory) {
+	function modalFailureController($scope, $uibModalInstance, categorySetupAPIService, failureSetupAPIService, selectedFailure, insertCallback, updateCallback, dialogFactory, operationDataFactory) {
 		var vm = this;
 
 		var roleList = {};
@@ -36,11 +36,8 @@
 		getFailuresOnGoing();
 
 		function getCategoryList() {
-			setupAPIService.getList(
-				'setup/category',
-				function (response) {
-					getCategoryListSuccessCallback(response.data);
-				}
+			categorySetupAPIService.getList(
+				getCategoryListSuccessCallback
 			);
 		}
 
@@ -114,8 +111,7 @@
 		}
 
 		function registerFailure(failure) {
-			setupAPIService.insertObject(
-				'setup/failure',
+			failureSetupAPIService.insertObject(
 				failure,
 				failureSuccessCallback,
 				failureErrorCallback
@@ -123,8 +119,7 @@
 		}
 
 		function updateFailure(failure) {
-			setupAPIService.updateObject(
-				'setup/failure',
+			failureSetupAPIService.updateObject(
 				failure,
 				failureSuccessCallback,
 				failureErrorCallback

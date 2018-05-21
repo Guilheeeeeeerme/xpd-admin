@@ -1,9 +1,9 @@
 (function() {
 	'use strict';
 	angular.module('xpd.admin').directive('xpdSectionList', xpdSectionList);
-	xpdSectionList.$inject = ['$filter', 'wellSetupAPIService'];
+	xpdSectionList.$inject = ['$filter', 'sectionSetupAPIService'];
 
-	function xpdSectionList($filter, wellSetupAPIService) {
+	function xpdSectionList($filter, sectionSetupAPIService) {
 		return {
 			scope: {
 				index: '=',
@@ -34,7 +34,7 @@
 
 				delete scope.operations;
 				if (section != null) {
-					wellSetupAPIService.getListOfOperationsBySection(section.id, function(sectionList) {
+					sectionSetupAPIService.getListOfOperationsBySection(section.id, function(sectionList) {
 						scope.operations = $filter('orderBy')(sectionList, 'operationOrder');
 					});
 				}

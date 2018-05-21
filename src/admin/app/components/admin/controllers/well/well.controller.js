@@ -3,16 +3,16 @@
 
 	angular.module('xpd.admin').controller('WellController', wellController);
 
-	wellController.$inject = ['$scope', '$uibModal', 'setupAPIService', 'wellSetupAPIService', 'dialogFactory', 'operationDataFactory'];
+	wellController.$inject = ['$scope', '$uibModal', 'wellSetupAPIService', 'sectionSetupAPIService', 'dialogFactory', 'operationDataFactory'];
 
-	function wellController($scope, $modal, setupAPIService, wellSetupAPIService, dialogFactory, operationDataFactory) {
+	function wellController($scope, $modal, wellSetupAPIService, sectionSetupAPIService, dialogFactory, operationDataFactory) {
 
 		var vm = this;
 
 		$scope.dados = {
 			wellList: []
 		};
-		
+
 		operationDataFactory.operationData = [];
 
 		operationDataFactory.operationData = [];
@@ -34,8 +34,8 @@
 		function loadWellList() {
 			delete $scope.dados.wellList;
 
-			setupAPIService.getList('setup/well', function (wellList) {
-				$scope.dados.wellList = wellList.data;
+			wellSetupAPIService.getList(function (wellList) {
+				$scope.dados.wellList = wellList;
 			});
 		}
 
@@ -79,8 +79,8 @@
 
 		function actionButtonRemoveWell(well) {
 
-			wellSetupAPIService.getListOfSectionsByWell(well.id, function (sectionList) {
-				if(sectionList.length == 0)
+			sectionSetupAPIService.getListOfSectionsByWell(well.id, function (sectionList) {
+				if (sectionList.length == 0)
 					removeWell(well);
 				else
 					dialogFactory.showMessageDialog('You can\'t delete a Well with Sections and Operations inside.', 'Unable to Remove Well');
@@ -108,16 +108,16 @@
 		function upsertCallback(well) {
 
 			if (well.id != null) {
-				setupAPIService.updateObject('setup/well', well, loadWellList);
+				wellSetupAPIService.updateObject(well, loadWellList);
 			} else {
-				setupAPIService.insertObject('setup/well', well, loadWellList);
+				wellSetupAPIService.insertObject(well, loadWellList);
 			}
 		}
 
 		function removeWell(well) {
 			dialogFactory.showCriticalDialog({ templateHtml: 'By <b>removing</b> a Well you will no longer be able to access its sections. Proceed?' },
 				function () {
-					setupAPIService.removeObject('setup/well', well, loadWellList);
+					wellSetupAPIService.removeObject(well, loadWellList);
 				});
 		}
 

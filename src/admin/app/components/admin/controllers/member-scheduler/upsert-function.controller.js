@@ -4,9 +4,9 @@
 	angular.module('xpd.admin')
 		.controller('UpsertFunctionController', upsertFunctionController);
 
-	upsertFunctionController.$inject = ['$scope', '$uibModalInstance', 'setupAPIService', 'insertFunctionCallback', 'updateFunctionCallback', 'removeFunctionCallback', '$function'];
+	upsertFunctionController.$inject = ['$scope', '$uibModalInstance', 'scheduleSetupAPIService', 'insertFunctionCallback', 'updateFunctionCallback', 'removeFunctionCallback', '$function'];
 
-	function upsertFunctionController($scope, $modalInstance, setupAPIService, insertFunctionCallback, updateFunctionCallback, removeFunctionCallback, $function) {
+	function upsertFunctionController($scope, $modalInstance, scheduleSetupAPIService, insertFunctionCallback, updateFunctionCallback, removeFunctionCallback, $function) {
 
 		if(!Window.UpsertFunctionController)
 			Window.UpsertFunctionController = [];
@@ -39,14 +39,12 @@
 			console.log(func);
 
 			if (func.id !== null){
-				setupAPIService.updateObject('setup/function', func, function(response){
-					func = response.data;
+				scheduleSetupAPIService.updateFunction(func, function(func){
 					$modalInstance.close();
 					updateFunctionCallback(func);
 				});
 			} else {
-				setupAPIService.insertObject('setup/function', func, function(response){
-					func = response.data;
+				scheduleSetupAPIService.insertFunction(func, function(func){
 					$modalInstance.close();
 					insertFunctionCallback(func);
 				});
@@ -57,8 +55,7 @@
 
 			var func = {id: $scope.modalData.id};
 
-			setupAPIService.removeObject('setup/function', func, function(response){
-				func = response.data;
+			scheduleSetupAPIService.removeFunction(func, function(func){
 				$modalInstance.close();
 				removeFunctionCallback(func);
 			});

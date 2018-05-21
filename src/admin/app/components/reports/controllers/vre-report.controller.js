@@ -10,9 +10,9 @@
 	angular.module('xpd.reports')
 		.controller('VreReportController', vreReportController);
 
-	vreReportController.$inject = ['$scope', 'setupAPIService', 'reportsSetupAPIService'];
+	vreReportController.$inject = ['$scope', 'wellSetupAPIService', 'reportsSetupAPIService'];
 
-	function vreReportController($scope, setupAPIService, reportsSetupAPIService) {
+	function vreReportController($scope, wellSetupAPIService, reportsSetupAPIService) {
 		var vm = this;
 
 		$scope.vreData = {
@@ -30,8 +30,8 @@
 
 		// --implements--
 		function getWellList() {
-			setupAPIService.getList('setup/well', function(response){
-				getWellSuccessCallback(response.data);
+			wellSetupAPIService.getList( function(wellList){
+				getWellSuccessCallback(wellList);
 			}, getWellErrorCallback);
 		}
 

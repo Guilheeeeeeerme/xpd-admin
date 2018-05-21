@@ -4,9 +4,9 @@
 	angular.module('xpd.admin')
 		.controller('FailureDelayCategoryController', failureDelayCategoryController);
 
-	failureDelayCategoryController.$inject = ['$scope', '$uibModal', 'dialogFactory', 'setupAPIService'];
+	failureDelayCategoryController.$inject = ['$scope', '$uibModal', 'dialogFactory', 'categorySetupAPIService'];
 
-	function failureDelayCategoryController($scope, $modal, dialogFactory, setupAPIService){
+	function failureDelayCategoryController($scope, $modal, dialogFactory, categorySetupAPIService){
 		var vm = this;
 
 		$scope.controller = vm;
@@ -36,11 +36,8 @@
 		getCategoryList();
 
 		function getCategoryList() {
-			setupAPIService.getList(
-				'setup/category',
-				function(response){
-					getCategoryListSuccessCallback(response.data);
-				},
+			categorySetupAPIService.getList(
+				getCategoryListSuccessCallback,
 				getCategoryListErrorCallback
 			);
 		}
@@ -109,8 +106,7 @@
 
 
 		function saveNode(node) {
-			setupAPIService.insertObject(
-				'setup/category',
+			categorySetupAPIService.insertObject(
 				node,
 				saveNodeSuccessCallback,
 				upsertNodeErrorCallback
@@ -118,7 +114,7 @@
 		}
 
 		function saveNodeSuccessCallback(result) {
-			result = result.data;
+			
 			result.children = [];
 		  	roleList[result.id] = result;
 		  	roleList[result.parentId].children.push(result);
@@ -128,8 +124,7 @@
 		}
 
 		function updateNode(node) {
-			setupAPIService.updateObject(
-				'setup/category',
+			categorySetupAPIService.updateObject(
 				node,
 				updateNodeSuccessCallback,
 				upsertNodeErrorCallback
@@ -137,7 +132,7 @@
 		}
 
 		function updateNodeSuccessCallback(result) {
-			result = result.data;
+			
 			roleList[result.id].name = result.name;
 			roleList[result.id].initial = result.initial;
 
@@ -146,16 +141,13 @@
 		}
 
 		function upsertNodeErrorCallback(error) {
-			dialogFactory.showConfirmDialog(error.data.message);
+			dialogFactory.showConfirmDialog(error.message);
 		}
 
 		function removeNode(node) {
-			setupAPIService.removeObject(
-				'/setup/category',
+			categorySetupAPIService.removeObject(
 				node,
-				function(response){
-					removeNodeSuccessCallback(response.data);
-				},
+				removeNodeSuccessCallback,
 				removeNodeErrorCallback
 			);
 		}
@@ -174,7 +166,7 @@
 		}
 
 		function removeNodeErrorCallback(error) {
-			dialogFactory.showConfirmDialog(error.data.message);
+			dialogFactory.showConfirmDialog(error.message);
 		}
 
 		function actionClickSelectItem(node) {

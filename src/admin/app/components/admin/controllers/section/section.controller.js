@@ -3,9 +3,9 @@
 
 	angular.module('xpd.admin').controller('SectionController', sectionController);
 
-	sectionController.$inject = ['$scope', '$filter', '$localStorage', '$location', '$uibModal', '$routeParams', 'setupAPIService', 'dialogFactory', 'wellSetupAPIService', 'operationDataFactory'];
+	sectionController.$inject = ['$scope', '$filter', '$localStorage', '$location', '$uibModal', '$routeParams', 'sectionSetupAPIService', 'dialogFactory', 'wellSetupAPIService', 'operationDataFactory'];
 
-	function sectionController($scope, $filter, $localStorage, $location, $modal, $routeParams, setupAPIService, dialogFactory, wellSetupAPIService, operationDataFactory) {
+	function sectionController($scope, $filter, $localStorage, $location, $modal, $routeParams, sectionSetupAPIService, dialogFactory, wellSetupAPIService, operationDataFactory) {
 
 		var vm = this;
 
@@ -15,8 +15,8 @@
 			sectionList: [],
 		};
 
-		setupAPIService.getObjectById('setup/well', $routeParams.wellId, function(response){
-			$scope.well = response.data;
+		wellSetupAPIService.getObjectById($routeParams.wellId, function(well){
+			$scope.well = well;
 		});
 		
 		if(!$localStorage.setup){
@@ -81,7 +81,7 @@
 			$scope.dados.sectionList = [];
 
 			if ($routeParams.wellId != null) {
-				wellSetupAPIService.getListOfSectionsByWell($routeParams.wellId, function (sectionList) {
+				sectionSetupAPIService.getListOfSectionsByWell($routeParams.wellId, function (sectionList) {
 					$scope.dados.sectionList = $filter('orderBy')(sectionList, 'sectionOrder');
 				});
 			}
@@ -149,11 +149,12 @@
 			delete section.operations;
 
 			if (section.id != null) {
-				setupAPIService.updateObject('setup/section', section, replaceOnList);
+				sectionSetupAPIService.updateObject( 
+					section, replaceOnList);
 			} else {
 				section.sectionOrder = $scope.dados.sectionList.length + 1;
 
-				setupAPIService.insertObject('setup/section',
+				sectionSetupAPIService.insertObject(
 					section,
 					operationDataFactory.emitRefreshQueue);
 			}

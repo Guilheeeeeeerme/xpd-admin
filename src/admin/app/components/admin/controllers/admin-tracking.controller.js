@@ -3,13 +3,14 @@
 
 	angular.module('xpd.admin').controller('AdminTrackingController', adminTrackingController);
 
-	adminTrackingController.$inject = ['$scope', '$uibModal', '$q', 'operationDataFactory', 'eventDetailsModal', 'failureModal', 'eventlogSetupAPIService', 'lessonLearnedModal', 'setupAPIService', 'dialogFactory', '$rootScope'];
+	adminTrackingController.$inject = ['$scope', '$uibModal', '$q', 'operationDataFactory', 'eventDetailsModal', 'failureModal', 'eventlogSetupAPIService', 'lessonLearnedModal', 'failureSetupAPIService', 'lessonLearnedSetupAPIService', 'dialogFactory', '$rootScope'];
 
-	function adminTrackingController($scope, $uibModal, $q, operationDataFactory, eventDetailsModal, failureModal, eventlogSetupAPIService, lessonLearnedModal, setupAPIService, dialogFactory, $rootScope) {
+	function adminTrackingController($scope, $uibModal, $q, operationDataFactory, eventDetailsModal, failureModal, eventlogSetupAPIService, lessonLearnedModal, failureSetupAPIService, lessonLearnedSetupAPIService, dialogFactory, $rootScope) {
 
 		var vm = this;
 
 		var eventStartTime, eventEndTime, eventId;
+		var listTrackingEventByOperationPromise = null;
 
 		vm.actionOpenDropdownMenu = actionOpenDropdownMenu;
 		vm.actionClickEventDetailsButton = actionClickEventDetailsButton;
@@ -33,7 +34,14 @@
 				$scope.operationData.operationContext.currentOperation &&
 				$scope.operationData.operationContext.currentOperation.running) {
 
-				listTrackingEventByOperation($scope.operationData.operationContext.currentOperation.id).then(organizeEventsOnLists);
+				if(!listTrackingEventByOperationPromise){
+					listTrackingEventByOperationPromise = listTrackingEventByOperation($scope.operationData.operationContext.currentOperation.id);
+
+					listTrackingEventByOperationPromise.then(function(trackingEvents){
+						organizeEventsOnLists(trackingEvents);
+						listTrackingEventByOperationPromise = null;
+					});
+				}
 			}
 
 		}
@@ -96,23 +104,15 @@
 		}
 
 		function updateFailureCallback(failure) {
-			setupAPIService.updateObject(
-				'setup/failure',
-				failure
-			);
+			failureSetupAPIService.updateObject(failure);
 		}
 
 		function insertLessonLearnedCallback(lessonLearned) {
-			setupAPIService.insertObject(
-				'setup/lessonlearned',
-				lessonLearned);
+			lessonLearnedSetupAPIService.insertObject(lessonLearned);
 		}
 
 		function updateLessonLearnedCallback(lessonLearned) {
-			setupAPIService.updateObject(
-				'setup/lessonlearned',
-				lessonLearned
-			);
+			lessonLearnedSetupAPIService.updateObject(lessonLearned);
 		}
 
 		function listTrackingEventByOperation(operationId) {

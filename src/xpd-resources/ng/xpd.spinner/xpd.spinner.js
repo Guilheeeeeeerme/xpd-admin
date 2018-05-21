@@ -31,11 +31,11 @@
 		var numLoadings = 0;
 
 		var urlsToExclude = [
-			'/xpd-setup-api/setup/reports/',
-			'/xpd-setup-api/setup/reading/from/',
-			'/xpd-setup-api/setup/reading/tick/',
-			'/xpd-setup-api/setup/event/list-by-type/',
-			'/xpd-setup-api/tripin/rig-pictures/load/'
+			// '/xpd-setup-api/setup/reports/',
+			// '/xpd-setup-api/setup/reading/from/',
+			// '/xpd-setup-api/setup/reading/tick/',
+			// '/xpd-setup-api/setup/event/list-by-type/',
+			// '/xpd-setup-api/tripin/rig-pictures/load/'
 		];
 
 		function hasSpinner(url) {

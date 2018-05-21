@@ -3,9 +3,9 @@
 
 	angular.module('xpd.admin').controller('RpdController', rpdController);
 
-	rpdController.$inject = ['$scope', 'setupAPIService', '$routeParams', '$location', '$filter', 'wellSetupAPIService', 'eventlogSetupAPIService'];
+	rpdController.$inject = ['$scope', '$routeParams', '$location', '$filter', 'wellSetupAPIService', 'sectionSetupAPIService', 'eventlogSetupAPIService'];
 
-	function rpdController($scope, setupAPIService, $routeParams, $location, $filter, wellSetupAPIService, eventlogSetupAPIService) {
+	function rpdController($scope, $routeParams, $location, $filter, wellSetupAPIService, sectionSetupAPIService, eventlogSetupAPIService) {
 
 		$scope.dados = {};
 
@@ -188,7 +188,7 @@
 			var promises = [];
 
 			promises.push(new Promise(function (resolve, reject) {
-				eventlogSetupAPIService.listByType('TRIP', operationId, null, function (events) {
+				eventlogSetupAPIService.listByFilters('TRIP', operationId, null, null, null, function (events) {
 					events = events.map(function (event) {
 						return event;
 					});
@@ -197,7 +197,7 @@
 			}));
 
 			promises.push(new Promise(function (resolve, reject) {
-				eventlogSetupAPIService.listByType('CONN', operationId, null, function (events) {
+				eventlogSetupAPIService.listByFilters('CONN', operationId, null, null, null, function (events) {
 					events = events.map(function (event) {
 						return event;
 					});
@@ -206,7 +206,7 @@
 			}));
 
 			promises.push(new Promise(function (resolve, reject) {
-				eventlogSetupAPIService.listByType('TIME', operationId, null, function (events) {
+				eventlogSetupAPIService.listByFilters('TIME', operationId, null, null, null, function (events) {
 					events = events.map(function (event) {
 						return event;
 					});
@@ -227,7 +227,7 @@
 
 		function loadOperations(sectionId) {
 			return new Promise(function (resolve, reject) {
-				wellSetupAPIService.getListOfOperationsBySection(sectionId, function (operations) {
+				sectionSetupAPIService.getListOfOperationsBySection(sectionId, function (operations) {
 					resolve($filter('orderBy')(operations, 'operationOrder'));
 				}, reject);
 			});
@@ -235,15 +235,15 @@
 
 		function loadWellList() {
 			return new Promise(function (resolve, reject) {
-				setupAPIService.getList('setup/well', function (response) {
-					resolve(response.data);
+				wellSetupAPIService.getList(function (wellList) {
+					resolve(wellList);
 				}, reject);
 			});
 		}
 
 		function loadSectionList(wellId) {
 			return new Promise(function (resolve, reject) {
-				wellSetupAPIService.getListOfSectionsByWell(wellId, function (sections) {
+				sectionSetupAPIService.getListOfSectionsByWell(wellId, function (sections) {
 					resolve($filter('orderBy')(sections, 'sectionOrder'));
 				}, reject);
 			});

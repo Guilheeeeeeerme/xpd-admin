@@ -3,9 +3,11 @@
 
 	angular.module('xpd.setupapi').service('readingSetupAPIService', readingSetupAPIService);
 
-	readingSetupAPIService.$inject = ['$http', 'xpdAccessFactory', 'setupAPIService'];
+	readingSetupAPIService.$inject = ['xpdAccessFactory', 'setupAPIService'];
 
-	function readingSetupAPIService($http, xpdAccessFactory, setupAPIService) {
+	function readingSetupAPIService(xpdAccessFactory, setupAPIService) {
+
+		var BASE_URL = xpdAccessFactory.getSetupURL() + 'setup/reading';
 
 		var vm = this;
 
@@ -16,61 +18,37 @@
 		function getAllReadingSince(from, successCallback, errorCallback) {
 			var req = {
 				method: 'GET',
-				url: xpdAccessFactory.getSetupURL() + 'setup/reading/from/' + from,
+				url: BASE_URL + '/from/' + from,
 				headers: {
 					'Content-Type': 'application/json'
 				}
 			};
 
-			$http(req).then(
-	            function(response) {
-	                successCallback && successCallback(response.data);
-	            },
-	            function(error){
-	            	setupAPIService.generateToast(error.data, true);
-	                errorCallback && errorCallback(error);
-            	}
-			);
+			setupAPIService.doRequest(req, successCallback, errorCallback);
 		}
 
 		function getTick(tick, successCallback, errorCallback) {
 			var req = {
 				method: 'GET',
-				url: xpdAccessFactory.getSetupURL() + 'setup/reading/tick/' + tick,
+				url: BASE_URL + '/tick/' + tick,
 				headers: {
 					'Content-Type': 'application/json'
 				}
 			};
 
-			$http(req).then(
-	            function(response) {
-	                successCallback && successCallback(response.data);
-	            },
-	            function(error){
-	            	setupAPIService.generateToast(error.data, true);
-	                errorCallback && errorCallback(error);
-            	}
-			);
+			setupAPIService.doRequest(req, successCallback, errorCallback);
 		}
 
 		function getAllReadingByStartEndTime(from, to, successCallback, errorCallback) {
 			var req = {
 				method: 'GET',
-				url: xpdAccessFactory.getSetupURL() + 'setup/reading/from/' + from + ( (to)? ('/to/' + to) : ''),
+				url: BASE_URL + '/from/' + from + ((to) ? ('/to/' + to) : ''),
 				headers: {
 					'Content-Type': 'application/json'
 				}
 			};
 
-			$http(req).then(
-				function (response) {
-					successCallback && successCallback(response.data);
-				},
-				function (error) {
-					setupAPIService.generateToast(error.data, true);
-					errorCallback && errorCallback(error);
-				}
-			);
+			setupAPIService.doRequest(req, successCallback, errorCallback);
 		}
 	}
 

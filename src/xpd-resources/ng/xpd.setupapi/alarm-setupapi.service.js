@@ -1,50 +1,81 @@
-(function() {
+(function () {
 	'use strict';
 
 	angular.module('xpd.setupapi')
 		.service('alarmSetupAPIService', alarmSetupAPIService);
 
-	alarmSetupAPIService.$inject = ['$http', 'xpdAccessFactory', 'setupAPIService'];
+	alarmSetupAPIService.$inject = ['xpdAccessFactory', 'setupAPIService'];
 
-	function alarmSetupAPIService($http, xpdAccessFactory, setupAPIService) {
+	function alarmSetupAPIService(xpdAccessFactory, setupAPIService) {
+
+		var BASE_URL = xpdAccessFactory.getSetupURL() + 'setup/alarm';
 
 		var vm = this;
-		var apiUrl = xpdAccessFactory.getSetupURL();
 
+		vm.insertAlarm = insertAlarm;
+		vm.updateAlarm = updateAlarm;
+		vm.removeAlarm = removeAlarm;
 		vm.updateArchive = updateArchive;
-		vm.listByType = listByType;
+		vm.getByOperationType = getByOperationType;
+
+		function insertAlarm(alarm, successCallback, errorCallback) {
+
+			var req = {
+				method: 'POST',
+				url: BASE_URL,
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				data: alarm
+			};
+
+			setupAPIService.doRequest(req, successCallback, errorCallback);
+		}
+
+		function removeAlarm(alarm, successCallback, errorCallback) {
+
+			var req = {
+				method: 'DELETE',
+				url: BASE_URL + '/' + alarm.id,
+				headers: {
+					'Content-Type': 'application/json'
+				}
+			};
+
+			setupAPIService.doRequest(req, successCallback, errorCallback);
+		}
+
+		function updateAlarm(alarm, successCallback, errorCallback) {
+
+			var req = {
+				method: 'PUT',
+				url: BASE_URL,
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				data: alarm
+			};
+
+			setupAPIService.doRequest(req, successCallback, errorCallback);
+		}
 
 		function updateArchive(id, archived, successCallback, errorCallback) {
 			var req = {
 				method: 'GET',
-				url: apiUrl + 'setup/alarm/' + id + '/archive/' + archived
+				url: BASE_URL + '/' + id + '/archive/' + archived
 			};
-			$http(req).then(
-	            function(response) {
-	                successCallback && successCallback(response.data.data);
-	            },
-	            function(error){
-	            	setupAPIService.generateToast(error.data, true);
-	                errorCallback && errorCallback(error);
-            	}
-			);
+
+			setupAPIService.doRequest(req, successCallback, errorCallback);
 		}
 
-		function listByType(type, id, successCallback, errorCallback) {
+		function getByOperationType(type, butNot, successCallback, errorCallback) {
 
 			var req = {
 				method: 'GET',
-				url: apiUrl + 'setup/alarm/of-operations/' + type + '/but-not-id/' + (id || 0)
+				url: BASE_URL + '/of-operations/' + type + '/but-not-id/' + (butNot || 0)
 			};
-			$http(req).then(
-	            function(response) {
-	                successCallback && successCallback(response.data.data);
-	            },
-	            function(error){
-	            	setupAPIService.generateToast(error.data, true);
-	                errorCallback && errorCallback(error);
-            	}
-			);
+
+			setupAPIService.doRequest(req, successCallback, errorCallback);
 		}
 	}
 

@@ -4,9 +4,9 @@
 	angular.module('xpd.admin')
 		.controller('UpsertScheduleController', upsertScheduleController);
 
-	upsertScheduleController.$inject = ['$scope', '$uibModalInstance', 'setupAPIService', 'scheduleSetupAPIService', 'insertScheduleCallback', 'updateScheduleCallback', 'removeScheduleCallback', '$schedule'];
+	upsertScheduleController.$inject = ['$scope', '$uibModalInstance', 'scheduleSetupAPIService', 'insertScheduleCallback', 'updateScheduleCallback', 'removeScheduleCallback', '$schedule'];
 
-	function upsertScheduleController($scope, $modalInstance, setupAPIService, scheduleSetupAPIService, insertScheduleCallback, updateScheduleCallback, removeScheduleCallback, $schedule) {
+	function upsertScheduleController($scope, $modalInstance, scheduleSetupAPIService, insertScheduleCallback, updateScheduleCallback, removeScheduleCallback, $schedule) {
 
 		if(!Window.UpsertScheduleController)
 			Window.UpsertScheduleController = [];
@@ -144,9 +144,9 @@
 
 					console.log('Atualizando Schedule ' + schedule);
 
-					setupAPIService.updateObject('setup/schedule', schedule, function(response){
-						updateScheduleCallback(response.data);
-						resolve(response.data);
+					scheduleSetupAPIService.updateSchedule(schedule, function(schedule){
+						updateScheduleCallback(schedule);
+						resolve(schedule);
 					}, reject);
 
 				});
@@ -169,9 +169,9 @@
 
 					console.log('Inserindo Schedule ' + schedule);
 
-					setupAPIService.insertObject('setup/schedule', schedule, function(response){
-						insertScheduleCallback(response.data);
-						resolve(response.data);
+					scheduleSetupAPIService.insertSchedule(schedule, function(schedule){
+						insertScheduleCallback(schedule);
+						resolve(schedule);
 					}, reject);
 			
 				});
@@ -200,8 +200,7 @@
 					$modalInstance.close();
 				});
 			}else{
-				setupAPIService.removeObject('setup/schedule', { id: schedule.id }, function(response){
-					schedule = response.data;
+				scheduleSetupAPIService.removeSchedule( { id: schedule.id }, function(schedule){
 					$modalInstance.close();
 					removeScheduleCallback(schedule);
 				});

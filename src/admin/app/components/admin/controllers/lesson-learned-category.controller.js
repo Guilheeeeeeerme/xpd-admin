@@ -10,9 +10,9 @@
 	angular.module('xpd.admin')
 		.controller('LessonLearnedCategoryController', lessonLearnedCategoryController);
 
-	lessonLearnedCategoryController.$inject = ['$scope', '$uibModal', 'dialogFactory', 'setupAPIService'];
+	lessonLearnedCategoryController.$inject = ['$scope', '$uibModal', 'dialogFactory', 'lessonLearnedSetupAPIService'];
 
-	function lessonLearnedCategoryController($scope, $modal, dialogFactory, setupAPIService){
+	function lessonLearnedCategoryController($scope, $modal, dialogFactory, lessonLearnedSetupAPIService) {
 		var vm = this;
 
 		$scope.controller = vm;
@@ -25,11 +25,11 @@
 		$scope.newNode = {};
 
 		//temporary node
-	    $scope.temporaryNode = {
-	        children: []
-	    };
+		$scope.temporaryNode = {
+			children: []
+		};
 
-	  	var roleList = {};
+		var roleList = {};
 
 		vm.actionClickAdd = actionClickAdd;
 		vm.actionClickEdit = actionClickEdit;
@@ -42,16 +42,13 @@
 		getLessonLearnedCategoryList();
 
 		function getLessonLearnedCategoryList() {
-			setupAPIService.getList(
-				'setup/lessonlearned_category',
-				function(response){
-					getLessonLearnedCategoryListSuccessCallback(response.data);
-				},
+			lessonLearnedSetupAPIService.getListCategory(
+				getLessonLearnedCategoryListSuccessCallback,
 				getLessonLearnedCategoryListErrorCallback
 			);
 		}
 
-		function getLessonLearnedCategoryListSuccessCallback(result){
+		function getLessonLearnedCategoryListSuccessCallback(result) {
 			roleList = result;
 			makeTreeStructure(roleList);
 		}
@@ -62,7 +59,7 @@
 
 		function actionClickAdd(parentNode) {
 			// reset
-		  	$scope.newNode = {};
+			$scope.newNode = {};
 
 			$scope.newNode.parentId = parentNode.id;
 
@@ -103,9 +100,9 @@
 		}
 
 		function modalActionButtonSave() {
-			if (!$scope.newNode.id){
+			if (!$scope.newNode.id) {
 				saveNode($scope.newNode);
-			}else{
+			} else {
 				updateNode($scope.newNode);
 			}
 		}
@@ -116,8 +113,7 @@
 
 
 		function saveNode(node) {
-			setupAPIService.insertObject(
-				'setup/lessonlearned_category',
+			lessonLearnedSetupAPIService.insertCategory(
 				node,
 				saveNodeSuccessCallback,
 				upsertNodeErrorCallback
@@ -125,18 +121,17 @@
 		}
 
 		function saveNodeSuccessCallback(result) {
-			result = result.data;
-			result.children = [];
-		  	roleList[result.id] = result;
-		  	roleList[result.parentId].children.push(result);
 
-		  	$scope.$modalInstance.close();
-		  	$scope.newNode = {};
+			result.children = [];
+			roleList[result.id] = result;
+			roleList[result.parentId].children.push(result);
+
+			$scope.$modalInstance.close();
+			$scope.newNode = {};
 		}
 
 		function updateNode(node) {
-			setupAPIService.updateObject(
-				'setup/lessonlearned_category',
+			lessonLearnedSetupAPIService.updateCategory(
 				node,
 				updateNodeSuccessCallback,
 				upsertNodeErrorCallback
@@ -144,25 +139,22 @@
 		}
 
 		function updateNodeSuccessCallback(result) {
-			result = result.data;
+
 			roleList[result.id].name = result.name;
 			roleList[result.id].initial = result.initial;
 
 			$scope.$modalInstance.close();
-		  	$scope.newNode = {};
+			$scope.newNode = {};
 		}
 
 		function upsertNodeErrorCallback(error) {
-			dialogFactory.showConfirmDialog(error.data.message);
+			dialogFactory.showConfirmDialog(error.message);
 		}
 
 		function removeNode(node) {
-			setupAPIService.removeObject(
-				'/setup/lessonlearned_category',
+			lessonLearnedSetupAPIService.removeCategory(
 				node,
-				function(response){
-					removeNodeSuccessCallback(response.data);
-				},
+				removeNodeSuccessCallback,
 				removeNodeErrorCallback
 			);
 		}
@@ -172,8 +164,8 @@
 			var parentChildren = roleList[result.parentId].children;
 
 			//remove o filho que esta no array do pai
-			for(var i in parentChildren){
-				if (result.id == parentChildren[i].id){
+			for (var i in parentChildren) {
+				if (result.id == parentChildren[i].id) {
 					parentChildren.splice(i, 1);
 				}
 			}
@@ -181,7 +173,7 @@
 		}
 
 		function removeNodeErrorCallback(error) {
-			dialogFactory.showConfirmDialog(error.data.message);
+			dialogFactory.showConfirmDialog(error.message);
 		}
 
 		function actionClickSelectItem(node) {
@@ -208,7 +200,7 @@
 				// child to parent
 				if (currentObj.parentId == null || currentObj.parentId == undefined) {
 					categoryData.push(objList[i]);
-				}else{
+				} else {
 					objList[currentObj.parentId].children.push(currentObj);
 				}
 			}
