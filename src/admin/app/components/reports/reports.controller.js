@@ -27,10 +27,8 @@
 			toDate: null
 		};
 
-		$scope.$watchGroup(['reportsData.fromDate', 'reportsData.toDate'], function(interval){
-			getFailuresOnInterval(interval[0], interval[1]);
-		}, true);
-
+		vm.getFailuresOnInterval = getFailuresOnInterval;
+		
 		// --actions--
 		if(!$localStorage['reportsData.toDate'] || !$localStorage['reportsData.fromDate']){
 			setCurrentDate();
@@ -40,6 +38,7 @@
 		}
 		
 		getWellList();
+		getFailuresOnInterval($scope.reportsData.fromDate, $scope.reportsData.toDate);
 
 		operationSetupAPIService.getList(
 			currentOperationSuccessCallback, 

@@ -82,8 +82,10 @@
 		}
 
 		function onClickFilterButton(fromDate, toDate) {
-
+			
 			if (toDate == undefined) return false;
+			
+			$scope.$parent.rController.getFailuresOnInterval(fromDate, toDate);
 
 			if (toDate >= fromDate){
 				reportsSetupAPIService.getVreScoreList(
