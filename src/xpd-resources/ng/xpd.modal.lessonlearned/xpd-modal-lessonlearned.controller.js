@@ -4,9 +4,9 @@
 
 	angular.module('xpd.modal-lessonlearned').controller('modalLessonLearnedController', modalLessonLearnedController);
 
-	modalLessonLearnedController.$inject = ['$scope', '$uibModalInstance', 'lessonLearnedSetupAPIService', 'selectedLessonLearned', 'insertCallback', 'updateCallback'];
+	modalLessonLearnedController.$inject = ['$scope', '$uibModalInstance', 'lessonLearnedSetupAPIService', 'selectedLessonLearned', 'modalSuccessCallback', 'modalErrorCallback'];
 
-	function modalLessonLearnedController($scope, $uibModalInstance, lessonLearnedSetupAPIService, selectedLessonLearned, insertCallback, updateCallback) {
+	function modalLessonLearnedController($scope, $uibModalInstance, lessonLearnedSetupAPIService, selectedLessonLearned, modalSuccessCallback, modalErrorCallback) {
 
 		var vm = this;
 
@@ -72,10 +72,11 @@
 
 		function lessonLearnedSuccessCallback(result) {
 			$uibModalInstance.close();
+			modalSuccessCallback(result);
 		}
 
 		function lessonLearnedErrorCallback(error) {
-			console.log('Error on insert/update Lesson Learned!');
+			modalErrorCallback();
 		}
 
 		function modalActionButtonClose() {

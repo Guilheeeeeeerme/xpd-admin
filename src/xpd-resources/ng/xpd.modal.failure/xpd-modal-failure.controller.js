@@ -4,9 +4,9 @@
 
 	angular.module('xpd.modal-failure').controller('modalFailureController', modalFailureController);
 
-	modalFailureController.$inject = ['$scope', '$uibModalInstance', 'categorySetupAPIService', 'failureSetupAPIService', 'selectedFailure', 'insertCallback', 'updateCallback', 'dialogFactory', 'operationDataFactory'];
+	modalFailureController.$inject = ['$scope', '$uibModalInstance', 'categorySetupAPIService', 'failureSetupAPIService', 'selectedFailure', 'modalSuccessCallback', 'modalErrorCallback', 'dialogFactory', 'operationDataFactory'];
 
-	function modalFailureController($scope, $uibModalInstance, categorySetupAPIService, failureSetupAPIService, selectedFailure, insertCallback, updateCallback, dialogFactory, operationDataFactory) {
+	function modalFailureController($scope, $uibModalInstance, categorySetupAPIService, failureSetupAPIService, selectedFailure, modalSuccessCallback, modalErrorCallback, dialogFactory, operationDataFactory) {
 		var vm = this;
 
 		var roleList = {};
@@ -37,8 +37,18 @@
 
 		function getCategoryList() {
 			categorySetupAPIService.getList(
-				getCategoryListSuccessCallback
+				getCategoryListSuccessCallback,
+				getCategoryListErrorCallback
 			);
+		}
+
+		function getCategoryListSuccessCallback(result) {
+			roleList = result;
+			makeTreeStructure(roleList);
+		}
+
+		function getCategoryListErrorCallback(error) {
+			console.log(error);
 		}
 
 		function toMilli(param) {
@@ -72,15 +82,6 @@
 			});
 		}
 
-		function getCategoryListSuccessCallback(result) {
-			roleList = result;
-			makeTreeStructure(roleList);
-		}
-
-		function getCategoryListErrorCallback(error) {
-			console.log(error);
-		}
-
 		function modalActionButtonSave() {
 			var failure = $scope.selectedFailure;
 
@@ -88,9 +89,9 @@
 
 				operationDataFactory.emitStartFailureOnGoing(failure);
 
-				operationDataFactory.addEventListener('modalFailureController', 'setOnGoingFailureListener', insertFailureSuccessCallback);
+				operationDataFactory.addEventListener('modalFailureController', 'setOnGoingFailureListener', insertOnGoingFailureSuccessCallback);
 
-				operationDataFactory.addEventListener('modalFailureController', 'setOnErrorInsertFailureListener', insertFailureErrorCallback);
+				operationDataFactory.addEventListener('modalFailureController', 'setOnErrorInsertFailureListener', insertOnGoingFailureErrorCallback);
 
 			} else {
 				if (!failure.id) {
@@ -102,12 +103,14 @@
 
 		}
 
-		function insertFailureSuccessCallback() {
+		function insertOnGoingFailureSuccessCallback() {
 			$uibModalInstance.close();
+			modalSuccessCallback();
 		}
 
-		function insertFailureErrorCallback() {
-			dialogFactory.showConfirmDialog('Error on inserting failure, please try again!');
+		function insertOnGoingFailureErrorCallback() {
+			$uibModalInstance.close();
+			modalErrorCallback();
 		}
 
 		function registerFailure(failure) {
@@ -128,10 +131,10 @@
 
 		function failureSuccessCallback(result) {
 			$uibModalInstance.close();
+			modalSuccessCallback(result);
 		}
 
 		function failureErrorCallback(error) {
-			/*console.log('NPT error!');*/
 			dialogFactory.showConfirmDialog('NPT already exists in this time interval!');
 		}
 

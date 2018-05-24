@@ -7,18 +7,18 @@
 
 	LessonLearnedController.$inject = ['$scope', 'lessonLearnedModal', '$uibModal', 'lessonLearnedSetupAPIService', 'operationDataFactory', 'dialogFactory'];
 
-	function LessonLearnedController($scope, lessonLearnedModal, $modal, lessonLearnedSetupAPIService, operationDataFactory, dialogFactory){
-    	var vm = this;
+	function LessonLearnedController($scope, lessonLearnedModal, $modal, lessonLearnedSetupAPIService, operationDataFactory, dialogFactory) {
+		var vm = this;
 
 		$scope.modalData = {
-    		lessonLearnedList: [],
+			lessonLearnedList: [],
 			operation: {},
 			lessonLearnedCategory: {
 				roleList: [],
 				parentList: [],
 				lastSelected: null
 			}
-    	};
+		};
 
 		vm.actionClickButtonAddLessonLearned = actionClickButtonAddLessonLearned;
 		vm.actionClickButtonRemoveLessonLearned = actionClickButtonRemoveLessonLearned;
@@ -44,41 +44,35 @@
 			console.log(error);
 		}
 
-    	function actionClickButtonAddLessonLearned(){
+		function actionClickButtonAddLessonLearned() {
 
-			var selectedLessonLearned = {};
+			var newLessonLearned = {};
 
-			if($scope.modalData.operation != null){
-				selectedLessonLearned = {
+			if ($scope.modalData.operation != null) {
+				newLessonLearned = {
 					operation: {
 						'id': $scope.modalData.operation.id
 					}
 				};
 			}
 
-
-			lessonLearnedModal.open(selectedLessonLearned, insertLessonLearnedCallback, updateLessonLearnedCallback);
+			lessonLearnedModal.open(newLessonLearned, lessonLearnedModalSuccessCallback, lessonLearnedModalErrorCallback);
 		}
 
 		function actionClickButtonEditLessonLearned(selectedLessonLearned) {
-			if($scope.modalData.operation != null){
-				selectedLessonLearned.operation = {'id':$scope.modalData.operation.id};
-			}			
+			if ($scope.modalData.operation != null) {
+				selectedLessonLearned.operation = { 'id': $scope.modalData.operation.id };
+			}
 
-			lessonLearnedModal.open(selectedLessonLearned, insertLessonLearnedCallback, updateLessonLearnedCallback);
+			lessonLearnedModal.open(selectedLessonLearned, lessonLearnedModalSuccessCallback, lessonLearnedModalErrorCallback);
 		}
 
-		function updateLessonLearnedCallback(lessonlearned){
-			lessonLearnedSetupAPIService.updateObject(
-				lessonlearned,
-				populateLessionLearnedList
-			);
+		function lessonLearnedModalSuccessCallback(lessonlearned) {
+			populateLessionLearnedList();
 		}
 
-		function insertLessonLearnedCallback(lessonlearned){
-			lessonLearnedSetupAPIService.insertObject(
-				lessonlearned,
-				populateLessionLearnedList);
+		function lessonLearnedModalErrorCallback() {
+			dialogFactory.showConfirmDialog('Error on inserting lesson learned, please try again!');
 		}
 
 		function actionClickButtonRemoveLessonLearned(lessonlearned) {

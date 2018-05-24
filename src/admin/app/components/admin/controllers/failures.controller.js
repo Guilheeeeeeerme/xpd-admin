@@ -7,24 +7,24 @@
 
 	FailuresController.$inject = ['$scope', 'failureModal', '$uibModal', 'operationDataFactory', 'failureSetupAPIService', 'dialogFactory'];
 
-	function FailuresController($scope, failureModal, $modal, operationDataFactory, failureSetupAPIService, dialogFactory){
-    	var vm = this;
+	function FailuresController($scope, failureModal, $modal, operationDataFactory, failureSetupAPIService, dialogFactory) {
+		var vm = this;
 
 		$scope.modalData = {
-    		failuresList: [],
-    		failureOnGoing: [],
+			failuresList: [],
+			failureOnGoing: [],
 			operation: {},
 			category: {
 				roleList: [],
 				parentList: [],
 				lastSelected: null
 			}
-    	};
+		};
 
 		vm.actionClickButtonAddFailure = actionClickButtonAddFailure;
 		vm.actionClickButtonRemoveFailure = actionClickButtonRemoveFailure;
 		vm.actionClickButtonEditFailure = actionClickButtonEditFailure;
-		
+
 		operationDataFactory.operationData = [];
 
 		$scope.modalData.operation = operationDataFactory.operationData.operationContext.currentOperation;
@@ -32,48 +32,45 @@
 		populateFailureList();
 
 		function populateFailureList() {
-			failureSetupAPIService.listFailures(function(response){
-				$scope.modalData.failuresList = response.filter(function(failure){
+			failureSetupAPIService.listFailures(function (response) {
+				$scope.modalData.failuresList = response.filter(function (failure) {
 					return !failure.onGoing;
 				});
 
-				$scope.modalData.failureOnGoing = response.filter(function(failure){
+				$scope.modalData.failureOnGoing = response.filter(function (failure) {
 					return failure.onGoing;
 				});
 			});
 		}
 
-    	function actionClickButtonAddFailure(){
-			var selectedFailure = {};
-    	
-    	if($scope.modalData.operation != null){
-    		selectedFailure = {
+		function actionClickButtonAddFailure() {
+			var newFailure = {};
+
+			if ($scope.modalData.operation != null) {
+				newFailure = {
 					operation: {
 						'id': $scope.modalData.operation.id
 					}
 				};
-    	}
+			}
 
-			failureModal.open(selectedFailure, insertFailureCallback, updateFailureCallback);
+			failureModal.open(newFailure, failureModalSuccessCallback, failureModalErrorCallback);
 		}
 
 		function actionClickButtonEditFailure(selectedFailure) {
-			if($scope.modalData.operation != null){
-				selectedFailure.operation = {'id':$scope.modalData.operation.id};
+			if ($scope.modalData.operation != null) {
+				selectedFailure.operation = { 'id': $scope.modalData.operation.id };
 			}
 
-			failureModal.open(selectedFailure, insertFailureCallback, updateFailureCallback);
+			failureModal.open(selectedFailure, failureModalSuccessCallback, failureModalErrorCallback);
 		}
 
-		function updateFailureCallback(){
-   			populateFailureList();
+		function failureModalSuccessCallback(failure) {
+			populateFailureList();
 		}
 
-		function insertFailureCallback(failure){
-			if(failure && failure.onGoing)
-				$scope.$parent.controller.modalActionButtonClose();
-			else
-				populateFailureList();
+		function failureModalErrorCallback() {
+			dialogFactory.showConfirmDialog('Error on inserting failure, please try again!');
 		}
 
 		function actionClickButtonRemoveFailure(failure) {

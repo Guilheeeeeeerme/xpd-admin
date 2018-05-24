@@ -11,7 +11,7 @@
 			open: open
 		};
 
-		function open(selectedLessonLearned, insertCallback, updateCallback){
+		function open(selectedLessonLearned, modalSuccessCallback, modalErrorCallback){
 
 			if(selectedLessonLearned.startTime)
 				selectedLessonLearned.startTime = new Date(selectedLessonLearned.startTime);
@@ -30,11 +30,11 @@
 					selectedLessonLearned: function(){
 						return selectedLessonLearned;
 					},
-					updateCallback: function(){
-						return updateCallback;
+					modalSuccessCallback: function(){
+						return modalSuccessCallback;
 					},
-					insertCallback: function(){
-						return insertCallback;
+					modalErrorCallback: function(){
+						return modalErrorCallback;
 					}
 				}
 			});
