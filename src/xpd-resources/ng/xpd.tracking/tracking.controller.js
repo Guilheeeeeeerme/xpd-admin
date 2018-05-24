@@ -33,7 +33,7 @@
 			hasAlarm: false,
 			hasMessage: false,
 
-			showDMEC: true
+			showDMEC: (localStorage.getItem('is-dmec-template')) ? JSON.parse(localStorage.getItem('is-dmec-template')) : true
 		};
 
 		$scope.acknowledgement = {
@@ -342,6 +342,7 @@
 
 		function changeTrackingContent() {
 			$scope.flags.showDMEC = !$scope.flags.showDMEC;
+			localStorage.setItem('is-dmec-template', $scope.flags.showDMEC);
 		}
 
 	}
