@@ -182,11 +182,11 @@
 
 				while (loopEndTime.getTime() < loopLimit.getTime()) {
 
-					loopEndTime.setHours(loopStartTime.getHours() + 1);
+					loopEndTime.setHours(loopStartTime.getHours() + 12);
 					var loopEndTimestamp = loopEndTime.getTime();
 
 					if (loopEndTime.getTime() > loopLimit.getTime()) {
-						loopEndTimestamp = null; // loopLimit.getTime();
+						loopEndTimestamp = null;
 					}
 
 					promiseList.push(getAllReadingByStartEndTime(loopStartTime.getTime(), loopEndTimestamp));
@@ -196,7 +196,7 @@
 
 				scope.onReadingSince = $q(function (resolve, reject) {
 
-					var parsedReadings = [];
+					var parsedReadings = {};
 
 					function mergeParsedReadings() {
 
@@ -207,12 +207,12 @@
 
 							promise(function (readings) {
 
-								if (readings && readings[0] && readings[0].timestamp) {
-									parsedReadings.push({
-										timestamp: readings[0].timestamp
-									});
-									
-									parsedReadings = parsedReadings.concat(readings);
+								for(var i in readings){
+									if(!parsedReadings[i]){
+										parsedReadings[i] = readings[i];
+									}else{
+										parsedReadings[i] = parsedReadings[i].concat(readings[i]);
+									}
 								}
 
 								mergeParsedReadings();
@@ -225,29 +225,14 @@
 
 					mergeParsedReadings();
 
-					// $q.all(promiseList).then(function (readings) {
-
-					// 	for (var i in readings) {
-
-					// 		if(readings[i] && readings[i][0] && readings[i][0].timestamp){
-					// 			parsedReadings.push({
-					// 				timestamp: readings[i][0].timestamp
-					// 			});
-					// 		}
-
-					// 		parsedReadings = parsedReadings.concat(readings[i]);
-					// 	}
-
-					// });
-
 
 				});
 
 				scope.bitDepthPoints = null;
 				scope.maxDepth = null;
 
-				scope.onReadingSince.then(function (data) {
-					scope.bitDepthPoints = generateBitDepthPoints(data);
+				scope.onReadingSince.then(function (readings) {
+					scope.bitDepthPoints = generateBitDepthPoints(readings.bitDepth);
 				});
 
 				return startTime;
@@ -279,22 +264,22 @@
 			}
 
 
-			function generateBitDepthPoints(readings) {
+			function generateBitDepthPoints(bitDepthList) {
 				var points = [];
 
-				readings.map(function (reading) {
+				bitDepthList.map(function (bitDepthPoint) {
 
-					if (reading.bitDepth) {
+					if (bitDepthPoint.actual) {
 						if (scope.maxDepth == null) {
-							scope.maxDepth = reading.bitDepth;
+							scope.maxDepth = bitDepthPoint.actual;
 						} else {
-							scope.maxDepth = Math.max(scope.maxDepth, reading.bitDepth);
+							scope.maxDepth = Math.max(scope.maxDepth, bitDepthPoint.actual);
 						}
 					}
 
 					points.push({
-						x: reading.timestamp,
-						y: reading.bitDepth || null
+						x: bitDepthPoint.x,
+						y: bitDepthPoint.actual || null
 					});
 
 				});

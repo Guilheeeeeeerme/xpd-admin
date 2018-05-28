@@ -1,20 +1,20 @@
 (function () {
 	'use strict',
 
-		angular.module('xpd.setupapi')
-			.service('setupAPIService', setupAPIService)
-			.config(function (toastrConfig) {
-				angular.extend(toastrConfig, {
-					autoDismiss: true,
-					extendedTimeOut: 3000,
-					maxOpened: 4,
-					newestOnTop: true,
-					preventOpenDuplicates: true,
-					tapToDismiss: true,
-					timeOut: 2000,
-					positionClass: 'toast-bottom-center',
-				});
+	angular.module('xpd.setupapi')
+		.service('setupAPIService', setupAPIService)
+		.config(function (toastrConfig) {
+			angular.extend(toastrConfig, {
+				autoDismiss: true,
+				extendedTimeOut: 3000,
+				maxOpened: 4,
+				newestOnTop: true,
+				preventOpenDuplicates: true,
+				tapToDismiss: true,
+				timeOut: 2000,
+				positionClass: 'toast-bottom-center',
 			});
+		});
 
 	setupAPIService.$inject = ['$http', 'xpdAccessFactory', 'toastr'];
 

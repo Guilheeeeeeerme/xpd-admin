@@ -55,32 +55,32 @@
 		return {
 			request: function (config) {
 
-				if (hasSpinner(config.url)) {
-					numLoadings++;
-					usSpinnerService.spin('xpd-spinner');
-				}
+				// if (hasSpinner(config.url)) {
+				// 	numLoadings++;
+				// 	usSpinnerService.spin('xpd-spinner');
+				// }
 
 				return config || $q.when(config);
 
 			},
 			response: function (response) {
 
-				if (hasSpinner(response.config.url)) {
-					if ((--numLoadings) === 0) {
-						usSpinnerService.stop('xpd-spinner');
-					}
-				}
+				// if (hasSpinner(response.config.url)) {
+				// 	if ((--numLoadings) === 0) {
+				// 		usSpinnerService.stop('xpd-spinner');
+				// 	}
+				// }
 
 				return response || $q.when(response);
 
 			},
 			responseError: function (response) {
 
-				if (hasSpinner(response.config.url)) {
-					if (!(--numLoadings)) {
-						usSpinnerService.stop('xpd-spinner');
-					}
-				}
+				// if (hasSpinner(response.config.url)) {
+				// 	if (!(--numLoadings)) {
+				// 		usSpinnerService.stop('xpd-spinner');
+				// 	}
+				// }
 
 				return $q.reject(response);
 			}
