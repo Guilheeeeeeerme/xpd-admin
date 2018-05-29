@@ -3,9 +3,9 @@
 
 	angular.module('xpd.setupapi').service('photoAPIService', photoAPIService);
 
-	photoAPIService.$inject = ['$http', 'xpdAccessFactory'];
+	photoAPIService.$inject = ['$http', 'xpdAccessFactory', 'setupAPIService'];
 
-	function photoAPIService($http, xpdAccessFactory) {
+	function photoAPIService($http, xpdAccessFactory, setupAPIService) {
 
 		var vm = this;
 
@@ -25,6 +25,7 @@
 					successCallback && successCallback(_arrayBufferToBase64(response.data));
 				},
 				function (error) {
+					setupAPIService.generateToast(error);
 					errorCallback && errorCallback(error);
 				}
 			);
@@ -44,7 +45,13 @@
 				params: {
 					fd: fd
 				}
-			}).then(successCallback, errorCallback);
+			}).then(
+				successCallback, 
+				function (error) {
+					setupAPIService.generateToast(error);
+					errorCallback && errorCallback(error);
+				}
+			);
 
 		}
 
@@ -58,6 +65,7 @@
 						successCallback && successCallback(response.data);
 					},
 					function (error) {
+						setupAPIService.generateToast(error);
 						errorCallback && errorCallback(error);
 					}
 				);
