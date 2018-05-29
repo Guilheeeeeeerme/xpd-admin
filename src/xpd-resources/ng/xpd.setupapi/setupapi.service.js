@@ -41,7 +41,7 @@
 				function (error) {
 					// console.log( angular.copy( { req: req, response: error} ) );
 
-					setupAPIService.generateToast(error, true);
+					generateToast(error, true);
 					errorCallback && errorCallback(error);
 				}
 			);
@@ -49,31 +49,30 @@
 
 		function generateToast(error, showError) {
 
-			console.log(showError);
-
 			if (!showError) {
 				toastr.success(error.message);
-			} else {
+			} else {				
 
 				if (!error) {
-					error = {
+					error = {};
+					error.data = {
 						message: 'Insecure Response'
 					};
 				}
 
-				if (!error.message) {
+				// if (!error.data.message) {
 
-					error = {
-						message: error
-					};
+				// 	error = {
+				// 		message: error
+				// 	};
 
-					error.message = error.message.split('<body>')[1];
-					error.message = error.message.split('</body>')[0];
+				// 	error.message = error.message.split('<body>')[1];
+				// 	error.message = error.message.split('</body>')[0];
 
-					error.message = error.message.replace(/<[^>]*>/g, '\n');
-				}
+				// 	error.message = error.message.replace(/<[^>]*>/g, '\n');
+				// }
 
-				toastr.error(error.message);
+				toastr.error(error.data.message);
 			}
 		}
 	}
