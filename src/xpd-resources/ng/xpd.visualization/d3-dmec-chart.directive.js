@@ -48,15 +48,15 @@
 
 					onReadingSince.then(function (readings) {
 
-						readingsToPoints(readings, tracks).then(function (points) {
+						// readingsToPoints(readings, tracks).then(function (points) {
 
-							d3Service.d3().then(function (d3) {
+						d3Service.d3().then(function (d3) {
 
-								createChart(d3, points);
-
-							});
+							createChart(d3, readings);
 
 						});
+
+						// });
 
 					});
 				}
@@ -132,6 +132,7 @@
 
 						onReading.then(function (reading) {
 
+
 							if(!readings){
 								readings = [];
 							}
@@ -141,9 +142,7 @@
 							// console.log(reading);
 
 							readingsToPoints(readings, tracks).then(function (points) {
-
 								draw('newPoints', points);		
-
 							});
 
 						});

@@ -104,6 +104,12 @@
 
 		}
 
+		function getAllReadingByStartEndTime(startTime, endTime) {
+			return function (resolve, reject) {
+				readingSetupAPIService.getAllReadingByStartEndTime(startTime, endTime, resolve, reject);
+			};
+		}
+
 		function getAllReadingSince(startTime) {
 			
 			startTime = new Date(startTime);
@@ -133,9 +139,7 @@
 					loopEndTimestamp = null;
 				}
 
-				promiseList.push($q(function (resolve, reject) {
-					readingSetupAPIService.getAllReadingByStartEndTime(loopStartTime.getTime(), loopEndTimestamp, resolve, reject);
-				}));
+				promiseList.push(getAllReadingByStartEndTime(loopStartTime.getTime(), loopEndTimestamp));
 
 				loopStartTime = new Date(loopEndTime);
 			}
@@ -143,23 +147,35 @@
 
 			$scope.onReadingSince = $q(function (resolve, reject) {
 
-				$q.all(promiseList).then(function (readings) {
+				var parsedReadings = {};
 
-					var parsedReadings = [];
+				function mergeParsedReadings() {
 
-					for (var i in readings) {
+					if (!promiseList || promiseList.length == 0) {
+						resolve(parsedReadings);
+					} else {
+						var promise = promiseList.shift();
 
-						if(readings[i] && readings[i][0] && readings[i][0].timestamp){
-							parsedReadings.push({
-								timestamp: readings[i][0].timestamp
-							});
-						}
-						
-						parsedReadings = parsedReadings.concat(readings[i]);
+						promise(function (readings) {
+
+							for(var i in readings){
+								if(!parsedReadings[i]){
+									parsedReadings[i] = readings[i];
+								}else{
+									parsedReadings[i] = parsedReadings[i].concat(readings[i]);
+								}
+							}
+
+							mergeParsedReadings();
+
+						}, function () {
+							mergeParsedReadings();
+						});
 					}
+				}
 
-					resolve(parsedReadings);
-				});
+				mergeParsedReadings();
+
 
 			});
 
