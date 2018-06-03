@@ -11,7 +11,7 @@
                         <th class="col-md-3">Description</th>
         				<th class="col-md-1"></th>
         			</tr>
-        		</thead>
+                </thead>
         		<tbody>
         			<tr ng-repeat="lessonLearned in modalData.lessonLearnedList" 
                         ng-if="modalData.lessonLearnedList.length > 0" 
@@ -21,10 +21,10 @@
                         <td class="col-md-1">
                             <span ng-class="{'glyphicon glyphicon-star':(lessonLearned.bestPractices), '':(!lessonLearned.bestPractices)}"></span>
                         </td>
-        				<td class="col-md-3">{{lessonLearned.startTime | date:'MM/dd/yyyy HH:mm'}}</td>
-        				<td class="col-md-2">{{lessonLearned.endTime | date:'MM/dd/yyyy HH:mm'}}</td>
-                        <td class="col-md-2 cell-description">{{lessonLearned.description}}</td>
                         <td class="col-md-3">{{(lessonLearned.lessonLearnedCategory)? lessonLearned.lessonLearnedCategory.initial +' - '+  lessonLearned.lessonLearnedCategory.name : 'Non categorized' }}</td>
+        				<td class="col-md-2">{{lessonLearned.startTime | date:'MM/dd/yyyy HH:mm'}}</td>
+        				<td class="col-md-2">{{lessonLearned.endTime | date:'MM/dd/yyyy HH:mm'}}</td>
+                        <td class="col-md-3 cell-description">{{lessonLearned.description}}</td>
         				<td class="col-md-1" style="white-space: nowrap;">
                             <span 
                                 class="btn btn-xs glyphicon glyphicon-pencil"

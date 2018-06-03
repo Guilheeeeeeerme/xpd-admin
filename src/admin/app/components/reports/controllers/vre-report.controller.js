@@ -85,6 +85,8 @@
 		}
 
 		function onClickFilterButton(fromDate, toDate) {
+			$scope.$parent.rController.getFailuresOnInterval(fromDate, toDate);
+
 			$scope.vreData.period = {
 				fromDate: fromDate,	
 				toDate: toDate

@@ -122,7 +122,7 @@
 				scope.$watch('onReading', onReadingChange);
 
 				configTracks(tracks);
-				draw('oldPoints', initialPoints);		
+				draw('oldPoints', initialPoints);
 
 				/**
 				 * Real History
@@ -133,7 +133,7 @@
 						onReading.then(function (reading) {
 
 
-							if(!readings){
+							if (!readings) {
 								readings = [];
 							}
 
@@ -142,7 +142,7 @@
 							// console.log(reading);
 
 							readingsToPoints(readings, tracks).then(function (points) {
-								draw('newPoints', points);		
+								draw('newPoints', points);
 							});
 
 						});
@@ -196,12 +196,33 @@
 						track.labelStartAt = labelStartAt;
 						track.labelEndAt = labelEndAt;
 
-						var trackScale = d3.scale.linear()
-							.domain([track.min, track.max])
-							.range([
-								labelStartAt + ((labelEndAt - labelStartAt) * 0.01),
-								labelEndAt - ((labelEndAt - labelStartAt) * 0.01)
-							]);
+						var trackScale;
+
+						if (isHorizontal) {
+
+							trackScale = d3.scale.linear()
+								.domain([
+									track.min,
+									track.max
+								])
+								.range([
+									Math.max(labelEndAt, labelStartAt) - (Math.abs(labelEndAt - labelStartAt) * 0.1),
+									Math.min(labelEndAt, labelStartAt) + (Math.abs(labelEndAt - labelStartAt) * 0.1)
+								]);
+
+						} else {
+
+							trackScale = d3.scale.linear()
+								.domain([
+									track.min,
+									track.max
+								])
+								.range([
+									Math.min(labelEndAt, labelStartAt) + (Math.abs(labelEndAt - labelStartAt) * 0.1),
+									Math.max(labelEndAt, labelStartAt) - (Math.abs(labelEndAt - labelStartAt) * 0.1)
+								]);
+
+						}
 
 						var lineFunction = d3.svg.line()
 							.defined(isNumber)
@@ -325,11 +346,36 @@
 							.attr(((!isHorizontal) ? 'y1' : 'x1'), position)
 							.attr(((!isHorizontal) ? 'y2' : 'x2'), position);
 
-						onMousemove(timestamp, position);
+						var avgPoint;
+						var avgSize;						
+
+						if (isHorizontal) {
+							avgSize = scope.svg.viewWidth / 3;			
+	
+							if(position > scope.svg.viewWidth / 2)
+								avgPoint = (0 + position) / 2;
+							else
+								avgPoint = (scope.svg.viewWidth + position) / 2;
+
+						} else {
+							avgSize = scope.svg.viewHeight / 3;	
+
+							if(position > scope.svg.viewHeight / 2)
+								avgPoint = (0 + position) / 2;
+							else
+								avgPoint = (scope.svg.viewHeight + position) / 2;
+						}
+
+						d3.select(element[0]).selectAll('#crosshair1')
+							.attr('stroke-width' , avgSize)
+							.attr(((!isHorizontal) ? 'y1' : 'x1'), avgPoint)
+							.attr(((!isHorizontal) ? 'y2' : 'x2'), avgPoint);
+
+						onMousemove(timestamp, position, avgPoint);
 
 					}
 
-					function onMousemove(timestamp, position) {
+					function onMousemove(timestamp, position, avgPoint) {
 
 						worker.postMessage({
 							cmd: 'find-point',
@@ -358,6 +404,7 @@
 
 								var bubble = d3.select(element[0]).selectAll('#bubble-' + track.param);
 								var tooltip = d3.select(element[0]).selectAll('#text-' + track.param);
+								var tooltiplabel = d3.select(element[0]).selectAll('#text-label-' + track.param);
 
 								bubble.attr('style', 'display: none');
 								tooltip.attr('style', 'display: none');
@@ -382,10 +429,12 @@
 									if (!isHorizontal) {
 										bubble.attr('transform', 'translate(' + track.trackScale(point.y) + ', ' + position + ')');
 										// tooltip.attr('x', track.trackScale(point.y) );
-										// tooltip.attr('y', position );
+										tooltip.attr('y', avgPoint );
+										tooltiplabel.attr('y', avgPoint );
 									} else {
 										bubble.attr('transform', 'translate(' + position + ', ' + track.trackScale(point.y) + ')');
-										// tooltip.attr('x', position );
+										tooltip.attr('x', avgPoint );
+										tooltiplabel.attr('x', avgPoint );
 										// tooltip.attr('y', track.trackScale(point.y) );
 									}
 

@@ -11,7 +11,7 @@
 			open: open
 		};
 
-		function open(selectedFailure, insertCallback, updateCallback){
+		function open(selectedFailure, modalSuccessCallback, modalErrorCallback){
 
 			if(selectedFailure.startTime)
 				selectedFailure.startTime = new Date(selectedFailure.startTime);
@@ -30,11 +30,11 @@
 					selectedFailure: function(){
 						return selectedFailure;
 					},
-					updateCallback: function(){
-						return updateCallback;
+					modalSuccessCallback: function(){
+						return modalSuccessCallback;
 					},
-					insertCallback: function(){
-						return insertCallback;
+					modalErrorCallback: function(){
+						return modalErrorCallback;
 					}
 				}
 			});

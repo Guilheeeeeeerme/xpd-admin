@@ -75,6 +75,8 @@
 		}
 
 		function onClickFilterButton(fromDate, toDate) {
+			$scope.$parent.rController.getFailuresOnInterval(fromDate, toDate);
+			
 			reportsSetupAPIService.getNeedleDataChart(
 				fromDate,
 				toDate,

@@ -166,6 +166,8 @@
 		 * @param  {date} toDate   data final
 		 */
 		function onClickFilterButton(fromDate, toDate) {
+			$scope.$parent.rController.getFailuresOnInterval(fromDate, toDate);
+			
 			$scope.failuresData.breadcrumbs = [
 				{name:'Failure / Delay Categories'}
 			];

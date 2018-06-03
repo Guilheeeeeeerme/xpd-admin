@@ -68,15 +68,6 @@
 			$scope.zoomIsLocked = lockZoom;
 		}
 
-		function moveZoomRealtime() {
-						
-			var now = new Date();
-			var zoom = new Date($scope.zoomEndAt).getTime() - new Date($scope.zoomStartAt).getTime();
-
-			$scope.zoomStartAt = new Date(now.getTime() - zoom);
-			$scope.zoomEndAt = now;
-		}
-
 		function actionButtonSubmitDmecRange() {			
 			localStorage.setItem('dmecInputRangeForm', JSON.stringify($scope.inputRangeForm));
 			location.reload();
@@ -88,13 +79,6 @@
 
 				var now = new Date().getTime();
 				$scope.dmecTrackingEndAt = now;
-
-				if($scope.inputRangeForm.keepZoomAtTheEnd){
-					
-					if(!$scope.zoomIsLocked){
-						moveZoomRealtime();
-					}
-				}
 
 				$scope.onReading = $q(function (resolve, reject) {
 					readingSetupAPIService.getTick((now - updateLatency), resolve, reject);
