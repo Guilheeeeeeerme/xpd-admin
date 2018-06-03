@@ -93,15 +93,6 @@
 				scope.zoomIsLocked = lockZoom;
 			}
 
-
-			function moveZoomRealtime() {
-				var now = new Date();
-				var zoom = new Date(scope.zoomEndAt).getTime() - new Date(scope.zoomStartAt).getTime();
-
-				scope.zoomStartAt = new Date(now.getTime() - zoom);
-				scope.zoomEndAt = now;
-			}
-
 			function actionButtonUseOperationStartDate(startDate) {
 
 				if (scope.inputRangeForm.useOperationStartDate) {
@@ -123,12 +114,6 @@
 
 					var now = new Date().getTime();
 					scope.dmecTrackingEndAt = now;
-
-					if (scope.inputRangeForm.keepZoomAtTheEnd) {
-						if (!scope.zoomIsLocked) {
-							moveZoomRealtime();
-						}
-					}
 
 					scope.onReading = $q(function (resolve, reject) {
 						var currentReading = scope.currentReading;
@@ -182,7 +167,7 @@
 
 				while (loopEndTime.getTime() < loopLimit.getTime()) {
 
-					loopEndTime.setHours(loopStartTime.getHours() + 12);
+					loopEndTime.setHours( loopStartTime.getHours() + 1 );
 					var loopEndTimestamp = loopEndTime.getTime();
 
 					if (loopEndTime.getTime() > loopLimit.getTime()) {

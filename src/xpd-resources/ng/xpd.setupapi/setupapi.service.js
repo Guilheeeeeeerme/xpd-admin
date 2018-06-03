@@ -49,6 +49,8 @@
 
 		function generateToast(error) {
 
+			console.error(error);
+
 			var httpStatus = getHttpStatus(error.status);
 			var url = (error.config.method == 'GET')?'\n'+ error.config.url: null;
 
@@ -76,7 +78,7 @@
 
 			toastr.error(httpStatus);
 
-			if(url){
+			if( url && error.status == -1 ){
 				window.open(url, httpStatus);
 			}
 

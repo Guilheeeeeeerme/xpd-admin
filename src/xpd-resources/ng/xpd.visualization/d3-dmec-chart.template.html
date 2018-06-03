@@ -35,9 +35,9 @@
 				<clipPath id="myClip-{{ track.param }}">
 					<rect 
 						ng-attr-x="{{ horizontal? timeScale(zoomStartAt) : track.trackScale(track.min) }}" 
-						ng-attr-y="{{ horizontal? track.trackScale(track.min) : timeScale(zoomStartAt) }}" 
+						ng-attr-y="{{ horizontal? track.trackScale(track.max) : timeScale(zoomStartAt) }}" 
 						ng-attr-width='{{ horizontal? zoomArea : ( track.trackScale(track.max) - track.trackScale(track.min) )  }}' 
-						ng-attr-height='{{ horizontal? ( track.trackScale(track.max) - track.trackScale(track.min) ): zoomArea }}'
+						ng-attr-height='{{ horizontal? ( track.trackScale(track.min) - track.trackScale(track.max) ): zoomArea }}'
 						/>
 				</clipPath>
 			</g>
@@ -85,10 +85,12 @@
 	<!-- Following the mouse -->
 	<g class="crosshair" ng-if="!horizontal">
 		<line x1="0" ng-attr-x2="{{ svg.viewWidth }}" id="crosshair" stroke="black" stroke-opacity="0.5" stroke-width="0.1em" />
+		<line x1="0" ng-attr-x2="{{ svg.viewWidth }}" id="crosshair1" stroke="black" stroke-opacity="0.9" />
 	</g>
 
 	<g class="crosshair" ng-if="horizontal">
 		<line y1="0" ng-attr-y2="{{ svg.viewHeight }}" id="crosshair" stroke="white" stroke-opacity="0.5" stroke-width="0.1em" />
+		<line y1="0" ng-attr-y2="{{ svg.viewHeight }}" id="crosshair1" stroke="white" stroke-opacity="0.9" />
 	</g>
 
 	<g class="bubbles">
@@ -108,48 +110,26 @@
 
 	<g class="legend" ng-if="!horizontal">
 
-		<g class="label" ng-if="$tracks && track.labelPosition != null" ng-repeat="track in $tracks">
+		<g class="label" ng-if="$tracks && track.labelPosition != null" ng-repeat="(key, track) in $tracks">
 
 			<text 
-				font-size="1vw" 
+				id="text-label-{{track.param}}" 
+				font-size="0.5vw" 
 				ng-attr-fill="{{ track.color }}"
-				ng-attr-x="{{ track.labelStartAt + ( (track.labelEndAt - track.labelStartAt) * 0.1 )  }}"
-				ng-attr-y="{{ track.labelPosition * 25 }}" 
-				alignment-baseline="baseline" 
-				text-anchor="start">
-				{{ track.min }}
-			</text>
-
-			<text 
-				font-size="1vw" 
-				ng-attr-fill="{{ track.color }}" 
-				ng-attr-x="{{ track.labelStartAt + ( (track.labelEndAt - track.labelStartAt) * 0.5 ) }}"
-			 	ng-attr-y="{{ track.labelPosition * 25 }}" 
-			 	alignment-baseline="baseline" 
-			 	text-anchor="middle">
-				{{ track.label }} ( {{ track.unitMeasure }} )
-			</text>
-
-			<text 
-				font-size="1vw" 
-				ng-attr-fill="{{ track.color }}"
-				ng-attr-x="{{ track.labelStartAt + ( (track.labelEndAt - track.labelStartAt) * 0.9 ) }}"
-				ng-attr-y="{{ track.labelPosition * 25 }}" 
-				alignment-baseline="baseline" 
+				ng-attr-x="{{ ( svg.viewWidth * 0.1 ) + ( ( key / $tracks.length ) * ( svg.viewWidth * 0.8 )  ) }}"
+				ng-attr-alignment-baseline="{{ (key % 2)? 'baseline' : 'hanging' " 
 				text-anchor="end">
-				{{ track.max }}
+				{{ track.label }}: 
 			</text>
 
 			<text 
 				id="text-{{track.param}}" 
 				style="display: none;"
-				font-size="1vw" 
+				font-size="0.5vw" 
 				ng-attr-fill="{{ track.color }}" 
-				ng-attr-x="{{ track.labelStartAt + ( (track.labelEndAt - track.labelStartAt) * 0.5 ) }}"
-			 	ng-attr-y="{{ svg.viewHeight - ( track.labelPosition * 25 ) }}" 
-			 	alignment-baseline="baseline" 
-			 	text-anchor="middle">
-				{{ track.label }} ( {{ track.unitMeasure }} )
+				ng-attr-x="{{ ( svg.viewWidth * 0.1 ) + ( ( key / $tracks.length ) * ( svg.viewWidth * 0.8 )  ) }}"
+			 	ng-attr-alignment-baseline="{{ (key % 2)? 'baseline' : 'hanging' " 
+			 	text-anchor="start">
 			</text>
 
 		</g>
@@ -158,47 +138,26 @@
 
 	<g class="legend" ng-if="horizontal">
 
-		<g class="label" ng-if="$tracks && track.labelPosition != null" ng-repeat="track in $tracks">
+		<g class="label" ng-if="$tracks && track.labelPosition != null" ng-repeat="(key, track) in $tracks">
 
 			<text 
+				id="text-label-{{track.param}}" 
 				font-size="1.5vh" 
 				ng-attr-fill="{{ track.color }}" 
-				ng-attr-y="{{ track.labelStartAt + ( (track.labelEndAt - track.labelStartAt) * 0.1 )  }}"
-				ng-attr-x="{{ (track.labelPosition * 50) }}" 
-				alignment-baseline="hanging" 
-				text-anchor="start">
-				{{ track.min }}
-			</text>
-
-			<text 
-				font-size="1.5vh" 
-				ng-attr-fill="{{ track.color }}" 
-				ng-attr-y="{{ track.labelStartAt + ( ( track.labelEndAt - track.labelStartAt ) * ( (track.labelPosition+1) / 3 ) ) }}"
-				x="0" 
+				ng-attr-y="{{ ( svg.viewHeight * 0.1 ) + ( ( key / $tracks.length ) * ( svg.viewHeight * 0.8 ) ) }}"
 				alignment-baseline="middle" 
-				text-anchor="start">
-				{{ track.label }} ( {{ track.unitMeasure }} )
-			</text>
-
-			<text 
-				font-size="1.5vh" 
-				ng-attr-fill="{{ track.color }}" 
-				ng-attr-y="{{ track.labelStartAt + ( (track.labelEndAt - track.labelStartAt) * 0.9 ) }}"
-				ng-attr-x="{{ (track.labelPosition * 50) }}" 
-				alignment-baseline="baseline" 
-				text-anchor="start">
-				{{ track.max }}
+				text-anchor="end">
+				{{ track.label }}: 
 			</text>
 
 			<text 
 				id="text-{{track.param}}" 
 				style="display: none;"
 				font-size="1.5vh" 
-				ng-attr-fill="{{ track.color }}" 
-				ng-attr-x="{{ svg.viewWidth }}"
-				ng-attr-y="{{ track.labelStartAt + ( ( track.labelEndAt - track.labelStartAt ) * ( (track.labelPosition+1) / 3 ) ) }}"
+				ng-attr-fill="{{ track.color }}"
+				ng-attr-y="{{ ( svg.viewHeight * 0.1 ) + ( ( key / $tracks.length ) * ( svg.viewHeight * 0.8 ) ) }}"
 				alignment-baseline="middle" 
-				text-anchor="end">
+				text-anchor="start">
 			</text>
 
 		</g>
