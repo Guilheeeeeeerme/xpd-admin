@@ -114,6 +114,7 @@
 
 					var now = new Date().getTime();
 					scope.dmecTrackingEndAt = now;
+					setZoomEndAt(now);
 
 					scope.onReading = $q(function (resolve, reject) {
 						var currentReading = scope.currentReading;
