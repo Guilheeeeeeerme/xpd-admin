@@ -33,7 +33,7 @@
 			hasAlarm: false,
 			hasMessage: false,
 
-			showDMEC: (localStorage.getItem('is-dmec-template')) ? JSON.parse(localStorage.getItem('is-dmec-template')) : true
+			showDMEC: (localStorage.getItem('is-dmec-template')) ? JSON.parse(localStorage.getItem('is-dmec-template')) : false
 		};
 
 		$scope.acknowledgement = {
