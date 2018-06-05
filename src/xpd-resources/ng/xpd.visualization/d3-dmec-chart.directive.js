@@ -320,10 +320,6 @@
 
 				}
 
-				function listenToMouseMoveOld() {
-
-				}
-
 				function listenToMouseMove() {
 
 					d3.select(element[0]).selectAll('.overlay')
