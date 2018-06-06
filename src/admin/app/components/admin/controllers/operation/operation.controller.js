@@ -87,17 +87,11 @@
 				id: $routeParams.sectionId
 			};
 
-			var afterRiser = false;
 			var lastSectionId = null;
 
 			try{
 
 				for( const op of $scope.dados.operationQueue ) {
-
-					if(op.type == 'riser'){
-						afterRiser = true;
-						break;
-					}
 
 					if(lastSectionId != op.section.id){
 
@@ -116,7 +110,6 @@
 				console.error(e);
 			}
 
-			$scope.dados.afterRiser = afterRiser;
 			$scope.dados.operation = operation;
 
 			//OPERATION CONFIGURATION
