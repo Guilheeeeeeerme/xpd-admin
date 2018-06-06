@@ -18,6 +18,8 @@
 				currentBlockPosition: '=',
 				zoomStartAt: '=', 
 				zoomEndAt: '=',
+				setZoomStartAt: '=',
+				setZoomEndAt: '=',
 				actionEventDetail: '='
 			},
 			link: function (scope, element, attrs) {
@@ -203,10 +205,9 @@
 						scope.mindate = scope.xScale.invert(d3.mouse(this)[0] - 20);
 						scope.maxdate = scope.xScale.invert(d3.mouse(this)[0] + 20);
 
-						scope.zoomStartAt = scope.mindate;
-						scope.zoomEndAt = scope.maxdate;
+						scope.setZoomStartAt(new Date(scope.mindate));
+						scope.setZoomEndAt(new Date(scope.maxdate));
 						
-						defineScaleChart();
 					}
 
 					function rightClick() {
