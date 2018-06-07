@@ -3,9 +3,9 @@
 
 	angular.module('xpd.admin').controller('SectionController', sectionController);
 
-	sectionController.$inject = ['$scope', '$filter', '$localStorage', '$location', '$uibModal', '$routeParams', 'sectionSetupAPIService', 'dialogFactory', 'wellSetupAPIService', 'operationDataFactory'];
+	sectionController.$inject = ['$scope', '$filter', '$location', '$uibModal', '$routeParams', 'sectionSetupAPIService', 'dialogFactory', 'wellSetupAPIService', 'operationDataFactory'];
 
-	function sectionController($scope, $filter, $localStorage, $location, $modal, $routeParams, sectionSetupAPIService, dialogFactory, wellSetupAPIService, operationDataFactory) {
+	function sectionController($scope, $filter, $location, $modal, $routeParams, sectionSetupAPIService, dialogFactory, wellSetupAPIService, operationDataFactory) {
 
 		var vm = this;
 
@@ -19,22 +19,27 @@
 			$scope.well = well;
 		});
 		
-		if(!$localStorage.setup){
-			$localStorage.setup = {};
-		}
-		
-		if(!$localStorage.setup.openedSections){
-			$localStorage.setup.openedSections = {};
+		if(!localStorage.getItem('xpd.admin.setup.openedSections')){
+			localStorage.setItem('xpd.admin.setup.openedSections', JSON.stringify({}));
 		}
 
-		$scope.openedSections = $localStorage.setup.openedSections;
+		$scope.openedSections = JSON.parse(localStorage.getItem('xpd.admin.setup.openedSections'));
 
 		$scope.$watch('openedSections', function(openedSections){
-			if(openedSections){
+
+			var tempOpenedSections = JSON.parse(localStorage.getItem('xpd.admin.setup.openedSections'));
+			
+			if(openedSections && tempOpenedSections){
+
 				for(var i in openedSections){
-					$localStorage.setup.openedSections[i] = openedSections[i];
+					tempOpenedSections[i] = openedSections[i] == true;
 				}
+
+				localStorage.setItem('xpd.admin.setup.openedSections', JSON.stringify(tempOpenedSections));
 			}
+
+			
+
 		}, true);
 		
 		operationDataFactory.operationData = [];

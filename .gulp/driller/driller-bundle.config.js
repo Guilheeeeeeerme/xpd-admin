@@ -7,10 +7,10 @@ exports.scripts = {
 		'./node_modules/angular-ui-bootstrap/dist/ui-bootstrap-tpls.js',
 		'./node_modules/angular-aside/dist/js/angular-aside.min.js',
 		'./node_modules/angular-toastr/dist/angular-toastr.tpls.js',
-		'./node_modules/angular-spinner/dist/angular-spinner.min.js',
-		'./node_modules/ngstorage/ngStorage.min.js'
+		'./node_modules/angular-spinner/dist/angular-spinner.min.js'
 	],
 	base: ['./src/xpd-resources/ng/socket.io/socketio.module.js',
+		'./src/xpd-resources/ng/xpd.spinner/xpd.spinner.js',
 		'./src/xpd-resources/ng/socket.io/socket.factory.js',
 		'./src/xpd-resources/ng/xpd.access/accessfactory.module.js',
 		'./src/xpd-resources/ng/xpd.access/accessfactory.directive.js',
@@ -35,7 +35,6 @@ exports.scripts = {
 		"./src/xpd-resources/ng/xpd.setupapi/photo-setupapi.directive.js",
 		'./src/xpd-resources/ng/xpd.dialog/xpd.dialog.module.js',
 		'./src/xpd-resources/ng/xpd.dialog/xpd.dialog.factory.js',
-		'./src/xpd-resources/ng/xpd.spinner/xpd.spinner.js',
 		'./src/xpd-resources/ng/xpd.operationmanager/operationmanager.directive.js',
 		'./src/xpd-resources/ng/xpd.time-operation-manager/time-operation-manager.directive.js',
 		'./src/xpd-resources/ng/xpd.scoredevent/scoredevent.directive.js',

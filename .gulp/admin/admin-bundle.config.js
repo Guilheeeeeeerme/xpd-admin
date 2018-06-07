@@ -10,15 +10,13 @@ exports.scripts = {
 		'./node_modules/angular-spinner/dist/angular-spinner.min.js',
 		'./node_modules/angular-ui-bootstrap/dist/ui-bootstrap.js',
 		'./node_modules/angular-ui-bootstrap/dist/ui-bootstrap-tpls.js',
-		'./node_modules/angular-aside/dist/js/angular-aside.min.js',
-		'./node_modules/ngstorage/ngStorage.min.js'
+		'./node_modules/angular-aside/dist/js/angular-aside.min.js'
 	],
 	base: [
 		'./node_modules/angular-toastr/dist/angular-toastr.tpls.js',
 		'./src/xpd-resources/ng/xpd.intersection/xpd-intersection.js',
 		'./src/xpd-resources/ng/socket.io/socketio.module.js',
 		'./src/xpd-resources/ng/xpd.spinner/xpd.spinner.js',
-		'./src/xpd-resources/ng/socket.io/socketio.module.js',
 		'./src/xpd-resources/ng/socket.io/socket.factory.js',
 		'./src/xpd-resources/ng/xpd.dialog/xpd.dialog.module.js',
 		'./src/xpd-resources/ng/xpd.dialog/xpd.dialog.factory.js',

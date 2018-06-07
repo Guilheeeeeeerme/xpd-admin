@@ -26,11 +26,11 @@
 
 		function link(scope, element, attrs) {
 
-			if (!localStorage.dmecTracks) {
-				localStorage.dmecTracks = JSON.stringify(getDefaultTracks());
+			if (!localStorage.getItem('xpd.admin.dmec.dmecTracks')) {
+				localStorage.setItem('xpd.admin.dmec.dmecTracks', JSON.stringify(getDefaultTracks()));
 			}
 
-			var tracks = JSON.parse(localStorage.dmecTracks);
+			var tracks = JSON.parse(localStorage.getItem('xpd.admin.dmec.dmecTracks'));
 			var threads = (!isNaN(Number(attrs.threads))) ? Number(attrs.threads) : 4;
 			var isHorizontal = scope.horizontal = (attrs.horizontal == true || attrs.horizontal == 'true');
 
@@ -74,15 +74,29 @@
 							readings: readings
 						});
 
-						worker.addEventListener('message', function (event) {
-							if (event.data.cmd == 'reading-to-points') {
-								resolve(event.data.points);
-							}
+						waitTheWorker('reading-to-points', function (message) {
+							resolve(message.data.points);
 						}, false);
 
 					}
 
 				});
+
+			}
+
+			function waitTheWorker(subject, callback) {
+
+				worker[subject] = callback;
+
+				if (!worker.isListening) {
+
+					worker.isListening = true;
+
+					worker.addEventListener('message', function (message) {
+						worker[message.data.cmd](message);
+					}, false);
+
+				}
 
 			}
 
@@ -297,10 +311,8 @@
 					});
 
 					var promise = $q(function (resolve, reject) {
-						worker.addEventListener('message', function (event) {
-							if (event.data.cmd == 'handle-overflow') {
-								resolve(event.data);
-							}
+						waitTheWorker('handle-overflow', function (event) {
+							resolve(event.data);
 						}, false);
 					});
 
@@ -322,130 +334,208 @@
 
 				function listenToMouseMove() {
 
+					//	'click'{
+					//	'mousemove'
+
 					d3.select(element[0]).selectAll('.overlay')
-						.on('mousemove', mousemove);
+						.on('click', function () {
+							moveCrosshair(d3.mouse(this)[0], d3.mouse(this)[1]);
+						});
 
-					function mousemove() {
+				}
 
-						var position = null;
-						var timestamp = null;
+				function moveCrosshair(mouseXPosition, mouseYPosition) {
 
-						if (!isHorizontal) {
-							position = d3.mouse(this)[1];
-							timestamp = scope.zoomScale.invert(d3.mouse(this)[1]);
-						} else {
-							position = d3.mouse(this)[0];
-							timestamp = scope.zoomScale.invert(d3.mouse(this)[0]);
-						}
+					var timeAxisPosition = null;
+					var timestamp = null;
+					var avgPoint;
+					var avgSize;
 
-						d3.select(element[0]).selectAll('#crosshair')
-							.attr(((!isHorizontal) ? 'y1' : 'x1'), position)
-							.attr(((!isHorizontal) ? 'y2' : 'x2'), position);
-
-						var avgPoint;
-						var avgSize;						
-
-						if (isHorizontal) {
-							avgSize = scope.svg.viewWidth / 3;			
-	
-							if(position > scope.svg.viewWidth / 2)
-								avgPoint = (0 + position) / 2;
-							else
-								avgPoint = (scope.svg.viewWidth + position) / 2;
-
-						} else {
-							avgSize = scope.svg.viewHeight / 3;	
-
-							if(position > scope.svg.viewHeight / 2)
-								avgPoint = (0 + position) / 2;
-							else
-								avgPoint = (scope.svg.viewHeight + position) / 2;
-						}
-
-						d3.select(element[0]).selectAll('#crosshair1')
-							.attr('stroke-width' , avgSize)
-							.attr(((!isHorizontal) ? 'y1' : 'x1'), avgPoint)
-							.attr(((!isHorizontal) ? 'y2' : 'x2'), avgPoint);
-
-						onMousemove(timestamp, position, avgPoint);
-
+					if (!isHorizontal) {
+						timeAxisPosition = mouseYPosition;
+						timestamp = scope.zoomScale.invert(mouseYPosition);
+					} else {
+						timeAxisPosition = mouseXPosition;
+						timestamp = scope.zoomScale.invert(mouseXPosition);
 					}
 
-					function onMousemove(timestamp, position, avgPoint) {
+					d3.select(element[0]).selectAll('#crosshair')
+						.attr(((!isHorizontal) ? 'y1' : 'x1'), timeAxisPosition)
+						.attr(((!isHorizontal) ? 'y2' : 'x2'), timeAxisPosition);
+
+					if (isHorizontal) {
+						avgSize = scope.svg.viewWidth / 3;
+
+						if (timeAxisPosition > scope.svg.viewWidth / 2)
+							avgPoint = (0 + timeAxisPosition) / 2;
+						else
+							avgPoint = (scope.svg.viewWidth + timeAxisPosition) / 2;
+
+					} else {
+						avgSize = scope.svg.viewHeight / 3;
+
+						if (timeAxisPosition > scope.svg.viewHeight / 2)
+							avgPoint = (0 + timeAxisPosition) / 2;
+						else
+							avgPoint = (scope.svg.viewHeight + timeAxisPosition) / 2;
+					}
+
+					d3.select(element[0]).selectAll('#crosshair1')
+						.attr('stroke-width', avgSize)
+						.attr(((!isHorizontal) ? 'y1' : 'x1'), avgPoint)
+						.attr(((!isHorizontal) ? 'y2' : 'x2'), avgPoint);
+
+					findPoint(timestamp, timeAxisPosition, avgPoint);
+
+				}
+
+				function findPoint(timestamp, position, avgPoint) {
+
+					function findPointAVL(t) {
 
 						worker.postMessage({
-							cmd: 'find-point',
+							cmd: 'find-point-avl',
 							timestamp: timestamp,
-							tracks: tracks.map(function (t) { return { param: t.param }; }),
+							param: t.param,
 							oldPoints: initialPoints,
 							newPoints: scope.newPoints
 						});
 
-						var promise = $q(function (resolve, reject) {
-							worker.addEventListener('message', function (event) {
-								if (event.data.cmd == 'find-point') {
-									var reading = event.data.points;
-									resolve(event.data.points);
+						waitTheWorker('find-point-avl', function (message) {
+
+							var point = message.data.point.point;
+							var param = message.data.param;
+							var track;
+
+							for (var i in tracks) {
+								if (tracks[i].param == param) {
+									track = tracks[i];
+									break;
 								}
-							}, false);
-						});
+							}
 
-						promise.then(function (reading) {
+							var bubble = d3.select(element[0]).selectAll('#bubble-' + param);
+							var tooltip = d3.select(element[0]).selectAll('#text-' + param);
+							var tooltiplabel = d3.select(element[0]).selectAll('#text-label-' + param);
 
-							// console.log('------------------------------------');
-							// console.log('------------------------------------');
-							// console.log('------------------------------------');
+							bubble.attr('style', 'display: none');
+							tooltip.attr('style', 'display: none');
 
-							tracks.map(function (track) {
+							if (point && point.y != null) {
 
-								var bubble = d3.select(element[0]).selectAll('#bubble-' + track.param);
-								var tooltip = d3.select(element[0]).selectAll('#text-' + track.param);
-								var tooltiplabel = d3.select(element[0]).selectAll('#text-label-' + track.param);
+								var distance = Math.abs(track.max - track.min);
 
-								bubble.attr('style', 'display: none');
-								tooltip.attr('style', 'display: none');
+								while (point.y < track.min) {
+									point.y += distance;
+								}
 
-								var point = reading[track.param];
+								while (point.y > track.max) {
+									point.y -= distance;
+								}
 
-								if (point && point.y != null) {
+								bubble.attr('style', null);
+								tooltip.attr('style', null);
 
-									var distance = Math.abs(track.max - track.min);
-
-									while (point.y < track.min) {
-										point.y += distance;
-									}
-
-									while (point.y > track.max) {
-										point.y -= distance;
-									}
-
-									bubble.attr('style', null);
-									tooltip.attr('style', null);
-
-									if (!isHorizontal) {
-										bubble.attr('transform', 'translate(' + track.trackScale(point.y) + ', ' + position + ')');
-										// tooltip.attr('x', track.trackScale(point.y) );
-										tooltip.attr('y', avgPoint );
-										tooltiplabel.attr('y', avgPoint );
-									} else {
-										bubble.attr('transform', 'translate(' + position + ', ' + track.trackScale(point.y) + ')');
-										tooltip.attr('x', avgPoint );
-										tooltiplabel.attr('x', avgPoint );
-										// tooltip.attr('y', track.trackScale(point.y) );
-									}
-
-									if (point.actual != null) {
-										tooltip.text(format(point.actual) + ' (' + track.unitMeasure + ')');
-									}
-
+								if (!isHorizontal) {
+									bubble.attr('transform', 'translate(' + track.trackScale(point.y) + ', ' + position + ')');
+									// tooltip.attr('x', track.trackScale(point.y) );
+									tooltip.attr('y', avgPoint);
+									tooltiplabel.attr('y', avgPoint);
 								} else {
-									bubble.attr('style', 'display: none');
+									bubble.attr('transform', 'translate(' + position + ', ' + track.trackScale(point.y) + ')');
+									tooltip.attr('x', avgPoint);
+									tooltiplabel.attr('x', avgPoint);
+									// tooltip.attr('y', track.trackScale(point.y) );
 								}
 
-							});
-						});
+								if (point.actual != null) {
+									tooltip.text(format(point.actual) + ' (' + track.unitMeasure + ')');
+								}
+
+							} else {
+								bubble.attr('style', 'display: none');
+							}
+
+						}, false);
 
 					}
+
+					tracks.map(findPointAVL);
+
+				}
+
+				function findPointOld(timestamp, position, avgPoint) {
+
+					worker.postMessage({
+						cmd: 'find-point',
+						timestamp: timestamp,
+						tracks: tracks.map(function (t) { return { param: t.param }; }),
+						oldPoints: initialPoints,
+						newPoints: scope.newPoints
+					});
+
+					var promise = $q(function (resolve, reject) {
+						waitTheWorker('find-point', function (message) {
+							if (message.data.cmd == 'find-point') {
+								var reading = message.data.points;
+								resolve(message.data.points);
+							}
+						}, false);
+					});
+
+					promise.then(function (reading) {
+
+						tracks.map(function (track) {
+
+							var bubble = d3.select(element[0]).selectAll('#bubble-' + track.param);
+							var tooltip = d3.select(element[0]).selectAll('#text-' + track.param);
+							var tooltiplabel = d3.select(element[0]).selectAll('#text-label-' + track.param);
+
+							bubble.attr('style', 'display: none');
+							tooltip.attr('style', 'display: none');
+
+							var point = reading[track.param];
+
+							if (point && point.y != null) {
+
+								var distance = Math.abs(track.max - track.min);
+
+								while (point.y < track.min) {
+									point.y += distance;
+								}
+
+								while (point.y > track.max) {
+									point.y -= distance;
+								}
+
+								bubble.attr('style', null);
+								tooltip.attr('style', null);
+
+								if (!isHorizontal) {
+									bubble.attr('transform', 'translate(' + track.trackScale(point.y) + ', ' + position + ')');
+									// tooltip.attr('x', track.trackScale(point.y) );
+									tooltip.attr('y', avgPoint);
+									tooltiplabel.attr('y', avgPoint);
+								} else {
+									bubble.attr('transform', 'translate(' + position + ', ' + track.trackScale(point.y) + ')');
+									tooltip.attr('x', avgPoint);
+									tooltiplabel.attr('x', avgPoint);
+									// tooltip.attr('y', track.trackScale(point.y) );
+								}
+
+								if (point.actual != null) {
+									tooltip.text(format(point.actual) + ' (' + track.unitMeasure + ')');
+								}
+
+							} else {
+								bubble.attr('style', 'display: none');
+							}
+
+						});
+
+					});
+
+					return promise;
 
 				}
 
@@ -568,7 +658,7 @@
 				}
 			}
 
-			localStorage.dmecTracks = JSON.stringify(tracks);
+			localStorage.setItem('xpd.admin.dmec.dmecTracks', JSON.stringify(tracks));
 
 			if (trackChanged) {
 				onTracksChange();

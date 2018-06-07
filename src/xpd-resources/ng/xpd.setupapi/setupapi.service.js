@@ -16,18 +16,31 @@
 			});
 		});
 
-	setupAPIService.$inject = ['$http', 'xpdAccessFactory', 'toastr'];
+	setupAPIService.$inject = ['$http', 'xpdAccessFactory', 'toastr', 'usSpinnerService'];
 
-	function setupAPIService($http, xpdAccessFactory, toastr) {
+	function setupAPIService($http, xpdAccessFactory, toastr, usSpinnerService) {
 
 		var vm = this;
+
+		var runningRequests = 0;
+		var hasRunningRequests = false;
 
 		vm.generateToast = generateToast;
 		vm.doRequest = doRequest;
 
+
 		function doRequest(req, successCallback, errorCallback) {
 
-			$http(req).then(
+			var request = $http(req);
+
+			++runningRequests;
+
+			if (runningRequests > 0 && !hasRunningRequests) {
+				hasRunningRequests = true;
+				usSpinnerService.spin('xpd-spinner');
+			}
+
+			request.then(
 				function (response) {
 					// console.log( angular.copy( { req: req, response: response} ) );
 
@@ -44,7 +57,17 @@
 					generateToast(error);
 					errorCallback && errorCallback(error);
 				}
-			);
+			).finally(finallySpinner);
+
+		}
+
+		function finallySpinner() {
+			--runningRequests;
+
+			if (runningRequests == 0) {
+				hasRunningRequests = false;
+				usSpinnerService.stop('xpd-spinner');
+			}
 		}
 
 		function generateToast(error) {
@@ -52,7 +75,7 @@
 			console.error(error);
 
 			var httpStatus = getHttpStatus(error.status);
-			var url = (error.config.method == 'GET')?'\n'+ error.config.url: null;
+			var url = (error.config.method == 'GET') ? '\n' + error.config.url : null;
 
 			if (error.data) {
 
@@ -78,7 +101,7 @@
 
 			toastr.error(httpStatus);
 
-			if( url && error.status == -1 ){
+			if (url && error.status == -1) {
 				window.open(url, httpStatus);
 			}
 

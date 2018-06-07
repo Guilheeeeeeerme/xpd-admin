@@ -1,7 +1,7 @@
 (function () {
 	'use strict';
 
-	var app = angular.module('xpd.accessfactory', ['ngStorage']);
+	var app = angular.module('xpd.accessfactory', []);
 
 
 })();

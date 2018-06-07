@@ -69,7 +69,7 @@
 		}
 
 		function actionButtonSubmitDmecRange() {			
-			localStorage.setItem('dmecInputRangeForm', JSON.stringify($scope.inputRangeForm));
+			localStorage.setItem('xpd.admin.dmec.dmecInputRangeForm', JSON.stringify($scope.inputRangeForm));
 			location.reload();
 		}
 
@@ -171,7 +171,7 @@
 			var inputRangeForm;
 
 			try {
-				inputRangeForm = JSON.parse(localStorage.getItem('dmecInputRangeForm'));
+				inputRangeForm = JSON.parse(localStorage.getItem('xpd.admin.dmec.dmecInputRangeForm'));
 			} catch (e) {
 				inputRangeForm = null;
 			}

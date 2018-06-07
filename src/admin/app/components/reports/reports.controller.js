@@ -10,9 +10,9 @@
 	angular.module('xpd.reports')
 		.controller('ReportsController', reportsController);
 
-	reportsController.$inject = ['$scope', '$localStorage', 'operationSetupAPIService', 'wellSetupAPIService', 'failureSetupAPIService'];
+	reportsController.$inject = ['$scope', 'operationSetupAPIService', 'wellSetupAPIService', 'failureSetupAPIService'];
 
-	function reportsController($scope, $localStorage, operationSetupAPIService, wellSetupAPIService, failureSetupAPIService) {
+	function reportsController($scope, operationSetupAPIService, wellSetupAPIService, failureSetupAPIService) {
 
 		// --declarations--
 		var vm = this;
@@ -30,11 +30,11 @@
 		vm.getFailuresOnInterval = getFailuresOnInterval;
 		
 		// --actions--
-		if(!$localStorage['reportsData.toDate'] || !$localStorage['reportsData.fromDate']){
+		if(!localStorage.getItem('xpd.admin.reports.reportsData.toDate')  || !localStorage.getItem('xpd.admin.reports.reportsData.fromDate') ){
 			setCurrentDate();
 		}else{
-			$scope.reportsData.toDate = new Date($localStorage['reportsData.toDate']);
-			$scope.reportsData.fromDate = new Date($localStorage['reportsData.fromDate']);
+			$scope.reportsData.toDate = new Date(localStorage.getItem('xpd.admin.reports.reportsData.toDate') );
+			$scope.reportsData.fromDate = new Date(localStorage.getItem('xpd.admin.reports.reportsData.fromDate') );
 		}
 		
 		getWellList();
@@ -61,8 +61,8 @@
 				$scope.reportsData.toDate.setHours(23, 59, 59, 999);
 			}
 
-			$localStorage['reportsData.toDate'] = $scope.reportsData.toDate.toISOString();
-			$localStorage['reportsData.fromDate'] = $scope.reportsData.fromDate.toISOString();
+			localStorage.setItem('xpd.admin.reports.reportsData.toDate', $scope.reportsData.toDate.toISOString());
+			localStorage.setItem('xpd.admin.reports.reportsData.fromDate', $scope.reportsData.fromDate.toISOString());
 
 		}
 

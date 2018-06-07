@@ -11,8 +11,7 @@
 		'xpd.filters',
 		'xpd.setupapi',
 		'xpd.visualization',
-		'ngAside',
-		'xpd-spinner'
+		'ngAside'
 	]);
 
 })();
