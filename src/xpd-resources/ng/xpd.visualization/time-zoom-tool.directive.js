@@ -180,7 +180,6 @@
 					getZoomAreaElement().on('mousemove', null).on('mouseup', null);
 					selectedElement = null;
 
-					moveZoomElement();
 				}
 
 				function dblclick() {
