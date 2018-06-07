@@ -120,7 +120,7 @@
 					function getBarHeight(event) {
 
 						var yScale = d3.scale.linear()
-							.domain([(event.vtarget * 2), event.vpoor / 2])
+							.domain([event.vtarget * 2, event.vpoor / 2])
 							.range([scope.svgViewHeight / 5, scope.svgViewHeight])
 							.clamp(true);
 
