@@ -1,22 +1,23 @@
 (function () {
 	'use strict',
 
-	angular.module('xpd.setupapi')
-		.service('setupAPIService', setupAPIService)
-		.config(function (toastrConfig) {
-			angular.extend(toastrConfig, {
-				autoDismiss: true,
-				extendedTimeOut: 3000,
-				maxOpened: 4,
-				newestOnTop: true,
-				preventOpenDuplicates: true,
-				tapToDismiss: true,
-				timeOut: 2000,
-				positionClass: 'toast-bottom-center',
+		angular.module('xpd.setupapi')
+			.service('setupAPIService', setupAPIService)
+			.config(function (toastrConfig) {
+				angular.extend(toastrConfig, {
+					autoDismiss: true,
+					extendedTimeOut: 3000,
+					maxOpened: 4,
+					newestOnTop: true,
+					preventOpenDuplicates: true,
+					tapToDismiss: true,
+					timeOut: 2000,
+					positionClass: 'toast-bottom-center',
+				});
 			});
-		});
 
 	setupAPIService.$inject = ['$http', 'xpdAccessFactory', 'toastr', 'usSpinnerService'];
+
 
 	function setupAPIService($http, xpdAccessFactory, toastr, usSpinnerService) {
 
@@ -28,16 +29,42 @@
 		vm.generateToast = generateToast;
 		vm.doRequest = doRequest;
 
+		function hasSpinner(url) {
+
+			var urlsWithoutSpinner = [
+				// '/xpd-setup-api/setup/reports/',
+				// '/xpd-setup-api/setup/reading/from/',
+				'/xpd-setup-api/setup/reading/tick/',
+				'/xpd-setup-api/setup/event/list-by-type/',
+				// '/xpd-setup-api/tripin/rig-pictures/load/'
+			];
+
+			var result = true;
+
+			for (var i in urlsWithoutSpinner) {
+				if (url.indexOf(urlsWithoutSpinner[i]) >= 0) {
+					result = false;
+					break;
+				}
+			}
+
+			return result;
+		}
+
 
 		function doRequest(req, successCallback, errorCallback) {
 
 			var request = $http(req);
 
-			++runningRequests;
+			if (req && req.url && hasSpinner(req.url)) {
 
-			if (runningRequests > 0 && !hasRunningRequests) {
-				hasRunningRequests = true;
-				usSpinnerService.spin('xpd-spinner');
+				++runningRequests;
+
+				if (!hasRunningRequests) {
+					hasRunningRequests = true;
+					usSpinnerService.spin('xpd-spinner');
+				}
+
 			}
 
 			request.then(

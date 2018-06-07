@@ -10,8 +10,7 @@
 		'xpd.dialog',
 		'xpd.filters',
 		'xpd.setupapi',
-		'xpd.visualization',
-		'ngAside'
+		'xpd.visualization'
 	]);
 
 })();

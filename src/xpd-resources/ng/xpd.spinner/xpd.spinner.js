@@ -6,9 +6,9 @@
 
 	app.config(spinnerConfig);
 
-	spinnerConfig.$inject = ['$httpProvider', 'usSpinnerConfigProvider'];
+	spinnerConfig.$inject = ['usSpinnerConfigProvider'];
 
-	function spinnerConfig($httpProvider, usSpinnerConfigProvider) {
+	function spinnerConfig(usSpinnerConfigProvider) {
 
 		if (!document.getElementById('xpd-spinner')) {
 			document.body.innerHTML += '<span us-spinner spinner-key="xpd-spinner"></span>';

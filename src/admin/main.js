@@ -20,6 +20,7 @@ var clientCrt = path.join(__dirname, 'keys', 'XPD-Client.crt');
 
 app.commandLine.appendSwitch('client-certificate', clientCrt);
 app.commandLine.appendSwitch('ignore-certificate-errors');
+app.commandLine.appendSwitch('js-flags', '--max_old_space_size=2048');
 
 app.on('certificate-error', function(event, webContents, url, error, certificate, callback) {
 	console.log(url);
