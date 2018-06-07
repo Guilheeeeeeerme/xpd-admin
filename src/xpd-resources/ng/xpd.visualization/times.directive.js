@@ -59,6 +59,11 @@
 							.range([20, 40, 60]);
 
 						var size = scale(event.actualSpeed);
+
+						if(event.eventType === 'TRIP') {
+							size = scale(event.actualSpeed * 10);
+						}
+
 						return (size <= 10) ? 10 : size;
 
 					}
