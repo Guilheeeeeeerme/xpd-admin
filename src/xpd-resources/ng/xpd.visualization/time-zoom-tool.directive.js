@@ -12,10 +12,7 @@
 			restrict: 'E',
 			templateUrl: '../xpd-resources/ng/xpd.visualization/time-zoom-tool.template.html',
 			scope: {
-				isZoomingCallback: '=',
 				bitDepthPoints: '=',
-				startAt: '=',
-				endAt: '=',
 				zoomStartAt: '=',
 				zoomEndAt: '=',
 				setZoomStartAt: '=',
@@ -34,17 +31,16 @@
 
 			function d3Done(d3) {
 
-				var selectedElement;
-				var selectedElementId;
-				var clickedPosition;
-				var clickedPositionStartx;
-				var clickedPositionEndx;
+				var clickedElement;
+				var clickedElementId;
+				var firstClickPosition;
+				var startNavigatorInitialPosition;
+				var endNavigatorInitialPosition;
 
-				scope.$watch('startAt', onDateRangeChange);
-				scope.$watch('endAt', onDateRangeChange);
+				scope.getBitDepth = getBitDepth;
 
-				scope.$watch('zoomStartAt', moveZoomElement);
-				scope.$watch('zoomEndAt', moveZoomElement);
+				scope.$watch('zoomStartAt', onZoomStartAt);
+				scope.$watch('zoomEndAt', onZoomEndAt);
 
 				getZoomAreaElement().on('mousedown', mouseDown);
 				getZoomAreaElement().on('mouseup', mouseUp);
@@ -57,21 +53,56 @@
 
 				getOverlayElement().on('dblclick', dblclick);
 
-				scope.$watch('bitDepthPoints', buildTimeAxis, true);
-				
+				scope.$watch('bitDepthPoints', drawBitDepthPoints, true);
+
 				buildTimeAxis();
 
-				// var resizeInterval = $interval(buildTimeAxis, 1000);
+				function mouseDown() {
+					//console.log('mouseDown');
 
-				// scope.$on('$destroy', function() {
-				// 	if (resizeInterval) {
-				// 		$interval.cancel(resizeInterval);
-				// 	}
-				// });
+					firstClickPosition = d3.mouse(this)[0];
+
+					clickedElement = d3.select(this);
+					clickedElementId = d3.select(this).attr('id');
+
+					var startt = d3.transform(getStartZoomElementTransform());
+					startNavigatorInitialPosition = startt.translate[0];
+
+					var endt = d3.transform(getEndZoomElementTransform());
+					endNavigatorInitialPosition = endt.translate[0];
+
+					clickedElement.classed('active', true);
+
+					getOverlayElement().on('mousemove', mouseMove).on('mouseup', mouseUp);
+					getZoomAreaElement().on('mousemove', mouseMove).on('mouseup', mouseUp);
+				}
+
+				function onZoomStartAt(zoom) {
+					// console.log('onZoomStartAt');
+
+					if (!zoom || clickedElement) {
+						return;
+					}
+
+					moveZoomElement();
+
+				}
+
+				function onZoomEndAt(zoom) {
+					// console.log('onZoomEndAt');
+
+					if (!zoom || clickedElement) {
+						return;
+					}
+
+					moveZoomElement();
+
+				}
 
 				function moveZoomElement() {
+					//console.log('moveZoomElement');
 
-					if (selectedElement) {
+					if (clickedElement) {
 						return;
 					}
 
@@ -97,46 +128,21 @@
 
 				}
 
-				function mouseDown() {
-
-					try {
-						scope.isZoomingCallback(true);
-					} catch (e) {
-						// faça nada
-					}
-
-					clickedPosition = d3.mouse(this)[0];
-					selectedElement = d3.select(this);
-					selectedElementId = d3.select(this).attr('id');
-
-					var startt = d3.transform(getStartZoomElementTransform());
-					clickedPositionStartx = startt.translate[0];
-
-					var endt = d3.transform(getEndZoomElementTransform());
-					clickedPositionEndx = endt.translate[0];
-
-					selectedElement.classed('active', true);
-
-					getOverlayElement()
-						.on('mousemove', mouseMove)
-						.on('mouseup', mouseUp);
-					getZoomAreaElement()
-						.on('mousemove', mouseMove)
-						.on('mouseup', mouseUp);
-				}
-
 				function mouseMove() {
+					//console.log('mouseMove');
 
-					if (selectedElementId == 'start-navigator') {
-						scope.startPipePosition = d3.mouse(this)[0];
-						setStartZoomElementTransformTranslate(d3.mouse(this)[0], 0);
-					} else if (selectedElementId == 'end-navigator') {
-						scope.endPipePosition = d3.mouse(this)[0];
-						setEndZoomElementTransformTranslate(d3.mouse(this)[0], 0);
+					var mousePosition = d3.mouse(this)[0];
+
+					if (clickedElementId == 'start-navigator') {
+						scope.startPipePosition = mousePosition;
+						setStartZoomElementTransformTranslate(mousePosition, 0);
+					} else if (clickedElementId == 'end-navigator') {
+						scope.endPipePosition = mousePosition;
+						setEndZoomElementTransformTranslate(mousePosition, 0);
 					} else {
-						var diff = d3.mouse(this)[0] - clickedPosition;
-						setStartZoomElementTransformTranslate((clickedPositionStartx + diff), 0);
-						setEndZoomElementTransformTranslate((clickedPositionEndx + diff), 0);
+						var zoomAreaDisplacement = mousePosition - firstClickPosition;
+						setStartZoomElementTransformTranslate((startNavigatorInitialPosition + zoomAreaDisplacement), 0);
+						setEndZoomElementTransformTranslate((endNavigatorInitialPosition + zoomAreaDisplacement), 0);
 					}
 
 					moveZoomArea();
@@ -144,6 +150,7 @@
 				}
 
 				function moveZoomArea() {
+					//console.log('moveZoomArea');
 
 					var zoomArea = getZoomAreaElement();
 
@@ -159,112 +166,108 @@
 				}
 
 				function mouseUp() {
-
-					try {
-						$timeout(scope.isZoomingCallback, 1000, false);
-					} catch (e) {
-						// faça nada
-					}
+					//console.log('mouseUp');
 
 					var startt = d3.transform(getStartZoomElementTransform()),
-						startx = scope.timeScale.invert(startt.translate[0]);
+						startNavigatorFinalPosition = scope.timeScale.invert(startt.translate[0]);
 
 					var endt = d3.transform(getEndZoomElementTransform()),
-						endx = scope.timeScale.invert(endt.translate[0]);
+						endNavigatorFinalPostion = scope.timeScale.invert(endt.translate[0]);
 
-					scope.setZoomStartAt(new Date(Math.min(endx, startx)));
-					scope.setZoomEndAt(new Date(Math.max(endx, startx)));
+					scope.setZoomStartAt(new Date(Math.min(endNavigatorFinalPostion, startNavigatorFinalPosition)));
+					scope.setZoomEndAt(new Date(Math.max(endNavigatorFinalPostion, startNavigatorFinalPosition)));
 
-					selectedElement.classed('active', false);
+					clickedElement.classed('active', false);
+
 					getOverlayElement().on('mousemove', null).on('mouseup', null);
 					getZoomAreaElement().on('mousemove', null).on('mouseup', null);
-					selectedElement = null;
+
+					clickedElement = null;
 
 				}
 
 				function dblclick() {
+					//console.log('dblclick');
 
-					var currentPosition = d3.mouse(this)[0];
-					scope.mindate = scope.timeScale.invert(d3.mouse(this)[0] - 40);
-					scope.maxdate = scope.timeScale.invert(d3.mouse(this)[0] + 40);
+					var mouseXPosition = d3.mouse(this)[0];
+
+					scope.mindate = scope.timeScale.invert(mouseXPosition - 40);
+					scope.maxdate = scope.timeScale.invert(mouseXPosition + 40);
 
 					scope.setZoomStartAt(scope.mindate);
 					scope.setZoomEndAt(scope.maxdate);
 				}
 
-				function onDateRangeChange(newDate, oldDate) {
-					moveZoomElement();
-				}
-
 				function getOverlayElement() {
+					//console.log('getOverlayElement');
 					return d3.select(scope.element).selectAll('.overlay');
 				}
 
 				function setStartZoomElementTransformTranslate(x, y) {
+					//console.log('setStartZoomElementTransformTranslate');
 					getStartZoomElement().attr('transform', 'translate(' + x + ', ' + y + ')');
 					getStartZoomTextElement().attr('transform', 'translate(' + x + ', ' + y + ')');
 					getStartZoomTextElement().text($filter('date')(scope.timeScale.invert(x), 'short'));
 				}
 
 				function setEndZoomElementTransformTranslate(x, y) {
+					//console.log('setEndZoomElementTransformTranslate');
 					getEndZoomElement().attr('transform', 'translate(' + x + ', ' + y + ')');
 					getEndZoomTextElement().attr('transform', 'translate(' + x + ', ' + y + ')');
 					getEndZoomTextElement().text($filter('date')(scope.timeScale.invert(x), 'short'));
 				}
 
 				function getEndZoomElementTransform() {
+					//console.log('getEndZoomElementTransform');
 					return getEndZoomElement().attr('transform');
 				}
 
 				function getStartZoomElementTransform() {
+					//console.log('getStartZoomElementTransform');
 					return getStartZoomElement().attr('transform');
 				}
 
 				function getStartZoomTextElement() {
+					//console.log('getStartZoomTextElement');
 					return d3.select(scope.element).selectAll('#start-navigator-text');
 				}
 
 				function getEndZoomTextElement() {
+					//console.log('getEndZoomTextElement');
 					return d3.select(scope.element).selectAll('#end-navigator-text');
 				}
 
 				function getStartZoomElement() {
+					//console.log('getStartZoomElement');
 					return d3.select(scope.element).selectAll('#start-navigator');
 				}
 
 				function getEndZoomElement() {
+					//console.log('getEndZoomElement');
 					return d3.select(scope.element).selectAll('#end-navigator');
 				}
 
 				function getZoomAreaElement() {
+					//console.log('getZoomAreaElement');
 					return d3.select(scope.element).selectAll('#zoom-area');
 				}
 
-
 				function buildTimeAxis() {
+					//console.log('buildTimeAxis');
 
-					if (selectedElement) {
+					if (clickedElement) {
 						return;
 					}
 
 					try {
 
-						var startAt = new Date(scope.startAt);
-						var endAt = new Date(scope.endAt);
-
 						var zoomStartAt = new Date(scope.zoomStartAt);
 						var zoomEndAt = new Date(scope.zoomEndAt);
 
-						var startDiff = Math.abs( zoomStartAt.getTime() - startAt.getTime() ) / 2;
-						var endDiff = Math.abs( zoomEndAt.getTime() - endAt.getTime() ) / 2;
+						var diff = Math.abs(zoomEndAt.getTime() - zoomStartAt.getTime()) / 2;
 
-						// if ( startAt.getTime() < ( zoomStartAt.getTime() - startDiff ) ){
-						startAt = new Date( zoomStartAt.getTime() - startDiff );
-						// }
-						
-						// if ( endAt.getTime() > ( zoomEndAt.getTime() + endDiff ) ){
-						endAt = new Date( zoomEndAt.getTime() + endDiff );
-						// }
+						var startAt = new Date(zoomStartAt.getTime() - diff);
+						var endAt = new Date(zoomEndAt.getTime() + diff);
 
 						var viewWidth = scope.element.clientWidth;
 						var viewHeight = scope.element.offsetHeight;
@@ -276,7 +279,7 @@
 							])
 							.range([
 								0,
-								viewWidth * 0.95
+								viewWidth
 							]);
 
 						scope.svg = {
@@ -284,33 +287,49 @@
 							viewHeight: viewHeight
 						};
 
-						scope.xTicks = scope.timeScale.ticks(6);
+						scope.xTicks = scope.timeScale.ticks();
+
+						drawBitDepthPoints();
+
+					} catch (e) {
+						console.error(e);
+					}
+				}
+
+				function getBitDepth(tick) {
+					tick = new Date(tick).getTime();
+					return (scope.bitDepthIndex && scope.bitDepthIndex[tick]) ? scope.bitDepthIndex[tick] : null;
+				}
+
+				function drawBitDepthPoints() {
+					//console.log('drawBitDepthPoints');
+
+					try {
 
 						var bitDepthPoints = angular.copy(scope.bitDepthPoints) || [];
 
-						if(bitDepthPoints.length > 0) {
+						if (bitDepthPoints.length > 0) {
+
 							bitDepthPoints.unshift({
-								x:bitDepthPoints[0].x,
+								x: bitDepthPoints[0].x,
 								y: scope.maxDepth
 							});
 
 							bitDepthPoints.push({
-								x: bitDepthPoints[bitDepthPoints.length-1].x,
+								x: bitDepthPoints[bitDepthPoints.length - 1].x,
 								y: scope.maxDepth
 							});
+
 						}
 
 						var depthScale = d3.scale.linear()
 							.domain([scope.minDepth, scope.maxDepth])
 							.range([
 								0,
-								viewHeight
+								scope.svg.viewHeight
 							]);
 
 						var lineFunction = d3.svg.line()
-							// .defined(function (d) {				
-							// 	return (angular.isNumber(d.y) && angular.isNumber(d.x));
-							// })
 							.x(function (d) {
 								return scope.timeScale(d.x);
 							})
@@ -327,11 +346,38 @@
 							.selectAll('#bit-depth-path')
 							.attr('d', d);
 
+						var index = 0;
+
+						scope.xTicks.map(function (tick) {
+
+							tick = new Date(tick).getTime();
+
+							if (!scope.bitDepthIndex) {
+								scope.bitDepthIndex = {};
+							}
+
+							if (!scope.bitDepthIndex[tick]) {
+
+								for (; index < bitDepthPoints.length; index++) {
+
+									var point = bitDepthPoints[index];
+
+									if (tick < point.x) {
+										break;
+									}
+
+									scope.bitDepthIndex[tick] = point.y;
+								}
+
+							}
+
+						});
 
 					} catch (e) {
 						console.error(e);
 					}
 				}
+
 			}
 
 		}

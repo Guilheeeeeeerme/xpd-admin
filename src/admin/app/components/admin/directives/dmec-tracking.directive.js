@@ -25,16 +25,12 @@
 		function link(scope, element, attrs) {
 
 			var ONE_HOUR = 3600000;
-			var ONE_DAY = 24 * ONE_HOUR;
-			var updateLatency = 1000;
+			var getTickFrequency = 1000;
 			var getTickInterval;
-
-			var resetPage = $timeout(reload, (ONE_HOUR / 2));
+			var resetPageTimeout = $timeout(reload, (ONE_HOUR / 2));
 
 			scope.$on('$destroy', destroy);
 
-			scope.zoomIsLocked = false;
-			scope.isZooming = isZooming;
 			scope.actionButtonUseOperationStartDate = actionButtonUseOperationStartDate;
 			scope.actionButtonSubmitDmecRange = actionButtonSubmitDmecRange;
 			scope.initializeComponent = initializeComponent;
@@ -47,8 +43,8 @@
 			}
 
 			function destroy() {
-				if (resetPage) {
-					$timeout.cancel(resetPage);
+				if (resetPageTimeout) {
+					$timeout.cancel(resetPageTimeout);
 				}
 				if (getTickInterval) {
 					$interval.cancel(getTickInterval);
@@ -65,32 +61,33 @@
 
 			function initializeComponent() {
 
-				var endAt = new Date().getTime();
+				var startAtMillis;
+				var endAtMillis = new Date().getTime();
 				var intervalToShow = 0;
 				var inputRangeForm = scope.inputRangeForm = getInputRangeForm();
 
 				if (inputRangeForm.realtime) {
 					intervalToShow = (+inputRangeForm.last * +inputRangeForm.toMilliseconds);
-					scope.dmecTrackingStartAt = getAllReadingSince(new Date(endAt - intervalToShow));
+					scope.dmecTrackingStartAt = getAllReadingSince(new Date(endAtMillis - intervalToShow));
 				} else {
 					scope.dmecTrackingStartAt = getAllReadingSince(new Date(inputRangeForm.startTime));
 				}
 
-				intervalToShow = endAt - new Date(scope.dmecTrackingStartAt).getTime();
-				scope.dmecTrackingEndAt = new Date(endAt);
-				scope.zoomEndAt = new Date(endAt);
-				scope.zoomStartAt = new Date(endAt - (intervalToShow / 2));
+				startAtMillis = new Date(scope.dmecTrackingStartAt).getTime();
+
+				intervalToShow = (endAtMillis - startAtMillis);
+				
+				setZoomStartAt(new Date(endAtMillis - (intervalToShow / 2)));
+				setZoomEndAt(new Date(endAtMillis));
 
 				if (angular.isDefined(getTickInterval)) {
 					$interval.cancel(getTickInterval);
 				}
 
-				getTickInterval = $interval(getTick, updateLatency);
+				getTickInterval = $interval(getTick, getTickFrequency);
 
-			}
+				scope.initializeComponent = function(){};
 
-			function isZooming(lockZoom) {
-				scope.zoomIsLocked = lockZoom;
 			}
 
 			function actionButtonUseOperationStartDate(startDate) {
@@ -108,33 +105,27 @@
 
 			function getTick() {
 
-				if (scope.inputRangeForm.realtime) {
+				var now = new Date().getTime();
 
-					var now = new Date().getTime();
-					scope.dmecTrackingEndAt = now;
-					setZoomEndAt(now);
+				scope.onReading = $q(function (resolve, reject) {
+					var currentReading = scope.currentReading;
+					if (currentReading.timestamp && currentReading.timestamp) {
+						currentReading.timestamp = new Date(currentReading.timestamp).getTime();
+						resolve(currentReading);
+					}
+				});
 
-					scope.onReading = $q(function (resolve, reject) {
-						var currentReading = scope.currentReading;
-						if (currentReading.timestamp && currentReading.timestamp) {
-							currentReading.timestamp = new Date(currentReading.timestamp).getTime();
-							resolve(currentReading);
-						}
-					});
+				scope.onReading.then(function (data) {
+					scope.maxDepth = Math.max(scope.maxDepth, data.bitDepth);
 
-					scope.onReading.then(function (data) {
-						scope.maxDepth = Math.max(scope.maxDepth, data.bitDepth);
+					if (scope.bitDepthPoints) {
+						scope.bitDepthPoints.push({
+							x: data.timestamp,
+							y: data.bitDepth
+						});
+					}
 
-						if (scope.bitDepthPoints) {
-							scope.bitDepthPoints.push({
-								x: data.timestamp,
-								y: data.bitDepth
-							});
-						}
-
-					});
-
-				}
+				});
 
 			}
 
@@ -166,7 +157,7 @@
 
 				while (loopEndTime.getTime() < loopLimit.getTime()) {
 
-					loopEndTime.setHours( loopStartTime.getHours() + 1 );
+					loopEndTime.setHours(loopStartTime.getHours() + 1);
 					var loopEndTimestamp = loopEndTime.getTime();
 
 					if (loopEndTime.getTime() > loopLimit.getTime()) {
@@ -191,10 +182,10 @@
 
 							promise(function (readings) {
 
-								for(var i in readings){
-									if(!parsedReadings[i]){
+								for (var i in readings) {
+									if (!parsedReadings[i]) {
 										parsedReadings[i] = readings[i];
-									}else{
+									} else {
 										parsedReadings[i] = parsedReadings[i].concat(readings[i]);
 									}
 								}

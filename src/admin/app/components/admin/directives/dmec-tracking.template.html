@@ -1,30 +1,20 @@
-<div class="dmec-tracking-container" ng-if="currentOperation && currentOperation.running"
- ng-init="initializeComponent()">
+<div class="dmec-tracking-container" ng-if="currentOperation && currentOperation.running" ng-init="initializeComponent()">
 
 	<uib-accordion>
+
 		<div uib-accordion-group class="panel-default" is-open="status.isCustomHeaderOpen">
 
 			<uib-accordion-heading>
-				Filter
+				Settings
 
 				<span class="well well-sm">
-					<strong>
-						Full range
-					</strong>
-					{{ dmecTrackingStartAt | date:'MM/dd/yyyy HH:mm' }} - {{ ( (dmecTrackingStartAt | date:'MM/dd/yyyy') != (dmecTrackingEndAt
-					| date:'MM/dd/yyyy') )? ( dmecTrackingEndAt | date:'MM/dd/yyyy HH:mm' ) : (dmecTrackingEndAt | date:'HH:mm') }}
+					<strong>DMEC is starting at</strong> {{ dmecTrackingStartAt | date:'medium' }}
 				</span>
 
-
-				<span class="well well-sm">
-					<strong>
-						Zooming at
-					</strong>
-					{{ zoomStartAt | date:'MM/dd/yyyy HH:mm' }} - {{ ( (zoomStartAt | date:'MM/dd/yyyy') != (zoomEndAt | date:'MM/dd/yyyy') )?
-					( zoomEndAt | date:'MM/dd/yyyy HH:mm' ) : (zoomEndAt | date:'HH:mm:ss') }}
-				</span>
-
-				<i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': status.isCustomHeaderOpen, 'glyphicon-chevron-right': !status.isCustomHeaderOpen}"></i>
+				<i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': status.isCustomHeaderOpen, 'glyphicon-chevron-right': !status.isCustomHeaderOpen}">
+					
+				</i>
+			
 			</uib-accordion-heading>
 
 			<form name="inputRange.form">
@@ -34,6 +24,8 @@
 						<input name="realtime" ng-model="inputRangeForm.realtime" type="checkbox"> Real Time
 					</label>
 				</div>
+
+				<p>You will be limited to the <strong>current operation start time</strong> in order to match the events bellow</p>
 
 				<div ng-if="!inputRangeForm.realtime">
 
@@ -50,12 +42,6 @@
 				</div>
 
 				<div ng-if="inputRangeForm.realtime">
-
-					<!-- <div class="checkbox">
-						<label>
-							<input name="realtime" ng-model="inputRangeForm.keepZoomAtTheEnd" type="checkbox"> Zoom at the end
-						</label>
-					</div> -->
 
 					<div class="form-group">
 						<label for="last">Last:</label>
@@ -87,19 +73,14 @@
 		</div>
 
 		<d3-dmec-chart 
-			ng-if="dmecTrackingStartAt && dmecTrackingEndAt && zoomStartAt && zoomEndAt"
-			threads="{{ 4 }}" 
+			ng-if="dmecTrackingStartAt && zoomStartAt && zoomEndAt"
+			threads="4" 
 			horizontal="true" 
-			start-at="dmecTrackingStartAt" 
-			end-at="dmecTrackingEndAt" 
+			on-reading-since="onReadingSince"
+			actual-start-at="dmecTrackingStartAt" 
 			on-reading="onReading"
 		 	zoom-start-at="zoomStartAt" 
-		 	zoom-end-at="zoomEndAt" 
-		 	on-reading-since="onReadingSince"
-		 	connection-events="connectionEvents" 
-		 	trip-events="tripEvents"
-		 	time-events="timeEvents" 
-		 	auto-scroll="chartAutoScroll">
+		 	zoom-end-at="zoomEndAt">
 		</d3-dmec-chart>
 
 	</div>
@@ -112,11 +93,7 @@
 
 		<time-zoom-tool 
 			ng-if="zoomStartAt && zoomEndAt" 
-			is-zooming-callback="isZooming" 
 			bit-depth-points="bitDepthPoints" 
-			horizontal="true" 
-			start-at="dmecTrackingStartAt" 
-			end-at="dmecTrackingEndAt"
 			zoom-start-at="zoomStartAt" 
 			zoom-end-at="zoomEndAt" 
 			set-zoom-start-at="setZoomStartAt" 

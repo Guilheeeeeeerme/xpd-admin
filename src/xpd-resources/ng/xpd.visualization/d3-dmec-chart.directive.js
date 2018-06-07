@@ -2,7 +2,6 @@
 	'use strict';
 
 	var module = angular.module('xpd.visualization');
-	var worker = new Worker('../assets/js/dmec-worker.js');
 
 	module.directive('d3DmecChart', d3DmecChart);
 
@@ -13,18 +12,18 @@
 			restrict: 'E',
 			templateUrl: '../xpd-resources/ng/xpd.visualization/d3-dmec-chart.template.html',
 			scope: {
-				startAt: '=',
-				endAt: '=',
+				actualStartAt: '=',
 				zoomStartAt: '=',
 				zoomEndAt: '=',
 				onReading: '=',
-				onReadingSince: '=',
-				autoScroll: '=',
+				onReadingSince: '='
 			},
 			link: link
 		};
 
 		function link(scope, element, attrs) {
+
+			var worker = new Worker('../assets/js/dmec-worker.js');
 
 			if (!localStorage.getItem('xpd.admin.dmec.dmecTracks')) {
 				localStorage.setItem('xpd.admin.dmec.dmecTracks', JSON.stringify(getDefaultTracks()));
@@ -32,6 +31,8 @@
 
 			var tracks = JSON.parse(localStorage.getItem('xpd.admin.dmec.dmecTracks'));
 			var threads = (!isNaN(Number(attrs.threads))) ? Number(attrs.threads) : 4;
+			threads = Math.min(Math.abs(threads), tracks.length);
+
 			var isHorizontal = scope.horizontal = (attrs.horizontal == true || attrs.horizontal == 'true');
 
 			/** 
@@ -48,40 +49,14 @@
 
 					onReadingSince.then(function (readings) {
 
-						// readingsToPoints(readings, tracks).then(function (points) {
-
 						d3Service.d3().then(function (d3) {
 
 							createChart(d3, readings);
 
 						});
 
-						// });
-
 					});
 				}
-			}
-
-			function readingsToPoints(readings, tracks) {
-
-				return $q(function (resolve, reject) {
-
-					if (tracks != null && tracks.length > 0 && readings != null && readings.length > 0) {
-
-						worker.postMessage({
-							cmd: 'reading-to-points',
-							tracks: tracks.map(function (t) { return { param: t.param }; }),
-							readings: readings
-						});
-
-						waitTheWorker('reading-to-points', function (message) {
-							resolve(message.data.points);
-						}, false);
-
-					}
-
-				});
-
 			}
 
 			function waitTheWorker(subject, callback) {
@@ -116,8 +91,8 @@
 
 				scope.timeScale = d3.time.scale()
 					.domain([
-						new Date(scope.startAt),
-						new Date(scope.endAt),
+						new Date(scope.actualStartAt),
+						new Date(),
 					])
 					.range([
 						0,
@@ -163,6 +138,28 @@
 					}
 				}
 
+				function readingsToPoints(readings, tracks) {
+
+					return $q(function (resolve, reject) {
+
+						if (tracks != null && tracks.length > 0 && readings != null && readings.length > 0) {
+
+							worker.postMessage({
+								cmd: 'reading-to-points',
+								tracks: tracks.map(function (t) { return { param: t.param }; }),
+								readings: readings
+							});
+
+							waitTheWorker('reading-to-points', function (message) {
+								resolve(message.data.points);
+							}, false);
+
+						}
+
+					});
+
+				}
+
 				function handleZoom() {
 
 					scope.zoomScale = d3.time.scale()
@@ -177,13 +174,19 @@
 
 					scope.zoomArea = (scope.timeScale(scope.zoomEndAt) - scope.timeScale(scope.zoomStartAt));
 
+					var viewBox;
+
 					if (isHorizontal) {
-						scope.viewBox = scope.timeScale(scope.zoomStartAt) + ' 0 ' + scope.zoomArea + ' ' + scope.svg.viewHeight;
+						viewBox = scope.timeScale(scope.zoomStartAt) + ' 0 ' + scope.zoomArea + ' ' + scope.svg.viewHeight;
 					} else {
-						scope.viewBox = '0 ' + scope.timeScale(scope.zoomStartAt) + ' ' + scope.svg.viewWidth + ' ' + scope.zoomArea;
+						viewBox = '0 ' + scope.timeScale(scope.zoomStartAt) + ' ' + scope.svg.viewWidth + ' ' + scope.zoomArea;
 					}
 
-					scope.timeTicks = scope.zoomScale.ticks(6);
+					d3.select(element[0])
+						.selectAll('.zoom-view-box-container')
+						.attr('viewBox', viewBox);
+
+					scope.timeTicks = scope.zoomScale.ticks();
 
 				}
 
@@ -192,7 +195,6 @@
 					scope.$tracks = tracks.map(function (track, index) {
 						return configTrackProperties(track, index, isHorizontal);
 					});
-
 
 					function configTrackProperties(track, index, isHorizontal) {
 
@@ -211,6 +213,7 @@
 						track.labelEndAt = labelEndAt;
 
 						var trackScale;
+						var margin = 0;
 
 						if (isHorizontal) {
 
@@ -220,8 +223,8 @@
 									track.max
 								])
 								.range([
-									Math.max(labelEndAt, labelStartAt) - (Math.abs(labelEndAt - labelStartAt) * 0.1),
-									Math.min(labelEndAt, labelStartAt) + (Math.abs(labelEndAt - labelStartAt) * 0.1)
+									Math.max(labelEndAt, labelStartAt) - (Math.abs(labelEndAt - labelStartAt) * margin ),
+									Math.min(labelEndAt, labelStartAt) + (Math.abs(labelEndAt - labelStartAt) * margin )
 								]);
 
 						} else {
@@ -232,8 +235,8 @@
 									track.max
 								])
 								.range([
-									Math.min(labelEndAt, labelStartAt) + (Math.abs(labelEndAt - labelStartAt) * 0.1),
-									Math.max(labelEndAt, labelStartAt) - (Math.abs(labelEndAt - labelStartAt) * 0.1)
+									Math.min(labelEndAt, labelStartAt) + (Math.abs(labelEndAt - labelStartAt) * margin ),
+									Math.max(labelEndAt, labelStartAt) - (Math.abs(labelEndAt - labelStartAt) * margin )
 								]);
 
 						}
@@ -247,7 +250,7 @@
 						track.id = index;
 						track.lineFunction = lineFunction;
 						track.trackScale = trackScale;
-						track.ticks = trackScale.ticks(4);
+						track.ticks = [track.max, track.min];
 
 						function isNumber(d) {
 
@@ -340,11 +343,14 @@
 					d3.select(element[0]).selectAll('.overlay')
 						.on('click', function () {
 							moveCrosshair(d3.mouse(this)[0], d3.mouse(this)[1]);
+							highligthPoints(d3.mouse(this)[0], d3.mouse(this)[1]);
+						}).on('mousemove', function () {
+							moveCrosshair(d3.mouse(this)[0], d3.mouse(this)[1]);
 						});
 
 				}
 
-				function moveCrosshair(mouseXPosition, mouseYPosition) {
+				function highligthPoints (mouseXPosition, mouseYPosition) {
 
 					var timeAxisPosition = null;
 					var timestamp = null;
@@ -358,10 +364,6 @@
 						timeAxisPosition = mouseXPosition;
 						timestamp = scope.zoomScale.invert(mouseXPosition);
 					}
-
-					d3.select(element[0]).selectAll('#crosshair')
-						.attr(((!isHorizontal) ? 'y1' : 'x1'), timeAxisPosition)
-						.attr(((!isHorizontal) ? 'y2' : 'x2'), timeAxisPosition);
 
 					if (isHorizontal) {
 						avgSize = scope.svg.viewWidth / 3;
@@ -386,6 +388,22 @@
 						.attr(((!isHorizontal) ? 'y2' : 'x2'), avgPoint);
 
 					findPoint(timestamp, timeAxisPosition, avgPoint);
+
+				}
+
+				function moveCrosshair(mouseXPosition, mouseYPosition) {
+
+					var timeAxisPosition = null;
+
+					if (!isHorizontal) {
+						timeAxisPosition = mouseYPosition;
+					} else {
+						timeAxisPosition = mouseXPosition;
+					}
+
+					d3.select(element[0]).selectAll('#crosshair')
+						.attr(((!isHorizontal) ? 'y1' : 'x1'), timeAxisPosition)
+						.attr(((!isHorizontal) ? 'y2' : 'x2'), timeAxisPosition);
 
 				}
 

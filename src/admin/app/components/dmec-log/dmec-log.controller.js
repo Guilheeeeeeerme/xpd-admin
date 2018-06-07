@@ -7,53 +7,52 @@
 
 	DMecLogController.$inject = ['$scope', '$timeout', '$interval', '$q', 'readingSetupAPIService'];
 
-	function DMecLogController($scope, $timeout, $interval, $q, readingSetupAPIService) {
+	function DMecLogController(scope, $timeout, $interval, $q, readingSetupAPIService) {
 
 		var ONE_HOUR = 3600000;
-		var ONE_DAY = 24 * ONE_HOUR;
 		var updateLatency = 1000;
 		var getTickInterval;
 
-		var resetPage = $timeout(reload, (ONE_HOUR / 2) );
-			
-		$scope.$on('$destroy', destroy );
+		var resetPage = $timeout(reload, (ONE_HOUR / 2));
 
-		$scope.zoomIsLocked = false;
-		$scope.actionButtonSubmitDmecRange = actionButtonSubmitDmecRange;
-		$scope.isZooming = isZooming;
-		
+		scope.$on('$destroy', destroy);
+
+		scope.actionButtonSubmitDmecRange = actionButtonSubmitDmecRange;
+		scope.setZoomStartAt = setZoomStartAt;
+		scope.setZoomEndAt = setZoomEndAt;
+
 		initializeComponent();
 
 		function destroy() {
-    		if (resetPage) {
-        		$timeout.cancel(resetPage);
-    		}
-    		if (getTickInterval) {
-        		$interval.cancel(getTickInterval);
-    		}
+			if (resetPage) {
+				$timeout.cancel(resetPage);
+			}
+			if (getTickInterval) {
+				$interval.cancel(getTickInterval);
+			}
 		}
 
-		function reload () {
+		function reload() {
 			location.reload();
 		}
 
 		function initializeComponent() {
-			
-			var endAt = new Date().getTime();
+
+			var endAtMillis = new Date().getTime();
 			var intervalToShow = 0;
-			var inputRangeForm = $scope.inputRangeForm = getInputRangeForm();
+			var inputRangeForm = scope.inputRangeForm = getInputRangeForm();
 
 			if (inputRangeForm.realtime) {
 				intervalToShow = (+inputRangeForm.last * +inputRangeForm.toMilliseconds);
-				$scope.dmecTrackingStartAt = getAllReadingSince(new Date(endAt - intervalToShow));
+				scope.dmecTrackingStartAt = getAllReadingSince(new Date(endAtMillis - intervalToShow));
 			} else {
-				$scope.dmecTrackingStartAt = getAllReadingSince(new Date(inputRangeForm.startTime));
+				scope.dmecTrackingStartAt = getAllReadingSince(new Date(inputRangeForm.startTime));
 			}
 
-			intervalToShow = endAt - new Date($scope.dmecTrackingStartAt).getTime();
-			$scope.dmecTrackingEndAt = new Date(endAt);
-			$scope.zoomEndAt = new Date(endAt);
-			$scope.zoomStartAt = new Date(endAt - (intervalToShow / 2));
+			intervalToShow = endAtMillis - new Date(scope.dmecTrackingStartAt).getTime();
+
+			setZoomStartAt(new Date(endAtMillis - (intervalToShow / 2)));
+			setZoomEndAt(new Date(endAtMillis));
 
 			if (angular.isDefined(getTickInterval)) {
 				$interval.cancel(getTickInterval);
@@ -64,23 +63,18 @@
 
 		}
 
-		function isZooming(lockZoom){
-			$scope.zoomIsLocked = lockZoom;
-		}
-
-		function actionButtonSubmitDmecRange() {			
-			localStorage.setItem('xpd.admin.dmec.dmecInputRangeForm', JSON.stringify($scope.inputRangeForm));
+		function actionButtonSubmitDmecRange() {
+			localStorage.setItem('xpd.admin.dmec.dmecInputRangeForm', JSON.stringify(scope.inputRangeForm));
 			location.reload();
 		}
 
 		function getTick() {
-			
-			if ($scope.inputRangeForm.realtime) {
+
+			if (scope.inputRangeForm.realtime) {
 
 				var now = new Date().getTime();
-				$scope.dmecTrackingEndAt = now;
 
-				$scope.onReading = $q(function (resolve, reject) {
+				scope.onReading = $q(function (resolve, reject) {
 					readingSetupAPIService.getTick((now - updateLatency), resolve, reject);
 				});
 
@@ -94,10 +88,18 @@
 			};
 		}
 
+		function setZoomStartAt(zoomStartAt) {
+			scope.zoomStartAt = new Date(zoomStartAt);
+		}
+
+		function setZoomEndAt(zoomEndAt) {
+			scope.zoomEndAt = new Date(zoomEndAt);
+		}
+
 		function getAllReadingSince(startTime) {
-			
+
 			startTime = new Date(startTime);
-			
+
 			var loopLimit = new Date();
 			var loopStartTime = new Date(startTime);
 			var loopEndTime = new Date(startTime);
@@ -111,7 +113,7 @@
 			} else {
 				loopStartTime.setHours(12);
 			}
-			
+
 			var promiseList = [];
 
 			while (loopEndTime.getTime() < loopLimit.getTime()) {
@@ -129,7 +131,7 @@
 			}
 
 
-			$scope.onReadingSince = $q(function (resolve, reject) {
+			scope.onReadingSince = $q(function (resolve, reject) {
 
 				var parsedReadings = {};
 
@@ -142,10 +144,10 @@
 
 						promise(function (readings) {
 
-							for(var i in readings){
-								if(!parsedReadings[i]){
+							for (var i in readings) {
+								if (!parsedReadings[i]) {
 									parsedReadings[i] = readings[i];
-								}else{
+								} else {
 									parsedReadings[i] = parsedReadings[i].concat(readings[i]);
 								}
 							}
@@ -167,7 +169,7 @@
 		}
 
 		function getInputRangeForm() {
-			
+
 			var inputRangeForm;
 
 			try {
