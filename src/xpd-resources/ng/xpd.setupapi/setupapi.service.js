@@ -128,9 +128,9 @@
 
 			toastr.error(httpStatus);
 
-			if (url && error.status == -1) {
-				window.open(url, httpStatus);
-			}
+			// if (url && error.status == -1) {
+			// 	window.open(url, httpStatus);
+			// }
 
 		}
 

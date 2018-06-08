@@ -10,7 +10,7 @@
 	function DMecLogController(scope, $timeout, $interval, $q, readingSetupAPIService) {
 
 		var ONE_HOUR = 3600000;
-		var updateLatency = 1000;
+		var updateLatency = 5000;
 		var getTickInterval;
 
 		var resetPage = $timeout(reload, (ONE_HOUR / 2));
@@ -53,13 +53,6 @@
 
 			setZoomStartAt(new Date(endAtMillis - (intervalToShow / 2)));
 			setZoomEndAt(new Date(endAtMillis));
-
-			if (angular.isDefined(getTickInterval)) {
-				$interval.cancel(getTickInterval);
-				getTickInterval = undefined;
-			}
-
-			getTickInterval = $interval(getTick, updateLatency);
 
 		}
 
@@ -162,6 +155,17 @@
 
 				mergeParsedReadings();
 
+
+			});
+
+			scope.onReadingSince.then(function () {
+
+				if (angular.isDefined(getTickInterval)) {
+					$interval.cancel(getTickInterval);
+					getTickInterval = undefined;
+				}
+
+				getTickInterval = $interval(getTick, updateLatency);
 
 			});
 

@@ -49,7 +49,16 @@
 				getStartZoomElement().on('mouseup', mouseUp);
 
 				getEndZoomElement().on('mousedown', mouseDown);
-				getEndZoomElement().on('mouseup', mouseUp);
+				getEndZoomElement().on('touchend', mouseUp);
+
+				getZoomAreaElement().on('touchstart', mouseDown);
+				getZoomAreaElement().on('touchend', mouseUp);
+
+				getStartZoomElement().on('touchstart', mouseDown);
+				getStartZoomElement().on('touchend', mouseUp);
+
+				getEndZoomElement().on('touchstart', mouseDown);
+				getEndZoomElement().on('touchend', mouseUp);
 
 				getOverlayElement().on('dblclick', dblclick);
 
@@ -75,6 +84,9 @@
 
 					getOverlayElement().on('mousemove', mouseMove).on('mouseup', mouseUp);
 					getZoomAreaElement().on('mousemove', mouseMove).on('mouseup', mouseUp);
+
+					getOverlayElement().on('touchstart', mouseMove).on('touchend', mouseUp);
+					getZoomAreaElement().on('touchstart', mouseMove).on('touchend', mouseUp);
 				}
 
 				function onZoomStartAt(zoom) {
@@ -181,6 +193,9 @@
 
 					getOverlayElement().on('mousemove', null).on('mouseup', null);
 					getZoomAreaElement().on('mousemove', null).on('mouseup', null);
+
+					getOverlayElement().on('touchstart', null).on('touchend', null);
+					getZoomAreaElement().on('touchstart', null).on('touchend', null);
 
 					clickedElement = null;
 
