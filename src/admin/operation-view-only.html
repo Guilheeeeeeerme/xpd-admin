@@ -164,14 +164,14 @@
 
         <div class="container" ng-if="dados.operation.type == 'bha'">
             <div class="row">
-                <div class="col-md-12 panel panel-default" ng-if="!dados.operation.afterRiser">
+                <div class="col-md-12 panel panel-default" ng-if="!dados.operation.bopSetted">
                     <operation-contract-info-table operation="dados.operation"  class="table table-condensed" state="Open Sea"
                            state-id="openSea" contract-params="dados.contractParams" trip-unit="m/h"
                            trip-required="false" conn-unit="Con/h" conn-required="true"
                            contract-form="ovoController.contract" view-only="true"
                            ui-popover="htmlPopover"/>
                 </div>
-                <div class="col-md-12 panel panel-default" ng-if="dados.operation.afterRiser">
+                <div class="col-md-12 panel panel-default" ng-if="dados.operation.bopSetted">
                     <operation-contract-info-table operation="dados.operation"  class="table table-condensed" state="Cased Well"
                            state-id="cased" contract-params="dados.contractParams" trip-unit="m/h"
                            trip-required="false" conn-unit="Con/h" conn-required="true"
