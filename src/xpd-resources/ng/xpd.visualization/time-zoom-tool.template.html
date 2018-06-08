@@ -12,8 +12,9 @@
 			<!-- <text alignment-baseline="baseline" x="-10" ng-attr-y='{{ svg.viewHeight * 0.25 }}'>{{ tick | date: 'mediumDate' }}</text> -->
 			<!-- <line y1="0" x1="0" ng-attr-y2='{{ svg.viewHeight }}' x2="0" stroke="black" stroke-opacity="0.2" stroke-width="0.1em" /> -->
 			
-			<text alignment-baseline="baseline" x="-30" ng-attr-y='{{ svg.viewHeight * 0.25 }}' font-size="10">{{ tick | date: 'mediumDate' }}</text>
-			<text alignment-baseline="baseline" x="-20" ng-attr-y='{{ svg.viewHeight * 0.75 }}' font-size="10">{{ tick | date: 'shortTime' }}</text>
+			<text alignment-baseline="baseline" x="0" ng-attr-y='{{ svg.viewHeight * 0.25 }}' font-size="10">{{ tick | date: 'mediumDate' }}</text>
+			<text alignment-baseline="middle" 	x="0" ng-attr-y='{{ svg.viewHeight * 0.50 }}' font-size="10">{{ getBitDepth(tick) | number: '.0' }} (m)</text>
+			<text alignment-baseline="hanging" 	x="0" ng-attr-y='{{ svg.viewHeight * 0.75 }}' font-size="10">{{ tick | date: 'shortTime' }}</text>
 			
 			<line y1="0" x1="0" ng-attr-y2='{{ svg.viewHeight / 7 }}' x2="0" stroke="black" stroke-opacity="0.2" stroke-width="0.1em" />
 			<line ng-attr-y1="{{ svg.viewHeight / 1.2 }}" x1="0" ng-attr-y2='{{ svg.viewHeight }}' x2="0" stroke="black" stroke-opacity="0.2" stroke-width="0.1em" />

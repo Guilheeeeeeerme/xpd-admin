@@ -2,7 +2,6 @@
 	'use strict';
 
 	var module = angular.module('xpd.visualization');
-	var worker = new Worker('../assets/js/dmec-worker.js');
 
 	module.directive('d3DmecChart', d3DmecChart);
 
@@ -13,25 +12,27 @@
 			restrict: 'E',
 			templateUrl: '../xpd-resources/ng/xpd.visualization/d3-dmec-chart.template.html',
 			scope: {
-				startAt: '=',
-				endAt: '=',
+				actualStartAt: '=',
 				zoomStartAt: '=',
 				zoomEndAt: '=',
 				onReading: '=',
-				onReadingSince: '=',
-				autoScroll: '=',
+				onReadingSince: '='
 			},
 			link: link
 		};
 
 		function link(scope, element, attrs) {
 
-			if (!localStorage.dmecTracks) {
-				localStorage.dmecTracks = JSON.stringify(getDefaultTracks());
+			var worker = new Worker('../assets/js/dmec-worker.js');
+
+			if (!localStorage.getItem('xpd.admin.dmec.dmecTracks')) {
+				localStorage.setItem('xpd.admin.dmec.dmecTracks', JSON.stringify(getDefaultTracks()));
 			}
 
-			var tracks = JSON.parse(localStorage.dmecTracks);
+			var tracks = JSON.parse(localStorage.getItem('xpd.admin.dmec.dmecTracks'));
 			var threads = (!isNaN(Number(attrs.threads))) ? Number(attrs.threads) : 4;
+			threads = Math.min(Math.abs(threads), tracks.length);
+
 			var isHorizontal = scope.horizontal = (attrs.horizontal == true || attrs.horizontal == 'true');
 
 			/** 
@@ -48,41 +49,29 @@
 
 					onReadingSince.then(function (readings) {
 
-						// readingsToPoints(readings, tracks).then(function (points) {
-
 						d3Service.d3().then(function (d3) {
 
 							createChart(d3, readings);
 
 						});
 
-						// });
-
 					});
 				}
 			}
 
-			function readingsToPoints(readings, tracks) {
+			function waitTheWorker(subject, callback) {
 
-				return $q(function (resolve, reject) {
+				worker[subject] = callback;
 
-					if (tracks != null && tracks.length > 0 && readings != null && readings.length > 0) {
+				if (!worker.isListening) {
 
-						worker.postMessage({
-							cmd: 'reading-to-points',
-							tracks: tracks.map(function (t) { return { param: t.param }; }),
-							readings: readings
-						});
+					worker.isListening = true;
 
-						worker.addEventListener('message', function (event) {
-							if (event.data.cmd == 'reading-to-points') {
-								resolve(event.data.points);
-							}
-						}, false);
+					worker.addEventListener('message', function (message) {
+						worker[message.data.cmd](message);
+					}, false);
 
-					}
-
-				});
+				}
 
 			}
 
@@ -102,8 +91,8 @@
 
 				scope.timeScale = d3.time.scale()
 					.domain([
-						new Date(scope.startAt),
-						new Date(scope.endAt),
+						new Date(scope.actualStartAt),
+						new Date(),
 					])
 					.range([
 						0,
@@ -149,6 +138,28 @@
 					}
 				}
 
+				function readingsToPoints(readings, tracks) {
+
+					return $q(function (resolve, reject) {
+
+						if (tracks != null && tracks.length > 0 && readings != null && readings.length > 0) {
+
+							worker.postMessage({
+								cmd: 'reading-to-points',
+								tracks: tracks.map(function (t) { return { param: t.param }; }),
+								readings: readings
+							});
+
+							waitTheWorker('reading-to-points', function (message) {
+								resolve(message.data.points);
+							}, false);
+
+						}
+
+					});
+
+				}
+
 				function handleZoom() {
 
 					scope.zoomScale = d3.time.scale()
@@ -163,13 +174,19 @@
 
 					scope.zoomArea = (scope.timeScale(scope.zoomEndAt) - scope.timeScale(scope.zoomStartAt));
 
+					var viewBox;
+
 					if (isHorizontal) {
-						scope.viewBox = scope.timeScale(scope.zoomStartAt) + ' 0 ' + scope.zoomArea + ' ' + scope.svg.viewHeight;
+						viewBox = scope.timeScale(scope.zoomStartAt) + ' 0 ' + scope.zoomArea + ' ' + scope.svg.viewHeight;
 					} else {
-						scope.viewBox = '0 ' + scope.timeScale(scope.zoomStartAt) + ' ' + scope.svg.viewWidth + ' ' + scope.zoomArea;
+						viewBox = '0 ' + scope.timeScale(scope.zoomStartAt) + ' ' + scope.svg.viewWidth + ' ' + scope.zoomArea;
 					}
 
-					scope.timeTicks = scope.zoomScale.ticks(6);
+					d3.select(element[0])
+						.selectAll('.zoom-view-box-container')
+						.attr('viewBox', viewBox);
+
+					scope.timeTicks = scope.zoomScale.ticks();
 
 				}
 
@@ -178,7 +195,6 @@
 					scope.$tracks = tracks.map(function (track, index) {
 						return configTrackProperties(track, index, isHorizontal);
 					});
-
 
 					function configTrackProperties(track, index, isHorizontal) {
 
@@ -197,6 +213,7 @@
 						track.labelEndAt = labelEndAt;
 
 						var trackScale;
+						var margin = 0;
 
 						if (isHorizontal) {
 
@@ -206,8 +223,8 @@
 									track.max
 								])
 								.range([
-									Math.max(labelEndAt, labelStartAt) - (Math.abs(labelEndAt - labelStartAt) * 0.1),
-									Math.min(labelEndAt, labelStartAt) + (Math.abs(labelEndAt - labelStartAt) * 0.1)
+									Math.max(labelEndAt, labelStartAt) - (Math.abs(labelEndAt - labelStartAt) * margin ),
+									Math.min(labelEndAt, labelStartAt) + (Math.abs(labelEndAt - labelStartAt) * margin )
 								]);
 
 						} else {
@@ -218,8 +235,8 @@
 									track.max
 								])
 								.range([
-									Math.min(labelEndAt, labelStartAt) + (Math.abs(labelEndAt - labelStartAt) * 0.1),
-									Math.max(labelEndAt, labelStartAt) - (Math.abs(labelEndAt - labelStartAt) * 0.1)
+									Math.min(labelEndAt, labelStartAt) + (Math.abs(labelEndAt - labelStartAt) * margin ),
+									Math.max(labelEndAt, labelStartAt) - (Math.abs(labelEndAt - labelStartAt) * margin )
 								]);
 
 						}
@@ -233,7 +250,7 @@
 						track.id = index;
 						track.lineFunction = lineFunction;
 						track.trackScale = trackScale;
-						track.ticks = trackScale.ticks(4);
+						track.ticks = [track.max, track.min];
 
 						function isNumber(d) {
 
@@ -297,10 +314,8 @@
 					});
 
 					var promise = $q(function (resolve, reject) {
-						worker.addEventListener('message', function (event) {
-							if (event.data.cmd == 'handle-overflow') {
-								resolve(event.data);
-							}
+						waitTheWorker('handle-overflow', function (event) {
+							resolve(event.data);
 						}, false);
 					});
 
@@ -322,130 +337,223 @@
 
 				function listenToMouseMove() {
 
+					//	'click'{
+					//	'mousemove'
+
 					d3.select(element[0]).selectAll('.overlay')
-						.on('mousemove', mousemove);
+						.on('click', function () {
+							moveCrosshair(d3.mouse(this)[0], d3.mouse(this)[1]);
+							highligthPoints(d3.mouse(this)[0], d3.mouse(this)[1]);
+						}).on('mousemove', function () {
+							moveCrosshair(d3.mouse(this)[0], d3.mouse(this)[1]);
+						});
 
-					function mousemove() {
+				}
 
-						var position = null;
-						var timestamp = null;
+				function highligthPoints (mouseXPosition, mouseYPosition) {
 
-						if (!isHorizontal) {
-							position = d3.mouse(this)[1];
-							timestamp = scope.zoomScale.invert(d3.mouse(this)[1]);
-						} else {
-							position = d3.mouse(this)[0];
-							timestamp = scope.zoomScale.invert(d3.mouse(this)[0]);
-						}
+					var timeAxisPosition = null;
+					var timestamp = null;
+					var avgPoint;
+					var avgSize;
 
-						d3.select(element[0]).selectAll('#crosshair')
-							.attr(((!isHorizontal) ? 'y1' : 'x1'), position)
-							.attr(((!isHorizontal) ? 'y2' : 'x2'), position);
-
-						var avgPoint;
-						var avgSize;						
-
-						if (isHorizontal) {
-							avgSize = scope.svg.viewWidth / 3;			
-	
-							if(position > scope.svg.viewWidth / 2)
-								avgPoint = (0 + position) / 2;
-							else
-								avgPoint = (scope.svg.viewWidth + position) / 2;
-
-						} else {
-							avgSize = scope.svg.viewHeight / 3;	
-
-							if(position > scope.svg.viewHeight / 2)
-								avgPoint = (0 + position) / 2;
-							else
-								avgPoint = (scope.svg.viewHeight + position) / 2;
-						}
-
-						d3.select(element[0]).selectAll('#crosshair1')
-							.attr('stroke-width' , avgSize)
-							.attr(((!isHorizontal) ? 'y1' : 'x1'), avgPoint)
-							.attr(((!isHorizontal) ? 'y2' : 'x2'), avgPoint);
-
-						onMousemove(timestamp, position, avgPoint);
-
+					if (!isHorizontal) {
+						timeAxisPosition = mouseYPosition;
+						timestamp = scope.zoomScale.invert(mouseYPosition);
+					} else {
+						timeAxisPosition = mouseXPosition;
+						timestamp = scope.zoomScale.invert(mouseXPosition);
 					}
 
-					function onMousemove(timestamp, position, avgPoint) {
+					if (isHorizontal) {
+						avgSize = scope.svg.viewWidth / 3;
+
+						if (timeAxisPosition > scope.svg.viewWidth / 2)
+							avgPoint = (0 + timeAxisPosition) / 2;
+						else
+							avgPoint = (scope.svg.viewWidth + timeAxisPosition) / 2;
+
+					} else {
+						avgSize = scope.svg.viewHeight / 3;
+
+						if (timeAxisPosition > scope.svg.viewHeight / 2)
+							avgPoint = (0 + timeAxisPosition) / 2;
+						else
+							avgPoint = (scope.svg.viewHeight + timeAxisPosition) / 2;
+					}
+
+					d3.select(element[0]).selectAll('#crosshair1')
+						.attr('stroke-width', avgSize)
+						.attr(((!isHorizontal) ? 'y1' : 'x1'), avgPoint)
+						.attr(((!isHorizontal) ? 'y2' : 'x2'), avgPoint);
+
+					findPoint(timestamp, timeAxisPosition, avgPoint);
+
+				}
+
+				function moveCrosshair(mouseXPosition, mouseYPosition) {
+
+					var timeAxisPosition = null;
+
+					if (!isHorizontal) {
+						timeAxisPosition = mouseYPosition;
+					} else {
+						timeAxisPosition = mouseXPosition;
+					}
+
+					d3.select(element[0]).selectAll('#crosshair')
+						.attr(((!isHorizontal) ? 'y1' : 'x1'), timeAxisPosition)
+						.attr(((!isHorizontal) ? 'y2' : 'x2'), timeAxisPosition);
+
+				}
+
+				function findPoint(timestamp, position, avgPoint) {
+
+					function findPointAVL(t) {
 
 						worker.postMessage({
-							cmd: 'find-point',
+							cmd: 'find-point-avl',
 							timestamp: timestamp,
-							tracks: tracks.map(function (t) { return { param: t.param }; }),
+							param: t.param,
 							oldPoints: initialPoints,
 							newPoints: scope.newPoints
 						});
 
-						var promise = $q(function (resolve, reject) {
-							worker.addEventListener('message', function (event) {
-								if (event.data.cmd == 'find-point') {
-									var reading = event.data.points;
-									resolve(event.data.points);
+						waitTheWorker('find-point-avl', function (message) {
+
+							var point = message.data.point.point;
+							var param = message.data.param;
+							var track;
+
+							for (var i in tracks) {
+								if (tracks[i].param == param) {
+									track = tracks[i];
+									break;
 								}
-							}, false);
-						});
+							}
 
-						promise.then(function (reading) {
+							var bubble = d3.select(element[0]).selectAll('#bubble-' + param);
+							var tooltip = d3.select(element[0]).selectAll('#text-' + param);
+							var tooltiplabel = d3.select(element[0]).selectAll('#text-label-' + param);
 
-							// console.log('------------------------------------');
-							// console.log('------------------------------------');
-							// console.log('------------------------------------');
+							bubble.attr('style', 'display: none');
+							tooltip.attr('style', 'display: none');
 
-							tracks.map(function (track) {
+							if (point && point.y != null) {
 
-								var bubble = d3.select(element[0]).selectAll('#bubble-' + track.param);
-								var tooltip = d3.select(element[0]).selectAll('#text-' + track.param);
-								var tooltiplabel = d3.select(element[0]).selectAll('#text-label-' + track.param);
+								var distance = Math.abs(track.max - track.min);
 
-								bubble.attr('style', 'display: none');
-								tooltip.attr('style', 'display: none');
+								while (point.y < track.min) {
+									point.y += distance;
+								}
 
-								var point = reading[track.param];
+								while (point.y > track.max) {
+									point.y -= distance;
+								}
 
-								if (point && point.y != null) {
+								bubble.attr('style', null);
+								tooltip.attr('style', null);
 
-									var distance = Math.abs(track.max - track.min);
-
-									while (point.y < track.min) {
-										point.y += distance;
-									}
-
-									while (point.y > track.max) {
-										point.y -= distance;
-									}
-
-									bubble.attr('style', null);
-									tooltip.attr('style', null);
-
-									if (!isHorizontal) {
-										bubble.attr('transform', 'translate(' + track.trackScale(point.y) + ', ' + position + ')');
-										// tooltip.attr('x', track.trackScale(point.y) );
-										tooltip.attr('y', avgPoint );
-										tooltiplabel.attr('y', avgPoint );
-									} else {
-										bubble.attr('transform', 'translate(' + position + ', ' + track.trackScale(point.y) + ')');
-										tooltip.attr('x', avgPoint );
-										tooltiplabel.attr('x', avgPoint );
-										// tooltip.attr('y', track.trackScale(point.y) );
-									}
-
-									if (point.actual != null) {
-										tooltip.text(format(point.actual) + ' (' + track.unitMeasure + ')');
-									}
-
+								if (!isHorizontal) {
+									bubble.attr('transform', 'translate(' + track.trackScale(point.y) + ', ' + position + ')');
+									// tooltip.attr('x', track.trackScale(point.y) );
+									tooltip.attr('y', avgPoint);
+									tooltiplabel.attr('y', avgPoint);
 								} else {
-									bubble.attr('style', 'display: none');
+									bubble.attr('transform', 'translate(' + position + ', ' + track.trackScale(point.y) + ')');
+									tooltip.attr('x', avgPoint);
+									tooltiplabel.attr('x', avgPoint);
+									// tooltip.attr('y', track.trackScale(point.y) );
 								}
 
-							});
-						});
+								if (point.actual != null) {
+									tooltip.text(format(point.actual) + ' (' + track.unitMeasure + ')');
+								}
+
+							} else {
+								bubble.attr('style', 'display: none');
+							}
+
+						}, false);
 
 					}
+
+					tracks.map(findPointAVL);
+
+				}
+
+				function findPointOld(timestamp, position, avgPoint) {
+
+					worker.postMessage({
+						cmd: 'find-point',
+						timestamp: timestamp,
+						tracks: tracks.map(function (t) { return { param: t.param }; }),
+						oldPoints: initialPoints,
+						newPoints: scope.newPoints
+					});
+
+					var promise = $q(function (resolve, reject) {
+						waitTheWorker('find-point', function (message) {
+							if (message.data.cmd == 'find-point') {
+								var reading = message.data.points;
+								resolve(message.data.points);
+							}
+						}, false);
+					});
+
+					promise.then(function (reading) {
+
+						tracks.map(function (track) {
+
+							var bubble = d3.select(element[0]).selectAll('#bubble-' + track.param);
+							var tooltip = d3.select(element[0]).selectAll('#text-' + track.param);
+							var tooltiplabel = d3.select(element[0]).selectAll('#text-label-' + track.param);
+
+							bubble.attr('style', 'display: none');
+							tooltip.attr('style', 'display: none');
+
+							var point = reading[track.param];
+
+							if (point && point.y != null) {
+
+								var distance = Math.abs(track.max - track.min);
+
+								while (point.y < track.min) {
+									point.y += distance;
+								}
+
+								while (point.y > track.max) {
+									point.y -= distance;
+								}
+
+								bubble.attr('style', null);
+								tooltip.attr('style', null);
+
+								if (!isHorizontal) {
+									bubble.attr('transform', 'translate(' + track.trackScale(point.y) + ', ' + position + ')');
+									// tooltip.attr('x', track.trackScale(point.y) );
+									tooltip.attr('y', avgPoint);
+									tooltiplabel.attr('y', avgPoint);
+								} else {
+									bubble.attr('transform', 'translate(' + position + ', ' + track.trackScale(point.y) + ')');
+									tooltip.attr('x', avgPoint);
+									tooltiplabel.attr('x', avgPoint);
+									// tooltip.attr('y', track.trackScale(point.y) );
+								}
+
+								if (point.actual != null) {
+									tooltip.text(format(point.actual) + ' (' + track.unitMeasure + ')');
+								}
+
+							} else {
+								bubble.attr('style', 'display: none');
+							}
+
+						});
+
+					});
+
+					return promise;
 
 				}
 
@@ -568,7 +676,7 @@
 				}
 			}
 
-			localStorage.dmecTracks = JSON.stringify(tracks);
+			localStorage.setItem('xpd.admin.dmec.dmecTracks', JSON.stringify(tracks));
 
 			if (trackChanged) {
 				onTracksChange();

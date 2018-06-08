@@ -10,15 +10,12 @@ exports.scripts = {
 		'./node_modules/angular-spinner/dist/angular-spinner.min.js',
 		'./node_modules/angular-ui-bootstrap/dist/ui-bootstrap.js',
 		'./node_modules/angular-ui-bootstrap/dist/ui-bootstrap-tpls.js',
-		'./node_modules/angular-aside/dist/js/angular-aside.min.js',
-		'./node_modules/ngstorage/ngStorage.min.js'
 	],
 	base: [
 		'./node_modules/angular-toastr/dist/angular-toastr.tpls.js',
 		'./src/xpd-resources/ng/xpd.intersection/xpd-intersection.js',
 		'./src/xpd-resources/ng/socket.io/socketio.module.js',
 		'./src/xpd-resources/ng/xpd.spinner/xpd.spinner.js',
-		'./src/xpd-resources/ng/socket.io/socketio.module.js',
 		'./src/xpd-resources/ng/socket.io/socket.factory.js',
 		'./src/xpd-resources/ng/xpd.dialog/xpd.dialog.module.js',
 		'./src/xpd-resources/ng/xpd.dialog/xpd.dialog.factory.js',
@@ -151,7 +148,6 @@ exports.scripts = {
 exports.styles = {
 	vendor: [
 		'./node_modules/bootstrap/dist/css/bootstrap.min.css',
-		'./node_modules/angular-aside/dist/css/angular-aside.min.css',
 		'./node_modules/angular-toastr/dist/angular-toastr.css',
 		'./node_modules/font-awesome/css/font-awesome.min.css'
 	],

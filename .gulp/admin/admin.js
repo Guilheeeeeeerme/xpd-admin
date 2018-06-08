@@ -34,8 +34,6 @@ module.exports = function (gulp) {
 			'./src/**/*',
 			'!./src/index.html',
 			'!./src/**/*.js',
-			'!./src/driller',
-			'!./src/driller/**/*',
 			'!./src/admin',
 			'!./src/admin/**/*',
 			// '!./src/bower_components',

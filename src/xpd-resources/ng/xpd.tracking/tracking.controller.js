@@ -3,9 +3,9 @@
 
 	angular.module('xpd.tracking').controller('TrackingController', trackingController);
 
-	trackingController.$inject = ['$scope', '$interval', '$timeout', '$aside', '$uibModal', 'operationDataFactory', 'dialogFactory', '$filter'];
+	trackingController.$inject = ['$scope', '$interval', '$timeout', '$uibModal', 'operationDataFactory', 'dialogFactory', '$filter'];
 
-	function trackingController($scope, $interval, $timeout, $aside, $uibModal, operationDataFactory, dialogFactory, $filter) {
+	function trackingController($scope, $interval, $timeout, $uibModal, operationDataFactory, dialogFactory, $filter) {
 
 		var vm = this;
 
@@ -33,7 +33,7 @@
 			hasAlarm: false,
 			hasMessage: false,
 
-			showDMEC: (localStorage.getItem('is-dmec-template')) ? JSON.parse(localStorage.getItem('is-dmec-template')) : false
+			showDMEC: (localStorage.getItem('xpd.admin.tracking.openDmecAsDefault')) ? JSON.parse(localStorage.getItem('xpd.admin.tracking.openDmecAsDefault')) : false
 		};
 
 		$scope.acknowledgement = {
@@ -60,7 +60,6 @@
 		vm.actionClickLessonsLearnedButton = actionClickLessonsLearnedButton;
 
 		//* MODAL ACTIONS *//
-		vm.actionOpenAlarmConfirmationModal = actionOpenAlarmConfirmationModal;
 		vm.actionButtonCloseAlarmsAcknowledgementModal = actionButtonCloseAlarmsAcknowledgementModal;
 		vm.actionButtonUnconfirmAcknowledgement = actionButtonUnconfirmAcknowledgement;
 		vm.actionButtonConfirmAcknowledgement = actionButtonConfirmAcknowledgement;
@@ -202,17 +201,6 @@
 			return shift.member.function.id != 1;
 		}
 
-		function actionOpenAlarmConfirmationModal() {
-			$scope.$uibModalInstance = $aside.open({
-				templateUrl: './app/components/driller/driller-alarms-acknowledgement/driller-alarms-acknowledgement.modal.html',
-				placement: 'left',
-				scope: $scope,
-				backdrop: false,
-				windowClass: 'driller-aside-window-class',
-				size: 'sm'
-			});
-		}
-
 		function actionButtonConfirmAcknowledgement(acknowledgement) {
 			dialogFactory.showConfirmDialog('Confirm Acknowledgement?', function () {
 				operationDataFactory.emitConfirmAcknowledgement(acknowledgement);
@@ -342,7 +330,7 @@
 
 		function changeTrackingContent() {
 			$scope.flags.showDMEC = !$scope.flags.showDMEC;
-			localStorage.setItem('is-dmec-template', $scope.flags.showDMEC);
+			localStorage.setItem('xpd.admin.tracking.openDmecAsDefault', $scope.flags.showDMEC);
 		}
 
 	}

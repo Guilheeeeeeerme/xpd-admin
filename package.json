@@ -12,13 +12,11 @@
     "compile": "node installer.js",
     "build-all": "npm run build && npm run compile",
     "pack": "npm run build && npm run pack-admin && npm run compile",
-    "pack-driller": "electron-packager dist/driller Driller --platform win32 --arch all --out build --overwrite --icon dist/driller/assets/icon/logo.ico",
-    "pack-admin": "electron-packager dist/admin Admin --platform win32 --arch x64 --out build --overwrite --icon dist/admin/assets/icon/logo.ico"
+    "pack-admin": "electron-packager dist/admin Admin --platform win32 --arch all --out build --overwrite --icon dist/admin/assets/icon/logo.ico"
   },
   "dependencies": {
     "angular": "1.5.9",
     "angular-animate": "1.5.9",
-    "angular-aside": "1.3.2",
     "angular-route": "1.5.9",
     "angular-spinner": "1.0.1",
     "angular-toastr": "2.1.1",
@@ -31,7 +29,6 @@
     "highcharts": "5.0.5",
     "highcharts-multicolor-series": "2.2.1",
     "jquery": "3.3.1",
-    "ngstorage": "0.3.11",
     "progress": "2.0.0",
     "request": "2.74.0",
     "socket.io-client": "1.7.3",
@@ -40,8 +37,8 @@
   },
   "devDependencies": {
     "babel-preset-es2015": "^6.24.1",
-    "electron": "^1.8.6",
-    "electron-packager": "^8.7.2",
+    "electron": "^2.0.2",
+    "electron-packager": "^12.1.0",
     "electron-winstaller": "^2.6.4",
     "eslint": "^4.19.1",
     "gulp": "^3.9.1",

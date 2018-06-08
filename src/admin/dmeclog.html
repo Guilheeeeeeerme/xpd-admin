@@ -28,14 +28,14 @@
     <!-- SOCKET IO -->
     <script type="text/javascript" src="/node_modules/socket.io-client/dist/socket.io.js"></script>
 
-    <script type="text/javascript" src="/node_modules/ngstorage/ngStorage.min.js"></script>
-
     <script type="text/javascript" src="/node_modules/angular-animate/angular-animate.min.js"></script>
     <script type="text/javascript" src="/node_modules/angular-toastr/dist/angular-toastr.tpls.js"></script>
+    <script type="text/javascript" src="/node_modules/angular-spinner/dist/angular-spinner.min.js"></script>
 
     <!-- endbuild -->
 
     <!-- build:basejs -->
+    <script type="text/javascript" src="/xpd-resources/ng/xpd.spinner/xpd.spinner.js"></script>
     <script type="text/javascript" src="/xpd-resources/ng/socket.io/socketio.module.js">
     </script>
     <script type="text/javascript" src="/xpd-resources/ng/socket.io/socket.factory.js"></script>
@@ -61,7 +61,7 @@
     <!-- XPD VISUALIZATION -->
     <script type="text/javascript" src="/xpd-resources/ng/xpd.visualization/xpd-visualization.module.js"></script>
     <script type="text/javascript" src="/xpd-resources/ng/xpd.visualization/d3-dmec-chart.directive.js"></script>
-	<script type="text/javascript" src="/xpd-resources/ng/xpd.visualization/time-zoom-tool.directive.js"></script>
+    <script type="text/javascript" src="/xpd-resources/ng/xpd.visualization/time-zoom-tool.directive.js"></script>
     <script type="text/javascript" src="/xpd-resources/ng/xpd.visualization/xpd-view-box.directive.js"></script>
 
     <!-- XPD DIALOG -->
@@ -79,22 +79,22 @@
 
     <!-- DMEC LEGADÃO -->
     <script type="text/javascript" src="/xpd-resources/ng/xpd.setupapi/setupapi.module.js"></script>
-	<script type="text/javascript" src="/xpd-resources/ng/xpd.setupapi/admin-user-setupapi.service.js"></script>
-	<script type="text/javascript" src="/xpd-resources/ng/xpd.setupapi/setupapi.service.js"></script>
-	<script type="text/javascript" src="/xpd-resources/ng/xpd.setupapi/photo-setupapi.service.js"></script>
-	<script type="text/javascript" src="/xpd-resources/ng/xpd.setupapi/alarm-setupapi.service.js"></script>
-	<script type="text/javascript" src="/xpd-resources/ng/xpd.setupapi/reading-setupapi.service.js"></script>
-	<script type="text/javascript" src="/xpd-resources/ng/xpd.setupapi/category-setupapi.service.js"></script>
-	<script type="text/javascript" src="/xpd-resources/ng/xpd.setupapi/reports-setupapi.service.js"></script>
-	<script type="text/javascript" src="/xpd-resources/ng/xpd.setupapi/eventlog-setupapi.service.js"></script>
-	<script type="text/javascript" src="/xpd-resources/ng/xpd.setupapi/schedule-setupapi.service.js"></script>
-	<script type="text/javascript" src="/xpd-resources/ng/xpd.setupapi/failure-setupapi.service.js"></script>
-	<script type="text/javascript" src="/xpd-resources/ng/xpd.setupapi/section-setupapi.service.js"></script>
-	<script type="text/javascript" src="/xpd-resources/ng/xpd.setupapi/lessonlearned-setupapi.service.js"></script>
-	<script type="text/javascript" src="/xpd-resources/ng/xpd.setupapi/master-user-setupapi.service.js"></script>
-	<script type="text/javascript" src="/xpd-resources/ng/xpd.setupapi/operation-setupapi.service.js"></script>
-	<script type="text/javascript" src="/xpd-resources/ng/xpd.setupapi/well-setupapi.service.js"></script>
-	<script type="text/javascript" src="/xpd-resources/ng/xpd.setupapi/photo-setupapi.directive.js"></script>
+    <script type="text/javascript" src="/xpd-resources/ng/xpd.setupapi/admin-user-setupapi.service.js"></script>
+    <script type="text/javascript" src="/xpd-resources/ng/xpd.setupapi/setupapi.service.js"></script>
+    <script type="text/javascript" src="/xpd-resources/ng/xpd.setupapi/photo-setupapi.service.js"></script>
+    <script type="text/javascript" src="/xpd-resources/ng/xpd.setupapi/alarm-setupapi.service.js"></script>
+    <script type="text/javascript" src="/xpd-resources/ng/xpd.setupapi/reading-setupapi.service.js"></script>
+    <script type="text/javascript" src="/xpd-resources/ng/xpd.setupapi/category-setupapi.service.js"></script>
+    <script type="text/javascript" src="/xpd-resources/ng/xpd.setupapi/reports-setupapi.service.js"></script>
+    <script type="text/javascript" src="/xpd-resources/ng/xpd.setupapi/eventlog-setupapi.service.js"></script>
+    <script type="text/javascript" src="/xpd-resources/ng/xpd.setupapi/schedule-setupapi.service.js"></script>
+    <script type="text/javascript" src="/xpd-resources/ng/xpd.setupapi/failure-setupapi.service.js"></script>
+    <script type="text/javascript" src="/xpd-resources/ng/xpd.setupapi/section-setupapi.service.js"></script>
+    <script type="text/javascript" src="/xpd-resources/ng/xpd.setupapi/lessonlearned-setupapi.service.js"></script>
+    <script type="text/javascript" src="/xpd-resources/ng/xpd.setupapi/master-user-setupapi.service.js"></script>
+    <script type="text/javascript" src="/xpd-resources/ng/xpd.setupapi/operation-setupapi.service.js"></script>
+    <script type="text/javascript" src="/xpd-resources/ng/xpd.setupapi/well-setupapi.service.js"></script>
+    <script type="text/javascript" src="/xpd-resources/ng/xpd.setupapi/photo-setupapi.directive.js"></script>
 
     <!-- DRILLING MECHANICS MODULE JS -->
     <script type="text/javascript" src="./app/components/dmec-log/dmec-log.module.js"></script>
@@ -106,7 +106,7 @@
 <body ng-app="xpd.dmeclog" ng-controller="DMecLogController as dmlController">
 
     <nav class="navbar navbar-default navbar-fixed-top dmec-navbar">
-        
+
         <div class="container-fluid">
 
             <div class="navbar-header">
@@ -114,62 +114,49 @@
             </div>
 
             <form class="navbar-form navbar-left">
+
+
                 <uib-accordion>
+
                     <div uib-accordion-group class="panel-default" is-open="status.isCustomHeaderOpen">
-            
+
                         <uib-accordion-heading>
-                            Filter
-            
+                            Settings
+
                             <span class="well well-sm">
-                                <strong>
-                                    Full range
-                                </strong>
-                                {{ dmecTrackingStartAt | date:'MM/dd/yyyy HH:mm' }} - {{ ( (dmecTrackingStartAt | date:'MM/dd/yyyy') != (dmecTrackingEndAt
-                                | date:'MM/dd/yyyy') )? ( dmecTrackingEndAt | date:'MM/dd/yyyy HH:mm' ) : (dmecTrackingEndAt | date:'HH:mm') }}
+                                <strong>DMEC is starting at</strong> {{ dmecTrackingStartAt | date:'medium' }}
                             </span>
-            
-            
-                            <span class="well well-sm">
-                                <strong>
-                                    Zooming at
-                                </strong>
-                                {{ zoomStartAt | date:'MM/dd/yyyy HH:mm' }} - {{ ( (zoomStartAt | date:'MM/dd/yyyy') != (zoomEndAt | date:'MM/dd/yyyy') )?
-                                ( zoomEndAt | date:'MM/dd/yyyy HH:mm' ) : (zoomEndAt | date:'HH:mm:ss') }}
-                            </span>
-            
-                            <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': status.isCustomHeaderOpen, 'glyphicon-chevron-right': !status.isCustomHeaderOpen}"></i>
+
+                            <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': status.isCustomHeaderOpen, 'glyphicon-chevron-right': !status.isCustomHeaderOpen}">
+
+                            </i>
+
                         </uib-accordion-heading>
-            
+
                         <form name="inputRange.form">
-            
+
                             <div class="checkbox">
                                 <label>
                                     <input name="realtime" ng-model="inputRangeForm.realtime" type="checkbox"> Real Time
                                 </label>
                             </div>
-            
+
                             <div ng-if="!inputRangeForm.realtime">
-            
+
                                 <div class="form-group">
                                     <label for="startTime">From:</label>
-                                    <input ng-model="inputRangeForm.startTime" type="datetime-local" class="form-control" required min="{{ operationData.operationContext.currentOperation.startDate | date:'yyyy-MM-ddTHH:mm' }}"
-                                     name="startTime" id="startTime">
+                                    <input ng-model="inputRangeForm.startTime" type="datetime-local" class="form-control" required name="startTime" id="startTime">
                                 </div>
+
                             </div>
 
                             <div ng-if="inputRangeForm.realtime">
-            
-                                <!-- <div class="checkbox">
-                                    <label>
-                                        <input name="realtime" ng-model="inputRangeForm.keepZoomAtTheEnd" type="checkbox"> Zoom at the end
-                                    </label>
-                                </div> -->
-            
+
                                 <div class="form-group">
                                     <label for="last">Last:</label>
                                     <input ng-model="inputRangeForm.last" type="number" class="form-control" required name="last" id="last">
                                 </div>
-            
+
                                 <div class="form-group">
                                     <select ng-model="inputRangeForm.toMilliseconds" class="form-control" required name="toMilliseconds" id="toMilliseconds">
                                         <option value="86400000">Days</option>
@@ -178,44 +165,28 @@
                                         <option value="1000">Seconds</option>
                                     </select>
                                 </div>
-            
+
                             </div>
-            
+
                             <button type="submit" ng-click="actionButtonSubmitDmecRange()" ng-disabled="inputRange.form.$invalid" class="btn btn-default">Submit</button>
-            
+
                         </form>
                     </div>
-            
+
                 </uib-accordion>
+
             </form>
 
         </div>
-    
+
     </nav>
-    
-    <time-zoom-tool 
-        horizontal="true" 
-        is-zooming-callback="isZooming"
-        start-at="dmecTrackingStartAt" 
-        end-at="dmecTrackingEndAt"    
-        zoom-start-at="zoomStartAt" 
-        zoom-end-at="zoomEndAt">
+
+    <time-zoom-tool ng-if="zoomStartAt && zoomEndAt" zoom-start-at="zoomStartAt" zoom-end-at="zoomEndAt" set-zoom-start-at="setZoomStartAt"
+        set-zoom-end-at="setZoomEndAt">
     </time-zoom-tool>
-    
-    <d3-dmec-chart 
-        ng-init="dmecTrackingStartAt && dmecTrackingEndAt"
-        threads="{{ 4 }}" 
-        horizontal="false" 
-        start-at="dmecTrackingStartAt" 
-        end-at="dmecTrackingEndAt" 
-        on-reading="onReading"
-        zoom-start-at="zoomStartAt" 
-        zoom-end-at="zoomEndAt" 
-        on-reading-since="onReadingSince" 
-        connection-events="connectionEvents" 
-        trip-events="tripEvents"
-        time-events="timeEvents" 
-        auto-scroll="chartAutoScroll">
+
+    <d3-dmec-chart ng-if="dmecTrackingStartAt && zoomStartAt && zoomEndAt" threads="4" horizontal="false" on-reading-since="onReadingSince"
+        actual-start-at="dmecTrackingStartAt" on-reading="onReading" zoom-start-at="zoomStartAt" zoom-end-at="zoomEndAt">
     </d3-dmec-chart>
 
 </body>

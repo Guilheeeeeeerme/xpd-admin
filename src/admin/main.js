@@ -15,11 +15,15 @@ app.on('window-all-closed', function() {
 		app.quit();
 });
 
+var MAX_GIGABYTES = 2;
+var MAX_MEGABYTES = MAX_GIGABYTES * 1024;
+
 // var clientCrt = path.join('/', '.xpd', 'keys', 'os', 'XPD-Client.crt');
 var clientCrt = path.join(__dirname, 'keys', 'XPD-Client.crt');
 
 app.commandLine.appendSwitch('client-certificate', clientCrt);
 app.commandLine.appendSwitch('ignore-certificate-errors');
+app.commandLine.appendSwitch('js-flags', '--max_old_space_size=' + MAX_MEGABYTES);
 
 app.on('certificate-error', function(event, webContents, url, error, certificate, callback) {
 	console.log(url);
@@ -30,6 +34,7 @@ app.on('certificate-error', function(event, webContents, url, error, certificate
 app.on('ready', function() {
 
 	mainWindow = new BrowserWindow({
+		show: false,
 		width: 800,
 		height: 600,
 		webPreferences: {
@@ -43,6 +48,9 @@ app.on('ready', function() {
 		protocol: 'file:',
 		slashes: true
 	}));
+
+	mainWindow.maximize();
+	mainWindow.show();
 
 	// mainWindow.webContents.openDevTools();
 });

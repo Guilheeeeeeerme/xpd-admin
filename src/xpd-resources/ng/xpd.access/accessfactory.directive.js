@@ -4,9 +4,9 @@
 	angular.module('xpd.accessfactory')
 		.directive('accessFactoryDirective', accessFactoryDirective);
 
-	accessFactoryDirective.$inject = ['$localStorage', '$uibModal', 'dialogFactory'];
+	accessFactoryDirective.$inject = ['$uibModal', 'dialogFactory'];
 
-	function accessFactoryDirective($localStorage, $uibModal, dialogFactory){
+	function accessFactoryDirective($uibModal, dialogFactory){
 		
 		return {
 			restrict: 'E',
@@ -31,7 +31,7 @@
 			}
 
 			function actionProceed(){
-				$localStorage.$default(scope.dados.XPDAccessData);
+				localStorage.setItem('xpd.admin.XPDAccessData', JSON.stringify(scope.dados.XPDAccessData) );
 				location.reload();
 			}
 
@@ -42,7 +42,7 @@
 
 			function actionButtonEditAccessData(){
 				scope.dados = {
-					XPDAccessData: $localStorage.XPDAccessData
+					XPDAccessData: JSON.parse(localStorage.getItem('xpd.admin.XPDAccessData'))
 				};
 
 				if(!modalInstance){
