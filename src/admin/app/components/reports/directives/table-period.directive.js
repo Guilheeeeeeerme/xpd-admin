@@ -7,7 +7,7 @@
 	tablePeriod.$inject = [];
 
 	function tablePeriod() {
-		return{
+		return {
 			restrict: 'EA',
 			templateUrl: 'app/components/reports/directives/table-period.template.html',
 			scope: {
@@ -46,17 +46,17 @@
 				}
 			}
 
-			function toJSONLocal (date) {
+			function toJSONLocal(date) {
 
 				if (date == undefined) return;
 
-			    var local = new Date(date);
-			    local.setMinutes(date.getMinutes() - date.getTimezoneOffset());
-			    return local.toJSON().slice(0, 19);
+				var local = new Date(date);
+				local.setMinutes(date.getMinutes() - date.getTimezoneOffset());
+				return local.toJSON().slice(0, 19);
 			}
 
-			function onDataRangeChange(){
-				if(scope.initialDate && scope.initialDate.getTime() > scope.finalDate.getTime()){
+			function onDataRangeChange() {
+				if (scope.initialDate && scope.initialDate.getTime() > scope.finalDate.getTime()) {
 					scope.initialDate = new Date(scope.finalDate.getFullYear(), scope.finalDate.getMonth(), scope.finalDate.getDate(), 0, 0, 0, 0);
 				}
 			}

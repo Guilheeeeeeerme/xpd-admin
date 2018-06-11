@@ -32,14 +32,14 @@
 			scope.actionButtonOpenFailureLessonModal = actionButtonOpenFailureLessonModal;
 			scope.actionButtonFinishFailureOnGoing = actionButtonFinishFailureOnGoing;
 			
-			loadOnGoingFailure();
+			// loadOnGoingFailure();
 
 			function loadOnGoingFailure() {
+				var failureContext = operationDataFactory.operationData.failureContext;
 				
-				if (operationDataFactory.operationData.onGoingFailureContext.onGoingFailure != null
-					&& operationDataFactory.operationData.onGoingFailureContext.onGoingFailure.length != 0) {
+				if (failureContext.onGoingFailure && failureContext.onGoingFailure != null) {
 					
-					scope.onGoingFailure = operationDataFactory.operationData.onGoingFailureContext.onGoingFailure;
+					scope.onGoingFailure = operationDataFactory.operationData.failureContext.onGoingFailure;
 					
 					if (scope.onGoingFailure.npt){
 						scope.failureClass = 'failure-npt';

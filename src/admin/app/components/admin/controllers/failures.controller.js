@@ -5,14 +5,14 @@
 	angular.module('xpd.failure-controller')
 		.controller('FailuresController', FailuresController);
 
-	FailuresController.$inject = ['$scope', 'failureModal', '$uibModal', 'operationDataFactory', 'failureSetupAPIService', 'dialogFactory'];
+	FailuresController.$inject = ['$scope', 'failureModal', 'operationDataFactory', 'dialogFactory'];
 
-	function FailuresController($scope, failureModal, $modal, operationDataFactory, failureSetupAPIService, dialogFactory) {
+	function FailuresController($scope, failureModal, operationDataFactory, dialogFactory) {
 		var vm = this;
 
 		$scope.modalData = {
 			failuresList: [],
-			failureOnGoing: [],
+			failureOnGoing: null,
 			operation: {},
 			category: {
 				roleList: [],
@@ -28,19 +28,15 @@
 		operationDataFactory.operationData = [];
 
 		$scope.modalData.operation = operationDataFactory.operationData.operationContext.currentOperation;
+		$scope.modalData.failuresList = operationDataFactory.operationData.failureContext.failureList;
 
-		populateFailureList();
+		operationDataFactory.addEventListener('failuresController', 'setOnFailureChangeListener', populateFailureList);
 
 		function populateFailureList() {
-			failureSetupAPIService.listFailures(function (response) {
-				$scope.modalData.failuresList = response.filter(function (failure) {
-					return !failure.onGoing;
-				});
+			var failureContext = operationDataFactory.operationData.failureContext;
 
-				$scope.modalData.failureOnGoing = response.filter(function (failure) {
-					return failure.onGoing;
-				});
-			});
+			$scope.modalData.failuresList = failureContext.failureList;
+			$scope.modalData.failureOnGoing = failureContext.failureOnGoing;
 		}
 
 		function actionClickButtonAddFailure() {
@@ -54,7 +50,7 @@
 				};
 			}
 
-			failureModal.open(newFailure, failureModalSuccessCallback, failureModalErrorCallback);
+			failureModal.open(newFailure);
 		}
 
 		function actionClickButtonEditFailure(selectedFailure) {
@@ -62,15 +58,7 @@
 				selectedFailure.operation = { 'id': $scope.modalData.operation.id };
 			}
 
-			failureModal.open(selectedFailure, failureModalSuccessCallback, failureModalErrorCallback);
-		}
-
-		function failureModalSuccessCallback(failure) {
-			populateFailureList();
-		}
-
-		function failureModalErrorCallback() {
-			dialogFactory.showConfirmDialog('Error on inserting failure, please try again!');
+			failureModal.open(selectedFailure);
 		}
 
 		function actionClickButtonRemoveFailure(failure) {
@@ -82,19 +70,7 @@
 		}
 
 		function removeFailure(failure) {
-			failureSetupAPIService.removeObject(
-				failure,
-				removeFailureSuccessCallback,
-				removeFailureErrorCallback
-			);
-		}
-
-		function removeFailureSuccessCallback(result) {
-			populateFailureList();
-		}
-
-		function removeFailureErrorCallback(error) {
-			console.log(error);
+			operationDataFactory.emitRemoveFailure(failure);
 		}
 
 	}
