@@ -6,8 +6,7 @@ exports.scripts = {
 		'./node_modules/angular-ui-bootstrap/dist/ui-bootstrap-tpls.js',
 		'./node_modules/angular-route/angular-route.min.js',
 		'./node_modules/angular-animate/angular-animate.min.js',
-		'./node_modules/angular-spinner/dist/angular-spinner.min.js',
-		'./node_modules/ngstorage/ngStorage.min.js'
+		'./node_modules/angular-spinner/dist/angular-spinner.min.js'
 	],
 	base: [
 		'./node_modules/angular-toastr/dist/angular-toastr.tpls.js',

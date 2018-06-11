@@ -64,7 +64,7 @@
 
 					scope.$watch('tick', function (tick) {
 						if (scope.currentEvent && scope.eventType == scope.currentEvent.eventType) {
-							currentEventBar(buildCurrentEventBar(scope.currentEvent, true, tick));
+							currentEventBar(buildCurrentEventBar(scope.currentEvent, tick));
 						}	
 					});
 
@@ -125,6 +125,11 @@
 							.clamp(true);
 
 						var height = yScale(event.actualSpeed);
+
+						if (scope.currentEvent.id != event.id && event.eventType == 'TRIP') {
+							height = yScale(event.actualSpeed * 30);
+						}
+
 						if (!isNaN(height)) {
 							return height;
 						}
@@ -138,7 +143,7 @@
 						return scope.xScale(new Date(startTime));
 					}
 
-					function buildCurrentEventBar(event, isCurrentEvent, eventDuration) {
+					function buildCurrentEventBar(event, eventDuration) {
 
 						var bar = {
 							width: 0,
@@ -159,6 +164,7 @@
 
 						event.actualSpeed = displacement / (eventDuration / 1000);
 						bar.height = getBarHeight(event);
+
 						bar.position = scope.svgViewHeight - bar.height;
 
 						if (event.actualSpeed >= event.voptimum) {

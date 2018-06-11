@@ -32,11 +32,11 @@
 		operationDataFactory.operationData = [];
 
 		// --actions--
-		if (!$localStorage['reportsData.toDate'] || !$localStorage['reportsData.fromDate']) {
+		if(!localStorage.getItem('xpd.admin.reports.reportsData.toDate')  || !localStorage.getItem('xpd.admin.reports.reportsData.fromDate') ){
 			setCurrentDate();
-		} else {
-			$scope.reportsData.toDate = new Date($localStorage['reportsData.toDate']);
-			$scope.reportsData.fromDate = new Date($localStorage['reportsData.fromDate']);
+		}else{
+			$scope.reportsData.toDate = new Date(localStorage.getItem('xpd.admin.reports.reportsData.toDate') );
+			$scope.reportsData.fromDate = new Date(localStorage.getItem('xpd.admin.reports.reportsData.fromDate') );
 		}
 
 		getWellList();
@@ -66,8 +66,8 @@
 				$scope.reportsData.toDate.setHours(23, 59, 59, 999);
 			}
 
-			$localStorage['reportsData.toDate'] = $scope.reportsData.toDate.toISOString();
-			$localStorage['reportsData.fromDate'] = $scope.reportsData.fromDate.toISOString();
+			localStorage.setItem('xpd.admin.reports.reportsData.toDate', $scope.reportsData.toDate.toISOString());
+			localStorage.setItem('xpd.admin.reports.reportsData.fromDate', $scope.reportsData.fromDate.toISOString());
 
 		}
 

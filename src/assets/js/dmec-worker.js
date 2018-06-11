@@ -1,15 +1,17 @@
 
-
-'use strict';
-
 (function () {
+
+	'use strict';
 
 	function getRandomArbitrary(min, max) {
 		return Math.floor(Math.random() * (max - min) + min);
 	}
 
-	addEventListener('message', function (e) {
-		var data = e.data;
+	addEventListener('message', onEvent, false);
+
+	function onEvent(event) {
+		var data = event.data;
+		var self = this;
 
 		// var threadId = getRandomArbitrary(0, 1000) + ' ' + data.cmd;
 		// var startTime = new Date().getTime();
@@ -18,33 +20,54 @@
 		switch (data.cmd) {
 
 		case 'find-point':
-			this.postMessage({
-				cmd: 'find-point',
-				points: getPoint(data.timestamp, data.tracks, data.oldPoints, data.newPoints)
+			getPoint(data.timestamp, data.tracks, data.oldPoints, data.newPoints).then(function (points) {
+				self.postMessage({
+					cmd: data.cmd,
+					points: points
+				});
+			});
+			break;
+		case 'find-point-avl':
+			getParamPointAVL(data.timestamp, data.param, data.oldPoints, data.newPoints).then(function (point) {
+				self.postMessage({
+					cmd: data.cmd,
+					point: point,
+					param: data.param
+				});
+			});
+			break;
+		case 'find-point-linear':
+			getParamPointLinear(data.timestamp, data.param, data.oldPoints, data.newPoints).then(function (point) {
+				self.postMessage({
+					cmd: data.cmd,
+					point: point,
+					param: data.param
+				});
 			});
 			break;
 		case 'handle-overflow':
 			this.postMessage({
-				cmd: 'handle-overflow',
+				cmd: data.cmd,
 				trackName: data.trackName,
 				points: overflowPoints(data.tracks, data.points)
 			});
 			break;
 		case 'reading-to-points':
 			this.postMessage({
-				cmd: 'reading-to-points',
+				cmd: data.cmd,
 				points: readingsToPoints(data.readings, data.tracks)
 			});
 			break;
 		default:
 			console.log('[Worker] Unable to handle ', data);
 			break;
+
 		}
 
 		// var endTime = new Date().getTime();
 		// console.log('%s terminou [%s ms]', threadId, (endTime - startTime));
 
-	}, false);
+	}
 
 	function overflowPoints(tracks, points) {
 
@@ -109,28 +132,52 @@
 			return result;
 		}
 	}
-
 	function getPoint(timestamp, tracks, oldPoints, newPoints) {
 
-		var reading = {};
+		var promises = [];
 
 		tracks.map(function (track) {
+			promises.push(getParamPointAVL(timestamp, track.param, oldPoints, newPoints));
+			// promises.push(getParamPointLinear(timestamp, track.param, oldPoints, newPoints));
+		});
+
+		return new Promise(function (resolve, reject) {
+
+			Promise.all(promises).then(function (top) {
+
+				var reading = {};
+
+				for (var i in top) {
+					reading[top[i].param] = top[i].point;
+				}
+
+				resolve(reading);
+
+			});
+
+		});
+
+	}
+
+	function getParamPointAVL(timestamp, param, oldPoints, newPoints) {
+
+		return new Promise(function (resolve, reject) {
 
 			var points = [];
 
 			if (newPoints &&
-				newPoints[track.param] &&
-				newPoints[track.param].length &&
-				timestamp >= newPoints[track.param][0].x) {
+				newPoints[param] &&
+				newPoints[param].length &&
+				timestamp >= newPoints[param][0].x) {
 
-				points = newPoints[track.param];
+				points = newPoints[param];
 
 			} else {
 				if (oldPoints &&
-					oldPoints[track.param] &&
-					oldPoints[track.param].length) {
+					oldPoints[param] &&
+					oldPoints[param].length) {
 
-					points = oldPoints[track.param];
+					points = oldPoints[param];
 				}
 			}
 
@@ -153,11 +200,53 @@
 
 			}
 
-			reading[track.param] = points[0] || null;
+			resolve({
+				param: param,
+				point: points[0] || null
+			});
 
 		});
 
-		return reading;
+	}
+
+	function getParamPointLinear(timestamp, param, oldPoints, newPoints) {
+
+		return new Promise(function (resolve, reject) {
+
+			var points = [];
+
+			if (newPoints &&
+				newPoints[param] &&
+				newPoints[param].length &&
+				timestamp >= newPoints[param][0].x) {
+
+				points = newPoints[param];
+
+			} else {
+				if (oldPoints &&
+					oldPoints[param] &&
+					oldPoints[param].length) {
+
+					points = oldPoints[param];
+				}
+			}
+
+			while (points && points.length > 1) {
+
+				if ((points[0].x <= timestamp) && (points[1].x >= timestamp)) {
+					break;
+				}
+
+				points.shift();
+			}
+
+			resolve({
+				param: param,
+				point: points[0] || null
+			});
+
+		});
+
 	}
 
 

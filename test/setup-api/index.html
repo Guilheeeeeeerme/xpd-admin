@@ -11,9 +11,10 @@
 
     <script type="text/javascript" src="/node_modules/angular/angular.min.js"></script>
     <script type="text/javascript" src="/node_modules/angular-animate/angular-animate.min.js"></script>
-    <script type="text/javascript" src="/node_modules/ngstorage/ngStorage.min.js"></script>
-    <script type="text/javascript" src="/node_modules/angular-toastr/dist/angular-toastr.tpls.js"></script>
+    <script type="text/javascript" src="/node_modules/angular-toastr/dist/angular-toastr.tpls.js"></script>	
+	<script type="text/javascript" src="/node_modules/angular-spinner/dist/angular-spinner.min.js"></script>
 
+	<script type="text/javascript" src="/xpd-resources/ng/xpd.spinner/xpd.spinner.js"></script>
     <script type="text/javascript" src="/src/xpd-resources/ng/xpd.access/accessfactory.module.js"></script>
     <script type="text/javascript" src="/src/xpd-resources/ng/xpd.access/accessfactory.directive.js"></script>
     <script type="text/javascript" src="/src/xpd-resources/ng/xpd.access/security-interceptor.factory.js"></script>
@@ -43,7 +44,7 @@
 
         function setupTestController($scope) {
 
-            $scope.selectedTest = localStorage.getItem('SETUPAPITEST');
+            $scope.selectedTest = localStorage.getItem('xpd.admin.setup.test');
 
             $scope.$watch('selectedTest',  updateLocalStorage)
             $scope.getPartial = getPartial;
@@ -54,7 +55,7 @@
 
             function updateLocalStorage(selectedTest){
                 if(selectedTest)
-                    localStorage.setItem('SETUPAPITEST', selectedTest);
+                    localStorage.setItem('xpd.admin.setup.test', selectedTest);
             }
 
         }

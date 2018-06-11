@@ -4,12 +4,13 @@ exports.scripts = {
 		'./node_modules/angular-ui-bootstrap/dist/ui-bootstrap.js',
 		'./node_modules/angular-ui-bootstrap/dist/ui-bootstrap-tpls.js',
 		'./node_modules/socket.io-client/dist/socket.io.js',
-		'./node_modules/ngstorage/ngStorage.min.js',
+		'./node_modules/angular-spinner/dist/angular-spinner.min.js',
 		'./node_modules/angular-animate/angular-animate.min.js'
 	],
 	base: [
 		'./node_modules/angular-toastr/dist/angular-toastr.tpls.js',
 		'./src/xpd-resources/ng/socket.io/socketio.module.js',
+		'./src/xpd-resources/ng/xpd.spinner/xpd.spinner.js',
 		'./src/xpd-resources/ng/socket.io/socket.factory.js',
 		'./src/xpd-resources/ng/xpd.access/accessfactory.module.js',
 		'./src/xpd-resources/ng/xpd.access/accessfactory.directive.js',

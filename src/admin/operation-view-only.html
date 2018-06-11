@@ -28,12 +28,12 @@
     <script type="text/javascript" src="/node_modules/angular-animate/angular-animate.min.js"></script>
     
     <script type="text/javascript" src="/node_modules/angular-toastr/dist/angular-toastr.tpls.js"></script>
-
-    <script type="text/javascript" src="/node_modules/ngstorage/ngStorage.min.js"></script>
+	<script type="text/javascript" src="/node_modules/angular-spinner/dist/angular-spinner.min.js"></script>
 
     <!-- endbuild -->
 	
 	<!-- build:basejs -->
+	<script type="text/javascript" src="/xpd-resources/ng/xpd.spinner/xpd.spinner.js"></script>
     <script type="text/javascript" src="/xpd-resources/ng/xpd.dialog/xpd.dialog.module.js"></script>
     <script type="text/javascript" src="/xpd-resources/ng/xpd.dialog/xpd.dialog.factory.js"></script>
 
@@ -164,14 +164,14 @@
 
         <div class="container" ng-if="dados.operation.type == 'bha'">
             <div class="row">
-                <div class="col-md-12 panel panel-default" ng-if="!dados.operation.afterRiser">
+                <div class="col-md-12 panel panel-default" ng-if="!dados.operation.bopSetted">
                     <operation-contract-info-table operation="dados.operation"  class="table table-condensed" state="Open Sea"
                            state-id="openSea" contract-params="dados.contractParams" trip-unit="m/h"
                            trip-required="false" conn-unit="Con/h" conn-required="true"
                            contract-form="ovoController.contract" view-only="true"
                            ui-popover="htmlPopover"/>
                 </div>
-                <div class="col-md-12 panel panel-default" ng-if="dados.operation.afterRiser">
+                <div class="col-md-12 panel panel-default" ng-if="dados.operation.bopSetted">
                     <operation-contract-info-table operation="dados.operation"  class="table table-condensed" state="Cased Well"
                            state-id="cased" contract-params="dados.contractParams" trip-unit="m/h"
                            trip-required="false" conn-unit="Con/h" conn-required="true"

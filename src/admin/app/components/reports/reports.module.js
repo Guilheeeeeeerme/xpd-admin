@@ -8,7 +8,6 @@
 		'xpd.filters',
 		'd3',
 		'highcharts',
-		'xpd-spinner',
 		'xpd.communication',
 		'xpd.modal.laydown-confirmation',
 		'xpd.menu-confirmation',

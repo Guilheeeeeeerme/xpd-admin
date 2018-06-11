@@ -302,7 +302,7 @@
 		"waterDepth": 2000,
 		"cementingFinished": false,
 		"makeUpFinished": false,
-		"afterRiser": false,
+		"bopSetted": false,
 		"safetySpeedLimit": 4000,
 		"stickUp": 3,
 		"upperStop": 33,
