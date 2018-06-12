@@ -44,7 +44,7 @@
 				animation: true,
 				keyboard: false,
 				backdrop: 'static',
-				size: 'modal-sm',
+				size: 'lg',
 				templateUrl: 'app/components/admin/views/modal/well-upsert.modal.html',
 				controller: 'WellUpsertController as wuController',
 				resolve: {
@@ -63,7 +63,7 @@
 				animation: true,
 				keyboard: false,
 				backdrop: 'static',
-				size: 'modal-sm',
+				size: 'lg',
 				templateUrl: 'app/components/admin/views/modal/well-upsert.modal.html',
 				controller: 'WellUpsertController as wuController',
 				resolve: {
