@@ -27,7 +27,7 @@
 			var ONE_HOUR = 3600000;
 			var getTickFrequency = 1000;
 			var getTickInterval;
-			var resetPageTimeout = $timeout(reload, (ONE_HOUR / 2));
+			var resetPageTimeout = null ; // $timeout(reload, (ONE_HOUR / 2));
 
 			scope.$on('$destroy', destroy);
 
@@ -76,14 +76,15 @@
 				startAtMillis = new Date(scope.dmecTrackingStartAt).getTime();
 
 				intervalToShow = (endAtMillis - startAtMillis);
-				
+
+				// scope.zoomStartAt
 				setZoomStartAt(new Date(endAtMillis - (intervalToShow / 2)));
-				setZoomEndAt(new Date(endAtMillis));
+				// scope.zoomEndAt
+				setZoomEndAt(new Date(endAtMillis + (intervalToShow / 2)));
 
-				if (angular.isDefined(getTickInterval)) {
-					$interval.cancel(getTickInterval);
-				}
+				destroy();
 
+				resetPageTimeout = $timeout(reload, (ONE_HOUR / 2));
 				getTickInterval = $interval(getTick, getTickFrequency);
 
 				scope.initializeComponent = function(){};
@@ -106,6 +107,17 @@
 			function getTick() {
 
 				var now = new Date().getTime();
+
+				if(scope.inputRangeForm.keepZoomAtTheEnd && now >= new Date(scope.zoomEndAt).getTime()){
+					var intervalToShow = new Date(scope.zoomEndAt).getTime() - new Date(scope.zoomStartAt).getTime();
+					// scope.zoomStartAt
+					setZoomStartAt(new Date(now - (intervalToShow / 2)));
+					// scope.zoomEndAt
+					setZoomEndAt(new Date(now + (intervalToShow / 2)));
+				}
+
+				
+
 
 				scope.onReading = $q(function (resolve, reject) {
 					var currentReading = scope.currentReading;
