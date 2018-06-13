@@ -10,9 +10,9 @@
 	angular.module('xpd.reports')
 		.controller('ReportsController', reportsController);
 
-	reportsController.$inject = ['$scope', '$localStorage', 'operationSetupAPIService', 'wellSetupAPIService', 'operationDataFactory'];
+	reportsController.$inject = ['$scope', 'operationSetupAPIService', 'wellSetupAPIService', 'operationDataFactory'];
 
-	function reportsController($scope, $localStorage, operationSetupAPIService, wellSetupAPIService, operationDataFactory) {
+	function reportsController($scope, operationSetupAPIService, wellSetupAPIService, operationDataFactory) {
 
 		// --declarations--
 		var vm = this;
