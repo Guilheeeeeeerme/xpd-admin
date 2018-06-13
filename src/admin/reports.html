@@ -169,8 +169,8 @@
 					</div>
 				</div>
 				
-				<div class="empty-value-report-message has-error" ng-if="( reportsData.failuresOnInterval | filter: { npt:true } ).length > 0">
-					There are <strong>{{ ( reportsData.failuresOnInterval | filter: { npt:true } ).length }}</strong> NPT(s) on this interval
+				<div class="empty-value-report-message has-error" ng-if="( reportsData.failuresOnInterval ).length > 0">
+					There are <strong>{{ ( reportsData.failuresOnInterval ).length }}</strong> NPT(s) on this interval
 				</div>
 
 				<div class="col-md-10" ng-view></div>

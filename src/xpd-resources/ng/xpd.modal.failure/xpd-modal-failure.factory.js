@@ -11,7 +11,7 @@
 			open: open
 		};
 
-		function open(selectedFailure, modalSuccessCallback, modalErrorCallback){
+		function open(selectedFailure){
 
 			if(selectedFailure.startTime)
 				selectedFailure.startTime = new Date(selectedFailure.startTime);
@@ -29,12 +29,6 @@
 				resolve: {
 					selectedFailure: function(){
 						return selectedFailure;
-					},
-					modalSuccessCallback: function(){
-						return modalSuccessCallback;
-					},
-					modalErrorCallback: function(){
-						return modalErrorCallback;
 					}
 				}
 			});

@@ -63,7 +63,7 @@
 	DataHandler.prototype.addEventListener = addEventListener;
 
 	DataHandler.prototype.CONTEXTS = OperationData.prototype.CONTEXTS = {
-		onGoingFailureContext: 'onGoingFailure',
+		failureContext: 'failure',
 		wellContext: 'well',
 		blockSpeedContext: 'blockSpeed',
 		shiftContext: 'shift',
@@ -180,33 +180,39 @@
 		}
 		
 		
-		
 		/**
-		 * ON GOING FAILURE
-         */
+		 * FAILURE
+		 */
+		communicationChannel.setOnFailureChangeListener && communicationChannel.setOnFailureChangeListener(setOnFailureChangeListener);
+		communicationChannel.setOnErrorUpsertFailureListener && communicationChannel.setOnErrorUpsertFailureListener(setOnErrorUpsertFailureListener);
+
 		communicationChannel.setOnGoingFailureListener && communicationChannel.setOnGoingFailureListener(setOnGoingFailureListener);
-		communicationChannel.setOnErrorInsertFailureListener && communicationChannel.setOnErrorInsertFailureListener(setOnErrorInsertFailureListener);
-		communicationChannel.setOnErrorUpdateFailureListener && communicationChannel.setOnErrorUpdateFailureListener(setOnErrorUpdateFailureListener);
+		communicationChannel.setOnNoGoingFailureListener && communicationChannel.setOnNoGoingFailureListener(setOnNoGoingFailureListener);
 		communicationChannel.setOnLastOnGoingSavedListener && communicationChannel.setOnLastOnGoingSavedListener(setOnLastOnGoingSavedListener);
 
-		function setOnGoingFailureListener(onGoingFailureContext) {
-			loadContext('onGoingFailureContext', onGoingFailureContext);
-			loadEventListenersCallback('setOnGoingFailureListener', onGoingFailureContext);
+		function setOnFailureChangeListener(failureContext) {
+			loadContext('failureContext', failureContext);
+			loadEventListenersCallback('setOnFailureChangeListener', failureContext);
 		}
 
-		function setOnErrorInsertFailureListener(onGoingFailureContext) {
-			loadContext('onGoingFailureContext', onGoingFailureContext);
-			loadEventListenersCallback('setOnErrorInsertFailureListener', onGoingFailureContext);
+		function setOnErrorUpsertFailureListener(failureContext) {
+			loadContext('failureContext', failureContext);
+			loadEventListenersCallback('setOnErrorUpsertFailureListener', failureContext);
 		}
 
-		function setOnErrorUpdateFailureListener(onGoingFailureContext){
-			loadContext('onGoingFailureContext', onGoingFailureContext);
-			loadEventListenersCallback('setOnErrorUpdateFailureListener', onGoingFailureContext);
+		function setOnGoingFailureListener(failureContext) {
+			loadContext('failureContext', failureContext);
+			loadEventListenersCallback('setOnGoingFailureListener', failureContext);
 		}
 
-		function setOnLastOnGoingSavedListener(onGoingFailureContext) {
-			loadContext('onGoingFailureContext', onGoingFailureContext);
-			loadEventListenersCallback('setOnLastOnGoingSavedListener', onGoingFailureContext);
+		function setOnNoGoingFailureListener(failureContext) {
+			loadContext('failureContext', failureContext);
+			loadEventListenersCallback('setOnNoGoingFailureListener', failureContext);
+		}		
+
+		function setOnLastOnGoingSavedListener(failureContext) {
+			loadContext('failureContext', failureContext);
+			loadEventListenersCallback('setOnLastOnGoingSavedListener', failureContext);
 		}
 		
 		/**
