@@ -18,15 +18,15 @@
 	function xpdEventLabelFilter($filter) {
 		return function (event) {
 
-			if( event.toLowerCase() == 'trip' ){
+			if( event && event.toLowerCase && event.toLowerCase() == 'trip' ){
 				return 'Trip';
 			}
 
-			if( event.toLowerCase() == 'conn' ){
+			if( event && event.toLowerCase && event.toLowerCase() == 'conn' ){
 				return 'Connection';
 			}
 
-			if( event.toLowerCase() == 'time' ){
+			if( event && event.toLowerCase && event.toLowerCase() == 'time' ){
 				return 'Time Procedure';
 			}
 
