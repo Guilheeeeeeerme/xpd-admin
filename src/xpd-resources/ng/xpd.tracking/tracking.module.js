@@ -5,7 +5,6 @@
 		'ui.bootstrap',
 		'xpd.communication',
 		'xpd.operationmanager',
-		'xpd.time-operation-manager',
 		'xpd.scoredevent',
 		'xpd.dialog',
 		'xpd.filters',

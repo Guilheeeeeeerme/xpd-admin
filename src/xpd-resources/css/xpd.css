@@ -382,13 +382,13 @@ a.view-only-link {
 
 /* OPERATION MANAGER */
 
-.xpd-operation-manager {
+.xpd-green-styled-box {
     font-family: AgencyFB;
     font-size: 1.3em;
     font-weight: bolder;
 }
 
-.xpd-operation-manager-popover {
+.xpd-green-styled-box-popover {
     font-family: AgencyFB;
     font-size: 1em;
     font-weight: bolder;
@@ -400,15 +400,15 @@ a.view-only-link {
     background: transparent;
 }
 
-.xpd-operation-manager-popover .popover-content{
+.xpd-green-styled-box-popover .popover-content{
     padding: 0;
 }
 
-.xpd-operation-manager-popover .equilibrium-time-table {
+.xpd-green-styled-box-popover .equilibrium-time-table {
     margin-bottom: 0px;
 }
 
-.xpd-operation-manager-cell {
+.xpd-green-styled-box-cell {
     display: table;
     height: 50px;
     max-height: 50px;
@@ -418,27 +418,27 @@ a.view-only-link {
     position: relative;
 }
 
-.xpd-operation-manager-cell-blink {
-    animation: xpd-operation-manager-cell-blinker 1s linear infinite;
+.xpd-green-styled-box-cell-blink {
+    animation: xpd-blinker 1s linear infinite;
 }
 
-@keyframes xpd-operation-manager-cell-blinker {
+@keyframes xpd-blinker {
     50% {
         opacity: 0.5;
     }
 }
 
-.xpd-operation-manager-cell:hover {
+.xpd-green-styled-box-cell:hover {
     background-color: #456c75;
     border: 2px solid black;
 }
 
-.xpd-operation-manager-cell a:hover {
+.xpd-green-styled-box-cell a:hover {
     background-color: #456c75;
     color: black;
 }
 
-.xpd-operation-manager-cell a {
+.xpd-green-styled-box-cell a {
     cursor: pointer;
     display: table-cell;
     text-align: center;
@@ -449,94 +449,12 @@ a.view-only-link {
     padding-right: 0;
 }
 
-.xpd-operation-manager-cell .current-state-label {
-    position: absolute;
-    bottom: -52px;
-    border-top: 0;
-    right: 0;
-    background-color: #456c75;
-    color: white;
-    padding: 1px 3px;
-    font-size: 1em;
-    z-index: 1049;
-}
-
-.xpd-operation-manager-cell.active {
+.xpd-green-styled-box-cell.active {
     background-color: #456c75;
     /* border: 2px solid black; */
 }
 
-.xpd-operation-manager-cell.active a {
-    color: black;
-}
-
-.sum-trip-conn {
-    height: 20px;
-    font-size: 0.8em;
-    text-align: center;
-    color: #fff;
-    background-color: #337ab7;
-
-}
-
-
-/* TIME OPERATION MANAGER */
-
-.xpd-time-operation-manager {
-    font-family: AgencyFB;
-    font-weight: bolder;
-}
-
-.operation-manager-cell-admin{
-    font-size: 2em;
-    height: 50px;
-    max-height: 50px;
-}
-
-.operation-manager-cell-driller{
-    font-size: 4em;
-    height: 100px;
-    max-height: 100px;
-}
-
-.xpd-time-operation-manager-cell {
-    height: 100%;
-    width: 100%;
-    display: table;
-    border: 2px solid #456c75;
-    padding: 0px;
-    white-space: nowrap;
-    position: relative;
-}
-
-.xpd-time-operation-manager-cell:hover {
-    background-color: #456c75;
-    border: 2px solid black;
-}
-
-.xpd-time-operation-manager-cell span:hover {
-    background-color: #456c75;
-    color: black;
-}
-
-.xpd-time-operation-manager-cell span {
-    color: #517f89;
-    display: table-cell;
-    text-align: center;
-    vertical-align: middle;
-    width: 100%;
-    white-space: nowrap;
-    padding-left: 0;
-    padding-right: 0;
-    cursor: pointer;
-}
-
-.xpd-time-operation-manager-cell.active {
-    background-color: #456c75;
-    border: 2px solid black;
-}
-
-.xpd-time-operation-manager-cell.active a {
+.xpd-green-styled-box-cell.active a {
     color: black;
 }
 
@@ -573,25 +491,6 @@ a.view-only-link {
     fill: #517f89;
     text-anchor: middle;
 }
-
-.equilibrium-time-table-footer {
-}
-
-
-/*;
-.btn-operation-manager,
-.btn-operation-manager > .btn,
-.btn-operation-manager > .dropdown-menu {
-    width: 100%;
-    font-weight: bold;
-    text-transform: uppercase;
-    text-align: center;
-}
-
-.operation-list-operation-manager li {
-    margin-bottom: 4px;
-    box-shadow: -1px 1px 2px;
-}*/
 
 .xpd-event-popover {
     width: 300px
@@ -939,19 +838,29 @@ a.view-only-link {
 
 
 /**
-* Componente: xpd-admin-nav-bar
+* Componente: xpd-admin-nav-bar and operation manager
 **/
+
+xpd-operation-manager {
+    position: absolute;
+    top: 0;
+    right: 0;
+    z-index: 1030;
+}
 
 xpd-admin-nav-bar .navbar {
     border: 0;
 }
 
+xpd-operation-manager,
+xpd-operation-manager .xpd-nav-button,
 xpd-admin-nav-bar,
 xpd-admin-nav-bar .navbar,
 xpd-admin-nav-bar .xpd-nav-button {
     background-color: transparent;
 }
 
+xpd-operation-manager .xpd-nav-button,
 xpd-admin-nav-bar .xpd-nav-button {
     border: 2px solid #456c75;
     padding: 15px;
@@ -961,12 +870,27 @@ xpd-admin-nav-bar .xpd-nav-button {
     color: #456c75;
 }
 
+xpd-operation-manager .xpd-nav-button,
 xpd-admin-nav-bar .xpd-nav-button {
     color: #456c75;
 }
 
+xpd-operation-manager .xpd-nav-button:focus,
+xpd-operation-manager .xpd-nav-button:hover,
 xpd-admin-nav-bar .xpd-nav-button:focus,
 xpd-admin-nav-bar .xpd-nav-button:hover {
     background-color: #456c75;
     color: white;
+}
+
+xpd-operation-manager .button-bellow-label {
+    position: absolute;
+    bottom: -1.5em;
+    border-top: 0;
+    right: 0;
+    background-color: #456c75;
+    color: white;
+    padding: 1px 3px;
+    font-size: 1em;
+    z-index: 1049;
 }

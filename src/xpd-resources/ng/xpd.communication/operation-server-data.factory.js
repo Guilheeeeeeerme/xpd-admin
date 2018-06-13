@@ -706,7 +706,7 @@
          * FORECAST
          */
 		communicationChannel.setOnForecastChangeListener && communicationChannel.setOnForecastChangeListener(setOnForecastChangeListener);
-		communicationChannel.setOnOptimumLineListener && communicationChannel.setOnOptimumLineListener(setOnOptimumLineListener);
+		communicationChannel.setOnvTargetLineListener && communicationChannel.setOnvTargetLineListener(setOnvTargetLineListener);
 		communicationChannel.setOnActualLineListener && communicationChannel.setOnActualLineListener(setOnActualLineListener);
 
 		function setOnForecastChangeListener(forecastContext) {
@@ -714,9 +714,9 @@
 			loadEventListenersCallback('setOnForecastChangeListener', forecastContext);
 		}
 
-		function setOnOptimumLineListener(forecastContext) {
+		function setOnvTargetLineListener(forecastContext) {
 			loadContext('forecastContext', forecastContext);
-			loadEventListenersCallback('setOnOptimumLineListener', forecastContext);
+			loadEventListenersCallback('setOnvTargetLineListener', forecastContext);
 		}
 
 		function setOnActualLineListener(forecastContext) {

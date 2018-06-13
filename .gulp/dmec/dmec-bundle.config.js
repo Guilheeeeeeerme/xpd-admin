@@ -19,7 +19,6 @@ exports.scripts = {
 		'./src/xpd-resources/ng/d3/d3.module.js',
 		'./src/xpd-resources/ng/d3/d3.service.js',
 		'./src/xpd-resources/ng/xpd.filters/xpd-filter.module.js',
-		'./src/xpd-resources/ng/xpd.filters/percentage.filter.js',
 		'./src/xpd-resources/ng/highcharts/highcharts.module.js',
 		'./src/xpd-resources/ng/highcharts/highcharts.service.js',
 		'./src/xpd-resources/ng/xpd.visualization/xpd-visualization.module.js',
