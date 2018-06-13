@@ -95,16 +95,28 @@
         </div>
         <div class="panel-body">
             <div class="row">
-                <div class="col-md-3">
+                <div class="col-md-6">
                     <table class="table borderless">
                         <tr>
                             <th>Air Gap:</th>
                             <td>{{dados.currentWell.airGap}} m</td>
+
                             <th>Water Depth:</th>
                             <td>
                                 <span ng-if="!dados.currentWell.onshore">{{dados.currentWell.waterDepth}} m</span>
                                 <span ng-if="dados.currentWell.onshore"><i>Onshore</i></span>
                             </td>
+
+                            <th>Hole Depth:</th>
+                            <td>{{dados.currentWell.holeDepth}} m</td>
+
+                            <th>Last Section Shoe Depth:</th>
+                            <td>{{dados.currentWell.shoeDepth}} m</td>
+
+                            <th>
+                                <span ng-if="!dados.currentWell.bopSetted">Without BOP</span>
+                                <span ng-if="dados.currentWell.bopSetted">With BOP</span>
+                            </th>
 
                         </tr>
                     </table>

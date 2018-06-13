@@ -3,9 +3,9 @@
 
 	angular.module('xpd.wellviewonly').controller('WellViewOnlyController', wellViewOnlyController);
 
-	wellViewOnlyController.$inject = ['$scope', 'wellSetupAPIService'];
+	wellViewOnlyController.$inject = ['$scope', 'wellSetupAPIService', 'sectionSetupAPIService'];
 
-	function wellViewOnlyController($scope, wellSetupAPIService) {
+	function wellViewOnlyController($scope, wellSetupAPIService, sectionSetupAPIService) {
 
 		var queryDict = {};
 		location.search.substr(1).split('&').forEach(function (item) {
@@ -24,7 +24,7 @@
 		}, 
 		loadWellErrorCallback);
 
-		wellSetupAPIService.getListOfSectionsByWell(wellId, loadSectionListCallback);
+		sectionSetupAPIService.getListOfSectionsByWell(wellId, loadSectionListCallback);
 
 		function loadWellCallback(data) {
 			$scope.dados.currentWell = data;
