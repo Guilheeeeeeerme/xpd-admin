@@ -37,7 +37,6 @@ exports.scripts = {
 		"./src/xpd-resources/ng/xpd.setupapi/well-setupapi.service.js",
 		"./src/xpd-resources/ng/xpd.setupapi/photo-setupapi.directive.js",
 		'./src/xpd-resources/ng/xpd.filters/xpd-filter.module.js',
-		'./src/xpd-resources/ng/xpd.filters/percentage.filter.js',
 		'./src/xpd-resources/ng/d3/d3.module.js',
 		'./src/xpd-resources/ng/d3/d3.service.js',
 		'./src/xpd-resources/ng/highcharts/highcharts.module.js',

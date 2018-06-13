@@ -1,16 +1,24 @@
-<ul class="xpd-tracking-operation-manager nav navbar-nav navbar-right">
-
-    <xpd-operation-manager display="inline" popover-placement="bottom-right" operation-queue='operationData.operationQueueContext.operationQueue'
-        current-operation='operationData.operationContext.currentOperation' last-section='operationData.operationQueueContext.lastSection'
-        current-state="operationData.stateContext.currentState" current-direction="operationData.directionContext" bit-depth-context='operationData.bitDepthContext'
-        current-alarm="operationData.alarmContext.currentAlarm" action-button-start-operation='tController.actionButtonStartOperation'
-        action-button-finish-operation='tController.actionButtonFinishOperation' action-button-start-cementation="tController.actionButtonStartCementation"
-        action-button-stop-cementation="tController.actionButtonStopCementation" action-button-start-make-up="tController.actionButtonStartMakeUp"
-        action-button-start-lay-down="tController.actionButtonStartLayDown" action-button-finish-make-up="tController.actionButtonFinishMakeUp"
-        action-button-finish-lay-down="tController.actionButtonFinishLayDown" action-button-finish-duration-alarm="tController.finishDurationAlarm">
-    </xpd-operation-manager>
-
-</ul>
+<xpd-operation-manager 
+    display="inline" 
+    popover-placement="bottom-right" 
+    current-event = "operationData.eventContext.currentEvent"
+    operation-queue='operationData.operationQueueContext.operationQueue'
+    current-operation='operationData.operationContext.currentOperation' 
+    last-section='operationData.operationQueueContext.lastSection'
+    current-state="operationData.stateContext.currentState" 
+    current-direction="operationData.directionContext" 
+    bit-depth-context='operationData.bitDepthContext'
+    current-alarm="operationData.alarmContext.currentAlarm" 
+    action-button-start-operation='tController.actionButtonStartOperation'
+    action-button-finish-operation='tController.actionButtonFinishOperation' 
+    action-button-start-cementation="tController.actionButtonStartCementation"
+    action-button-stop-cementation="tController.actionButtonStopCementation" 
+    action-button-start-make-up="tController.actionButtonStartMakeUp"
+    action-button-start-lay-down="tController.actionButtonStartLayDown" 
+    action-button-finish-make-up="tController.actionButtonFinishMakeUp"
+    action-button-finish-lay-down="tController.actionButtonFinishLayDown" 
+    action-button-finish-duration-alarm="tController.finishDurationAlarm">
+</xpd-operation-manager>
 
 <div class="col-md-9 col-sm-6 col-xs-6 tracking-content" ng-controller="AdminTrackingController as atController">
     

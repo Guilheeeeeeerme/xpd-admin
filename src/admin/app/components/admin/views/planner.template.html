@@ -7,27 +7,27 @@
 
     <div class="xpd-admin-col-content">
 
-        <ul class="nav xpd-operation-manager stacked" role="tablist" ng-repeat="state in operationData.suboperationContext.currentSuboperation.jointIntervals">
+        <ul class="nav xpd-green-styled-box stacked" role="tablist" ng-repeat="state in operationData.suboperationContext.currentSuboperation.jointIntervals">
 
             <br/>
 
-            <li role="presentation" class="xpd-operation-manager-cell disabled" ng-class="{'active': state.state == dados.selectedState}">
+            <li role="presentation" class="planner-list-item disabled" ng-class="{'active': state.state == dados.selectedState}">
                 <a>{{ state.label }}</a>
-                <div class="current-state-label" uib-popover="Joint Interval" popover-placement="top-right" popover-trigger="'mouseenter'">{{ state.initialJoint }} - {{ state.finalJoint }}</div>
+                <div class="button-bellow-label" uib-popover="Joint Interval" popover-placement="top-right" popover-trigger="'mouseenter'">{{ state.initialJoint }} - {{ state.finalJoint }}</div>
             </li>
 
-            <li class=" sum-trip-conn">
+            <li class=" planner-sum-trip-conn">
                 1 TRIP + 1 CONN = {{ pController.sumTripConnduration(dados.settings[state.state]) | date: 'HH:mm:ss': '+0000'}}
                 
             </li>
 
 
-            <li role="presentation" class="xpd-operation-manager-cell" ng-class="{'active': dados.selectedEventType == 'CONN' && state.state == dados.selectedState}"
+            <li role="presentation" class="planner-list-item" ng-class="{'active': dados.selectedEventType == 'CONN' && state.state == dados.selectedState}"
                 ng-click="pController.actionSelectActivityToPlan(state.state, 'CONN')" ng-init="pController.selectActivityOnInit($index, state.state, 'CONN')">
                 <a>Connection</a>
             </li>
 
-            <li role="presentation" class="xpd-operation-manager-cell" ng-class="{'active': dados.selectedEventType == 'TRIP' && state.state == dados.selectedState}"
+            <li role="presentation" class="planner-list-item" ng-class="{'active': dados.selectedEventType == 'TRIP' && state.state == dados.selectedState}"
                 ng-click="pController.actionSelectActivityToPlan(state.state, 'TRIP')">
                 <a>Trip</a>
             </li>
@@ -115,11 +115,11 @@
 
                 <div class="planner-forecast-cell planner-forecast-cell-full">
                     <div class="xpd-chart" forecast-line settings='dados.settings' state="{{dados.selectedState}}" type="{{dados.selectedEventType}}"
-                        optimum-line="operationData.forecastContext.optimumLine" actual-line="operationData.forecastContext.actualLine"></div>
+                        v-target-line="operationData.forecastContext.vTargetLine" actual-line="operationData.forecastContext.actualLine"></div>
                 </div>
 
                 <div class="planner-forecast-cell planner-forecast-cell-full">
-                    <div class="xpd-chart" forecast-line settings='dados.settings' state="{{dados.selectedState}}" type="{{ 'BOTH' }}" optimum-line="operationData.forecastContext.optimumLine"
+                    <div class="xpd-chart" forecast-line settings='dados.settings' state="{{dados.selectedState}}" type="{{ 'BOTH' }}" v-target-line="operationData.forecastContext.vTargetLine"
                         actual-line="operationData.forecastContext.actualLine"></div>
                 </div>
 

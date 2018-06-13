@@ -10,7 +10,7 @@
 		return {
 			templateUrl: '../xpd-resources/ng/xpd.visualization/forecast-line.template.html',
 			scope: {
-				optimumLine: '=',
+				vTargetLine: '=',
 				actualLine: '=',
 				settings: '=',
 				state: '@',
@@ -37,8 +37,8 @@
 						.y(function (d) {	return scope.yScale(d.y);	})
 						.interpolate('step-after');
 
-					scope.$watch('optimumLine', function () {
-						buildOptimumLine();
+					scope.$watch('vTargetLine', function () {
+						buildvTargetLine();
 					}, true);
 
 					scope.$watch('actualLine', function () {
@@ -52,13 +52,13 @@
 					scope.$watch('expectedLine', intersect, true);
 
 					scope.$watch('state', function () {
-						buildOptimumLine();
+						buildvTargetLine();
 						buildActualLine();
 						buildExpectedLine();
 					}, true);
 
 					scope.$watch('type', function () {
-						buildOptimumLine();
+						buildvTargetLine();
 						buildActualLine();
 						buildExpectedLine();
 					}, true);
@@ -77,24 +77,24 @@
 						buildExpectedLine();
 					}
 
-					function buildOptimumLine() {
+					function buildvTargetLine() {
 
 						delete scope.optimumPath;
 
-						if (!scope.optimumLine || !scope.optimumLine[scope.state] || !scope.optimumLine[scope.state][scope.type] || !scope.state || !scope.type)
+						if (!scope.vTargetLine || !scope.vTargetLine[scope.state] || !scope.vTargetLine[scope.state][scope.type] || !scope.state || !scope.type)
 							return;
 
 						scope.yScale = d3.scale.linear()
-							.domain([scope.optimumLine[scope.state][scope.type].initialJoint, scope.optimumLine[scope.state][scope.type].finalJoint])
+							.domain([scope.vTargetLine[scope.state][scope.type].initialJoint, scope.vTargetLine[scope.state][scope.type].finalJoint])
 							.range([scope.chart.height - 2, 2]);
 						scope.yScaleTicks = scope.yScale.ticks();
 
 						scope.xScale = d3.scale.linear()
-							.domain([scope.optimumLine[scope.state][scope.type].startTime, scope.optimumLine[scope.state][scope.type].finalTime])
+							.domain([scope.vTargetLine[scope.state][scope.type].startTime, scope.vTargetLine[scope.state][scope.type].finalTime])
 							.range([2, scope.chart.width - 2]);
 						scope.xScaleTicks = scope.xScale.ticks();
 
-						scope.optimumPath = pathGenerator(scope.optimumLine[scope.state][scope.type].points);
+						scope.optimumPath = pathGenerator(scope.vTargetLine[scope.state][scope.type].points);
 					}
 
 					function buildExpectedLine() {
@@ -107,10 +107,10 @@
 							points: []
 						};
 
-						if (!scope.settings || !scope.type || !scope.state || !scope.optimumLine || !scope.optimumLine[scope.state] || !scope.optimumLine[scope.state][scope.type])
+						if (!scope.settings || !scope.type || !scope.state || !scope.vTargetLine || !scope.vTargetLine[scope.state] || !scope.vTargetLine[scope.state][scope.type])
 							return;
 
-						var optimumLine = scope.optimumLine[scope.state][scope.type];
+						var vTargetLine = scope.vTargetLine[scope.state][scope.type];
 						var actualLine = null;
 
 						try {
@@ -120,11 +120,11 @@
 						}
 						
 
-						var actualFinalTime = (actualLine != null) ? actualLine.finalTime : optimumLine.startTime;
-						var actualFinalJoint = (actualLine != null) ? actualLine.finalJoint : optimumLine.initialJoint;
+						var actualFinalTime = (actualLine != null) ? actualLine.finalTime : vTargetLine.startTime;
+						var actualFinalJoint = (actualLine != null) ? actualLine.finalJoint : vTargetLine.initialJoint;
 
-						var optimumFinalTime = optimumLine.finalTime;
-						var optimumFinalJoint = optimumLine.finalJoint;
+						var optimumFinalTime = vTargetLine.finalTime;
+						var optimumFinalJoint = vTargetLine.finalJoint;
 
 						var points = [];
 
@@ -179,14 +179,14 @@
 						};
                         
 
-						if (scope.optimumLine &&
-                            scope.optimumLine[scope.state] &&
-                            scope.optimumLine[scope.state][scope.type] &&
-                            scope.optimumLine[scope.state][scope.type].points &&
-                            scope.optimumLine[scope.state][scope.type].points.length >= 0) {
+						if (scope.vTargetLine &&
+                            scope.vTargetLine[scope.state] &&
+                            scope.vTargetLine[scope.state][scope.type] &&
+                            scope.vTargetLine[scope.state][scope.type].points &&
+                            scope.vTargetLine[scope.state][scope.type].points.length >= 0) {
 
-							optimum.start = (scope.optimumLine[scope.state][scope.type].points[0]);
-							optimum.end = (scope.optimumLine[scope.state][scope.type].points[scope.optimumLine[scope.state][scope.type].points.length - 1]);
+							optimum.start = (scope.vTargetLine[scope.state][scope.type].points[0]);
+							optimum.end = (scope.vTargetLine[scope.state][scope.type].points[scope.vTargetLine[scope.state][scope.type].points.length - 1]);
 						}
 
 						if (scope.actualLine &&

@@ -1,179 +1,133 @@
 <fieldset ng-if="!drillerView" ng-disabled="!currentOperation">
+    
+    <div class="btn-group">
 
-    <ul class="nav xpd-operation-manager" ng-class="{'nav-stacked': stacked, 'nav-pills': !stacked}" role="tablist">
+        <button 
+            type="button" 
+            ng-if="currentOperation == null"
+            class="btn btn-primary xpd-nav-button disabled" >
+            No operation
+        </button>
 
-        <li role="presentation" class="xpd-operation-manager-cell disabled">
-            <a ng-if="currentOperation != null">{{ currentOperation.name ? currentOperation.name:"Nameless" }}</a>
+        <button 
+            type="button" 
+            ng-if="currentOperation != null && !currentOperation.running"
+            class="btn btn-primary xpd-nav-button" 
+            ng-click="clickStartOperation()">
+            Start Operation {{ (currentOperation)? currentOperation.name : "No operation" }}
 
-            <a ng-if="currentOperation == null">No operation</a>
+        </button>
 
-            <div ng-if="currentState" class="current-state-label">{{currentState}}</div>
-        </li>
+        <button 
+            type="button" 
+            ng-if="currentOperation != null && currentOperation.running"
+            class="btn btn-primary xpd-nav-button" 
+            ng-click="actionButtonFinishOperation()">
+            Finish Operation {{ (currentOperation)? currentOperation.name : "No operation" }} 
 
-        <!--###################################################################################################-->
-        <!--###################################################################################################-->
-        <!--###################################################################################################-->
-        <!--###################################################################################################-->
-        <!--###################################################################################################-->
+            <span 
+                class="button-bellow-label">{{ currentEvent.state | xpdStateLabelFilter }} | {{ currentEvent.eventType | xpdEventLabelFilter }}
+            </span>
+        </button>
 
-        <li role="presentation" class="xpd-operation-manager-cell" ng-if="currentOperation != null">
-            <a ng-if="!currentOperation.running" ng-click="clickStartOperation()">Start</a>
-            <a ng-if="currentOperation.running" ng-click="actionButtonFinishOperation()">Stop</a>
-        </li>
+        <button 
+            type="button" 
+            uib-popover-template="operationQueuePopover.templateUrl" 
+            popover-class="xpd-green-styled-box-popover"
+            popover-placement="{{popoverPlacement || 'bottom-right'}}" 
+            popover-trigger="'mouseenter'"
+            class="btn btn-primary xpd-nav-button">
+            <i class="glyphicon glyphicon-th-list"></i>
+        </button>
 
-        <!--###################################################################################################-->
-        <!--###################################################################################################-->
-        <!--###################################################################################################-->
-        <!--###################################################################################################-->
-        <!--###################################################################################################-->
+        <!-- <button 
+            type="button" 
+            ng-if="currentOperation != null && currentOperation.running"
+            class="btn btn-primary xpd-nav-button" 
+            ng-click="onClickStartMakeUp()">Start Make Up
+        </button> -->
 
-        <li role="presentation" class="xpd-operation-manager-cell">
+        <button 
+            type="button" 
+            ng-if="currentOperation != null && currentOperation.running && currentState == 'makeUp'" 
+            class="btn btn-primary xpd-nav-button" 
+            ng-click="onClickFinishMakeUp()">
+            Finish Make Up
+        </button>
 
-            <a uib-popover-template="operationQueuePopover.templateUrl" popover-class="xpd-operation-manager-popover"
-               popover-placement="{{popoverPlacement || 'bottom-right'}}" popover-trigger="'mouseenter'"
-               class="glyphicon glyphicon-th-list"></a>
+        <button 
+            type="button" 
+            ng-if="currentState != 'makeUp' && currentOperation.running == true && currentDirection.tripin && currentDirection.tripin !=null && (currentOperation.type == 'bha' || currentOperation.type == 'riser') && !currentAlarm.isDurationAlarm" 
+            class="btn btn-primary xpd-nav-button disabled">
+            Make Up Finished
+        </button>
 
-        </li>
+        <button 
+            type="button" 
+            ng-if="currentOperation != null && currentOperation.running == true  && !currentDirection.tripin && currentDirection.tripin != null && currentState != 'layDown' && (currentOperation.type == 'bha' || currentOperation.type == 'riser')"
+            class="btn btn-primary xpd-nav-button" 
+            ng-show="!currentAlarm" 
+            ng-click="onClickStartLayDown()">
+            Start Lay Down
+        </button>
 
-        <li ng-if="true == false"
-            role="presentation"
-            class="xpd-operation-manager-cell">
-                <a ng-if="currentOperation.tripin" ng-click="onClickStartMakeUp()">Start Make Up</a>
-        </li>
+        <button 
+            type="button" 
+            ng-if="currentState == 'layDown'"
+            class="btn btn-primary xpd-nav-button" 
+            ng-click="onClickFinishLayDown()">
+            Finish Lay Down
+        </button>
 
-        <li role="presentation"
-            class="xpd-operation-manager-cell"
-            ng-if="currentState == 'makeUp'">
-                <a ng-click="onClickFinishMakeUp()">Finish Make Up</a>
-        </li>
+        <button 
+            type="button" 
+            ng-if="currentAlarm.isDurationAlarm"
+            class="btn btn-primary xpd-nav-button" 
+            ng-click="onClickFinishDurationAlarm()">
+            Finish Duration Alarm</a>
+        </button>
 
-        <li ng-if="currentState != 'makeUp' && currentOperation.running == true && currentDirection.tripin && currentDirection.tripin !=null && (currentOperation.type == 'bha' || currentOperation.type == 'riser') && !currentAlarm.isDurationAlarm"
-            role="presentation"
-            class="xpd-operation-manager-cell disabled">
-                <a>Make Up Finished</a>
-        </li>
-
-        <li ng-if="currentOperation != null && currentOperation.running == true  && !currentDirection.tripin && currentDirection.tripin != null && currentState != 'layDown' && (currentOperation.type == 'bha' || currentOperation.type == 'riser')"
-            role="presentation"
-            class="xpd-operation-manager-cell"
-            ng-show="!currentAlarm">
-                <a ng-click="onClickStartLayDown()">Start Lay Down</a>
-        </li>
-
-
-        <li ng-if="currentState == 'layDown'"
-            role="presentation"
-            class="xpd-operation-manager-cell">
-                <a ng-click="onClickFinishLayDown()">Finish Lay Down</a>
-        </li>
-
-        <li ng-if="currentAlarm.isDurationAlarm"
-            role="presentation"
-            class="xpd-operation-manager-cell">
-                <a ng-click="onClickFinishDurationAlarm()">Finish Duration Alarm</a>
-        </li>
-
-
-        <!--###################################################################################################-->
-        <!--###################################################################################################-->
-        <!--###################################################################################################-->
-        <!--###################################################################################################-->
-        <!--###################################################################################################-->
-
-        <li role="presentation" class="xpd-operation-manager-cell disabled"
+        <button 
+            type="button" 
+            class="btn btn-primary xpd-nav-button disabled" 
             ng-if="currentOperation.running == true && currentOperation.type == 'casing' 
             && !currentOperation.cementingFinished && currentState != 'cementation'
-            && bitDepthContext.bitDepth < (currentOperation.endBitDepth - currentOperation.length)">
-            <a ng-click="actionDisabledCementation()">
+            && bitDepthContext.bitDepth < (currentOperation.endBitDepth - currentOperation.length)" 
+            ng-click="actionDisabledCementation()">
                 Start Cementation
-            </a>
-        </li>
+        </button>
 
-        <li role="presentation" class="xpd-operation-manager-cell"
+        <button 
+            type="button" 
+            class="btn btn-primary xpd-nav-button" 
             ng-if="currentOperation.running == true && currentOperation.type == 'casing'
             && !currentOperation.cementingFinished && currentState != 'cementation'
             && bitDepthContext.bitDepth >= (currentOperation.endBitDepth - currentOperation.length)
-            && bitDepthContext.bitDepth >= (currentOperation.endBitDepth - currentOperation.length)" ng-show="!currentAlarm">
-            <a ng-click="actionButtonStartCementation()">
+            && bitDepthContext.bitDepth >= (currentOperation.endBitDepth - currentOperation.length)" 
+            ng-show="!currentAlarm" 
+            ng-click="actionButtonStartCementation()">
                 Start Cementation
-            </a>
-        </li>
+        </button>
 
-        <li role="presentation" class="xpd-operation-manager-cell"
+        <button 
+            type="button" 
+            class="btn btn-primary xpd-nav-button" 
             ng-if="currentOperation.running == true && currentOperation.type == 'casing'
             && !currentOperation.cementingFinished && currentState == 'cementation'
-            && bitDepthContext.bitDepth >= (currentOperation.endBitDepth - currentOperation.length)" ng-show="!currentAlarm">
-            <a ng-click="actionButtonStopCementation()">
+            && bitDepthContext.bitDepth >= (currentOperation.endBitDepth - currentOperation.length)" 
+            ng-show="!currentAlarm" 
+            ng-click="actionButtonStopCementation()">
                 Finish Cementation
-            </a>
-        </li>
+        </button>
 
-        <li role="presentation" class="xpd-operation-manager-cell disabled"
+        <button 
+            type="button" 
+            class="btn btn-primary xpd-nav-button disabled" 
             ng-if="currentOperation.running == true && currentOperation.type == 'casing' && currentOperation.cementingFinished">
-            <a>Cementing Finished</a>
-        </li>
-    </ul>
+            Cementing Finished
+        </button>
 
-</fieldset>
-
-<fieldset ng-if="drillerView">
-
-    <table class="table xpd-operation-manager">
-        <tbody>
-            <tr>
-                <td ng-if="currentOperation != null && currentOperation.running" class="operation-direction">
-                    <span ng-if="currentEvent.eventType == 'TIME'" class="glyphicon glyphicon-time ng-scope"></span>
-                    <span ng-if="currentEvent.eventType !='TIME' && !currentDirection.tripin" class="glyphicon glyphicon-arrow-up ng-scope"></span>
-                    <span ng-if="currentEvent.eventType !='TIME' && currentDirection.tripin" class="glyphicon glyphicon-arrow-down ng-scope"></span>
-                </td>
-                <td ng-if="currentOperation != null" class="current-operation">
-                    <span ng-if="!currentOperation.running" class="operation-name">Current Operation: </span>
-                    <span class="operation-name">{{ currentOperation.name ? currentOperation.name:"Nameless" }}</span>
-                    <br>
-                    <span class="operation-state">{{currentEvent.label}}</span>
-                </td>
-
-                <td ng-if="currentOperation == null">
-                    No operation
-                </td>
-
-            </tr>
-
-			<!-- <tr ng-if="currentState">
-				<td>
-					{{(currentDirection.tripin) ? 'TRIP IN -' : 'TRIP OUT -'}} {{currentState}}
-				</td>
-			</tr> -->
-
-        </tbody>
-    </table>
-    
-	<div class="xpd-operation-actions-button">
-		<button
-			type="button" class="btn btn-success"
-			ng-if="currentOperation && !currentOperation.running"
-			ng-click="clickStartOperation()">
-            <p>START</p>
-            <span class="current-operation-name">{{ currentOperation.name ? currentOperation.name:"Nameless" }}</tspan>
-		</button>
-		<button
-			type="button" class="btn btn-danger"
-			ng-if="currentOperation.running"
-			ng-click="actionButtonFinishOperation()">
-            <p>STOP</p>
-			<span>{{ currentOperation.name ? currentOperation.name:"Nameless" }}</tspan>
-		</button>
-	</div>
-
-	<table class="table xpd-operation-manager">
-		<tbody>
-			<tr class="xpd-operation-manager-table">
-				<td ng-if="currentState" class="next-operation">
-					Next Op. {{operationQueue[1].name}}
-				</td>
-			</tr>
-		</tbody>
-	</table>
+    </div>
 
 </fieldset>
 

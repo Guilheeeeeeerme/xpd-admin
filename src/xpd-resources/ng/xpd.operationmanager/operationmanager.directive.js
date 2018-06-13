@@ -161,8 +161,6 @@
     			templateUrl: 'operationQueueTemplate.html',
     			title: 'Operation Queue'
     		};
-
-			elem[0].className = elem[0].className + ' xpd-operation-manager-container';
 		}
 	}
 

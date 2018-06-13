@@ -29,13 +29,6 @@ body {
     margin: 0;
 }
 
-.xpd-tracking-operation-manager {
-    position: fixed;
-    z-index: 1031;
-    right: 25px;
-    top: 5px;
-}
-
 /**
  *
 
@@ -332,6 +325,65 @@ body {
     float: left;
     height: 50%;
     width: 50%;
+}
+
+.planner-list-item {
+    display: table;
+    height: 50px;
+    max-height: 50px;
+    border: 2px solid #456c75;
+    padding: 0px;
+    white-space: nowrap;
+    position: relative;
+}
+
+.planner-list-item:hover {
+    background-color: #456c75;
+    border: 2px solid black;
+}
+
+.planner-list-item a:hover {
+    background-color: #456c75;
+    color: black;
+}
+
+.planner-list-item a {
+    cursor: pointer;
+    display: table-cell;
+    text-align: center;
+    vertical-align: middle;
+    width: 100%;
+    white-space: nowrap;
+    padding-left: 0;
+    padding-right: 0;
+}
+
+.planner-list-item .button-bellow-label {
+    position: absolute;
+    bottom: -52px;
+    border-top: 0;
+    right: 0;
+    background-color: #456c75;
+    color: white;
+    padding: 1px 3px;
+    font-size: 1em;
+    z-index: 1049;
+}
+
+.planner-list-item.active {
+    background-color: #456c75;
+}
+
+.planner-list-item.active a {
+    color: black;
+}
+
+.planner-sum-trip-conn {
+    height: 20px;
+    font-size: 0.8em;
+    text-align: center;
+    color: #fff;
+    background-color: #337ab7;
 }
 
 .planner-forecast-cell-full {
@@ -932,10 +984,6 @@ rect.negative-vre {
     vertical-align: middle;
     /* display: table-cell; */
     margin-top: 10px;
-}
-
-.xpd-operation-manager-container{
-    float: left;
 }
 
 .xpd-operation-modal{
