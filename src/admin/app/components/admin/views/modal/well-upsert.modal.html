@@ -49,29 +49,43 @@
                 </div>
             </div>
 
-            <div class="form-group col-md-6" ng-class="{ 'has-error': form.holeDepth.$invalid && !form.holeDepth.$pristine }">
+            <div class="form-group col-md-6" ng-class="{ 'has-error': form.startHoleDepth.$invalid && !form.startHoleDepth.$pristine }">
+                <label for="well-upsert-data-startHoleDepth">Start Hole Depth</label>
+                <div class="input-group">
+                    <input ng-disabled="modalData.onshore" type="number" name="startHoleDepth" ng-min="modalData.waterDepth" max="10000" ng-model="modalData.startHoleDepth"
+                        class="form-control" autofocus="true" id="well-upsert-data-startHoleDepth" placeholder="Hole Depth" xpd-form-validation="form">
+                    <span class="input-group-addon">m</span>
+                </div>
+            </div>
+            
+            <div class="form-group col-md-6" ng-class="{ 'has-error': form.startShoeDepth.$invalid && !form.startShoeDepth.$pristine }">
+                <label for="well-upsert-data-startShoeDepth">Start Last Section Shoe Depth</label>
+                <div class="input-group">
+                    <input ng-disabled="modalData.onshore" type="number" name="startShoeDepth" ng-min="modalData.waterDepth" max="10000" ng-model="modalData.startShoeDepth"
+                        class="form-control" autofocus="true" id="well-upsert-data-startShoeDepth" placeholder="Last Section Shoe Depth" xpd-form-validation="form">
+                    <span class="input-group-addon">m</span>
+                </div>
+            </div>
+
+            <div class="form-group col-md-6">
                 <label for="well-upsert-data-holeDepth">Hole Depth</label>
                 <div class="input-group">
-                    <input ng-disabled="modalData.onshore" type="number" name="holeDepth" ng-min="modalData.waterDepth" max="10000" ng-model="modalData.holeDepth"
-                        class="form-control" autofocus="true" id="well-upsert-data-holeDepth" placeholder="Hole Depth" xpd-form-validation="form">
+                    <input disabled type="number" name="holeDepth" ng-model="modalData.holeDepth"
+                        class="form-control" autofocus="true" id="well-upsert-data-holeDepth" placeholder="0" xpd-form-validation="form" >
                     <span class="input-group-addon">m</span>
                 </div>
             </div>
 
-            <div class="form-group col-md-6" ng-class="{ 'has-error': form.shoeDepth.$invalid && !form.shoeDepth.$pristine }">
+            <div class="form-group col-md-6">
                 <label for="well-upsert-data-shoeDepth">Last Section Shoe Depth</label>
                 <div class="input-group">
-                    <input ng-disabled="modalData.onshore" type="number" name="shoeDepth" ng-min="modalData.waterDepth" max="10000" ng-model="modalData.shoeDepth"
-                        class="form-control" autofocus="true" id="well-upsert-data-shoeDepth" placeholder="Last Section Shoe Depth" xpd-form-validation="form">
+                    <input disabled type="number" name="shoeDepth" ng-model="modalData.shoeDepth"
+                        class="form-control" autofocus="true" id="well-upsert-data-shoeDepth" placeholder="0" xpd-form-validation="form">
                     <span class="input-group-addon">m</span>
                 </div>
             </div>
-        </div>
 
-        <!-- <div>
-            <a role="button" ng-init="showAdvanced == 'false'" ng-click="showAdvanced = !showAdvanced">Advanced</a>
-        </div> -->
-        <!-- ng-show="showAdvanced" -->
+        </div>
 
     </div>
 

@@ -27,15 +27,15 @@
 		function changeOnshore() {
 			if ($scope.modalData.onshore) {
 				$scope.modalData.waterDepth = 0;
-				$scope.modalData.holeDepth = 0;
-				$scope.modalData.shoeDepth = 0;
+				$scope.modalData.startHoleDepth = 0;
+				$scope.modalData.startShoeDepth = 0;
 			}
 		}
 
 		function actionChangeWaterDepth() {
-			if (!($scope.modalData.holeDepth && $scope.modalData.shoeDepth) || $scope.modalData.waterDepth > ($scope.modalData.holeDepth || $scope.modalData.shoeDepth)) {
-				$scope.modalData.holeDepth = $scope.modalData.waterDepth;
-				$scope.modalData.shoeDepth = $scope.modalData.waterDepth;
+			if (!($scope.modalData.startHoleDepth && $scope.modalData.startShoeDepth) || $scope.modalData.waterDepth > ($scope.modalData.startHoleDepth || $scope.modalData.startShoeDepth)) {
+				$scope.modalData.startHoleDepth = $scope.modalData.waterDepth;
+				$scope.modalData.startShoeDepth = $scope.modalData.waterDepth;
 			}			
 		}
 
