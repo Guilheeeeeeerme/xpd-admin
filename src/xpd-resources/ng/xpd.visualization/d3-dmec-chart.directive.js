@@ -121,16 +121,14 @@
 
 						onReading.then(function (reading) {
 
-
 							if (!readings) {
 								readings = [];
 							}
 
 							readings.push(reading);
 
-							// console.log(reading);
-
 							readingsToPoints(readings, tracks).then(function (points) {
+								scope.newPoints = points;
 								draw('newPoints', points);
 							});
 
