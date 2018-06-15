@@ -15,7 +15,7 @@ app.on('window-all-closed', function() {
 		app.quit();
 });
 
-var MAX_GIGABYTES = 2;
+var MAX_GIGABYTES = 4;
 var MAX_MEGABYTES = MAX_GIGABYTES * 1024;
 
 // var clientCrt = path.join('/', '.xpd', 'keys', 'os', 'XPD-Client.crt');

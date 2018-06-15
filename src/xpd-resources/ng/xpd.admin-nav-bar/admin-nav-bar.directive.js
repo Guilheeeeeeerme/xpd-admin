@@ -32,10 +32,10 @@
 
 			operationDataFactory.operationData = [];
 
-			operationDataFactory.addEventListener('menuConfirmationFactory', 'setOnRunningOperationListener', showPlanner);
-			operationDataFactory.addEventListener('menuConfirmationFactory', 'setOnOperationChangeListener', checkPlanner);
-
-			operationDataFactory.addEventListener('menuConfirmationFactory', 'setOnNoCurrentOperationListener', hidePlanner);
+			checkIfHasRunningOperation();
+			operationDataFactory.addEventListener('menuConfirmationFactory', 'setOnRunningOperationListener', checkIfHasRunningOperation);
+			operationDataFactory.addEventListener('menuConfirmationFactory', 'setOnOperationChangeListener', checkIfHasRunningOperation);
+			operationDataFactory.addEventListener('menuConfirmationFactory', 'setOnNoCurrentOperationListener', checkIfHasRunningOperation);
 
 			function onclickItemMenuAdmin(path, newTab) {
 				var blockMenu = menuConfirmationFactory.getBlockMenu();
@@ -124,20 +124,13 @@
 				}
 			}
 
-			function showPlanner() {
-				scope.showPlanner = true;
-			}
-
-			function checkPlanner(context) {
+			function checkIfHasRunningOperation() {
+				var context = operationDataFactory.operationData.operationContext;
 				if (context.currentOperation && context.currentOperation.running && context.currentOperation.type != 'time') {
-					scope.showPlanner = true;
+					scope.hasRunningOperation = true;
 				} else {
-					scope.showPlanner = false;
+					scope.hasRunningOperation = false;
 				}
-			}
-
-			function hidePlanner() {
-				scope.showPlanner = false;
 			}
 		}
 	}

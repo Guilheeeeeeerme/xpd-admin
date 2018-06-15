@@ -12,7 +12,6 @@
 		ng-attr-height='{{ svg.viewHeight }}'>
 	</rect>
 
-	<!-- y axis ticks -->
 	<g class="range-ticks">
 		<g ng-repeat="track in $tracks">
 			<line 
@@ -42,8 +41,7 @@
 				</clipPath>
 			</g>
 		</g>
-		
-		<!-- x axis ticks -->
+
 		<g class="time-ticks">
 			<g 	ng-repeat="tick in timeTicks" 
 				ng-attr-transform="translate( {{ horizontal? timeScale(tick): 0 }}, {{ horizontal? 0: timeScale(tick) }} )">
@@ -82,7 +80,6 @@
 		</g>
 	</svg>
 
-	<!-- Following the mouse -->
 	<g class="crosshair" ng-if="!horizontal">
 		<line x1="0" ng-attr-x2="{{ svg.viewWidth }}" id="crosshair" stroke="black" stroke-opacity="0.5" stroke-width="0.1em" />
 		<line x1="0" ng-attr-x2="{{ svg.viewWidth }}" id="crosshair1" stroke="black" stroke-opacity="0.9" />

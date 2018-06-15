@@ -49,6 +49,7 @@ exports.scripts = {
 		"./src/xpd-resources/ng/xpd.setupapi/operation-setupapi.service.js",
 		"./src/xpd-resources/ng/xpd.setupapi/well-setupapi.service.js",
 		"./src/xpd-resources/ng/xpd.setupapi/photo-setupapi.directive.js",
+		"./src/xpd-resources/ng/xpd.dmec/dmec.service.js",
 		'./src/admin/app/components/dmec-log/dmec-log.module.js',
 		'./src/admin/app/components/dmec-log/dmec-log.controller.js',
 	]

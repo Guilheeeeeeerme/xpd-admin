@@ -581,7 +581,7 @@ a.view-only-link {
 /* Let's get this party started */
 
 ::-webkit-scrollbar {
-    width: 10px;
+    width: 5px;
 }
 
 
@@ -800,15 +800,6 @@ a.view-only-link {
 
 .unit-addon{
     padding: 6px 6px;
-}
-
-.access-factory-directive-button{
-    background-color: Transparent;
-    background-repeat:no-repeat;
-    border: none;
-    cursor:pointer;
-    overflow: hidden;
-    outline:none;
 }
 
 /**

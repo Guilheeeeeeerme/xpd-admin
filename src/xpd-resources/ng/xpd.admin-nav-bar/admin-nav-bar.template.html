@@ -4,6 +4,13 @@
 
 		<div class="btn-group">
 
+			<button 
+				type="button" 
+				class="btn btn-primary xpd-nav-button" 
+				id="nav-bar-access-factory">
+				<access-factory-directive>Config</access-factory-directive> 
+			</button>
+
 			<button type="button" class="btn btn-primary dropdown-toggle xpd-nav-button" uib-dropdown is-open="status.isopen" uib-dropdown-toggle
 			 href="#" id="nav-bar-menu">
 
@@ -59,8 +66,11 @@
 					<li>
 						<a ng-click="onclickItemMenu('/', false)" id="nav-bar-operation-tracking">Tracking</a>
 					</li>
-					<li ng-if="showPlanner">
+					<li ng-if="hasRunningOperation">
 						<a ng-click="onclickItemMenu('/planner', true)" id="nav-bar-operation-planner">Planner</a>
+					</li>
+					<li ng-if="hasRunningOperation">
+						<a ng-click="onclickItemMenu('/operation-dashboard', true)" id="nav-bar-operation-operation-dashboard">Dashboard</a>
 					</li>
 					<li>
 						<a ng-click="onclickItemMenu('/alarm', true)" id="nav-bar-operation-alarm">Alarm</a>

@@ -43,7 +43,7 @@
 			var req = {
 				method: 'GET',
 				url: BASE_URL + '/from/' + from + ((to) ? ('/to/' + to) : ''),
-				cache: (to) ? true : false,
+				// cache: (to) ? true : false,
 				headers: {
 					'Content-Type': 'application/json'
 				}

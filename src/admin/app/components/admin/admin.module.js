@@ -5,6 +5,7 @@
 		'ngRoute',
 		'xpd.setupapi',
 		'xpd.tracking',
+		'xpd.dmec',
 		'ngIntersection',
 		'xpd.zerotimezone',
 		'xpd.form.validation',

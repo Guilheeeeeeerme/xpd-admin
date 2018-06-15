@@ -18,8 +18,7 @@
 				currentBlockPosition: '=',
 				zoomStartAt: '=', 
 				zoomEndAt: '=',
-				setZoomStartAt: '=',
-				setZoomEndAt: '=',
+				setZoom: '=',
 				actionEventDetail: '='
 			},
 			link: function (scope, element, attrs) {
@@ -211,8 +210,10 @@
 						scope.mindate = scope.xScale.invert(d3.mouse(this)[0] - 20);
 						scope.maxdate = scope.xScale.invert(d3.mouse(this)[0] + 20);
 
-						scope.setZoomStartAt(new Date(scope.mindate));
-						scope.setZoomEndAt(new Date(scope.maxdate));
+						scope.setZoom(
+							new Date(scope.mindate), 
+							new Date(scope.maxdate)
+						);
 						
 					}
 
