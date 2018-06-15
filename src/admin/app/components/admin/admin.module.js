@@ -4,6 +4,7 @@
 	angular.module('xpd.admin', [
 		'ngRoute',
 		'xpd.setupapi',
+		'xpd.operation-dashboard',
 		'xpd.tracking',
 		'xpd.dmec',
 		'ngIntersection',

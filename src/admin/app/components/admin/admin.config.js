@@ -54,7 +54,7 @@
 			templateUrl: './app/components/admin/views/operation.template.html',
 			controller: 'OperationController as operationController'
 		});
-		
+
 		$routeProvider.when('/team/members', {
 			templateUrl: './app/components/admin/views/team.template.html',
 			controller: 'TeamController as tController'
