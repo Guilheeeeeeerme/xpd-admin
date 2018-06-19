@@ -3,9 +3,9 @@
 
 	angular.module('xpd.admin').controller('AdminTrackingController', adminTrackingController);
 
-	adminTrackingController.$inject = ['$scope', '$uibModal', '$q', 'operationDataFactory', 'eventDetailsModal', 'failureModal', 'eventlogSetupAPIService', 'lessonLearnedModal', 'failureSetupAPIService', 'lessonLearnedSetupAPIService', 'dialogFactory', '$rootScope'];
+	adminTrackingController.$inject = ['$scope', '$q', 'operationDataFactory', 'eventDetailsModal', 'failureModal', 'eventlogSetupAPIService', 'lessonLearnedModal', 'failureSetupAPIService', 'lessonLearnedSetupAPIService', 'dialogFactory', '$rootScope'];
 
-	function adminTrackingController($scope, $uibModal, $q, operationDataFactory, eventDetailsModal, failureModal, eventlogSetupAPIService, lessonLearnedModal, failureSetupAPIService, lessonLearnedSetupAPIService, dialogFactory, $rootScope) {
+	function adminTrackingController($scope, $q, operationDataFactory, eventDetailsModal, failureModal, eventlogSetupAPIService, lessonLearnedModal, failureSetupAPIService, lessonLearnedSetupAPIService, dialogFactory, $rootScope) {
 
 		var vm = this;
 
@@ -19,8 +19,10 @@
 
 		$rootScope.XPDmodule = 'admin';
 
-		operationDataFactory.operationData = [];
-		// $scope.operationData = operationDataFactory.operationData;
+		operationDataFactory.openConnection([]).then(function (response) {
+			operationDataFactory = response;
+			$scope.operationData = operationDataFactory.operationData;
+		});
 
 		loadEvents();
 

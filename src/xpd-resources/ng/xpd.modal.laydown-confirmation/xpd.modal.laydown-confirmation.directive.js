@@ -25,7 +25,9 @@
 
 			scope.actionButtonStartLaydown = actionButtonStartLaydown;
 			
-			operationDataFactory.operationData = [];
+			operationDataFactory.openConnection([]).then(function (response) {
+				operationDataFactory = response;
+			});
 
 			operationDataFactory.addEventListener('trackingController', 'setOnStateChangeListener', checkCurrentState);
 			operationDataFactory.addEventListener('trackingController', 'setOnCurrentStateListener', checkCurrentState);

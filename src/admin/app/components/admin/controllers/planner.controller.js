@@ -20,7 +20,10 @@
 			timeSlices: null
 		};
 
-		$scope.operationData = operationDataFactory.operationData;
+		operationDataFactory.openConnection([]).then(function (response) {
+			operationDataFactory = response;
+			$scope.operationData = operationDataFactory.operationData;
+		});
 
 		vm.actionSelectActivityToPlan = actionSelectActivityToPlan;
 		vm.selectActivityOnInit = selectActivityOnInit;

@@ -11,9 +11,10 @@
 
 		$scope.dados = {};
 
-		operationDataFactory.operationData = [];
-
-		$scope.operationData = operationDataFactory.operationData;
+		operationDataFactory.openConnection([]).then(function (response) {
+			operationDataFactory = response;
+			$scope.operationData = operationDataFactory.operationData;
+		});
 
 		vm.actionButtonSetBitDepthMode = actionButtonSetBitDepthMode;
 		vm.actionButtonSetBitDepth = actionButtonSetBitDepth;

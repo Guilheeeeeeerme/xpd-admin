@@ -7,6 +7,44 @@
 
 	function operationCommunicationFactory($q, socketFactory, xpdAccessFactory) {
 
+		var communicationChannel = null;
+
+		operationCommunicationFactory
+			.openCommunicationChannel(socketName, threads).then(function(gezzy){
+				console.log(gezzy);
+			});
+
+		return {
+			openCommunicationChannel: openCommunicationChannel 
+		};
+
+		function openCommunicationChannel(socketName, threads) {
+
+			return $q(function (resolve, reject) {
+
+				if (communicationChannel) {
+					resolve(communicationChannel);
+				} else {
+
+					var socket = socketFactory(xpdAccessFactory.getOperationServerURL(), socketName + '-socket', threads);
+
+					socket.on('subjects', function (data) {
+
+						var ContextSubjects = data.ContextSubjects;
+						var UserActions = data.UserActions;
+
+						window.ContextSubjects = ContextSubjects;
+						window.UserActions = UserActions;
+
+						communicationChannel = new CommunicationChannel(socket, ContextSubjects, UserActions);
+
+						resolve(communicationChannel);
+					});
+
+				}
+			});
+		}
+
 		function CommunicationChannel(socket, ContextSubjects, UserActions) {
 
 			var self = this;
@@ -61,36 +99,6 @@
 
 		}
 
-		var communicationChannel = null;
-
-		return {
-			openCommunicationChannel: function (socketName, threads) {
-
-				return $q(function (resolve, reject) {
-
-					if(communicationChannel){
-						resolve(communicationChannel);
-					} else{
-
-						var socket = socketFactory(xpdAccessFactory.getOperationServerURL(), socketName + '-socket', threads);
-
-						socket.on('subjects', function(data){
-
-							var ContextSubjects = data.ContextSubjects;
-							var UserActions = data.UserActions;
-
-							window.ContextSubjects = ContextSubjects;
-							window.UserActions = UserActions;
-
-							communicationChannel = new CommunicationChannel(socket, ContextSubjects, UserActions);
-
-							resolve(communicationChannel);
-						});
-				
-					}
-				});
-			}
-		};
 	}
 
 })();

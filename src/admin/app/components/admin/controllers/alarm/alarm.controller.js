@@ -9,9 +9,9 @@
 
 	angular.module('xpd.admin').controller('AlarmController', alarmController);
 
-	alarmController.$inject = ['$scope', '$uibModal', 'operationDataFactory', 'operationSetupAPIService', 'alarmService'];
+	alarmController.$inject = ['$scope', 'operationDataFactory', 'operationSetupAPIService', 'alarmService'];
 
-	function alarmController($scope, $uibModal, operationDataFactory, operationSetupAPIService, alarmService) {
+	function alarmController($scope, operationDataFactory, operationSetupAPIService, alarmService) {
 		var vm = this;
 
 		$scope.alarmData = {
@@ -23,7 +23,12 @@
 			depthAlarms: [],
 		};
 
-		$scope.operationData = operationDataFactory.operationData;
+		operationDataFactory.openConnection([]).then(function (response) {
+			operationDataFactory = response;
+			$scope.operationData = operationDataFactory.operationData;
+
+			loadOperation(operationDataFactory.operationData.operationContext);
+		});
 
 		vm.actionButtonAddTimeAlarm = actionButtonAddTimeAlarm;
 		vm.actionButtonAddDepthAlarm = actionButtonAddDepthAlarm;
@@ -39,11 +44,10 @@
 		operationDataFactory.addEventListener('alarmController', 'setOnSpeedRestrictionAlarmListener', reloadAlarms);
 
 
-		loadOperation(operationDataFactory.operationData.operationContext);
-
-
-		function loadOperation(context) {
-			$scope.alarmData.operation = angular.copy(context.currentOperation);
+		function loadOperation(operationContext) {
+			if (!operationContext) return;
+			
+			$scope.alarmData.operation = angular.copy(operationContext.currentOperation);
 			reloadAlarms();
 		}
 

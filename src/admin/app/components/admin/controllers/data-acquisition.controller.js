@@ -15,13 +15,11 @@
 			readingJson: false
 		};
 
-		// $scope.operationData = operationDataFactory.operationData;
-
-		operationDataFactory.operationData = [];
-		
-		$scope.readingData = operationDataFactory.operationData.readingContext;
-		$scope.acquisitionData = operationDataFactory.operationData.dataAcquisitionContext;
-
+		operationDataFactory.openConnection([]).then(function (response) {
+			operationDataFactory = response;
+			$scope.readingData = operationDataFactory.operationData.readingContext;
+			$scope.acquisitionData = operationDataFactory.operationData.dataAcquisitionContext;
+		});
 
 		vm.changeViewAcquisition = changeViewAcquisition;
 		vm.changeViewReading = changeViewReading;

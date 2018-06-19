@@ -34,7 +34,9 @@
 			updateFromGantt: null
 		};
 		
-		operationDataFactory.operationData = [];
+		operationDataFactory.openConnection([]).then(function (response) {
+			operationDataFactory = response;
+		});
 
 		return schedulerActions;
 
