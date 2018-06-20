@@ -32,9 +32,9 @@
 
 			operationDataFactory.openConnection([]).then(function (response) {
 				operationDataFactory = response;
+				checkIfHasRunningOperation();
 			});
 
-			checkIfHasRunningOperation();
 			operationDataFactory.addEventListener('menuConfirmationFactory', 'setOnRunningOperationListener', checkIfHasRunningOperation);
 			operationDataFactory.addEventListener('menuConfirmationFactory', 'setOnOperationChangeListener', checkIfHasRunningOperation);
 			operationDataFactory.addEventListener('menuConfirmationFactory', 'setOnNoCurrentOperationListener', checkIfHasRunningOperation);
@@ -128,7 +128,7 @@
 
 			function checkIfHasRunningOperation() {
 				var context = operationDataFactory.operationData.operationContext;
-				if (context.currentOperation && context.currentOperation.running && context.currentOperation.type != 'time') {
+				if (context && context.currentOperation && context.currentOperation.running && context.currentOperation.type != 'time') {
 					scope.hasRunningOperation = true;
 				} else {
 					scope.hasRunningOperation = false;
