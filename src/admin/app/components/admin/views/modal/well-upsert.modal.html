@@ -1,86 +1,101 @@
-<div class="modal-content">
-    
-    <div class="modal-header">
-        <h4 class="modal-title">Well Setup Information</h4>
-    </div>
-
-    <div class="modal-body">
-
-        <div class="container-fluid">
-
-            <div class="form-group col-md-12" ng-class="{ 'has-error': form.name.$invalid && !form.name.$pristine }">
-                <label for="well-upsert-data-name">Name</label>
-                <input type="text" name="name" maxlength="20" ng-model="modalData.name" class="form-control" autofocus="true" id="well-upsert-data-name"
-                    placeholder="Name" xpd-form-validation="form" required>
-            </div>
-
-            <div class="form-group col-md-6">
-                <div class="checkbox">
-                    <label>
-                        <input id="well-upsert-data-onshore" type="checkbox" ng-model="modalData.onshore" ng-click="wuController.changeOnshore()"> Onshore
-                    </label>
-                </div>
-            </div>
-            
-            <div class="form-group col-md-6">
-                <div class="checkbox">
-                    <label>
-                        <input id="well-upsert-data-bopSetted" type="checkbox" ng-model="modalData.bopSetted"> Bop setted
-                    </label>
-                </div>
-            </div>
-            
-            <div class="form-group col-md-6" ng-class="{ 'has-error': form.airGap.$invalid && !form.airGap.$pristine }">
-                <label for="well-upsert-data-airGap">Air Gap</label>
-                <div class="input-group">
-                    <input type="number" name="airGap" min="0" max="10000" ng-model="modalData.airGap" class="form-control" autofocus="true"
-                        id="well-upsert-data-airGap" placeholder="Air Gap" xpd-form-validation="form" required>
-                    <span class="input-group-addon">m</span>
-                </div>
-            </div>
-
-            <div class="form-group col-md-6" ng-class="{ 'has-error': form.waterDepth.$invalid && !form.waterDepth.$pristine }">
-                <label for="well-upsert-data-waterDepth">Water Depth</label>
-                <div class="input-group">
-                    <input ng-disabled="modalData.onshore" type="number" name="waterDepth" min="0" max="10000" ng-model="modalData.waterDepth"
-                        class="form-control" autofocus="true" id="well-upsert-data-waterDepth" placeholder="Water Depth" xpd-form-validation="form"
-                        required ng-change="wuController.actionChangeWaterDepth()">
-                    <span class="input-group-addon">m</span>
-                </div>
-            </div>
-
-            <div class="form-group col-md-6" ng-class="{ 'has-error': form.holeDepth.$invalid && !form.holeDepth.$pristine }">
-                <label for="well-upsert-data-holeDepth">Hole Depth</label>
-                <div class="input-group">
-                    <input ng-disabled="modalData.onshore" type="number" name="holeDepth" ng-min="modalData.waterDepth" max="10000" ng-model="modalData.holeDepth"
-                        class="form-control" autofocus="true" id="well-upsert-data-holeDepth" placeholder="Hole Depth" xpd-form-validation="form">
-                    <span class="input-group-addon">m</span>
-                </div>
-            </div>
-
-            <div class="form-group col-md-6" ng-class="{ 'has-error': form.shoeDepth.$invalid && !form.shoeDepth.$pristine }">
-                <label for="well-upsert-data-shoeDepth">Last Section Shoe Depth</label>
-                <div class="input-group">
-                    <input ng-disabled="modalData.onshore" type="number" name="shoeDepth" ng-min="modalData.waterDepth" max="10000" ng-model="modalData.shoeDepth"
-                        class="form-control" autofocus="true" id="well-upsert-data-shoeDepth" placeholder="Last Section Shoe Depth" xpd-form-validation="form">
-                    <span class="input-group-addon">m</span>
-                </div>
-            </div>
+<form name="form">
+    <div class="modal-content">
+        
+        <div class="modal-header">
+            <h4 class="modal-title">Well Setup Information</h4>
         </div>
 
-        <!-- <div>
-            <a role="button" ng-init="showAdvanced == 'false'" ng-click="showAdvanced = !showAdvanced">Advanced</a>
-        </div> -->
-        <!-- ng-show="showAdvanced" -->
+        <div class="modal-body">
+
+            <div class="container-fluid">
+
+                <div class="form-group col-md-12" ng-class="{ 'has-error': form.name.$invalid && !form.name.$pristine }">
+                    <label for="well-upsert-data-name">Name</label>
+                    <input type="text" name="name" maxlength="20" ng-model="modalData.name" class="form-control" autofocus="true" id="well-upsert-data-name"
+                        placeholder="Name" xpd-form-validation="form" required>
+                </div>
+
+                <div class="form-group col-md-6">
+                    <div class="checkbox">
+                        <label>
+                            <input id="well-upsert-data-onshore" type="checkbox" ng-model="modalData.onshore" ng-click="wuController.changeOnshore()"> Onshore
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="form-group col-md-6">
+                    <div class="checkbox">
+                        <label>
+                            <input id="well-upsert-data-bopSetted" type="checkbox" ng-model="modalData.bopSetted"> Bop setted
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="form-group col-md-6" ng-class="{ 'has-error': form.airGap.$invalid && !form.airGap.$pristine }">
+                    <label for="well-upsert-data-airGap">Air Gap</label>
+                    <div class="input-group">
+                        <input type="number" name="airGap" min="0" max="10000" ng-model="modalData.airGap" class="form-control" autofocus="true"
+                            id="well-upsert-data-airGap" placeholder="Air Gap" xpd-form-validation="form" required>
+                        <span class="input-group-addon">m</span>
+                    </div>
+                </div>
+
+                <div class="form-group col-md-6" ng-class="{ 'has-error': form.waterDepth.$invalid && !form.waterDepth.$pristine }">
+                    <label for="well-upsert-data-waterDepth">Water Depth</label>
+                    <div class="input-group">
+                        <input ng-disabled="modalData.onshore" type="number" name="waterDepth" min="0" max="10000" ng-model="modalData.waterDepth"
+                            class="form-control" autofocus="true" id="well-upsert-data-waterDepth" placeholder="Water Depth" xpd-form-validation="form"
+                            required ng-change="wuController.actionChangeWaterDepth()">
+                        <span class="input-group-addon">m</span>
+                    </div>
+                </div>
+
+                <div class="form-group col-md-6" ng-class="{ 'has-error': form.startHoleDepth.$invalid && !form.startHoleDepth.$pristine }">
+                    <label for="well-upsert-data-startHoleDepth">Start Hole Depth</label>
+                    <div class="input-group">
+                        <input type="number" name="startHoleDepth" min="{{modalData.waterDepth}}" max="10000" ng-model="modalData.startHoleDepth"
+                            class="form-control" autofocus="true" id="well-upsert-data-startHoleDepth" placeholder="Hole Depth" xpd-form-validation="form">
+                        <span class="input-group-addon">m</span>
+                    </div>
+                </div>
+                
+                <div class="form-group col-md-6" ng-class="{ 'has-error': form.startShoeDepth.$invalid && !form.startShoeDepth.$pristine }">
+                    <label for="well-upsert-data-startShoeDepth">Start Last Section Shoe Depth</label>
+                    <div class="input-group">
+                        <input type="number" name="startShoeDepth" min="{{modalData.waterDepth}}" max="10000" ng-model="modalData.startShoeDepth"
+                            class="form-control" autofocus="true" id="well-upsert-data-startShoeDepth" placeholder="Last Section Shoe Depth" xpd-form-validation="form">
+                        <span class="input-group-addon">m</span>
+                    </div>
+                </div>
+
+                <div class="form-group col-md-6">
+                    <label for="well-upsert-data-holeDepth">Hole Depth</label>
+                    <div class="input-group">
+                        <input disabled type="number" name="holeDepth" ng-model="modalData.holeDepth"
+                            class="form-control" autofocus="true" id="well-upsert-data-holeDepth" placeholder="0" xpd-form-validation="form" >
+                        <span class="input-group-addon">m</span>
+                    </div>
+                </div>
+
+                <div class="form-group col-md-6">
+                    <label for="well-upsert-data-shoeDepth">Last Section Shoe Depth</label>
+                    <div class="input-group">
+                        <input disabled type="number" name="shoeDepth" ng-model="modalData.shoeDepth"
+                            class="form-control" autofocus="true" id="well-upsert-data-shoeDepth" placeholder="0" xpd-form-validation="form">
+                        <span class="input-group-addon">m</span>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="modal-footer">
+            <button type="submit" class="btn btn-primary" id="well-upsert-button-save" ng-click="wuController.actionButtonSave();" ng-disabled="form.$invalid">
+                Save
+            </button>
+            <button type="button" class="btn btn-secondary" id="well-upsert-button-close" ng-click="wuController.actionButtonClose();">Cancel</button>
+        </div>
 
     </div>
-
-    <div class="modal-footer">
-        <button type="submit" class="btn btn-primary" id="well-upsert-button-save" ng-click="wuController.actionButtonSave();" ng-disabled="form.$invalid">
-            Save
-        </button>
-        <button type="button" class="btn btn-secondary" id="well-upsert-button-close" ng-click="wuController.actionButtonClose();">Cancel</button>
-    </div>
-
-</div>
-
+</form>
