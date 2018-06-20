@@ -23,6 +23,11 @@
 		operationDataFactory.openConnection([]).then(function (response) {
 			operationDataFactory = response;
 			$scope.operationData = operationDataFactory.operationData;
+
+			startWatching();
+
+			loadOperationStates();
+			loadTimeSlice();
 		});
 
 		vm.actionSelectActivityToPlan = actionSelectActivityToPlan;
@@ -51,11 +56,6 @@
 			vm.stateContext && vm.stateContext();
 			vm.vtargetContext && vm.vtargetContext();
 		}
-
-		startWatching();
-
-		loadOperationStates();
-		loadTimeSlice();
 
 		function loadTimeSlice() {
 
