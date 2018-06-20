@@ -27,8 +27,6 @@
 		function changeOnshore() {
 			if ($scope.modalData.onshore) {
 				$scope.modalData.waterDepth = 0;
-				$scope.modalData.startHoleDepth = 0;
-				$scope.modalData.startShoeDepth = 0;
 			}
 		}
 
