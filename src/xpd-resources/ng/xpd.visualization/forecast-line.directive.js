@@ -12,6 +12,7 @@
 			scope: {
 				vTargetLine: '=',
 				actualLine: '=',
+				isTripin: '=',
 				settings: '=',
 				state: '@',
 				type: '@'
@@ -33,9 +34,14 @@
 					scope.svg.viewBox = '0 0 100 ' + scope.chart.height;
 
 					var pathGenerator = d3.svg.line()
-						.x(function (d) {	return scope.xScale(d.x);	})
-						.y(function (d) {	return scope.yScale(d.y);	})
+						.x(function (d) { return scope.xScale(d.x); })
+						.y(function (d) { return scope.yScale(d.y); })
 						.interpolate('step-after');
+
+					scope.$watch('isTripin', function () {
+						buildvTargetLine();
+						buildActualLine();
+					});
 
 					scope.$watch('vTargetLine', function () {
 						buildvTargetLine();
@@ -70,8 +76,8 @@
 						if (!scope.actualLine || !scope.state || !scope.type)
 							return;
 
-						if (scope.actualLine[scope.state] && scope.actualLine[scope.state][scope.type]) {
-							scope.actualPath = pathGenerator(scope.actualLine[scope.state][scope.type].points);
+						if (getActualLine(scope.state, scope.type)) {
+							scope.actualPath = pathGenerator(getActualLine(scope.state, scope.type).points);
 						}
 
 						buildExpectedLine();
@@ -81,20 +87,20 @@
 
 						delete scope.optimumPath;
 
-						if (!scope.vTargetLine || !scope.vTargetLine[scope.state] || !scope.vTargetLine[scope.state][scope.type] || !scope.state || !scope.type)
+						if (!getVtargetLine(scope.state, scope.type) || !scope.state || !scope.type)
 							return;
 
 						scope.yScale = d3.scale.linear()
-							.domain([scope.vTargetLine[scope.state][scope.type].initialJoint, scope.vTargetLine[scope.state][scope.type].finalJoint])
+							.domain([getVtargetLine(scope.state, scope.type).initialJoint, getVtargetLine(scope.state, scope.type).finalJoint])
 							.range([scope.chart.height - 2, 2]);
 						scope.yScaleTicks = scope.yScale.ticks();
 
 						scope.xScale = d3.scale.linear()
-							.domain([scope.vTargetLine[scope.state][scope.type].startTime, scope.vTargetLine[scope.state][scope.type].finalTime])
+							.domain([getVtargetLine(scope.state, scope.type).startTime, getVtargetLine(scope.state, scope.type).finalTime])
 							.range([2, scope.chart.width - 2]);
 						scope.xScaleTicks = scope.xScale.ticks();
 
-						scope.optimumPath = pathGenerator(scope.vTargetLine[scope.state][scope.type].points);
+						scope.optimumPath = pathGenerator(getVtargetLine(scope.state, scope.type).points);
 					}
 
 					function buildExpectedLine() {
@@ -107,18 +113,18 @@
 							points: []
 						};
 
-						if (!scope.settings || !scope.type || !scope.state || !scope.vTargetLine || !scope.vTargetLine[scope.state] || !scope.vTargetLine[scope.state][scope.type])
+						if (!scope.settings || !scope.type || !scope.state || !getVtargetLine(scope.state, scope.type))
 							return;
 
-						var vTargetLine = scope.vTargetLine[scope.state][scope.type];
+						var vTargetLine = getVtargetLine(scope.state, scope.type);
 						var actualLine = null;
 
 						try {
-							actualLine = scope.actualLine[scope.state][scope.type];
+							actualLine = getActualLine(scope.state, scope.type);
 						} catch (e) {
-
+							console.log(e);
 						}
-						
+
 
 						var actualFinalTime = (actualLine != null) ? actualLine.finalTime : vTargetLine.startTime;
 						var actualFinalJoint = (actualLine != null) ? actualLine.finalJoint : vTargetLine.initialJoint;
@@ -162,6 +168,40 @@
 						scope.expectedPath = pathGenerator(points);
 					}
 
+					function getActualLine(state, type) {
+						var isTripin = scope.isTripin == false ? false : true;
+						var directionLabel = isTripin === false ? 'TRIPOUT' : 'TRIPIN';
+
+						if (scope.actualLine &&
+							scope.actualLine[state] &&
+							scope.actualLine[state][directionLabel] &&
+							scope.actualLine[state][directionLabel][type] ) {
+							return scope.actualLine[state][directionLabel][type];
+						} else {
+							return null;
+						}
+
+					}
+
+					function getVtargetLine(state, type) {
+						var isTripin = scope.isTripin == false ? false : true;
+
+						for (var i in scope.vTargetLine) {
+							var vTargetLine = scope.vTargetLine[i];
+
+							if (vTargetLine[state] &&
+								vTargetLine[state].isTripin == isTripin &&
+								vTargetLine[state][type]) {
+								return vTargetLine[state][type];
+							}
+
+						}
+
+						return null;
+
+					}
+
+
 					function intersect(expectedLine) {
 
 						var optimum = {
@@ -172,36 +212,32 @@
 							start: null,
 							end: null
 						};
-                        
+
 						var expected = {
 							start: null,
 							end: null
 						};
-                        
 
-						if (scope.vTargetLine &&
-                            scope.vTargetLine[scope.state] &&
-                            scope.vTargetLine[scope.state][scope.type] &&
-                            scope.vTargetLine[scope.state][scope.type].points &&
-                            scope.vTargetLine[scope.state][scope.type].points.length >= 0) {
 
-							optimum.start = (scope.vTargetLine[scope.state][scope.type].points[0]);
-							optimum.end = (scope.vTargetLine[scope.state][scope.type].points[scope.vTargetLine[scope.state][scope.type].points.length - 1]);
+						if (getVtargetLine(scope.state, scope.type) &&
+							getVtargetLine(scope.state, scope.type).points &&
+							getVtargetLine(scope.state, scope.type).points.length >= 0) {
+
+							optimum.start = (getVtargetLine(scope.state, scope.type).points[0]);
+							optimum.end = (getVtargetLine(scope.state, scope.type).points[getVtargetLine(scope.state, scope.type).points.length - 1]);
 						}
 
-						if (scope.actualLine &&
-                            scope.actualLine[scope.state] &&
-                            scope.actualLine[scope.state][scope.type] &&
-                            scope.actualLine[scope.state][scope.type].points &&
-                            scope.actualLine[scope.state][scope.type].points.length >= 0) {
+						if (getActualLine(scope.state, scope.type) &&
+							getActualLine(scope.state, scope.type).points &&
+							getActualLine(scope.state, scope.type).points.length >= 0) {
 
-							actual.start = (scope.actualLine[scope.state][scope.type].points[0]);
-							actual.end = (scope.actualLine[scope.state][scope.type].points[scope.actualLine[scope.state][scope.type].points.length - 1]);
+							actual.start = (getActualLine(scope.state, scope.type).points[0]);
+							actual.end = (getActualLine(scope.state, scope.type).points[getActualLine(scope.state, scope.type).points.length - 1]);
 						}
 
 						if (expectedLine &&
-                            expectedLine.points &&
-                            expectedLine.points.length >= 0) {
+							expectedLine.points &&
+							expectedLine.points.length >= 0) {
 
 							expected.start = (expectedLine.points[0]);
 							expected.end = (expectedLine.points[expectedLine.points.length - 1]);

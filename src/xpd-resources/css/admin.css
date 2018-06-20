@@ -29,16 +29,7 @@ body {
     margin: 0;
 }
 
-/**
- *
-
- */
-.tracking-content {
-    overflow: auto;
-    height: 100%;
-}
-
-.change-trackin-content {
+.change-tracking-content {
     position: absolute;
     bottom: 1px;
     right: 1px;

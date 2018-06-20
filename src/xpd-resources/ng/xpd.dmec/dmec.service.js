@@ -1,9 +1,9 @@
 (function () {
 	angular.module('xpd.dmec', []).service('dmecService', dmecService);
 
-	dmecService.$inject = ['$timeout', '$interval', '$q', 'readingSetupAPIService'];
+	dmecService.$inject = ['$timeout', '$interval', '$location', '$routeParams', '$q', 'readingSetupAPIService'];
 
-	function dmecService($timeout, $interval, $q, readingSetupAPIService) {
+	function dmecService($timeout, $interval, $location, $routeParams, $q, readingSetupAPIService) {
 
 		return {
 			dmec: DMECService
@@ -67,7 +67,13 @@
 			 * Salvando as configurações de busca
 			*/
 			function actionButtonSubmitDmecRange() {
-				localStorage.setItem(localStoragePath, JSON.stringify(scope.inputRangeForm));
+				// localStorage.setItem(localStoragePath, JSON.stringify(scope.inputRangeForm));
+
+				var param = {};
+				param[localStoragePath] = JSON.stringify(scope.inputRangeForm);
+
+				$location.path($location.path()).search(param);
+
 				reload();
 			}
 
@@ -169,26 +175,16 @@
 				var loopStartTime = new Date(startTime);
 				var loopEndTime = new Date(startTime);
 
+				// loopStartTime.setHours(0);
 				loopStartTime.setMinutes(0);
 				loopStartTime.setSeconds(0);
 				loopStartTime.setMilliseconds(0);
-				var step = 1;
 
+				var hours = (loopLimit.getTime() - loopStartTime.getTime()) / 3600000;
 
-				// var hours = (loopLimit.getTime() - loopStartTime.getTime()) / 3600000;
-				// if (hours <= 12) {
-				// 	step = 1;
-				// } else if (hours > 12 && hours <= 24) {
-				// 	step = 12;
-				// } else if (hours > 24 && hours <= (7 * 24)) {
-				// 	step = 24;
-				// } else if (hours > (7 * 24) && hours <= (4 * 7 * 24)) {
-				// 	step = (7 * 24);
-				// } else {
-				// 	step = (4 * 7 * 24);
-				// }
+				var step = Math.floor(hours / 12) * 6;
 
-				// console.log({hours, step});
+				step = (step < 1) ? 1 : step;
 
 				var promises = [];
 
@@ -203,11 +199,9 @@
 
 					promises.push($q(function (resolve, reject) {
 
-						// setTimeout(resolve, 1000, {});
-
 						readingSetupAPIService.getAllReadingByStartEndTime(
 							loopStartTime.getTime(),
-							loopEndTimestamp, // ? loopEndTimestamp : new Date().getTime(),
+							loopEndTimestamp ? loopEndTimestamp : new Date().getTime(),
 							resolve,
 							reject
 						);
@@ -280,7 +274,9 @@
 				var inputRangeForm;
 
 				try {
-					inputRangeForm = JSON.parse(localStorage.getItem(localStoragePath));
+
+					inputRangeForm = JSON.parse($routeParams[localStoragePath]);
+					// inputRangeForm = JSON.parse(localStorage.getItem(localStoragePath));
 				} catch (e) {
 					inputRangeForm = null;
 				}
@@ -288,8 +284,9 @@
 				if (!inputRangeForm) {
 					inputRangeForm = {
 						realtime: true,
+						keepZoomAtTheEnd: true,
 						last: 30,
-						toMilliseconds: '60000',
+						toMilliseconds: '60000'
 					};
 				}
 

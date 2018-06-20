@@ -1,17 +1,126 @@
-<!-- <div class="row">
-    <div class="col-xs-6 col-sm-6 col-md-2 col-lg-2">
-        <pre>{{ operationData.forecastContext.vTargetLine | json }}</pre>
+<div class="row scrollable-content">
+
+    <div class="container-fluid ">
+
+        <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+
+            <div class="panel panel-default">
+
+                <div class="panel-heading">
+                    <h4>Well Information</h4>
+                </div>
+
+                <div class="panel-body">
+
+                    <table class="table table-sm table-hover table-condensed">
+                        <tr>
+                            <th>Well</th>
+                            <td>{{ operationData.wellContext.currentWell.name }}</td>
+                            <td>Plataforma 1</td>
+                        </tr>
+                        <tr>
+                            <th>Water Depth</th>
+                            <td colspan="2">{{ operationData.wellContext.currentWell.waterDepth }}</td>
+                        </tr>
+                        <tr>
+                            <th>Seabed</th>
+                            <td colspan="2"></td>
+                        </tr>
+                        <tr>
+                            <th>BOP TOP</th>
+                            <td colspan="2"></td>
+                        </tr>
+                        <tr>
+                            <th>Well Head</th>
+                            <td colspan="2"></td>
+                        </tr>
+                        <tr>
+                            <th>Last Shoe Depth</th>
+                            <td colspan="2">{{ operationData.wellContext.currentWell.shoeDepth }}</td>
+                        </tr>
+                    </table>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-xs-12 col-sm-12 col-md-8 col-lg-6">
+
+            <div class="panel panel-default">
+
+                <div class="panel-heading">
+                    <h4>Operation Dashboard</h4>
+                </div>
+
+                <div class="panel-body">
+
+                    <div class="well">Operation:
+                        <strong>{{ operationData.operationContext.currentOperation.name }}</strong>
+                    </div>
+
+                    <button class="btn btn-default" ng-click="odController.actionButtonBuildForecast( 'vOptimumLine', 'BOTH' )">
+                        Optimum
+                    </button>
+
+                    <button class="btn btn-default" ng-click="odController.actionButtonBuildForecast( 'vStandardLine', 'BOTH' )">
+                        Standard
+                    </button>
+
+                    <button class="btn btn-default" ng-click="odController.actionButtonBuildForecast( 'vPoorLine', 'BOTH' )">
+                        Poor
+                    </button>
+
+                    <div id="container">
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+
+            <div class="panel panel-default">
+
+                <div class="panel-heading">
+                    <h4>Bit Depth</h4>
+                </div>
+
+                <div class="panel-body">
+
+                    <table class="table table-sm table-hover table-condensed">
+                        <tr>
+                            <th>Bit Depth</th>
+                            <td>{{ operationData.readingContext.currentReading.bitDepth | number : '.2' }} m</td>
+                        </tr>
+                        <tr>
+                            <th>BlockPosition</th>
+                            <td>{{ operationData.readingContext.currentReading.blockPosition | number : '.2' }} m</td>
+                        </tr>
+                        <tr>
+                            <th>Hookload</th>
+                            <td>{{ operationData.readingContext.currentReading.hookload | number : '.2' }} klb</td>
+                        </tr>
+                    </table>
+
+                    <!-- <pre>{{ operationData.inSlipsContext | json }}</pre> -->
+
+                </div>
+
+            </div>
+
+        </div>
+
     </div>
-    <div class="col-xs-6 col-sm-6 col-md-2 col-lg-2">
-        <pre>{{ operationData.forecastContext.optimumLine | json }}</pre>
-    </div>
-    <div class="col-xs-6 col-sm-6 col-md-2 col-lg-2">
-        <pre>{{ operationData.forecastContext.vStandardLine | json }}</pre>
-    </div>
-    <div class="col-xs-6 col-sm-6 col-md-2 col-lg-2">
-        <pre>{{ operationData.forecastContext.vPoorLine | json }}</pre>
-    </div>
-    <div class="col-xs-6 col-sm-6 col-md-2 col-lg-2">
-        <pre>{{ operationData.forecastContext | json }}</pre>
-    </div>
-</div> -->
+
+    <!-- <pre ng-repeat="(key, value) in operationData.forecastContext">{{ key }}</pre> -->
+    <pre>{{ operationData.forecastContext.actualLine | json }}</pre>
+    <!-- <pre >{{ operationData.suboperationContext.currentSuboperation.tripin | json }}</pre> -->
+
+</div>

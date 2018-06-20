@@ -33,7 +33,7 @@
 			hasAlarm: false,
 			hasMessage: false,
 
-			showDMEC: (localStorage.getItem('xpd.admin.tracking.openDmecAsDefault')) ? JSON.parse(localStorage.getItem('xpd.admin.tracking.openDmecAsDefault')) : false
+			showDMEC: !!JSON.parse(localStorage.getItem('xpd.admin.tracking.openDmecAsDefault'))
 		};
 
 		$scope.acknowledgement = {

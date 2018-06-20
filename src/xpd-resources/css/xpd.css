@@ -7,6 +7,11 @@
     src: url("../fonts/agency-fb.ttf");
 }
 
+.scrollable-content {
+    overflow: auto;
+    height: 100%;
+}
+
 
 /**
  * TYPE SCALE CODE (Major Third Scale)
