@@ -30,7 +30,9 @@
 				scope.onclickItemMenu = onclickItemMenuAdmin;
 			}
 
-			operationDataFactory.operationData = [];
+			operationDataFactory.openConnection([]).then(function (response) {
+				operationDataFactory = response;
+			});
 
 			checkIfHasRunningOperation();
 			operationDataFactory.addEventListener('menuConfirmationFactory', 'setOnRunningOperationListener', checkIfHasRunningOperation);

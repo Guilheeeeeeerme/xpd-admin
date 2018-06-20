@@ -32,7 +32,7 @@
 
 
 					var containerWidth = /*248;*/+parentNodeRect.width - horizontalPadding;
-					var containerHeight = /*192;*/+parentNodeRect.height - verticalPadding;			
+					var containerHeight = /*192;*/+parentNodeRect.height - verticalPadding;
 
 
 					var width = 248;
@@ -169,7 +169,7 @@
 						.attr('class', 'score-bg-arc');
 
 					var plotCurrentScoreArc = currentScoreArcGroup.append('path')
-						.datum({startAngle: currScoreArcEndRadians})
+						.datum({ startAngle: currScoreArcEndRadians })
 						.attr('d', currentScoreArc)
 						.style('fill', '#c06b50');
 
@@ -178,7 +178,7 @@
 						.attr('class', 'score-bg-arc');
 
 					var plotAccScoreArc = accScoreArcGroup.append('path')
-						.datum({endAngle: accScoreArcStartRadians})
+						.datum({ endAngle: accScoreArcStartRadians })
 						.attr('d', accScoreArc)
 						.style('fill', '#ffe89a');
 
@@ -270,7 +270,7 @@
 					scope.$watch('directionData', setCurrentDirection, true);
 
 					function redrawCurrentScoreArc(newValue) {
-						if (newValue != null && typeof(newValue) !== 'undefined' && !isNaN(newValue)) {
+						if (newValue != null && typeof (newValue) !== 'undefined' && !isNaN(newValue)) {
 							plotCurrentScoreArc.transition().duration(500)
 								.call(scoreArcTween, currentScoreArc, 'startAngle', currentScoreScale(newValue));
 
@@ -284,7 +284,7 @@
 					}
 
 					function redrawAccScoreArc(newValue) {
-						if (newValue != null && typeof(newValue) !== 'undefined' && newValue.eventScoreQty && newValue.totalScore) {
+						if (newValue != null && typeof (newValue) !== 'undefined' && newValue.eventScoreQty && newValue.totalScore) {
 							if (newValue.eventScoreQty && newValue.totalScore) {
 								var accScore = newValue.totalScore / newValue.eventScoreQty;
 
@@ -303,23 +303,23 @@
 
 					function renderJointData(jointData) {
 
-						if(jointData.jointType != 'none'){
+						if (jointData && jointData.jointType != 'none') {
 							if (jointData.currentJoint)
 								currentJointText.text(jointData.currentJoint.jointNumber);
 							else
-	                            currentJointText.text('--');
+								currentJointText.text('--');
 
 							if (jointData.numberJoints != null)
 								jointNumberText.text(jointData.numberJoints);
 							else
-	                            jointNumberText.text('--');
+								jointNumberText.text('--');
 
 							if (jointData.jointType === 'casing')
 								jointLabel.text('Casing Jts.');
 							else
-	                            jointLabel.text('Joints');
+								jointLabel.text('Joints');
 
-						}else{
+						} else {
 							currentJointText.text('--');
 							jointNumberText.text('--');
 							jointLabel.text('Joints');
@@ -327,13 +327,13 @@
 					}
 
 					function setCurrentDirection(directionData) {
-						if (directionData.tripin != null) {
+						if (directionData && directionData.tripin != null) {
 							var tripinY1 = directionData.tripin ? '128' : '147';
 							var tripinY2 = directionData.tripin ? '140' : '136';
 
 							tripinIndicatior
-	                            .attr('y1', tripinY1)
-	                            .attr('y2', tripinY2);
+								.attr('y1', tripinY1)
+								.attr('y2', tripinY2);
 						}
 					}
 
@@ -394,7 +394,7 @@
 						x = (dSin * bgArcOuterRadius) + margin;
 						y = (dCos * bgArcOuterRadius);
 
-						return {'x': x, 'y': y};
+						return { 'x': x, 'y': y };
 					}
 
 					function createBackgroundDetails() {
