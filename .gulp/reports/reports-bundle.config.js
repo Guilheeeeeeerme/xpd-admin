@@ -44,7 +44,6 @@ exports.scripts = {
 		'./src/xpd-resources/ng/socket.io/socketio.module.js',
 		'./src/xpd-resources/ng/socket.io/socket.factory.js',
 		'./src/xpd-resources/ng/xpd.communication/communication.module.js',
-		'./src/xpd-resources/ng/xpd.communication/operation-communication.factory.js',
 		'./src/xpd-resources/ng/xpd.communication/operation-server-data.factory.js',
 		'./src/xpd-resources/ng/xpd.modal.laydown-confirmation/xpd.modal.laydown-confirmation.directive.js',
 		'./src/xpd-resources/ng/xpd.modal.failure/xpd-modal-failure.module.js',

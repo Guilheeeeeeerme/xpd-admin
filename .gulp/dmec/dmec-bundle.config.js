@@ -28,7 +28,6 @@ exports.scripts = {
 		'./src/xpd-resources/ng/xpd.dialog/xpd.dialog.module.js',
 		'./src/xpd-resources/ng/xpd.dialog/xpd.dialog.factory.js',
 		'./src/xpd-resources/ng/xpd.communication/communication.module.js',
-		'./src/xpd-resources/ng/xpd.communication/operation-communication.factory.js',
 		'./src/xpd-resources/ng/xpd.communication/operation-server-data.factory.js',
 		'./src/xpd-resources/ng/xpd.calculation/calculation.module.js',
 		'./src/xpd-resources/ng/xpd.calculation/calculation.service.js',
