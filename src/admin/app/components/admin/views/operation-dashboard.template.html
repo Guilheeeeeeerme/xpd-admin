@@ -72,9 +72,10 @@
                         Poor
                     </button>
 
-                    <div id="container">
-
-                    </div>
+                    <forecast-waterfall
+                        horizontal="false"
+                        data-data-chart="forecast">
+                    </forecast-waterfall>
 
                 </div>
 
@@ -120,7 +121,7 @@
     </div>
 
     <!-- <pre ng-repeat="(key, value) in operationData.forecastContext">{{ key }}</pre> -->
-    <pre>{{ operationData.forecastContext.actualLine | json }}</pre>
+    <!-- <pre>{{ operationData.forecastContext.actualLine | json }}</pre> -->
     <!-- <pre >{{ operationData.suboperationContext.currentSuboperation.tripin | json }}</pre> -->
 
 </div>

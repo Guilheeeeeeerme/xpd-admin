@@ -4,21 +4,22 @@
 
 	angular.module('xpd.operation-dashboard').controller('OperationDashboardController', operationDashboardController);
 
-	operationDashboardController.$inject = ['$scope', '$filter', 'operationDataFactory', 'highchartsService'];
+	operationDashboardController.$inject = ['$scope', '$filter', 'operationDataFactory'];
 
-	function operationDashboardController($scope, $filter, operationDataFactory, highchartsService) {
+	function operationDashboardController($scope, $filter, operationDataFactory) {
 
 		var vm = this;
 
 		var selectedBaseLine;
 		var selectedEventType;
 
+		operationDataFactory.openConnection([]).then(function (response) {
+			operationDataFactory = response;
+			$scope.operationData = operationDataFactory.operationData;
+			__init();
+		});
+
 		vm.actionButtonBuildForecast = actionButtonBuildForecast;
-
-		operationDataFactory.operationData = [];
-		$scope.operationData = operationDataFactory.operationData;
-
-		__init();
 
 		operationDataFactory.addEventListener('operationDashboardController', 'setOnOptimumLineListener', __init);
 		operationDataFactory.addEventListener('operationDashboardController', 'setOnActualLineListener', __init);
@@ -67,7 +68,7 @@
 			 */
 			var actualLine = $scope.operationData.forecastContext.actualLine;
 
-			var forecast = [];
+			$scope.forecast = [];
 
 			var statesHash;
 			var state;
@@ -85,7 +86,7 @@
 
 				var selectedParamExpectedTime = calcTimeSpent(selectedLine, state, eventType, isTripin);
 
-				forecast.push({
+				$scope.forecast.push({
 					name: 'Expected ' + $filter('xpdStateLabelFilter')(state) + (isTripin ? ' Trip In' : ' Trip Out'),
 					y: selectedParamExpectedTime,
 					color: splitColor
@@ -96,7 +97,7 @@
 			/**
 			 * Total Expected
 			 */
-			forecast.push({
+			$scope.forecast.push({
 				name: 'Total Expected Time',
 				isIntermediateSum: true,
 				color: '#434348'
@@ -124,7 +125,7 @@
 						actualLine[state][directionLabel][eventType].startTime
 					);
 
-					forecast.push({
+					$scope.forecast.push({
 						name: 'Time Spent on ' + $filter('xpdStateLabelFilter')(state) + (isTripin ? ' Trip In' : ' Trip Out'),
 						y: -1 * actualTimeSpent,
 						color: color(actualTimeSpent, optimumTimeSpent, standardTimeSpent, poorTimeSpent)
@@ -137,90 +138,32 @@
 			/**
 			 * Remaining Time
 			 */
-			forecast.push({
+			$scope.forecast.push({
 				name: 'Remaining Time',
 				isSum: true,
 				color: '#434348'
 			});
 
+		}
 
-			highchartsService.highcharts().then(function (Highcharts) {
-				drawChart(Highcharts, forecast);
-			});
-
-			function calcTimeSpent(line, state, eventType, isTripin) {
-				for (var i in line) {
-					if (line[i] && line[i][state] && line[i][state].isTripin == isTripin && line[i][state][eventType]) {
-						return Math.abs(line[i][state][eventType].finalTime - line[i][state][eventType].startTime);
-					}
+		function calcTimeSpent(line, state, eventType, isTripin) {
+			for (var i in line) {
+				if (line[i] && line[i][state] && line[i][state].isTripin == isTripin && line[i][state][eventType]) {
+					return Math.abs(line[i][state][eventType].finalTime - line[i][state][eventType].startTime);
 				}
 			}
+		}
 
-			function color(actualDuration, optimumDuration, standardDuration, poorDuration) {
-				if (actualDuration <= optimumDuration) {
-					return '#73b9c6';
-				} else if (actualDuration > optimumDuration && actualDuration <= standardDuration) {
-					return '#0FA419';
-				} else if (actualDuration > standardDuration && actualDuration <= poorDuration) {
-					return '#ffe699';
-				} else {
-					return '#860000';
-				}
+		function color(actualDuration, optimumDuration, standardDuration, poorDuration) {
+			if (actualDuration <= optimumDuration) {
+				return '#73b9c6';
+			} else if (actualDuration > optimumDuration && actualDuration <= standardDuration) {
+				return '#0FA419';
+			} else if (actualDuration > standardDuration && actualDuration <= poorDuration) {
+				return '#ffe699';
+			} else {
+				return '#860000';
 			}
-
-
-			function drawChart(Highcharts, forecast) {
-
-				function formatter() {
-					return $filter('secondsToHourMinutes')(Math.abs(this.y));
-				}
-
-				Highcharts.chart('container', {
-
-					chart: {
-						type: 'waterfall'
-					},
-
-					title: {
-						text: null
-					},
-
-					xAxis: {
-						type: 'category'
-					},
-
-					yAxis: {
-						title: {
-							text: 'Seconds'
-						}
-					},
-
-					legend: {
-						enabled: false
-					},
-
-					tooltip: {
-						formatter: formatter
-					},
-
-					series: [{
-						upColor: Highcharts.getOptions().colors[2],
-						color: Highcharts.getOptions().colors[3],
-						data: forecast,
-						dataLabels: {
-							enabled: true,
-							formatter: formatter,
-							style: {
-								fontWeight: 'bold'
-							}
-						},
-						pointPadding: 0
-					}]
-				});
-
-
-			}
-
 		}
 
 	}
