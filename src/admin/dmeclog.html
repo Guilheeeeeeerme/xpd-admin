@@ -69,7 +69,6 @@
 
     <!-- XPD COMMUNICATION -->
     <script type="text/javascript" src="/xpd-resources/ng/xpd.communication/communication.module.js"></script>
-    <script type="text/javascript" src="/xpd-resources/ng/xpd.communication/operation-communication.factory.js"></script>
     <script type="text/javascript" src="/xpd-resources/ng/xpd.communication/operation-server-data.factory.js"></script>
 
     <!-- XPD CALCULATION -->
@@ -95,6 +94,8 @@
     <script type="text/javascript" src="/xpd-resources/ng/xpd.setupapi/well-setupapi.service.js"></script>
     <script type="text/javascript" src="/xpd-resources/ng/xpd.setupapi/photo-setupapi.directive.js"></script>
 
+	<script type="text/javascript" src="/xpd-resources/ng/xpd.dmec/dmec.service.js"></script>
+
     <!-- DRILLING MECHANICS MODULE JS -->
     <script type="text/javascript" src="./app/components/dmec-log/dmec-log.module.js"></script>
     <script type="text/javascript" src="./app/components/dmec-log/dmec-log.controller.js"></script>
@@ -114,65 +115,71 @@
 
             <form class="navbar-form navbar-left">
 
-
                 <uib-accordion>
-
-                    <div uib-accordion-group class="panel-default" is-open="status.isCustomHeaderOpen">
-
-                        <uib-accordion-heading>
-                            Settings
-
-                            <span class="well well-sm">
-                                <strong>DMEC is starting at</strong> {{ dmecTrackingStartAt | date:'medium' }}
-                            </span>
-
-                            <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': status.isCustomHeaderOpen, 'glyphicon-chevron-right': !status.isCustomHeaderOpen}">
-
-                            </i>
-
-                        </uib-accordion-heading>
-
-                        <form name="inputRange.form">
-
-                            <div class="checkbox">
-                                <label>
-                                    <input name="realtime" ng-model="inputRangeForm.realtime" type="checkbox"> Real Time
-                                </label>
-                            </div>
-
-                            <div ng-if="!inputRangeForm.realtime">
-
-                                <div class="form-group">
-                                    <label for="startTime">From:</label>
-                                    <input ng-model="inputRangeForm.startTime" type="datetime-local" class="form-control" required name="startTime" id="startTime">
+                
+                        <div uib-accordion-group class="panel-default" is-open="status.isCustomHeaderOpen">
+                
+                            <uib-accordion-heading>
+                                Settings
+                
+                                <span class="well well-sm">
+                                    <strong>DMEC is starting at</strong> {{ dmecTrackingStartAt | date:'medium' }}
+                                </span>
+                
+                                <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': status.isCustomHeaderOpen, 'glyphicon-chevron-right': !status.isCustomHeaderOpen}">
+                                    
+                                </i>
+                            
+                            </uib-accordion-heading>
+                
+                            <form name="inputRange.form">
+                
+                                <div class="checkbox">
+                                    <label>
+                                        <input name="realtime" ng-model="inputRangeForm.realtime" type="checkbox"> Real Time
+                                    </label>
                                 </div>
-
-                            </div>
-
-                            <div ng-if="inputRangeForm.realtime">
-
-                                <div class="form-group">
-                                    <label for="last">Last:</label>
-                                    <input ng-model="inputRangeForm.last" type="number" class="form-control" required name="last" id="last">
+                                <div class="checkbox">
+                                    <label>
+                                        <input name="keepZoomAtTheEnd" ng-model="inputRangeForm.keepZoomAtTheEnd" type="checkbox"> Keep zoom at the end
+                                    </label>
                                 </div>
-
-                                <div class="form-group">
-                                    <select ng-model="inputRangeForm.toMilliseconds" class="form-control" required name="toMilliseconds" id="toMilliseconds">
-                                        <option value="86400000">Days</option>
-                                        <option value="3600000">Hours</option>
-                                        <option value="60000">Minutes</option>
-                                        <option value="1000">Seconds</option>
-                                    </select>
+                
+                                <div ng-if="!inputRangeForm.realtime">
+                
+                                    <div class="form-group">
+                                        <label for="startTime">From:</label>
+                                        <input ng-model="inputRangeForm.startTime" type="datetime-local" class="form-control" required
+                                         name="startTime" id="startTime">
+                                    </div>
+                
                                 </div>
-
-                            </div>
-
-                            <button type="submit" ng-click="actionButtonSubmitDmecRange()" ng-disabled="inputRange.form.$invalid" class="btn btn-default">Submit</button>
-
-                        </form>
-                    </div>
-
-                </uib-accordion>
+                
+                                <div ng-if="inputRangeForm.realtime">
+                
+                                    <div class="form-group">
+                                        <label for="last">Last:</label>
+                                        <input ng-model="inputRangeForm.last" type="number" class="form-control" required name="last" id="last">
+                                    </div>
+                
+                                    <div class="form-group">
+                                        <select ng-model="inputRangeForm.toMilliseconds" class="form-control" required name="toMilliseconds" id="toMilliseconds">
+                                            <option value="86400000">Days</option>
+                                            <option value="3600000">Hours</option>
+                                            <option value="60000">Minutes</option>
+                                            <option value="1000">Seconds</option>
+                                        </select>
+                                    </div>
+                
+                                </div>
+                
+                                <button type="submit" ng-click="actionButtonSubmitDmecRange()" ng-disabled="inputRange.form.$invalid" class="btn btn-default">Submit</button>
+                
+                            </form>
+                        </div>
+                
+                    </uib-accordion>
+                
 
             </form>
 
@@ -180,8 +187,7 @@
 
     </nav>
 
-    <time-zoom-tool ng-if="zoomStartAt && zoomEndAt" zoom-start-at="zoomStartAt" zoom-end-at="zoomEndAt" set-zoom-start-at="setZoomStartAt"
-        set-zoom-end-at="setZoomEndAt">
+    <time-zoom-tool ng-if="zoomStartAt && zoomEndAt" zoom-start-at="zoomStartAt" zoom-end-at="zoomEndAt" set-zoom="setZoom">
     </time-zoom-tool>
 
     <d3-dmec-chart ng-if="dmecTrackingStartAt && zoomStartAt && zoomEndAt" threads="4" horizontal="false" on-reading-since="onReadingSince"

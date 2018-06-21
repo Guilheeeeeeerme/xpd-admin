@@ -2,6 +2,10 @@ body {
 	font-family: AgencyFB;
 }
 
+access-factory-directive {
+    padding: 1px;
+}
+
 .child-element-spacing {
     overflow: auto;
     height: 100%;

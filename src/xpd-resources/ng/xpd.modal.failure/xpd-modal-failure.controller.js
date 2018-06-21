@@ -17,8 +17,9 @@
 		$scope.now = now;
 		$scope.keepTimeBeforeNow = keepTimeBeforeNow;
 
-
-		operationDataFactory.operationData = [];
+		operationDataFactory.openConnection([]).then(function (response) {
+			operationDataFactory = response;
+		});
 
 		$scope.category = {
 			roleList: [],

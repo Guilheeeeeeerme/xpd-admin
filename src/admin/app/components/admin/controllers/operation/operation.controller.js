@@ -38,8 +38,9 @@
 		 */
 		menuConfirmationFactory.setBlockMenu(true);
 
-		operationDataFactory.operationData = [];
-
+		operationDataFactory.openConnection([]).then(function (response) {
+			operationDataFactory = response;
+		});
 
 		function getOperation() {
 			if (operation.id != null) {

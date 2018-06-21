@@ -14,6 +14,12 @@
 			templateUrl: './app/components/admin/views/tracking.template.html',
 			controller: 'TrackingController as tController'
 		});
+
+		$routeProvider.when('/operation-dashboard', {
+			templateUrl: './app/components/admin/views/operation-dashboard.template.html',
+			controller: 'OperationDashboardController as odController'
+		});
+
 		$routeProvider.when('/menu', {
 			templateUrl: './app/components/admin/views/menu.template.html',
 			controller: 'MenuController as mController'
@@ -48,7 +54,7 @@
 			templateUrl: './app/components/admin/views/operation.template.html',
 			controller: 'OperationController as operationController'
 		});
-		
+
 		$routeProvider.when('/team/members', {
 			templateUrl: './app/components/admin/views/team.template.html',
 			controller: 'TeamController as tController'

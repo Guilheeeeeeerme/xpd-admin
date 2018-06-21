@@ -1,9 +1,7 @@
 (function () {
 	'use strict';
 
-	var module = angular.module('xpd.visualization');
-
-	module.directive('timeZoomTool', timeZoomTool);
+	angular.module('xpd.visualization').directive('timeZoomTool', timeZoomTool);
 
 	timeZoomTool.$inject = ['$timeout', '$interval', '$filter', 'd3Service'];
 
@@ -15,8 +13,7 @@
 				bitDepthPoints: '=',
 				zoomStartAt: '=',
 				zoomEndAt: '=',
-				setZoomStartAt: '=',
-				setZoomEndAt: '=',
+				setZoom: '=',
 				minDepth: '=',
 				maxDepth: '=',
 			},
@@ -186,8 +183,10 @@
 					var endt = d3.transform(getEndZoomElementTransform()),
 						endNavigatorFinalPostion = scope.timeScale.invert(endt.translate[0]);
 
-					scope.setZoomStartAt(new Date(Math.min(endNavigatorFinalPostion, startNavigatorFinalPosition)));
-					scope.setZoomEndAt(new Date(Math.max(endNavigatorFinalPostion, startNavigatorFinalPosition)));
+					scope.setZoom(
+						new Date(Math.min(endNavigatorFinalPostion, startNavigatorFinalPosition)),
+						new Date(Math.max(endNavigatorFinalPostion, startNavigatorFinalPosition))
+					);
 
 					clickedElement.classed('active', false);
 
@@ -209,8 +208,10 @@
 					scope.mindate = scope.timeScale.invert(mouseXPosition - 40);
 					scope.maxdate = scope.timeScale.invert(mouseXPosition + 40);
 
-					scope.setZoomStartAt(scope.mindate);
-					scope.setZoomEndAt(scope.maxdate);
+					scope.setZoom(
+						scope.mindate,
+						scope.maxdate
+					);
 				}
 
 				function getOverlayElement() {

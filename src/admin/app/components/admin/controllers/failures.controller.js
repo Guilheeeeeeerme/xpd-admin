@@ -26,9 +26,11 @@
 		vm.actionClickButtonEditFailure = actionClickButtonEditFailure;
 
 		operationDataFactory.operationData = [];
-
-		$scope.modalData.operation = operationDataFactory.operationData.operationContext.currentOperation;
-		$scope.modalData.failuresList = operationDataFactory.operationData.failureContext.failureList;
+		operationDataFactory.openConnection([]).then(function (response) {
+			operationDataFactory = response;
+			$scope.modalData.operation = operationDataFactory.operationData.operationContext.currentOperation;
+			$scope.modalData.failuresList = operationDataFactory.operationData.failureContext.failureList;
+		});		
 
 		operationDataFactory.addEventListener('failuresController', 'setOnFailureChangeListener', populateFailureList);
 

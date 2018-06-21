@@ -33,7 +33,7 @@
 			hasAlarm: false,
 			hasMessage: false,
 
-			showDMEC: (localStorage.getItem('xpd.admin.tracking.openDmecAsDefault')) ? JSON.parse(localStorage.getItem('xpd.admin.tracking.openDmecAsDefault')) : false
+			showDMEC: !!JSON.parse(localStorage.getItem('xpd.admin.tracking.openDmecAsDefault'))
 		};
 
 		$scope.acknowledgement = {
@@ -41,10 +41,15 @@
 			depthAlarms: []
 		};
 
+		operationDataFactory.openConnection([]).then(function(response) {
+			operationDataFactory = response;
+			$scope.operationData = operationDataFactory.operationData;
 
-		operationDataFactory.operationData = [];
-
-		$scope.operationData = operationDataFactory.operationData;
+			buildEventStruture();
+			buildTimeSlicesStruture();
+			removeTeamsFromShift();
+			buildAcknowledgementList();
+		});		
 
 		vm.actionButtonStartOperation = actionButtonStartOperation;
 		vm.actionButtonFinishOperation = actionButtonFinishOperation;
@@ -74,14 +79,14 @@
 		//* ALARM *//
 		vm.finishDurationAlarm = finishDurationAlarm;
 
-		buildEventStruture();
+		// buildEventStruture();
 		operationDataFactory.addEventListener('trackingController', 'setOnEventChangeListener', buildEventStruture);
 		operationDataFactory.addEventListener('trackingController', 'setOnCurrentEventListener', buildEventStruture);
 		operationDataFactory.addEventListener('trackingController', 'setOnNoCurrentEventListener', buildEventStruture);
 		operationDataFactory.addEventListener('trackingController', 'setOnEventLogUpdateListener', buildEventStruture);
 		operationDataFactory.addEventListener('trackingController', 'setOnWaitEventListener', buildEventStruture);
 
-		buildTimeSlicesStruture();
+		// buildTimeSlicesStruture();
 		operationDataFactory.addEventListener('trackingController', 'setOnTimeSlicesChangeListener', buildTimeSlicesStruture);
 		operationDataFactory.addEventListener('trackingController', 'setOnTimeSlicesListener', buildTimeSlicesStruture);
 		operationDataFactory.addEventListener('trackingController', 'setOnNoTimeSlicesListener', buildTimeSlicesStruture);
@@ -89,10 +94,10 @@
 		operationDataFactory.addEventListener('trackingController', 'setOnAboveSpeedLimitListener', onAboveSpeedLimit);
 		operationDataFactory.addEventListener('trackingController', 'setOnUnreachableTargetListener', onUnreachableTarget);
 
-		removeTeamsFromShift();
+		// removeTeamsFromShift();
 		operationDataFactory.addEventListener('trackingController', 'setOnShiftListener', removeTeamsFromShift);
 
-		buildAcknowledgementList();
+		// buildAcknowledgementList();
 		operationDataFactory.addEventListener('trackingController', 'setOnAlarmsChangeListener', buildAcknowledgementList);
 		operationDataFactory.addEventListener('trackingController', 'setOnCurrentAlarmsListener', buildAcknowledgementList);
 		operationDataFactory.addEventListener('trackingController', 'setOnNoCurrentAlarmsListener', buildAcknowledgementList);
@@ -177,22 +182,26 @@
 			$scope.flags.hasAlarm = false;
 			$scope.flags.hasMessage = false;
 
-			var acknowledgements = $scope.operationData.alarmContext.acknowledgementList;
+			var alarmContext = $scope.operationData.alarmContext;
 
-			for (var i in acknowledgements) {
-				var alarm = acknowledgements[i].alarm;
+			if (alarmContext) {
+				var acknowledgements = alarmContext.acknowledgementList;
 
-				if (alarm.alarmType == 'depth') {
-					if (!acknowledgements[i].acknowledgeTime)
-						$scope.flags.hasAlarm = true;
+				for (var i in acknowledgements) {
+					var alarm = acknowledgements[i].alarm;
 
-					$scope.acknowledgement.depthAlarms.push(acknowledgements[i]);
+					if (alarm.alarmType == 'depth') {
+						if (!acknowledgements[i].acknowledgeTime)
+							$scope.flags.hasAlarm = true;
 
-				} else {
-					if (!acknowledgements[i].acknowledgeTime)
-						$scope.flags.hasMessage = true;
+						$scope.acknowledgement.depthAlarms.push(acknowledgements[i]);
 
-					$scope.acknowledgement.timeAlarms.push(acknowledgements[i]);
+					} else {
+						if (!acknowledgements[i].acknowledgeTime)
+							$scope.flags.hasMessage = true;
+
+						$scope.acknowledgement.timeAlarms.push(acknowledgements[i]);
+					}
 				}
 			}
 		}
@@ -214,22 +223,18 @@
 		}
 
 		function actionButtonStartMakeUp() {
-			// console.log('actionButtonStartMakeUp()');
 			operationDataFactory.emitStartMakeUp();
 		}
 
 		function actionButtonStartLayDown() {
-			// console.log('actionButtonStartLayDown()');
 			operationDataFactory.emitStartLayDown();
 		}
 
 		function actionButtonFinishMakeUp() {
-			// console.log('actionButtonFinishMakeUp()');
 			operationDataFactory.emitFinishMakeUp();
 		}
 
 		function actionButtonFinishLayDown() {
-			// console.log('actionButtonFinishLayDown()');
 			operationDataFactory.emitFinishLayDown();
 		}
 
@@ -278,7 +283,7 @@
 
 			var eventContext = $scope.operationData.eventContext;
 
-			if (eventContext.currentEvent != null && eventContext.currentEvent.eventType == 'WAIT') {
+			if (eventContext && eventContext.currentEvent != null && eventContext.currentEvent.eventType == 'WAIT') {
 
 				$scope.dados.timeBlocks = [{
 					name: 'Waiting for Readings',
@@ -293,7 +298,7 @@
 
 			var timeSlicesContext = $scope.operationData.timeSlicesContext;
 
-			if (timeSlicesContext.currentTimeSlices != null) {
+			if (timeSlicesContext && timeSlicesContext.currentTimeSlices != null) {
 
 				try {
 					timeSlicesContext.currentTimeSlices = timeSlicesContext.currentTimeSlices.map(function (ts) {

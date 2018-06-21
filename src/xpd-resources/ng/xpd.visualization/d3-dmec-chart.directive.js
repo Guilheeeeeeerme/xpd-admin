@@ -5,9 +5,9 @@
 
 	module.directive('d3DmecChart', d3DmecChart);
 
-	d3DmecChart.$inject = ['d3Service', '$interval', '$q', '$uibModal'];
+	d3DmecChart.$inject = ['$interval', '$q', '$uibModal', 'd3Service'];
 
-	function d3DmecChart(d3Service, $interval, $q, $modal) {
+	function d3DmecChart($interval, $q, $modal, d3Service) {
 		return {
 			restrict: 'E',
 			templateUrl: '../xpd-resources/ng/xpd.visualization/d3-dmec-chart.template.html',
@@ -121,16 +121,14 @@
 
 						onReading.then(function (reading) {
 
-
 							if (!readings) {
 								readings = [];
 							}
 
 							readings.push(reading);
 
-							// console.log(reading);
-
 							readingsToPoints(readings, tracks).then(function (points) {
+								scope.newPoints = points;
 								draw('newPoints', points);
 							});
 
@@ -223,8 +221,8 @@
 									track.max
 								])
 								.range([
-									Math.max(labelEndAt, labelStartAt) - (Math.abs(labelEndAt - labelStartAt) * margin ),
-									Math.min(labelEndAt, labelStartAt) + (Math.abs(labelEndAt - labelStartAt) * margin )
+									Math.max(labelEndAt, labelStartAt) - (Math.abs(labelEndAt - labelStartAt) * margin),
+									Math.min(labelEndAt, labelStartAt) + (Math.abs(labelEndAt - labelStartAt) * margin)
 								]);
 
 						} else {
@@ -235,8 +233,8 @@
 									track.max
 								])
 								.range([
-									Math.min(labelEndAt, labelStartAt) + (Math.abs(labelEndAt - labelStartAt) * margin ),
-									Math.max(labelEndAt, labelStartAt) - (Math.abs(labelEndAt - labelStartAt) * margin )
+									Math.min(labelEndAt, labelStartAt) + (Math.abs(labelEndAt - labelStartAt) * margin),
+									Math.max(labelEndAt, labelStartAt) - (Math.abs(labelEndAt - labelStartAt) * margin)
 								]);
 
 						}
@@ -350,7 +348,7 @@
 
 				}
 
-				function highligthPoints (mouseXPosition, mouseYPosition) {
+				function highligthPoints(mouseXPosition, mouseYPosition) {
 
 					var timeAxisPosition = null;
 					var timestamp = null;
@@ -562,7 +560,7 @@
 						animation: false,
 						keyboard: false,
 						backdrop: 'static',
-						templateUrl: 'app/components/dmec-log/change-scale.template.html',
+						templateUrl: '../xpd-resources/ng/xpd.visualization/d3-dmec-chart-modal.template.html',
 						controller: 'ModalUpdateDmecTracks',
 						windowClass: 'change-scale-modal',
 						resolve: {

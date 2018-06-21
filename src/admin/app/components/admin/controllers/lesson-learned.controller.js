@@ -24,8 +24,10 @@
 		vm.actionClickButtonRemoveLessonLearned = actionClickButtonRemoveLessonLearned;
 		vm.actionClickButtonEditLessonLearned = actionClickButtonEditLessonLearned;
 
-		operationDataFactory.operationData = [];
-		$scope.modalData.operation = operationDataFactory.operationData.operationContext.currentOperation;
+		operationDataFactory.openConnection([]).then(function (response) {
+			operationDataFactory = response;
+			$scope.modalData.operation = operationDataFactory.operationData.operationContext.currentOperation;
+		});
 
 		populateLessionLearnedList();
 

@@ -13,10 +13,10 @@
 			wellList: []
 		};
 
-		operationDataFactory.operationData = [];
-
-		operationDataFactory.operationData = [];
-		$scope.operationData = operationDataFactory.operationData;
+		operationDataFactory.openConnection([]).then(function(response) {
+			operationDataFactory = response;
+			$scope.operationData = operationDataFactory.operationData;
+		});
 
 		vm.actionButtonAddWell = actionButtonAddWell;
 		vm.actionButtonEditWell = actionButtonEditWell;

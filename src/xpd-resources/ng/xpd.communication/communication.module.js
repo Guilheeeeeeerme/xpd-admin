@@ -1,6 +1,6 @@
 (function () {
 	'use strict',
 
-	angular.module('xpd.communication', ['xpd.accessfactory', 'socketIO']);
+	angular.module('xpd.communication', ['socketIO', 'xpd.accessfactory',]);
 
 })();

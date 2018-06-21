@@ -25,7 +25,9 @@
 
 		function link(scope, element, attrs) {
 
-			operationDataFactory.operationData = [];
+			operationDataFactory.openConnection([]).then(function (response) {
+				operationDataFactory = response;
+			});
 
 			operationDataFactory.addEventListener('failureNavBar', 'setOnGoingFailureListener', loadOnGoingFailure);
 

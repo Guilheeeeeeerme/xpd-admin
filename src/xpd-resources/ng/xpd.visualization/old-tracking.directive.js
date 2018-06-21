@@ -1,7 +1,7 @@
 (function () {
 	'use strict';
 
-	angular.module('xpd.admin').directive('oldTracking', oldTracking);
+	angular.module('xpd.visualization').directive('oldTracking', oldTracking);
 
 	function oldTracking() {
 		return {
@@ -31,7 +31,7 @@
 				flags: '='
 			},
 			restrict: 'AE',
-			templateUrl: 'app/components/admin/directives/old-tracking.template.html',
+			templateUrl: '../xpd-resources/ng/xpd.visualization/old-tracking.template.html',
 			link: link
 		};
 

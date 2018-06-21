@@ -7,6 +7,11 @@
     src: url("../fonts/agency-fb.ttf");
 }
 
+.scrollable-content {
+    overflow: auto;
+    height: 100%;
+}
+
 
 /**
  * TYPE SCALE CODE (Major Third Scale)
@@ -581,7 +586,7 @@ a.view-only-link {
 /* Let's get this party started */
 
 ::-webkit-scrollbar {
-    width: 10px;
+    width: 5px;
 }
 
 
@@ -802,15 +807,6 @@ a.view-only-link {
     padding: 6px 6px;
 }
 
-.access-factory-directive-button{
-    background-color: Transparent;
-    background-repeat:no-repeat;
-    border: none;
-    cursor:pointer;
-    overflow: hidden;
-    outline:none;
-}
-
 /**
  * XPD CRITICAL MODAL
  */
@@ -893,4 +889,20 @@ xpd-operation-manager .button-bellow-label {
     padding: 1px 3px;
     font-size: 1em;
     z-index: 1049;
+}
+
+
+/** OPERATION DASHBOARD */
+
+.borderless {
+    border: none;
+}
+
+.table>tbody>tr> .borderless-top {
+    border-top: none;
+}
+
+.progress {
+    margin-bottom: 0;
+    border-radius: 0;
 }

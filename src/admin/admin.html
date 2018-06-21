@@ -48,7 +48,7 @@
 	<script type="text/javascript" src="/node_modules/angular-ui-bootstrap/dist/ui-bootstrap-tpls.js"></script>
 
 	<script type="text/javascript" src="/node_modules/socket.io-client/dist/socket.io.js"></script>
-
+	
 	<!-- endbuild -->
 	
 	<!-- build:basejs -->
@@ -97,7 +97,6 @@
 
 
 	<script type="text/javascript" src="/xpd-resources/ng/xpd.communication/communication.module.js"></script>
-	<script type="text/javascript" src="/xpd-resources/ng/xpd.communication/operation-communication.factory.js"></script>
 	<script type="text/javascript" src="/xpd-resources/ng/xpd.communication/operation-server-data.factory.js"></script>
 
 	<script type="text/javascript" src="/xpd-resources/ng/xpd.calculation/calculation.module.js"></script>
@@ -133,6 +132,8 @@
 	<script type="text/javascript" src="/xpd-resources/ng/xpd.visualization/in-slips.directive.js"></script>
 	<script type="text/javascript" src="/xpd-resources/ng/xpd.visualization/times.directive.js"></script>
 	<script type="text/javascript" src="/xpd-resources/ng/xpd.visualization/dmec-tracking-events.directive.js"></script>
+	<script type="text/javascript" src="/xpd-resources/ng/xpd.visualization/dmec-tracking.directive.js"></script>
+	<script type="text/javascript" src="/xpd-resources/ng/xpd.visualization/old-tracking.directive.js"></script>
 	<script type="text/javascript" src="/xpd-resources/ng/xpd.visualization/block-speed.directive.js"></script>
 	<script type="text/javascript" src="/xpd-resources/ng/xpd.visualization/performance-parameter-bar.directive.js"></script>
 	<script type="text/javascript" src="/xpd-resources/ng/xpd.visualization/member-performance.directive.js"></script>
@@ -164,14 +165,17 @@
 
 	<script type="text/javascript" src="/xpd-resources/ng/xpd.modal.laydown-confirmation/xpd.modal.laydown-confirmation.directive.js"></script>
 
+	<script type="text/javascript" src="/xpd-resources/ng/xpd.dmec/dmec.service.js"></script>
+
 	<script type="text/javascript" src="./app/components/admin/admin.module.js"></script>
 	
 	<script type="text/javascript" src="/xpd-resources/ng/xpd.section-list/section-list.directive.js"></script>
 
 	<script type="text/javascript" src="./app/components/admin/directives/vre-list-table.directive.js"></script>
 	<script type="text/javascript" src="./app/components/admin/directives/saved-alarms-list.directive.js"></script>
-	<script type="text/javascript" src="./app/components/admin/directives/old-tracking.directive.js"></script>
-	<script type="text/javascript" src="./app/components/admin/directives/dmec-tracking.directive.js"></script>
+
+	<script type="text/javascript" src="../xpd-resources/ng/xpd.forecast-waterfall/forecast-waterfall.module.js"></script>
+	<script type="text/javascript" src="../xpd-resources/ng/xpd.forecast-waterfall/forecast-waterfall.directive.js"></script>
 
 	<script type="text/javascript" src="./app/components/admin/admin.config.js"></script>
 
@@ -226,6 +230,10 @@
 
 	<script type="text/javascript" src="app/components/admin/controllers/shift-report.controller.js"></script>
 	<script type="text/javascript" src="app/components/admin/controllers/team.controller.js"></script>
+	<script type="text/javascript" src="app/components/admin/controllers/operation-dashboard/operation-dashboard.module.js"></script>
+	<script type="text/javascript" src="app/components/admin/controllers/operation-dashboard/operation-dashboard.config.js"></script>
+	<script type="text/javascript" src="app/components/admin/controllers/operation-dashboard/operation-dashboard.controller.js"></script>
+
 	<script type="text/javascript" src="app/components/admin/controllers/admin-tracking.controller.js"></script>
 
 

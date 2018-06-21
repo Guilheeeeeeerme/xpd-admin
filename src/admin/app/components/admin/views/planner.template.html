@@ -114,12 +114,24 @@
             <div class="planner-forecast-grid">
 
                 <div class="planner-forecast-cell planner-forecast-cell-full">
-                    <div class="xpd-chart" forecast-line settings='dados.settings' state="{{dados.selectedState}}" type="{{dados.selectedEventType}}"
-                        v-target-line="operationData.forecastContext.vTargetLine" actual-line="operationData.forecastContext.actualLine"></div>
+                    <div 
+                        class="xpd-chart" 
+                        is-tripin = "operationData.suboperationContext.currentSuboperation.tripin"
+                        forecast-line settings='dados.settings' 
+                        state="{{dados.selectedState}}" 
+                        type="{{dados.selectedEventType}}"
+                        v-target-line="operationData.forecastContext.vTargetLine" 
+                        actual-line="operationData.forecastContext.actualLine"></div>
                 </div>
 
                 <div class="planner-forecast-cell planner-forecast-cell-full">
-                    <div class="xpd-chart" forecast-line settings='dados.settings' state="{{dados.selectedState}}" type="{{ 'BOTH' }}" v-target-line="operationData.forecastContext.vTargetLine"
+                    <div 
+                        class="xpd-chart" 
+                        is-tripin = "operationData.suboperationContext.currentSuboperation.tripin"
+                        forecast-line settings='dados.settings' 
+                        state="{{dados.selectedState}}" 
+                        type="{{ 'BOTH' }}" 
+                        v-target-line="operationData.forecastContext.vTargetLine"
                         actual-line="operationData.forecastContext.actualLine"></div>
                 </div>
 

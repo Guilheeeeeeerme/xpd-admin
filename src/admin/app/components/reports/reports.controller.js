@@ -29,7 +29,9 @@
 
 		vm.getFailuresOnInterval = getFailuresOnInterval;
 
-		operationDataFactory.operationData = [];
+		operationDataFactory.openConnection([]).then(function (response) {
+			operationDataFactory = response;
+		});
 
 		// --actions--
 		if(!localStorage.getItem('xpd.admin.reports.reportsData.toDate')  || !localStorage.getItem('xpd.admin.reports.reportsData.fromDate') ){

@@ -28,7 +28,6 @@ exports.scripts = {
 		'./src/xpd-resources/ng/xpd.dialog/xpd.dialog.module.js',
 		'./src/xpd-resources/ng/xpd.dialog/xpd.dialog.factory.js',
 		'./src/xpd-resources/ng/xpd.communication/communication.module.js',
-		'./src/xpd-resources/ng/xpd.communication/operation-communication.factory.js',
 		'./src/xpd-resources/ng/xpd.communication/operation-server-data.factory.js',
 		'./src/xpd-resources/ng/xpd.calculation/calculation.module.js',
 		'./src/xpd-resources/ng/xpd.calculation/calculation.service.js',
@@ -49,6 +48,7 @@ exports.scripts = {
 		"./src/xpd-resources/ng/xpd.setupapi/operation-setupapi.service.js",
 		"./src/xpd-resources/ng/xpd.setupapi/well-setupapi.service.js",
 		"./src/xpd-resources/ng/xpd.setupapi/photo-setupapi.directive.js",
+		"./src/xpd-resources/ng/xpd.dmec/dmec.service.js",
 		'./src/admin/app/components/dmec-log/dmec-log.module.js',
 		'./src/admin/app/components/dmec-log/dmec-log.controller.js',
 	]
