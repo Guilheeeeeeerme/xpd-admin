@@ -35,7 +35,7 @@
 
     <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3 xpd-admin-col">
 
-        <div class="xpd-admin-col-content">
+        <div ng-if="flags.showDMEC == false" class="xpd-admin-col-content">
 
             <div class="row tracking-performance-row xpd-chart-container">
 
@@ -189,6 +189,14 @@
                 </div>
             </div>
 
+        </div>
+        
+        <div ng-if="flags.showDMEC == true" class="xpd-admin-col-content">
+            <ng-include
+             src ="'./app/components/admin/views/operation-dashboard.template.html'" 
+             ng-controller = 'OperationDashboardController as odController'>
+            </ng-include>
+        
         </div>
 
         <span class="fa fa-retweet change-tracking-content" ng-click="tController.changeTrackingContent()"></span>

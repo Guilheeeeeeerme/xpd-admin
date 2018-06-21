@@ -890,3 +890,19 @@ xpd-operation-manager .button-bellow-label {
     font-size: 1em;
     z-index: 1049;
 }
+
+
+/** OPERATION DASHBOARD */
+
+.borderless {
+    border: none;
+}
+
+.table>tbody>tr> .borderless-top {
+    border-top: none;
+}
+
+.progress {
+    margin-bottom: 0;
+    border-radius: 0;
+}
