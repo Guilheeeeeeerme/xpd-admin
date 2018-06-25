@@ -905,6 +905,14 @@ xpd-operation-manager .button-bellow-label {
 .progress {
     margin-bottom: 0;
     border-radius: 0;
+    position: relative;
+}
+
+.progress span {
+    position: absolute;
+    display: block;
+    width: 100%;
+    color: black;
 }
 
 .progress-bar-total {
@@ -912,9 +920,10 @@ xpd-operation-manager .button-bellow-label {
 }
 
 .progress-bar {
+    font-size: 11px;
     color: #000;
 }
 
-/* .progress-bar-actual {
-    background-color: #860000;
-} */
+.expected-time {
+    color: #337ab7;
+}
