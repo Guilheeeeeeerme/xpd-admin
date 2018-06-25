@@ -6,11 +6,17 @@
 
             <div class="panel panel-default">
 
-                <div class="panel-heading">
-                    <h4>Well Information</h4>
+                <div class="panel-heading clearfix">
+                    <h4 class="panel-title pull-left">Well Information</h4>
+                    <div class="btn-group pull-right">
+                        <i type="button" class="pull-right glyphicon"
+                            ng-class="{'glyphicon-chevron-down': panelWellIsCollapsed, 'glyphicon-chevron-up': !panelWellIsCollapsed}"
+                            ng-click="panelWellIsCollapsed = !panelWellIsCollapsed">
+                        </i>
+                    </div>
                 </div>
 
-                <div class="panel-body">
+                <div class="panel-body" uib-collapse="panelWellIsCollapsed">
 
                     <table class="table table-sm table-hover table-condensed">
                         <tr>
@@ -44,15 +50,18 @@
 
             </div>
 
-            <!-- <pre>{{ operationData.eventContext.currentEvent | json }}</pre> -->
-
-            <div class="panel panel-default">
+            <!-- <div class="panel panel-default">
             
-                <div class="panel-heading">
-                    <h4>Operation Information</h4>
+                <div class="panel-heading clearfix">
+                    <h4 class="panel-title pull-left">Operation Information</h4>
+                    <div class="btn-group pull-right">
+                        <i type="button" class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': panelOperationInfoIsCollapsed, 'glyphicon-chevron-up': !panelOperationInfoIsCollapsed}"
+                            ng-click="panelOperationInfoIsCollapsed = !panelOperationInfoIsCollapsed">
+                        </i>
+                    </div>
                 </div>
             
-                <div class="panel-body">
+                <div class="panel-body" uib-collapse="panelOperationInfoIsCollapsed">
             
                     <table class="table table-sm table-hover table-condensed">
                         <tr>
@@ -101,19 +110,20 @@
             
                 </div>
             
-            </div>
+            </div> -->
 
-        </div>
+            <!-- <div class="panel panel-default">
 
-        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-
-            <div class="panel panel-default">
-
-                <div class="panel-heading">
-                    <h4>Operation Dashboard</h4>
+                <div class="panel-heading clearfix">
+                    <h4 class="panel-title pull-left">Operation Dashboard</h4>
+                    <div class="btn-group pull-right">
+                        <i type="button" class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': panelOperationIsCollapsed, 'glyphicon-chevron-up': !panelOperationIsCollapsed}"
+                            ng-click="panelOperationIsCollapsed = !panelOperationIsCollapsed">
+                        </i>
+                    </div>
                 </div>
 
-                <div class="panel-body">
+                <div class="panel-body" uib-collapse="panelOperationIsCollapsed">
 
                     <div class="well">Operation:
                         <strong>{{ operationData.operationContext.currentOperation.name }}</strong>
@@ -138,19 +148,20 @@
 
                 </div>
 
-            </div>
+            </div> -->
 
-        </div>
+            <!-- <div class="panel panel-default">
 
-        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-
-            <div class="panel panel-default">
-
-                <div class="panel-heading">
-                    <h4>Bit Depth</h4>
+                <div class="panel-heading clearfix">
+                    <h4 class="panel-title pull-left">Bit Depth</h4>
+                    <div class="btn-group pull-right">
+                        <i type="button" class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': panelBitDepthIsCollapsed, 'glyphicon-chevron-up': !panelBitDepthIsCollapsed}"
+                            ng-click="panelBitDepthIsCollapsed = !panelBitDepthIsCollapsed">
+                        </i>
+                    </div>
                 </div>
 
-                <div class="panel-body">
+                <div class="panel-body" uib-collapse="panelBitDepthIsCollapsed">
 
                     <table class="table table-sm table-hover table-condensed">
                         <tr>
@@ -167,15 +178,111 @@
                         </tr>
                     </table>
 
-                    <!-- <pre>{{ operationData.inSlipsContext | json }}</pre> -->
-
                 </div>
 
+            </div> -->
+
+            <div class="panel panel-default">
+            
+                <div class="panel-heading clearfix">
+                    <h4 class="panel-title pull-left">Consistency Information</h4>
+                    <div class="btn-group pull-right">
+                        <i type="button" class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': panelConsistencyInfoIsCollapsed, 'glyphicon-chevron-up': !panelConsistencyInfoIsCollapsed}"
+                            ng-click="panelConsistencyInfoIsCollapsed = !panelConsistencyInfoIsCollapsed">
+                        </i>
+                    </div>
+                </div>
+            
+                <div class="panel-body" uib-collapse="panelConsistencyInfoIsCollapsed">
+            
+                    <table class="table table-sm table-hover table-condensed">
+                        <tr>
+                            <th>Consistency</th>
+                            <td colspan="2"></td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" class="borderless-top">
+                                <div class="progress">
+                                    <div class="progress-bar progress-bar-success" role="progressbar" aria-valuemin="0" aria-valuemax="100" style="width: 80%;">
+                                        80%
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        
+                    </table>
+
+                        <!-- <pre>{{directiveData | json}}</pre> -->
+
+
+                    <table class="table table-sm table-hover table-condensed" ng-repeat="progressDataItem in directiveData track by $index">
+                    
+                        <tr>                    
+                            <th>{{progressDataItem.label}} Total Time</th>
+                            <td colspan="2"></td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" class="borderless-top">
+                                <div class="progress">
+                                    <div class="progress-bar progress-bar-total" role="progressbar"
+                                        aria-valuemin="0" aria-valuemax="{{progressDataItem.totalTime}}"
+                                        style="width: 100%">
+                                        {{progressDataItem.totalTime | secondsToHourMinutes}}
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <th>{{progressDataItem.label}} Expected Time</th>
+                            <td colspan="2"></td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" class="borderless-top">
+                                <div class="progress">
+                                    <div class="progress-bar" role="progressbar"
+                                        aria-valuemin="0" aria-valuemax="100"
+                                        ng-style="{ 'width' : odController.getProgressPercentage(progressDataItem.totalTime, progressDataItem.expectedTime) }">
+                                        {{progressDataItem.expectedTime | secondsToHourMinutes}}
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <th>{{progressDataItem.label}} Actual Time</th>
+                            <td colspan="2"></td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" class="borderless-top">
+                                <div class="progress">
+                                    <div class="progress-bar"
+                                    ng-style="{ 'width' : odController.getProgressPercentage(progressDataItem.totalTime, progressDataItem.expectedTime) }">
+                                        {{progressDataItem.expectedTime | secondsToHourMinutes}}
+                                        <span class="sr-only">35% Complete (success)</span>
+                                    </div>
+                                    <div class="progress-bar progress-bar-danger"
+                                    ng-style="{ 'width' : odController.getProgressPercentage(progressDataItem.totalTime, (progressDataItem.actualTime - progressDataItem.expectedTime)) }">
+                                        {{progressDataItem.expectedTime - progressDataItem.actualTime | secondsToHourMinutes}}
+                                        <span class="sr-only">10% Complete (danger)</span>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    
+                    </table>
+            
+                </div>
+            
             </div>
 
         </div>
 
     </div>
+
+    <!-- <pre>{{ directiveData | json }}</pre> -->
+    <!-- <pre>{{ operationData.operationQueueContext | json }}</pre> -->
+
 
     <!-- <pre ng-repeat="(key, value) in operationData.forecastContext">{{ key }}</pre> -->
     <!-- <pre>{{ operationData.forecastContext.actualLine | json }}</pre> -->

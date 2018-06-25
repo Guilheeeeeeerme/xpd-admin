@@ -20,6 +20,7 @@
 		});
 
 		vm.actionButtonBuildForecast = actionButtonBuildForecast;
+		vm.getProgressPercentage = getProgressPercentage;
 
 		operationDataFactory.addEventListener('operationDashboardController', 'setOnOptimumLineListener', __init);
 		operationDataFactory.addEventListener('operationDashboardController', 'setOnActualLineListener', __init);
@@ -37,9 +38,11 @@
 				}
 
 				actionButtonBuildForecast(selectedBaseLine, selectedEventType);
+				buildProgressData();
 			} catch (error) {
 				// setTimeout(onReadyToStart, 5000);
 			}
+
 		}
 
 		/**
@@ -164,6 +167,42 @@
 			} else {
 				return '#860000';
 			}
+		}
+
+		function buildProgressData() {
+			var currentState = $scope.operationData.stateContext.currentState;
+			var progressData = $scope.operationData.operationProgressContext.operationProgressData[currentState];
+			
+			$scope.directiveData = getDirectiveData(progressData);
+			// progress - data - delay="operationData.operationProgressContext.progressDataDelay"
+		}
+
+		function getDirectiveData(progressData) {
+			var directiveData = [{
+				'label': 'Target Operation',
+				'totalTime': 0,
+				'expectedTime': 0,
+				'actualTime': 0
+			}];
+
+			for (var eventKey in progressData) {
+				if (eventKey === 'CONN')
+					progressData[eventKey].label = 'Connection';
+				else if (eventKey === 'TRIP')
+					progressData[eventKey].label = 'Trip';
+
+				directiveData[0].totalTime += progressData[eventKey].totalTime;
+				directiveData[0].expectedTime += progressData[eventKey].expectedTime;
+				directiveData[0].actualTime += progressData[eventKey].actualTime;
+
+				directiveData.push(progressData[eventKey]);
+			}
+
+			return directiveData;
+		}
+
+		function getProgressPercentage(totalTime, currentTime) {
+			return (currentTime * 100) / totalTime + '%';
 		}
 
 	}

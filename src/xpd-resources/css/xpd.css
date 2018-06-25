@@ -906,3 +906,15 @@ xpd-operation-manager .button-bellow-label {
     margin-bottom: 0;
     border-radius: 0;
 }
+
+.progress-bar-total {
+    background-color: #517f89;
+}
+
+.progress-bar {
+    color: #000;
+}
+
+/* .progress-bar-actual {
+    background-color: #860000;
+} */
