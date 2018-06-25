@@ -6,11 +6,17 @@
 
             <div class="panel panel-default">
 
-                <div class="panel-heading">
-                    <h4>Well Information</h4>
+                <div class="panel-heading clearfix">
+                    <h4 class="panel-title pull-left">Well Information</h4>
+                    <div class="btn-group pull-right">
+                        <i type="button" class="pull-right glyphicon"
+                            ng-class="{'glyphicon-chevron-down': panelWellIsCollapsed, 'glyphicon-chevron-up': !panelWellIsCollapsed}"
+                            ng-click="panelWellIsCollapsed = !panelWellIsCollapsed">
+                        </i>
+                    </div>
                 </div>
 
-                <div class="panel-body">
+                <div class="panel-body" uib-collapse="panelWellIsCollapsed">
 
                     <table class="table table-sm table-hover table-condensed">
                         <tr>
@@ -20,7 +26,8 @@
                         </tr>
                         <tr>
                             <th>Water Depth</th>
-                            <td colspan="2">{{ operationData.wellContext.currentWell.waterDepth }}</td>
+                            <td ng-if="!well.onshore" colspan="2">{{ operationData.wellContext.currentWell.waterDepth }}</td>
+                            <td ng-if="well.onshore" colspan="2">On Shore</td>
                         </tr>
                         <tr>
                             <th>Seabed</th>
@@ -44,15 +51,18 @@
 
             </div>
 
-            <!-- <pre>{{ operationData.eventContext.currentEvent | json }}</pre> -->
-
-            <div class="panel panel-default">
+            <!-- <div class="panel panel-default">
             
-                <div class="panel-heading">
-                    <h4>Operation Information</h4>
+                <div class="panel-heading clearfix">
+                    <h4 class="panel-title pull-left">Operation Information</h4>
+                    <div class="btn-group pull-right">
+                        <i type="button" class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': panelOperationInfoIsCollapsed, 'glyphicon-chevron-up': !panelOperationInfoIsCollapsed}"
+                            ng-click="panelOperationInfoIsCollapsed = !panelOperationInfoIsCollapsed">
+                        </i>
+                    </div>
                 </div>
             
-                <div class="panel-body">
+                <div class="panel-body" uib-collapse="panelOperationInfoIsCollapsed">
             
                     <table class="table table-sm table-hover table-condensed">
                         <tr>
@@ -101,19 +111,20 @@
             
                 </div>
             
-            </div>
+            </div> -->
 
-        </div>
+            <!-- <div class="panel panel-default">
 
-        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-
-            <div class="panel panel-default">
-
-                <div class="panel-heading">
-                    <h4>Operation Dashboard</h4>
+                <div class="panel-heading clearfix">
+                    <h4 class="panel-title pull-left">Operation Dashboard</h4>
+                    <div class="btn-group pull-right">
+                        <i type="button" class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': panelOperationIsCollapsed, 'glyphicon-chevron-up': !panelOperationIsCollapsed}"
+                            ng-click="panelOperationIsCollapsed = !panelOperationIsCollapsed">
+                        </i>
+                    </div>
                 </div>
 
-                <div class="panel-body">
+                <div class="panel-body" uib-collapse="panelOperationIsCollapsed">
 
                     <div class="well">Operation:
                         <strong>{{ operationData.operationContext.currentOperation.name }}</strong>
@@ -138,19 +149,20 @@
 
                 </div>
 
-            </div>
+            </div> -->
 
-        </div>
+            <!-- <div class="panel panel-default">
 
-        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-
-            <div class="panel panel-default">
-
-                <div class="panel-heading">
-                    <h4>Bit Depth</h4>
+                <div class="panel-heading clearfix">
+                    <h4 class="panel-title pull-left">Bit Depth</h4>
+                    <div class="btn-group pull-right">
+                        <i type="button" class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': panelBitDepthIsCollapsed, 'glyphicon-chevron-up': !panelBitDepthIsCollapsed}"
+                            ng-click="panelBitDepthIsCollapsed = !panelBitDepthIsCollapsed">
+                        </i>
+                    </div>
                 </div>
 
-                <div class="panel-body">
+                <div class="panel-body" uib-collapse="panelBitDepthIsCollapsed">
 
                     <table class="table table-sm table-hover table-condensed">
                         <tr>
@@ -167,16 +179,19 @@
                         </tr>
                     </table>
 
-                    <!-- <pre>{{ operationData.inSlipsContext | json }}</pre> -->
-
                 </div>
 
-            </div>
+            </div> -->
+
+            <panel-consistency-information
+                acc-score="operationData.shiftContext.accScore"
+                progress-data="operationData.operationProgressContext.operationProgressData[operationData.stateContext.currentState]">
+            </panel-consistency-information>
 
         </div>
 
     </div>
-
+    
     <!-- <pre ng-repeat="(key, value) in operationData.forecastContext">{{ key }}</pre> -->
     <!-- <pre>{{ operationData.forecastContext.actualLine | json }}</pre> -->
     <!-- <pre >{{ operationData.suboperationContext.currentSuboperation.tripin | json }}</pre> -->

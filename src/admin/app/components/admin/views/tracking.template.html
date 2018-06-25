@@ -10,7 +10,7 @@
 
 <div class="row scrollable-content" ng-controller="AdminTrackingController as atController">
 
-    <div class="scrollable-content col-xs-12 col-sm-12 col-md-9 col-lg-9">
+    <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8 scrollable-content">
 
         <old-tracking action-event-modal-button-close="atController.actionEventModalButtonClose" action-event-modal-button-save="atController.actionEventModalButtonSave"
             action-open-dropdown-menu="atController.actionOpenDropdownMenu" action-click-event-details-button="atController.actionClickEventDetailsButton"
@@ -33,7 +33,7 @@
 
     </div>
 
-    <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3 xpd-admin-col">
+    <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4 xpd-admin-col">
 
         <div ng-if="flags.showDMEC == false" class="xpd-admin-col-content">
 
@@ -199,8 +199,8 @@
         
         </div>
 
-        <span class="fa fa-retweet change-tracking-content" ng-click="tController.changeTrackingContent()"></span>
-
     </div>
+
+    <span class="fa fa-retweet change-tracking-content" ng-click="tController.changeTrackingContent()"></span>
 
 </div>

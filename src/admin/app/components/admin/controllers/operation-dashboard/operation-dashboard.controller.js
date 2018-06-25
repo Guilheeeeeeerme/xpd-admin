@@ -37,9 +37,11 @@
 				}
 
 				actionButtonBuildForecast(selectedBaseLine, selectedEventType);
+				buildProgressData();
 			} catch (error) {
 				// setTimeout(onReadyToStart, 5000);
 			}
+
 		}
 
 		/**
