@@ -32,7 +32,7 @@ body {
 .change-tracking-content {
     position: absolute;
     bottom: 1px;
-    right: 1px;
+    right: 17px;
     cursor: pointer;
     color: #456c75;
 }
