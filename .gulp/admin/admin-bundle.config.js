@@ -100,6 +100,8 @@ exports.scripts = {
 		'./src/xpd-resources/ng/xpd.section-list/section-list.directive.js',
 		'./src/admin/app/components/admin/directives/vre-list-table.directive.js',
 		'./src/admin/app/components/admin/directives/saved-alarms-list.directive.js',
+		'./src/xpd-resources/ng/xpd.forecast-waterfall/forecast-waterfall.module.js',
+		'./src/xpd-resources/ng/xpd.forecast-waterfall/forecast-waterfall.directive.js',
 		'./src/admin/app/components/admin/admin.config.js',
 		'./src/xpd-resources/ng/xpd.rpd/rpd.directive.js',
 		'./src/xpd-resources/ng/xpd.modal.event-details/xpd-modal-event-details.module.js',

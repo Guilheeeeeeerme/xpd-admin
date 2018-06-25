@@ -26,7 +26,8 @@
                         </tr>
                         <tr>
                             <th>Water Depth</th>
-                            <td colspan="2">{{ operationData.wellContext.currentWell.waterDepth }}</td>
+                            <td ng-if="!well.onshore" colspan="2">{{ operationData.wellContext.currentWell.waterDepth }}</td>
+                            <td ng-if="well.onshore" colspan="2">On Shore</td>
                         </tr>
                         <tr>
                             <th>Seabed</th>
