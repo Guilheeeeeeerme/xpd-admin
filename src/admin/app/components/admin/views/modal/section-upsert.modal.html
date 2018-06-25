@@ -17,7 +17,7 @@
 			</div>
 
 			<div class="form-group" ng-class="{ 'has-error': form.size.$invalid && !form.size.$pristine }">
-				<label for="section-upsert-data-size">Size</label>
+				<label for="section-upsert-data-size">Size (Diameter)</label>
 				<div class="input-group">
 					<input type="number" name="size" min="0" max="10000" ng-model="modalData.size" class="form-control" autofocus="true" id="section-upsert-data-size"
 					 placeholder="Size" xpd-form-validation="form" required>
@@ -41,11 +41,23 @@
 				</div>
 			</div>
 
+			<div class="form-group" ng-class="{ 'has-error': form.height.$invalid && !form.height.$pristine }">
+				<label for="section-upsert-data-height">Section Height</label>
+				<div class="input-group">
+					<input type="number" name="height" min="0" max="10000" ng-model="sectionHeight" class="form-control"
+					 autofocus="true" id="section-upsert-data-height" placeholder="Section height" xpd-form-validation="form" 
+					 ng-change="modalData.mdBottom = modalData.mdTop + sectionHeight" required>
+					<span class="input-group-addon">m</span>
+				</div>
+			</div>
+
 			<div class="form-group" ng-class="{ 'has-error': form.mdBottom.$invalid && !form.mdBottom.$pristine }">
 				<label for="section-upsert-data-mdBottom">MD Bottom</label>
 				<div class="input-group">
 					<input type="number" name="mdBottom" min="{{modalData.mdTop}}" max="10000" ng-model="modalData.mdBottom" class="form-control"
-					 autofocus="true" id="section-upsert-data-mdBottom" placeholder="MD Bottom" xpd-form-validation="form" required>
+					 autofocus="true" id="section-upsert-data-mdBottom" placeholder="MD Bottom" xpd-form-validation="form" 
+					 ng-init="sectionHeight = (modalData.mdBottom - modalData.mdTop)" 
+					 ng-change="sectionHeight = (modalData.mdBottom - modalData.mdTop)" required>
 					<span class="input-group-addon">m</span>
 				</div>
 			</div>
