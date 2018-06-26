@@ -22,7 +22,6 @@
 			scope.getProgressPercentage = getProgressPercentage;
 
 			scope.$watch('progressData', getDirectiveData);
-			// scope.$watch('accScore', setAccScore);
 		
 			function getDirectiveData(progressData) {
 				var directiveData = [{
@@ -51,12 +50,6 @@
 			function getProgressPercentage(totalTime, currentTime) {
 				return (currentTime * 100) / totalTime + '%';
 			}
-
-			// function setAccScore(accScore) {
-			// 	if(!accScore) return;
-
-			// 	scope.currentScore = accScore.totalScore / accScore.eventScoreQty;
-			// }
 		}
 	}
 })();
