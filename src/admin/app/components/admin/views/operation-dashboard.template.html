@@ -86,6 +86,7 @@
                             <td colspan="2">
                                 <span ng-if="operationData.directionContext.tripin" class="glyphicon glyphicon-arrow-down"></span>
                                 <span ng-if="!operationData.directionContext.tripin" class="glyphicon glyphicon-arrow-up"></span>
+                                Trip {{ operationData.directionContext.tripin?'In': 'Out' }}
                             </td>
                         </tr>
                         <tr>
@@ -167,7 +168,8 @@
             <div class="panel panel-default">
 
                 <div class="panel-heading clearfix">
-                    <h4 class="panel-title pull-left">Sub Operation Forecast</h4>
+                    <h4 class="panel-title pull-left">
+                            Trip {{ operationData.directionContext.tripin?'In': 'Out' }} Sub Operation Forecast</h4>
                     <div class="btn-group pull-right">
                         <i type="button" class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': panelOperationIsCollapsed, 'glyphicon-chevron-up': !panelOperationIsCollapsed}"
                             ng-click="panelOperationIsCollapsed = !panelOperationIsCollapsed">
