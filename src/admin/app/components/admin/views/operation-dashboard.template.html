@@ -51,7 +51,7 @@
 
             </div>
 
-            <!-- <div class="panel panel-default">
+            <div class="panel panel-default">
             
                 <div class="panel-heading clearfix">
                     <h4 class="panel-title pull-left">Operation Information</h4>
@@ -79,10 +79,16 @@
                         </tr>
                         <tr class="success">
                             <th>Event Type</th>
-                            <td colspan="2">{{ operationData.eventContext.currentEvent.eventType }}</td>
+                            <td colspan="2">{{ operationData.eventContext.currentEvent.eventType | xpdEventLabelFilter }}</td>
                         </tr>
                         <tr>
-                            <th>Forecast</th>
+                            <th>Joints</th>
+                            <td colspan="2">
+                                <strong>{{ operationData.jointContext.currentJoint.jointNumber }}</strong> of 
+                                {{ operationData.jointContext.numberJoints | json}}
+                            </td>
+                        <tr>
+                            <th>Forecast (Coming soon)</th>
                             <td colspan="2"></td>
                         </tr>
                         <tr>
@@ -100,9 +106,10 @@
                         </tr>
                         <tr>
                             <td colspan="2" class="borderless-top">
+
                                 <div class="progress">
-                                    <div class="progress-bar progress-bar-success" role="progressbar" aria-valuemin="0" aria-valuemax="100" style="width: 100%;">
-                                        100%
+                                    <div class="progress-bar progress-bar-success" role="progressbar" aria-valuemin="0" aria-valuemax="100" style="width: {{ operationData.shiftContext.accScore.totalScore / operationData.shiftContext.accScore.eventScoreQty }}%;">
+                                        {{ operationData.shiftContext.accScore.totalScore / operationData.shiftContext.accScore.eventScoreQty | number : '.0' }}
                                     </div>
                                 </div>
                             </td>
@@ -111,50 +118,12 @@
             
                 </div>
             
-            </div> -->
+            </div>
 
-            <!-- <div class="panel panel-default">
-
-                <div class="panel-heading clearfix">
-                    <h4 class="panel-title pull-left">Operation Dashboard</h4>
-                    <div class="btn-group pull-right">
-                        <i type="button" class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': panelOperationIsCollapsed, 'glyphicon-chevron-up': !panelOperationIsCollapsed}"
-                            ng-click="panelOperationIsCollapsed = !panelOperationIsCollapsed">
-                        </i>
-                    </div>
-                </div>
-
-                <div class="panel-body" uib-collapse="panelOperationIsCollapsed">
-
-                    <div class="well">Operation:
-                        <strong>{{ operationData.operationContext.currentOperation.name }}</strong>
-                    </div>
-
-                    <button class="btn btn-default" ng-click="odController.actionButtonBuildForecast( 'vOptimumLine', 'BOTH' )">
-                        Optimum
-                    </button>
-
-                    <button class="btn btn-default" ng-click="odController.actionButtonBuildForecast( 'vStandardLine', 'BOTH' )">
-                        Standard
-                    </button>
-
-                    <button class="btn btn-default" ng-click="odController.actionButtonBuildForecast( 'vPoorLine', 'BOTH' )">
-                        Poor
-                    </button>
-
-                    <forecast-waterfall
-                        horizontal="false"
-                        data-data-chart="forecast">
-                    </forecast-waterfall>
-
-                </div>
-
-            </div> -->
-
-            <!-- <div class="panel panel-default">
+            <div class="panel panel-default">
 
                 <div class="panel-heading clearfix">
-                    <h4 class="panel-title pull-left">Bit Depth</h4>
+                    <h4 class="panel-title pull-left">Channels</h4>
                     <div class="btn-group pull-right">
                         <i type="button" class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': panelBitDepthIsCollapsed, 'glyphicon-chevron-up': !panelBitDepthIsCollapsed}"
                             ng-click="panelBitDepthIsCollapsed = !panelBitDepthIsCollapsed">
@@ -181,12 +150,46 @@
 
                 </div>
 
-            </div> -->
+            </div>
 
             <panel-consistency-information
                 acc-score="operationData.shiftContext.accScore"
                 progress-data="operationData.operationProgressContext.operationProgressData[operationData.stateContext.currentState]">
             </panel-consistency-information>
+
+            <div class="panel panel-default">
+
+                <div class="panel-heading clearfix">
+                    <h4 class="panel-title pull-left">Sub Operation Forecast</h4>
+                    <div class="btn-group pull-right">
+                        <i type="button" class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': panelOperationIsCollapsed, 'glyphicon-chevron-up': !panelOperationIsCollapsed}"
+                            ng-click="panelOperationIsCollapsed = !panelOperationIsCollapsed">
+                        </i>
+                    </div>
+                </div>
+
+                <div class="panel-body" uib-collapse="panelOperationIsCollapsed">
+
+                    <button class="btn btn-default" ng-click="odController.actionButtonBuildForecast( 'vOptimumLine', 'BOTH' )">
+                        Optimum
+                    </button>
+
+                    <button class="btn btn-default" ng-click="odController.actionButtonBuildForecast( 'vStandardLine', 'BOTH' )">
+                        Standard
+                    </button>
+
+                    <button class="btn btn-default" ng-click="odController.actionButtonBuildForecast( 'vPoorLine', 'BOTH' )">
+                        Poor
+                    </button>
+
+                    <forecast-waterfall
+                        horizontal="false"
+                        data-data-chart="forecast">
+                    </forecast-waterfall>
+
+                </div>
+
+            </div>
 
         </div>
 
