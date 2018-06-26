@@ -11,7 +11,7 @@
 			restrict: 'EA',
 			templateUrl: '../xpd-resources/ng/xpd.visualization/panel-consistency-information.template.html',
 			scope: {
-				accScore: '=',
+				currentScore: '=',
 				progressData: '=',
 			},
 			link: link
@@ -22,7 +22,7 @@
 			scope.getProgressPercentage = getProgressPercentage;
 
 			scope.$watch('progressData', getDirectiveData);
-			scope.$watch('accScore', setAccScore);
+			// scope.$watch('accScore', setAccScore);
 		
 			function getDirectiveData(progressData) {
 				var directiveData = [{
@@ -52,11 +52,11 @@
 				return (currentTime * 100) / totalTime + '%';
 			}
 
-			function setAccScore(accScore) {
-				if(!accScore) return;
+			// function setAccScore(accScore) {
+			// 	if(!accScore) return;
 
-				scope.accumulatedScore = accScore.totalScore / accScore.eventScoreQty;
-			}
+			// 	scope.currentScore = accScore.totalScore / accScore.eventScoreQty;
+			// }
 		}
 	}
 })();
