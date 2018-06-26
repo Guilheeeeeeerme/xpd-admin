@@ -37,7 +37,7 @@
 				}
 
 				actionButtonBuildForecast(selectedBaseLine, selectedEventType);
-				buildProgressData();
+				calcAccScore();
 			} catch (error) {
 				// setTimeout(onReadyToStart, 5000);
 			}
@@ -166,6 +166,10 @@
 			} else {
 				return '#860000';
 			}
+		}
+
+		function calcAccScore() {
+			$scope.accScore = $scope.operationData.shiftContext.accScore.totalScore / $scope.operationData.shiftContext.accScore.eventScoreQty;
 		}
 
 	}
