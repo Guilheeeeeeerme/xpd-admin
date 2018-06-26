@@ -67,7 +67,7 @@
                     <table class="table table-sm table-hover table-condensed">
                         <tr>
                             <th>Section</th>
-                            <td>Section name</td>
+                            <td>{{ operationData.operationContext.currentOperation.section.name }}</td>
                         </tr>
                         <tr>
                             <th>Operation Name</th>
@@ -132,13 +132,13 @@
                 <div class="panel-heading clearfix">
                     <h4 class="panel-title pull-left">Channels</h4>
                     <div class="btn-group pull-right">
-                        <i type="button" class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': panelBitDepthIsCollapsed, 'glyphicon-chevron-up': !panelBitDepthIsCollapsed}"
-                            ng-click="panelBitDepthIsCollapsed = !panelBitDepthIsCollapsed">
+                        <i type="button" class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': panelChanelsIsCollapsed, 'glyphicon-chevron-up': !panelChanelsIsCollapsed}"
+                            ng-click="panelChanelsIsCollapsed = !panelChanelsIsCollapsed">
                         </i>
                     </div>
                 </div>
             
-                <div class="panel-body" uib-collapse="panelBitDepthIsCollapsed">
+                <div class="panel-body" uib-collapse="panelChanelsIsCollapsed">
             
                     <table class="table table-sm table-hover table-condensed">
                         <tr>
@@ -196,6 +196,133 @@
 
                 </div>
 
+            </div>
+
+            <div class="panel panel-default">
+            
+                <div class="panel-heading clearfix">
+                    <h4 class="panel-title pull-left">Next Activity</h4>
+                    <div class="btn-group pull-right">
+                        <i type="button" class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': panelNextActivityIsCollapsed, 'glyphicon-chevron-up': !panelNextActivityIsCollapsed}"
+                            ng-click="panelNextActivityIsCollapsed = !panelNextActivityIsCollapsed">
+                        </i>
+                    </div>
+                </div>
+            
+                <div class="panel-body" uib-collapse="panelNextActivityIsCollapsed">
+            
+                    <div ng-if="operationData.operationQueueContext.nextOperation">
+                        <table class="table table-sm table-hover table-condensed">
+                            <tr>
+                                <th>Section</th>
+                                <td>{{ operationData.operationQueueContext.nextOperation.section.name }}</td>
+                            </tr>
+                            <tr>
+                                <th>Name</th>
+                                <td>{{ operationData.operationQueueContext.nextOperation.name }}</td>
+                            </tr>
+                            <tr>
+                                <th>Type</th>
+                                <td>{{ operationData.operationQueueContext.nextOperation.type | uppercase }}</td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <div ng-if="!operationData.operationQueueContext.nextOperation">No Operation</div>
+            
+                </div>
+            
+            </div>
+
+            <div class="panel panel-default">
+            
+                <div class="panel-heading clearfix">
+                    <h4 class="panel-title pull-left">Current Alarm</h4>
+                    <div class="btn-group pull-right">
+                        <i type="button" class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': panelCurrentAlarmIsCollapsed, 'glyphicon-chevron-up': !panelCurrentAlarmIsCollapsed}"
+                            ng-click="panelCurrentAlarmIsCollapsed = !panelCurrentAlarmIsCollapsed">
+                        </i>
+                    </div>
+                </div>
+            
+                <div class="panel-body" uib-collapse="panelCurrentAlarmIsCollapsed">
+            
+                    <div ng-if="operationData.alarmContext.currentAlarm">
+                        <table class="table table-sm table-hover table-condensed">
+                            <thead>
+                                <tr>
+                                    <th>{{operationData.alarmContext.currentAlarm.name}}</th>
+                                </tr>
+                                <tr>
+                                    <th>Start</th>
+                                    <th>End</th>
+                                    <th ng-if="operationData.alarmContext.currentAlarm.isDurationAlarm">Duration</th>
+                                    <th ng-if="!operationData.alarmContext.currentAlarm.isDurationAlarm">Restriction</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>{{operationData.alarmContext.currentAlarm.startDepth | number: 2}}(m)</td>
+                                    <td>{{operationData.alarmContext.currentAlarm.endDepth | number: 2}}(m)</td>
+                                    <td ng-if="operationData.alarmContext.currentAlarm.isDurationAlarm">{{ 3600/operationData.alarmContext.currentAlarm.optimumSpeed | secondsToHourMinutesSeconds}}</td>
+                                    <td ng-if="!operationData.alarmContext.currentAlarm.isDurationAlarm">{{operationData.alarmContext.currentAlarm.speedRestriction | number: 2}}(m/s)</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="3">{{operationData.alarmContext.currentAlarm.message}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <div ng-if="!operationData.alarmContext.currentAlarm">
+                        No Current Alarm
+                    </div>
+            
+                </div>
+            
+            </div>
+
+            <div class="panel panel-default">
+            
+                <div class="panel-heading clearfix">
+                    <h4 class="panel-title pull-left">Next Alarms</h4>
+                    <div class="btn-group pull-right">
+                        <i type="button" class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': panelNextAlarmsIsCollapsed, 'glyphicon-chevron-up': !panelNextAlarmsIsCollapsed}"
+                            ng-click="panelNextAlarmsIsCollapsed = !panelNextAlarmsIsCollapsed">
+                        </i>
+                    </div>
+                </div>
+            
+                <div class="panel-body" uib-collapse="panelNextAlarmsIsCollapsed">
+            
+                    <div ng-if="nextAlarms.length != 0">
+
+                        <table class="table table-sm table-hover table-condensed">
+                            <thead>
+                                <tr>
+                                    <th>Alarms</th>
+                                    <th>Start</th>
+                                    <th>End</th>
+                                    <th>Type</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="(key, alarm) in nextAlarms">
+                                    <td>{{alarm.name}}</td>
+                                    <td>{{alarm.startDepth | number: 2}}(m)</td>
+                                    <td>{{alarm.endDepth | number: 2}}(m)</td>
+                                    <td>{{alarm.alarmType | uppercase}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+            
+                    <div ng-if="nextAlarms.length == 0">
+                        No alarms predicted
+                    </div>
+            
+                </div>
+            
             </div>
 
         </div>

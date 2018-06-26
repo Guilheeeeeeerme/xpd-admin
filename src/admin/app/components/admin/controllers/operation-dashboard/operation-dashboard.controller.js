@@ -25,6 +25,9 @@
 		operationDataFactory.addEventListener('operationDashboardController', 'setOnActualLineListener', __init);
 		operationDataFactory.addEventListener('operationDashboardController', 'setOnForecastChangeListener', __init);
 
+		operationDataFactory.addEventListener('operationDashboardController', 'setOnDirectionDetectedListener', listNextAlarms);
+		operationDataFactory.addEventListener('operationDashboardController', 'setOnAlarmsChangeListener', listNextAlarms);
+
 		function __init() {
 			try {
 
@@ -38,6 +41,7 @@
 
 				actionButtonBuildForecast(selectedBaseLine, selectedEventType);
 				calcAccScore();
+				listNextAlarms();
 			} catch (error) {
 				// setTimeout(onReadyToStart, 5000);
 			}
@@ -170,6 +174,59 @@
 
 		function calcAccScore() {
 			$scope.accScore = $scope.operationData.shiftContext.accScore.totalScore / $scope.operationData.shiftContext.accScore.eventScoreQty;
+		}
+
+		function getAlarmByDirectionSorted() {
+
+			var tripinAlarms = $scope.operationData.alarmContext.tripin;
+			var tripoutAlarms = $scope.operationData.alarmContext.tripout;
+
+			if ($scope.operationData.directionContext) {
+				if ($scope.operationData.directionContext.tripin && tripinAlarms) {
+					return tripinAlarms.sort(function (a, b) {
+						return a.startDepth - b.startDepth;
+					});
+				} else if (!$scope.operationData.directionContext.tripin && tripoutAlarms) {
+					return tripoutAlarms.sort(function (a, b) {
+						return b.startDepth - a.startDepth;
+					});
+				}
+			}
+		}
+
+		function listNextAlarms() {
+
+			if (!$scope.operationData.bitDepthContext) return;
+
+			var alarmListSorted = getAlarmByDirectionSorted();
+			var currentBitDepth = $scope.operationData.bitDepthContext.bitDepth;
+			var nextAlarms = [];
+
+
+			if (!currentBitDepth && alarmListSorted) {
+				nextAlarms = alarmListSorted.slice(0, 3);
+			} else {
+				for (var i in alarmListSorted) {
+
+					var alarm = alarmListSorted[i];
+
+					if ($scope.operationData.directionContext.tripin && alarm.startDepth >= currentBitDepth
+						&& (!alarm.triggered || alarm.alwaysTripin)) {
+						nextAlarms.push(alarm);
+					}
+
+					if (!$scope.operationData.directionContext.tripin && alarm.startDepth <= currentBitDepth
+						&& (!alarm.triggered || alarm.alwaysTripout)) {
+						nextAlarms.push(alarm);
+					}
+
+					if (nextAlarms.length === 3) {
+						break;
+					}
+				}
+			}
+
+			$scope.nextAlarms = nextAlarms;
 		}
 
 	}
