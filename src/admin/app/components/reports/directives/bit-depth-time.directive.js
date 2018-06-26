@@ -140,12 +140,6 @@
 						}
 					});
 
-					if (holeDepthPoints) {					
-						holeDepthPoints.color = 'rgba(180, 180, 180, 0.75)';
-						holeDepthPoints.lineWidth = 10;
-						bitDepthVsTimeChart.addSeries(holeDepthPoints);
-					}
-
 					if (bitDepthPlannedPoints) {
 						bitDepthPlannedPoints.zIndex = 2;
 						bitDepthPlannedPoints.step = true;
@@ -155,6 +149,12 @@
 					if (bitDepthExecutedPoints) {
 						bitDepthExecutedPoints.zIndex = 3;
 						bitDepthVsTimeChart.addSeries(bitDepthExecutedPoints);
+					}
+
+					if (holeDepthPoints) {					
+						holeDepthPoints.color = 'rgba(180, 180, 180, 0.75)';
+						holeDepthPoints.lineWidth = 10;
+						bitDepthVsTimeChart.addSeries(holeDepthPoints);
 					}
 
 					return bitDepthVsTimeChart;
