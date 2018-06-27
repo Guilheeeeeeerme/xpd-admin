@@ -2,14 +2,14 @@
 	'use strict';
 
 	angular.module('xpd.visualization')
-		.directive('panelConsistencyInformation', panelConsistencyInformation);
+		.directive('consistencyInformationPanel', consistencyInformationPanel);
 
-	panelConsistencyInformation.$inject = [];
+	consistencyInformationPanel.$inject = [];
 
-	function panelConsistencyInformation() {
+	function consistencyInformationPanel() {
 		return {
 			restrict: 'EA',
-			templateUrl: '../xpd-resources/ng/xpd.visualization/panel-consistency-information.template.html',
+			templateUrl: '../xpd-resources/ng/xpd.visualization/consistency-information-panel.template.html',
 			scope: {
 				currentScore: '=',
 				progressData: '=',
