@@ -13,6 +13,8 @@
 		var selectedBaseLine;
 		var selectedEventType;
 
+		$scope.statusPanel = [];
+
 		operationDataFactory.openConnection([]).then(function (response) {
 			operationDataFactory = response;
 			$scope.operationData = operationDataFactory.operationData;
@@ -20,6 +22,9 @@
 		});
 
 		vm.actionButtonBuildForecast = actionButtonBuildForecast;
+		vm.getTotalFailureTime = getTotalFailureTime;
+		vm.getPanelStartState = getPanelStartState;
+		vm.changePanelState = changePanelState;
 
 		operationDataFactory.addEventListener('operationDashboardController', 'setOnOptimumLineListener', __init);
 		operationDataFactory.addEventListener('operationDashboardController', 'setOnActualLineListener', __init);
@@ -38,6 +43,7 @@
 
 				actionButtonBuildForecast(selectedBaseLine, selectedEventType);
 				calcAccScore();
+				prepareFailure();
 			} catch (error) {
 				// setTimeout(onReadyToStart, 5000);
 			}
@@ -170,6 +176,24 @@
 
 		function calcAccScore() {
 			$scope.accScore = $scope.operationData.shiftContext.accScore.totalScore / $scope.operationData.shiftContext.accScore.eventScoreQty;
+		}
+
+		function getTotalFailureTime(startTime, endTime) {
+			if(!endTime) return 0;
+
+			var diffTime = new Date(endTime).getTime() - new Date(startTime).getTime();
+			return new Date(diffTime);
+		}
+
+		function getPanelStartState(keyName) {
+			$scope.statusPanel[keyName] = JSON.parse(localStorage.getItem(keyName));
+			return $scope.statusPanel[keyName];
+		}
+
+		function changePanelState(keyName) {
+			var newState = !getPanelStartState(keyName);
+			$scope.statusPanel[keyName] = newState;
+			localStorage.setItem(keyName, newState);
 		}
 	}
 

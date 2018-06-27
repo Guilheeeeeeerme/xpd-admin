@@ -1,10 +1,10 @@
 <div class="panel panel-default">
 
-	<div class="panel-heading clearfix">
+	<div class="panel-heading clearfix" ng-click="panelConsistencyInfoIsCollapsed = !panelConsistencyInfoIsCollapsed">
 		<h4 class="panel-title pull-left">Consistency Information</h4>
 		<div class="btn-group pull-right">
-			<i type="button" class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': panelConsistencyInfoIsCollapsed, 'glyphicon-chevron-up': !panelConsistencyInfoIsCollapsed}"
-				ng-click="panelConsistencyInfoIsCollapsed = !panelConsistencyInfoIsCollapsed">
+			<i type="button" class="pull-right glyphicon pointer"
+				ng-class="{'glyphicon-chevron-down': panelConsistencyInfoIsCollapsed, 'glyphicon-chevron-up': !panelConsistencyInfoIsCollapsed}">
 			</i>
 		</div>
 	</div>
