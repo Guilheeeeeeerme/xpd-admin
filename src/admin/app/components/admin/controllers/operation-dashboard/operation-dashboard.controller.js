@@ -14,6 +14,11 @@
 		var selectedEventType;
 
 		$scope.statusPanel = [];
+		$scope.dados = {
+			connectionEvents: [],
+			tripEvents: [],
+			timeEvents: [],
+		};
 
 		operationDataFactory.openConnection([]).then(function (response) {
 			operationDataFactory = response;
