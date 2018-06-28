@@ -82,8 +82,8 @@
 				var format = d3.format('.1f');
 
 				scope.svg = {
-					viewWidth: element[0].clientWidth,
-					viewHeight: element[0].offsetHeight
+					viewWidth: element[0].clientWidth || 200,
+					viewHeight: element[0].offsetHeight || 200
 				};
 
 				scope.openScaleModal = openScaleModal;
@@ -195,7 +195,7 @@
 					});
 
 					function configTrackProperties(track, index, isHorizontal) {
-
+						
 						track.color = colorScale(index);
 
 						var trackIndex = index;

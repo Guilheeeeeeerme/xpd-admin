@@ -33,7 +33,7 @@
 			hasAlarm: false,
 			hasMessage: false,
 
-			showDMEC: !!JSON.parse(localStorage.getItem('xpd.admin.tracking.openDmecAsDefault'))
+			// showDMEC: !!JSON.parse(localStorage.getItem('xpd.admin.tracking.openDmecAsDefault'))
 		};
 
 		$scope.acknowledgement = {
@@ -56,7 +56,7 @@
 		vm.actionButtonStartCementation = actionButtonStartCementation;
 		vm.actionButtonStopCementation = actionButtonStopCementation;
 		vm.flashGoDiv = flashGoDiv;
-		vm.changeTrackingContent = changeTrackingContent;
+		// vm.changeTrackingContent = changeTrackingContent;
 
 		/**
 		 * ADMIN ONLY
@@ -333,10 +333,10 @@
 			operationDataFactory.emitFinishDurationAlarm();
 		}
 
-		function changeTrackingContent() {
-			$scope.flags.showDMEC = !$scope.flags.showDMEC;
-			localStorage.setItem('xpd.admin.tracking.openDmecAsDefault', $scope.flags.showDMEC);
-		}
+		// function changeTrackingContent() {
+		// 	$scope.flags.showDMEC = !$scope.flags.showDMEC;
+		// 	localStorage.setItem('xpd.admin.tracking.openDmecAsDefault', $scope.flags.showDMEC);
+		// }
 
 	}
 

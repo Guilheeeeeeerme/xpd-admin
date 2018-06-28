@@ -22,20 +22,21 @@
             block-speed-context="operationData.blockSpeedContext" changing-states-list="operationData.stateContext.changingStatesList"
             changing-alarms-list="operationData.alarmContext.changingAlarmsList" unreachable="operationData.elevatorTargetContext.unreachable"
             current-state="operationData.stateContext.currentState" connection-times="dados.connectionTimes" trip-times="dados.tripTimes"
-            time-blocks="dados.timeBlocks" flags="flags" ng-if="flags.showDMEC == false">
+            time-blocks="dados.timeBlocks" flags="flags">
         </old-tracking>
 
-        <dmec-tracking ng-if="flags.showDMEC == true" current-operation="operationData.operationContext.currentOperation" current-event="operationData.eventContext.currentEvent"
+        <!-- <dmec-tracking ng-if="flags.showDMEC == true" current-operation="operationData.operationContext.currentOperation" current-event="operationData.eventContext.currentEvent"
             current-tick="operationData.chronometerContext.tick" current-block-position="operationData.readingContext.currentReading.blockPosition"
             current-reading="operationData.readingContext.currentReading" connection-events="dados.connectionEvents" trip-events="dados.tripEvents"
             time-events="dados.timeEvents">
-        </dmec-tracking>
+        </dmec-tracking> -->
 
     </div>
 
     <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4 xpd-admin-col">
 
-        <div ng-if="flags.showDMEC == false" class="xpd-admin-col-content">
+         <!-- ng-if="flags.showDMEC == false" -->
+        <div class="xpd-admin-col-content">
 
             <div class="row tracking-performance-row xpd-chart-container">
 
@@ -191,16 +192,16 @@
 
         </div>
         
-        <div ng-if="flags.showDMEC == true" class="xpd-admin-col-content">
+        <!-- <div ng-if="flags.showDMEC == true" class="xpd-admin-col-content">
             <ng-include
              src ="'./app/components/admin/views/operation-dashboard.template.html'" 
              ng-controller = 'OperationDashboardController as odController'>
             </ng-include>
         
-        </div>
+        </div> -->
 
     </div>
 
-    <span class="fa fa-retweet change-tracking-content" ng-click="tController.changeTrackingContent()"></span>
+    <!-- <span class="fa fa-retweet change-tracking-content" ng-click="tController.changeTrackingContent()"></span> -->
 
 </div>

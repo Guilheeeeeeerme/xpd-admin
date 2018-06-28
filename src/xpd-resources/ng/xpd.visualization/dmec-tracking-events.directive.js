@@ -23,7 +23,6 @@
 			},
 			link: function (scope, element, attrs) {
 
-				var selfTick = null;
 				var lastEventType = null;
 				var lastBarColor;
 				var lastElement;
@@ -37,7 +36,7 @@
 
 				d3Service.d3().then(function (d3) {
 
-					scope.events.pop();
+					// scope.events.pop();
 					setViewMode();
 					scope.getBarWidth = getBarWidth;
 					scope.getBarHeight = getBarHeight;
