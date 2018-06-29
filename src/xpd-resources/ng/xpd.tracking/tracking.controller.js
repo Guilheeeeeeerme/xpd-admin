@@ -3,18 +3,20 @@
 
 	angular.module('xpd.tracking').controller('TrackingController', trackingController);
 
-	trackingController.$inject = ['$scope', '$interval', '$timeout', '$uibModal', 'operationDataFactory', 'dialogFactory', '$filter'];
+	trackingController.$inject = ['$scope', '$xpdInterval', '$xpdTimeout', '$uibModal', 'operationDataFactory', 'dialogFactory', '$filter'];
 
-	function trackingController($scope, $interval, $timeout, $uibModal, operationDataFactory, dialogFactory, $filter) {
+	function trackingController($scope, $xpdInterval, $xpdTimeout, $uibModal, operationDataFactory, dialogFactory, $filter) {
 
 		var vm = this;
 
-		$interval(circulateShiftList, 10000);
+		$scope.$on('$destroy', destroy);
+
+		var circulateShiftListInterval = $xpdInterval(circulateShiftList, 10000, $scope);
 
 		$scope.dados = {
 			connectionTimes: [],
 			tripTimes: [],
-			
+
 			bitDepthByEvents: [],
 			connectionEvents: [],
 			tripEvents: [],
@@ -41,7 +43,7 @@
 			depthAlarms: []
 		};
 
-		operationDataFactory.openConnection([]).then(function(response) {
+		operationDataFactory.openConnection([]).then(function (response) {
 			operationDataFactory = response;
 			$scope.operationData = operationDataFactory.operationData;
 
@@ -49,7 +51,7 @@
 			buildTimeSlicesStruture();
 			removeTeamsFromShift();
 			buildAcknowledgementList();
-		});		
+		});
 
 		vm.actionButtonStartOperation = actionButtonStartOperation;
 		vm.actionButtonFinishOperation = actionButtonFinishOperation;
@@ -106,6 +108,15 @@
 		operationDataFactory.addEventListener('trackingController', 'setOnNoCurrentAlarmListener', buildAcknowledgementList);
 		operationDataFactory.addEventListener('trackingController', 'setOnExpectedAlarmChangeListener', buildAcknowledgementList);
 
+
+		/**
+		 * Quando sair do controller
+		 */
+		function destroy() {
+			if (circulateShiftListInterval) {
+				$xpdInterval.cancel(circulateShiftListInterval);
+			}
+		}
 
 		function actionButtonStartOperation(operation) {
 			dialogFactory.showConfirmDialog('Start current operation?', function () {
@@ -253,9 +264,9 @@
 
 			$scope.flags.showSlowDown = true;
 
-			$timeout(function () {
+			$xpdTimeout(function () {
 				$scope.flags.showSlowDown = false;
-			}, 1500);
+			}, 1500, $scope);
 		}
 
 		function onUnreachableTarget() {
@@ -265,7 +276,7 @@
 
              $scope.flags.showUnreachable = true;
 
-             $timeout(function() {
+             $xpdTimeout(function() {
              $scope.flags.showUnreachable = false;
              }, 500);
              */
@@ -274,9 +285,9 @@
 		function flashGoDiv() {
 			$scope.flags.showGo = true;
 
-			$timeout(function () {
+			$xpdTimeout(function () {
 				$scope.flags.showGo = false;
-			}, 500);
+			}, 500, $scope);
 		}
 
 		function buildEventStruture() {

@@ -3,9 +3,9 @@
 	angular.module('xpd.admin')
 		.directive('rpdForm', rpdFormDirective);
 
-	rpdFormDirective.$inject = ['$filter'];
+	rpdFormDirective.$inject = ['$filter', '$xpdTimeout'];
 
-	function rpdFormDirective($filter) {
+	function rpdFormDirective($filter, $xpdTimeout) {
 
 		return {
 			link: link,
@@ -28,7 +28,7 @@
 			scope.getFailures = getFailures;
 			scope.getAlarms = getAlarms;
 
-			setTimeout(prepareButtonsToExport, 5000);
+			$xpdTimeout(prepareButtonsToExport, 5000, scope);
 
 			function toStateArray(stateObject) {
 

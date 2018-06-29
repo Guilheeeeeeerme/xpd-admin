@@ -6,6 +6,7 @@
 		'xpd.setupapi',
 		'xpd.dmec',
 		'xpd.filters', 
+		'xpd.timers',
 		'highcharts', 
 		'xpd.visualization', 
 		'xpd.calculation', 

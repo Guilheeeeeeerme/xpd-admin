@@ -1,9 +1,9 @@
 (function () {
 	angular.module('xpd.dmec', []).service('dmecService', dmecService);
 
-	dmecService.$inject = ['$timeout', '$interval', '$location', '$routeParams', '$q', 'readingSetupAPIService'];
+	dmecService.$inject = ['$xpdTimeout', '$xpdInterval', '$location', '$routeParams', '$q', 'readingSetupAPIService'];
 
-	function dmecService($timeout, $interval, $location, $routeParams, $q, readingSetupAPIService) {
+	function dmecService($xpdTimeout, $xpdInterval, $location, $routeParams, $q, readingSetupAPIService) {
 
 		return {
 			dmec: DMECService
@@ -89,10 +89,10 @@
 			 */
 			function destroy() {
 				if (resetPageTimeout) {
-					$timeout.cancel(resetPageTimeout);
+					$xpdTimeout.cancel(resetPageTimeout);
 				}
 				if (getTickInterval) {
-					$interval.cancel(getTickInterval);
+					$xpdInterval.cancel(getTickInterval);
 				}
 			}
 			/**
@@ -256,8 +256,8 @@
 
 				onReadingSince.then(function () {
 					destroy();
-					resetPageTimeout = $timeout(reload, (ONE_HOUR / 2));
-					getTickInterval = $interval(getTick, getTickFrequency);
+					resetPageTimeout = $xpdTimeout(reload, (ONE_HOUR / 2), scope);
+					getTickInterval = $xpdInterval(getTick, getTickFrequency, scope);
 				});
 
 				scope.onReadingSince = onReadingSince;

@@ -13,6 +13,7 @@ exports.scripts = {
 		'./src/xpd-resources/ng/xpd.dialog/xpd.dialog.module.js',
 		'./src/xpd-resources/ng/xpd.dialog/xpd.dialog.factory.js',
 		'./src/xpd-resources/ng/xpd.spinner/xpd.spinner.js',
+		'./src/xpd-resources/ng/xpd.timers/xpd.timers.js',
 		'./src/xpd-resources/ng/xpd.access/accessfactory.module.js',
 		'./src/xpd-resources/ng/xpd.access/accessfactory.directive.js',
 		'./src/xpd-resources/ng/xpd.access/security-interceptor.factory.js',

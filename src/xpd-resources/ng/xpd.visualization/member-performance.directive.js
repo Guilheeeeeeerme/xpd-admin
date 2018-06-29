@@ -4,9 +4,9 @@
 	angular.module('xpd.visualization')
 		.directive('memberPerformance', memberPerformance);
 
-	memberPerformance.$inject = ['d3Service', '$interval', '$timeout'];
+	memberPerformance.$inject = ['d3Service'];
 
-	function memberPerformance(d3Service, $interval, $timeout) {
+	function memberPerformance(d3Service) {
 		return {
 			templateUrl: '../xpd-resources/ng/xpd.visualization/member-performance.template.html',
 			restrict: 'A',

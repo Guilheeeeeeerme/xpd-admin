@@ -14,6 +14,7 @@
 		'xpd.calculation',
 		'xpd.contract-param',
 		'xpd.filters',
+		'xpd.timers',
 		'xpd.contractTimeInput',
 		'angularTreeview',
 		'xpd.modal-event-details',

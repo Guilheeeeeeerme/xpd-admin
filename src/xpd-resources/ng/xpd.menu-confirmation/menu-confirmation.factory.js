@@ -10,9 +10,9 @@
 	angular.module('xpd.menu-confirmation')
 		.factory('menuConfirmationFactory', menuConfirmationFactory);
 
-	menuConfirmationFactory.$inject = ['$location'];
+	menuConfirmationFactory.$inject = [];
 
-	function menuConfirmationFactory($location) {
+	function menuConfirmationFactory() {
 
 		var vm = this;
 		vm.blockMenu = false;

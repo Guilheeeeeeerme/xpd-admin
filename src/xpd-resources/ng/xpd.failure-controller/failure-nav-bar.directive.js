@@ -11,9 +11,9 @@
 	angular.module('xpd.failure-controller')
 		.directive('failureNavBar', failureNavBar);
 
-	failureNavBar.$inject = ['$location', '$uibModal', 'categorySetupAPIService', 'operationDataFactory', 'dialogFactory'];
+	failureNavBar.$inject = ['$uibModal', 'categorySetupAPIService', 'operationDataFactory', 'dialogFactory'];
 
-	function failureNavBar($location, $uibModal, categorySetupAPIService, operationDataFactory, dialogFactory) {
+	function failureNavBar($uibModal, categorySetupAPIService, operationDataFactory, dialogFactory) {
 		return {
 			scope: {
 

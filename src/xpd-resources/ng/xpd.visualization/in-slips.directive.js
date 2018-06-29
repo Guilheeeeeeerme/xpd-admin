@@ -4,9 +4,9 @@
 	angular.module('xpd.visualization')
 		.directive('inSlips', inSlips);
 
-	inSlips.$inject = ['$interval'];
+	inSlips.$inject = [];
 
-	function inSlips($interval) {
+	function inSlips() {
 		return {
 			templateUrl: '../xpd-resources/ng/xpd.visualization/in-slips.template.html',
 			scope: {

@@ -8,6 +8,7 @@
 		'xpd.scoredevent',
 		'xpd.dialog',
 		'xpd.filters',
+		'xpd.timers',
 		'xpd.setupapi',
 		'xpd.visualization'
 	]);
