@@ -1,17 +1,17 @@
 <div class="panel panel-default">
 
-	<div class="panel-heading clearfix" ng-click="panelConsistencyInfoIsCollapsed = !panelConsistencyInfoIsCollapsed">
-		<h4 class="panel-title pull-left">Consistency Information</h4>
+	<div class="panel-heading clearfix" ng-click="panelOperationProgressIsCollapsed = !panelOperationProgressIsCollapsed">
+		<h4 class="panel-title pull-left">Operation Progress</h4>
 		<div class="btn-group pull-right">
 			<i type="button" class="pull-right glyphicon pointer"
-				ng-class="{'glyphicon-chevron-down': panelConsistencyInfoIsCollapsed, 'glyphicon-chevron-up': !panelConsistencyInfoIsCollapsed}">
+				ng-class="{'glyphicon-chevron-down': panelOperationProgressIsCollapsed, 'glyphicon-chevron-up': !panelOperationProgressIsCollapsed}">
 			</i>
 		</div>
 	</div>
             
-	<div class="panel-body" uib-collapse="panelConsistencyInfoIsCollapsed">
+	<div class="panel-body" uib-collapse="panelOperationProgressIsCollapsed">
 
-		<table class="table table-sm table-hover table-condensed">
+		<!-- <table class="table table-sm table-hover table-condensed">
 			<tr>
 				<th>Consistency</th>
 				<td colspan="2"></td>
@@ -28,7 +28,7 @@
 				</td>
 			</tr>
 			
-		</table>
+		</table> -->
 
 		<div class="col-lg-{{ $index == 0?12:6 }} col-md-{{ $index == 0?12:6 }}" ng-repeat="progressDataItem in directiveData track by $index">
 
