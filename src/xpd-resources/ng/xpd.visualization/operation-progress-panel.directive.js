@@ -2,14 +2,14 @@
 	'use strict';
 
 	angular.module('xpd.visualization')
-		.directive('consistencyInformationPanel', consistencyInformationPanel);
+		.directive('operationProgressPanel', operationProgressPanel);
 
-	consistencyInformationPanel.$inject = [];
+	operationProgressPanel.$inject = [];
 
-	function consistencyInformationPanel() {
+	function operationProgressPanel() {
 		return {
 			restrict: 'EA',
-			templateUrl: '../xpd-resources/ng/xpd.visualization/consistency-information-panel.template.html',
+			templateUrl: '../xpd-resources/ng/xpd.visualization/operation-progress-panel.template.html',
 			scope: {
 				currentScore: '=',
 				progressData: '=',
