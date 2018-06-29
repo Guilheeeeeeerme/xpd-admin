@@ -81,7 +81,7 @@ exports.scripts = {
 		'./src/xpd-resources/ng/xpd.visualization/operation-progress-chart.directive.js',
 		'./src/xpd-resources/ng/xpd.visualization/displacement-area.directive.js',
 		'./src/xpd-resources/ng/xpd.visualization/forecast-line.directive.js',
-		'./src/xpd-resources/ng/xpd.visualization/consistency-information-panel.directive.js',
+		'./src/xpd-resources/ng/xpd.visualization/operation-progress-panel.directive.js',
 		'./src/xpd-resources/ng/xpd.visualization/upcoming-alarms-panel.directive.js',
 		'./src/xpd-resources/ng/xpd.filters/xpd-filter.module.js',
 		'./src/xpd-resources/ng/xpd.form.validation/xpd.form.validation.directive.js',
