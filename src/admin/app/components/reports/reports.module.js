@@ -6,6 +6,7 @@
 		'xpd.dialog',
 		'xpd.setupapi',
 		'xpd.filters',
+		'xpd.timers',
 		'd3',
 		'highcharts',
 		'xpd.communication',

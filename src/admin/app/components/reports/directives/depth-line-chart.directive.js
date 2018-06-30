@@ -4,9 +4,9 @@
 	angular.module('xpd.reports')
 		.directive('depthLineChart', depthLineChart);
 
-	depthLineChart.$inject = ['$timeout'];
+	depthLineChart.$inject = ['$xpdTimeout'];
 
-	function depthLineChart($timeout) {
+	function depthLineChart($xpdTimeout) {
 		return{
 			restrict: 'EA',
 			scope:{
@@ -22,9 +22,9 @@
 			var objChart = createChart();
 
 			scope.$watchGroup(['chartPlannedData', 'chartRealizedData', 'plotBandsPlannedData'], function(newValues){
-				$timeout(function() {
+				$xpdTimeout(function() {
 					redrawChart(newValues[0], newValues[1], newValues[2]);
-				}, 500);
+				}, 500, scope);
 			}, true);
 
 			function createChart() {

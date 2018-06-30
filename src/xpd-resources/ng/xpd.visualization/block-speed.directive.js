@@ -4,9 +4,9 @@
 	angular.module('xpd.visualization')
 		.directive('blockSpeed', blockSpeed);
 
-	blockSpeed.$inject = ['$filter', 'highchartsService', '$interval'];
+	blockSpeed.$inject = ['$filter', 'highchartsService', '$xpdInterval'];
 
-	function blockSpeed($filter, highchartsService, $interval) {
+	function blockSpeed($filter, highchartsService, $xpdInterval) {
 		return {
 			scope: {
 				blockSpeed: '='
@@ -23,11 +23,11 @@
 					}
 				});
 				
-				$interval(drawChart, 10000);
+				$xpdInterval(drawChart, 10000, scope);
 				
 				function drawChart() {
 
-					blockSpeed = scope.blockSpeed;
+					var blockSpeed = scope.blockSpeed;
 
 					var chart = {
 						

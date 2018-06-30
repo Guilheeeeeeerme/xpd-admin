@@ -4,9 +4,9 @@
 	angular.module('xpd.reports')
 		.directive('slipsToSlipsBarChart', slipsToSlipsBarChart);
 
-	slipsToSlipsBarChart.$inject = ['$timeout', 'd3Service'];
+	slipsToSlipsBarChart.$inject = ['d3Service'];
 
-	function slipsToSlipsBarChart($timeout, d3Service) {
+	function slipsToSlipsBarChart(d3Service) {
 		return {
 			templateUrl: 'app/components/reports/directives/slips-to-slips-bar-chart.template.html',
 			scope: {

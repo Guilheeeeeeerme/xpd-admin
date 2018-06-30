@@ -5,9 +5,9 @@
 
 	module.directive('d3DmecChart', d3DmecChart);
 
-	d3DmecChart.$inject = ['$interval', '$q', '$uibModal', 'd3Service'];
+	d3DmecChart.$inject = ['$q', '$uibModal', 'd3Service'];
 
-	function d3DmecChart($interval, $q, $modal, d3Service) {
+	function d3DmecChart($q, $modal, d3Service) {
 		return {
 			restrict: 'E',
 			templateUrl: '../xpd-resources/ng/xpd.visualization/d3-dmec-chart.template.html',

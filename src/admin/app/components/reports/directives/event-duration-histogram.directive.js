@@ -4,9 +4,9 @@
 	angular.module('xpd.reports')
 		.directive('eventDurationHistogram', eventDurationHistogram);
 
-	eventDurationHistogram.$inject = ['$timeout','highchartsService'];
+	eventDurationHistogram.$inject = ['highchartsService'];
 
-	function eventDurationHistogram($timeout, highchartsService) {
+	function eventDurationHistogram(highchartsService) {
 		return{
 			restrict: 'EA',
 			scope:{

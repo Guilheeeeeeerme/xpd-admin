@@ -5,9 +5,9 @@
 	angular.module('xpd.reports')
 		.directive('vreBarChart', vreBarChart);
 
-	vreBarChart.$inject = ['$filter', '$timeout', 'd3Service'];
+	vreBarChart.$inject = ['$filter', '$xpdTimeout', 'd3Service'];
 
-	function vreBarChart($filter, $timeout, d3Service) {
+	function vreBarChart($filter, $xpdTimeout, d3Service) {
 		return {
 			restrict: 'EA',
 			templateUrl: 'app/components/reports/directives/vre-bar-chart.template.html',
@@ -29,9 +29,9 @@
 			d3Service.d3().then(function (d3) {
 
 				scope.$watchGroup(['vreListData', 'vreDailyData'], function (newValues) {
-					$timeout(function () {
+					$xpdTimeout(function () {
 						drawVreChart(newValues[0], newValues[1]);
-					}, 500);
+					}, 500, scope);
 				}, true);
 
 			});

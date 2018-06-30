@@ -3,9 +3,9 @@
 
 	angular.module('xpd.visualization').directive('timeZoomTool', timeZoomTool);
 
-	timeZoomTool.$inject = ['$timeout', '$interval', '$filter', 'd3Service'];
+	timeZoomTool.$inject = ['$filter', 'd3Service'];
 
-	function timeZoomTool($timeout, $interval, $filter, d3Service) {
+	function timeZoomTool($filter, d3Service) {
 		return {
 			restrict: 'E',
 			templateUrl: '../xpd-resources/ng/xpd.visualization/time-zoom-tool.template.html',

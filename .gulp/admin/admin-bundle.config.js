@@ -16,6 +16,7 @@ exports.scripts = {
 		'./src/xpd-resources/ng/xpd.intersection/xpd-intersection.js',
 		'./src/xpd-resources/ng/socket.io/socketio.module.js',
 		'./src/xpd-resources/ng/xpd.spinner/xpd.spinner.js',
+		'./src/xpd-resources/ng/xpd.timers/xpd.timers.js',
 		'./src/xpd-resources/ng/socket.io/socket.factory.js',
 		'./src/xpd-resources/ng/xpd.dialog/xpd.dialog.module.js',
 		'./src/xpd-resources/ng/xpd.dialog/xpd.dialog.factory.js',
