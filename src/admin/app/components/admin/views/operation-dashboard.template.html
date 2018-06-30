@@ -2,13 +2,13 @@
 
     <div class="container-fluid scrollable-content">
 
-        <!-- <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8 scrollable-content" ng-controller="AdminTrackingController as atController">
+        <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8 scrollable-content" ng-controller="AdminTrackingController as atController">
             <dmec-tracking current-operation="operationData.operationContext.currentOperation" current-event="operationData.eventContext.currentEvent"
                 current-tick="operationData.chronometerContext.tick" current-block-position="operationData.readingContext.currentReading.blockPosition"
                 current-reading="operationData.readingContext.currentReading" connection-events="dados.connectionEvents" trip-events="dados.tripEvents"
                 time-events="dados.timeEvents">
             </dmec-tracking>
-        </div> -->
+        </div>
 
         <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4 scrollable-content">
 
@@ -61,6 +61,10 @@
 
             <!-- Operation Information -->
             <div class="panel panel-default">
+
+                <!-- <pre>{{ ( operationData.chronometerContext.stateTick * 100 ) / expectations.stateExpectedDuration }}</pre>
+                <pre>{{ operationData.chronometerContext.stateTick }}</pre>
+                <pre>{{ expectations.stateExpectedDuration }}</pre> -->
             
                 <div class="panel-heading clearfix" ng-init="odController.getPanelStartState('panelOperationInfoIsCollapsed')" ng-click="odController.changePanelState('panelOperationInfoIsCollapsed')">
                     <h4 class="panel-title pull-left">Operation Information</h4>
@@ -81,30 +85,54 @@
                             <td>{{ operationData.operationContext.currentOperation.section.name }}</td>
                             <td colspan="2">{{ operationData.stateContext.currentState | xpdStateLabelFilter }}</td>
                         </tr>
-                        <!-- <tr class="success">
-                            <th>Event Type</th>
-                            <td colspan="2">{{ operationData.eventContext.currentEvent.eventType | xpdEventLabelFilter }}</td>
-                        </tr>
-                        <tr class="success">
-                            <th>Direction</th>
-                            <td colspan="2">
-                                <span ng-if="operationData.directionContext.tripin" class="glyphicon glyphicon-arrow-down"></span>
-                                <span ng-if="!operationData.directionContext.tripin" class="glyphicon glyphicon-arrow-up"></span>
-                                Trip {{ operationData.directionContext.tripin?'In': 'Out' }}
-                            </td>
-                        </tr> -->
-                            <th>Forecast (Coming soon)</th>
-                            <td colspan="3"></td>
+                        <tr>
+                            <th>Forecast: </th>
+                            <td colspan="3">{{ expectations.stateExpectedEndTime | date:'medium' }}</td>
                         </tr>
                         <tr>
-                            <td colspan="3" class="borderless-top">
+                            
+                            <td colspan="3" class="borderless-top" ng-if="expectations.vPoorStateExpectedDuration > expectations.stateExpectedDuration">
+                            
                                 <div class="progress">
-                                    <div class="progress-bar progress-bar-info" role="progressbar" aria-valuemin="0" aria-valuemax="100" style="width: 60%;">
-                                        10h
+
+                                    <div 
+                                        class="progress-bar"
+                                        ng-style="{width : ( ( expectations.stateExpectedDuration * 100 ) / expectations.vPoorStateExpectedDuration ) + '%' }">
+                                        {{ expectations.stateExpectedDuration / 1000 | secondsToHourMinutes }}
                                     </div>
+                                    
+                                    <div 
+                                        class="progress-bar progress-bar-danger"
+                                        ng-style="{width : 100 - ( ( expectations.stateExpectedDuration * 100 ) / expectations.vPoorStateExpectedDuration ) + '%' }">
+                                        {{ ( expectations.vPoorStateExpectedDuration - expectations.stateExpectedDuration) / 1000 | secondsToHourMinutes }}
+                                    </div>
+
                                 </div>
+
                             </td>
+                            
+                            <td colspan="3" class="borderless-top" ng-if="expectations.vPoorStateExpectedDuration <= expectations.stateExpectedDuration">
+                            
+                                <div class="progress">
+
+                                    <div 
+                                    class="progress-bar progress-bar-danger"
+                                        ng-style="{width : ( ( expectations.vPoorStateExpectedDuration * 100 ) / expectations.stateExpectedDuration ) + '%' }">
+                                        {{ expectations.vPoorStateExpectedDuration / 1000 | secondsToHourMinutes }}
+                                    </div>
+                                    
+                                    <div 
+                                        class="progress-bar"
+                                        ng-style="{width : 100 - ( ( expectations.vPoorStateExpectedDuration * 100 ) / expectations.stateExpectedDuration ) + '%' }">
+                                        {{ ( expectations.stateExpectedDuration - expectations.vPoorStateExpectedDuration) / 1000 | secondsToHourMinutes }}
+                                    </div>
+
+                                </div>
+
+                            </td>
+
                         </tr>
+
                         <tr>
                             <th>Cumulated Consistency</th>
                             <td colspan="3"></td>
@@ -128,7 +156,7 @@
                         </tr>
                         <tr>
                             <th>Hole Depth</th>
-                            <td colspan="3">{{ operationData.operationContext.currentOperation.holeDepth | number : '.2' }} m</td>
+                            <td colspan="3">{{ operationData.wellContext.currentWell.holeDepth | number : '.2' }} m</td>
                         </tr>
                         <!-- <tr>
                             <th>BlockPosition</th>
@@ -250,25 +278,25 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td class="col-md-6 borderless-top" ng-repeat="value in ['CONN', 'TRIP']">
+                                <td class="col-md-6 borderless-top" ng-repeat="eventType in ['CONN', 'TRIP']">
                                     <div class="progress">
                                         <div class="progress-bar"
-                                            ng-style="{'width' : lastTwoEvents[value].voptimumPercentage + '%'}">
+                                            ng-style="{'width' : lastTwoEvents[eventType].voptimumPercentage + '%'}">
                                         </div>
                                         <div class="progress-bar progress-bar-success"
-                                            ng-style="{'width' : lastTwoEvents[value].vstandardPercentage + '%'}">
+                                            ng-style="{'width' : lastTwoEvents[eventType].vstandardPercentage + '%'}">
                                         </div>
                                         <div class="progress-bar progress-bar-warning"
-                                            ng-style="{'width' : lastTwoEvents[value].vpoorPercentage + '%'}">
+                                            ng-style="{'width' : lastTwoEvents[eventType].vpoorPercentage + '%'}">
                                         </div>
                                         <div class="progress-bar progress-bar-danger"
-                                            ng-style="{'width' : lastTwoEvents[value].afterVpoorPercentage + '%'}">
+                                            ng-style="{'width' : lastTwoEvents[eventType].afterVpoorPercentage + '%'}">
                                         </div>
                                     </div>
                                     <div>
-                                        <span class="label label-primary">{{lastTwoEvents[value].voptimumTime | secondsToHourMinutes}}</span>
-                                        <span class="label label-success center">{{lastTwoEvents[value].vstandardTime | secondsToHourMinutes}}</span>
-                                        <span class="label label-warning right">{{lastTwoEvents[value].vpoorTime | secondsToHourMinutes}}</span>
+                                        <span class="label label-primary">{{lastTwoEvents[eventType].voptimumTime | secondsToHourMinutes}}</span>
+                                        <span class="label label-success center">{{lastTwoEvents[eventType].vstandardTime | secondsToHourMinutes}}</span>
+                                        <span class="label label-warning right">{{lastTwoEvents[eventType].vpoorTime | secondsToHourMinutes}}</span>
                                     </div>
                                 </td>
                             </tr>

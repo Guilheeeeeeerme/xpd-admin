@@ -36,8 +36,50 @@
 		operationDataFactory.addEventListener('operationDashboardController', 'setOnActualLineListener', __init);
 		operationDataFactory.addEventListener('operationDashboardController', 'setOnForecastChangeListener', __init);
 
+		operationDataFactory.addEventListener('operationDashboardController', 'setOnJointChangeListener', estimateJointExpectedDurationAndUpdateStateForecast);
+		operationDataFactory.addEventListener('operationDashboardController', 'setOnCurrentJointListener', estimateJointExpectedDurationAndUpdateStateForecast);
+		operationDataFactory.addEventListener('operationDashboardController', 'setOnNoCurrentJointListener', estimateJointExpectedDurationAndUpdateStateForecast);	
+
+		function estimateJointExpectedDurationAndUpdateStateForecast(){
+
+			try {
+
+				var currentState = $scope.operationData.stateContext.currentState;
+	
+				var vTargetStateJointInterval = $scope.operationData.forecastContext.estimatives.vTargetLine.filter(function(line){
+					return line[currentState] != null;
+				})[0][currentState];
+
+				var vPoorStateJointInterval = $scope.operationData.forecastContext.estimatives.vPoorLine.filter(function(line){
+					return line[currentState] != null;
+				})[0][currentState];
+
+				var stateExpectedDuration = Math.ceil( 1000 * vTargetStateJointInterval.BOTH.finalTime );
+				var vPoorStateExpectedDuration = Math.ceil( 1000 * vPoorStateJointInterval.BOTH.finalTime );
+
+				$scope.expectations = {
+					stateExpectedEndTime: new Date().getTime() + stateExpectedDuration,
+					stateExpectedDuration: stateExpectedDuration,
+					jointExpectedDuration: Math.ceil( stateExpectedDuration / vTargetStateJointInterval.BOTH.points.length ),
+					
+					vPoorStateExpectedEndTime: new Date().getTime() + vPoorStateExpectedDuration,
+					vPoorStateExpectedDuration: vPoorStateExpectedDuration,
+					vPoorJointExpectedDuration: Math.ceil( vPoorStateExpectedDuration / vTargetStateJointInterval.BOTH.points.length )
+				};
+				
+			} catch (error) {
+				// give up
+			}
+
+			// <pre>{{ operationData.chronometerContext | json }}</pre>
+			// <pre>{{  | json }}</pre>
+
+		}
+
 		function __init() {
 			try {
+
+				estimateJointExpectedDurationAndUpdateStateForecast();
 
 				if (!selectedBaseLine) {
 					selectedBaseLine = 'vOptimumLine';
@@ -275,7 +317,7 @@
 				afterVpoorTime: afterVpoorTime,
 				percentageDuration: percentageDuration,
 				colorPerformance: colorPerformance,
-			}
+			};
 
 		}
 
