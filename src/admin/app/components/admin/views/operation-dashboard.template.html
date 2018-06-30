@@ -18,8 +18,7 @@
                 <div class="panel-heading clearfix" ng-init="odController.getPanelStartState('panelWellIsCollapsed')" ng-click="odController.changePanelState('panelWellIsCollapsed')">
                     <h4 class="panel-title pull-left">Well Information</h4>
                     <div class="btn-group pull-right">
-                        <i type="button" class="pull-right glyphicon pointer"
-                            ng-class="{'glyphicon-chevron-down': statusPanel['panelWellIsCollapsed'], 'glyphicon-chevron-up': !statusPanel['panelWellIsCollapsed']}">
+                        <i type="button" class="pull-right glyphicon pointer" ng-class="{'glyphicon-chevron-down': statusPanel['panelWellIsCollapsed'], 'glyphicon-chevron-up': !statusPanel['panelWellIsCollapsed']}">
                         </i>
                     </div>
                 </div>
@@ -65,18 +64,17 @@
                 <!-- <pre>{{ ( operationData.chronometerContext.stateTick * 100 ) / expectations.stateExpectedDuration }}</pre>
                 <pre>{{ operationData.chronometerContext.stateTick }}</pre>
                 <pre>{{ expectations.stateExpectedDuration }}</pre> -->
-            
+
                 <div class="panel-heading clearfix" ng-init="odController.getPanelStartState('panelOperationInfoIsCollapsed')" ng-click="odController.changePanelState('panelOperationInfoIsCollapsed')">
                     <h4 class="panel-title pull-left">Operation Information</h4>
                     <div class="btn-group pull-right">
-                        <i type="button" class="pull-right glyphicon pointer"
-                            ng-class="{'glyphicon-chevron-down': statusPanel['panelOperationInfoIsCollapsed'], 'glyphicon-chevron-up': !statusPanel['panelOperationInfoIsCollapsed']}">
+                        <i type="button" class="pull-right glyphicon pointer" ng-class="{'glyphicon-chevron-down': statusPanel['panelOperationInfoIsCollapsed'], 'glyphicon-chevron-up': !statusPanel['panelOperationInfoIsCollapsed']}">
                         </i>
                     </div>
                 </div>
-            
+
                 <div class="panel-body" uib-collapse="statusPanel['panelOperationInfoIsCollapsed']">
-            
+
                     <table class="table table-sm table-hover table-condensed">
                         <tr>
                             <td colspan="3">{{ operationData.operationContext.currentOperation.name }}</td>
@@ -90,40 +88,32 @@
                             <td colspan="3">{{ expectations.stateExpectedEndTime | date:'medium' }}</td>
                         </tr>
                         <tr>
-                            
+
                             <td colspan="3" class="borderless-top" ng-if="expectations.vPoorStateExpectedDuration > expectations.stateExpectedDuration">
-                            
+
                                 <div class="progress">
 
-                                    <div 
-                                        class="progress-bar"
-                                        ng-style="{width : ( ( expectations.stateExpectedDuration * 100 ) / expectations.vPoorStateExpectedDuration ) + '%' }">
+                                    <div class="progress-bar" ng-style="{width : ( ( expectations.stateExpectedDuration * 100 ) / expectations.vPoorStateExpectedDuration ) + '%' }">
                                         {{ expectations.stateExpectedDuration / 1000 | secondsToHourMinutes }}
                                     </div>
-                                    
-                                    <div 
-                                        class="progress-bar progress-bar-danger"
-                                        ng-style="{width : 100 - ( ( expectations.stateExpectedDuration * 100 ) / expectations.vPoorStateExpectedDuration ) + '%' }">
+
+                                    <div class="progress-bar progress-bar-danger" ng-style="{width : 100 - ( ( expectations.stateExpectedDuration * 100 ) / expectations.vPoorStateExpectedDuration ) + '%' }">
                                         {{ ( expectations.vPoorStateExpectedDuration - expectations.stateExpectedDuration) / 1000 | secondsToHourMinutes }}
                                     </div>
 
                                 </div>
 
                             </td>
-                            
+
                             <td colspan="3" class="borderless-top" ng-if="expectations.vPoorStateExpectedDuration <= expectations.stateExpectedDuration">
-                            
+
                                 <div class="progress">
 
-                                    <div 
-                                    class="progress-bar progress-bar-danger"
-                                        ng-style="{width : ( ( expectations.vPoorStateExpectedDuration * 100 ) / expectations.stateExpectedDuration ) + '%' }">
+                                    <div class="progress-bar progress-bar-danger" ng-style="{width : ( ( expectations.vPoorStateExpectedDuration * 100 ) / expectations.stateExpectedDuration ) + '%' }">
                                         {{ expectations.vPoorStateExpectedDuration / 1000 | secondsToHourMinutes }}
                                     </div>
-                                    
-                                    <div 
-                                        class="progress-bar"
-                                        ng-style="{width : 100 - ( ( expectations.vPoorStateExpectedDuration * 100 ) / expectations.stateExpectedDuration ) + '%' }">
+
+                                    <div class="progress-bar" ng-style="{width : 100 - ( ( expectations.vPoorStateExpectedDuration * 100 ) / expectations.stateExpectedDuration ) + '%' }">
                                         {{ ( expectations.stateExpectedDuration - expectations.vPoorStateExpectedDuration) / 1000 | secondsToHourMinutes }}
                                     </div>
 
@@ -150,8 +140,9 @@
                         <tr>
                             <th>Bit Depth</th>
                             <td>{{ operationData.readingContext.currentReading.bitDepth | number : '2' }} m</td>
-                            <td>Joint 
-                                <strong>{{ operationData.jointContext.currentJoint.jointNumber }}</strong> / {{ operationData.jointContext.numberJoints | json}}
+                            <td>Joint
+                                <strong>{{ operationData.jointContext.currentJoint.jointNumber }}</strong> / {{ operationData.jointContext.numberJoints
+                                | json}}
                             </td>
                         </tr>
                         <tr>
@@ -167,9 +158,9 @@
                             <td>{{ operationData.readingContext.currentReading.hookload | number : '.2' }} klb</td>
                         </tr> -->
                     </table>
-            
+
                 </div>
-            
+
             </div>
 
             <!-- Channels -->
@@ -207,7 +198,7 @@
 
             <!-- <pre>{{ lastTwoEvents['TRIP'] | json}}</pre> -->
             <div class="panel panel-default">
-            
+
                 <div class="panel-heading clearfix" ng-click="panelConsistencyInfoIsCollapsed = !panelConsistencyInfoIsCollapsed">
                     <h4 class="panel-title pull-left">Consistency Information</h4>
                     <div class="btn-group pull-right">
@@ -215,9 +206,9 @@
                         </i>
                     </div>
                 </div>
-            
+
                 <div class="panel-body" uib-collapse="panelConsistencyInfoIsCollapsed">
-            
+
                     <table class="table table-sm table-condensed">
                         <tr>
                             <th>Status</th>
@@ -248,7 +239,7 @@
                             </td>
                         </tr>
                     </table>
-                    
+
                     <table class="table table-sm table-condensed">
                         <thead>
                             <tr>
@@ -269,8 +260,7 @@
                             <tr>
                                 <td class="col-md-6 borderless-top" ng-repeat="value in ['CONN', 'TRIP']">
                                     <div class="progress">
-                                        <div class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="lastTwoEvents[value].afterVpoorTime"
-                                            ng-class="lastTwoEvents[value].colorPerformance"
+                                        <div class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="lastTwoEvents[value].afterVpoorTime" ng-class="lastTwoEvents[value].colorPerformance"
                                             ng-style="{'width' : lastTwoEvents[value].percentageDuration + '%'}">
                                             <span class="show">{{lastTwoEvents[value].duration | secondsToHourMinutes}}</span>
                                         </div>
@@ -280,17 +270,13 @@
                             <tr>
                                 <td class="col-md-6 borderless-top" ng-repeat="eventType in ['CONN', 'TRIP']">
                                     <div class="progress">
-                                        <div class="progress-bar"
-                                            ng-style="{'width' : lastTwoEvents[eventType].voptimumPercentage + '%'}">
+                                        <div class="progress-bar" ng-style="{'width' : lastTwoEvents[eventType].voptimumPercentage + '%'}">
                                         </div>
-                                        <div class="progress-bar progress-bar-success"
-                                            ng-style="{'width' : lastTwoEvents[eventType].vstandardPercentage + '%'}">
+                                        <div class="progress-bar progress-bar-success" ng-style="{'width' : lastTwoEvents[eventType].vstandardPercentage + '%'}">
                                         </div>
-                                        <div class="progress-bar progress-bar-warning"
-                                            ng-style="{'width' : lastTwoEvents[eventType].vpoorPercentage + '%'}">
+                                        <div class="progress-bar progress-bar-warning" ng-style="{'width' : lastTwoEvents[eventType].vpoorPercentage + '%'}">
                                         </div>
-                                        <div class="progress-bar progress-bar-danger"
-                                            ng-style="{'width' : lastTwoEvents[eventType].afterVpoorPercentage + '%'}">
+                                        <div class="progress-bar progress-bar-danger" ng-style="{'width' : lastTwoEvents[eventType].afterVpoorPercentage + '%'}">
                                         </div>
                                     </div>
                                     <div>
@@ -321,22 +307,51 @@
                         </tbody>
                     </table>
                 </div>
-            
+
             </div>
 
-            <operation-progress-panel
-                current-score="operationData.scoreContext.currentScore"
-                progress-data="operationData.operationProgressContext.operationProgressData[operationData.stateContext.currentState]">
+            
+
+            <div class="panel panel-default">
+
+                    <div class="panel-heading clearfix" ng-init="odController.getPanelStartState('panelNextActivityIsCollapsed')" ng-click="odController.changePanelState('panelNextActivityIsCollapsed')">
+                        <h4 class="panel-title pull-left">Next Activity</h4>
+                        <div class="btn-group pull-right">
+                            <i type="button" class="pull-right glyphicon pointer" ng-class="{'glyphicon-chevron-down': statusPanel['panelNextActivityIsCollapsed'], 'glyphicon-chevron-up': !statusPanel['panelNextActivityIsCollapsed']}">
+                            </i>
+                        </div>
+                    </div>
+    
+                    <div class="panel-body" uib-collapse="statusPanel['panelNextActivityIsCollapsed']">
+    
+                        <table class="table table-sm table-hover table-condensed">
+                            <tr ng-repeat="activity in expectations.nextActivities">
+                                <td>
+                                    {{ activity.name }}
+                                </td>
+                                <td>
+                                    {{ activity.startTime | date: 'medium' }}
+                                </td>
+                                <td>
+                                    {{ activity.finalTime | date: 'medium' }}
+                                </td>
+                            </tr>
+                        </table>
+    
+                    </div>
+    
+                </div>
+
+            <operation-progress-panel current-score="operationData.scoreContext.currentScore" progress-data="operationData.operationProgressContext.operationProgressData[operationData.stateContext.currentState]">
             </operation-progress-panel>
 
             <div class="panel panel-default">
 
                 <div class="panel-heading clearfix" ng-init="odController.getPanelStartState('panelOperationIsCollapsed')" ng-click="odController.changePanelState('panelOperationIsCollapsed')">
                     <h4 class="panel-title pull-left">
-                            Trip {{ operationData.directionContext.tripin?'In': 'Out' }} Sub Operation Forecast</h4>
+                        Trip {{ operationData.directionContext.tripin?'In': 'Out' }} Sub Operation Forecast</h4>
                     <div class="btn-group pull-right">
-                        <i type="button" class="pull-right glyphicon pointer"
-                            ng-class="{'glyphicon-chevron-down': statusPanel['panelOperationIsCollapsed'], 'glyphicon-chevron-up': !statusPanel['panelOperationIsCollapsed']}">
+                        <i type="button" class="pull-right glyphicon pointer" ng-class="{'glyphicon-chevron-down': statusPanel['panelOperationIsCollapsed'], 'glyphicon-chevron-up': !statusPanel['panelOperationIsCollapsed']}">
                         </i>
                     </div>
                 </div>
@@ -355,9 +370,7 @@
                         Poor
                     </button>
 
-                    <forecast-waterfall
-                        horizontal="false"
-                        data-data-chart="forecast">
+                    <forecast-waterfall horizontal="false" data-data-chart="forecast">
                     </forecast-waterfall>
 
                 </div>
@@ -365,54 +378,17 @@
             </div>
 
             <div class="panel panel-default">
-            
-                <div class="panel-heading clearfix" ng-init="odController.getPanelStartState('panelNextActivityIsCollapsed')" ng-click="odController.changePanelState('panelNextActivityIsCollapsed')">
-                    <h4 class="panel-title pull-left">Next Activity</h4>
-                    <div class="btn-group pull-right">
-                        <i type="button" class="pull-right glyphicon pointer"
-                            ng-class="{'glyphicon-chevron-down': statusPanel['panelNextActivityIsCollapsed'], 'glyphicon-chevron-up': !statusPanel['panelNextActivityIsCollapsed']}">
-                        </i>
-                    </div>
-                </div>
-            
-                <div class="panel-body" uib-collapse="statusPanel['panelNextActivityIsCollapsed']">
-            
-                    <div ng-if="operationData.operationQueueContext.nextOperation">
-                        <table class="table table-sm table-hover table-condensed">
-                            <tr>
-                                <th>Section</th>
-                                <td>{{ operationData.operationQueueContext.nextOperation.section.name }}</td>
-                            </tr>
-                            <tr>
-                                <th>Name</th>
-                                <td>{{ operationData.operationQueueContext.nextOperation.name }}</td>
-                            </tr>
-                            <tr>
-                                <th>Type</th>
-                                <td>{{ operationData.operationQueueContext.nextOperation.type | uppercase }}</td>
-                            </tr>
-                        </table>
-                    </div>
 
-                    <div ng-if="!operationData.operationQueueContext.nextOperation">No Operation</div>
-            
-                </div>
-            
-            </div>
-
-            <div class="panel panel-default">
-            
                 <div class="panel-heading clearfix" ng-init="odController.getPanelStartState('panelCurrentAlarmIsCollapsed')" ng-click="odController.changePanelState('panelCurrentAlarmIsCollapsed')">
                     <h4 class="panel-title pull-left">Current Alarm</h4>
                     <div class="btn-group pull-right">
-                        <i type="button" class="pull-right glyphicon pointer"
-                            ng-class="{'glyphicon-chevron-down': statusPanel['panelCurrentAlarmIsCollapsed'], 'glyphicon-chevron-up': !statusPanel['panelCurrentAlarmIsCollapsed']}">
+                        <i type="button" class="pull-right glyphicon pointer" ng-class="{'glyphicon-chevron-down': statusPanel['panelCurrentAlarmIsCollapsed'], 'glyphicon-chevron-up': !statusPanel['panelCurrentAlarmIsCollapsed']}">
                         </i>
                     </div>
                 </div>
-            
+
                 <div class="panel-body" uib-collapse="statusPanel['panelCurrentAlarmIsCollapsed']">
-            
+
                     <div ng-if="operationData.alarmContext.currentAlarm">
                         <table class="table table-sm table-hover table-condensed">
                             <thead>
@@ -439,37 +415,33 @@
                             </tbody>
                         </table>
                     </div>
-                    
+
                     <div ng-if="!operationData.alarmContext.currentAlarm">
                         No Current Alarm
                     </div>
-            
+
                 </div>
-            
+
             </div>
 
-            <upcoming-alarms-panel
-                tripin-alarms="operationData.alarmContext.tripin"
-                tripout-alarms="operationData.alarmContext.tripout"
-                current-direction="operationData.directionContext"
-                current-bit-depth="operationData.bitDepthContext.bitDepth">
+            <upcoming-alarms-panel tripin-alarms="operationData.alarmContext.tripin" tripout-alarms="operationData.alarmContext.tripout"
+                current-direction="operationData.directionContext" current-bit-depth="operationData.bitDepthContext.bitDepth">
             </upcoming-alarms-panel>
 
             <div class="panel panel-default">
-            
+
                 <div class="panel-heading clearfix" ng-init="odController.getPanelStartState('panelFailuresIsCollapsed')" ng-click="odController.changePanelState('panelFailuresIsCollapsed')">
                     <h4 class="panel-title pull-left">Failures</h4>
                     <div class="btn-group pull-right">
-                        <i type="button" class="pull-right glyphicon pointer"
-                            ng-class="{'glyphicon-chevron-down': statusPanel['panelFailuresIsCollapsed'], 'glyphicon-chevron-up': !statusPanel['panelFailuresIsCollapsed']}">
+                        <i type="button" class="pull-right glyphicon pointer" ng-class="{'glyphicon-chevron-down': statusPanel['panelFailuresIsCollapsed'], 'glyphicon-chevron-up': !statusPanel['panelFailuresIsCollapsed']}">
                         </i>
                     </div>
                 </div>
-            
+
                 <div class="panel-body" uib-collapse="statusPanel['panelFailuresIsCollapsed']">
-            
+
                     <div ng-if="operationData.failureContext.failureList.length != 0">
-                    
+
                         <table class="table table-sm table-hover table-condensed">
                             <thead>
                                 <tr>
@@ -493,15 +465,15 @@
                             </tbody>
                         </table>
                     </div>
-            
+
                 </div>
-            
+
             </div>
 
         </div>
 
     </div>
-    
+
     <!-- <pre ng-repeat="(key, value) in operationData.forecastContext">{{ key }}</pre> -->
     <!-- <pre>{{ operationData.forecastContext.actualLine | json }}</pre> -->
     <!-- <pre >{{ operationData.suboperationContext.currentSuboperation.tripin | json }}</pre> -->
