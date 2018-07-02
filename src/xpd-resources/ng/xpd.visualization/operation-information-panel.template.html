@@ -1,0 +1,107 @@
+<div class="panel panel-default">
+
+	<div class="panel-heading clearfix">
+		<h4 class="panel-title pull-left">Operation Information</h4>
+		<div class="btn-group pull-right">
+			<i type="button" 
+				class="pull-right glyphicon pointer" 
+				ng-class="{'glyphicon-chevron-down': collapse, 'glyphicon-chevron-up': !collapse}">
+			</i>
+		</div>
+	</div>
+
+	<div class="panel-body" uib-collapse="collapse">
+
+		<table class="table table-sm table-hover table-condensed">
+			<tr>
+				<td colspan="3">{{ operation.name }}</td>
+			</tr>
+			<tr>
+				<td>{{ operation.section.name }}</td>
+				<td colspan="2">{{ state | xpdStateLabelFilter }}</td>
+			</tr>
+			<tr>
+				<th>Forecast: </th>
+				<td colspan="3">{{ targetParamExpectedEndTime | date:'medium' }}</td>
+			</tr>
+			<tr>
+
+				<td colspan="3" class="borderless-top" ng-if="poorExpectedDuration > targetExpectedDuration">
+
+					<div class="progress">
+
+						<div 
+							class="progress-bar" 
+							ng-style="{width : ( ( targetExpectedDuration * 100 ) / poorExpectedDuration ) + '%' }">
+							{{ targetExpectedDuration / 1000 | secondsToHourMinutes }}
+						</div>
+
+						<div 
+							class="progress-bar progress-bar-danger" 
+							ng-style="{width : 100 - ( ( targetExpectedDuration * 100 ) / poorExpectedDuration ) + '%' }">
+							{{ ( poorExpectedDuration - targetExpectedDuration) / 1000 | secondsToHourMinutes }}
+						</div>
+
+					</div>
+
+				</td>
+
+				<td 
+					colspan="3" 
+					class="borderless-top" 
+					ng-if="poorExpectedDuration <= targetExpectedDuration">
+
+					<div class="progress">
+
+						<div 
+							class="progress-bar progress-bar-danger" 
+							ng-style="{width : ( ( poorExpectedDuration * 100 ) / targetExpectedDuration ) + '%' }">
+							{{ poorExpectedDuration / 1000 | secondsToHourMinutes }}
+						</div>
+
+						<div 
+							class="progress-bar" 
+							ng-style="{width : 100 - ( ( poorExpectedDuration * 100 ) / targetExpectedDuration ) + '%' }">
+							{{ ( targetExpectedDuration - poorExpectedDuration) / 1000 | secondsToHourMinutes }}
+						</div>
+
+					</div>
+
+				</td>
+
+			</tr>
+
+			<tr>
+				<th>Cumulated Consistency</th>
+				<td colspan="3"></td>
+			</tr>
+			<tr>
+				<td colspan="3" class="borderless-top">
+
+					<div class="progress">
+						<div 
+							class="progress-bar progress-bar-success" 
+							role="progressbar" 
+							aria-valuemin="0" 
+							aria-valuemax="100" ng-style="{width: accScore + '%'}">
+							{{ accScore | number: 0}}
+						</div>
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<th>Bit Depth</th>
+				<td>{{ reading.bitDepth | number : '2' }} m</td>
+				<td>Joint
+					<strong>{{ jointNumber }}</strong> / {{ numberJoints | json}}
+				</td>
+			</tr>
+			<tr>
+				<th>Hole Depth</th>
+				<td colspan="3">{{ well.holeDepth | number : '.2' }} m</td>
+			</tr>
+		</table>
+
+	</div>
+
+</div>

@@ -24,7 +24,7 @@
 		operationDataFactory.openConnection([]).then(function (response) {
 			operationDataFactory = response;
 			$scope.operationData = operationDataFactory.operationData;
-			__init();
+			main();
 		});
 
 		vm.actionButtonBuildForecast = actionButtonBuildForecast;
@@ -32,54 +32,98 @@
 		vm.getPanelStartState = getPanelStartState;
 		vm.changePanelState = changePanelState;
 
-		operationDataFactory.addEventListener('operationDashboardController', 'setOnOptimumLineListener', __init);
-		operationDataFactory.addEventListener('operationDashboardController', 'setOnActualLineListener', __init);
-		operationDataFactory.addEventListener('operationDashboardController', 'setOnForecastChangeListener', __init);
+		operationDataFactory.addEventListener('operationDashboardController', 'setOnOptimumLineListener', main);
+		operationDataFactory.addEventListener('operationDashboardController', 'setOnActualLineListener', main);
+		operationDataFactory.addEventListener('operationDashboardController', 'setOnForecastChangeListener', main);
 
-		operationDataFactory.addEventListener('operationDashboardController', 'setOnJointChangeListener', estimateJointExpectedDurationAndUpdateStateForecast);
-		operationDataFactory.addEventListener('operationDashboardController', 'setOnCurrentJointListener', estimateJointExpectedDurationAndUpdateStateForecast);
-		operationDataFactory.addEventListener('operationDashboardController', 'setOnNoCurrentJointListener', estimateJointExpectedDurationAndUpdateStateForecast);	
+		operationDataFactory.addEventListener('operationDashboardController', 'setOnJointChangeListener', generateEstimatives);
+		operationDataFactory.addEventListener('operationDashboardController', 'setOnCurrentJointListener', generateEstimatives);
+		operationDataFactory.addEventListener('operationDashboardController', 'setOnNoCurrentJointListener', generateEstimatives);
 
-		function estimateJointExpectedDurationAndUpdateStateForecast(){
+		function generateEstimatives() {
 
-			try {
+			if ($scope.operationData.stateContext && $scope.operationData.forecastContext) {
 
-				var currentState = $scope.operationData.stateContext.currentState;
-	
-				var vTargetStateJointInterval = $scope.operationData.forecastContext.estimatives.vTargetLine.filter(function(line){
-					return line[currentState] != null;
-				})[0][currentState];
+				var expectations = {};
 
-				var vPoorStateJointInterval = $scope.operationData.forecastContext.estimatives.vPoorLine.filter(function(line){
-					return line[currentState] != null;
-				})[0][currentState];
+				try {
 
-				var stateExpectedDuration = Math.ceil( 1000 * vTargetStateJointInterval.BOTH.finalTime );
-				var vPoorStateExpectedDuration = Math.ceil( 1000 * vPoorStateJointInterval.BOTH.finalTime );
+					var currentState = $scope.operationData.stateContext.currentState;
+					var estimatives = $scope.operationData.forecastContext.estimatives;
+					var estimatedAt = new Date(estimatives.estimatedAt).getTime();
 
-				$scope.expectations = {
-					stateExpectedEndTime: new Date().getTime() + stateExpectedDuration,
-					stateExpectedDuration: stateExpectedDuration,
-					jointExpectedDuration: Math.ceil( stateExpectedDuration / vTargetStateJointInterval.BOTH.points.length ),
-					
-					vPoorStateExpectedEndTime: new Date().getTime() + vPoorStateExpectedDuration,
-					vPoorStateExpectedDuration: vPoorStateExpectedDuration,
-					vPoorJointExpectedDuration: Math.ceil( vPoorStateExpectedDuration / vTargetStateJointInterval.BOTH.points.length )
-				};
-				
-			} catch (error) {
-				// give up
+					var vTargetStateJointInterval = estimatives.vTargetLine.filter(function (line) {
+						return line[currentState] != null;
+					})[0][currentState];
+
+					var vPoorStateJointInterval = estimatives.vPoorLine.filter(function (line) {
+						return line[currentState] != null;
+					})[0][currentState];
+
+					var stateExpectedDuration = (1000 * vTargetStateJointInterval.BOTH.finalTime);
+					var vPoorStateExpectedDuration = (1000 * vPoorStateJointInterval.BOTH.finalTime);
+
+					expectations = {
+						stateExpectedEndTime: estimatedAt + stateExpectedDuration,
+						stateExpectedDuration: stateExpectedDuration,
+						jointExpectedDuration: (stateExpectedDuration / vTargetStateJointInterval.BOTH.points.length),
+
+						vPoorStateExpectedEndTime: estimatedAt + vPoorStateExpectedDuration,
+						vPoorStateExpectedDuration: vPoorStateExpectedDuration,
+						vPoorJointExpectedDuration: (vPoorStateExpectedDuration / vTargetStateJointInterval.BOTH.points.length)
+					};
+
+					var nextActivities = [];
+
+					for (var index = 0;
+						index < estimatives.vTargetLine.length;
+						index++) {
+
+						try {
+
+							var vTargetLine = estimatives.vTargetLine[index];
+
+							var state = Object.keys(vTargetLine)[0];
+							var startTime = estimatedAt;
+							var duration = (vTargetLine[state].BOTH.finalTime * 1000);
+
+							if (nextActivities.length > 0) {
+								startTime = nextActivities[nextActivities.length - 1].finalTime;
+							}
+
+							var activity = {
+								name: state,
+								duration: duration,
+								startTime: startTime,
+								finalTime: (startTime + duration),
+								isTripin: vTargetLine[state].BOTH.isTripin,
+							};
+
+							nextActivities.push(activity);
+
+							console.log(duration, state, activity);
+
+						} catch (error) {
+							console.error(error);
+						}
+
+					}
+
+					expectations.nextActivities = nextActivities;
+
+				} catch (error) {
+					console.error(error);
+				}
+
+				$scope.expectations = expectations;
 			}
-
-			// <pre>{{ operationData.chronometerContext | json }}</pre>
-			// <pre>{{  | json }}</pre>
 
 		}
 
-		function __init() {
+		function main() {
 			try {
 
-				estimateJointExpectedDurationAndUpdateStateForecast();
+				generateEstimatives();
 
 				if (!selectedBaseLine) {
 					selectedBaseLine = 'vOptimumLine';
@@ -223,7 +267,9 @@
 		}
 
 		function calcAccScore() {
-			$scope.accScore = $scope.operationData.shiftContext.accScore.totalScore / $scope.operationData.shiftContext.accScore.eventScoreQty;
+			$scope.scoreData = {
+				accScore: $scope.operationData.shiftContext.accScore.totalScore / $scope.operationData.shiftContext.accScore.eventScoreQty
+			};
 		}
 
 		function getLastTwoEvents(eventContext) {
@@ -234,10 +280,10 @@
 			var conn = false;
 			var trip = false;
 
-			for (var index = lastEvents.length-1; index >= 0; index--) {
+			for (var index = lastEvents.length - 1; index >= 0; index--) {
 
-				var event = lastEvents[index];				
-				
+				var event = lastEvents[index];
+
 				if (event.eventType == 'CONN') {
 					lastTwoEvents['CONN'] = prepareLastEvent(event);
 					conn = true;
@@ -263,7 +309,7 @@
 			var eventDuration = event.duration / 1000;
 			var displacement = 1;
 
-			if(event.eventType == 'TRIP') {
+			if (event.eventType == 'TRIP') {
 				displacement = $scope.operationData.operationContext.currentOperation.slipsThreshold;
 			}
 
@@ -329,7 +375,7 @@
 
 			if (duration < voptimumTime) {
 				return '';
-			} else if (duration <= vstandardTime ) {
+			} else if (duration <= vstandardTime) {
 				return 'progress-bar-success';
 			} else if (duration <= vpoorTime) {
 				return 'progress-bar-warning';
