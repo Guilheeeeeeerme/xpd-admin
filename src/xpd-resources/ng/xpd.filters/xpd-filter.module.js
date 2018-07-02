@@ -46,7 +46,7 @@
 			case 'cased':
 				return 'Cased Well';
 			case 'drilling':
-				return 'Drilling Run';
+				return 'Drilling';
 			case 'openSea':
 				return 'Open Sea';
 			case 'openHole':

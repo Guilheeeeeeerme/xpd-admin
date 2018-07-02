@@ -60,36 +60,56 @@
 						return line[currentState] != null;
 					})[0][currentState];
 
-					var stateExpectedDuration = Math.ceil(1000 * vTargetStateJointInterval.BOTH.finalTime);
-					var vPoorStateExpectedDuration = Math.ceil(1000 * vPoorStateJointInterval.BOTH.finalTime);
+					var stateExpectedDuration = (1000 * vTargetStateJointInterval.BOTH.finalTime);
+					var vPoorStateExpectedDuration = (1000 * vPoorStateJointInterval.BOTH.finalTime);
 
 					expectations = {
 						stateExpectedEndTime: estimatedAt + stateExpectedDuration,
 						stateExpectedDuration: stateExpectedDuration,
-						jointExpectedDuration: Math.ceil(stateExpectedDuration / vTargetStateJointInterval.BOTH.points.length),
+						jointExpectedDuration: (stateExpectedDuration / vTargetStateJointInterval.BOTH.points.length),
 
 						vPoorStateExpectedEndTime: estimatedAt + vPoorStateExpectedDuration,
 						vPoorStateExpectedDuration: vPoorStateExpectedDuration,
-						vPoorJointExpectedDuration: Math.ceil(vPoorStateExpectedDuration / vTargetStateJointInterval.BOTH.points.length)
+						vPoorJointExpectedDuration: (vPoorStateExpectedDuration / vTargetStateJointInterval.BOTH.points.length)
 					};
 
-					var finalTime = estimatedAt;
+					var nextActivities = [];
 
-					expectations.nextActivities = estimatives.vTargetLine.map(function (vTargetLine) {
-						var state = Object.keys(vTargetLine)[0];
+					for (var index = 0;
+						index < estimatives.vTargetLine.length;
+						index++) {
 
-						var obj = {
-							name: state,
-							startTime: finalTime,
-							finalTime: finalTime + (vTargetLine[state].BOTH.finalTime * 1000),
-							isTripin: vTargetLine[state].BOTH.isTripin,
-						};
+						try {
 
-						finalTime = obj.finalTime;
+							var vTargetLine = estimatives.vTargetLine[index];
 
-						return obj;
+							var state = Object.keys(vTargetLine)[0];
+							var startTime = estimatedAt;
+							var duration = (vTargetLine[state].BOTH.finalTime * 1000);
 
-					});
+							if (nextActivities.length > 0) {
+								startTime = nextActivities[nextActivities.length - 1].finalTime;
+							}
+
+							var activity = {
+								name: state,
+								duration: duration,
+								startTime: startTime,
+								finalTime: (startTime + duration),
+								isTripin: vTargetLine[state].BOTH.isTripin,
+							};
+
+							nextActivities.push(activity);
+
+							console.log(duration, state, activity);
+
+						} catch (error) {
+							console.error(error);
+						}
+
+					}
+
+					expectations.nextActivities = nextActivities;
 
 				} catch (error) {
 					console.error(error);
@@ -247,7 +267,9 @@
 		}
 
 		function calcAccScore() {
-			$scope.accScore = $scope.operationData.shiftContext.accScore.totalScore / $scope.operationData.shiftContext.accScore.eventScoreQty;
+			$scope.scoreData = {
+				accScore: $scope.operationData.shiftContext.accScore.totalScore / $scope.operationData.shiftContext.accScore.eventScoreQty
+			};
 		}
 
 		function getLastTwoEvents(eventContext) {
