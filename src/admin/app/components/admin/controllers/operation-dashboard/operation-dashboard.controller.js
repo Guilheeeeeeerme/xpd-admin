@@ -72,7 +72,15 @@
 					})[0][currentState];
 
 					var stateExpectedDuration = (1000 * vTargetStateJointInterval.BOTH.finalTime);
+					var vOptimumStateExpectedDuration = (1000 * vOptimumStateJointInterval.BOTH.finalTime);
+					var vStandardStateExpectedDuration = (1000 * vStandardStateJointInterval.BOTH.finalTime);
 					var vPoorStateExpectedDuration = (1000 * vPoorStateJointInterval.BOTH.finalTime);
+					var afterVPoorStateExpectedDuration = vPoorStateExpectedDuration + (vPoorStateExpectedDuration / 10);
+
+					var vOptimumStatePercentage = calcPercentage(vOptimumStateExpectedDuration, afterVPoorStateExpectedDuration);
+					var vStandardStatePercentage = calcPercentage(vStandardStateExpectedDuration, afterVPoorStateExpectedDuration) - vOptimumStatePercentage;
+					var vPoorStatePercentage = calcPercentage(vPoorStateExpectedDuration, afterVPoorStateExpectedDuration) - (vOptimumStatePercentage + vStandardStatePercentage);
+					var afterVpoorStatePercentage = 100 - (vOptimumStatePercentage + vStandardStatePercentage + vPoorStatePercentage);
 
 					// EXPECTED TRIP/CONN
 					$scope.eventProperty['CONN'] = getEventProperty('CONN', vTargetStateJointInterval, vOptimumStateJointInterval, vStandardStateJointInterval, vPoorStateJointInterval);
@@ -81,13 +89,25 @@
 
 					expectations = {
 						stateExpectedEndTime: estimatedAt + stateExpectedDuration,
-						stateExpectedDuration: stateExpectedDuration,
-						jointExpectedDuration: (stateExpectedDuration / vTargetStateJointInterval.BOTH.points.length),
-
 						vPoorStateExpectedEndTime: estimatedAt + vPoorStateExpectedDuration,
+
+						stateExpectedDuration: stateExpectedDuration,
+						vOptimumStateExpectedDuration: vOptimumStateExpectedDuration,
+						vStandardStateExpectedDuration: vStandardStateExpectedDuration,
 						vPoorStateExpectedDuration: vPoorStateExpectedDuration,
-						vPoorJointExpectedDuration: (vPoorStateExpectedDuration / vTargetStateJointInterval.BOTH.points.length)
+						afterVPoorStateExpectedDuration: afterVPoorStateExpectedDuration,
+
+						jointExpectedDuration: (stateExpectedDuration / vTargetStateJointInterval.BOTH.points.length),
+						vPoorJointExpectedDuration: (vPoorStateExpectedDuration / vTargetStateJointInterval.BOTH.points.length),
+
 					};
+
+					expectations.stateProgressPercentage = {
+						vOptimumStatePercentage: vOptimumStatePercentage,
+						vStandardStatePercentage: vStandardStatePercentage,
+						vPoorStatePercentage: vPoorStatePercentage,
+						afterVpoorStatePercentage: afterVpoorStatePercentage
+					}
 
 					var nextActivities = [];
 
@@ -354,6 +374,7 @@
 		}
 
 		function changePanelState(keyName) {
+			console.log(keyName)
 			var newState = !getPanelStartState(keyName);
 			$scope.statusPanel[keyName] = newState;
 			localStorage.setItem(keyName, newState);

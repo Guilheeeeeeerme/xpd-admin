@@ -14,16 +14,16 @@
 
             <!-- Well Information -->
             <well-information-panel
-                ng-init="odController.getPanelStartState('panelWellIsCollapsed')" 
-                ng-click="odController.changePanelState('panelWellIsCollapsed')"
+                on-init="odController.getPanelStartState" 
+                on-click-collapse="odController.changePanelState"
                 collapse = "statusPanel['panelWellIsCollapsed']"
                 well="operationData.wellContext.currentWell">
             </well-information-panel>
 
             <!-- Operation Information -->
             <operation-information-panel
-                ng-init="odController.getPanelStartState('panelOperationInfoIsCollapsed')" 
-                ng-click="odController.changePanelState('panelOperationInfoIsCollapsed')" 
+                on-init="odController.getPanelStartState"
+                on-click-collapse="odController.changePanelState"
                 collapse = "statusPanel['panelOperationInfoIsCollapsed']"
                 number-joints="operationData.jointContext.numberJoints"
                 joint-number="operationData.jointContext.currentJoint.jointNumber" 
@@ -31,9 +31,14 @@
                 state="operationData.stateContext.currentState" 
                 reading="operationData.readingContext.currentReading"
                 acc-score="scoreData.accScore"
+                state-duration="operationData.chronometerContext.stateTick"
                 target-param-expected-end-time="expectations.stateExpectedEndTime" 
                 target-expected-duration="expectations.stateExpectedDuration"
+                optimum-expected-duration="expectations.vOptimumStateExpectedDuration"
+                standard-expected-duration="expectations.vStandardStateExpectedDuration"
                 poor-expected-duration="expectations.vPoorStateExpectedDuration"
+                after-poor-expected-duration="expectations.afterVPoorStateExpectedDuration"
+                state-progress-percentage="expectations.stateProgressPercentage"
                 well="operationData.wellContext.currentWell">
             </operation-information-panel>
 
@@ -41,8 +46,9 @@
 
             <!-- Consistency Information -->
             <consistency-information-panel
-                ng-init="odController.getPanelStartState('panelConsistencyInfoIsCollapsed')" 
-                collapse = "statusPanel['panelConsistencyInfoIsCollapsed']"
+                on-init="odController.getPanelStartState"
+                on-click-collapse="odController.changePanelState"
+                collapse= "statusPanel['panelConsistencyInfoIsCollapsed']"
                 state="operationData.stateContext.currentState" 
                 event="operationData.eventContext.currentEvent"
                 is-tripin="operationData.directionContext.tripin" 
@@ -54,15 +60,15 @@
 
             <!-- Next Activities Information -->
             <next-activities-information-panel
-                ng-init="odController.getPanelStartState('panelNextActivityIsCollapsed')" 
-                ng-click="odController.changePanelState('panelNextActivityIsCollapsed')" 
+                on-init="odController.getPanelStartState"
+                on-click-collapse="odController.changePanelState"
                 collapse = "statusPanel['panelNextActivityIsCollapsed']"
                 activities="expectations.nextActivities">
             </next-activities-information-panel>
 
             <operation-progress-panel
-                ng-init="odController.getPanelStartState('panelOperationProgressIsCollapsed')"
-                ng-click="odController.changePanelState('panelOperationProgressIsCollapsed')"
+                on-init="odController.getPanelStartState"
+                on-click-collapse="odController.changePanelState"
                 collapse = "statusPanel['panelOperationProgressIsCollapsed']"
                 current-score="operationData.scoreContext.currentScore" 
                 progress-data="operationData.operationProgressContext.operationProgressData[operationData.stateContext.currentState]">
@@ -151,6 +157,7 @@
                 current-direction="operationData.directionContext" current-bit-depth="operationData.bitDepthContext.bitDepth">
             </upcoming-alarms-panel>
 
+            <!-- Failures -->
             <div class="panel panel-default">
 
                 <div class="panel-heading clearfix" ng-init="odController.getPanelStartState('panelFailuresIsCollapsed')" ng-click="odController.changePanelState('panelFailuresIsCollapsed')">

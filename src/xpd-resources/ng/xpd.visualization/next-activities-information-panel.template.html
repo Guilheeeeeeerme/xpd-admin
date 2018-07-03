@@ -1,12 +1,9 @@
 <div class="panel panel-default">
 
-	<div class="panel-heading clearfix">
+	<div class="panel-heading clearfix" ng-init="onInit('panelNextActivityIsCollapsed')" ng-click="onClickCollapse('panelNextActivityIsCollapsed')">
 		<h4 class="panel-title pull-left">Next Activities</h4>
 		<div class="btn-group pull-right">
-			<i 
-				type="button" 
-				class="pull-right glyphicon pointer" 
-				ng-class="{'glyphicon-chevron-down': collapse, 'glyphicon-chevron-up': !collapse}">
+			<i type="button" class="pull-right glyphicon pointer" ng-class="{'glyphicon-chevron-down': collapse, 'glyphicon-chevron-up': !collapse}">
 			</i>
 		</div>
 	</div>
@@ -15,40 +12,52 @@
 
 		<table class="table table-sm table-hover table-condensed table-bordered">
 
-			<tr ng-repeat-start="activity in activities track by $index" ng-class="{ 'success': ($index == 0) }">
+			<thead>
+				<tr>
+					<th>Name</th>
+					<th>Start Time</th>
+					<th>End Time</th>
+					<th>Duration</th>
+				</tr>
+			</thead>
 
-				<th rowspan="2">
-					{{ activity.name | xpdStateLabelFilter }}
-				</th>
+			<tbody>
 
-				<th ng-if="$index > 0">
-					{{ activity.startTime | date: 'mediumTime' }}
-				</th>
+				<tr ng-repeat-start="activity in activities track by $index" ng-class="{ 'success': ($index == 0) }">
 
-				<th ng-if="$index == 0" rowspan="2">
-					Going on
-				</th>
+					<th rowspan="2">
+						{{ activity.name | xpdStateLabelFilter }}
+					</th>
 
-				<th>
-					{{ activity.finalTime | date: 'mediumTime' }}
-				</th>
+					<th ng-if="$index > 0">
+						{{ activity.startTime | date: 'mediumTime' }}
+					</th>
 
-				<th rowspan="2">
-					{{ ( activity.duration / 1000 ) | secondsToHourMinutes }}
-				</th>
-			</tr>
+					<th ng-if="$index == 0" rowspan="2">
+						Going on
+					</th>
 
-			<tr ng-repeat-end ng-class="{ 'success': ($index == 0) }">
+					<th>
+						{{ activity.finalTime | date: 'mediumTime' }}
+					</th>
 
-				<td ng-if="$index > 0">
-					{{ activity.startTime | date: 'mediumDate' }}
-				</td>
+					<th rowspan="2">
+						{{ ( activity.duration / 1000 ) | secondsToHourMinutes }}
+					</th>
+				</tr>
 
-				<td>
-					{{ activity.finalTime | date: 'mediumDate' }}
-				</td>
+				<tr ng-repeat-end ng-class="{ 'success': ($index == 0) }">
 
-			</tr>
+					<td ng-if="$index > 0">
+						{{ activity.startTime | date: 'mediumDate' }}
+					</td>
+
+					<td>
+						{{ activity.finalTime | date: 'mediumDate' }}
+					</td>
+
+				</tr>
+			</tbody>
 
 		</table>
 

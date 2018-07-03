@@ -1,6 +1,6 @@
 <div class="panel panel-default">
 
-	<div class="panel-heading clearfix">
+	<div class="panel-heading clearfix" ng-init="onInit('panelOperationInfoIsCollapsed')" ng-click="onClickCollapse('panelOperationInfoIsCollapsed')">
 		<h4 class="panel-title pull-left">Operation Information</h4>
 		<div class="btn-group pull-right">
 			<i type="button" 
@@ -24,7 +24,7 @@
 				<th>Forecast: </th>
 				<td colspan="3">{{ targetParamExpectedEndTime | date:'medium' }}</td>
 			</tr>
-			<tr>
+			<!-- <tr>
 
 				<td colspan="3" class="borderless-top" ng-if="poorExpectedDuration > targetExpectedDuration">
 
@@ -69,6 +69,45 @@
 
 				</td>
 
+			</tr> -->
+
+			<tr>
+				<td colspan="3" class="borderless-top">
+				
+					<div class="progress">
+						<div class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" ng-class=""
+						style="width: 100%">
+							<span class="show">{{ targetExpectedDuration / 1000 | secondsToHourMinutes}}</span>
+						</div>
+					</div>
+
+					<div class="progress">
+						<div class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" ng-class="getColorPerformance()"
+						ng-style="{'width': getStatePercentageDuration() +'%'}">
+							<span class="show">{{ stateDuration / 1000 | secondsToHourMinutes}}</span>
+						</div>
+					</div>
+				
+				</td>
+			</tr>
+			<tr>
+				<td colspan="3" class="borderless-top">
+					<div class="progress legend-progress">
+						<div class="progress-bar" ng-style="{'width' : stateProgressPercentage.vOptimumStatePercentage + '%'}">
+						</div>
+						<div class="progress-bar progress-bar-success" ng-style="{'width' : stateProgressPercentage.vStandardStatePercentage + '%'}">
+						</div>
+						<div class="progress-bar progress-bar-warning" ng-style="{'width' : stateProgressPercentage.vPoorStatePercentage + '%'}">
+						</div>
+						<div class="progress-bar progress-bar-danger" ng-style="{'width' : stateProgressPercentage.afterVpoorStatePercentage + '%'}">
+						</div>
+					</div>
+					<div class="pull-right">
+						<span class="label label-primary">{{ optimumExpectedDuration / 1000 | secondsToHourMinutes }}</span>
+						<span class="label label-success center">{{ standardExpectedDuration / 1000 | secondsToHourMinutes }}</span>
+						<span class="label label-warning right">{{ poorExpectedDuration / 1000 | secondsToHourMinutes }}</span>
+					</div>
+				</td>
 			</tr>
 
 			<tr>
