@@ -374,7 +374,6 @@
 		}
 
 		function changePanelState(keyName) {
-			console.log(keyName)
 			var newState = !getPanelStartState(keyName);
 			$scope.statusPanel[keyName] = newState;
 			localStorage.setItem(keyName, newState);
