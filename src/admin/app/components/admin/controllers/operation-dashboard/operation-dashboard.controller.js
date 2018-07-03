@@ -46,7 +46,6 @@
 		function generateEstimatives() {
 
 			if ($scope.operationData.stateContext && $scope.operationData.forecastContext) {
-				console.log('forecastContext', $scope.operationData.forecastContext);
 
 				var expectations = {};
 
