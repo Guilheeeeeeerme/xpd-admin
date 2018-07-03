@@ -60,58 +60,62 @@
 					<td class="borderless-top col-md-6" ng-repeat="eventType in ['CONN', 'TRIP']">
 						<div class="progress">
 							<div class="progress-bar" role="progressbar" aria-valuemin="0" style="width : 100%">
-								<span class="show">{{ lastTwoEvents[eventType].vtargetTime | secondsToHourMinutes}}</span>
+								<span class="show">{{ eventProperty[eventType].vtargetTime | secondsToHourMinutes}}</span>
 							</div>
 						</div>
 					</td>
 				</tr>
 				<tr>
 					<td class="col-md-6 borderless-top" ng-repeat="eventType in ['CONN', 'TRIP']">
-						<div class="progress">
+						<div class="progress" ng-if="duration[eventType]">
 							<div 
 								class="progress-bar" 
 								role="progressbar" 
 								aria-valuemin="0" 
-								aria-valuemax="lastTwoEvents[eventType].afterVpoorTime" 
-								ng-class="lastTwoEvents[eventType].colorPerformance"
-							 	ng-style="{'width' : lastTwoEvents[eventType].percentageDuration + '%'}">
-								<span class="show">{{lastTwoEvents[eventType].duration | secondsToHourMinutes}}</span>
+								aria-valuemax="eventProperty[eventType].afterVpoorTime" 
+								ng-class="colorPerformance[eventType]"
+							 	ng-style="{'width' : percentageDuration[eventType] + '%'}">
+								<span class="show">{{duration[eventType] | secondsToHourMinutes}}</span>
 							</div>
+						</div>
+						<div ng-if="!duration[eventType]">
+							<span ng-if="eventType == 'CONN'">Waiting for connection!</span>
+							<span ng-if="eventType == 'TRIP'">Waiting for trip!</span>
 						</div>
 					</td>
 				</tr>
 				<tr>
 					<td class="col-md-6 borderless-top" ng-repeat="eventType in ['CONN', 'TRIP']">
-						<div class="progress">
+						<div class="progress legend-progress" ng-if="eventProperty[eventType]">
 							<div 
 								class="progress-bar" 
-								ng-style="{'width' : lastTwoEvents[eventType].voptimumPercentage + '%'}">
+								ng-style="{'width' : eventProperty[eventType].voptimumPercentage + '%'}">
 							</div>
 							<div 
 								class="progress-bar progress-bar-success" 
-								ng-style="{'width' : lastTwoEvents[eventType].vstandardPercentage + '%'}">
+								ng-style="{'width' : eventProperty[eventType].vstandardPercentage + '%'}">
 							</div>
 							<div 
 								class="progress-bar progress-bar-warning" 
-								ng-style="{'width' : lastTwoEvents[eventType].vpoorPercentage + '%'}">
+								ng-style="{'width' : eventProperty[eventType].vpoorPercentage + '%'}">
 							</div>
 							<div 
 								class="progress-bar progress-bar-danger" 
-								ng-style="{'width' : lastTwoEvents[eventType].afterVpoorPercentage + '%'}">
+								ng-style="{'width' : eventProperty[eventType].afterVpoorPercentage + '%'}">
 							</div>
 						</div>
-						<div>
+						<div class="pull-right" ng-if="eventProperty[eventType]">
 							<span 
 								class="label label-primary">
-									{{lastTwoEvents[eventType].voptimumTime | secondsToHourMinutes}}
+									{{eventProperty[eventType].voptimumTime | secondsToHourMinutes}}
 							</span>
 							<span 
 								class="label label-success center">
-									{{lastTwoEvents[eventType].vstandardTime | secondsToHourMinutes}}
+									{{eventProperty[eventType].vstandardTime | secondsToHourMinutes}}
 							</span>
 							<span 
 								class="label label-warning right">
-									{{lastTwoEvents[eventType].vpoorTime | secondsToHourMinutes}}
+									{{eventProperty[eventType].vpoorTime | secondsToHourMinutes}}
 							</span>
 						</div>
 					</td>
@@ -127,15 +131,29 @@
 								role="progressbar" 
 								aria-valuemin="0" 
 								aria-valuemax="100" 
-								ng-class="jointInfo.colorPerformance"
-							 	ng-style="{'width' : jointInfo.percentageDuration + '%'}">
-								<span class="show">{{ jointInfo.duration | secondsToHourMinutes}}</span>
+								ng-class="getJointPerformanceColor()"
+							 	ng-style="{'width' : getJointPercentageDuration() + '%'}">
+								<span class="show">{{ getJointDuration() | secondsToHourMinutes}}</span>
+							</div>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td colspan="2" class="borderless-top">
+						<div class="progress legend-progress">
+							<div class="progress-bar" ng-style="{'width' : eventProperty['BOTH'].voptimumPercentage + '%'}">
+							</div>
+							<div class="progress-bar progress-bar-success" ng-style="{'width' : eventProperty['BOTH'].vstandardPercentage + '%'}">
+							</div>
+							<div class="progress-bar progress-bar-warning" ng-style="{'width' : eventProperty['BOTH'].vpoorPercentage + '%'}">
+							</div>
+							<div class="progress-bar progress-bar-danger" ng-style="{'width' : eventProperty['BOTH'].afterVpoorPercentage + '%'}">
 							</div>
 						</div>
 						<div class="pull-right">
-							<span class="label label-primary">{{ jointInfo.voptimumTime | secondsToHourMinutes }}</span>
-							<span class="label label-success center">{{ jointInfo.vstandardTime | secondsToHourMinutes }}</span>
-							<span class="label label-warning right">{{ jointInfo.vpoorTime | secondsToHourMinutes }}</span>
+							<span class="label label-primary">{{ eventProperty['BOTH'].voptimumTime | secondsToHourMinutes }}</span>
+							<span class="label label-success center">{{ eventProperty['BOTH'].vstandardTime | secondsToHourMinutes }}</span>
+							<span class="label label-warning right">{{ eventProperty['BOTH'].vpoorTime | secondsToHourMinutes }}</span>
 						</div>
 					</td>
 				</tr>

@@ -37,17 +37,19 @@
                 well="operationData.wellContext.currentWell">
             </operation-information-panel>
 
+            <!-- ng-click="odController.changePanelState('panelConsistencyInfoIsCollapsed')" -->
+
             <!-- Consistency Information -->
             <consistency-information-panel
                 ng-init="odController.getPanelStartState('panelConsistencyInfoIsCollapsed')" 
-                ng-click="odController.changePanelState('panelConsistencyInfoIsCollapsed')" 
                 collapse = "statusPanel['panelConsistencyInfoIsCollapsed']"
                 state="operationData.stateContext.currentState" 
                 event="operationData.eventContext.currentEvent"
                 is-tripin="operationData.directionContext.tripin" 
                 score="operationData.scoreContext.currentScore"
-                joint-info="jointInfo"
-                last-two-events="lastTwoEvents">
+                last-trip-duration="lastTripDuration"
+                last-conn-duration="lastConnDuration"
+                event-property="eventProperty">
             </consistency-information-panel>
 
             <!-- Next Activities Information -->
@@ -58,7 +60,10 @@
                 activities="expectations.nextActivities">
             </next-activities-information-panel>
 
-            <operation-progress-panel 
+            <operation-progress-panel
+                ng-init="odController.getPanelStartState('panelOperationProgressIsCollapsed')"
+                ng-click="odController.changePanelState('panelOperationProgressIsCollapsed')"
+                collapse = "statusPanel['panelOperationProgressIsCollapsed']"
                 current-score="operationData.scoreContext.currentScore" 
                 progress-data="operationData.operationProgressContext.operationProgressData[operationData.stateContext.currentState]">
             </operation-progress-panel>
