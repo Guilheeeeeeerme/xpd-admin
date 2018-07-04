@@ -12,7 +12,7 @@
 
 	<div class="panel-body" uib-collapse="collapse">
 
-		<table class="table table-sm table-hover table-condensed">
+		<table class="table table-sm table-condensed">
 			<tr>
 				<td colspan="3">{{ operation.name }}</td>
 			</tr>
@@ -24,52 +24,6 @@
 				<th>Forecast: </th>
 				<td colspan="3">{{ targetParamExpectedEndTime | date:'medium' }}</td>
 			</tr>
-			<!-- <tr>
-
-				<td colspan="3" class="borderless-top" ng-if="poorExpectedDuration > targetExpectedDuration">
-
-					<div class="progress">
-
-						<div 
-							class="progress-bar" 
-							ng-style="{width : ( ( targetExpectedDuration * 100 ) / poorExpectedDuration ) + '%' }">
-							{{ targetExpectedDuration / 1000 | secondsToHourMinutes }}
-						</div>
-
-						<div 
-							class="progress-bar progress-bar-danger" 
-							ng-style="{width : 100 - ( ( targetExpectedDuration * 100 ) / poorExpectedDuration ) + '%' }">
-							{{ ( poorExpectedDuration - targetExpectedDuration) / 1000 | secondsToHourMinutes }}
-						</div>
-
-					</div>
-
-				</td>
-
-				<td 
-					colspan="3" 
-					class="borderless-top" 
-					ng-if="poorExpectedDuration <= targetExpectedDuration">
-
-					<div class="progress">
-
-						<div 
-							class="progress-bar progress-bar-danger" 
-							ng-style="{width : ( ( poorExpectedDuration * 100 ) / targetExpectedDuration ) + '%' }">
-							{{ poorExpectedDuration / 1000 | secondsToHourMinutes }}
-						</div>
-
-						<div 
-							class="progress-bar" 
-							ng-style="{width : 100 - ( ( poorExpectedDuration * 100 ) / targetExpectedDuration ) + '%' }">
-							{{ ( targetExpectedDuration - poorExpectedDuration) / 1000 | secondsToHourMinutes }}
-						</div>
-
-					</div>
-
-				</td>
-
-			</tr> -->
 
 			<tr>
 				<td colspan="3" class="borderless-top">
@@ -79,15 +33,17 @@
 						style="width: 100%">
 							<span class="show">{{ targetExpectedDuration / 1000 | secondsToHourMinutes}}</span>
 						</div>
-					</div>
-
+					</div>				
+				</td>
+			</tr>
+			<tr>
+				<td colspan="3" class="borderless-top">
 					<div class="progress">
-						<div class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" ng-class="getColorPerformance()"
+						<div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100" ng-class="getColorPerformance()"
 						ng-style="{'width': getStatePercentageDuration() +'%'}">
 							<span class="show">{{ stateDuration / 1000 | secondsToHourMinutes}}</span>
 						</div>
 					</div>
-				
 				</td>
 			</tr>
 			<tr>
@@ -137,7 +93,7 @@
 			</tr>
 			<tr>
 				<th>Hole Depth</th>
-				<td colspan="3">{{ well.holeDepth | number : '.2' }} m</td>
+				<td colspan="3">{{ well.holeDepth | number : '2' }} m</td>
 			</tr>
 		</table>
 

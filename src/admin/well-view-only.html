@@ -101,9 +101,7 @@
                         <tr>
                             <th>Air Gap (m)</th>
                             <th>Water Depth (m)</th>
-                            <th>Start Hole Depth</th>
                             <th>Hole Depth (m)</th>
-                            <th>Start Last Section Shoe Depth (m)</th>
                             <th>Last Section Shoe Depth (m)</th>
                             <th>Last BOP Status</th>
                         </tr>
@@ -117,14 +115,10 @@
                                 </span>
                             </td>
                             
-                            <td>{{dados.currentWell.startHoleDepth | number: 2}}</td>
-
                             <td>
                                 <span ng-if="dados.currentWell.holeDepth">{{dados.currentWell.holeDepth | number: 2}}</span>
                                 <span ng-if="!dados.currentWell.holeDepth">Not setted</span>
                             </td>
-
-                            <td>{{dados.currentWell.startShoeDepth | number: 2}}</td>
 
                             <td>
                                 <span ng-if="dados.currentWell.shoeDepth">{{dados.currentWell.shoeDepth | number: 2}}</span>
@@ -132,8 +126,8 @@
                             </td>
                         
                             <td>
-                                <span ng-if="!dados.currentWell.bopSetted">Setted</span>
-                                <span ng-if="dados.currentWell.bopSetted">Not setted</span>
+                                <span ng-if="dados.currentWell.bopSetted">Setted</span>
+                                <span ng-if="!dados.currentWell.bopSetted">Not setted</span>
                             </td>
                         
                         </tr>

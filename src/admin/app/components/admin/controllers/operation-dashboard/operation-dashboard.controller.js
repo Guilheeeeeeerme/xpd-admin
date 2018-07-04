@@ -27,6 +27,7 @@
 		operationDataFactory.openConnection([]).then(function (response) {
 			operationDataFactory = response;
 			$scope.operationData = operationDataFactory.operationData;
+			console.log($scope.operationData)
 			main();
 		});
 

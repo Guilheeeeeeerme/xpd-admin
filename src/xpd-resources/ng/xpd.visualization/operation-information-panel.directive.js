@@ -39,8 +39,10 @@
 			scope.getColorPerformance = getColorPerformance;
 
 			function getStatePercentageDuration() {
-				if (scope.afterPoorExpectedDuration)
-					return calcPercentage(scope.stateDuration, scope.afterPoorExpectedDuration);
+				if (scope.afterPoorExpectedDuration) {
+					var percentage = calcPercentage(scope.stateDuration, scope.afterPoorExpectedDuration);
+					return (percentage > 100) ? 100 : percentage;
+				}
 			}
 
 			function calcPercentage(partTime, totalTime) {

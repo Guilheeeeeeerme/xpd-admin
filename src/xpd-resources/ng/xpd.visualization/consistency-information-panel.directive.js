@@ -60,8 +60,10 @@
 			}
 
 			function getJointPercentageDuration() {
-				if (scope.eventProperty['BOTH'])
-					return calcPercentage(getJointDuration(), scope.eventProperty['BOTH'].afterVpoorTime);
+				if (scope.eventProperty['BOTH']) {
+					var percentage = calcPercentage(getJointDuration(), scope.eventProperty['BOTH'].afterVpoorTime);
+					return (percentage > 100) ? 100 : percentage; 
+				}
 			}
 
 			function calcPercentage(partTime, totalTime) {
