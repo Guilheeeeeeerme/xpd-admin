@@ -24,66 +24,17 @@
 				<th>Forecast: </th>
 				<td colspan="3">{{ targetParamExpectedEndTime | date:'medium' }}</td>
 			</tr>
+		</table>
 
-			<tr>
-				<td colspan="3" class="borderless-top">
-				
-					<div class="progress">
-						<div class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" ng-class=""
-						style="width: 100%">
-							<span class="show">{{ targetExpectedDuration / 1000 | secondsToHourMinutes}}</span>
-						</div>
-					</div>				
-				</td>
-			</tr>
-			<tr>
-				<td colspan="3" class="borderless-top">
-					<div class="progress">
-						<div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100" ng-class="getColorPerformance()"
-						ng-style="{'width': getStatePercentageDuration() +'%'}">
-							<span class="show">{{ stateDuration / 1000 | secondsToHourMinutes}}</span>
-						</div>
-					</div>
-				</td>
-			</tr>
-			<tr>
-				<td colspan="3" class="borderless-top">
-					<div class="progress legend-progress">
-						<div class="progress-bar" ng-style="{'width' : stateProgressPercentage.vOptimumStatePercentage + '%'}">
-						</div>
-						<div class="progress-bar progress-bar-success" ng-style="{'width' : stateProgressPercentage.vStandardStatePercentage + '%'}">
-						</div>
-						<div class="progress-bar progress-bar-warning" ng-style="{'width' : stateProgressPercentage.vPoorStatePercentage + '%'}">
-						</div>
-						<div class="progress-bar progress-bar-danger" ng-style="{'width' : stateProgressPercentage.afterVpoorStatePercentage + '%'}">
-						</div>
-					</div>
-					<div class="pull-right">
-						<span class="label label-primary">{{ optimumExpectedDuration / 1000 | secondsToHourMinutes }}</span>
-						<span class="label label-success center">{{ standardExpectedDuration / 1000 | secondsToHourMinutes }}</span>
-						<span class="label label-warning right">{{ poorExpectedDuration / 1000 | secondsToHourMinutes }}</span>
-					</div>
-				</td>
-			</tr>
+			<performance-progress-bar
+				current-value="stateDuration / 1000"
+				high-value= "optimumExpectedDuration / 1000",
+				medium-value= "standardExpectedDuration / 1000",
+				low-value= "poorExpectedDuration / 1000"
+				is-real-time="true">
+			</performance-progress-bar>
 
-			<tr>
-				<th>Cumulated Consistency</th>
-				<td colspan="3"></td>
-			</tr>
-			<tr>
-				<td colspan="3" class="borderless-top">
-
-					<div class="progress">
-						<div 
-							class="progress-bar progress-bar-success" 
-							role="progressbar" 
-							aria-valuemin="0" 
-							aria-valuemax="100" ng-style="{width: accScore + '%'}">
-							{{ accScore | number: 0}}
-						</div>
-					</div>
-				</td>
-			</tr>
+		<table class="table table-sm table-condensed">
 			<tr>
 				<th>Bit Depth</th>
 				<td>{{ reading.bitDepth | number : '2' }} m</td>

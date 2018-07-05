@@ -27,7 +27,6 @@
 		operationDataFactory.openConnection([]).then(function (response) {
 			operationDataFactory = response;
 			$scope.operationData = operationDataFactory.operationData;
-			console.log($scope.operationData)
 			main();
 		});
 
@@ -76,12 +75,6 @@
 					var vOptimumStateExpectedDuration = (1000 * vOptimumStateJointInterval.BOTH.finalTime);
 					var vStandardStateExpectedDuration = (1000 * vStandardStateJointInterval.BOTH.finalTime);
 					var vPoorStateExpectedDuration = (1000 * vPoorStateJointInterval.BOTH.finalTime);
-					var afterVPoorStateExpectedDuration = vPoorStateExpectedDuration + (vPoorStateExpectedDuration / 10);
-
-					var vOptimumStatePercentage = calcPercentage(vOptimumStateExpectedDuration, afterVPoorStateExpectedDuration);
-					var vStandardStatePercentage = calcPercentage(vStandardStateExpectedDuration, afterVPoorStateExpectedDuration) - vOptimumStatePercentage;
-					var vPoorStatePercentage = calcPercentage(vPoorStateExpectedDuration, afterVPoorStateExpectedDuration) - (vOptimumStatePercentage + vStandardStatePercentage);
-					var afterVpoorStatePercentage = 100 - (vOptimumStatePercentage + vStandardStatePercentage + vPoorStatePercentage);
 
 					// EXPECTED TRIP/CONN
 					$scope.eventProperty['CONN'] = getEventProperty('CONN', vTargetStateJointInterval, vOptimumStateJointInterval, vStandardStateJointInterval, vPoorStateJointInterval);
@@ -96,19 +89,10 @@
 						vOptimumStateExpectedDuration: vOptimumStateExpectedDuration,
 						vStandardStateExpectedDuration: vStandardStateExpectedDuration,
 						vPoorStateExpectedDuration: vPoorStateExpectedDuration,
-						afterVPoorStateExpectedDuration: afterVPoorStateExpectedDuration,
 
 						jointExpectedDuration: (stateExpectedDuration / vTargetStateJointInterval.BOTH.points.length),
 						vPoorJointExpectedDuration: (vPoorStateExpectedDuration / vTargetStateJointInterval.BOTH.points.length),
-
 					};
-
-					expectations.stateProgressPercentage = {
-						vOptimumStatePercentage: vOptimumStatePercentage,
-						vStandardStatePercentage: vStandardStatePercentage,
-						vPoorStatePercentage: vPoorStatePercentage,
-						afterVpoorStatePercentage: afterVpoorStatePercentage
-					}
 
 					var nextActivities = [];
 
@@ -156,28 +140,12 @@
 		}
 
 		function getEventProperty(eventType, vTargetStateJointInterval, vOptimumStateJointInterval, vStandardStateJointInterval, vPoorStateJointInterval) {
-			var vtargetTime = (vTargetStateJointInterval[eventType].finalTime / vTargetStateJointInterval[eventType].points.length);
-			var voptimumTime = (vOptimumStateJointInterval[eventType].finalTime / vOptimumStateJointInterval[eventType].points.length);
-			var vstandardTime = (vStandardStateJointInterval[eventType].finalTime / vStandardStateJointInterval[eventType].points.length);
-			var vpoorTime = (vPoorStateJointInterval[eventType].finalTime / vPoorStateJointInterval[eventType].points.length);
-			var afterVpoorTime = vpoorTime + (vpoorTime / 10);
-
-			var voptimumPercentage = calcPercentage(voptimumTime, afterVpoorTime);
-			var vstandardPercentage = calcPercentage(vstandardTime, afterVpoorTime) - voptimumPercentage;
-			var vpoorPercentage = calcPercentage(vpoorTime, afterVpoorTime) - (voptimumPercentage + vstandardPercentage);
-			var afterVpoorPercentage = 100 - (voptimumPercentage + vstandardPercentage + vpoorPercentage);
-
 			return {
-				vtargetTime,
-				voptimumTime,
-				vstandardTime,
-				vpoorTime,
-				afterVpoorTime,
-				voptimumPercentage,
-				vstandardPercentage,
-				vpoorPercentage,
-				afterVpoorPercentage
-			}
+				vtargetTime: (vTargetStateJointInterval[eventType].finalTime / vTargetStateJointInterval[eventType].points.length),
+				voptimumTime: (vOptimumStateJointInterval[eventType].finalTime / vOptimumStateJointInterval[eventType].points.length),
+				vstandardTime: (vStandardStateJointInterval[eventType].finalTime / vStandardStateJointInterval[eventType].points.length),
+				vpoorTime: (vPoorStateJointInterval[eventType].finalTime / vPoorStateJointInterval[eventType].points.length),
+			};
 		}
 
 		function main() {
@@ -356,10 +324,6 @@
 				if (conn && trip) break;
 
 			}
-		}
-
-		function calcPercentage(partTime, totalTime) {
-			return (partTime * 100) / totalTime;
 		}	
 
 		function getTotalFailureTime(startTime, endTime) {
