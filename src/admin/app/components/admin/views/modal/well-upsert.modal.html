@@ -45,25 +45,7 @@
                     <div class="input-group">
                         <input ng-disabled="modalData.onshore" type="number" name="waterDepth" min="0" max="10000" ng-model="modalData.waterDepth"
                             class="form-control" autofocus="true" id="well-upsert-data-waterDepth" placeholder="Water Depth" xpd-form-validation="form"
-                            required ng-change="wuController.actionChangeWaterDepth()">
-                        <span class="input-group-addon">m</span>
-                    </div>
-                </div>
-
-                <div class="form-group col-md-6" ng-class="{ 'has-error': form.startHoleDepth.$invalid && !form.startHoleDepth.$pristine }">
-                    <label for="well-upsert-data-startHoleDepth">Start Hole Depth</label>
-                    <div class="input-group">
-                        <input type="number" name="startHoleDepth" min="{{modalData.waterDepth}}" max="10000" ng-model="modalData.startHoleDepth"
-                            class="form-control" autofocus="true" id="well-upsert-data-startHoleDepth" placeholder="Hole Depth" xpd-form-validation="form">
-                        <span class="input-group-addon">m</span>
-                    </div>
-                </div>
-                
-                <div class="form-group col-md-6" ng-class="{ 'has-error': form.startShoeDepth.$invalid && !form.startShoeDepth.$pristine }">
-                    <label for="well-upsert-data-startShoeDepth">Start Last Section Shoe Depth</label>
-                    <div class="input-group">
-                        <input type="number" name="startShoeDepth" min="{{modalData.waterDepth}}" max="10000" ng-model="modalData.startShoeDepth"
-                            class="form-control" autofocus="true" id="well-upsert-data-startShoeDepth" placeholder="Last Section Shoe Depth" xpd-form-validation="form">
+                            required>
                         <span class="input-group-addon">m</span>
                     </div>
                 </div>

@@ -11,6 +11,9 @@
 			restrict: 'EA',
 			templateUrl: '../xpd-resources/ng/xpd.visualization/operation-progress-panel.template.html',
 			scope: {
+				onInit: '=',
+				onClickCollapse: '=',
+				collapse: '=',
 				currentScore: '=',
 				progressData: '=',
 			},

@@ -11,6 +11,8 @@
 			restrict: 'EA',
 			templateUrl: '../xpd-resources/ng/xpd.visualization/well-information-panel.template.html',
 			scope: {
+				onInit: '=',
+				onClickCollapse: '=',
 				collapse: '=',
 				well: '=',
 			}

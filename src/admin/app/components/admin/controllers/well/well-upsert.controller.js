@@ -11,7 +11,6 @@
 		vm.actionButtonClose = actionButtonClose;
 		vm.actionButtonSave = actionButtonSave;
 		vm.changeOnshore = changeOnshore;
-		vm.actionChangeWaterDepth = actionChangeWaterDepth;
 
 		$scope.modalData = angular.copy(initialData);
 
@@ -28,13 +27,6 @@
 			if ($scope.modalData.onshore) {
 				$scope.modalData.waterDepth = 0;
 			}
-		}
-
-		function actionChangeWaterDepth() {
-			if (!($scope.modalData.startHoleDepth && $scope.modalData.startShoeDepth) || $scope.modalData.waterDepth > ($scope.modalData.startHoleDepth || $scope.modalData.startShoeDepth)) {
-				$scope.modalData.startHoleDepth = $scope.modalData.waterDepth;
-				$scope.modalData.startShoeDepth = $scope.modalData.waterDepth;
-			}			
 		}
 
 	}
