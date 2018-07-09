@@ -87,12 +87,6 @@
 
 				});
 
-				// $scope.dados.data.bitDepthPlannedPoints = mergedData.bitDepthPlannedPoints;
-				// $scope.dados.data.sectionsBands = mergedData.sectionsBands;
-				// $scope.dados.data.startChartAt = mergedData.startChartAt;
-
-				// mergeExecutedAndPlanned(mergedData);
-
 				$scope.dados.data = mergedData;
 				resolve();
 			}
