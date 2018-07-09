@@ -19,6 +19,7 @@
 		vm.getLessonsLearnedDataChart = getLessonsLearnedDataChart;
 		vm.getOperationQueue = getOperationQueue;
 		vm.getBitDepthChartForOperation = getBitDepthChartForOperation;
+		vm.getOperationExecuted = getOperationExecuted;
 
 		function getVreList(fromDate, toDate, successCallback, errorCallback) {
 
@@ -124,7 +125,7 @@
 
 			var req = {
 				method: 'GET',
-				url: xpdAccessFactory.getReportsAPIURL() + 'bitdepth-vs-time/' + wellId
+				url: xpdAccessFactory.getReportsAPIURL() + 'planning/well/' + wellId
 			};
 
 			setupAPIService.doRequest(req, successCallback, errorCallback);
@@ -135,7 +136,18 @@
 
 			var req = {
 				method: 'GET',
-				url: xpdAccessFactory.getReportsAPIURL() + 'bitdepth-vs-time/' + wellId + '/operation/' + operationId
+				url: xpdAccessFactory.getReportsAPIURL() + 'planning/well/' + wellId + '/operation/' + operationId
+			};
+
+			setupAPIService.doRequest(req, successCallback, errorCallback);
+
+		}
+
+		function getOperationExecuted(operationId, successCallback, errorCallback) {
+
+			var req = {
+				method: 'GET',
+				url: xpdAccessFactory.getReportsAPIURL() + 'executed/operation/' + operationId
 			};
 
 			setupAPIService.doRequest(req, successCallback, errorCallback);

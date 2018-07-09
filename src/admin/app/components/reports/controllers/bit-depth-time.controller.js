@@ -30,36 +30,34 @@
 		}
 
 		function renderChart() {
-			reportsSetupAPIService.getOperationQueue($scope.wellId, getOperationQueue, error);
+			reportsSetupAPIService.getOperationQueue($scope.wellId, getOperationQueueCallback, error);
 		}
 
-		function runQueue(results) {
+		function runPlanned(results, resolve) {
 			try {
 				results.shift()().then(function (result) {
-					$scope.results.push(result);
-					runQueue(results);
+					$scope.planned.push(result);
+					runPlanned(results, resolve);
 				});
 			} catch (e) {
 
 				var mergedData = {
 					bitDepthPlannedPoints: null,
-					bitDepthExecutedPoints: null,
-					holeDepthPoints: null,
 					sectionsBands: null,
 					startChartAt: new Date().getTime(),
 				};
 
 				var startPointAt;
 
-				$scope.results.map(function (chartData) {
+				$scope.planned.map(function (chartData) {
 					mergedData.startChartAt = Math.min(mergedData.startChartAt, chartData.startChartAt);
 				});
 
 				startPointAt = mergedData.startChartAt;
 
-				$scope.results.map(function (chartData) {
-					
-					chartData.bitDepthPlannedPoints.data = chartData.bitDepthPlannedPoints.events.map(function(event){
+				$scope.planned.map(function (chartData) {
+
+					chartData.bitDepthPlannedPoints.data = chartData.bitDepthPlannedPoints.events.map(function (event) {
 						var point = [
 							startPointAt,
 							event.startBitDepth,
@@ -71,16 +69,54 @@
 					});
 				});
 
+				$scope.planned.map(function (chartData) {
+
+					if (!mergedData.sectionsBands) {
+						mergedData.sectionsBands = chartData.sectionsBands;
+					}
+				});
+
+				$scope.planned.map(function (result) {
+
+					if (!mergedData.bitDepthPlannedPoints) {
+						mergedData.bitDepthPlannedPoints = result.bitDepthPlannedPoints;
+					} else if (result.bitDepthPlannedPoints.data.length && result.bitDepthPlannedPoints.events.length) {
+						mergedData.bitDepthPlannedPoints.data = [...mergedData.bitDepthPlannedPoints.data, ...result.bitDepthPlannedPoints.data];
+						mergedData.bitDepthPlannedPoints.events = [...mergedData.bitDepthPlannedPoints.events, ...result.bitDepthPlannedPoints.events];
+					}
+
+				});
+
+				// $scope.dados.data.bitDepthPlannedPoints = mergedData.bitDepthPlannedPoints;
+				// $scope.dados.data.sectionsBands = mergedData.sectionsBands;
+				// $scope.dados.data.startChartAt = mergedData.startChartAt;
+
+				// mergeExecutedAndPlanned(mergedData);
+
+				$scope.dados.data = mergedData;
+				resolve();
+			}
+		}
+
+		function runExecuted(results) {
+			try {
+				results.shift()().then(function (result) {
+					$scope.executed.push(result);
+					runExecuted(results);
+				});
+			} catch (e) {
+
+				var mergedData = {
+					bitDepthPlannedPoints: $scope.dados.data.bitDepthPlannedPoints,
+					sectionsBands: $scope.dados.data.sectionsBands,
+					startChartAt: $scope.dados.data.startChartAt,
+					bitDepthExecutedPoints: null,
+					holeDepthPoints: null,
+				};
+
 				var holeDepth = null;
 
-				$scope.results.map(function (chartData) {
-					
-					// if (!mergedData.startChartAt) {
-					// 	mergedData.startChartAt = result.startChartAt;
-					// } else {
-					// 	mergedData.startChartAt = Math.min(result.startChartAt, mergedData.startChartAt);
-					// }
-
+				$scope.executed.map(function (chartData) {
 					if (!mergedData.bitDepthExecutedPoints) {
 						mergedData.bitDepthExecutedPoints = chartData.bitDepthExecutedPoints;
 					} else if (chartData.bitDepthExecutedPoints.data.length && chartData.bitDepthExecutedPoints.events.length) {
@@ -88,17 +124,16 @@
 						mergedData.bitDepthExecutedPoints.events = [...mergedData.bitDepthExecutedPoints.events, ...chartData.bitDepthExecutedPoints.events];
 					}
 
-
 					if (!mergedData.holeDepthPoints) {
 						mergedData.holeDepthPoints = chartData.holeDepthPoints;
 					} else if (chartData.holeDepthPoints.data.length) {
-						
-						if(!holeDepth)
-							holeDepth = mergedData.holeDepthPoints.data[mergedData.holeDepthPoints.data.length-1][1];
+
+						if (!holeDepth)
+							holeDepth = mergedData.holeDepthPoints.data[mergedData.holeDepthPoints.data.length - 1][1];
 
 						chartData.holeDepthPoints.data = chartData.holeDepthPoints.data.map(function (data) {
 							holeDepth = Math.max(holeDepth, data[1]);
-							data[1] = holeDepth;							
+							data[1] = holeDepth;
 
 							return data;
 						});
@@ -111,43 +146,44 @@
 					}
 				});
 
-				// let startChartAt = angular.copy(mergedData.startChartAt);
-
-				$scope.results.map(function (result) {
-
-					// result.bitDepthPlannedPoints.data = result.bitDepthPlannedPoints.data.map(function (data, index) {
-					// 	data.x = startChartAt;
-					// 	startChartAt += (result.bitDepthPlannedPoints.events[index].duration * 1000);
-					// 	return data;
-					// });
-
-					if (!mergedData.bitDepthPlannedPoints) {
-						mergedData.bitDepthPlannedPoints = result.bitDepthPlannedPoints;
-					} else if (result.bitDepthPlannedPoints.data.length && result.bitDepthPlannedPoints.events.length) {
-						mergedData.bitDepthPlannedPoints.data = [...mergedData.bitDepthPlannedPoints.data, ...result.bitDepthPlannedPoints.data];
-						mergedData.bitDepthPlannedPoints.events = [...mergedData.bitDepthPlannedPoints.events, ...result.bitDepthPlannedPoints.events];
-					}
-
-				});
-
 				$scope.dados.data = mergedData;
-				// console.log($scope.results);
 			}
 		}
 
-		function getOperationQueue(results) {
+		function getOperationQueueCallback(results) {
+			getOperationPlanned(results).then(function () {
+				getOperationExecuted(results);
+			});
+		}
 
-			$scope.results = [];
-			results = results.map(function (result) {
+		function getOperationPlanned(operations) {
+			$scope.planned = [];
+
+			return new Promise(function (resolve, reject) {
+
+				operations = operations.map(function (operation) {
+					return function () {
+						return new Promise(function (resolve, reject) {
+							reportsSetupAPIService.getBitDepthChartForOperation($scope.wellId, operation.id, resolve, reject);
+						});
+					};
+				});
+
+				runPlanned(operations, resolve);
+			});			
+		}
+
+		function getOperationExecuted(operations) {
+			$scope.executed = [];
+			operations = operations.map(function (operation) {
 				return function () {
 					return new Promise(function (resolve, reject) {
-						reportsSetupAPIService.getBitDepthChartForOperation($scope.wellId, result.id, resolve, reject);
+						reportsSetupAPIService.getOperationExecuted(operation.id, resolve, reject);
 					});
 				};
 			});
-			runQueue(results);
 
-			// $scope.dados.data = result;
+			runExecuted(operations);
 		}
 
 		function error(error) {
