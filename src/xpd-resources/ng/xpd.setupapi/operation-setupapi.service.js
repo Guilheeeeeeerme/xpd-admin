@@ -105,17 +105,14 @@
 		// 		);
 		// }
 
-		// FIXME: Revisar esta rota
 		function getOperationQueue(wellId, successCallback, errorCallback) {
-
 			
 			var req = {
 				method: 'GET',
-				url: xpdAccessFactory.getSetupURL() + 'report-service/operations-queue/' + wellId
+				url: xpdAccessFactory.getSetupURL() + 'operation-resources/operations-queue/' + wellId
 			};
 
-			setupAPIService.doRequest(req, successCallback, errorCallback);
-			
+			setupAPIService.doRequest(req, successCallback, errorCallback);			
 		}
 	}
 
