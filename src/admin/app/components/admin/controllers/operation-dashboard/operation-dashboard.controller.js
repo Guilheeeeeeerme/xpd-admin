@@ -101,8 +101,6 @@
 
 							nextActivities.push(activity);
 
-							console.log(duration, state, activity);
-
 						} catch (error) {
 							console.error(error);
 						}

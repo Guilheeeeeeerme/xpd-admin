@@ -55,6 +55,9 @@
                 ng-init="odController.getPanelStartState('panelNextActivityIsCollapsed')" 
                 ng-click="odController.changePanelState('panelNextActivityIsCollapsed')" 
                 collapse = "statusPanel['panelNextActivityIsCollapsed']"
+                current-activity-elapsed-time="operationData.chronometerContext.stateTick"
+                initial-planning="operationData.suboperationContext.currentSuboperation.jointIntervals"
+                operation="operationData.operationContext.currentOperation" 
                 activities="expectations.nextActivities">
             </next-activities-information-panel>
 
