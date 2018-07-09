@@ -924,10 +924,11 @@ xpd-operation-manager .button-bellow-label {
     color: #000;
 }
 
-.legend-progress {
-    height: 5px;
-}
-
 .pointer {
     cursor: pointer;
+}
+
+.nopadding {
+   padding: 0 !important;
+   margin: 0 !important;
 }
