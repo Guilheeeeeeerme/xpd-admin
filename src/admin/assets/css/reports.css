@@ -8,8 +8,7 @@ access-factory-directive {
 
 .child-element-spacing {
     overflow: auto;
-    height: 100%;
-    padding-bottom: 7%;
+    max-height: 85%;
 }
 
 .child-element-spacing > div:nth-child(2){
