@@ -6,11 +6,18 @@
             <dmec-tracking current-operation="operationData.operationContext.currentOperation" current-event="operationData.eventContext.currentEvent"
                 current-tick="operationData.chronometerContext.tick" current-block-position="operationData.readingContext.currentReading.blockPosition"
                 current-reading="operationData.readingContext.currentReading" connection-events="dados.connectionEvents" trip-events="dados.tripEvents"
-                time-events="dados.timeEvents">
+                time-events="dados.timeEvents" selected-timestamp="odController.selectedTimestamp">
             </dmec-tracking>
         </div>
 
         <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4 scrollable-content">
+
+            <channels-information-panel
+                on-init="odController.getPanelStartState" 
+                on-click-collapse="odController.changePanelState"
+                collapse = "statusPanel['panelChanelsIsCollapsed']"
+                reading="selectedReading">
+            </channels-information-panel>
 
             <!-- Well Information -->
             <well-information-panel

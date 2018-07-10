@@ -4,9 +4,9 @@
 
 	angular.module('xpd.operation-dashboard').controller('OperationDashboardController', operationDashboardController);
 
-	operationDashboardController.$inject = ['$scope', '$filter', 'operationDataFactory'];
+	operationDashboardController.$inject = ['$scope', '$filter', 'operationDataFactory', 'readingSetupAPIService'];
 
-	function operationDashboardController($scope, $filter, operationDataFactory) {
+	function operationDashboardController($scope, $filter, operationDataFactory, readingSetupAPIService) {
 
 		var vm = this;
 
@@ -18,10 +18,11 @@
 		$scope.eventProperty['CONN'] = {};
 		$scope.statusPanel = [];
 		$scope.jointInfo = {};
+		$scope.readingTimestamp = null;
 		$scope.dados = {
 			connectionEvents: [],
 			tripEvents: [],
-			timeEvents: [],
+			timeEvents: []
 		};
 
 		operationDataFactory.openConnection([]).then(function (response) {
@@ -34,6 +35,7 @@
 		vm.getTotalFailureTime = getTotalFailureTime;
 		vm.getPanelStartState = getPanelStartState;
 		vm.changePanelState = changePanelState;
+		vm.selectedTimestamp = selectedTimestamp;
 
 		operationDataFactory.addEventListener('operationDashboardController', 'setOnOptimumLineListener', main);
 		operationDataFactory.addEventListener('operationDashboardController', 'setOnActualLineListener', main);
@@ -342,6 +344,22 @@
 			var newState = !getPanelStartState(keyName);
 			$scope.statusPanel[keyName] = newState;
 			localStorage.setItem(keyName, newState);
+		}
+
+		function selectedTimestamp(timestamp) {
+			getReading(timestamp);
+		}
+
+		function getReading(timestamp) {
+
+			if (!timestamp) return;
+
+			var tick = new Date(timestamp).getTime();
+			readingSetupAPIService.getTick(tick, getReadingSuccessCallback);
+		}
+
+		function getReadingSuccessCallback(reading) {
+			$scope.selectedReading = reading;
 		}
 	}
 

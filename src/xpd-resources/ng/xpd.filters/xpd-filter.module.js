@@ -8,12 +8,14 @@
 	app.filter('xpdStateLabelFilter', xpdStateLabelFilter);
 	app.filter('xpdEventLabelFilter', xpdEventLabelFilter);
 	app.filter('secondsToHourMinutesSeconds', secondsToHourMinutesSeconds);
+	app.filter('readingAttrFilter', readingAttrFilter);
 
 	percentage.$inject = ['$filter'];
 	xpdStateLabelFilter.$inject = ['$filter'];
 	xpdEventLabelFilter.$inject = ['$filter'];
 	secondsToHourMinutes.$inject = ['$filter'];
 	secondsToHourMinutesSeconds.$inject = ['$filter'];
+	readingAttrFilter.$inject = ['$filter'];
 	
 	function xpdEventLabelFilter($filter) {
 		return function (event) {
@@ -150,6 +152,43 @@
 			}
 		};
 
+	}
+
+	function readingAttrFilter($filter) {
+		return function (attribute) {
+			switch (attribute) {
+			case 'rpm':
+				return 'RPM';
+			case 'wob':
+				return 'WOB';
+			case 'flow':
+				return 'Flow';
+			case 'rop':
+				return 'ROP';
+			case 'torque':
+				return 'Torque';
+			case 'depth':
+				return 'Depth';
+			case 'blockPosition':
+				return 'Block Position';
+			case 'hookload':
+				return 'Hook Load';
+			case 'sppa':
+				return 'SPPA';
+			case 'date':
+				return 'Date';
+			case 'time':
+				return 'Time';
+			case 'bitDepth':
+				return 'Bit Depth';
+			case 'blockSpeed':
+				return 'Block Speed';
+			case 'timestamp':
+				return 'Date';
+			default:
+				return 'Not Found!';
+			}
+		};
 	}
 
 	function toFixed(time) {

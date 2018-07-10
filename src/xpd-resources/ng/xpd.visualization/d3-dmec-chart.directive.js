@@ -16,7 +16,8 @@
 				zoomStartAt: '=',
 				zoomEndAt: '=',
 				onReading: '=',
-				onReadingSince: '='
+				onReadingSince: '=',
+				getReadingTimestamp: '=',
 			},
 			link: link
 		};
@@ -385,6 +386,7 @@
 						.attr(((!isHorizontal) ? 'y1' : 'x1'), avgPoint)
 						.attr(((!isHorizontal) ? 'y2' : 'x2'), avgPoint);
 
+					scope.getReadingTimestamp(timestamp);
 					findPoint(timestamp, timeAxisPosition, avgPoint);
 
 				}

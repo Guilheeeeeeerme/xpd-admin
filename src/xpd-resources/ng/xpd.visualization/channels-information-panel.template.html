@@ -1,0 +1,28 @@
+<div class="panel panel-default">
+
+	<div class="panel-heading clearfix" ng-init="onInit('panelChanelsIsCollapsed')" ng-click="onClickCollapse('panelChanelsIsCollapsed')">
+		<h4 class="panel-title pull-left">Channels Information</h4>
+		<div class="btn-group pull-right">
+			<i type="button" class="pull-right glyphicon pointer"
+			ng-class="{
+				'glyphicon-minus': !reading,
+				'glyphicon-chevron-down': (collapse && reading),
+				'glyphicon-chevron-up': (!collapse && reading)
+			}">
+			</i>
+		</div>
+	</div>
+
+	<div class="panel-body" uib-collapse="(!reading) ? 'false' : collapse">
+
+		<table class="table table-sm table-hover table-condensed">
+			<tr ng-repeat="(key, value) in reading">
+				<th>{{key | readingAttrFilter}}</th>
+				<td ng-if="key != 'timestamp'">{{ value | number: 2 }}</td>
+				<td ng-if="key == 'timestamp'">{{ value | date:'MM/dd/yyyy HH:mm:ss' }}</td>
+			</tr>
+		</table>
+
+	</div>
+
+</div>
