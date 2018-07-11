@@ -17,7 +17,7 @@
 				zoomEndAt: '=',
 				onReading: '=',
 				onReadingSince: '=',
-				getSelectedPoint: '=',
+				setSelectedPoint: '=',
 				lastSelectedPoint: '=',
 				removeMarker: '='
 			},
@@ -365,8 +365,7 @@
 							moveCrosshair(d3.mouse(this)[0], d3.mouse(this)[1]);
 							// highligthPoints(d3.mouse(this)[0], d3.mouse(this)[1]);
 							var selectedPoint = wrapSelectedPoint(d3.mouse(this)[0], d3.mouse(this)[1]);
-							// TODO: trocar para set
-							scope.getSelectedPoint(selectedPoint);
+							scope.setSelectedPoint(selectedPoint);
 						}).on('mousemove', function () {
 							moveCrosshair(d3.mouse(this)[0], d3.mouse(this)[1]);
 						});

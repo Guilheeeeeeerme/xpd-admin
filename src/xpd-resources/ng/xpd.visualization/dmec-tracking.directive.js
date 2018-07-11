@@ -27,7 +27,7 @@
 
 		function link(scope) {
 
-			scope.getSelectedPoint = getSelectedPoint;
+			scope.setSelectedPoint = setSelectedPoint;
 
 			dmecService.dmec(scope, 
 				'xpd.admin.dmec.dmecInputRangeForm',
@@ -39,7 +39,7 @@
 				}
 			);
 
-			function getSelectedPoint(position) {
+			function setSelectedPoint(position) {
 				scope.selectedPoint(position);
 			}
 		}
