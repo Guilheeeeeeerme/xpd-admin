@@ -14,7 +14,8 @@
 				onInit: '=',
 				onClickCollapse: '=',
 				collapse: '=',
-				reading: '=',
+				readings: '=',
+				removeReading: '='
 			},
 			link: link,
 		};

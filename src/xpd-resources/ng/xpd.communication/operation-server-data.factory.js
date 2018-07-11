@@ -70,6 +70,7 @@
 					console.info('There is already an running operation data factory.');
 					resolve(operationDataFactory);
 				} else {
+					communicationChannel = {};
 
 					socket = socketFactory(xpdAccessFactory.getOperationServerURL(), '/operation-socket', threads);
 
@@ -77,7 +78,6 @@
 
 						var ContextSubjects = response.ContextSubjects;
 						var UserActions = response.UserActions;
-						communicationChannel = {};
 
 						contextSubjectGenerator(ContextSubjects, communicationChannel);
 

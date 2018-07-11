@@ -5,22 +5,43 @@
 		<div class="btn-group pull-right">
 			<i type="button" class="pull-right glyphicon pointer"
 			ng-class="{
-				'glyphicon-minus': !reading,
-				'glyphicon-chevron-down': (collapse && reading),
-				'glyphicon-chevron-up': (!collapse && reading)
+				'glyphicon-minus': !readings,
+				'glyphicon-chevron-down': (collapse && readings),
+				'glyphicon-chevron-up': (!collapse && readings)
 			}">
 			</i>
 		</div>
 	</div>
 
-	<div class="panel-body" uib-collapse="(!reading) ? 'false' : collapse">
+	<div ng-if="readings.length != []" class="panel-body" uib-collapse="(!readings) ? 'false' : collapse">
 
 		<table class="table table-sm table-hover table-condensed">
-			<tr ng-repeat="(key, value) in reading">
-				<th>{{key | readingAttrFilter}}</th>
-				<td ng-if="key != 'timestamp'">{{ value | number: 2 }}</td>
-				<td ng-if="key == 'timestamp'">{{ value | date:'MM/dd/yyyy HH:mm:ss' }}</td>
-			</tr>
+			<thead>
+				<tr>
+					<th>Color</th>
+					<th ng-repeat="(key, value) in readings[0]" ng-if="key != 'color'">
+						{{key | readingAttrFilter}}
+					</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr ng-repeat="(key, reading) in readings">
+					<td>
+						<span class="glyphicon glyphicon-certificate"
+							ng-style="{ 'color': reading.color }">
+						</span>
+					</td>
+					<td ng-repeat="(key, value) in reading" ng-if="key != 'color'">
+						{{ (key != 'timestamp') ? (value | number: 2) : (value | date:'MM/dd/yyyy HH:mm:ss') }}
+					</td>
+					<td>
+						<button id="depth-alarm-remove-0" type="button" class="btn btn-sm btn-warning"
+							ng-click="removeReading(key)">
+							<span class="glyphicon glyphicon-trash"></span>
+						</button>
+					</td>
+				</tr>
+			</tbody>
 		</table>
 
 	</div>

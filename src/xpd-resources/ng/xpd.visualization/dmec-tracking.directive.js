@@ -16,7 +16,9 @@
 				currentTick: '=',
 				currentBlockPosition: '=',
 				currentReading: '=',
-				selectedTimestamp: '='
+				selectedPoint: '=',
+				lastSelectedPoint: '=',
+				removeMarker: '='
 			},
 			restrict: 'AE',
 			templateUrl: '../xpd-resources/ng/xpd.visualization/dmec-tracking.template.html',
@@ -25,7 +27,7 @@
 
 		function link(scope) {
 
-			scope.getReadingTimestamp = getReadingTimestamp;
+			scope.getSelectedPoint = getSelectedPoint;
 
 			dmecService.dmec(scope, 
 				'xpd.admin.dmec.dmecInputRangeForm',
@@ -37,8 +39,8 @@
 				}
 			);
 
-			function getReadingTimestamp(timestamp) {
-				scope.selectedTimestamp(timestamp);
+			function getSelectedPoint(position) {
+				scope.selectedPoint(position);
 			}
 		}
 
