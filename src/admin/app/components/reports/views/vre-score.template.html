@@ -9,44 +9,43 @@
 			final-date="reportsData.toDate"
 			function-change-period="vsController.onClickFilterButton">
 		</div>
-	</div>
-
-	<div class="child-element-spacing">
 		
-		<div ng-repeat="type in vreScoredata.chartData.operationTypes"
-			ng-if="type.activities.length>0"
-			class="row">
+		<div class="child-element-spacing col-md-12">
+			<div ng-repeat="type in vreScoredata.chartData.operationTypes"
+				ng-if="type.activities.length>0">
 
-	  		<h1	class="xpd-member-box-title" ng-if="type.label">
-	  			{{ type.label | uppercase}} Operation
-			</h1>
+				<h1	class="xpd-member-box-title" ng-if="type.label">
+					{{ type.label | uppercase}} Operation
+				</h1>
 
-	  		<h1	class="xpd-member-box-title" ng-if="!type.label">
-	  			All Operations
-			</h1>
+				<h1	class="xpd-member-box-title" ng-if="!type.label">
+					All Operations
+				</h1>
 
-			<table  ng-if="type.activities && type.activities.length>0"
-					class="table vtr-report-table vre-score-table">
+				<table  ng-if="type.activities && type.activities.length>0"
+						class="table vtr-report-table vre-score-table">
 
-		  	<tbody ng-repeat="activity in type.activities">
-		  		<tr>
-			    	<td colspan="2">
-			    		<h4 class="vre-score-label">{{activity.label}}</h4>
-			    	</td>
-			    </tr>
-			    <tr>
-			      	<td>
-			      		<div 
-			      			vre-score-bar-chart
-			      			chart-categories="vreScoredata.chartData.categories"
-			      			chart-scale="vreScoredata.chartData.scale"
-			      			chart-data="activity">
-		      			</div>
-			      	</td>
-			    </tr>
-		  	</tbody>
-		</table>
-		
+					<tbody ng-repeat="activity in type.activities">
+						<tr>
+							<td colspan="2">
+								<h4 class="vre-score-label">{{activity.label}}</h4>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<div 
+									vre-score-bar-chart
+									chart-categories="vreScoredata.chartData.categories"
+									chart-scale="vreScoredata.chartData.scale"
+									chart-data="activity">
+								</div>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			
+			</div>
+		</div>
 	</div>
 
 
