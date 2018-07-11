@@ -1,23 +1,20 @@
 <div class="row">
 	<h1 class="xpd-member-box-title">Histogram</h1>
 </div>
-<div>
-	<div class="row">
-		<div class="col-md-6 col-md-offset-6"
-			table-period initial-date="reportsData.fromDate"
-			final-date="reportsData.toDate"
-			function-change-period="hrController.actionFilterButton">
-		</div>
+
+<div class="row">
+	<div class="col-md-6 col-md-offset-6"
+		table-period initial-date="reportsData.fromDate"
+		final-date="reportsData.toDate"
+		function-change-period="hrController.actionFilterButton">
 	</div>
 	
-	<div class="child-element-spacing">
-		
+	<div class="col-md-12 child-element-spacing">
 		<div ng-repeat="type in histoData.histograms"
-			ng-if="type.activities.length>0"
-			class="row">
+			ng-if="type.activities.length>0">
 
-			<h1 
-	  			class="xpd-member-box-title">{{type.label | uppercase}} Operation
+			<h1 class="xpd-member-box-title">
+				{{type.label | uppercase}} Operation
 			</h1>
 
 			<div ng-if="type.activities && type.activities.length>0" 
@@ -26,11 +23,11 @@
 				<div event-duration-histogram chart-data="activity"></div>
 			</div>
 		</div>
-
 	</div>
 
-	<div ng-if="histoData.histograms && histoData.histograms.length<=0"
-		class="empty-value-report-message">
-		No activities in this data range
-	</div>
+</div>
+
+<div ng-if="histoData.histograms && histoData.histograms.length<=0"
+	class="empty-value-report-message">
+	No activities in this data range
 </div>

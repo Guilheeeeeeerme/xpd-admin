@@ -14,16 +14,16 @@
 
             <!-- Well Information -->
             <well-information-panel
-                ng-init="odController.getPanelStartState('panelWellIsCollapsed')" 
-                ng-click="odController.changePanelState('panelWellIsCollapsed')"
+                on-init="odController.getPanelStartState" 
+                on-click-collapse="odController.changePanelState"
                 collapse = "statusPanel['panelWellIsCollapsed']"
                 well="operationData.wellContext.currentWell">
             </well-information-panel>
 
             <!-- Operation Information -->
             <operation-information-panel
-                ng-init="odController.getPanelStartState('panelOperationInfoIsCollapsed')" 
-                ng-click="odController.changePanelState('panelOperationInfoIsCollapsed')" 
+                on-init="odController.getPanelStartState"
+                on-click-collapse="odController.changePanelState"
                 collapse = "statusPanel['panelOperationInfoIsCollapsed']"
                 number-joints="operationData.jointContext.numberJoints"
                 joint-number="operationData.jointContext.currentJoint.jointNumber" 
@@ -31,29 +31,35 @@
                 state="operationData.stateContext.currentState" 
                 reading="operationData.readingContext.currentReading"
                 acc-score="scoreData.accScore"
-                target-param-expected-end-time="expectations.stateExpectedEndTime" 
-                target-expected-duration="expectations.stateExpectedDuration"
+                state-duration="operationData.chronometerContext.stateTick"
+                target-param-expected-end-time="expectations.stateExpectedEndTime"
+                optimum-expected-duration="expectations.vOptimumStateExpectedDuration"
+                standard-expected-duration="expectations.vStandardStateExpectedDuration"
                 poor-expected-duration="expectations.vPoorStateExpectedDuration"
                 well="operationData.wellContext.currentWell">
             </operation-information-panel>
 
             <!-- Consistency Information -->
             <consistency-information-panel
-                ng-init="odController.getPanelStartState('panelConsistencyInfoIsCollapsed')" 
-                ng-click="odController.changePanelState('panelConsistencyInfoIsCollapsed')" 
-                collapse = "statusPanel['panelConsistencyInfoIsCollapsed']"
+                on-init="odController.getPanelStartState"
+                on-click-collapse="odController.changePanelState"
+                collapse= "statusPanel['panelConsistencyInfoIsCollapsed']"
                 state="operationData.stateContext.currentState" 
                 event="operationData.eventContext.currentEvent"
                 is-tripin="operationData.directionContext.tripin" 
                 score="operationData.scoreContext.currentScore"
-                joint-info="jointInfo"
-                last-two-events="lastTwoEvents">
+                current-event-duration="operationData.chronometerContext.tick"
+                last-event-type="operationData.eventContext.lastEvent.eventType"
+                joint-duration="operationData.chronometerContext.jointTick"
+                last-trip-duration="lastTripDuration"
+                last-conn-duration="lastConnDuration"
+                event-property="eventProperty">
             </consistency-information-panel>
 
             <!-- Next Activities Information -->
             <next-activities-information-panel
-                ng-init="odController.getPanelStartState('panelNextActivityIsCollapsed')" 
-                ng-click="odController.changePanelState('panelNextActivityIsCollapsed')" 
+                on-init="odController.getPanelStartState"
+                on-click-collapse="odController.changePanelState"
                 collapse = "statusPanel['panelNextActivityIsCollapsed']"
                 current-activity-elapsed-time="operationData.chronometerContext.stateTick"
                 initial-planning="operationData.suboperationContext.currentSuboperation.jointIntervals"
@@ -61,7 +67,10 @@
                 activities="expectations.nextActivities">
             </next-activities-information-panel>
 
-            <operation-progress-panel 
+            <operation-progress-panel
+                on-init="odController.getPanelStartState"
+                on-click-collapse="odController.changePanelState"
+                collapse = "statusPanel['panelOperationProgressIsCollapsed']"
                 current-score="operationData.scoreContext.currentScore" 
                 progress-data="operationData.operationProgressContext.operationProgressData[operationData.stateContext.currentState]">
             </operation-progress-panel>
@@ -149,6 +158,7 @@
                 current-direction="operationData.directionContext" current-bit-depth="operationData.bitDepthContext.bitDepth">
             </upcoming-alarms-panel>
 
+            <!-- Failures -->
             <div class="panel panel-default">
 
                 <div class="panel-heading clearfix" ng-init="odController.getPanelStartState('panelFailuresIsCollapsed')" ng-click="odController.changePanelState('panelFailuresIsCollapsed')">

@@ -107,7 +107,7 @@
 			if (hours <= 0) {
 				return startWith + toFixed(minutes) + 'm: ' + toFixed(seconds) + 's';
 			} else if (hours < 24) {
-				return startWith + toFixed(hours) + 'h: ' + toFixed(minutes) + ':m ' + toFixed(seconds) + 's';
+				return startWith + toFixed(hours) + 'h: ' + toFixed(minutes) + 'm: ' + toFixed(seconds) + 's';
 			} else {
 				var days = Math.floor(hours / 24);
 				hours = hours % 24;

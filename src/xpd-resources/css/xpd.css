@@ -927,3 +927,8 @@ xpd-operation-manager .button-bellow-label {
 .pointer {
     cursor: pointer;
 }
+
+.nopadding {
+   padding: 0 !important;
+   margin: 0 !important;
+}

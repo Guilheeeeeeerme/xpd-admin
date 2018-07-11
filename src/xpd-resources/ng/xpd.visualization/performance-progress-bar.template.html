@@ -1,0 +1,34 @@
+<div class="performance-progress-bar-content" ng-class="{'bg-success': isRealTime}">
+	<div ng-if="title">
+		<h6><strong>{{title}}</strong></h6>
+	</div>
+	<div class="performance-progress-bar">
+			<!-- <div class="progress">
+				<div class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" ng-class="" style="width: 100%">
+					<span class="show">{{ expectedValue | secondsToHourMinutes}}</span>
+				</div>
+			</div> -->
+		<div class="progress" ng-if="currentValue">
+			<div class="progress-bar {{currentColor}}" role="progressbar" aria-valuemin="0" aria-valuemax="100"
+				ng-class="{'progress-bar-striped active': isRealTime}"
+				ng-style="{'width' : currentPercentage + '%'}">
+				<span class="show">{{ currentValue | secondsToHourMinutes}}</span>
+			</div>
+		</div>
+		<div ng-if="!currentValue">
+			<span>Waiting for event!</span>
+		</div>
+	</div>
+	<div class="performance-progress-bar">
+		<div class="progress performance-progress-bar-legend">
+			<div class="progress-bar {{value.color}}" ng-repeat="value in legendBar track by $index"
+				ng-style="{'width' : value.percentage + '%'}">
+			</div>
+		</div>
+		<div class="pull-right performance-progress-bar-label">
+			<span class="label label-primary">{{ highValue | secondsToHourMinutes }}</span>
+			<span class="label label-success center">{{ mediumValue | secondsToHourMinutes }}</span>
+			<span class="label label-warning right">{{ lowValue | secondsToHourMinutes }}</span>
+		</div>
+	</div>	
+</div>

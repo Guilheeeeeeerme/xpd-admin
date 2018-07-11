@@ -1,6 +1,6 @@
 <div class="panel panel-default">
 
-	<div class="panel-heading clearfix">
+	<div class="panel-heading clearfix" ng-init="onInit('panelConsistencyInfoIsCollapsed')" ng-click="onClickCollapse('panelConsistencyInfoIsCollapsed')">
 		<h4 class="panel-title pull-left">Consistency Information</h4>
 		<div class="btn-group pull-right">
 			<i 
@@ -48,99 +48,66 @@
 			</tr>
 		</table>
 
-		<table class="table table-sm table-condensed">
-			<thead>
-				<tr>
-					<th>Connection</th>
-					<th>Trip</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr>
-					<td class="borderless-top col-md-6" ng-repeat="eventType in ['CONN', 'TRIP']">
-						<div class="progress">
-							<div class="progress-bar" role="progressbar" aria-valuemin="0" style="width : 100%">
-								<span class="show">{{ lastTwoEvents[eventType].vtargetTime | secondsToHourMinutes}}</span>
-							</div>
-						</div>
-					</td>
-				</tr>
-				<tr>
-					<td class="col-md-6 borderless-top" ng-repeat="eventType in ['CONN', 'TRIP']">
-						<div class="progress">
-							<div 
-								class="progress-bar" 
-								role="progressbar" 
-								aria-valuemin="0" 
-								aria-valuemax="lastTwoEvents[eventType].afterVpoorTime" 
-								ng-class="lastTwoEvents[eventType].colorPerformance"
-							 	ng-style="{'width' : lastTwoEvents[eventType].percentageDuration + '%'}">
-								<span class="show">{{lastTwoEvents[eventType].duration | secondsToHourMinutes}}</span>
-							</div>
-						</div>
-					</td>
-				</tr>
-				<tr>
-					<td class="col-md-6 borderless-top" ng-repeat="eventType in ['CONN', 'TRIP']">
-						<div class="progress">
-							<div 
-								class="progress-bar" 
-								ng-style="{'width' : lastTwoEvents[eventType].voptimumPercentage + '%'}">
-							</div>
-							<div 
-								class="progress-bar progress-bar-success" 
-								ng-style="{'width' : lastTwoEvents[eventType].vstandardPercentage + '%'}">
-							</div>
-							<div 
-								class="progress-bar progress-bar-warning" 
-								ng-style="{'width' : lastTwoEvents[eventType].vpoorPercentage + '%'}">
-							</div>
-							<div 
-								class="progress-bar progress-bar-danger" 
-								ng-style="{'width' : lastTwoEvents[eventType].afterVpoorPercentage + '%'}">
-							</div>
-						</div>
-						<div>
-							<span 
-								class="label label-primary">
-									{{lastTwoEvents[eventType].voptimumTime | secondsToHourMinutes}}
-							</span>
-							<span 
-								class="label label-success center">
-									{{lastTwoEvents[eventType].vstandardTime | secondsToHourMinutes}}
-							</span>
-							<span 
-								class="label label-warning right">
-									{{lastTwoEvents[eventType].vpoorTime | secondsToHourMinutes}}
-							</span>
-						</div>
-					</td>
-				</tr>
-				<tr>
-					<th colspan="2">Total</th>
-				</tr>
-				<tr>
-					<td colspan="2" class="borderless-top">
-						<div class="progress">
-							<div 
-								class="progress-bar" 
-								role="progressbar" 
-								aria-valuemin="0" 
-								aria-valuemax="100" 
-								ng-class="jointInfo.colorPerformance"
-							 	ng-style="{'width' : jointInfo.percentageDuration + '%'}">
-								<span class="show">{{ jointInfo.duration | secondsToHourMinutes}}</span>
-							</div>
-						</div>
-						<div class="pull-right">
-							<span class="label label-primary">{{ jointInfo.voptimumTime | secondsToHourMinutes }}</span>
-							<span class="label label-success center">{{ jointInfo.vstandardTime | secondsToHourMinutes }}</span>
-							<span class="label label-warning right">{{ jointInfo.vpoorTime | secondsToHourMinutes }}</span>
-						</div>
-					</td>
-				</tr>
-			</tbody>
-		</table>
+		<div class="col-md-12 text-center">
+			<strong>Current Activity</strong>
+		</div>
+
+		<div class="col-md-6 nopadding">
+			<performance-progress-bar
+				title="Last Event ({{lastEventType | xpdEventLabelFilter}})"
+				current-value="duration[lastEventType]"
+				high-value= "eventProperty[lastEventType].voptimumTime",
+				medium-value= "eventProperty[lastEventType].vstandardTime",
+				low-value= "eventProperty[lastEventType].vpoorTime">
+			</performance-progress-bar>
+		</div>
+
+		<div class="col-md-6 nopadding">
+			<performance-progress-bar
+				title="Current Event ({{event.eventType | xpdEventLabelFilter}})"
+				current-value="(currentEventDuration / 1000)"
+				high-value= "eventProperty[event.eventType].voptimumTime",
+				medium-value= "eventProperty[event.eventType].vstandardTime",
+				low-value= "eventProperty[event.eventType].vpoorTime"
+				is-real-time="true">
+			</performance-progress-bar>
+		</div>
+
+		<div class="col-md-12 nopadding">
+			<performance-progress-bar
+				title="Current Joint"
+				current-value="(jointDuration / 1000)"
+				high-value= "eventProperty['BOTH'].voptimumTime",
+				medium-value= "eventProperty['BOTH'].vstandardTime",
+				low-value= "eventProperty['BOTH'].vpoorTime"
+				is-real-time="true">
+			</performance-progress-bar>
+		</div>
+
+		<div class="col-md-12 text-center">
+			<strong>Last Activity</strong>
+		</div>
+
+		<div class="col-md-6 nopadding" ng-repeat="eventType in ['CONN', 'TRIP']">
+			<performance-progress-bar
+				title="Last {{eventType | xpdEventLabelFilter}} Done"
+				current-value="duration[eventType]"
+				high-value= "eventProperty[eventType].voptimumTime",
+				medium-value= "eventProperty[eventType].vstandardTime",
+				low-value= "eventProperty[eventType].vpoorTime">
+			</performance-progress-bar>
+		</div>
+
+		<div class="col-md-12 nopadding">
+			<performance-progress-bar
+				title="Last Joint Done"
+				current-value="getLastJointDuration()"
+				high-value= "eventProperty['BOTH'].voptimumTime",
+				medium-value= "eventProperty['BOTH'].vstandardTime",
+				low-value= "eventProperty['BOTH'].vpoorTime">
+			</performance-progress-bar>
+		</div>
+
 	</div>
 
 </div>

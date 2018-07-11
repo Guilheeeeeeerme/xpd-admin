@@ -11,6 +11,8 @@
 			restrict: 'EA',
 			templateUrl: '../xpd-resources/ng/xpd.visualization/operation-information-panel.template.html',
 			scope: {
+				onInit: '=',
+				onClickCollapse: '=',
 				collapse: '=',
 				numberJoints: '=',
 				jointNumber: '=',
@@ -18,8 +20,10 @@
 				state: '=',
 				reading: '=',
 				accScore: '=',
+				stateDuration: '=',
 				targetParamExpectedEndTime: '=',
-				targetExpectedDuration: '=',
+				optimumExpectedDuration: '=',
+				standardExpectedDuration: '=',
 				poorExpectedDuration: '=',
 				well: '=',
 			}
