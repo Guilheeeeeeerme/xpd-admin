@@ -12,7 +12,6 @@
 
 		var selectedBaseLine;
 		var selectedEventType;
-		var lastPoint = null;
 
 		$scope.eventProperty = [];
 		$scope.eventProperty['TRIP'] = {};
