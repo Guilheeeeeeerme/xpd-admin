@@ -29,9 +29,9 @@
 
 				function createChart(chartCategories, chartData) {
 
-					let series = getDataSeries(chartData);
+					const series = getDataSeries(chartData);
 
-					let highcharts = {
+					const highcharts = {
 
 						chart: {
 							type: 'column',
@@ -126,10 +126,10 @@
 
 				function getDataSeries(data) {
 
-					let series = [];
+					const series = [];
 
-					let positiveVre = data.vre.map(positiveOnly);
-					let negativeVre = data.vre.map(negativeOnly);
+					const positiveVre = data.vre.map(positiveOnly);
+					const negativeVre = data.vre.map(negativeOnly);
 
 					series.push({
 						name: 'VRE',

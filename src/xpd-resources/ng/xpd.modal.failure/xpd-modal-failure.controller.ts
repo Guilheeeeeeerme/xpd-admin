@@ -6,7 +6,7 @@
 
 // 	modalFailureController.$inject = ['$scope', '$uibModalInstance', 'categorySetupAPIService', 'failureSetupAPIService', 'selectedFailure', 'dialogFactory', 'operationDataFactory'];
 
-// 	
+//
 import * as angular from 'angular';
 import { IModalServiceInstance } from 'angular-ui-bootstrap';
 
@@ -19,7 +19,7 @@ export class ModalFailureController {
 		'failureSetupAPIService',
 		'selectedFailure',
 		'dialogFactory',
-		'operationDataFactory'
+		'operationDataFactory',
 	];
 	public modalActionButtonSave: () => void;
 	public modalActionButtonClose: () => void;
@@ -234,4 +234,3 @@ export class ModalFailureController {
 
 	}
 }
-

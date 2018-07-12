@@ -19,7 +19,7 @@
 
 		function link(scope, elem, attr) {
 
-			let objChart = createChart();
+			const objChart = createChart();
 
 			scope.$watchGroup(['chartPlannedData', 'chartRealizedData', 'plotBandsPlannedData'], function(newValues) {
 				$xpdTimeout(function() {

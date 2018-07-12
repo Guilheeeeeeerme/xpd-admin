@@ -6,7 +6,7 @@
 	MemberSchedulerController.$inject = ['$scope', 'scheduleSetupAPIService', 'schedulerActionsService'];
 
 	function MemberSchedulerController($scope, scheduleSetupAPIService, schedulerActionsService) {
-		let vm = this;
+		const vm = this;
 
 		/**
          * SCHEDULER SETUP
@@ -91,7 +91,7 @@
 			/**
              * SETTING UP DATE LIMITS
              **/
-			let referenceDate = $scope.schedulerSetup.referenceDate;
+			const referenceDate = $scope.schedulerSetup.referenceDate;
 
 			if ($scope.schedulerSetup.monthlyView) {
 				fromDate = new Date(referenceDate.getFullYear(), referenceDate.getMonth(), 1).getTime();
@@ -119,8 +119,7 @@
 		function updateReferenceDate() {
 			if ($scope.schedulerSetup.selectedDate > getDateRange($scope.schedulerSetup.selectedMonth)) {
 				$scope.schedulerSetup.referenceDate = new Date($scope.schedulerSetup.selectedYear, $scope.schedulerSetup.selectedMonth, getDateRange($scope.schedulerSetup.selectedMonth));
-			}
-			else {
+			} else {
 				$scope.schedulerSetup.referenceDate = new Date($scope.schedulerSetup.selectedYear, $scope.schedulerSetup.selectedMonth, $scope.schedulerSetup.selectedDate);
 			}
 		}

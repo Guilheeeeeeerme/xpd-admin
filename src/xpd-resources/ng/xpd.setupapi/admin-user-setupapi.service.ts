@@ -7,15 +7,15 @@
 
 	function adminUserSetupAPIService(xpdAccessFactory, setupAPIService) {
 
-		let BASE_URL = xpdAccessFactory.getSetupURL() + 'setup/admin-user';
+		const BASE_URL = xpdAccessFactory.getSetupURL() + 'setup/admin-user';
 
-		let vm = this;
+		const vm = this;
 
 		vm.authenticate = authenticate;
 
 		function authenticate(loginInfo, successCallback, errorCallback) {
 
-			let req = {
+			const req = {
 				method: 'POST',
 				url: BASE_URL + '/login',
 				headers: {

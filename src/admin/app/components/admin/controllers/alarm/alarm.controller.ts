@@ -12,7 +12,7 @@
 	alarmController.$inject = ['$scope', 'operationDataFactory', 'operationSetupAPIService', 'alarmService'];
 
 	function alarmController($scope, operationDataFactory, operationSetupAPIService, alarmService) {
-		let vm = this;
+		const vm = this;
 
 		$scope.alarmData = {
 			operation: null,
@@ -68,7 +68,7 @@
 			$scope.alarms.timeAlarms = [];
 			$scope.alarms.depthAlarms = [];
 
-			for (let i in alarms) {
+			for (const i in alarms) {
 				if (alarms[i].enabled != false) {
 					if (alarms[i].alarmType == 'time') {
 						$scope.alarms.timeAlarms.push(alarms[i]);
@@ -81,7 +81,7 @@
 
 		function actionButtonAddTimeAlarm() {
 
-			let alarm = {
+			const alarm = {
 				alarmType: 'time',
 			};
 
@@ -98,7 +98,7 @@
 
 		function actionButtonAddDepthAlarm() {
 
-			let alarm = {
+			const alarm = {
 				alarmType: 'depth',
 			};
 

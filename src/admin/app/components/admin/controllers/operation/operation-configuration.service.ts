@@ -6,7 +6,7 @@
 	operationConfigurationService.$inject = ['$sce'];
 
 	function operationConfigurationService($sce) {
-		let vm = this;
+		const vm = this;
 
 		vm.getCasingTypeSizeItems = getCasingTypeSizeItems;
 		vm.getHtmlPopOver = getHtmlPopOver;
@@ -16,7 +16,7 @@
 		vm.getCasingTripSpeedParams = getCasingTripSpeedParams;
 		vm.getRiserTripSpeedParams = getRiserTripSpeedParams;
 
-		let casingTripSpeedParams = {
+		const casingTripSpeedParams = {
 			casing12SemiFlush: { voptimum: 14, vstandard: 12, vpoor: 8, contractIndicator: true },
 			casing12Flush: { voptimum: 12, vstandard: 10, vpoor: 6, contractIndicator: true },
 			casing16SemiFlush: { voptimum: 12, vstandard: 10, vpoor: 6, contractIndicator: true },
@@ -25,13 +25,13 @@
 			casing24Plus: { voptimum: 2, vstandard: 1.5, vpoor: 0.5, contractIndicator: true },
 		};
 
-		let riserTripSpeedParams = {
+		const riserTripSpeedParams = {
 			descendRiser: { voptimum: 95, vstandard: 80, vpoor: 50, contractIndicator: true },
 			ascentRiser: { voptimum: 105, vstandard: 88, vpoor: 55, contractIndicator: true },
 		};
 
 		function getCasingTypeSizeItems() {
-			let casingTypeSizeItems = [
+			const casingTypeSizeItems = [
 				{/*id: 1,*/ label: 'Less than 12" semi flush or conventinal', id: 'casing12SemiFlush' },
 				{/*id: 2,*/ label: 'Less than 12" flush', id: 'casing12Flush' },
 				{

@@ -7,7 +7,7 @@
 
 	function wellController($scope, $modal, wellSetupAPIService, sectionSetupAPIService, dialogFactory, operationDataFactory) {
 
-		let vm = this;
+		const vm = this;
 
 		$scope.dados = {
 			wellList: [],
@@ -82,8 +82,7 @@
 			sectionSetupAPIService.getListOfSectionsByWell(well.id, function(sectionList) {
 				if (sectionList.length == 0) {
 					removeWell(well);
-				}
-				else {
+				} else {
 					dialogFactory.showMessageDialog('You can\'t delete a Well with Sections and Operations inside.', 'Unable to Remove Well');
 				}
 			});

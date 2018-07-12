@@ -7,7 +7,7 @@
 	slipsToSlipsController.$inject = ['$scope', '$routeParams', 'eventlogSetupAPIService'];
 
 	function slipsToSlipsController($scope, $routeParams, eventlogSetupAPIService) {
-		let vm = this;
+		const vm = this;
 
 		$scope.slipsToSlipsData = {
 			connectionTimes: null,
@@ -16,8 +16,8 @@
 			type: null,
 		};
 
-		let operationId = $routeParams.operationId;
-		let eventType = $routeParams.type;
+		const operationId = $routeParams.operationId;
+		const eventType = $routeParams.type;
 
 		getEventTimes();
 		vm.onChangePeriod = onChangePeriod;

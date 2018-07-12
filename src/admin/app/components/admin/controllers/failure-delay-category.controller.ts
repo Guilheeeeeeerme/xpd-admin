@@ -7,7 +7,7 @@
 	failureDelayCategoryController.$inject = ['$scope', '$uibModal', 'dialogFactory', 'categorySetupAPIService'];
 
 	function failureDelayCategoryController($scope, $modal, dialogFactory, categorySetupAPIService) {
-		let vm = this;
+		const vm = this;
 
 		$scope.controller = vm;
 
@@ -153,10 +153,10 @@
 
 		function removeNodeSuccessCallback(result) {
 
-			let parentChildren = roleList[result.parentId].children;
+			const parentChildren = roleList[result.parentId].children;
 
 			// remome o filho que esta no array do pai
-			for (let i in parentChildren) {
+			for (const i in parentChildren) {
 				if (result.id == parentChildren[i].id) {
 					parentChildren.splice(i, 1);
 				}
@@ -180,15 +180,15 @@
 
 		function makeTreeStructure(data) {
 
-			let objList = data;
-			let categoryData = [];
+			const objList = data;
+			const categoryData = [];
 
-			for (let i in objList) {
+			for (const i in objList) {
 
 				objList[i].children = [];
 				objList[i].selected = false;
 
-				let currentObj = objList[i];
+				const currentObj = objList[i];
 
 				// child to parent
 				if (currentObj.parentId == null || currentObj.parentId == undefined) {
@@ -202,7 +202,7 @@
 		}
 
 		function hasChildren(node) {
-			let children = node.children;
+			const children = node.children;
 
 			if (children.length > 0) {
 				return true;

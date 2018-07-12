@@ -68,7 +68,7 @@
 			schedule.shiftHours = schedule.endDate.getTime();
 			schedule.shiftHours -= schedule.startDate.getTime();
 
-			let schedules = [];
+			const schedules = [];
 
 			if ($scope.modalData.repeat) {
 
@@ -138,7 +138,7 @@
 					console.log('Limpando %s Schedules', scheduleIds.length);
 
 					while (scheduleIds.length > 0) {
-						let _schedule = scheduleIds.pop();
+						const _schedule = scheduleIds.pop();
 
 						if (_schedule.id != schedule.id) {
 							removeScheduleCallback(_schedule);
@@ -188,7 +188,7 @@
 
 		function actionButtonRemove() {
 
-			let schedule = {
+			const schedule = {
 				id: $scope.modalData.id || null,
 				startDate: new Date($scope.modalData.startDate),
 				member: $scope.modalData.member,

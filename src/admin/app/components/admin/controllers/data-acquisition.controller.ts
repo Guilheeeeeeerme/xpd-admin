@@ -8,7 +8,7 @@
 
 	function dataAcquisitionController($scope, operationDataFactory) {
 
-		let vm = this;
+		const vm = this;
 
 		$scope.dados = {
 			acquisitionJson: false,

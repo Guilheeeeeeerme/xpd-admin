@@ -7,7 +7,7 @@
 	alarmService.$inject = ['$uibModal', 'dialogFactory'];
 
 	function alarmService($uibModal, dialogFactory) {
-		let vm = this;
+		const vm = this;
 
 		vm.addAlarm = addAlarm;
 		vm.editAlarm = editAlarm;

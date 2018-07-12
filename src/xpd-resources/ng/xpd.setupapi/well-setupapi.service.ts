@@ -7,9 +7,9 @@
 	wellSetupAPIService.$inject = ['xpdAccessFactory', 'setupAPIService'];
 
 	function wellSetupAPIService(xpdAccessFactory, setupAPIService) {
-		let BASE_URL = xpdAccessFactory.getSetupURL() + 'setup/well';
+		const BASE_URL = xpdAccessFactory.getSetupURL() + 'setup/well';
 
-		let vm = this;
+		const vm = this;
 
 		vm.getObjectById = getObjectById;
 		vm.insertObject = insertObject;
@@ -19,7 +19,7 @@
 
 		function insertObject(object, successCallback, errorCallback) {
 
-			let req = {
+			const req = {
 				method: 'POST',
 				url: BASE_URL,
 				headers: {
@@ -34,7 +34,7 @@
 
 		function removeObject(object, successCallback, errorCallback) {
 
-			let req = {
+			const req = {
 				method: 'DELETE',
 				url: BASE_URL,
 				headers: {
@@ -48,7 +48,7 @@
 
 		function updateObject(object, successCallback, errorCallback) {
 
-			let req = {
+			const req = {
 				method: 'PUT',
 				url: BASE_URL + '/' + object.id,
 				headers: {
@@ -62,7 +62,7 @@
 
 		function getList(successCallback, errorCallback) {
 
-			let req = {
+			const req = {
 				method: 'GET',
 				url: BASE_URL + '/list',
 			};
@@ -72,7 +72,7 @@
 
 		function getObjectById(id, successCallback, errorCallback) {
 
-			let req = {
+			const req = {
 				method: 'GET',
 				url: BASE_URL + '/' + id,
 			};

@@ -1,132 +1,145 @@
-(function() {
+// (function() {
 
-	angular.module('xpd.planner')
-		.directive('xpdConnectionPlanner', xpdConnectionPlanner);
+// 	angular.module('xpd.planner')
+// 		.directive('xpdConnectionPlanner', xpdConnectionPlanner);
+import * as angular from 'angular';
+import template from '../xpd-resources/ng/xpd.planner/connection-planner.template.html';
 
-	function xpdConnectionPlanner() {
-		return {
-			link,
-			scope: {
-				label: '@',
-				targetSpeed: '=',
-				targetTime: '=',
-				timeSlices: '<',
-				optimumSpeed: '<',
-				actionButtonApply: '&',
-			},
-			templateUrl: '../xpd-resources/ng/xpd.planner/connection-planner.template.html',
-		};
+export class XPDConnectionPlannerDirective implements ng.IDirective {
+	public scope = {
+		label: '@',
+		targetSpeed: '=',
+		targetTime: '=',
+		timeSlices: '<',
+		optimumSpeed: '<',
+		actionButtonApply: '&',
+	};
+	public template = template;
 
-		function link(scope, elem, attrs) {
+	public link: ng.IDirectiveLinkFn = (
+		scope: any,
+		element: ng.IAugmentedJQuery,
+		attrs: ng.IAttributes,
+		ctrl: any,
+	) => {
 
-			let stopWatchingPlannerTimeSlices;
+		let stopWatchingPlannerTimeSlices;
 
-			scope.actionSwap = actionSwap;
-			scope.actionButtonAddTimeSlice = actionButtonAddTimeSlice;
-			scope.changingPercentageOf = changingPercentageOf;
-			scope.makeMoveVtarget = makeMoveVtarget;
+		scope.actionSwap = actionSwap;
+		scope.actionButtonAddTimeSlice = actionButtonAddTimeSlice;
+		scope.changingPercentageOf = changingPercentageOf;
+		scope.makeMoveVtarget = makeMoveVtarget;
 
-			function changingPercentageOf(item) {
-				scope.selectedSlice = item;
-				// onTimeSlicesPercentageChange();
+		function changingPercentageOf(item) {
+			scope.selectedSlice = item;
+			// onTimeSlicesPercentageChange();
 
-			}
+		}
 
-			function makeMoveVtarget(item, list) {
-				list.map(function(_item) {
+		function makeMoveVtarget(item, list) {
+			// tslint:disable-next-line:variable-name
+			list.map(function (_item) {
 
-					if (item.timeOrder == _item.timeOrder) {
-						_item.moveVtarget = _item.moveVtarget;
-					} else {
-						_item.moveVtarget = false;
-					}
-
-					return _item;
-				});
-			}
-
-			scope.$watch('targetSpeed', updateTargetTime, true);
-
-			function actionSwap(indexA, valueA, indexB, valueB) {
-
-				stopWatchingPlannerTimeSlices && stopWatchingPlannerTimeSlices();
-
-				if (valueA && valueB) {
-					scope.timeSlices[scope.selectedDirection][indexA] = angular.copy(valueB);
-					scope.timeSlices[scope.selectedDirection][indexB] = angular.copy(valueA);
+				if (item.timeOrder === _item.timeOrder) {
+					_item.moveVtarget = _item.moveVtarget;
+				} else {
+					_item.moveVtarget = false;
 				}
 
-				stopWatchingPlannerTimeSlices = startWatchingPlannerTimeSlices();
+				return _item;
+			});
+		}
+
+		scope.$watch('targetSpeed', updateTargetTime, true);
+
+		function actionSwap(indexA, valueA, indexB, valueB) {
+
+			if (stopWatchingPlannerTimeSlices) {
+				stopWatchingPlannerTimeSlices();
 			}
 
-			function updateTargetTime() {
-
-				let reference = 1;
-
-				scope.targetTime = reference / scope.targetSpeed;
-				scope.optimumTime = reference / scope.optimumSpeed;
+			if (valueA && valueB) {
+				scope.timeSlices[scope.selectedDirection][indexA] = angular.copy(valueB);
+				scope.timeSlices[scope.selectedDirection][indexB] = angular.copy(valueA);
 			}
 
 			stopWatchingPlannerTimeSlices = startWatchingPlannerTimeSlices();
+		}
 
-			function actionButtonAddTimeSlice(timeSlices, direction, name) {
+		function updateTargetTime() {
 
-				stopWatchingPlannerTimeSlices && stopWatchingPlannerTimeSlices();
+			const reference = 1;
 
-				timeSlices[direction].push({
-					id: null,
-					name,
-					percentage: 0,
-					timeOrder: timeSlices[direction].length + 1,
-					tripin: direction != 'tripout',
-					moveVtarget: false,
-					canDelete: true,
-				});
+			scope.targetTime = reference / scope.targetSpeed;
+			scope.optimumTime = reference / scope.optimumSpeed;
+		}
 
-				stopWatchingPlannerTimeSlices = startWatchingPlannerTimeSlices();
+		stopWatchingPlannerTimeSlices = startWatchingPlannerTimeSlices();
 
+		function actionButtonAddTimeSlice(timeSlices, direction, name) {
+
+			if (stopWatchingPlannerTimeSlices) {
+				stopWatchingPlannerTimeSlices();
 			}
 
-			function startWatchingPlannerTimeSlices() {
-				return scope.$watch('timeSlices', onTimeSlicesPercentageChange, true);
+			timeSlices[direction].push({
+				id: null,
+				name,
+				percentage: 0,
+				timeOrder: timeSlices[direction].length + 1,
+				tripin: direction !== 'tripout',
+				moveVtarget: false,
+				canDelete: true,
+			});
+
+			stopWatchingPlannerTimeSlices = startWatchingPlannerTimeSlices();
+
+		}
+
+		function startWatchingPlannerTimeSlices() {
+			return scope.$watch('timeSlices', onTimeSlicesPercentageChange, true);
+		}
+
+		function onTimeSlicesPercentageChange() {
+
+			let timeSlices = scope.timeSlices;
+
+			const direction = scope.selectedDirection;
+
+			if (!timeSlices || !direction) {
+				return;
 			}
 
-			function onTimeSlicesPercentageChange() {
+			timeSlices = timeSlices[direction];
 
-				let timeSlices = scope.timeSlices;
+			scope.leftPercentage = 100;
 
-				let direction = scope.selectedDirection;
+			let timeOrder = 1;
+			let timeSlice = null;
 
-				if (!timeSlices || !direction) {
-					return;
-	}
+			for (const i in timeSlices) {
 
-				timeSlices = timeSlices[direction];
+				timeSlice = timeSlices[i];
 
-				scope.leftPercentage = 100;
+				timeSlice.timeOrder = timeOrder;
 
-				let timeOrder = 1;
-				let timeSlice = null;
+				timeSlice.percentage = Math.round(timeSlice.percentage);
+				scope.leftPercentage -= timeSlice.percentage;
 
-				for (let i in timeSlices) {
+				timeOrder++;
+			}
 
-					timeSlice = timeSlices[i];
-
-					timeSlice.timeOrder = timeOrder;
-
-					timeSlice.percentage = Math.round(timeSlice.percentage);
-					scope.leftPercentage -= timeSlice.percentage;
-
-					timeOrder++;
-				}
-
-				if (scope.leftPercentage < 0) {
-					scope.selectedSlice.percentage += scope.leftPercentage;
-				}
-
+			if (scope.leftPercentage < 0) {
+				scope.selectedSlice.percentage += scope.leftPercentage;
 			}
 
 		}
+
 	}
 
-})();
+	public static Factory(): ng.IDirectiveFactory {
+		return () => new XPDConnectionPlannerDirective();
+	}
+}
+
+// })();

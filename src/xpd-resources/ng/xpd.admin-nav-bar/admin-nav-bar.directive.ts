@@ -4,137 +4,167 @@
 * @Last Modified by:   Gezzy Ramos
 * @Last Modified time: 2017-10-05 14:18:42
 */
-(function() {
-	'use strict';
+// (function() {
+// 	'use strict';
 
-	angular.module('xpd.admin-nav-bar', [])
-		.directive('xpdAdminNavBar', xpdAdminNavBar);
+// 	angular.module('xpd.admin-nav-bar', [])
+// 		.directive('xpdAdminNavBar', xpdAdminNavBar);
 
-	xpdAdminNavBar.$inject = ['$location', 'menuConfirmationFactory', 'operationDataFactory', 'dialogFactory'];
+// 	xpdAdminNavBar.$inject = ['$location', 'menuConfirmationFactory', 'operationDataFactory', 'dialogFactory'];
+import template from '../xpd-resources/ng/xpd.admin-nav-bar/admin-nav-bar.template.html';
+import { OperationDataFactory } from '../xpd.communication/operation-server-data.factory';
+import { DialogFactory } from '../xpd.dialog/xpd.dialog.factory';
+import { MenuConfirmationFactory } from '../xpd.menu-confirmation/menu-confirmation.factory';
 
-	function xpdAdminNavBar($location, menuConfirmationFactory, operationDataFactory, dialogFactory) {
-		return {
-			scope: {
+export class XPDAdminNavBarDirective implements ng.IDirective {
 
-			},
-			restrict: 'E',
-			templateUrl: '../xpd-resources/ng/xpd.admin-nav-bar/admin-nav-bar.template.html',
-			link,
-		};
+	public static $inject: string[] = ['$location', 'menuConfirmationFactory', 'operationDataFactory', 'dialogFactory'];
 
-		function link(scope, element, attrs) {
+	public scope = {
 
-			if (attrs.navOrigin == 'report') {
-				scope.onclickItemMenu = onclickItemMenuReport;
+	};
+	public restrict = 'E';
+	public template = template;
+
+	constructor(
+		private $location: ng.ILocationService,
+		private menuConfirmationFactory: MenuConfirmationFactory,
+		private operationDataFactory: OperationDataFactory,
+		private dialogFactory: DialogFactory) { }
+
+	public link: ng.IDirectiveLinkFn = (
+		scope: any,
+		element: ng.IAugmentedJQuery,
+		attrs: ng.IAttributes,
+		ctrl: any,
+	) => {
+
+		const self = this;
+
+		if (attrs.navOrigin === 'report') {
+			scope.onclickItemMenu = onclickItemMenuReport;
+		} else {
+			scope.onclickItemMenu = onclickItemMenuAdmin;
+		}
+
+		this.operationDataFactory.openConnection([]).then(function (response) {
+			self.operationDataFactory = response;
+			checkIfHasRunningOperation();
+		});
+
+		this.operationDataFactory.addEventListener('menuConfirmationFactory', 'setOnRunningOperationListener', checkIfHasRunningOperation);
+		this.operationDataFactory.addEventListener('menuConfirmationFactory', 'setOnOperationChangeListener', checkIfHasRunningOperation);
+		this.operationDataFactory.addEventListener('menuConfirmationFactory', 'setOnNoCurrentOperationListener', checkIfHasRunningOperation);
+
+		function onclickItemMenuAdmin(path, newTab) {
+			const blockMenu = self.menuConfirmationFactory.getBlockMenu();
+
+			if (!blockMenu) {
+
+				redirectToPath(path, !!newTab);
+
 			} else {
-				scope.onclickItemMenu = onclickItemMenuAdmin;
-			}
+				const message = 'Your changes will be lost. Proceed?';
 
-			operationDataFactory.openConnection([]).then(function(response) {
-				operationDataFactory = response;
-				checkIfHasRunningOperation();
-			});
-
-			operationDataFactory.addEventListener('menuConfirmationFactory', 'setOnRunningOperationListener', checkIfHasRunningOperation);
-			operationDataFactory.addEventListener('menuConfirmationFactory', 'setOnOperationChangeListener', checkIfHasRunningOperation);
-			operationDataFactory.addEventListener('menuConfirmationFactory', 'setOnNoCurrentOperationListener', checkIfHasRunningOperation);
-
-			function onclickItemMenuAdmin(path, newTab) {
-				let blockMenu = menuConfirmationFactory.getBlockMenu();
-
-				if (!blockMenu) {
-
+				self.dialogFactory.showCriticalDialog(message, function () {
+					self.menuConfirmationFactory.setBlockMenu(false);
 					redirectToPath(path, !!newTab);
-
-				} else {
-					let message = 'Your changes will be lost. Proceed?';
-
-					dialogFactory.showCriticalDialog(message, function() {
-						menuConfirmationFactory.setBlockMenu(false);
-						redirectToPath(path, !!newTab);
-					});
-				}
+				});
 			}
+		}
 
-			function onclickItemMenuReport(path, newTab) {
+		function onclickItemMenuReport(path, newTab) {
 
-				if ($location.port()) {
+			if (self.$location.port()) {
 
-					if (path == 'dmeclog.html#/') {
-						window.open('https://' + $location.host() + ':' + $location.port() + '/admin/dmeclog.html#');
+				if (path === 'dmeclog.html#/') {
+					window.open('https://' + self.$location.host() + ':' + self.$location.port() + '/admin/dmeclog.html#');
+				} else {
+					if (newTab) {
+						window.open('https://' + self.$location.host() + ':' + self.$location.port() + '/admin/admin.html#' + path);
 					} else {
+						window.location.href = 'https://' + self.$location.host() + ':' + self.$location.port() + '/admin/admin.html#' + path;
+					}
+				}
+
+			} else {
+
+				const url = window.location.href.split('/pages')[0];
+
+				if (path === 'dmeclog.html#/') {
+					window.open(url + 'pages/dmeclog.html#');
+				} else {
+					if (newTab) {
+						window.open('https://' + url + 'pages/admin.html#' + path);
+					} else {
+						window.location.href = url + 'pages/admin.html#' + path;
+					}
+				}
+
+			}
+		}
+
+		function redirectToPath(path, newTab) {
+
+			if (self.$location.port()) {
+
+				if (path === 'dmeclog.html#/') {
+					window.open('https://' + self.$location.host() + ':' + self.$location.port() + '/admin/dmeclog.html#');
+				} else if (path === 'reports.html#/') {
+					window.location.href = 'https://' + self.$location.host() + ':' + self.$location.port() + '/admin/' + path;
+				} else {
+					if (!window.location.href.endsWith(path)) {
 						if (newTab) {
-							window.open('https://' + $location.host() + ':' + $location.port() + '/admin/admin.html#' + path);
+							window.open('admin.html#' + path);
 						} else {
-							window.location.href = 'https://' + $location.host() + ':' + $location.port() + '/admin/admin.html#' + path;
+							$location.url(path);
 						}
 					}
+				}
 
+			} else {
+
+				const url = window.location.href.split('pages')[0];
+
+				if (path === 'dmeclog.html#/') {
+					window.open(url + '/pages/' + path);
+				} else if (path === 'reports.html#/') {
+					window.location.href = url + '/pages/' + path;
 				} else {
-
-					let url = window.location.href.split('/pages')[0];
-
-					if (path == 'dmeclog.html#/') {
-						window.open(url + 'pages/dmeclog.html#');
-					} else {
+					if (!window.location.href.endsWith(path)) {
 						if (newTab) {
-							window.open('https://' + url + 'pages/admin.html#' + path);
+							window.open('admin.html#' + path);
 						} else {
-							window.location.href = url + 'pages/admin.html#' + path;
+							self.$location.url(path);
 						}
 					}
-
 				}
+
 			}
+		}
 
-			function redirectToPath(path, newTab) {
-
-				if ($location.port()) {
-
-					if (path == 'dmeclog.html#/') {
-						window.open('https://' + $location.host() + ':' + $location.port() + '/admin/dmeclog.html#');
-					} else if (path == 'reports.html#/') {
-						window.location.href = 'https://' + $location.host() + ':' + $location.port() + '/admin/' + path;
-					} else {
-						if ( !window.location.href.endsWith(path) ) {
-							if (newTab) {
-								window.open('admin.html#' + path);
-							} else {
-								$location.url(path);
-							}
-						}
-					}
-
-				} else {
-
-					let url = window.location.href.split('pages')[0];
-
-					if (path == 'dmeclog.html#/') {
-						window.open(url + '/pages/' + path);
-					} else if (path == 'reports.html#/') {
-						window.location.href = url + '/pages/' + path;
-					} else {
-						if ( !window.location.href.endsWith(path) ) {
-							if (newTab) {
-								window.open('admin.html#' + path);
-							} else {
-								$location.url(path);
-							}
-						}
-					}
-
-				}
-			}
-
-			function checkIfHasRunningOperation() {
-				let context = operationDataFactory.operationData.operationContext;
-				if (context && context.currentOperation && context.currentOperation.running && context.currentOperation.type != 'time') {
-					scope.hasRunningOperation = true;
-				} else {
-					scope.hasRunningOperation = false;
-				}
+		function checkIfHasRunningOperation() {
+			const context = self.operationDataFactory.operationData.operationContext;
+			if (context && context.currentOperation && context.currentOperation.running && context.currentOperation.type !== 'time') {
+				scope.hasRunningOperation = true;
+			} else {
+				scope.hasRunningOperation = false;
 			}
 		}
 	}
 
-})();
+	public static Factory(): ng.IDirectiveFactory {
+		return (
+			$location: ng.ILocationService,
+			menuConfirmationFactory: MenuConfirmationFactory,
+			operationDataFactory: OperationDataFactory,
+			dialogFactory: DialogFactory) => new XPDAdminNavBarDirective(
+				$location,
+				menuConfirmationFactory,
+				operationDataFactory,
+				dialogFactory,
+			);
+	}
+}
+
+// })();

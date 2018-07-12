@@ -13,13 +13,13 @@
 	reportNeedleController.$inject = ['$scope', 'reportsSetupAPIService'];
 
 	function reportNeedleController($scope, reportsSetupAPIService) {
-		let vm = this;
+		const vm = this;
 
 		$scope.needleData = {
 			needleDataChart: null,
 		};
 
-		let operationTypes = {
+		const operationTypes = {
 			none: {
 				label: '',
 				activities: [],
@@ -48,7 +48,7 @@
 
 		function renderChart() {
 
-			let parentData = $scope.reportsData;
+			const parentData = $scope.reportsData;
 
 			reportsSetupAPIService.getNeedleDataChart(
 				parentData.fromDate,
@@ -129,7 +129,7 @@
 			// 	return activity;
 			// });
 
-			for (let i in activities) {
+			for (const i in activities) {
 				if (activities[i].operationType == 'bha') {
 					operationTypes.bha.activities.push(activities[i]);
 					// operationTypes.bha.activities = sortActivities(operationTypes.bha.activities, bhaStates);

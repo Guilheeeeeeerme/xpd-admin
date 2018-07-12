@@ -33,9 +33,9 @@
 
 				if (attr.maxDate != null && attr.minDate != null) {
 
-					let dateTimeInputs = elem[0].querySelectorAll('.table-period-date-limit');
-					let max = toJSONLocal(maxDate);
-					let min = toJSONLocal(minDate);
+					const dateTimeInputs = elem[0].querySelectorAll('.table-period-date-limit');
+					const max = toJSONLocal(maxDate);
+					const min = toJSONLocal(minDate);
 
 					dateTimeInputs[0].max = max;
 					dateTimeInputs[0].min = min;
@@ -50,7 +50,7 @@
 
 				if (date == undefined) { return; }
 
-				let local = new Date(date);
+				const local = new Date(date);
 				local.setMinutes(date.getMinutes() - date.getTimezoneOffset());
 				return local.toJSON().slice(0, 19);
 			}

@@ -3,32 +3,29 @@
 * @Date:   2017-05-15 17:09:13
 * @Last Modified by:   Gezzy Ramos
 * @Last Modified time: 2017-05-16 17:35:49
-*/
-(function() {
-	'use strict';
+// */
+// (function() {
+// 	'use strict';
 
-	angular.module('xpd.menu-confirmation')
-		.factory('menuConfirmationFactory', menuConfirmationFactory);
+// 	angular.module('xpd.menu-confirmation')
+// 		.factory('menuConfirmationFactory', menuConfirmationFactory);
 
-	menuConfirmationFactory.$inject = [];
+// 	menuConfirmationFactory.$inject = [];
 
-	function menuConfirmationFactory() {
+export class MenuConfirmationFactory {
 
-		let vm = this;
-		vm.blockMenu = false;
-		vm.menuPlanner = false;
+	public static $inject: string[] = [];
 
-		return {
-			getBlockMenu,
-			setBlockMenu,
-		};
+	public blockMenu = false;
+	public menuPlanner = false;
 
-		function getBlockMenu() {
-			return vm.blockMenu;
-		}
-
-		function setBlockMenu(value) {
-			vm.blockMenu = value;
-		}
+	public getBlockMenu() {
+		return this.blockMenu;
 	}
-})();
+
+	public setBlockMenu(value) {
+		this.blockMenu = value;
+	}
+}
+
+	// })();

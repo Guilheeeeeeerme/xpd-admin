@@ -7,9 +7,9 @@
 
 	function operationSetupAPIService(xpdAccessFactory, setupAPIService) {
 
-		let BASE_URL = xpdAccessFactory.getSetupURL() + 'setup/operation';
+		const BASE_URL = xpdAccessFactory.getSetupURL() + 'setup/operation';
 
-		let vm = this;
+		const vm = this;
 
 		vm.getDefaultFields = getDefaultFields;
 		vm.getOperationAlarms = getOperationAlarms;
@@ -22,7 +22,7 @@
 
 		function getOperationAlarms(operationId, successCallback, errorCallback) {
 
-			let req = {
+			const req = {
 				method: 'GET',
 				url: BASE_URL + '/' + operationId + '/alarms',
 			};
@@ -32,7 +32,7 @@
 
 		function getObjectById(id, successCallback, errorCallback) {
 
-			let req = {
+			const req = {
 				method: 'GET',
 				url: BASE_URL + '/' + id,
 			};
@@ -42,7 +42,7 @@
 
 		function getList(successCallback, errorCallback) {
 
-			let req = {
+			const req = {
 				method: 'GET',
 				url: BASE_URL + '/list',
 			};
@@ -52,7 +52,7 @@
 
 		function insertObject(object, successCallback, errorCallback) {
 
-			let req = {
+			const req = {
 				method: 'POST',
 				url: BASE_URL,
 				headers: {
@@ -67,7 +67,7 @@
 
 		function updateObject(object, successCallback, errorCallback) {
 
-			let req = {
+			const req = {
 				method: 'PUT',
 				url: BASE_URL + '/' + object.id,
 				headers: {
@@ -80,7 +80,7 @@
 		}
 
 		function getDefaultFields(type, successCallback, errorCallback) {
-			let req = {
+			const req = {
 				method: 'GET',
 				url: BASE_URL + '/default?type=' + type,
 				headers: {
@@ -107,7 +107,7 @@
 
 		function getOperationQueue(wellId, successCallback, errorCallback) {
 
-			let req = {
+			const req = {
 				method: 'GET',
 				url: xpdAccessFactory.getSetupURL() + 'operation-resources/operations-queue/' + wellId,
 			};

@@ -6,7 +6,7 @@
 	wellUpsertController.$inject = ['$scope', '$uibModalInstance', 'callback', 'initialData'];
 
 	function wellUpsertController($scope, $modalInstance, callback, initialData) {
-		let vm = this;
+		const vm = this;
 
 		vm.actionButtonClose = actionButtonClose;
 		vm.actionButtonSave = actionButtonSave;

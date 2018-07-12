@@ -36,14 +36,14 @@
 		// 	label: 'Section of 3 joints of casing greater than or equal to 12" and smaller than 16"'
 		// }];
 
-		let queryDict = {};
+		const queryDict = {};
 		location.search.substr(1).split('&').forEach(function(item) {
 			queryDict[item.split('=')[0]] = item.split('=')[1];
 		});
 
-		let operationId = queryDict.operationid;
+		const operationId = queryDict.operationid;
 
-		let vm = this;
+		const vm = this;
 
 		vm.toDate = toDate;
 
@@ -61,10 +61,10 @@
 
 		function loadOperationCallback(data) {
 
-			let contractParams = {};
+			const contractParams = {};
 
 			// Array to Object
-			for (let i in data.contractParams) {
+			for (const i in data.contractParams) {
 				contractParams[data.contractParams[i].type] = data.contractParams[i];
 				delete contractParams[data.contractParams[i].type].type;
 			}

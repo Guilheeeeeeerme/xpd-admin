@@ -8,9 +8,9 @@
 
 	function failureSetupAPIService(xpdAccessFactory, setupAPIService) {
 
-		let BASE_URL = xpdAccessFactory.getSetupURL() + 'setup/failure';
+		const BASE_URL = xpdAccessFactory.getSetupURL() + 'setup/failure';
 
-		let vm = this;
+		const vm = this;
 
 		vm.insertObject = insertObject;
 		vm.updateObject = updateObject;
@@ -22,7 +22,7 @@
 
 		function updateObject(failure, successCallback, errorCallback) {
 
-			let req = {
+			const req = {
 				method: 'PUT',
 				url: BASE_URL + '/' + failure.id,
 				headers: {
@@ -37,7 +37,7 @@
 
 		function removeObject(object, successCallback, errorCallback) {
 
-			let req = {
+			const req = {
 				method: 'DELETE',
 				url: BASE_URL,
 				headers: {
@@ -51,7 +51,7 @@
 
 		function insertObject(object, successCallback, errorCallback) {
 
-			let req = {
+			const req = {
 				method: 'POST',
 				url: BASE_URL,
 				headers: {
@@ -65,9 +65,9 @@
 		}
 
 		function getFailuresOnInterval(from, to, successCallback, errorCallback) {
-			let url = BASE_URL + '/get-by-interval?from=' + from + '&to=' + to;
+			const url = BASE_URL + '/get-by-interval?from=' + from + '&to=' + to;
 
-			let req = {
+			const req = {
 				method: 'GET',
 				url,
 			};
@@ -92,9 +92,9 @@
 		// }
 
 		function listFailuresOnGoing(successCallback, errorCallback) {
-			let url = BASE_URL + '/list-on-going';
+			const url = BASE_URL + '/list-on-going';
 
-			let req = {
+			const req = {
 				method: 'GET',
 				url,
 			};
@@ -103,9 +103,9 @@
 		}
 
 		function listFailures(successCallback, errorCallback) {
-			let url = BASE_URL + '/list';
+			const url = BASE_URL + '/list';
 
-			let req = {
+			const req = {
 				method: 'GET',
 				url,
 			};

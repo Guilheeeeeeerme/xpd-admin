@@ -8,9 +8,9 @@
 
 	function lessonLearnedSetupAPIService(xpdAccessFactory, setupAPIService) {
 
-		let BASE_URL = xpdAccessFactory.getSetupURL() + 'setup/lessonlearned';
+		const BASE_URL = xpdAccessFactory.getSetupURL() + 'setup/lessonlearned';
 
-		let vm = this;
+		const vm = this;
 
 		vm.insertObject = insertObject;
 		vm.updateObject = updateObject;
@@ -24,9 +24,9 @@
 
 		function getList(successCallback, errorCallback) {
 
-			let url = BASE_URL + '/list';
+			const url = BASE_URL + '/list';
 
-			let req = {
+			const req = {
 				method: 'GET',
 				url,
 			};
@@ -36,7 +36,7 @@
 
 		function updateObject(object, successCallback, errorCallback) {
 
-			let req = {
+			const req = {
 				method: 'PUT',
 				url: BASE_URL + '/' + object.id,
 				headers: {
@@ -50,7 +50,7 @@
 
 		function insertObject(object, successCallback, errorCallback) {
 
-			let req = {
+			const req = {
 				method: 'POST',
 				url: BASE_URL,
 				headers: {
@@ -65,7 +65,7 @@
 
 		function removeObject(object, successCallback, errorCallback) {
 
-			let req = {
+			const req = {
 				method: 'DELETE',
 				url: BASE_URL,
 				headers: {
@@ -96,7 +96,7 @@
 		function getListCategory(successCallback, errorCallback) {
 			// lessonlearned_category
 
-			let req = {
+			const req = {
 				method: 'GET',
 				url: BASE_URL + '_category/list',
 			};
@@ -107,7 +107,7 @@
 		function removeCategory(object, successCallback, errorCallback) {
 			// lessonlearned_category
 
-			let req = {
+			const req = {
 				method: 'DELETE',
 				url: BASE_URL + '_category',
 				headers: {
@@ -123,7 +123,7 @@
 		function insertCategory(object, successCallback, errorCallback) {
 			// lessonlearned_category
 
-			let req = {
+			const req = {
 				method: 'POST',
 				url: BASE_URL + '_category',
 				headers: {
@@ -139,7 +139,7 @@
 		function updateCategory(object, successCallback, errorCallback) {
 			// lessonlearned_category
 
-			let req = {
+			const req = {
 				method: 'PUT',
 				url: BASE_URL + '_category/' + object.id,
 				headers: {

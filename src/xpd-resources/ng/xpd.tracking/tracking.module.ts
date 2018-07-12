@@ -37,4 +37,3 @@ const XPDTrackingModule: angular.IModule = angular.module('xpd.tracking', [
 ]);
 export default XPDTrackingModule;
 XPDTrackingModule.controller('TrackingController', TrackingController);
-

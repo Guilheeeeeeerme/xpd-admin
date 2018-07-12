@@ -8,9 +8,9 @@
 
 	function categorySetupAPIService(xpdAccessFactory, setupAPIService) {
 
-		let BASE_URL = xpdAccessFactory.getSetupURL() + 'setup/category';
+		const BASE_URL = xpdAccessFactory.getSetupURL() + 'setup/category';
 
-		let vm = this;
+		const vm = this;
 
 		vm.getList = getList;
 		vm.insertObject = insertObject;
@@ -20,7 +20,7 @@
 
 		function getCategoryName(id, successCallback, errorCallback) {
 
-			let req = {
+			const req = {
 				method: 'GET',
 				url: BASE_URL + '/' + id,
 			};
@@ -30,7 +30,7 @@
 
 		function getList(successCallback, errorCallback) {
 
-			let req = {
+			const req = {
 				method: 'GET',
 				url: BASE_URL + '/list',
 			};
@@ -40,7 +40,7 @@
 
 		function insertObject(object, successCallback, errorCallback) {
 
-			let req = {
+			const req = {
 				method: 'POST',
 				url: BASE_URL,
 				headers: {
@@ -54,7 +54,7 @@
 
 		function removeObject(object, successCallback, errorCallback) {
 
-			let req = {
+			const req = {
 				method: 'DELETE',
 				url: BASE_URL,
 				headers: {
@@ -69,7 +69,7 @@
 
 		function updateObject(object, successCallback, errorCallback) {
 
-			let req = {
+			const req = {
 				method: 'PUT',
 				url: BASE_URL + '/' + object.id,
 				headers: {

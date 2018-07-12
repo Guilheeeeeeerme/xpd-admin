@@ -7,18 +7,18 @@
 
 	function eventlogSetupAPIService(xpdAccessFactory, setupAPIService, $rootScope) {
 
-		let BASE_URL = xpdAccessFactory.getSetupURL() + 'setup/event';
+		const BASE_URL = xpdAccessFactory.getSetupURL() + 'setup/event';
 
-		let vm = this;
+		const vm = this;
 
 		vm.listTrackingEventByOperation = listTrackingEventByOperation;
 		vm.listByFilters = listByFilters;
 		vm.getWithDetails = getWithDetails;
 
 		function listTrackingEventByOperation(operationId, successCallback, errorCallback) {
-			let url = BASE_URL + '/operation/' + operationId + '/tracking-events';
+			const url = BASE_URL + '/operation/' + operationId + '/tracking-events';
 
-			let req = {
+			const req = {
 				method: 'GET',
 				url,
 			};
@@ -82,7 +82,7 @@
 				url += 'xpdmodule=' + $rootScope.XPDmodule;
 			}
 
-			let req = {
+			const req = {
 				method: 'GET',
 				url,
 			};
@@ -94,7 +94,7 @@
 			let url = BASE_URL;
 			url += '/' + eventId + '/details';
 
-			let req = {
+			const req = {
 				method: 'GET',
 				url,
 			};

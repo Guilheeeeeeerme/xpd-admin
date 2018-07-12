@@ -40,9 +40,9 @@
 
 				scope.drawChartReady = true;
 
-				let padding = 3;
-				let table = d3.select(element[0]);
-				let svgSelection = table.select('svg');
+				const padding = 3;
+				const table = d3.select(element[0]);
+				const svgSelection = table.select('svg');
 				widthSvg = svgSelection[0][0].width.animVal.value;
 				heightSvg = parseInt(window.getComputedStyle(document.querySelector('td.vre-svg-container')).height);
 
@@ -61,8 +61,8 @@
 			};
 
 			scope.getBarScale = function getBarScale(vre) {
-				let xVre = xAxisScale(vre * 100);
-				let xLine = xAxisScale(0);
+				const xVre = xAxisScale(vre * 100);
+				const xLine = xAxisScale(0);
 
 				if (vre >= 0) {
 					return xLine;
@@ -72,8 +72,8 @@
 			};
 
 			scope.setBarWidth = function setBarWidth(vre) {
-				let xVre = xAxisScale(vre * 100);
-				let xLine = xAxisScale(0);
+				const xVre = xAxisScale(vre * 100);
+				const xLine = xAxisScale(0);
 
 				if (vre > 0) {
 					return xVre - xLine;

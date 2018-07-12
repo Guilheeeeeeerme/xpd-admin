@@ -13,7 +13,7 @@
 	lessonsLearnedController.$inject = ['$scope', '$uibModal', 'reportsSetupAPIService'];
 
 	function lessonsLearnedController($scope, $modal, reportsSetupAPIService) {
-		let vm = this;
+		const vm = this;
 
 		vm.totalTime = null;
 		vm.totalLessons = null;
@@ -58,7 +58,7 @@
          */
 		function getLessonList() {
 
-			let parentData = $scope.reportsData;
+			const parentData = $scope.reportsData;
 
 			reportsSetupAPIService.getLessonsLearnedDataChart(
 				parentData.fromDate,
@@ -79,11 +79,11 @@
 				return;
 			}
 
-			let lessons = result.lessons_learned;
+			const lessons = result.lessons_learned;
 			listCategory = result.categories;
 
-			for (let i in lessons) {
-				let node = insertLessonsInCategory(lessons[i]);
+			for (const i in lessons) {
+				const node = insertLessonsInCategory(lessons[i]);
 				createTreeStructure(node);
 			}
 
@@ -113,8 +113,8 @@
          */
 		function insertLessonsInCategory(lesson) {
 
-			let node = listCategory[lesson.lessonLearnedCategory.id];
-			let time = (new Date(lesson.endTime) - new Date(lesson.startTime)) / 1000;
+			const node = listCategory[lesson.lessonLearnedCategory.id];
+			const time = (new Date(lesson.endTime) - new Date(lesson.startTime)) / 1000;
 			lesson.time = time;
 
 			/** Time / SelfTime */
@@ -193,7 +193,7 @@
          */
 		function actionButtonSelectCategory(node) {
 
-			let nodeList = node.children;
+			const nodeList = node.children;
 
 			vm.chartDonut.title = node.name;
 			vm.totalTime = node.time;
@@ -241,7 +241,7 @@
 		function createVirtualNode(node) {
 
 			if (node.lessons) {
-				let virtualNode = {
+				const virtualNode = {
 					name: 'Other',
 					initial: node.initial,
 					isParent: false,
@@ -270,7 +270,7 @@
 
 			if (node.parentId) {
 
-				let parentNode = listCategory[node.parentId];
+				const parentNode = listCategory[node.parentId];
 
 				parentNode.isParent = true;
 
@@ -305,7 +305,7 @@
          */
 		function setTimeAndLessonLength(nodes) {
 
-			for (let i in nodes) {
+			for (const i in nodes) {
 
 				if (nodes[i].children) {
 					setTimeAndLessonLength(nodes[i].children);
@@ -337,7 +337,7 @@
 					return;
 				}
 
-				let parentNode = listCategory[nodes[i].parentId];
+				const parentNode = listCategory[nodes[i].parentId];
 				parentNode.time += nodes[i].time;
 				parentNode.bestPracticesTime += nodes[i].bestPracticesTime;
 				parentNode.lessonsLength += nodes[i].lessonsLength;
@@ -377,11 +377,11 @@
          */
 		function createSeriesDataChart(nodes) {
 
-			let chartDonut = {};
-			let donut = [];
-			let pie = [];
+			const chartDonut = {};
+			const donut = [];
+			const pie = [];
 
-			let colors = [
+			const colors = [
 				'#1B699E', '#419ede',
 				'#bb0000', '#ff4a4a',
 				'#ff7f0e', '#ff9a41',
@@ -397,9 +397,9 @@
 			let j = 0;
 			let dark = 0;
 			let light = 1;
-			let paretoData = [];
+			const paretoData = [];
 
-			for (let i in nodes) {
+			for (const i in nodes) {
 
 				nodes[i].color = {
 					light: colors[light],
@@ -445,7 +445,7 @@
 
 					} else {
 
-						let time = nodes[i].time - nodes[i].bestPracticesTime;
+						const time = nodes[i].time - nodes[i].bestPracticesTime;
 
 						pie[j] = {
 							name: nodes[i].name,
@@ -468,7 +468,7 @@
 				paretoItem.percent = (nodes[i].lessonsLength * 100) / vm.totalLessons;
 				paretoItem.category = nodes[i].name;
 
-				let lessonsLength = {
+				const lessonsLength = {
 					y: nodes[i].lessonsLength - nodes[i].bestPracticesLength,
 					color: colors[light],
 				};
@@ -482,7 +482,7 @@
 				paretoData.push(paretoItem);
 			}
 
-			let chartPareto = {
+			const chartPareto = {
 				categories: [],
 				lessons: [],
 				bestPractices: [],
@@ -490,8 +490,8 @@
 			};
 
 			paretoData.sort(function(a, b) {
-				let totalFailuresA = ((a.lessons && a.lessons.y) ? a.lessons.y : 0) + ((a.bestPractices && a.bestPractices.y) ? a.bestPractices.y : 0);
-				let totalFailuresB = ((b.lessons && b.lessons.y) ? b.lessons.y : 0) + ((b.bestPractices && b.bestPractices.y) ? b.bestPractices.y : 0);
+				const totalFailuresA = ((a.lessons && a.lessons.y) ? a.lessons.y : 0) + ((a.bestPractices && a.bestPractices.y) ? a.bestPractices.y : 0);
+				const totalFailuresB = ((b.lessons && b.lessons.y) ? b.lessons.y : 0) + ((b.bestPractices && b.bestPractices.y) ? b.bestPractices.y : 0);
 
 				return totalFailuresB - totalFailuresA;
 			});
@@ -499,7 +499,7 @@
 			let accPercent = 0;
 
 			for (i = 0; i < paretoData.length; i++) {
-				let paretoItem = paretoData[i];
+				const paretoItem = paretoData[i];
 				accPercent += paretoItem.percent;
 
 				chartPareto.categories.push(paretoItem.category);

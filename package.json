@@ -30,6 +30,7 @@
     "express": "^4.16.2",
     "font-awesome": "^4.7.0",
     "highcharts": "5.0.5",
+    "highcharts-more": "^0.1.7",
     "highcharts-multicolor-series": "2.2.1",
     "jquery": "3.3.1",
     "progress": "2.0.0",

@@ -1,5 +1,7 @@
-(function() {
-	'use strict';
+import * as angular from 'angular';
+import { GanttService } from './gantt.service';
 
-	angular.module('gantt', []);
-})();
+const XPDGanttModule: angular.IModule  = angular.module('gantt', []);
+export default XPDGanttModule;
+
+XPDGanttModule.service('ganttService', GanttService);

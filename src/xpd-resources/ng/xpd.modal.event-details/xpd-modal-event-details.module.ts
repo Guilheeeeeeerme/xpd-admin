@@ -6,4 +6,3 @@ export default XPDEventDetailsModule;
 
 XPDFailureModule.factory('failureModal', FailureModalFactory);
 XPDFailureModule.controller('modalEventDetailsController', ModalEventDetailsController);
-

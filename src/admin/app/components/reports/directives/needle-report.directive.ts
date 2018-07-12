@@ -87,7 +87,7 @@
 							return plotBand;
 						});
 
-						let plotLinePoor = {
+						const plotLinePoor = {
 							id: 1,
 							color: '#D01814',
 							width: 2,
@@ -95,7 +95,7 @@
 							value: dataChart.vpoor,
 							name: 'V. Poor',
 						};
-						let plotLineStd = {
+						const plotLineStd = {
 							id: 2,
 							color: '#D0A614',
 							width: 2,
@@ -103,7 +103,7 @@
 							value: dataChart.vstandard,
 							name: 'V. Standard',
 						};
-						let plotLineOpt = {
+						const plotLineOpt = {
 							id: 3,
 							color: '#89CFF0',
 							width: 2,
@@ -120,7 +120,7 @@
 							avg = formatMilliseconds(dataChart.duration * 1000);
 						}
 
-						let plotLineAverage = {
+						const plotLineAverage = {
 							id: 4,
 							color: '#fff',
 							width: 2,
@@ -129,7 +129,7 @@
 							name: 'V. Average: ( ' + avg + ' )',
 						};
 
-						let plotLineOptions = [
+						const plotLineOptions = [
 							plotLinePoor,
 							plotLineStd,
 							plotLineOpt,
@@ -137,7 +137,7 @@
 						];
 
 						/* zones */
-						let zonesOptions = [];
+						const zonesOptions = [];
 
 						let temp = {};
 						temp.value = 0;
@@ -168,8 +168,8 @@
 						temp.color = plotLinePoor.color;
 						zonesOptions.push(temp);
 
-						let from = dataChart.categoriesmin;
-						let to = dataChart.categoriesmax;
+						const from = dataChart.categoriesmin;
+						const to = dataChart.categoriesmax;
 
 						let series = [{
 							name: 'Activities',
@@ -205,7 +205,7 @@
 
 						}));
 
-						let chart = {
+						const chart = {
 
 							chart: {
 								zoomType: 'xy',

@@ -7,8 +7,8 @@
 
 // 	d3DmecChart.$inject = ['$q', '$uibModal'];
 import * as angular from 'angular';
-import * as d3 from 'd3';
 import { IModalService } from 'angular-ui-bootstrap';
+import * as d3 from 'd3';
 import modalTemplate from '../xpd-resources/ng/xpd.visualization/d3-dmec-chart-modal.template.html';
 import template from '../xpd-resources/ng/xpd.visualization/d3-dmec-chart.template.html';
 
@@ -351,13 +351,20 @@ export class D3DMECChartDirective implements ng.IDirective {
 				// 	'click'{
 				// 	'mousemove'
 
+				// TODO: TAVA DANDO ZICA NO TYPESCRIPT SEM O TRY
+
 				d3.select(element[0]).selectAll('.overlay')
-					.on('click', function () {
-						moveCrosshair(d3.mouse(this)[0], d3.mouse(this)[1]);
-						highligthPoints(d3.mouse(this)[0], d3.mouse(this)[1]);
-					}).on('mousemove', function () {
-						moveCrosshair(d3.mouse(this)[0], d3.mouse(this)[1]);
-					});
+					.on('click', onClick)
+					.on('mousemove', onMouseMove);
+
+				function onClick() {
+					moveCrosshair(d3.mouse(this)[0], d3.mouse(this)[1]);
+					highligthPoints(d3.mouse(this)[0], d3.mouse(this)[1]);
+				}
+
+				function onMouseMove() {
+					moveCrosshair(d3.mouse(this)[0], d3.mouse(this)[1]);
+				}
 
 			}
 

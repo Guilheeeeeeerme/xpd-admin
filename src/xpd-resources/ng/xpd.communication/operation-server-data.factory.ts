@@ -1,201 +1,195 @@
-(function() {
-	'use strict';
+import { IQProvider, IQService } from "../../../../node_modules/@types/angular";
 
-	if (typeof window === 'undefined') {
+// (function() {
+// 	'use strict';
 
-		module.exports = operationDataFactory;
+// 		angular.module('xpd.communication')
+// 			.factory('operationDataFactory', operationDataFactory);
 
-	} else {
+// operationDataFactory.$inject = ['$q', 'socketFactory', 'xpdAccessFactory'];
 
-		angular.module('xpd.communication')
-			.factory('operationDataFactory', operationDataFactory);
+export class OperationDataFactory {
 
-		operationDataFactory.$inject = ['$q', 'socketFactory', 'xpdAccessFactory'];
+	public static $inject: string[] = ['$q', 'socketFactory', 'xpdAccessFactory'];
 
+	public socket;
+	public communicationChannel = null;
+	public threadList = [
+		'failure',
+		'well',
+		'blockSpeed',
+		'shift',
+		'operation',
+		'timeSlices',
+		'alarm',
+		'state',
+		'chronometer',
+		'event',
+		'parallelEvent',
+		'jointLog',
+		'operationProgress',
+		'elevatorTarget',
+		'score',
+		'vTarget',
+		'reading',
+		'bitDepth',
+		'vre',
+		'subOperation',
+		'forecast',
+		'operationQueue',
+		'speedSecurity',
+		'direction',
+		'dataAcquisition',
+	];
+
+	public operationDataFactory = {
+		operationData: {},
+		eventsCallbacks: {},
+		addEventListener,
+	};
+	public static eventsCallbacks: any = {};
+
+	constructor(private $q: IQService, private socketFactory: SocketFactory, private xpdAccessFactory: XPDAccessFactory) { }
+
+	public addEventListener(origin, event, callback) {
+
+		if (!OperationDataFactory.eventsCallbacks[event]) {
+			OperationDataFactory.eventsCallbacks[event] = {};
+		}
+
+		OperationDataFactory.eventsCallbacks[event][origin] = callback;
 	}
 
-	function operationDataFactory($q, socketFactory, xpdAccessFactory) {
+	public openConnection(threads) {
+		const self = this;
 
-		let socket;
-		let communicationChannel = null;
-		let threadList = [
-			'failure',
-			'well',
-			'blockSpeed',
-			'shift',
-			'operation',
-			'timeSlices',
-			'alarm',
-			'state',
-			'chronometer',
-			'event',
-			'parallelEvent',
-			'jointLog',
-			'operationProgress',
-			'elevatorTarget',
-			'score',
-			'vTarget',
-			'reading',
-			'bitDepth',
-			'vre',
-			'subOperation',
-			'forecast',
-			'operationQueue',
-			'speedSecurity',
-			'direction',
-			'dataAcquisition',
-		];
+		if (!threads || threads.length === 0) {
+			threads = this.threadList;
+		}
 
-		let operationDataFactory = {
-			operationData: {},
-			eventsCallbacks: {},
-			addEventListener,
-		};
+		return self.$q(function (resolve, reject) {
 
-		return {
-			openConnection,
-			addEventListener,
-		};
+		if (self.communicationChannel) {
+			console.info('There is already an running operation data factory.');
+			resolve(OperationDataFactory);
+		} else {
 
-		function openConnection(threads) {
-			let self = this;
+			self.socket = self.socketFactory(self.xpdAccessFactory.getOperationServerURL(), '/operation-socket', threads);
+			self.communicationChannel = {};
 
-			if (!threads || threads.length == 0) {
-				threads = threadList;
-			}
+			self.socket.on('subjects', function (response) {
 
-			return $q(function(resolve, reject) {
+				const ContextSubjects = response.ContextSubjects;
+				const UserActions = response.UserActions;
 
-				if (communicationChannel) {
-					console.info('There is already an running operation data factory.');
-					resolve(operationDataFactory);
-				} else {
+				self.contextSubjectGenerator(ContextSubjects, self.communicationChannel);
 
-					socket = socketFactory(xpdAccessFactory.getOperationServerURL(), '/operation-socket', threads);
+				self.userActionsGenerator(UserActions, self.communicationChannel);
 
-					socket.on('subjects', function(response) {
-
-						let ContextSubjects = response.ContextSubjects;
-						let UserActions = response.UserActions;
-						communicationChannel = {};
-
-						contextSubjectGenerator(ContextSubjects, communicationChannel);
-
-						userActionsGenerator(UserActions, communicationChannel);
-
-						for (let key in communicationChannel) {
-							if (key.startsWith('emit')) {
-								operationDataFactory[key] = getEmitFunction(key);
-							}
-						}
-
-						function getEmitFunction(channelKey) {
-							return function(data) {
-								communicationChannel[channelKey](data);
-							};
-						}
-
-						resolve(operationDataFactory);
-
-					});
+				for (const key in self.communicationChannel) {
+					if (key.startsWith('emit')) {
+						OperationDataFactory[key] = getEmitFunction(key);
+					}
 				}
+
+				function getEmitFunction(channelKey) {
+					return function (data) {
+						self.communicationChannel[channelKey](data);
+					};
+				}
+
+				resolve(OperationDataFactory);
 
 			});
 		}
 
-		function contextSubjectGenerator(ContextSubjects, communicationChannel) {
-			for (let i in ContextSubjects) {
+		});
+	}
 
-				let contextSubject = ContextSubjects[i];
+	private contextSubjectGenerator(ContextSubjects, communicationChannel) {
+		for (const i in ContextSubjects) {
 
-				let subject = contextSubject.toLowerCase();
+			const contextSubject = ContextSubjects[i];
 
-				subject = subject.replace(/_./g, function(v) {
-					return v.toUpperCase().replace(/_/g, '');
-				});
+			let subject = contextSubject.toLowerCase();
 
-				subject = 'set' + subject.charAt(0).toUpperCase() + subject.slice(1) + 'Listener';
-
-				communicationChannel[subject] = setOn(socket, contextSubject);
-				setInterceptor(subject, communicationChannel[subject]);
-			}
-		}
-
-		function userActionsGenerator(UserActions, communicationChannel) {
-			for (let i in UserActions) {
-
-				let userAction = UserActions[i];
-
-				let action = userAction.toLowerCase();
-
-				action = action.replace(/_./g, function(v) {
-					return v.toUpperCase().replace(/_/g, '');
-				});
-
-				action = 'emit' + action.charAt(0).toUpperCase() + action.slice(1);
-
-				communicationChannel[action] = setEmit(socket, userAction);
-			}
-		}
-
-		function setInterceptor(subject, communication) {
-			communication(function(contextRoot) {
-				if (contextRoot && contextRoot.name && contextRoot.data) {
-					let contextName = contextRoot.name;
-					let contextData = contextRoot.data;
-
-					loadContext(contextName, contextData);
-					loadEventListenersCallback(subject, contextData);
-				}
+			subject = subject.replace(/_./g, function (v) {
+				return v.toUpperCase().replace(/_/g, '');
 			});
+
+			subject = 'set' + subject.charAt(0).toUpperCase() + subject.slice(1) + 'Listener';
+
+			communicationChannel[subject] = this.setOn(this.socket, contextSubject);
+			this.setInterceptor(subject, communicationChannel[subject]);
 		}
+	}
 
-		function loadContext(target, context) {
+	private userActionsGenerator(UserActions, communicationChannel) {
+		for (const i in UserActions) {
 
-			if (!operationDataFactory.operationData[target]) {
-				// console.warn('Contexto não esperado', target, new Error().stack);
-				operationDataFactory.operationData[target] = {};
+			const userAction = UserActions[i];
+
+			let action = userAction.toLowerCase();
+
+			action = action.replace(/_./g, function (v) {
+				return v.toUpperCase().replace(/_/g, '');
+			});
+
+			action = 'emit' + action.charAt(0).toUpperCase() + action.slice(1);
+
+			communicationChannel[action] = this.setEmit(this.socket, userAction);
+		}
+	}
+
+	private setInterceptor(subject, communication) {
+		communication(function (contextRoot) {
+			if (contextRoot && contextRoot.name && contextRoot.data) {
+				const contextName = contextRoot.name;
+				const contextData = contextRoot.data;
+
+				loadContext(contextName, contextData);
+				loadEventListenersCallback(subject, contextData);
 			}
+		});
+	}
 
-			for (let i in context) {
-				operationDataFactory.operationData[target][i] = context[i];
+	private loadContext(target, context) {
+
+		if (!OperationDataFactory.operationData[target]) {
+			// console.warn('Contexto não esperado', target, new Error().stack);
+			OperationDataFactory.operationData[target] = {};
+		}
+
+		for (const i in context) {
+			OperationDataFactory.operationData[target][i] = context[i];
+		}
+	}
+
+	private loadEventListenersCallback(listenerName, data) {
+
+		for (const origin in OperationDataFactory.eventsCallbacks[listenerName]) {
+			try {
+				OperationDataFactory.eventsCallbacks[listenerName][origin](data);
+			} catch (e) {
+				console.error(e);
 			}
-		}
-
-		function loadEventListenersCallback(listenerName, data) {
-
-			for (let origin in operationDataFactory.eventsCallbacks[listenerName]) {
-				try {
-					operationDataFactory.eventsCallbacks[listenerName][origin](data);
-				} catch (e) {
-					console.error(e);
-				}
-			}
-
-		}
-
-		function setOn(socket, eventName) {
-			return function(callback) {
-				socket.on(eventName, callback);
-			};
-		}
-
-		function setEmit(socket, eventName) {
-			return function(data) {
-				socket.emit(eventName, data);
-			};
-		}
-
-		function addEventListener(origin, event, callback) {
-
-			if (!operationDataFactory.eventsCallbacks[event]) {
-				operationDataFactory.eventsCallbacks[event] = {};
-			}
-
-			operationDataFactory.eventsCallbacks[event][origin] = callback;
 		}
 
 	}
+
+	private setOn(socket, eventName) {
+		return function (callback) {
+			socket.on(eventName, callback);
+		};
+	}
+
+	private setEmit(socket, eventName) {
+		return function (data) {
+			socket.emit(eventName, data);
+		};
+	}
+
+}
 
 	// function initContextMapping(response, vm) {
 
@@ -899,4 +893,4 @@
 
 	// }
 
-})();
+// })();

@@ -8,7 +8,7 @@
 	FailuresController.$inject = ['$scope', 'failureModal', 'operationDataFactory', 'dialogFactory'];
 
 	function FailuresController($scope, failureModal, operationDataFactory, dialogFactory) {
-		let vm = this;
+		const vm = this;
 
 		$scope.modalData = {
 			failuresList: [],
@@ -35,7 +35,7 @@
 		operationDataFactory.addEventListener('failuresController', 'setOnFailureChangeListener', populateFailureList);
 
 		function populateFailureList() {
-			let failureContext = operationDataFactory.operationData.failureContext;
+			const failureContext = operationDataFactory.operationData.failureContext;
 
 			$scope.modalData.failuresList = failureContext.failureList;
 			$scope.modalData.failureOnGoing = failureContext.failureOnGoing;

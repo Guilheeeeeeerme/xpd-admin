@@ -14,7 +14,7 @@
 		let upsertScheduleModal;
 		let removeSchedulesModal;
 
-		let schedulerActions = {
+		const schedulerActions = {
 
 			onUpsertMember,
 			onUpsertFunction,
@@ -273,7 +273,7 @@
 
 					while ( deletedScheduleS && deletedScheduleS.length > 0 ) {
 
-						let _schedule = deletedScheduleS.pop();
+						const _schedule = deletedScheduleS.pop();
 
 						if ( _schedule.id != schedule.id ) {
 							removeFromGantt('schedule', _schedule );
@@ -354,10 +354,10 @@
 				startOfDay.setMilliseconds(0);
 				startOfDay = startOfDay.getTime();
 
-				let endOfDay = new Date( startOfDay + 86400000 ).getTime();
+				const endOfDay = new Date( startOfDay + 86400000 ).getTime();
 
-				let startDate = new Date(task.startDate).getTime();
-				let endDate = new Date(task.endDate).getTime();
+				const startDate = new Date(task.startDate).getTime();
+				const endDate = new Date(task.endDate).getTime();
 
 				if (startDate >= startOfDay && startDate <= endOfDay) {
 					operationDataFactory.emitOnShiftUpdate();

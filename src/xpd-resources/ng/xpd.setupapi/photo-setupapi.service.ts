@@ -7,14 +7,14 @@
 
 	function photoAPIService($http, xpdAccessFactory, setupAPIService) {
 
-		let vm = this;
+		const vm = this;
 
 		vm.loadPhoto = loadPhoto;
 		vm.uploadPhoto = uploadPhoto;
 
 		function loadPhoto(path, name, successCallback, errorCallback) {
 
-			let request = {
+			const request = {
 				method: 'GET',
 				url: xpdAccessFactory.getSetupURL() + path + '/load/' + name,
 				responseType: 'arraybuffer',
@@ -72,8 +72,8 @@
 
 		function _arrayBufferToBase64(buffer) {
 			let binary = '';
-			let bytes = new Uint8Array(buffer);
-			let len = bytes.byteLength;
+			const bytes = new Uint8Array(buffer);
+			const len = bytes.byteLength;
 			for (let i = 0; i < len; i++) {
 				binary += String.fromCharCode(bytes[i]);
 			}

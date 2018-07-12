@@ -6,7 +6,7 @@
 	operationCopyOptionsModalController.$inject = ['actionButtonConfirmCallback', 'actionButtonCancelCallback', 'importedOperation', 'currentOperation'];
 
 	function operationCopyOptionsModalController(actionButtonConfirmCallback, actionButtonCancelCallback, importedOperation, currentOperation) {
-		let vm = this;
+		const vm = this;
 
 		vm.flag = {
 			operationInfo: false,
@@ -51,7 +51,7 @@
 
 		function processContractPerformance() {
 			if (vm.flag.contractPerformance == true) {
-				let contractParams = objectCleaning(importedOperation.contractParams);
+				const contractParams = objectCleaning(importedOperation.contractParams);
 				if (contractParams[0]) {
 					newOperation.contractParams = changeKeyContractParams(contractParams);
 				}
@@ -73,7 +73,7 @@
 		 * de uma lista de obj
 		*/
 		function objectCleaning(objList) {
-			for (let i in objList) {
+			for (const i in objList) {
 				delete objList[i].id;
 				delete objList[i].operation;
 			}
@@ -83,9 +83,9 @@
 
 		function changeKeyContractParams(contractParams) {
 
-			let cp = {};
+			const cp = {};
 
-			for (let i in contractParams) {
+			for (const i in contractParams) {
 				cp[contractParams[i].type] = contractParams[i];
 				delete cp[contractParams[i].type].type;
 			}

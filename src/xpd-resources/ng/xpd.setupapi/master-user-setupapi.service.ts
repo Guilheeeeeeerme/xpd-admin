@@ -7,9 +7,9 @@
 
 	function masterUserSetupAPIService(xpdAccessFactory, setupAPIService) {
 
-		let MASTER_USERNAME = 'admin';
+		const MASTER_USERNAME = 'admin';
 
-		let vm = this;
+		const vm = this;
 
 		vm.authenticate = authenticate;
 
@@ -17,7 +17,7 @@
 
 			object.username = MASTER_USERNAME;
 
-			let req = {
+			const req = {
 				method: 'POST',
 				url: xpdAccessFactory.getSetupURL() + 'setup/master-user/login',
 				headers: {

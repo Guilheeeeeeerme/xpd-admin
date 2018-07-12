@@ -8,7 +8,7 @@
 
 	function depthController($scope, $routeParams, reportSetupAPIService) {
 
-		let vm = this;
+		const vm = this;
 
 		$scope.depthData = {
 			plannedDataChart: {
@@ -20,7 +20,7 @@
 			plotBandsPlannedData: [],
 		};
 
-		let operationId = $routeParams.operationId;
+		const operationId = $routeParams.operationId;
 
 		getEventsDataChart(operationId);
 
@@ -46,11 +46,11 @@
 			$scope.depthData.plannedDataChart.vPoor = result.points_vpoor;
 			$scope.depthData.plannedDataChart.vStandard = result.points_vstandard;
 
-			let black = '#000';
+			const black = '#000';
 			let rgb_value = 154;
 			for (let i = 1, len = result.depthLimits.length; i < len; i++) {
 
-				let plotBand = new Object();
+				const plotBand = new Object();
 
 				plotBand.from = result.depthLimits[i - 1].endDepth;
 				plotBand.to = result.depthLimits[i].endDepth;
@@ -65,7 +65,7 @@
 			}
 
 			function rgbToHex(red, green, blue) {
-				let rgb = blue | (green << 8) | (red << 16);
+				const rgb = blue | (green << 8) | (red << 16);
 				return '#' + (0x1000000 + rgb).toString(16).slice(1);
   			}
 		}

@@ -10,7 +10,7 @@ import modalTemplate from '../xpd-resources/ng/xpd.modal.failure/xpd-modal-failu
 
 export class FailureModalFactory {
 
-	constructor (private $uibModal: IModalService){
+	constructor (private $uibModal: IModalService) {
 
 	}
 

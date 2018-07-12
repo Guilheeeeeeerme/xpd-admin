@@ -1,5 +1,7 @@
-(function() {
-	'use strict';
+import * as angular from 'angular';
+import { HighchartsService } from './highcharts.service';
 
-	angular.module('highcharts', []);
-})();
+const XPDHighchartsModule: angular.IModule  = angular.module('highcharts', []);
+export default XPDHighchartsModule;
+
+XPDHighchartsModule.factory('highchartsService', HighchartsService);

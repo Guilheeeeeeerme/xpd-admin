@@ -8,9 +8,9 @@
 
 	function trackingUpdateTimesController($scope, $uibModalInstance, selectedEvent, confirmCallback, changeEventStatusCallback) {
 
-		let vm = this;
+		const vm = this;
 
-		let useful = selectedEvent.useful;
+		const useful = selectedEvent.useful;
 
 		$scope.selectedEvent = angular.copy(selectedEvent);
 

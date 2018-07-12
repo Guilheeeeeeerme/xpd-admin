@@ -6,10 +6,10 @@
 	operationController.$inject = ['$scope', '$filter', '$routeParams', '$location', '$uibModal', 'operationDataFactory', 'dialogFactory', 'wellSetupAPIService', 'sectionSetupAPIService', 'operationSetupAPIService', 'OperationConfigurationService', 'menuConfirmationFactory'];
 
 	function operationController($scope, $filter, $routeParams, $location, $uibModal, operationDataFactory, dialogFactory, wellSetupAPIService, sectionSetupAPIService, operationSetupAPIService, operationConfigurationService, menuConfirmationFactory) {
-		let vm = this;
+		const vm = this;
 
 		let modalInstance = null;
-		let operation = JSON.parse($routeParams.operation);
+		const operation = JSON.parse($routeParams.operation);
 
 		$routeParams.wellId = +$routeParams.wellId;
 		$routeParams.sectionId = +$routeParams.sectionId;
@@ -59,9 +59,9 @@
 
 		function loadOperationSetup(operation) {
 
-			let contractParams = {};
+			const contractParams = {};
 
-			for (let i in operation.contractParams) {
+			for (const i in operation.contractParams) {
 				contractParams[operation.contractParams[i].type] = operation.contractParams[i];
 				delete contractParams[operation.contractParams[i].type].type;
 			}
@@ -129,7 +129,7 @@
 			if (vm.contract) {
 				$scope.hasContractError = function(typeError) {
 					if (!(vm.contract.$error === undefined) && vm.contract.$error) {
-						for (let i in vm.contract.$error.required) {
+						for (const i in vm.contract.$error.required) {
 							if (vm.contract.$error.required[i].$name == typeError) {
 								return true;
 							}
@@ -285,7 +285,7 @@
 
 				dialogFactory.showConfirmDialog('Save and exit?', function() {
 
-					let operation = $scope.dados.operation;
+					const operation = $scope.dados.operation;
 
 					if (operation.type == 'time') {
 						operation.optimumTime = speedToTime($scope.dados.operation.contractParams.timeSpeed.voptimum);
@@ -341,11 +341,11 @@
 
 			function saveContractParams(operation, contractParams) {
 
-				let newContractParams = [];
+				const newContractParams = [];
 
 				delete $scope.dados.contractParams;
 
-				for (let i in contractParams) {
+				for (const i in contractParams) {
 
 					if (operation && operation.id) {
 						contractParams[i].operation = {
@@ -386,10 +386,10 @@
 
 			function actionSelectCasingType() {
 
-				let newId = $scope.dados.operation.metaType;
-				let averageSectionLength = $scope.dados.operation.averageSectionLength;
+				const newId = $scope.dados.operation.metaType;
+				const averageSectionLength = $scope.dados.operation.averageSectionLength;
 
-				let casingTripSpeedParams = angular.copy(operationConfigurationService.getCasingTripSpeedParams(newId));
+				const casingTripSpeedParams = angular.copy(operationConfigurationService.getCasingTripSpeedParams(newId));
 
 				if (!casingTripSpeedParams) {
 					return;
@@ -403,7 +403,7 @@
 			}
 
 			function speedToTime(speed) {
-				let time = (1 / speed) * 3600000;
+				const time = (1 / speed) * 3600000;
 				return time;
 			}
 		}
@@ -458,7 +458,7 @@
 
 		function myFunction(value) {
 			/* Get the text field */
-			let copyText = document.getElementById('result');
+			const copyText = document.getElementById('result');
 
 			// /* Select the text field */
 			copyText.select();

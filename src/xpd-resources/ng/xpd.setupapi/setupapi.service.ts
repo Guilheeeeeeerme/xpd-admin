@@ -20,7 +20,7 @@
 
 	function setupAPIService($http, toastr, usSpinnerService) {
 
-		let vm = this;
+		const vm = this;
 
 		let runningRequests = 0;
 		let hasRunningRequests = false;
@@ -30,7 +30,7 @@
 
 		function hasSpinner(url) {
 
-			let urlsWithoutSpinner = [
+			const urlsWithoutSpinner = [
 				// '/xpd-setup-api/setup/reports/',
 				// '/xpd-setup-api/setup/reading/from/',
 				'/xpd-setup-api/setup/reading/tick/',
@@ -40,7 +40,7 @@
 
 			let result = true;
 
-			for (let i in urlsWithoutSpinner) {
+			for (const i in urlsWithoutSpinner) {
 				if (url.indexOf(urlsWithoutSpinner[i]) >= 0) {
 					result = false;
 					break;
@@ -52,7 +52,7 @@
 
 		function doRequest(req, successCallback, errorCallback) {
 
-			let request = $http(req);
+			const request = $http(req);
 
 			if (req && req.url && hasSpinner(req.url)) {
 
@@ -100,7 +100,7 @@
 			console.error(error);
 
 			let httpStatus = getHttpStatus(error.status);
-			let url = (error.config.method == 'GET') ? '\n' + error.config.url : null;
+			const url = (error.config.method == 'GET') ? '\n' + error.config.url : null;
 
 			if (error.data) {
 

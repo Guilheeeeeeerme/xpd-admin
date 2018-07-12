@@ -8,9 +8,9 @@
 
 	function sectionSetupAPIService(xpdAccessFactory, setupAPIService) {
 
-		let BASE_URL = xpdAccessFactory.getSetupURL() + 'setup/section';
+		const BASE_URL = xpdAccessFactory.getSetupURL() + 'setup/section';
 
-		let vm = this;
+		const vm = this;
 
 		vm.getObjectById = getObjectById;
 		vm.insertObject = insertObject;
@@ -20,7 +20,7 @@
 
 		function getObjectById(id, successCallback, errorCallback) {
 
-			let req = {
+			const req = {
 				method: 'GET',
 				url: BASE_URL + '/' + id,
 			};
@@ -30,7 +30,7 @@
 
 		function insertObject(object, successCallback, errorCallback) {
 
-			let req = {
+			const req = {
 				method: 'POST',
 				url: BASE_URL,
 				headers: {
@@ -45,7 +45,7 @@
 
 		function updateObject(object, successCallback, errorCallback) {
 
-			let req = {
+			const req = {
 				method: 'PUT',
 				url: BASE_URL + '/' + object.id,
 				headers: {
@@ -59,9 +59,9 @@
 
 		function getListOfSectionsByWell(wellId, successCallback, errorCallback) {
 
-			let url = BASE_URL + '/list-sections-by-well?wellId=' + wellId;
+			const url = BASE_URL + '/list-sections-by-well?wellId=' + wellId;
 
-			let req = {
+			const req = {
 				method: 'GET',
 				url,
 			};
@@ -72,9 +72,9 @@
 
 		function getListOfOperationsBySection(sectionId, successCallback, errorCallback) {
 
-			let url = BASE_URL + '/' + sectionId + '/operation';
+			const url = BASE_URL + '/' + sectionId + '/operation';
 
-			let req = {
+			const req = {
 				method: 'GET',
 				url,
 			};

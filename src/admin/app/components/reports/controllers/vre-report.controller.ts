@@ -13,7 +13,7 @@
 	vreReportController.$inject = ['$scope', 'wellSetupAPIService', 'reportsSetupAPIService'];
 
 	function vreReportController($scope, wellSetupAPIService, reportsSetupAPIService) {
-		let vm = this;
+		const vm = this;
 
 		$scope.vreData = {
 			vreList: null,
@@ -37,9 +37,9 @@
 
 		function getWellSuccessCallback(result) {
 
-			let currentWell = result[0];
+			const currentWell = result[0];
 
-			let parentData = $scope.reportsData;
+			const parentData = $scope.reportsData;
 
 			$scope.vreData.period = {
 				fromDate: parentData.fromDate,
@@ -68,7 +68,7 @@
 		}
 
 		function vreDaily(vreList) {
-			let day = ($scope.reportsData.toDate / 1000) - ($scope.reportsData.fromDate / 1000);
+			const day = ($scope.reportsData.toDate / 1000) - ($scope.reportsData.fromDate / 1000);
 			let runningTime = 0;
 			let vreTotal = 0;
 			let remainingTime = 0;

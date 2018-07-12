@@ -6,7 +6,7 @@
 	sectionUpsertController.$inject = ['$scope', '$uibModalInstance', 'callback', 'initialData'];
 
 	function sectionUpsertController($scope, $modalInstance, callback, initialData) {
-		let vm = this;
+		const vm = this;
 
 		vm.actionButtonClose = actionButtonClose;
 		vm.actionButtonSave = actionButtonSave;

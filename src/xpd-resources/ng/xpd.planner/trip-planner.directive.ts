@@ -1,80 +1,97 @@
-(function() {
+// (function() {
 
-	angular.module('xpd.planner')
-		.directive('xpdTripPlanner', xpdTripPlanner);
+// 	angular.module('xpd.planner')
+// 		.directive('xpdTripPlanner', xpdTripPlanner);
 
-	xpdTripPlanner.$inject = ['vCruisingCalculator'];
+// 	xpdTripPlanner.$inject = ['vCruisingCalculator'];
+import template from '../xpd-resources/ng/xpd.planner/trip-planner.template.html';
+import { VCruisingCalculatorService } from '../xpd.calculation/calculation.service';
+export class XPDTripPlannerDirective {
 
-	function xpdTripPlanner(vCruisingCalculator) {
-		return {
-			link,
-			scope: {
-				label: '@',
-				targetSpeed: '=',
-				targetTime: '=',
-				optimumSpeed: '<',
-				displacement: '<',
-				optimumSafetySpeedLimit: '<',
-				targetSafetySpeedLimit: '=',
-				vcruising: '=',
+	public static $inject: string[] = ['vCruisingCalculator'];
 
-				optimumAccelerationTimeLimit: '<',
-				targetAccelerationTimeLimit: '=',
-				optimumDecelerationTimeLimit: '<',
-				targetDecelerationTimeLimit: '=',
+	public scope = {
+		label: '@',
+		targetSpeed: '=',
+		targetTime: '=',
+		optimumSpeed: '<',
+		displacement: '<',
+		optimumSafetySpeedLimit: '<',
+		targetSafetySpeedLimit: '=',
+		vcruising: '=',
 
-				stickUp: '<',
-				upperStop: '<',
-				slipsTime: '=',
-				inSlipsDefault: '<',
+		optimumAccelerationTimeLimit: '<',
+		targetAccelerationTimeLimit: '=',
+		optimumDecelerationTimeLimit: '<',
+		targetDecelerationTimeLimit: '=',
 
-				currentOperation: '=',
+		stickUp: '<',
+		upperStop: '<',
+		slipsTime: '=',
+		inSlipsDefault: '<',
 
-				actionButtonApply: '&',
-			},
-			templateUrl: '../xpd-resources/ng/xpd.planner/trip-planner.template.html',
-		};
+		currentOperation: '=',
 
-		function link(scope, elem, attrs) {
+		actionButtonApply: '&',
+	};
 
-			scope.$watch('targetSpeed', updateTargetTime, true);
-			scope.$watchGroup([
-				'slipsTime',
-				'targetAccelerationTimeLimit',
-				'targetDecelerationTimeLimit',
-				'targetSpeed',
-				'displacement',
-			], updateSettings, true);
+	public template = template;
 
-			function updateTargetTime() {
-				let reference = scope.displacement;
+	constructor(private vCruisingCalculator: VCruisingCalculatorService) {
 
-				scope.targetTime = reference / +scope.targetSpeed;
-				scope.optimumTime = reference / +scope.optimumSpeed;
-			}
-
-			function updateSettings() {
-
-				scope.slipsTime = Math.floor(scope.slipsTime);
-				scope.targetAccelerationTimeLimit = Math.floor(scope.targetAccelerationTimeLimit);
-				scope.targetDecelerationTimeLimit = Math.floor(scope.targetDecelerationTimeLimit);
-
-				let displacement = scope.displacement;
-
-				let targetSpeed = scope.targetSpeed;
-
-				let pureDuration = (displacement / targetSpeed);
-				let time = pureDuration - scope.slipsTime;
-
-				let accelerationTimeLimit = scope.targetAccelerationTimeLimit;
-				let decelerationTimeLimit = scope.targetDecelerationTimeLimit;
-
-				let vcruising = vCruisingCalculator.calculate((displacement / time), time, accelerationTimeLimit, decelerationTimeLimit);
-
-				scope.vcruising = vcruising;
-			}
-
-		}
 	}
 
-})();
+	public link: ng.IDirectiveLinkFn = (
+		scope: any,
+		element: ng.IAugmentedJQuery,
+		attrs: ng.IAttributes,
+		ctrl: any,
+	) => {
+
+		const self = this;
+
+		scope.$watch('targetSpeed', updateTargetTime, true);
+		scope.$watchGroup([
+			'slipsTime',
+			'targetAccelerationTimeLimit',
+			'targetDecelerationTimeLimit',
+			'targetSpeed',
+			'displacement',
+		], updateSettings, true);
+
+		function updateTargetTime() {
+			const reference = scope.displacement;
+
+			scope.targetTime = reference / +scope.targetSpeed;
+			scope.optimumTime = reference / +scope.optimumSpeed;
+		}
+
+		function updateSettings() {
+
+			scope.slipsTime = Math.floor(scope.slipsTime);
+			scope.targetAccelerationTimeLimit = Math.floor(scope.targetAccelerationTimeLimit);
+			scope.targetDecelerationTimeLimit = Math.floor(scope.targetDecelerationTimeLimit);
+
+			const displacement = scope.displacement;
+
+			const targetSpeed = scope.targetSpeed;
+
+			const pureDuration = (displacement / targetSpeed);
+			const time = pureDuration - scope.slipsTime;
+
+			const accelerationTimeLimit = scope.targetAccelerationTimeLimit;
+			const decelerationTimeLimit = scope.targetDecelerationTimeLimit;
+
+			const vcruising = self.vCruisingCalculator.calculate((displacement / time), time, accelerationTimeLimit, decelerationTimeLimit);
+
+			scope.vcruising = vcruising;
+		}
+
+	}
+
+	public static Factory(): ng.IDirectiveFactory {
+		return (vCruisingCalculator: VCruisingCalculatorService) => new XPDTripPlannerDirective(vCruisingCalculator);
+	}
+}
+
+// })();

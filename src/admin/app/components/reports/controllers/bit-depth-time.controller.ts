@@ -8,7 +8,7 @@
 
 	function bitDepthTimeController($scope, $routeParams, reportsSetupAPIService) {
 
-		let vm = this;
+		const vm = this;
 
 		$scope.dados = {
 			data: [],
@@ -41,7 +41,7 @@
 				});
 			} catch (e) {
 
-				let mergedData = {
+				const mergedData = {
 					bitDepthPlannedPoints: null,
 					sectionsBands: null,
 					startChartAt: new Date().getTime(),
@@ -58,7 +58,7 @@
 				$scope.planned.map(function(chartData) {
 
 					chartData.bitDepthPlannedPoints.data = chartData.bitDepthPlannedPoints.events.map(function(event) {
-						let point = [
+						const point = [
 							startPointAt,
 							event.startBitDepth,
 						];
@@ -100,7 +100,7 @@
 				});
 			} catch (e) {
 
-				let mergedData = {
+				const mergedData = {
 					bitDepthPlannedPoints: $scope.dados.data.bitDepthPlannedPoints,
 					sectionsBands: $scope.dados.data.sectionsBands,
 					startChartAt: $scope.dados.data.startChartAt,

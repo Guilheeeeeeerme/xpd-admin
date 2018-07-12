@@ -6,7 +6,7 @@
 	alarmInfoController.$inject = ['$scope', '$uibModal', 'alarmSetupAPIService', 'alarmService'];
 
 	function alarmInfoController($scope, $uibModal, alarmSetupAPIService, alarmService) {
-		let vm = this;
+		const vm = this;
 
 		vm.actionButtonAddAlarm = actionButtonAddAlarm;
 		vm.actionButtonEditAlarm = actionButtonEditAlarm;
@@ -39,8 +39,8 @@
 		}
 
 		function listByTypeCallback(alarms) {
-			for (let i in alarms) {
-				let alarm = alarms[i];
+			for (const i in alarms) {
+				const alarm = alarms[i];
 
 				if (alarm.enabled == false) {
 					alarm.enabled = false;
@@ -76,7 +76,7 @@
 
 		function actionButtonImport(alarm) {
 
-			let newAlarm = angular.copy(alarm);
+			const newAlarm = angular.copy(alarm);
 
 			// $scope.alarms.alarmToImport = null;
 
@@ -86,7 +86,7 @@
 
 			delete newAlarm.id;
 
-			for (let i in newAlarm.timeSlices) {
+			for (const i in newAlarm.timeSlices) {
 				delete newAlarm.timeSlices[i].id;
 				delete newAlarm.timeSlices[i].alarm;
 			}
@@ -96,7 +96,7 @@
 		}
 
 		function actionButtonAddAlarm(_alarm) {
-			let alarm = (!_alarm) ? null : _alarm;
+			const alarm = (!_alarm) ? null : _alarm;
 
 			alarmService.addAlarm(
 				alarm,
@@ -133,7 +133,7 @@
 				'xpd-modal-xxlg',
 				'app/components/admin/views/forms/alarm-info-upsert.modal.html',
 				function(updatedAlarm) {
-					for (let field in updatedAlarm) {
+					for (const field in updatedAlarm) {
 						$scope.alarmToUpdate[field] = updatedAlarm[field];
 					}
 				},

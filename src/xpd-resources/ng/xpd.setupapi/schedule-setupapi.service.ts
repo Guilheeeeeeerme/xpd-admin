@@ -7,8 +7,8 @@
 	scheduleSetupAPIService.$inject = ['xpdAccessFactory', 'setupAPIService'];
 
 	function scheduleSetupAPIService(xpdAccessFactory, setupAPIService) {
-		let vm = this;
-		let apiUrl = xpdAccessFactory.getSetupURL();
+		const vm = this;
+		const apiUrl = xpdAccessFactory.getSetupURL();
 
 		vm.getOnlyScheduled = getOnlyScheduled;
 		vm.fullScheduleByRangeDate = fullScheduleByRangeDate;
@@ -37,9 +37,9 @@
 		 */
 		function getFunctionById(id, successCallback, errorCallback) {
 
-			let modelURL = 'setup/function';
+			const modelURL = 'setup/function';
 
-			let req = {
+			const req = {
 				method: 'GET',
 				url: xpdAccessFactory.getSetupURL() + modelURL + '/' + id,
 			};
@@ -50,9 +50,9 @@
 
 		function insertFunction(object, successCallback, errorCallback) {
 
-			let modelURL = 'setup/function';
+			const modelURL = 'setup/function';
 
-			let req = {
+			const req = {
 				method: 'POST',
 				url: xpdAccessFactory.getSetupURL() + modelURL,
 				headers: {
@@ -66,9 +66,9 @@
 
 		function updateFunction(object, successCallback, errorCallback) {
 
-			let modelURL = 'setup/function';
+			const modelURL = 'setup/function';
 
-			let req = {
+			const req = {
 				method: 'PUT',
 				url: xpdAccessFactory.getSetupURL() + modelURL + '/' + object.id,
 				headers: {
@@ -82,9 +82,9 @@
 
 		function removeFunction(object, successCallback, errorCallback) {
 
-			let modelURL = 'setup/function';
+			const modelURL = 'setup/function';
 
-			let req = {
+			const req = {
 				method: 'DELETE',
 				url: xpdAccessFactory.getSetupURL() + modelURL, // + '/' + object.id,
 				headers: {
@@ -102,9 +102,9 @@
 		 */
 		function updateMember(object, successCallback, errorCallback) {
 
-			let modelURL = 'setup/member';
+			const modelURL = 'setup/member';
 
-			let req = {
+			const req = {
 				method: 'PUT',
 				url: xpdAccessFactory.getSetupURL() + modelURL + '/' + object.id,
 				headers: {
@@ -118,9 +118,9 @@
 
 		function getMemberById(id, successCallback, errorCallback) {
 
-			let modelURL = 'setup/member';
+			const modelURL = 'setup/member';
 
-			let req = {
+			const req = {
 				method: 'GET',
 				url: xpdAccessFactory.getSetupURL() + modelURL + '/' + id,
 			};
@@ -131,7 +131,7 @@
 
 		function indentificationExists(id, identification, successCallback, errorCallback) {
 
-			let req = {
+			const req = {
 				method: 'GET',
 				url: apiUrl + 'setup/member/identification-exists/' + identification,
 			};
@@ -146,9 +146,9 @@
 
 		function insertMember(object, successCallback, errorCallback) {
 
-			let modelURL = 'setup/member';
+			const modelURL = 'setup/member';
 
-			let req = {
+			const req = {
 				method: 'POST',
 				url: xpdAccessFactory.getSetupURL() + modelURL,
 				headers: {
@@ -162,9 +162,9 @@
 
 		function removeMember(object, successCallback, errorCallback) {
 
-			let modelURL = 'setup/member';
+			const modelURL = 'setup/member';
 
-			let req = {
+			const req = {
 				method: 'DELETE',
 				url: xpdAccessFactory.getSetupURL() + modelURL, // + '/' + object.id,
 				headers: {
@@ -178,9 +178,9 @@
 
 		function getMemberScore(successCallback, errorCallback) {
 
-			let modelURL = 'setup/member';
+			const modelURL = 'setup/member';
 
-			let req = {
+			const req = {
 				method: 'GET',
 				url: xpdAccessFactory.getSetupURL() + modelURL + '/score/list',
 				headers: {
@@ -197,9 +197,9 @@
 		 */
 		function getScheduleById(id, successCallback, errorCallback) {
 
-			let modelURL = 'setup/schedule';
+			const modelURL = 'setup/schedule';
 
-			let req = {
+			const req = {
 				method: 'GET',
 				url: xpdAccessFactory.getSetupURL() + modelURL + '/' + id,
 			};
@@ -209,9 +209,9 @@
 
 		function removeSchedule(object, successCallback, errorCallback) {
 
-			let modelURL = 'setup/schedule';
+			const modelURL = 'setup/schedule';
 
-			let req = {
+			const req = {
 				method: 'DELETE',
 				url: xpdAccessFactory.getSetupURL() + modelURL, //  + '/' + object.id,
 				headers: {
@@ -225,9 +225,9 @@
 
 		function insertSchedule(object, successCallback, errorCallback) {
 
-			let modelURL = 'setup/schedule';
+			const modelURL = 'setup/schedule';
 
-			let req = {
+			const req = {
 				method: 'POST',
 				url: xpdAccessFactory.getSetupURL() + modelURL,
 				headers: {
@@ -241,9 +241,9 @@
 
 		function updateSchedule(object, successCallback, errorCallback) {
 
-			let modelURL = 'setup/schedule';
+			const modelURL = 'setup/schedule';
 
-			let req = {
+			const req = {
 				method: 'PUT',
 				url: xpdAccessFactory.getSetupURL() + modelURL + '/' + object.id,
 				headers: {
@@ -268,7 +268,7 @@
 			url += 'fromDate=' + fromDate + '&';
 			url += 'toDate=' + toDate;
 
-			let req = {
+			const req = {
 				method: 'GET',
 				url,
 			};
@@ -289,7 +289,7 @@
 			url += 'fromDate=' + fromDate + '&';
 			url += 'toDate=' + toDate;
 
-			let req = {
+			const req = {
 				method: 'GET',
 				url,
 			};
@@ -306,7 +306,7 @@
 		 */
 		function getCleanListBySchedule(schedule, successCallback, errorCallback) {
 
-			let req = {
+			const req = {
 				method: 'POST',
 				url: apiUrl + 'setup/schedule/clean-list-by-schedule',
 				headers: {

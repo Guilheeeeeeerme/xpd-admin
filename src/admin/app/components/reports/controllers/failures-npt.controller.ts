@@ -13,7 +13,7 @@
 	failuresNptController.$inject = ['$scope', '$uibModal', 'reportsSetupAPIService'];
 
 	function failuresNptController($scope, $modal, reportsSetupAPIService) {
-		let vm = this;
+		const vm = this;
 
 		vm.totalTime = null;
 		vm.totalFailures = null;
@@ -58,7 +58,7 @@
 		 */
 		function getFailureList() {
 
-			let parentData = $scope.reportsData;
+			const parentData = $scope.reportsData;
 
 			reportsSetupAPIService.getFailuresNptDataChart(
 				parentData.fromDate,
@@ -79,11 +79,11 @@
 				return;
 			}
 
-			let failures = result.failures;
+			const failures = result.failures;
 			listCategory = result.categories;
 
-			for (let i in failures) {
-				let node = insertFailureInCategory(failures[i]);
+			for (const i in failures) {
+				const node = insertFailureInCategory(failures[i]);
 				makeTreeStructure(node);
 			}
 
@@ -109,10 +109,10 @@
 		 */
 		function insertFailureInCategory(failure) {
 
-			let categories = listCategory;
+			const categories = listCategory;
 
-			let node = categories[failure.category.id];
-			let time = (new Date(failure.endTime) - new Date(failure.startTime)) / 1000;
+			const node = categories[failure.category.id];
+			const time = (new Date(failure.endTime) - new Date(failure.startTime)) / 1000;
 			failure.time = time;
 
 			/** Time / SelfTime */
@@ -189,7 +189,7 @@
 		 */
 		function actionButtonSelectCategory(node) {
 
-			let nodeList = node.children;
+			const nodeList = node.children;
 
 			vm.chartDonut.title = node.name;
 			vm.totalTime = node.time;
@@ -237,7 +237,7 @@
 		function makeVirtualNode(node) {
 
 			if (node.failures) {
-				let virtualNode = {
+				const virtualNode = {
 					name: 'Other',
 					initial: node.initial,
 					isParent: false,
@@ -271,7 +271,7 @@
 
 			if (node.parentId) {
 
-				let parentNode = listCategory[node.parentId];
+				const parentNode = listCategory[node.parentId];
 
 				parentNode.isParent = true;
 
@@ -307,7 +307,7 @@
 		 */
 		function setTimeAndFailuresLength(nodes) {
 
-			for (let i in nodes) {
+			for (const i in nodes) {
 
 				if (nodes[i].children) {
 					setTimeAndFailuresLength(nodes[i].children);
@@ -348,7 +348,7 @@
 					return;
 				}
 
-				let parentNode = listCategory[nodes[i].parentId];
+				const parentNode = listCategory[nodes[i].parentId];
 				parentNode.time += nodes[i].time;
 				parentNode.nptTime += nodes[i].nptTime;
 				parentNode.failuresLength += nodes[i].failuresLength;
@@ -388,11 +388,11 @@
          */
 		function makeSeriesDataChart(nodes) {
 
-			let chartDonut = {};
-			let donut = [];
-			let pie = [];
+			const chartDonut = {};
+			const donut = [];
+			const pie = [];
 
-			let colors = [
+			const colors = [
 				'#1B699E', '#419ede',
 				'#bb0000', '#ff4a4a',
 				'#ff7f0e', '#ff9a41',
@@ -408,9 +408,9 @@
 			let j = 0;
 			let dark = 0;
 			let light = 1;
-			   let paretoData = [];
+			const paretoData = [];
 
-			for (let i in nodes) {
+			for (const i in nodes) {
 
 				nodes[i].color = {
 					light: colors[light],
@@ -453,7 +453,7 @@
 						};
 					} else {
 
-						let time = nodes[i].time - nodes[i].nptTime;
+						const time = nodes[i].time - nodes[i].nptTime;
 
 						pie[j] = {
 							name: nodes[i].name,
@@ -476,7 +476,7 @@
 				paretoItem.percent = (nodes[i].failuresLength * 100) / vm.totalFailures;
 				paretoItem.category = nodes[i].name;
 
-				let failuresLength = {
+				const failuresLength = {
 					y: nodes[i].failuresLength - nodes[i].failuresNptLength,
 					color: colors[light],
 				};
@@ -490,24 +490,24 @@
 				paretoData.push(paretoItem);
 			}
 
-			   let chartPareto = {
+			const chartPareto = {
 				categories: [],
 				failures: [],
 				npts: [],
 				percentage: [],
 			};
 
-			   paretoData.sort(function(a, b) {
-				let totalFailuresA = ((a.failures && a.failures.y) ? a.failures.y : 0) + ((a.npts && a.npts.y) ? a.npts.y : 0);
-				let totalFailuresB = ((b.failures && b.failures.y) ? b.failures.y : 0) + ((b.npts && b.npts.y) ? b.npts.y : 0);
+			paretoData.sort(function(a, b) {
+				const totalFailuresA = ((a.failures && a.failures.y) ? a.failures.y : 0) + ((a.npts && a.npts.y) ? a.npts.y : 0);
+				const totalFailuresB = ((b.failures && b.failures.y) ? b.failures.y : 0) + ((b.npts && b.npts.y) ? b.npts.y : 0);
 
 				return totalFailuresB - totalFailuresA;
 			});
 
-			   let accPercent = 0;
+			let accPercent = 0;
 
-			   for (i = 0; i < paretoData.length; i++) {
-				let paretoItem = paretoData[i];
+			for (i = 0; i < paretoData.length; i++) {
+				const paretoItem = paretoData[i];
 				accPercent += paretoItem.percent;
 
 				chartPareto.categories.push(paretoItem.category);

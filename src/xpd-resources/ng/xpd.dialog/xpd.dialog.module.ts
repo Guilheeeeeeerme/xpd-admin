@@ -8,4 +8,3 @@ export default XPDDialogModule;
 
 XPDDialogModule.controller('dialogController', DialogController);
 XPDDialogModule.factory('dialogFactory', DialogFactory);
-

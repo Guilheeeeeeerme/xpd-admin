@@ -1,5 +1,4 @@
 
-
 // angular.module('xpd.visualization')
 // 	.directive('inSlips', inSlips);
 

@@ -7,7 +7,7 @@
 
 	function sectionController($scope, $filter, $location, $modal, $routeParams, sectionSetupAPIService, dialogFactory, wellSetupAPIService, operationDataFactory) {
 
-		let vm = this;
+		const vm = this;
 
 		$routeParams.wellId = +$routeParams.wellId;
 
@@ -27,11 +27,11 @@
 
 		$scope.$watch('openedSections', function(openedSections) {
 
-			let tempOpenedSections = JSON.parse(localStorage.getItem('xpd.admin.setup.openedSections'));
+			const tempOpenedSections = JSON.parse(localStorage.getItem('xpd.admin.setup.openedSections'));
 
 			if (openedSections && tempOpenedSections) {
 
-				for (let i in openedSections) {
+				for (const i in openedSections) {
 					tempOpenedSections[i] = openedSections[i] == true;
 				}
 
@@ -167,8 +167,8 @@
 
 		function replaceOnList(updatedSection) {
 
-			for (let i in $scope.dados.sectionList) {
-				let section = $scope.dados.sectionList[i];
+			for (const i in $scope.dados.sectionList) {
+				const section = $scope.dados.sectionList[i];
 
 				if (section.id == updatedSection.id) {
 					$scope.dados.sectionList[i] = updatedSection;

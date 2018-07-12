@@ -28,7 +28,7 @@
 			}
 		};
 
-		let vm = this;
+		const vm = this;
 
 		vm.actionButtonAdd = actionButtonAdd;
 		vm.actionButtonCancel = actionButtonCancel;
@@ -81,7 +81,7 @@
 
 		function actionButtonAdd() {
 
-			let member = {
+			const member = {
 				id: $scope.modalData.id || null,
 				identification: $scope.modalData.identification || null,
 				photoPath: $scope.modalData.photoPath || null,
@@ -110,7 +110,7 @@
 
 		function actionButtonRemove() {
 
-			let member = {id: $scope.modalData.id};
+			const member = {id: $scope.modalData.id};
 
 			scheduleSetupAPIService.removeMember(member, function(member) {
 				$modalInstance.close();
@@ -120,9 +120,9 @@
 		}
 
 		function actionSelectPhoto(files) {
-			let data = {}; // file object
+			const data = {}; // file object
 
-			let fd = new FormData();
+			const fd = new FormData();
 			fd.append('uploadedFile', files[0]);
 
 			photoAPIService.uploadPhoto(fd, 'tripin/member-pictures', function(data) {

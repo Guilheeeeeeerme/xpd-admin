@@ -32,7 +32,7 @@
 
 		function actionButtonAdd() {
 
-			let func = {
+			const func = {
 				id: $scope.modalData.id || null,
 				name: $scope.modalData.name,
 			};
@@ -54,7 +54,7 @@
 
 		function actionButtonRemove() {
 
-			let func = {id: $scope.modalData.id};
+			const func = {id: $scope.modalData.id};
 
 			scheduleSetupAPIService.removeFunction(func, function(func) {
 				$modalInstance.close();

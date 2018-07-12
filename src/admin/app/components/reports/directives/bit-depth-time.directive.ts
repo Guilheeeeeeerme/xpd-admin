@@ -39,7 +39,7 @@
 
 			function onDependenciesReady(Highcharts, d3) {
 
-				let colorPallete = d3.scale.category10();
+				const colorPallete = d3.scale.category10();
 				let plannedLocked = false;
 				let executedLocked = false;
 				let indexSelectedPoint = null;
@@ -86,7 +86,7 @@
 
 				function createChart(bitDepthPlannedPoints, bitDepthExecutedPoints, holeDepthPoints, sectionsBands, startChartAt) {
 
-					let plotBands = (!sectionsBands) ? [] : sectionsBands.map(setSectionColors);
+					const plotBands = (!sectionsBands) ? [] : sectionsBands.map(setSectionColors);
 
 					bitDepthVsTimeChart = Highcharts.chart(elem[0], {
 
@@ -259,9 +259,9 @@
 
 					currentPoint = this;
 
-					let plannedOfPoint = getPointFromSerieByX(bitDepthVsTimeChart.series[0], this.x);
-					let executedOfPoint = getPointFromSerieByX(bitDepthVsTimeChart.series[1], this.x);
-					let holeDepthOfPoint = getPointFromSerieByX(bitDepthVsTimeChart.series[2], this.x);
+					const plannedOfPoint = getPointFromSerieByX(bitDepthVsTimeChart.series[0], this.x);
+					const executedOfPoint = getPointFromSerieByX(bitDepthVsTimeChart.series[1], this.x);
+					const holeDepthOfPoint = getPointFromSerieByX(bitDepthVsTimeChart.series[2], this.x);
 
 					/** Marca no ponto qual linha ele pertence */
 					if (currentPoint == plannedOfPoint) {
@@ -284,8 +284,8 @@
 						let executedEvent = null;
 						let pointIndex = null;
 
-						for (let index in bitDepthVsTimeChart.series[1].hcEvents) {
-							let tempEvent = bitDepthVsTimeChart.series[1].hcEvents[index][0];
+						for (const index in bitDepthVsTimeChart.series[1].hcEvents) {
+							const tempEvent = bitDepthVsTimeChart.series[1].hcEvents[index][0];
 							if (tempEvent.id == executedOfPoint.id) {
 								executedEvent = tempEvent;
 								pointIndex = index;
@@ -300,9 +300,9 @@
 						);
 					}
 
-					let holeDepth = getDepthFromPointOfASerie(holeDepthOfPoint, bitDepthVsTimeChart.series[2]);
-					let plannedDepth = getDepthFromPointOfASerie(plannedOfPoint, bitDepthVsTimeChart.series[0]);
-					let executedDepth = getDepthFromPointOfASerie(executedOfPoint, bitDepthVsTimeChart.series[1]);
+					const holeDepth = getDepthFromPointOfASerie(holeDepthOfPoint, bitDepthVsTimeChart.series[2]);
+					const plannedDepth = getDepthFromPointOfASerie(plannedOfPoint, bitDepthVsTimeChart.series[0]);
+					const executedDepth = getDepthFromPointOfASerie(executedOfPoint, bitDepthVsTimeChart.series[1]);
 
 					try {
 						let highLigth;
@@ -359,18 +359,18 @@
 				}
 
 				function getPointFromSerieByX(serie, x) {
-					let point = null;
+					const point = null;
 
 					if (serie) {
 						for (let i = 1; i < serie.points.length; i++) {
 
-							let pontoAnterior = serie.points[i - 1];
-							let proximoPonto = serie.points[i];
+							const pontoAnterior = serie.points[i - 1];
+							const proximoPonto = serie.points[i];
 
 							if ( x >= pontoAnterior.x && x <= proximoPonto.x ) {
 
-								let distanciaParaAnterior = Math.abs( x - pontoAnterior.x );
-								let distanciaParaProximo = Math.abs( x - proximoPonto.x );
+								const distanciaParaAnterior = Math.abs( x - pontoAnterior.x );
+								const distanciaParaProximo = Math.abs( x - proximoPonto.x );
 
 								if (distanciaParaAnterior <= distanciaParaProximo) {
 									return pontoAnterior;

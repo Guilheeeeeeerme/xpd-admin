@@ -1,89 +1,94 @@
-angular.module('xpd.form.validation', [])
-	.directive('xpdFormValidation', function() {
-		return {
-			restrict: 'A',
-			require: '^ngModel',
-			priority: 1,
-			scope: {
-				ngModel: '=',
-				xpdFormValidation: '=',
-			},
-			link,
-		};
+export class XPDFormValidationDirective implements ng.IDirective {
 
-		function link(scope, element, attrs) {
+	public restrict = 'A';
+	public require = '^ngModel';
+	public priority = 1;
+	public scope = {
+		ngModel: '=',
+		xpdFormValidation: '=',
+	};
 
-			let isFirst = true;
+	public link: ng.IDirectiveLinkFn = (
+		scope: any,
+		element: ng.IAugmentedJQuery,
+		attributes: ng.IAttributes,
+		ctrl: any,
+	) => {
 
-			let parent = element.parent();
+		let isFirst = true;
 
-			// AQUI CRIA UM ELEMENTO PARA CADA CHAMADA
-			let errorElement = document.createElement('span');
+		const parent = element.parent();
 
-			let style = '';
-			style += 'color: red;';
-			style += 'font-style: italic;';
-			style += 'display: table-footer-group;';
+		// AQUI CRIA UM ELEMENTO PARA CADA CHAMADA
+		const errorElement = document.createElement('span');
 
-			errorElement.style = style;
+		let style = '';
+		style += 'color: red;';
+		style += 'font-style: italic;';
+		style += 'display: table-footer-group;';
 
-			parent.append(errorElement);
+		errorElement.style = style;
 
-			scope.$watch('ngModel', function() {
-				errorElement.innerHTML = '';
+		parent.append(errorElement);
 
-				let form = null;
+		scope.$watch('ngModel', function () {
+			errorElement.innerHTML = '';
 
-				if (scope.xpdFormValidation && scope.xpdFormValidation[attrs.name]) {
-					form = scope.xpdFormValidation[attrs.name];
+			let form = null;
+
+			if (scope.xpdFormValidation && scope.xpdFormValidation[attrs.name]) {
+				form = scope.xpdFormValidation[attrs.name];
+			} else {
+				return;
+			}
+
+			const error = form.$error;
+
+			if (!isFirst && !form.$valid) {
+
+				for (const errorType in error) {
+					errorElement.innerHTML += genericInputMessageError(errorType);
+				}
+			}
+
+			isFirst = false;
+
+		}, true);
+
+		function genericInputMessageError(errorType) {
+
+			if (errorType == 'max') {
+				if (attrs.atLeast != undefined) {
+					return 'this field should be at least "' + attrs.atLeast + '" <br/>';
+				} else if (!attrs.min || attrs.min == '') {
+					return 'this field should be at most ' + attrs.max + '<br/>';
 				} else {
-					return;
+					return 'this field should be between ' + attrs.min + ' and ' + attrs.max + '<br/>';
 				}
 
-				let error = form.$error;
-
-				if (!isFirst && !form.$valid) {
-
-					for (let errorType in error) {
-						errorElement.innerHTML += genericInputMessageError(errorType);
-					}
-				}
-
-				isFirst = false;
-
-			}, true);
-
-			function genericInputMessageError(errorType) {
-
-				if (errorType == 'max') {
-					if (attrs.atLeast != undefined) {
-						return 'this field should be at least "' + attrs.atLeast + '" <br/>';
-					} else if (!attrs.min || attrs.min == '') {
-						return 'this field should be at most ' + attrs.max + '<br/>';
-										} else {
-						return 'this field should be between ' + attrs.min + ' and ' + attrs.max + '<br/>';
-										}
-
-				} else if (errorType == 'min') {
-					if (attrs.atMost != undefined) {
-						return 'this field should be at most "' + attrs.atMost + '" <br/>';
-					} else if (!attrs.max || attrs.max == '') {
-						return 'this field should be at least ' + attrs.min + '<br/>';
-										} else {
-						return 'this field should be between ' + attrs.min + ' and ' + attrs.max + '<br/>';
-										}
-
-				} else if (errorType == 'required') {
-					return 'this field is mandatory';
-				} else if (errorType == 'number') {
-					return 'this field should be a valid number';
+			} else if (errorType == 'min') {
+				if (attrs.atMost != undefined) {
+					return 'this field should be at most "' + attrs.atMost + '" <br/>';
+				} else if (!attrs.max || attrs.max == '') {
+					return 'this field should be at least ' + attrs.min + '<br/>';
 				} else {
-					return JSON.stringify(errorType);
+					return 'this field should be between ' + attrs.min + ' and ' + attrs.max + '<br/>';
 				}
 
+			} else if (errorType == 'required') {
+				return 'this field is mandatory';
+			} else if (errorType == 'number') {
+				return 'this field should be a valid number';
+			} else {
+				return JSON.stringify(errorType);
 			}
 
 		}
 
-	});
-
+	}
+
+	public static Factory(): ng.IDirectiveFactory {
+		return () => new XPDFormValidationDirective();
+	}
+
+}

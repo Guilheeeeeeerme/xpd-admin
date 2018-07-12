@@ -1,16 +1,21 @@
-(function() {
-	'use strict';
+// (function() {
+// 	'use strict';
 
-	angular
-		.module('xpd.accessfactory')
-		.factory('xpdAccessFactory', xpdAccessFactory);
+// 	angular
+// 		.module('xpd.accessfactory')
+// 		.factory('xpdAccessFactory', xpdAccessFactory);
 
-	xpdAccessFactory.$inject = [];
+// 	xpdAccessFactory.$inject = [];
 
-	/* @ngInject */
-	function xpdAccessFactory() {
+/* @ngInject */
+export class XPDAccessFactory {
 
-		let XPDAccessData = window.XPDAccessData;
+	public static $inject: string[] = [];
+	private server: any;
+
+	constructor() {
+
+		let XPDAccessData = (window as any).XPDAccessData;
 
 		// 	tem algo no local storage?
 		if (localStorage.getItem('xpd.admin.XPDAccessData')) {
@@ -43,27 +48,28 @@
 
 		// 	sincronizando local storage
 		// console.log('Atualizando Local Storage !!!');
-		window.XPDAccessData = XPDAccessData;
+		(window as any).XPDAccessData = XPDAccessData;
 		localStorage.setItem('xpd.admin.XPDAccessData', JSON.stringify(XPDAccessData));
 
-		let server = XPDAccessData.server;
-
-		return {
-			getReportsAPIURL() {
-				let url = 'https://' + server.xpdDefaultReportsAPIAccessIp + ':' + server.xpdDefaultReportsAPIPort + '/reports-api/';
-				// console.log(url);
-				return url;
-			},
-			getOperationServerURL() {
-				let url = 'https://' + server.xpdDefaultSetupAPIAccessIp + ':' + server.xpdDefaultOperationServerPort;
-				// console.log(url);
-				return url;
-			},
-			getSetupURL() {
-				let url = 'https://' + server.xpdDefaultAccessIp + ':' + server.xpdDefaultSetupApiPort + '/xpd-setup-api/';
-				// console.log(url);
-				return url;
-			},
-		};
+		this.server = XPDAccessData.server;
 	}
-})();
+
+	public getReportsAPIURL() {
+		const url = 'https://' + this.server.xpdDefaultReportsAPIAccessIp + ':' + this.server.xpdDefaultReportsAPIPort + '/reports-api/';
+		// console.log(url);
+		return url;
+	}
+
+	public getOperationServerURL() {
+		const url = 'https://' + this.server.xpdDefaultSetupAPIAccessIp + ':' + this.server.xpdDefaultOperationServerPort;
+		// console.log(url);
+		return url;
+	}
+
+	public getSetupURL() {
+		const url = 'https://' + this.server.xpdDefaultAccessIp + ':' + this.server.xpdDefaultSetupApiPort + '/xpd-setup-api/';
+		// console.log(url);
+		return url;
+	}
+}
+// })();

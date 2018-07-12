@@ -107,7 +107,7 @@ export class DMECService {
 		 */
 		function getTick() {
 
-			let now = new Date().getTime();
+			const now = new Date().getTime();
 
 			scope.onReading = $q(function (resolve, reject) {
 				if (getCurrentReading) {

@@ -23,7 +23,7 @@
 
 				let prevSelected = null;
 				let columnWidth = 15;
-				let taskCellWidth = {
+				const taskCellWidth = {
 					left: columnWidth * 24,
 					width: columnWidth * 24,
 				};
@@ -34,7 +34,7 @@
 
 				gantt.init(attrs.id);
 
-				let identificationSpan = document.createElement('span');
+				const identificationSpan = document.createElement('span');
 				identificationSpan.className = 'member-scheduler-identification-label';
 
 				document.querySelector('.gantt_data_area').appendChild(identificationSpan);
@@ -101,9 +101,9 @@
 				gantt.attachEvent('onMouseMove', function(id, event) {
 
 					if (event.path[1].className !== 'gantt_cell') {
-						let taskId = event.path[1].getAttribute('task_id');
+						const taskId = event.path[1].getAttribute('task_id');
 					} else {
-						let taskId = event.path[2].getAttribute('task_id');
+						const taskId = event.path[2].getAttribute('task_id');
 					}
 
 					if (taskId != null) {
@@ -114,7 +114,7 @@
 							task = gantt.getTask(task.sib_id);
 						}
 
-						let element = document.querySelectorAll('div[task_id=\'' + taskId + '\']');
+						const element = document.querySelectorAll('div[task_id=\'' + taskId + '\']');
 
 						if (element.length == 2) {
 
@@ -146,7 +146,7 @@
 
 				gantt.attachEvent('onXPDEmptyRowClick', function(task, date) {
 					if (typeof(task.sib_id) === 'undefined') {
-						let schedule = {
+						const schedule = {
 							endDate: new Date(new Date(date).getTime() + 3600000),
 							startDate: new Date(new Date(date).getTime()),
 							shiftHours: 3600000,
@@ -219,7 +219,7 @@
 
 				function removeClass(ele, cls) {
 					if (hasClass(ele, cls)) {
-						let reg = new RegExp('(\\s|^)' + cls + '(\\s|$)');
+						const reg = new RegExp('(\\s|^)' + cls + '(\\s|$)');
 						ele.className = ele.className.replace(reg, '');
 					}
 				}
@@ -274,20 +274,20 @@
 				}
 
 				function createMonthlyOverlay() {
-					let bgOverlay = document.createElement('div');
+					const bgOverlay = document.createElement('div');
 					bgOverlay.className = 'member-scheduler-monthly-view-overlay';
 
 					document.querySelector('.gantt_data_area').appendChild(bgOverlay);
 
-					let iconSize = 50;
-					let dataAreaRect = document.querySelector('.gantt_data_area').getBoundingClientRect();
+					const iconSize = 50;
+					const dataAreaRect = document.querySelector('.gantt_data_area').getBoundingClientRect();
 
-					let iconPosition = {
+					const iconPosition = {
 						top: ((dataAreaRect.height / 2) - (iconSize) - 25),
 						left: ((dataAreaRect.width / 2) - (iconSize / 2)),
 					};
 
-					let monthlyViewLockIcon = document.createElement('span');
+					const monthlyViewLockIcon = document.createElement('span');
 					monthlyViewLockIcon.className = 'glyphicon glyphicon-lock member-scheduler-monthly-view-overlay-icon';
 
 					monthlyViewLockIcon.style.fontSize = iconSize + 'px';
@@ -298,7 +298,7 @@
 				}
 
 				function renderMonthyOverlay() {
-					let monthlyOverlayHeight = document.querySelector('.gantt_task_bg').getBoundingClientRect().height;
+					const monthlyOverlayHeight = document.querySelector('.gantt_task_bg').getBoundingClientRect().height;
 
 					document.querySelector('.member-scheduler-monthly-view-overlay').style.height = monthlyOverlayHeight;
 					document.querySelector('.member-scheduler-monthly-view-overlay').style.display = 'block';
@@ -313,7 +313,7 @@
                      * CREATING NEW IDENTIFICATION DIV
                      */
 
-					let dataGridReference = document.querySelector('.gantt_data_area');
+					const dataGridReference = document.querySelector('.gantt_data_area');
 					identificationSpan.style.top = event.clientY - dataGridReference.getBoundingClientRect().top + dataGridReference.scrollTop + 'px';
 					identificationSpan.style.left = event.clientX - dataGridReference.getBoundingClientRect().left + 15 + 'px';
 
@@ -328,10 +328,10 @@
 				}
 
 				function initTaskCellWidth() {
-					let row = document.querySelector('.gantt_task_row');
+					const row = document.querySelector('.gantt_task_row');
 
 					if (row != null) {
-						let taskCells = row.querySelectorAll('.gantt_task_cell');
+						const taskCells = row.querySelectorAll('.gantt_task_cell');
 
 						taskCellWidth.left = 0;
 						taskCellWidth.width = 0;
@@ -349,7 +349,7 @@
 				}
 
 				function renderOddBgColumn() {
-					let oldOddBgColumns = document.querySelectorAll('.member-scheduler-odd-bg-column');
+					const oldOddBgColumns = document.querySelectorAll('.member-scheduler-odd-bg-column');
 
 					if (oldOddBgColumns.length > 0) {
 						// FOR EACH HACK
@@ -358,7 +358,7 @@
 						});
 					}
 
-					let oddBGColumnReferenceElements = document.querySelectorAll('.gantt_task_row');
+					const oddBGColumnReferenceElements = document.querySelectorAll('.gantt_task_row');
 
 					if (oddBGColumnReferenceElements.length > 0) {
 						if (scope.monthlyView) {
@@ -371,9 +371,9 @@
 				}
 
 				function createOddColumnsDailyView(element) {
-					let referenceBoundingRect = element.getBoundingClientRect();
+					const referenceBoundingRect = element.getBoundingClientRect();
 
-					let oddBGColumn = document.createElement('div');
+					const oddBGColumn = document.createElement('div');
 					oddBGColumn.className = 'member-scheduler-odd-bg-column';
 
 					oddBGColumn.style.height = referenceBoundingRect.height + 'px';
@@ -387,7 +387,7 @@
 				function createOddColumnsMonthlyView(element) {
 					[].forEach.call(element.childNodes, function(cellElement, index) {
 						if (index % 2 === 1) {
-							let oddBGColumn = document.createElement('div');
+							const oddBGColumn = document.createElement('div');
 							oddBGColumn.className = 'member-scheduler-odd-bg-column';
 
 							oddBGColumn.style.width = '100%';
@@ -407,7 +407,7 @@
 						let placeHolderTask = null;
 
 						if (type == 'function') {
-							let functionTaskId = 'f_' + data.id;
+							const functionTaskId = 'f_' + data.id;
 
 							newTask = {};
 							newTask.id = functionTaskId;
@@ -424,7 +424,7 @@
 							placeHolderTask.sib_id = functionTaskId;
 						} else if (type == 'member') {
 
-							let memberTaskId = 'm_' + data.id;
+							const memberTaskId = 'm_' + data.id;
 
 							newTask = {};
 							newTask.id = memberTaskId;
@@ -465,7 +465,7 @@
 							gantt.deleteTask('m_' + data.id);
 						} else if (type === 'schedule') {
 							if (data && data.length) {
-								for (let i in data) {
+								for (const i in data) {
 									gantt.deleteTask(data[i].id);
 								}
 							} else {

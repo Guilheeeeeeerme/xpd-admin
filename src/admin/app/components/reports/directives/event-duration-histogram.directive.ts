@@ -21,7 +21,7 @@
 				let chart;
 				let chartData = [];
 				let binSize = 60;
-				let extremes = {
+				const extremes = {
 					min: null,
 					max: null,
 				};
@@ -43,16 +43,16 @@
 
 				function renderChart(fromBin) {
 
-					let container = elem[0].querySelectorAll('.histogram-container')[0];
+					const container = elem[0].querySelectorAll('.histogram-container')[0];
 
-					let jointLength =  (chartData.label.toLowerCase().indexOf('trip') > -1 ? chartData.jointLength : 1);
-					let vporEventDuration = jointLength / (chartData.vpoor / 3600);
-					let vstdEventDuration = jointLength / (chartData.vstandard / 3600);
-					let voptEventDuration = jointLength / (chartData.voptimum / 3600);
+					const jointLength =  (chartData.label.toLowerCase().indexOf('trip') > -1 ? chartData.jointLength : 1);
+					const vporEventDuration = jointLength / (chartData.vpoor / 3600);
+					const vstdEventDuration = jointLength / (chartData.vstandard / 3600);
+					const voptEventDuration = jointLength / (chartData.voptimum / 3600);
 
-					let histogramData = histogram(chartData.points, binSize);
+					const histogramData = histogram(chartData.points, binSize);
 
-					let showResetZoom = chart && chart.resetZoomButton && chart.resetZoomButton !== null;
+					const showResetZoom = chart && chart.resetZoomButton && chart.resetZoomButton !== null;
 
 					scope.showDiffMessage = chartData['diff-op'];
 
@@ -100,7 +100,7 @@
 						tooltip: {
 					        formatter() {
 					            if (this.series.name === 'Event Data') {
-									let s = 'Event duration: ' + formatSeconds(this.x);
+									const s = 'Event duration: ' + formatSeconds(this.x);
 																	} else {
 									let s = '(' + formatSeconds(this.x) + ' - ' + formatSeconds(this.x + binSize) + ')';
 									s += '<br>Frequency: ' + this.y;
@@ -141,19 +141,19 @@
 				}
 
 				function actionButtonApply() {
-					let minutes = scope.binMinutes || 0;
-					let seconds = scope.binSeconds || 0;
+					const minutes = scope.binMinutes || 0;
+					const seconds = scope.binSeconds || 0;
 
 					binSize = minutes * 60 + seconds;
 					renderChart(true);
 				}
 
 				function actionButtonApplyExtremes() {
-					let maxMinutes = scope.maxMinutes || 0;
-					let maxSeconds = scope.maxSeconds || 0;
+					const maxMinutes = scope.maxMinutes || 0;
+					const maxSeconds = scope.maxSeconds || 0;
 
-					let minMinutes = scope.minMinutes || 0;
-					let minSeconds = scope.minSeconds || 0;
+					const minMinutes = scope.minMinutes || 0;
+					const minSeconds = scope.minSeconds || 0;
 
 					extremes.min = (minMinutes * 60) + minSeconds;
 					extremes.max = (maxMinutes * 60) + maxSeconds;
@@ -205,8 +205,8 @@
 			    }
 
 			 function setExtremesFromHistoData(data) {
-			    	let firstValue = data[0][0];
-			    	let lastValue = data[data.length - 1][0] + binSize;
+			    	const firstValue = data[0][0];
+			    	const lastValue = data[data.length - 1][0] + binSize;
 
 			    	extremes.min = firstValue;
 			    	extremes.max = lastValue;
@@ -235,8 +235,8 @@
 			    }
 
 			 function formatSeconds(durationSeconds) {
-					let minutes = parseInt(durationSeconds / 60);
-					let seconds = parseInt(durationSeconds % 60);
+					const minutes = parseInt(durationSeconds / 60);
+					const seconds = parseInt(durationSeconds % 60);
 
 					return minutes + 'm:' + seconds + 's';
 			    }

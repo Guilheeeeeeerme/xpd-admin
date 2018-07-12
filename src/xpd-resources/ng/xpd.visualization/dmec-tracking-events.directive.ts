@@ -317,7 +317,6 @@ export class DMECTrackingEventsDirective implements ng.IDirective {
 			return event;
 		}
 
-
 	}
 
 	public static Factory(): ng.IDirectiveFactory {

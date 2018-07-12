@@ -8,9 +8,9 @@
 
 	function alarmSetupAPIService(xpdAccessFactory, setupAPIService) {
 
-		let BASE_URL = xpdAccessFactory.getSetupURL() + 'setup/alarm';
+		const BASE_URL = xpdAccessFactory.getSetupURL() + 'setup/alarm';
 
-		let vm = this;
+		const vm = this;
 
 		vm.insertAlarm = insertAlarm;
 		vm.updateAlarm = updateAlarm;
@@ -20,7 +20,7 @@
 
 		function insertAlarm(alarm, successCallback, errorCallback) {
 
-			let req = {
+			const req = {
 				method: 'POST',
 				url: BASE_URL,
 				headers: {
@@ -34,7 +34,7 @@
 
 		function removeAlarm(alarm, successCallback, errorCallback) {
 
-			let req = {
+			const req = {
 				method: 'DELETE',
 				url: BASE_URL + '/' + alarm.id,
 				headers: {
@@ -47,7 +47,7 @@
 
 		function updateAlarm(alarm, successCallback, errorCallback) {
 
-			let req = {
+			const req = {
 				method: 'PUT',
 				url: BASE_URL,
 				headers: {
@@ -60,7 +60,7 @@
 		}
 
 		function updateArchive(id, archived, successCallback, errorCallback) {
-			let req = {
+			const req = {
 				method: 'GET',
 				url: BASE_URL + '/' + id + '/archive/' + archived,
 			};
@@ -70,7 +70,7 @@
 
 		function getByOperationType(type, butNot, successCallback, errorCallback) {
 
-			let req = {
+			const req = {
 				method: 'GET',
 				url: BASE_URL + '/of-operations/' + type + '/but-not-id/' + (butNot || 0),
 			};

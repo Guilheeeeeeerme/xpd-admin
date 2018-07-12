@@ -16,4 +16,3 @@ export class WellInformationPanelDirective implements ng.IDirective {
 	}
 
 }
-

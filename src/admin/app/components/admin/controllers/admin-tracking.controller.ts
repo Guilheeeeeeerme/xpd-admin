@@ -7,7 +7,7 @@
 
 	function adminTrackingController($scope, $q, operationDataFactory, eventDetailsModal, failureModal, eventlogSetupAPIService, lessonLearnedModal, failureSetupAPIService, lessonLearnedSetupAPIService, dialogFactory, $rootScope) {
 
-		let vm = this;
+		const vm = this;
 
 		let eventStartTime, eventEndTime, eventId;
 		let listTrackingEventByOperationPromise = null;
@@ -50,7 +50,7 @@
 
 		function actionOpenDropdownMenu($event, eventLog) {
 
-			let modalOption = document.querySelector('.slips-to-slips-dropdown-menu');
+			const modalOption = document.querySelector('.slips-to-slips-dropdown-menu');
 
 			modalOption.style.top = ($event.clientY) + 'px';
 			modalOption.style.left = ($event.clientX) + 'px';
@@ -86,11 +86,11 @@
 		}
 
 		function getSelectedEvent() {
-			let operationId = $scope.operationData.operationContext.currentOperation.id;
-			let start = new Date(eventStartTime);
-			let end = new Date(eventEndTime);
+			const operationId = $scope.operationData.operationContext.currentOperation.id;
+			const start = new Date(eventStartTime);
+			const end = new Date(eventEndTime);
 
-			let selectedEvent = {
+			const selectedEvent = {
 				operation: {
 					id: operationId,
 				},

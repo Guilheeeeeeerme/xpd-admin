@@ -13,9 +13,9 @@
 	histogramReportController.$inject = ['$scope', 'reportsSetupAPIService'];
 
 	function histogramReportController($scope, reportsSetupAPIService) {
-		let vm = this;
+		const vm = this;
 
-		let parentData = $scope.reportsData;
+		const parentData = $scope.reportsData;
 
 		$scope.histoData = {
 			columns: 2,
@@ -24,7 +24,7 @@
 
 		$scope.inputIntevals = {};
 
-		let operationTypes = {
+		const operationTypes = {
 			none: {
 				label: '',
 				activities: [],
@@ -90,7 +90,7 @@
 
 		function groupOperationByState(activities) {
 
-			for (let i in activities) {
+			for (const i in activities) {
 				if (activities[i].operationType == 'bha') {
 					operationTypes.bha.activities.push(activities[i]);
 				} else if (activities[i].operationType == 'casing') {

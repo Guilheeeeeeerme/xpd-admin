@@ -4,7 +4,7 @@
 // timeZoomTool.$inject = ['$filter', 'd3Service'];
 import * as angular from 'angular';
 import * as d3 from 'd3';
-import { parseSvg } from "d3-interpolate/src/transform/parse";
+import { parseSvg } from 'd3-interpolate/src/transform/parse';
 import template from '../xpd-resources/ng/xpd.visualization/time-zoom-tool.template.html';
 
 export class TimeZoomToolDirective implements ng.IDirective {

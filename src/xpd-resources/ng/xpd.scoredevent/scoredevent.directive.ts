@@ -1,5 +1,4 @@
 
-
 export class XPDScoredEventsDirective implements ng.IDirective {
 	// Runs during compile
 	public scope: {
@@ -31,4 +30,3 @@ export class XPDScoredEventsDirective implements ng.IDirective {
 		  return () => new XPDScoredEventsDirective();
 		}
 }
-

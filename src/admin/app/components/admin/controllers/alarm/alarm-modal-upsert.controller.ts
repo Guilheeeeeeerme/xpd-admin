@@ -14,7 +14,7 @@
 
 	function alarmModalUpsertController($scope, $filter, $uibModalInstance, $operation, $alarm, actionButtonSaveCallback, actionButtonCloseCallback) {
 
-		let vm = this;
+		const vm = this;
 
 		vm.actionButtonClose = actionButtonClose;
 		vm.actionButtonSave = actionButtonSave;

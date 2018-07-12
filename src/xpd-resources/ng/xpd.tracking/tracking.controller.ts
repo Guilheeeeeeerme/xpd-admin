@@ -1,6 +1,8 @@
 import * as angular from 'angular';
 import { IModalService } from 'angular-ui-bootstrap';
-import { XPDIntervalService, XPDTimeoutService } from '../xpd.timers/xpd-timers.service';
+import { DialogFactory } from '../xpd.dialog/xpd.dialog.factory';
+import { OperationDataFactory } from '../xpd.communication/operation-server-data.factory';
+import { XPDTimeoutService, XPDIntervalService } from '../xpd.timers/xpd-timers.service';
 
 // (function() {
 // 	'use strict',
@@ -11,13 +13,15 @@ import { XPDIntervalService, XPDTimeoutService } from '../xpd.timers/xpd-timers.
 
 export class TrackingController {
 
+	public operationDataFactory: any;
+
 	public static $inject: string[] = [
 		'$scope',
 		'$xpdInterval',
 		'$xpdTimeout',
 		'$uibModal',
 		'operationDataFactory',
-		'dialogFactory'
+		'dialogFactory',
 	];
 
 	public actionButtonStartOperation: (operation: any) => void;
@@ -90,7 +94,7 @@ export class TrackingController {
 		};
 
 		operationDataFactory.openConnection([]).then(function (response) {
-			operationDataFactory = response;
+			vm.operationDataFactory = response;
 			$scope.operationData = operationDataFactory.operationData;
 
 			buildEventStruture();

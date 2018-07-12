@@ -8,7 +8,7 @@
 	TabsCtrl.$inject = ['$scope', '$uibModalInstance'];
 
 	function TabsCtrl($scope, $uibModalInstance) {
-		let vm = this;
+		const vm = this;
 
 		$scope.controller = vm;
 

@@ -7,16 +7,16 @@
 
 	function readingSetupAPIService(xpdAccessFactory, setupAPIService) {
 
-		let BASE_URL = xpdAccessFactory.getSetupURL() + 'setup/reading';
+		const BASE_URL = xpdAccessFactory.getSetupURL() + 'setup/reading';
 
-		let vm = this;
+		const vm = this;
 
 		vm.getAllReadingSince = getAllReadingSince;
 		vm.getTick = getTick;
 		vm.getAllReadingByStartEndTime = getAllReadingByStartEndTime;
 
 		function getAllReadingSince(from, successCallback, errorCallback) {
-			let req = {
+			const req = {
 				method: 'GET',
 				url: BASE_URL + '/from/' + from,
 				headers: {
@@ -28,7 +28,7 @@
 		}
 
 		function getTick(tick, successCallback, errorCallback) {
-			let req = {
+			const req = {
 				method: 'GET',
 				url: BASE_URL + '/tick/' + tick,
 				headers: {
@@ -40,7 +40,7 @@
 		}
 
 		function getAllReadingByStartEndTime(from, to, successCallback, errorCallback) {
-			let req = {
+			const req = {
 				method: 'GET',
 				url: BASE_URL + '/from/' + from + ((to) ? ('/to/' + to) : ''),
 				// cache: (to) ? true : false,

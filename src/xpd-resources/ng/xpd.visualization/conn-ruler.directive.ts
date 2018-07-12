@@ -90,8 +90,13 @@ export class ConnRulerDirective implements ng.IDirective {
 
 			scope.plottedTimeBlocks = timeBlocks;
 
-			scope.colorGradientScale = d3.scaleLinear().domain([0, 100]).range(['#000000', '#517f89']);
-			scope.colorGradientScaleInverse = d3.scaleLinear().domain([0, 100]).range(['#517f89', '#000000']);
+			// TODO VERIFICAR A ADAPTAÇÃO AS ANY
+			scope.colorGradientScale = d3.scaleLinear()
+				.domain([0, 100])
+				.range([('#000000' as any), ('#517f89'as any)]);
+			scope.colorGradientScaleInverse = d3.scaleLinear()
+				.domain([0, 100])
+				.range([('#517f89' as any), ('#000000'as any)]);
 
 			if (scope.hasVtarget) {
 				unwatchChronometer = watchChronometer();

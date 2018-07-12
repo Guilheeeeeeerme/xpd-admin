@@ -38,8 +38,8 @@
 
 					if (slipsData == null || slipsData.length == 0) { return; }
 
-					let timeFirstEvent = slipsData[0].startTime;
-					let timeLastEvent = slipsData[slipsData.length - 1].startTime;
+					const timeFirstEvent = slipsData[0].startTime;
+					const timeLastEvent = slipsData[slipsData.length - 1].startTime;
 
 					scope.fromDate = new Date(timeFirstEvent);
 					scope.toDate = new Date(timeLastEvent);

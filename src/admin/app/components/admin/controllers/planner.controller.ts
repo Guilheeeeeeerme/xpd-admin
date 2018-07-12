@@ -13,7 +13,7 @@
 
 	function plannerController($scope, $filter, operationDataFactory, dialogFactory, vCruisingCalculator) {
 
-		let vm = this;
+		const vm = this;
 
 		$scope.dados = {
 			settings: null,
@@ -79,13 +79,13 @@
 				return;
 			}
 
-			for (let i in $scope.operationData.stateContext.operationStates) {
-				let stateName = i;
-				let state = $scope.operationData.stateContext.operationStates[i];
+			for (const i in $scope.operationData.stateContext.operationStates) {
+				const stateName = i;
+				const state = $scope.operationData.stateContext.operationStates[i];
 
-				for (let j in state.calcVREParams) {
-					let eventType = j;
-					let param = state.calcVREParams[j];
+				for (const j in state.calcVREParams) {
+					const eventType = j;
+					const param = state.calcVREParams[j];
 
 					if (eventType != 'TIME') {
 						setAllActivitiesParams(stateName, state, eventType, param, state.stateType);
@@ -141,14 +141,14 @@
 
 				$scope.dados.settings[stateName][eventType].displacement = displacement;
 
-				let targetSpeed = $scope.dados.settings[stateName][eventType].targetSpeed;
+				const targetSpeed = $scope.dados.settings[stateName][eventType].targetSpeed;
 
-				let time = (displacement / targetSpeed) - $scope.operationData.operationContext.currentOperation.inSlips;
+				const time = (displacement / targetSpeed) - $scope.operationData.operationContext.currentOperation.inSlips;
 
-				let accelerationTimeLimit = $scope.dados.settings[stateName][eventType].targetAccelerationTimeLimit;
-				let decelerationTimeLimit = $scope.dados.settings[stateName][eventType].targetDecelerationTimeLimit;
+				const accelerationTimeLimit = $scope.dados.settings[stateName][eventType].targetAccelerationTimeLimit;
+				const decelerationTimeLimit = $scope.dados.settings[stateName][eventType].targetDecelerationTimeLimit;
 
-				let vcruising = vCruisingCalculator.calculate((displacement / time), time, accelerationTimeLimit, decelerationTimeLimit);
+				const vcruising = vCruisingCalculator.calculate((displacement / time), time, accelerationTimeLimit, decelerationTimeLimit);
 
 				$scope.dados.settings[stateName][eventType].vcruising = vcruising;
 
@@ -183,7 +183,7 @@
 
 		function actionButtonApply() {
 
-			let eventData = {};
+			const eventData = {};
 
 			eventData.stateKey = $scope.dados.selectedState;
 			eventData.eventKey = $scope.dados.selectedEventType;
@@ -202,8 +202,8 @@
 
 			let timeOrder = 1;
 
-			for (let i in timeSlices) {
-				let timeSlice = timeSlices[i];
+			for (const i in timeSlices) {
+				const timeSlice = timeSlices[i];
 
 				timeSlice.timeOrder = timeOrder;
 
@@ -261,8 +261,8 @@
 
 		function sumTripConnduration(stateSettings) {
 
-			let tripDuration = stateSettings.TRIP.targetTime * 1000;
-			let connDuration = stateSettings.CONN.targetTime * 1000;
+			const tripDuration = stateSettings.TRIP.targetTime * 1000;
+			const connDuration = stateSettings.CONN.targetTime * 1000;
 
 			return tripDuration + connDuration;
 		}

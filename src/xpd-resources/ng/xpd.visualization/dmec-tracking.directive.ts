@@ -20,7 +20,7 @@ export class DMECTrackingDirective implements ng.IDirective {
 	public restrict = 'AE';
 	public template = template;
 
-	constructor(private dmecService: DMECService){ }
+	constructor(private dmecService: DMECService) { }
 
 	public link: ng.IDirectiveLinkFn = (
 		scope: any,

@@ -15,7 +15,7 @@
 	function reportsController($scope, operationSetupAPIService, wellSetupAPIService, operationDataFactory) {
 
 		// --declarations--
-		let vm = this;
+		const vm = this;
 
 		$scope.reportsData = {
 			currentOperation: null,
@@ -83,7 +83,7 @@
 		function getWellSuccessCallback(result) {
 			$scope.reportsData.wellList = result;
 
-			for (let i in result) {
+			for (const i in result) {
 				if (result[i].current) {
 					$scope.reportsData.currentWell = result[i];
 				}
@@ -139,8 +139,8 @@
 
 			$scope.reportsData.failuresOnInterval = null;
 
-			let startInterval = new Date(startTime).getTime();
-			let endInterval = new Date(endTime).getTime();
+			const startInterval = new Date(startTime).getTime();
+			const endInterval = new Date(endTime).getTime();
 
 			if (startTime && endTime) {
 				$scope.reportsData.failuresOnInterval = checkNptOnInterval(startInterval, endInterval);
@@ -152,17 +152,17 @@
 
 		function checkNptOnInterval(startInterval, endInterval) {
 
-			let failureList = operationDataFactory.operationData.failureContext.failureList;
-			let failuresOnInterval = [];
+			const failureList = operationDataFactory.operationData.failureContext.failureList;
+			const failuresOnInterval = [];
 
-			for (let i in failureList) {
-				let failure = failureList[i];
+			for (const i in failureList) {
+				const failure = failureList[i];
 
 				if (failure.npt) {
-					let failureStartTime = new Date(failure.startTime).getTime();
-					let failureEndTime = new Date(failure.endTime).getTime();
+					const failureStartTime = new Date(failure.startTime).getTime();
+					const failureEndTime = new Date(failure.endTime).getTime();
 
-					let onGoingCondition = (failure.onGoing && (failureStartTime <= endInterval));
+					const onGoingCondition = (failure.onGoing && (failureStartTime <= endInterval));
 
 					if ((failureEndTime >= startInterval) && (failureStartTime <= endInterval) || onGoingCondition) {
 						failuresOnInterval.push(failure);
@@ -174,4 +174,3 @@
 		}
 	}
 })();
-

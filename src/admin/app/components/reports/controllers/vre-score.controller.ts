@@ -14,7 +14,7 @@
 
 	function vreScoreController($scope, reportsSetupAPIService) {
 
-		let vm = this;
+		const vm = this;
 
 		$scope.vreScoredata = {
 			fromDate: 0,
@@ -22,7 +22,7 @@
 			chartData: {},
 		};
 
-		let operationTypes = {
+		const operationTypes = {
 			none: {
 				label: '',
 				activities: [],
@@ -51,7 +51,7 @@
 
 		function getVreScoreList() {
 
-			let parentData = $scope.reportsData;
+			const parentData = $scope.reportsData;
 
 			reportsSetupAPIService.getVreScoreList(
 				parentData.fromDate,
@@ -112,7 +112,7 @@
 
 		function groupOperationByState(activities) {
 
-			let bhaStates = [
+			const bhaStates = [
 				{0: /makeup/i, 1: /make up/i},
 				{0: /laydown/i, 1: /lay down/i},
 				{0: /cased/i, 1: /cased well/i},
@@ -122,7 +122,7 @@
 				// {0:/inBreakDPInterval/i, 1:/In Break DP Interval/i}
 			];
 
-			let casingStates = [
+			const casingStates = [
 				{0: /casing/i, 1: /casing/i},
 				{0: /settlementstring/i, 1: /settlement string/i},
 				{0: /belowshoedepth/i, 1: /below shoe depth/i},
@@ -130,12 +130,12 @@
 				// {0:/inBreakDPInterval/i, 1:/In Break DP Interval/i}
 			];
 
-			let riserStates = [
+			const riserStates = [
 				{0: /ascentriser/i, 1: /ascent riser/i},
 				{0: /descentriser/i, 1: /descent riser/i},
 			];
 
-			let timeState = [
+			const timeState = [
 				{0: /time/i, 1: /time/i},
 			];
 
@@ -155,7 +155,7 @@
 				return activity;
 			});
 
-			for (let i in activities) {
+			for (const i in activities) {
 				if (activities[i].$$operationType == 'bha') {
 					operationTypes.bha.activities.push(activities[i]);
 				} else if (activities[i].$$operationType == 'casing') {
@@ -176,9 +176,9 @@
 				return activity;
 			}
 
-			let attr = activity.label;
+			const attr = activity.label;
 
-			for (let i in states) {
+			for (const i in states) {
 				if (attr.match(states[i][0]) || attr.match(states[i][1])) {
 					activity.$$operationType = type;
 					break;

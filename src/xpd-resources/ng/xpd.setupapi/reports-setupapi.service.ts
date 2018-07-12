@@ -7,7 +7,7 @@
 	reportsSetupAPIService.$inject = ['xpdAccessFactory', 'setupAPIService'];
 
 	function reportsSetupAPIService(xpdAccessFactory, setupAPIService) {
-		let vm = this;
+		const vm = this;
 
 		vm.getVreList = getVreList;
 		vm.getVreScoreList = getVreScoreList;
@@ -27,7 +27,7 @@
 			url += 'from=' + fromDate.getTime();
 			url += '&to=' + toDate.getTime();
 
-			let req = {
+			const req = {
 				method: 'GET',
 				url,
 			};
@@ -40,7 +40,7 @@
 			url += 'from=' + fromDate.getTime();
 			url += '&to=' + toDate.getTime();
 
-			let req = {
+			const req = {
 				method: 'GET',
 				url,
 			};
@@ -49,7 +49,7 @@
 		}
 
 		function getPlannedGraphicDataOperation(operationId, successCallback, errorCallback) {
-			let req = {
+			const req = {
 				method: 'GET',
 				url: xpdAccessFactory.getSetupURL() +
 					'setup/reports/planned-operation-graphic-data?'
@@ -59,7 +59,7 @@
 		}
 
 		function getRealizedGraphicDataOperation(operation_id, successCallback, errorCallback) {
-			let req = {
+			const req = {
 				method: 'GET',
 				url: xpdAccessFactory.getSetupURL() +
 					'setup/reports/realized-operation-graphic-data?' +
@@ -74,7 +74,7 @@
 			url += 'from=' + fromDate.getTime();
 			url += '&to=' + toDate.getTime();
 
-			let req = {
+			const req = {
 				method: 'GET',
 				url,
 			};
@@ -87,7 +87,7 @@
 			url += 'from=' + fromDate.getTime();
 			url += '&to=' + toDate.getTime();
 
-			let req = {
+			const req = {
 				method: 'GET',
 				url,
 			};
@@ -100,7 +100,7 @@
 			url += 'from=' + fromDate.getTime();
 			url += '&to=' + toDate.getTime();
 
-			let req = {
+			const req = {
 				method: 'GET',
 				url,
 			};
@@ -113,7 +113,7 @@
 			url += 'from=' + fromDate.getTime();
 			url += '&to=' + toDate.getTime();
 
-			let req = {
+			const req = {
 				method: 'GET',
 				url,
 			};
@@ -123,7 +123,7 @@
 
 		function getOperationQueue(wellId, successCallback, errorCallback) {
 
-			let req = {
+			const req = {
 				method: 'GET',
 				url: xpdAccessFactory.getReportsAPIURL() + 'planning/well/' + wellId,
 			};
@@ -134,7 +134,7 @@
 
 		function getBitDepthChartForOperation(wellId, operationId, successCallback, errorCallback) {
 
-			let req = {
+			const req = {
 				method: 'GET',
 				url: xpdAccessFactory.getReportsAPIURL() + 'planning/well/' + wellId + '/operation/' + operationId,
 			};
@@ -145,7 +145,7 @@
 
 		function getOperationExecuted(operationId, successCallback, errorCallback) {
 
-			let req = {
+			const req = {
 				method: 'GET',
 				url: xpdAccessFactory.getReportsAPIURL() + 'executed/operation/' + operationId,
 			};

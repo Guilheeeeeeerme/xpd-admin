@@ -1,4 +1,4 @@
-import { IModalServiceInstance } from "angular-ui-bootstrap";
+import { IModalServiceInstance } from 'angular-ui-bootstrap';
 
 // (function() {
 
@@ -14,7 +14,7 @@ export class ModalEventDetailsController {
 		'$scope',
 		'$uibModalInstance',
 		'eventlogSetupAPIService',
-		'eventId'
+		'eventId',
 	];
 	public modalActionButtonClose: () => void;
 
@@ -24,7 +24,7 @@ export class ModalEventDetailsController {
 		eventlogSetupAPIService: EventlogSetupAPIService,
 		eventId: number) {
 
-		let vm = this;
+		const vm = this;
 
 		let selectedEvent = null;
 		$scope.eventDetails = {};

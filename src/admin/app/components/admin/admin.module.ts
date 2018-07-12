@@ -48,4 +48,3 @@ export default XPDAdminModule;
 
 XPDAdminModule.directive('xpdSectionList', XPDSectionListDirective.Factory());
 XPDAdminModule.directive('rpdForm', XPDRPDFormDirective.Factory());
-

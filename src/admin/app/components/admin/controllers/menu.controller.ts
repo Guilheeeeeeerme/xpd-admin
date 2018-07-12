@@ -7,7 +7,7 @@
 
 	function menuController($scope, operationDataFactory, dialogFactory) {
 
-		let vm = this;
+		const vm = this;
 
 		$scope.dados = {};
 
@@ -25,7 +25,7 @@
 		vm.actionButtonSetBlockSpeedInterval = actionButtonSetBlockSpeedInterval;
 
 		function actionButtonSetBitDepthMode(mode) {
-			let message = 'Change bit depth provider to ' + ((mode) ? 'XPD' : 'Rig') + '?';
+			const message = 'Change bit depth provider to ' + ((mode) ? 'XPD' : 'Rig') + '?';
 
 			dialogFactory.showCriticalDialog(message, function() {
 				operationDataFactory.emitSetBitDepthMode(mode);
@@ -33,7 +33,7 @@
 		}
 
 		function actionButtonSetBitDepth(bitDepth) {
-			let message = 'Update bit depth to ' + bitDepth + 'm ?';
+			const message = 'Update bit depth to ' + bitDepth + 'm ?';
 
 			dialogFactory.showCriticalDialog(message, function() {
 				operationDataFactory.emitSetBitDepth(bitDepth);
@@ -42,7 +42,7 @@
 		}
 
 		function actionButtonSetBlockWeight(blockWeight) {
-			let message = 'Update block weight to ' + blockWeight + 'klb ?';
+			const message = 'Update block weight to ' + blockWeight + 'klb ?';
 
 			dialogFactory.showCriticalDialog(message, function() {
 				operationDataFactory.emitUpdateBlockWeight(blockWeight);
@@ -51,7 +51,7 @@
 		}
 
 		function actionButtonSetSlipsThreshold(threshold) {
-			let message = 'Update slips threshold to ' + threshold + 'klb ?';
+			const message = 'Update slips threshold to ' + threshold + 'klb ?';
 
 			dialogFactory.showCriticalDialog(message, function() {
 				operationDataFactory.emitUpdateSlipsThreshold(threshold);
@@ -60,7 +60,7 @@
 		}
 
 		function actionButtonSetStickUp(stickUp) {
-			let message = 'Update stick up to ' + stickUp + 'm ?';
+			const message = 'Update stick up to ' + stickUp + 'm ?';
 
 			dialogFactory.showCriticalDialog(message, function() {
 				operationDataFactory.emitUpdateStickUp(stickUp);
@@ -69,7 +69,7 @@
 		}
 
 		function actionButtonSetDelayOnUnreachable(seconds) {
-			let message = 'Change delay seconds on unreachable target to ' + seconds + '?';
+			const message = 'Change delay seconds on unreachable target to ' + seconds + '?';
 
 			dialogFactory.showCriticalDialog(message, function() {
 				operationDataFactory.emitSetDelayOnUnreachableCheck(seconds);
@@ -77,7 +77,7 @@
 		}
 
 		function actionButtonSetBlockSpeedInterval(interval) {
-			let message = 'Change interval on block speed to ' + interval + '?';
+			const message = 'Change interval on block speed to ' + interval + '?';
 
 			dialogFactory.showCriticalDialog(message, function() {
 				operationDataFactory.emitSetBlockSpeedInterval(interval);

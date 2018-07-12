@@ -29,6 +29,7 @@ import { TripRulerDirective } from './trip-ruler.directive';
 import { UpcomingAlarmsPanelDirective } from './upcoming-alarms-panel.directive';
 import { WellInformationPanelDirective } from './well-information-panel.directive';
 import { XPDViewBoxDirective } from './xpd-view-box.directive';
+import { ForecastWaterfallDirective } from './forecast-waterfall.directive';
 
 const XPDVisualizationModule: angular.IModule = angular.module('xpd.visualization', [
 	ngIntersection.name,
@@ -62,3 +63,4 @@ XPDVisualizationModule.directive('d3DmecChart', D3DMECChartDirective.Factory());
 XPDVisualizationModule.controller('D3DMECChartModalController', D3DMECChartModalController);
 XPDVisualizationModule.directive('consistencyInformationPanel', ConsistencyInformationPanelDirective.Factory());
 XPDVisualizationModule.directive('connRuler', ConnRulerDirective.Factory());
+XPDVisualizationModule.directive('forecastWaterfall', ForecastWaterfallDirective.Factory());

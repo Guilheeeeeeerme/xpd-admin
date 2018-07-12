@@ -25,7 +25,7 @@ export class MemberPerformanceDirective implements ng.IDirective {
 		 };*/
 		element[0].className = element[0].className + ' member-perfomance-container';
 
-		let verticalPadding = parseFloat(window.getComputedStyle(element[0]).paddingTop) + parseFloat(window.getComputedStyle(element[0]).paddingBottom);
+		const verticalPadding = parseFloat(window.getComputedStyle(element[0]).paddingTop) + parseFloat(window.getComputedStyle(element[0]).paddingBottom);
 
 		scope.svg = {
 			height: element[0].offsetHeight - verticalPadding,

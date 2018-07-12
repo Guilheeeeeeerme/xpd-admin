@@ -8,7 +8,7 @@
 
 	function operationDashboardController($scope, $filter, operationDataFactory) {
 
-		let vm = this;
+		const vm = this;
 
 		let selectedBaseLine;
 		let selectedEventType;
@@ -51,30 +51,30 @@
 
 				try {
 
-					let currentState = $scope.operationData.stateContext.currentState;
-					let estimatives = $scope.operationData.forecastContext.estimatives;
-					let estimatedAt = new Date(estimatives.estimatedAt).getTime();
+					const currentState = $scope.operationData.stateContext.currentState;
+					const estimatives = $scope.operationData.forecastContext.estimatives;
+					const estimatedAt = new Date(estimatives.estimatedAt).getTime();
 
-					let vTargetStateJointInterval = estimatives.vTargetLine.filter(function(line) {
+					const vTargetStateJointInterval = estimatives.vTargetLine.filter(function(line) {
 						return line[currentState] != null;
 					})[0][currentState];
 
-					let vOptimumStateJointInterval = estimatives.vOptimumLine.filter(function(line) {
+					const vOptimumStateJointInterval = estimatives.vOptimumLine.filter(function(line) {
 						return line[currentState] != null;
 					})[0][currentState];
 
-					let vStandardStateJointInterval = estimatives.vStandardLine.filter(function(line) {
+					const vStandardStateJointInterval = estimatives.vStandardLine.filter(function(line) {
 						return line[currentState] != null;
 					})[0][currentState];
 
-					let vPoorStateJointInterval = estimatives.vPoorLine.filter(function(line) {
+					const vPoorStateJointInterval = estimatives.vPoorLine.filter(function(line) {
 						return line[currentState] != null;
 					})[0][currentState];
 
-					let stateExpectedDuration = (1000 * vTargetStateJointInterval.BOTH.finalTime);
-					let vOptimumStateExpectedDuration = (1000 * vOptimumStateJointInterval.BOTH.finalTime);
-					let vStandardStateExpectedDuration = (1000 * vStandardStateJointInterval.BOTH.finalTime);
-					let vPoorStateExpectedDuration = (1000 * vPoorStateJointInterval.BOTH.finalTime);
+					const stateExpectedDuration = (1000 * vTargetStateJointInterval.BOTH.finalTime);
+					const vOptimumStateExpectedDuration = (1000 * vOptimumStateJointInterval.BOTH.finalTime);
+					const vStandardStateExpectedDuration = (1000 * vStandardStateJointInterval.BOTH.finalTime);
+					const vPoorStateExpectedDuration = (1000 * vPoorStateJointInterval.BOTH.finalTime);
 
 					// EXPECTED TRIP/CONN
 					$scope.eventProperty.CONN = getEventProperty('CONN', vTargetStateJointInterval, vOptimumStateJointInterval, vStandardStateJointInterval, vPoorStateJointInterval);
@@ -94,7 +94,7 @@
 						vPoorJointExpectedDuration: (vPoorStateExpectedDuration / vTargetStateJointInterval.BOTH.points.length),
 					};
 
-					let nextActivities = [];
+					const nextActivities = [];
 
 					for (let index = 0;
 						index < estimatives.vTargetLine.length;
@@ -102,17 +102,17 @@
 
 						try {
 
-							let vTargetLine = estimatives.vTargetLine[index];
+							const vTargetLine = estimatives.vTargetLine[index];
 
-							let state = Object.keys(vTargetLine)[0];
+							const state = Object.keys(vTargetLine)[0];
 							let startTime = estimatedAt;
-							let duration = (vTargetLine[state].BOTH.finalTime * 1000);
+							const duration = (vTargetLine[state].BOTH.finalTime * 1000);
 
 							if (nextActivities.length > 0) {
 								startTime = nextActivities[nextActivities.length - 1].finalTime;
 							}
 
-							let activity = {
+							const activity = {
 								name: state,
 								duration,
 								startTime,
@@ -182,37 +182,37 @@
 			/**
 			 * Linha que o usuário escolheu
 			 */
-			let selectedLine = $scope.operationData.forecastContext[selectedLineName];
+			const selectedLine = $scope.operationData.forecastContext[selectedLineName];
 
 			/**
 			 * Os tres parametros para definir cores
 			 */
-			let vOptimumLine = $scope.operationData.forecastContext.vOptimumLine;
-			let standardLine = $scope.operationData.forecastContext.vStandardLine;
-			let poorLine = $scope.operationData.forecastContext.vPoorLine;
+			const vOptimumLine = $scope.operationData.forecastContext.vOptimumLine;
+			const standardLine = $scope.operationData.forecastContext.vStandardLine;
+			const poorLine = $scope.operationData.forecastContext.vPoorLine;
 
 			/**
 			 * O que realmente aconteceu
 			 */
-			let actualLine = $scope.operationData.forecastContext.actualLine;
+			const actualLine = $scope.operationData.forecastContext.actualLine;
 
 			$scope.forecast = [];
 
 			let statesHash;
 			let state;
 			let isTripin;
-			let splitColor = '#90ed7d';
+			const splitColor = '#90ed7d';
 
 			/**
 			 * Expected
 			 */
-			for (let i in selectedLine) {
+			for (const i in selectedLine) {
 
 				statesHash = selectedLine[i];
 				state = Object.keys(statesHash)[0];
 				isTripin = statesHash[state].isTripin;
 
-				let selectedParamExpectedTime = calcTimeSpent(selectedLine, state, eventType, isTripin);
+				const selectedParamExpectedTime = calcTimeSpent(selectedLine, state, eventType, isTripin);
 
 				$scope.forecast.push({
 					name: 'Expected ' + $filter('xpdStateLabelFilter')(state) + (isTripin ? ' Trip In' : ' Trip Out'),
@@ -234,21 +234,21 @@
 			/**
 			 * Actual
 			 */
-			for (let j in selectedLine) {
+			for (const j in selectedLine) {
 
 				statesHash = selectedLine[j];
 				state = Object.keys(statesHash)[0];
 				isTripin = statesHash[state].isTripin;
 
-				let directionLabel = isTripin === false ? 'TRIPOUT' : 'TRIPIN';
+				const directionLabel = isTripin === false ? 'TRIPOUT' : 'TRIPIN';
 
-				let optimumTimeSpent = calcTimeSpent(vOptimumLine, state, eventType, isTripin);
-				let standardTimeSpent = calcTimeSpent(standardLine, state, eventType, isTripin);
-				let poorTimeSpent = calcTimeSpent(poorLine, state, eventType, isTripin);
+				const optimumTimeSpent = calcTimeSpent(vOptimumLine, state, eventType, isTripin);
+				const standardTimeSpent = calcTimeSpent(standardLine, state, eventType, isTripin);
+				const poorTimeSpent = calcTimeSpent(poorLine, state, eventType, isTripin);
 
 				if (actualLine[state] && actualLine[state][directionLabel] && actualLine[state][directionLabel][eventType]) {
 
-					let actualTimeSpent = Math.abs(
+					const actualTimeSpent = Math.abs(
 						actualLine[state][directionLabel][eventType].finalTime -
 						actualLine[state][directionLabel][eventType].startTime,
 					);
@@ -275,7 +275,7 @@
 		}
 
 		function calcTimeSpent(line, state, eventType, isTripin) {
-			for (let i in line) {
+			for (const i in line) {
 				if (line[i] && line[i][state] && line[i][state].isTripin == isTripin && line[i][state][eventType]) {
 					return Math.abs(line[i][state][eventType].finalTime - line[i][state][eventType].startTime);
 				}
@@ -302,14 +302,14 @@
 
 		function getLastTwoEventsDuration(eventContext) {
 
-			let lastEvents = eventContext.lastEvents;
+			const lastEvents = eventContext.lastEvents;
 
 			let conn = false;
 			let trip = false;
 
 			for (let index = lastEvents.length - 1; index >= 0; index--) {
 
-				let event = lastEvents[index];
+				const event = lastEvents[index];
 
 				if (event.eventType == 'CONN') {
 					$scope.lastConnDuration = (event.duration / 1000);
@@ -329,7 +329,7 @@
 		function getTotalFailureTime(startTime, endTime) {
 			if (!endTime) { return 0; }
 
-			let diffTime = new Date(endTime).getTime() - new Date(startTime).getTime();
+			const diffTime = new Date(endTime).getTime() - new Date(startTime).getTime();
 			return new Date(diffTime);
 		}
 
@@ -339,7 +339,7 @@
 		}
 
 		function changePanelState(keyName) {
-			let newState = !getPanelStartState(keyName);
+			const newState = !getPanelStartState(keyName);
 			$scope.statusPanel[keyName] = newState;
 			localStorage.setItem(keyName, newState);
 		}

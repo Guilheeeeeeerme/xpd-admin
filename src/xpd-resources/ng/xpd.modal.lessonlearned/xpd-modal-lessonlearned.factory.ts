@@ -10,7 +10,7 @@ import modalTemplate from '../xpd-resources/ng/xpd.modal.lessonlearned/xpd-modal
 
 export class LessonLearnedModalFactory {
 
-	constructor (private $uibModal: IModalService){
+	constructor (private $uibModal: IModalService) {
 
 	}
 

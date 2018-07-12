@@ -1,58 +1,65 @@
-(function() {
-	'use strict';
+// (function() {
+// 	'use strict';
 
-	angular.module('xpd.register-alarm-modal', [])
-		.directive('registerAlarmModal', registerAlarmModal);
+// 	angular.module('xpd.register-alarm-modal', [])
+// 		.directive('registerAlarmModal', registerAlarmModal);
 
-	registerAlarmModal.$inject = [];
+// 	registerAlarmModal.$inject = [];
+import template from '../xpd-resources/ng/xpd.register-alarm-modal/register-alarm-modal.template.html';
 
-	function registerAlarmModal() {
-		return {
-			restrict: 'E',
-			scope: {
-				alarm: '=',
-				operation: '=',
-				alarmType: '@',
-				modalTitle: '@',
-				alarmForm: '=',
-				actionSaveAlarm: '=',
-				actionCancelAlarm: '=',
-			},
-			templateUrl: '../xpd-resources/ng/xpd.register-alarm-modal/register-alarm-modal.template.html',
-			link,
-		};
+export class RegisterAlarmModalDirective implements ng.IDirective {
+	public restrict = 'E';
+	public scope = {
+		alarm: '=',
+		operation: '=',
+		alarmType: '@',
+		modalTitle: '@',
+		alarmForm: '=',
+		actionSaveAlarm: '=',
+		actionCancelAlarm: '=',
+	};
+	public template = template;
 
-		function link(scope, element, attrs) {
+	public link: ng.IDirectiveLinkFn = (
+		scope: any,
+		element: ng.IAugmentedJQuery,
+		attrs: ng.IAttributes,
+		ctrl: any,
+	) => {
 
-			scope.actionChangeDepth = actionChangeDepth;
-			scope.$watch('alarm.isDurationAlarm', changeIsDurationAlarm );
-			scope.$watch('alarm.startTime', takeSecondsAway, true);
-			scope.$watch('alarm.endTime', takeSecondsAway, true);
+		scope.actionChangeDepth = actionChangeDepth;
+		scope.$watch('alarm.isDurationAlarm', changeIsDurationAlarm);
+		scope.$watch('alarm.startTime', takeSecondsAway, true);
+		scope.$watch('alarm.endTime', takeSecondsAway, true);
 
-			function changeIsDurationAlarm() {
+		function changeIsDurationAlarm() {
 
-				if (scope.alarm.isDurationAlarm == true) {
-					scope.alarm.endDepth = scope.alarm.startDepth;
-				}
-
-			}
-
-			function actionChangeDepth() {
-
-				if (scope.alarm.isDurationAlarm) {
-					scope.alarm.endDepth = scope.alarm.startDepth;
-				}
-
-			}
-
-			function takeSecondsAway(date) {
-				if (date && ( date.getSeconds() || date.getMilliseconds() )) {
-					date.setSeconds(null);
-					date.setMilliseconds(null);
-				}
+			if (scope.alarm.isDurationAlarm === true) {
+				scope.alarm.endDepth = scope.alarm.startDepth;
 			}
 
 		}
 
+		function actionChangeDepth() {
+
+			if (scope.alarm.isDurationAlarm) {
+				scope.alarm.endDepth = scope.alarm.startDepth;
+			}
+
+		}
+
+		function takeSecondsAway(date) {
+			if (date && (date.getSeconds() || date.getMilliseconds())) {
+				date.setSeconds(null);
+				date.setMilliseconds(null);
+			}
+		}
+
 	}
-})();
+
+	public static Factory(): ng.IDirectiveFactory {
+		return () => new RegisterAlarmModalDirective();
+	}
+
+}
+// })();

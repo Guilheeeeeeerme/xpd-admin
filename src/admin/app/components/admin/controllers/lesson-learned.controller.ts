@@ -8,7 +8,7 @@
 	LessonLearnedController.$inject = ['$scope', 'lessonLearnedModal', '$uibModal', 'lessonLearnedSetupAPIService', 'operationDataFactory', 'dialogFactory'];
 
 	function LessonLearnedController($scope, lessonLearnedModal, $modal, lessonLearnedSetupAPIService, operationDataFactory, dialogFactory) {
-		let vm = this;
+		const vm = this;
 
 		$scope.modalData = {
 			lessonLearnedList: [],
