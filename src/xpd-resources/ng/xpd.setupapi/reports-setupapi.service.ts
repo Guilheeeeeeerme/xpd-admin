@@ -1,158 +1,150 @@
-(function() {
-	'use strict';
+// (function() {
+// 	'use strict';
 
-	angular.module('xpd.setupapi')
-		.service('reportsSetupAPIService', reportsSetupAPIService);
+// 	angular.module('xpd.setupapi')
+// 		.service('reportsSetupAPIService', reportsSetupAPIService);
 
-	reportsSetupAPIService.$inject = ['xpdAccessFactory', 'setupAPIService'];
+	// reportsSetupAPIService.$inject = ['xpdAccessFactory', 'setupAPIService'];
 
-	function reportsSetupAPIService(xpdAccessFactory, setupAPIService) {
-		let vm = this;
+export class ReportsSetupAPIService {
 
-		vm.getVreList = getVreList;
-		vm.getVreScoreList = getVreScoreList;
-		vm.getPlannedGraphicDataOperation = getPlannedGraphicDataOperation;
-		vm.getRealizedGraphicDataOperation = getRealizedGraphicDataOperation;
-		vm.getHistogramData = getHistogramData;
-		vm.getNeedleDataChart = getNeedleDataChart;
-		vm.getFailuresNptDataChart = getFailuresNptDataChart;
-		vm.getLessonsLearnedDataChart = getLessonsLearnedDataChart;
-		vm.getOperationQueue = getOperationQueue;
-		vm.getBitDepthChartForOperation = getBitDepthChartForOperation;
-		vm.getOperationExecuted = getOperationExecuted;
+	public static $inject: string[] = ['xpdAccessFactory', 'setupAPIService'];
+	public BASE_URL: string;
 
-		function getVreList(fromDate, toDate, successCallback, errorCallback) {
+	constructor(private xpdAccessFactory: XPDAccessFactory, private setupAPIService: SetupAPIService) {
+		this.BASE_URL = xpdAccessFactory.getSetupURL() + 'setup/reports';
+	}
 
-			let url = xpdAccessFactory.getSetupURL() + 'setup/reports/vre?';
-			url += 'from=' + fromDate.getTime();
-			url += '&to=' + toDate.getTime();
+	public getVreList(fromDate, toDate, successCallback, errorCallback) {
 
-			let req = {
-				method: 'GET',
-				url,
-			};
+		let url = this.BASE_URL + '/vre?';
+		url += 'from=' + fromDate.getTime();
+		url += '&to=' + toDate.getTime();
 
-			setupAPIService.doRequest(req, successCallback, errorCallback);
-		}
+		const req = {
+			method: 'GET',
+			url,
+		};
 
-		function getVreScoreList(fromDate, toDate, successCallback, errorCallback) {
-			let url = xpdAccessFactory.getSetupURL() + 'setup/reports/vre-score?';
-			url += 'from=' + fromDate.getTime();
-			url += '&to=' + toDate.getTime();
+		this.setupAPIService.doRequest(req, successCallback, errorCallback);
+	}
 
-			let req = {
-				method: 'GET',
-				url,
-			};
+	public getVreScoreList(fromDate, toDate, successCallback, errorCallback) {
+		let url = this.BASE_URL + '/vre-score?';
+		url += 'from=' + fromDate.getTime();
+		url += '&to=' + toDate.getTime();
 
-			setupAPIService.doRequest(req, successCallback, errorCallback);
-		}
+		const req = {
+			method: 'GET',
+			url,
+		};
 
-		function getPlannedGraphicDataOperation(operationId, successCallback, errorCallback) {
-			let req = {
-				method: 'GET',
-				url: xpdAccessFactory.getSetupURL() +
-					'setup/reports/planned-operation-graphic-data?'
-					+ 'operation-id=' + operationId,
-			};
-			setupAPIService.doRequest(req, successCallback, errorCallback);
-		}
+		this.setupAPIService.doRequest(req, successCallback, errorCallback);
+	}
 
-		function getRealizedGraphicDataOperation(operation_id, successCallback, errorCallback) {
-			let req = {
-				method: 'GET',
-				url: xpdAccessFactory.getSetupURL() +
-					'setup/reports/realized-operation-graphic-data?' +
-					'operation-id=' + operation_id,
-			};
+	public getPlannedGraphicDataOperation(operationId, successCallback, errorCallback) {
+		const req = {
+			method: 'GET',
+			url: this.BASE_URL + '/planned-operation-graphic-data?'
+				+ 'operation-id=' + operationId,
+		};
+		this.setupAPIService.doRequest(req, successCallback, errorCallback);
+	}
 
-			setupAPIService.doRequest(req, successCallback, errorCallback);
-		}
+	public getRealizedGraphicDataOperation(operationId, successCallback, errorCallback) {
+		const req = {
+			method: 'GET',
+			url: this.BASE_URL + '/realized-operation-graphic-data?' +
+				'operation-id=' + operationId,
+		};
 
-		function getHistogramData(fromDate, toDate, successCallback, errorCallback) {
-			let url = xpdAccessFactory.getSetupURL() + 'setup/reports/histogram?';
-			url += 'from=' + fromDate.getTime();
-			url += '&to=' + toDate.getTime();
+		this.setupAPIService.doRequest(req, successCallback, errorCallback);
+	}
 
-			let req = {
-				method: 'GET',
-				url,
-			};
+	public getHistogramData(fromDate, toDate, successCallback, errorCallback) {
+		let url = this.BASE_URL + '/histogram?';
+		url += 'from=' + fromDate.getTime();
+		url += '&to=' + toDate.getTime();
 
-			setupAPIService.doRequest(req, successCallback, errorCallback);
-		}
+		const req = {
+			method: 'GET',
+			url,
+		};
 
-		function getNeedleDataChart(fromDate, toDate, successCallback, errorCallback) {
-			let url = xpdAccessFactory.getSetupURL() + 'setup/reports/needle?';
-			url += 'from=' + fromDate.getTime();
-			url += '&to=' + toDate.getTime();
+		this.setupAPIService.doRequest(req, successCallback, errorCallback);
+	}
 
-			let req = {
-				method: 'GET',
-				url,
-			};
+	public getNeedleDataChart(fromDate, toDate, successCallback, errorCallback) {
+		let url = this.BASE_URL + '/needle?';
+		url += 'from=' + fromDate.getTime();
+		url += '&to=' + toDate.getTime();
 
-			setupAPIService.doRequest(req, successCallback, errorCallback);
-		}
+		const req = {
+			method: 'GET',
+			url,
+		};
 
-		function getFailuresNptDataChart(fromDate, toDate, successCallback, errorCallback) {
-			let url = xpdAccessFactory.getSetupURL() + 'setup/reports/failure-category?';
-			url += 'from=' + fromDate.getTime();
-			url += '&to=' + toDate.getTime();
+		this.setupAPIService.doRequest(req, successCallback, errorCallback);
+	}
 
-			let req = {
-				method: 'GET',
-				url,
-			};
+	public getFailuresNptDataChart(fromDate, toDate, successCallback, errorCallback) {
+		let url = this.BASE_URL + '/failure-category?';
+		url += 'from=' + fromDate.getTime();
+		url += '&to=' + toDate.getTime();
 
-			setupAPIService.doRequest(req, successCallback, errorCallback);
-		}
+		const req = {
+			method: 'GET',
+			url,
+		};
 
-		function getLessonsLearnedDataChart(fromDate, toDate, successCallback, errorCallback) {
-			let url = xpdAccessFactory.getSetupURL() + 'setup/reports/lesson-learned-category?';
-			url += 'from=' + fromDate.getTime();
-			url += '&to=' + toDate.getTime();
+		this.setupAPIService.doRequest(req, successCallback, errorCallback);
+	}
 
-			let req = {
-				method: 'GET',
-				url,
-			};
+	public getLessonsLearnedDataChart(fromDate, toDate, successCallback, errorCallback) {
+		let url = this.BASE_URL + '/lesson-learned-category?';
+		url += 'from=' + fromDate.getTime();
+		url += '&to=' + toDate.getTime();
 
-			setupAPIService.doRequest(req, successCallback, errorCallback);
-		}
+		const req = {
+			method: 'GET',
+			url,
+		};
 
-		function getOperationQueue(wellId, successCallback, errorCallback) {
+		this.setupAPIService.doRequest(req, successCallback, errorCallback);
+	}
 
-			let req = {
-				method: 'GET',
-				url: xpdAccessFactory.getReportsAPIURL() + 'planning/well/' + wellId,
-			};
+	public getOperationQueue(wellId, successCallback, errorCallback) {
 
-			setupAPIService.doRequest(req, successCallback, errorCallback);
+		const req = {
+			method: 'GET',
+			url: this.xpdAccessFactory.getReportsAPIURL() + 'planning/well/' + wellId,
+		};
 
-		}
-
-		function getBitDepthChartForOperation(wellId, operationId, successCallback, errorCallback) {
-
-			let req = {
-				method: 'GET',
-				url: xpdAccessFactory.getReportsAPIURL() + 'planning/well/' + wellId + '/operation/' + operationId,
-			};
-
-			setupAPIService.doRequest(req, successCallback, errorCallback);
-
-		}
-
-		function getOperationExecuted(operationId, successCallback, errorCallback) {
-
-			let req = {
-				method: 'GET',
-				url: xpdAccessFactory.getReportsAPIURL() + 'executed/operation/' + operationId,
-			};
-
-			setupAPIService.doRequest(req, successCallback, errorCallback);
-
-		}
+		this.setupAPIService.doRequest(req, successCallback, errorCallback);
 
 	}
-})();
+
+	public getBitDepthChartForOperation(wellId, operationId, successCallback, errorCallback) {
+
+		const req = {
+			method: 'GET',
+			url: this.xpdAccessFactory.getReportsAPIURL() + 'planning/well/' + wellId + '/operation/' + operationId,
+		};
+
+		this.setupAPIService.doRequest(req, successCallback, errorCallback);
+
+	}
+
+	public getOperationExecuted(operationId, successCallback, errorCallback) {
+
+		const req = {
+			method: 'GET',
+			url: this.xpdAccessFactory.getReportsAPIURL() + 'executed/operation/' + operationId,
+		};
+
+		this.setupAPIService.doRequest(req, successCallback, errorCallback);
+
+	}
+
+}
+// })();

@@ -1,87 +1,83 @@
-(function() {
-	'use strict';
+// (function() {
+// 	'use strict';
 
-	angular.module('xpd.setupapi')
-		.service('sectionSetupAPIService', sectionSetupAPIService);
+// 	angular.module('xpd.setupapi')
+// 		.service('sectionSetupAPIService', sectionSetupAPIService);
 
-	sectionSetupAPIService.$inject = ['xpdAccessFactory', 'setupAPIService'];
+// sectionSetupAPIService.$inject = ['xpdAccessFactory', 'setupAPIService'];
 
-	function sectionSetupAPIService(xpdAccessFactory, setupAPIService) {
+export class SectionSetupAPIService {
+	public static $inject: string[] = ['xpdAccessFactory', 'setupAPIService'];
+	public BASE_URL: string;
 
-		let BASE_URL = xpdAccessFactory.getSetupURL() + 'setup/section';
+	constructor(private xpdAccessFactory: XPDAccessFactory, private setupAPIService: SetupAPIService) {
+		this.BASE_URL = xpdAccessFactory.getSetupURL() + 'setup/section';
+	}
 
-		let vm = this;
+	public getObjectById(id, successCallback, errorCallback) {
 
-		vm.getObjectById = getObjectById;
-		vm.insertObject = insertObject;
-		vm.updateObject = updateObject;
-		vm.getListOfSectionsByWell = getListOfSectionsByWell;
-		vm.getListOfOperationsBySection = getListOfOperationsBySection;
+		const req = {
+			method: 'GET',
+			url: this.BASE_URL + '/' + id,
+		};
 
-		function getObjectById(id, successCallback, errorCallback) {
+		this.setupAPIService.doRequest(req, successCallback, errorCallback);
+	}
 
-			let req = {
-				method: 'GET',
-				url: BASE_URL + '/' + id,
-			};
+	public insertObject(object, successCallback, errorCallback) {
 
-			setupAPIService.doRequest(req, successCallback, errorCallback);
-		}
+		const req = {
+			method: 'POST',
+			url: this.BASE_URL,
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			data: object,
+		};
 
-		function insertObject(object, successCallback, errorCallback) {
-
-			let req = {
-				method: 'POST',
-				url: BASE_URL,
-				headers: {
-					'Content-Type': 'application/json',
-				},
-				data: object,
-			};
-
-			setupAPIService.doRequest(req, successCallback, errorCallback);
-
-		}
-
-		function updateObject(object, successCallback, errorCallback) {
-
-			let req = {
-				method: 'PUT',
-				url: BASE_URL + '/' + object.id,
-				headers: {
-					'Content-Type': 'application/json',
-				},
-				data: object,
-			};
-
-			setupAPIService.doRequest(req, successCallback, errorCallback);
-		}
-
-		function getListOfSectionsByWell(wellId, successCallback, errorCallback) {
-
-			let url = BASE_URL + '/list-sections-by-well?wellId=' + wellId;
-
-			let req = {
-				method: 'GET',
-				url,
-			};
-
-			setupAPIService.doRequest(req, successCallback, errorCallback);
-
-		}
-
-		function getListOfOperationsBySection(sectionId, successCallback, errorCallback) {
-
-			let url = BASE_URL + '/' + sectionId + '/operation';
-
-			let req = {
-				method: 'GET',
-				url,
-			};
-
-			setupAPIService.doRequest(req, successCallback, errorCallback);
-		}
+		this.setupAPIService.doRequest(req, successCallback, errorCallback);
 
 	}
 
-})();
+	public updateObject(object, successCallback, errorCallback) {
+
+		const req = {
+			method: 'PUT',
+			url: this.BASE_URL + '/' + object.id,
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			data: object,
+		};
+
+		this.setupAPIService.doRequest(req, successCallback, errorCallback);
+	}
+
+	public getListOfSectionsByWell(wellId, successCallback, errorCallback) {
+
+		const url = this.BASE_URL + '/list-sections-by-well?wellId=' + wellId;
+
+		const req = {
+			method: 'GET',
+			url,
+		};
+
+		this.setupAPIService.doRequest(req, successCallback, errorCallback);
+
+	}
+
+	public getListOfOperationsBySection(sectionId, successCallback, errorCallback) {
+
+		const url = this.BASE_URL + '/' + sectionId + '/operation';
+
+		const req = {
+			method: 'GET',
+			url,
+		};
+
+		this.setupAPIService.doRequest(req, successCallback, errorCallback);
+	}
+
+}
+
+// })();

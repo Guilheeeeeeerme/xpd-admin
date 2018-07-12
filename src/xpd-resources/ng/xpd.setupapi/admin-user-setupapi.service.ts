@@ -1,32 +1,33 @@
-(function() {
-	'use strict';
+// (function() {
+// 	'use strict';
 
-	angular.module('xpd.setupapi').service('adminUserSetupAPIService', adminUserSetupAPIService);
+// 	angular.module('xpd.setupapi').service('adminUserSetupAPIService', adminUserSetupAPIService);
 
-	adminUserSetupAPIService.$inject = ['xpdAccessFactory', 'setupAPIService'];
+// 	adminUserSetupAPIService.$inject = ['xpdAccessFactory', 'setupAPIService'];
 
-	function adminUserSetupAPIService(xpdAccessFactory, setupAPIService) {
+	export class AdminUserSetupAPIService {
 
-		let BASE_URL = xpdAccessFactory.getSetupURL() + 'setup/admin-user';
+		public static $inject: string[] = ['xpdAccessFactory', 'setupAPIService'];
+		public BASE_URL: string;
 
-		let vm = this;
+		constructor(private xpdAccessFactory: XPDAccessFactory, private setupAPIService: SetupAPIService) {
+			this.BASE_URL = xpdAccessFactory.getSetupURL() + 'setup/admin-user';
+		}
 
-		vm.authenticate = authenticate;
+		public authenticate(loginInfo, successCallback, errorCallback) {
 
-		function authenticate(loginInfo, successCallback, errorCallback) {
-
-			let req = {
+			const req = {
 				method: 'POST',
-				url: BASE_URL + '/login',
+				url: this.BASE_URL + '/login',
 				headers: {
 					'Content-Type': 'application/json',
 				},
 				data: loginInfo,
 			};
 
-			setupAPIService.doRequest(req, successCallback, errorCallback);
+			this.setupAPIService.doRequest(req, successCallback, errorCallback);
 		}
 
 	}
 
-})();
+// })();
