@@ -1,9 +1,11 @@
+import XPDDialogModule from '../../../../xpd-resources/ng/xpd.dialog/xpd.dialog.module';
+
 (function() {
 	'use strict';
 
 	angular.module('xpd.reports', [
 		'ngRoute',
-		'xpd.dialog',
+		XPDDialogModule.name,
 		'xpd.setupapi',
 		'xpd.filters',
 		'xpd.timers',

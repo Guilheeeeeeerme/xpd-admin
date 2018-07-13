@@ -6,8 +6,8 @@
 
 // 	accessFactoryDirective.$inject = ['$uibModal', 'dialogFactory'];
 import { IModalService } from 'angular-ui-bootstrap';
-import { DialogFactory } from '../xpd.dialog/xpd.dialog.factory';
 import template from '../xpd-resources/ng/xpd.access/accessfactory.template.html';
+import { DialogFactory } from '../xpd.dialog/xpd.dialog.factory';
 
 export class AccessFactoryDirective implements ng.IDirective {
 
@@ -20,7 +20,7 @@ export class AccessFactoryDirective implements ng.IDirective {
 		};
 		public template = template;
 
-	constructor(private $uibModal: IModalService, private dialogFactory: DialogFactory){
+	constructor(private $uibModal: IModalService, private dialogFactory: DialogFactory) {
 
 	}
 

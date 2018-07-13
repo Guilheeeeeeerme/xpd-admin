@@ -1,12 +1,24 @@
-(function() {
-	'use strict';
+import * as angular from 'angular';
+import { IModalService } from '../../../../../../node_modules/@types/angular-ui-bootstrap';
+import { DialogFactory } from '../../../../../xpd-resources/ng/xpd.dialog/xpd.dialog.factory';
+import { CategorySetupAPIService } from '../../../../../xpd-resources/ng/xpd.setupapi/category-setupapi.service';
 
-	angular.module('xpd.admin')
-		.controller('FailureDelayCategoryController', failureDelayCategoryController);
+export class FailureDelayCategoryController {
+	// 'use strict';
 
-	failureDelayCategoryController.$inject = ['$scope', '$uibModal', 'dialogFactory', 'categorySetupAPIService'];
+	// angular.module('xpd.admin')
+	// 	.controller('FailureDelayCategoryController', failureDelayCategoryController);
 
-	function failureDelayCategoryController($scope, $modal, dialogFactory, categorySetupAPIService) {
+	public static $inject = ['$scope', '$uibModal', 'dialogFactory', 'categorySetupAPIService'];
+	public actionClickAdd: (parentNode: any) => void;
+	public actionClickEdit: (node: any) => void;
+	public actionClickRemove: (node: any) => void;
+	public modalActionButtonSave: () => void;
+	public modalActionButtonClose: () => void;
+	public actionClickSelectItem: (node: any) => void;
+	public hasChildren: (node: any) => boolean;
+
+	constructor($scope, $modal: IModalService, dialogFactory: DialogFactory, categorySetupAPIService: CategorySetupAPIService) {
 		const vm = this;
 
 		$scope.controller = vm;
@@ -19,11 +31,11 @@
 		$scope.newNode = {};
 
 		// temporary node
-	 $scope.temporaryNode = {
-	        children: [],
-	    };
+		$scope.temporaryNode = {
+			children: [],
+		};
 
-	 let roleList = {};
+		let roleList = {};
 
 		vm.actionClickAdd = actionClickAdd;
 		vm.actionClickEdit = actionClickEdit;
@@ -53,11 +65,11 @@
 
 		function actionClickAdd(parentNode) {
 			// reset
-		  	$scope.newNode = {};
+			$scope.newNode = {};
 
-			  $scope.newNode.parentId = parentNode.id;
+			$scope.newNode.parentId = parentNode.id;
 
-			  $scope.$modalInstance = $modal.open({
+			$scope.$modalInstance = $modal.open({
 				animation: true,
 				keyboard: false,
 				backdrop: 'static',
@@ -86,7 +98,7 @@
 		function actionClickRemove(node) {
 
 			dialogFactory.showConfirmDialog('Do you want to remove this category?',
-				function() {
+				function () {
 					removeNode(node);
 				},
 			);
@@ -115,11 +127,11 @@
 		function saveNodeSuccessCallback(result) {
 
 			result.children = [];
-		 roleList[result.id] = result;
-		 roleList[result.parentId].children.push(result);
+			roleList[result.id] = result;
+			roleList[result.parentId].children.push(result);
 
-		 $scope.$modalInstance.close();
-		 $scope.newNode = {};
+			$scope.$modalInstance.close();
+			$scope.newNode = {};
 		}
 
 		function updateNode(node) {
@@ -136,7 +148,7 @@
 			roleList[result.id].initial = result.initial;
 
 			$scope.$modalInstance.close();
-		 $scope.newNode = {};
+			$scope.newNode = {};
 		}
 
 		function upsertNodeErrorCallback(error) {
@@ -157,7 +169,7 @@
 
 			// remome o filho que esta no array do pai
 			for (const i in parentChildren) {
-				if (result.id == parentChildren[i].id) {
+				if (result.id === parentChildren[i].id) {
 					parentChildren.splice(i, 1);
 				}
 			}
@@ -191,7 +203,7 @@
 				const currentObj = objList[i];
 
 				// child to parent
-				if (currentObj.parentId == null || currentObj.parentId == undefined) {
+				if (currentObj.parentId == null || currentObj.parentId === undefined) {
 					categoryData.push(objList[i]);
 				} else {
 					objList[currentObj.parentId].children.push(currentObj);
@@ -211,4 +223,4 @@
 			return false;
 		}
 	}
-})();
+}

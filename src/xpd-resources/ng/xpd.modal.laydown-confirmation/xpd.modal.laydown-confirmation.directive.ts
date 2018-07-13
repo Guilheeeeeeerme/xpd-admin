@@ -10,6 +10,7 @@
 
 import { IModalService } from 'angular-ui-bootstrap';
 import modalTemplate from '../xpd-resources/ng/xpd.modal.laydown-confirmation/xpd.modal.laydown-confirmation.template.html';
+import { OperationDataFactory } from '../xpd.communication/operation-server-data.factory';
 
 export class LayDownConfirmationDirective implements ng.IDirective {
 
@@ -30,45 +31,44 @@ export class LayDownConfirmationDirective implements ng.IDirective {
 
 		let layDownDetectedModal = null;
 
-		scope.actionButtonStartLaydown = actionButtonStartLaydown;
+		this.operationDataFactory.openConnection([]).then(function (op) {
+			const operationDataFactory: any = (op as any);
+			scope.actionButtonStartLaydown = actionButtonStartLaydown;
 
-		this.operationDataFactory.openConnection([]).then(function (response) {
-			self.operationDataFactory = response;
-		});
+			this.operationDataFactory.addEventListener('trackingController', 'setOnStateChangeListener', checkCurrentState);
+			this.operationDataFactory.addEventListener('trackingController', 'setOnCurrentStateListener', checkCurrentState);
+			this.operationDataFactory.addEventListener('trackingController', 'setOnChangeLaydownStatusListener', checkCurrentState);
 
-		this.operationDataFactory.addEventListener('trackingController', 'setOnStateChangeListener', checkCurrentState);
-		this.operationDataFactory.addEventListener('trackingController', 'setOnCurrentStateListener', checkCurrentState);
-		this.operationDataFactory.addEventListener('trackingController', 'setOnChangeLaydownStatusListener', checkCurrentState);
-
-		function actionButtonStartLaydown() {
-			self.operationDataFactory.emitStartLayDown();
-		}
-
-		function checkCurrentState(stateContext) {
-
-			// console.log(stateContext.currentState, stateContext.layDownDetected);
-
-			if (!layDownDetectedModal && stateContext.currentState === 'layDown' && stateContext.layDownDetected === true) {
-				scope.buttonNameStartLayDown = 'Start ' + (self.operationDataFactory.operationData.operationContext.currentOperation.type === 'bha' ? 'BHA' : 'BOP') + ' Lay Down';
-
-				layDownDetectedModal = self.$uibModal.open({
-					keyboard: false,
-					animation: false,
-					scope,
-					size: 'lg',
-					backdrop: !!scope.dismissable,
-					windowClass: 'laydown-confirmation-modal',
-					template: modalTemplate,
-				});
-
-			} else if (layDownDetectedModal) {
-				if (layDownDetectedModal && layDownDetectedModal.close) {
-					layDownDetectedModal.close();
-				}
-				layDownDetectedModal = null;
+			function actionButtonStartLaydown() {
+				operationDataFactory.emitStartLayDown();
 			}
 
-		}
+			function checkCurrentState(stateContext) {
+
+				// console.log(stateContext.currentState, stateContext.layDownDetected);
+
+				if (!layDownDetectedModal && stateContext.currentState === 'layDown' && stateContext.layDownDetected === true) {
+					scope.buttonNameStartLayDown = 'Start ' + (operationDataFactory.operationData.operationContext.currentOperation.type === 'bha' ? 'BHA' : 'BOP') + ' Lay Down';
+
+					layDownDetectedModal = self.$uibModal.open({
+						keyboard: false,
+						animation: false,
+						scope,
+						size: 'lg',
+						backdrop: !!scope.dismissable,
+						windowClass: 'laydown-confirmation-modal',
+						template: modalTemplate,
+					});
+
+				} else if (layDownDetectedModal) {
+					if (layDownDetectedModal && layDownDetectedModal.close) {
+						layDownDetectedModal.close();
+					}
+					layDownDetectedModal = null;
+				}
+
+			}
+		});
 
 	}
 

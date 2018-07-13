@@ -10,7 +10,7 @@ import template from '../xpd-resources/ng/xpd.visualization/consistency-informat
 export class ConsistencyInformationPanelDirective implements ng.IDirective {
 
 	public restrict = 'EA';
-	public templateUrl = template;
+	public template = template;
 	public scope = {
 		onInit: '=',
 		onClickCollapse: '=',

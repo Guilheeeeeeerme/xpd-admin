@@ -256,7 +256,7 @@ export class HighchartsService {
 	// 	const scriptTag = $document[0].createElement('script');
 	// 	scriptTag.type = 'text/javascript';
 	// 	scriptTag.async = true;
-	// 	scriptTag.src = highcharts; 
+	// 	scriptTag.src = highcharts;
 
 	// 	(scriptTag as any).onreadystatechange = function () {
 	// 		if (this.readyState === 'complete') { self.loadHighchartsMore(); }

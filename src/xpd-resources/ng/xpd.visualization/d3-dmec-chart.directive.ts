@@ -14,7 +14,7 @@ import template from '../xpd-resources/ng/xpd.visualization/d3-dmec-chart.templa
 
 export class D3DMECChartDirective implements ng.IDirective {
 	public restrict = 'E';
-	public templateUrl = template;
+	public template = template;
 	public scope = {
 		actualStartAt: '=',
 		zoomStartAt: '=',

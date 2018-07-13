@@ -1,13 +1,21 @@
-(function() {
+import { OperationDataFactory } from '../../../../../xpd-resources/ng/xpd.communication/operation-server-data.factory';
+import { DialogFactory } from '../../../../../xpd-resources/ng/xpd.dialog/xpd.dialog.factory';
+import { FailureModalFactory } from '../../../../../xpd-resources/ng/xpd.modal.failure/xpd-modal-failure.factory';
 
-	'use strict';
+export class FailuresController {
 
-	angular.module('xpd.failure-controller')
-		.controller('FailuresController', FailuresController);
+	// 'use strict';
 
-	FailuresController.$inject = ['$scope', 'failureModal', 'operationDataFactory', 'dialogFactory'];
+	// angular.module('xpd.failure-controller')
+	// 	.controller('FailuresController', FailuresController);
 
-	function FailuresController($scope, failureModal, operationDataFactory, dialogFactory) {
+	public static $inject = ['$scope', 'failureModal', 'operationDataFactory', 'dialogFactory'];
+	public actionClickButtonAddFailure: () => void;
+	public actionClickButtonRemoveFailure: (failure: any) => void;
+	public actionClickButtonEditFailure: (selectedFailure: any) => void;
+	public operationDataFactory: any;
+
+	constructor ($scope, failureModal: FailureModalFactory, operationDataFactory: OperationDataFactory, dialogFactory: DialogFactory) {
 		const vm = this;
 
 		$scope.modalData = {
@@ -27,7 +35,7 @@
 
 		operationDataFactory.operationData = [];
 		operationDataFactory.openConnection([]).then(function(response) {
-			operationDataFactory = response;
+			vm.operationDataFactory = response;
 			$scope.modalData.operation = operationDataFactory.operationData.operationContext.currentOperation;
 			$scope.modalData.failuresList = operationDataFactory.operationData.failureContext.failureList;
 		});
@@ -72,8 +80,9 @@
 		}
 
 		function removeFailure(failure) {
-			operationDataFactory.emitRemoveFailure(failure);
+			vm.operationDataFactory.emitRemoveFailure(failure);
 		}
 
 	}
-})();
+
+}

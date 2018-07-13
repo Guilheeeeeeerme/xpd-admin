@@ -1,11 +1,49 @@
-(function() {
-	'use strict';
+import * as angular from 'angular';
+import { IModalService } from '../../../../../../../node_modules/@types/angular-ui-bootstrap';
+import { OperationDataFactory } from '../../../../../../xpd-resources/ng/xpd.communication/operation-server-data.factory';
+import { DialogFactory } from '../../../../../../xpd-resources/ng/xpd.dialog/xpd.dialog.factory';
+import { MenuConfirmationFactory } from '../../../../../../xpd-resources/ng/xpd.menu-confirmation/menu-confirmation.factory';
+import { OperationSetupAPIService } from '../../../../../../xpd-resources/ng/xpd.setupapi/operation-setupapi.service';
+import { SectionSetupAPIService } from '../../../../../../xpd-resources/ng/xpd.setupapi/section-setupapi.service';
+import { WellSetupAPIService } from '../../../../../../xpd-resources/ng/xpd.setupapi/well-setupapi.service';
+import { OperationConfigurationService } from './operation-configuration.service';
 
-	angular.module('xpd.admin').controller('OperationController', operationController);
+export class OperationController {
+	// 'use strict';
 
-	operationController.$inject = ['$scope', '$filter', '$routeParams', '$location', '$uibModal', 'operationDataFactory', 'dialogFactory', 'wellSetupAPIService', 'sectionSetupAPIService', 'operationSetupAPIService', 'OperationConfigurationService', 'menuConfirmationFactory'];
+	// angular.module('xpd.admin').controller('OperationController', operationController);
 
-	function operationController($scope, $filter, $routeParams, $location, $uibModal, operationDataFactory, dialogFactory, wellSetupAPIService, sectionSetupAPIService, operationSetupAPIService, operationConfigurationService, menuConfirmationFactory) {
+	public static $inject = ['$scope', '$routeParams', '$location', '$uibModal', 'operationDataFactory', 'dialogFactory', 'wellSetupAPIService', 'sectionSetupAPIService', 'operationSetupAPIService', 'OperationConfigurationService', 'menuConfirmationFactory'];
+	public changeImportedOperation: (operationId: any) => void;
+	public contract: any;
+	public actionButtonSave: () => void;
+	public actionSelectCasingType: () => void;
+	public markTabAsVisited: (index: any) => void;
+	public confirmLeaving: () => void;
+	public casingFormCalcs: (param: any) => void;
+	public riserFormCalcs: (param: any) => void;
+	public bhaFormCalcs: (param: any) => void;
+	public validateContractParams: () => void;
+	public validateGeneralInfo: () => void;
+	public actionTimeOperationItemClick: (custom: any, type: any, name: any, standardTime: any) => void;
+	public calcContractParamsConverter: (value: any, unit: any) => void;
+	public myFunction: (value: any) => void;
+	public info: any;
+	public operationDataFactory: any;
+
+	constructor(
+		$scope: any,
+		$routeParams: any,
+		$location: any,
+		$uibModal: IModalService,
+		operationDataFactory: OperationDataFactory,
+		dialogFactory: DialogFactory,
+		wellSetupAPIService: WellSetupAPIService,
+		sectionSetupAPIService: SectionSetupAPIService,
+		operationSetupAPIService: OperationSetupAPIService,
+		operationConfigurationService: OperationConfigurationService,
+		menuConfirmationFactory: MenuConfirmationFactory) {
+
 		const vm = this;
 
 		let modalInstance = null;
@@ -17,12 +55,12 @@
 		vm.changeImportedOperation = changeImportedOperation;
 		// vm.changeOperationQueue = changeOperationQueue;
 
-		wellSetupAPIService.getObjectById($routeParams.wellId, function(well) {
+		wellSetupAPIService.getObjectById($routeParams.wellId, function (well) {
 			$scope.well = well;
 			getOperation();
 		});
 
-		sectionSetupAPIService.getObjectById($routeParams.sectionId, function(section) {
+		sectionSetupAPIService.getObjectById($routeParams.sectionId, function (section) {
 			$scope.section = section;
 		});
 
@@ -38,15 +76,15 @@
 		 */
 		menuConfirmationFactory.setBlockMenu(true);
 
-		operationDataFactory.openConnection([]).then(function(response) {
-			operationDataFactory = response;
+		operationDataFactory.openConnection([]).then(function (response) {
+			vm.operationDataFactory = response;
 		});
 
 		function getOperation() {
 			if (operation.id != null) {
 				operationSetupAPIService.getObjectById(operation.id, loadOperationSetup);
 			} else {
-				operationSetupAPIService.getOperationQueue($routeParams.wellId, function(operationQueue) {
+				operationSetupAPIService.getOperationQueue($routeParams.wellId, function (operationQueue) {
 
 					$scope.dados.operationQueue = operationQueue;
 					// $scope.dados.operationQueue = operationQueue.filter((operation) => {
@@ -69,9 +107,9 @@
 			operation.contractParams = contractParams;
 
 			try {
-				operation.alarms = operation.alarms.map(function(alarm) {
+				operation.alarms = operation.alarms.map(function (alarm) {
 
-					if (alarm.enabled == false) {
+					if (alarm.enabled === false) {
 						alarm.enabled = false;
 					} else {
 						alarm.enabled = true;
@@ -91,11 +129,11 @@
 
 			try {
 
-				for ( const op of $scope.dados.operationQueue ) {
+				for (const op of $scope.dados.operationQueue) {
 
-					if (lastSectionId != op.section.id) {
+					if (lastSectionId !== op.section.id) {
 
-						if (lastSectionId == $routeParams.sectionId) {
+						if (lastSectionId === $routeParams.sectionId) {
 							break;
 						}
 
@@ -127,10 +165,10 @@
 			$scope.dados.leftPercentage = 100;
 
 			if (vm.contract) {
-				$scope.hasContractError = function(typeError) {
+				$scope.hasContractError = function (typeError) {
 					if (!(vm.contract.$error === undefined) && vm.contract.$error) {
 						for (const i in vm.contract.$error.required) {
-							if (vm.contract.$error.required[i].$name == typeError) {
+							if (vm.contract.$error.required[i].$name === typeError) {
 								return true;
 							}
 						}
@@ -162,13 +200,13 @@
 			vm.myFunction = myFunction;
 
 			function validateGeneralInfo() {
-				angular.forEach(vm.info.$error.required, function(field) {
+				angular.forEach(vm.info.$error.required, function (field) {
 					field.$setDirty();
 				});
 			}
 
 			function validateContractParams() {
-				angular.forEach(vm.contract.$error.required, function(field) {
+				angular.forEach(vm.contract.$error.required, function (field) {
 					field.$setDirty();
 				});
 			}
@@ -176,46 +214,46 @@
 			function casingFormCalcs(param) {
 
 				switch (param) {
-				case 'averageJointLength':
-				case 'numberOfCasingJointsPerSection':
-					$scope.dados.operation.averageSectionLength = +$scope.dados.operation.averageJointLength * +$scope.dados.operation.numberOfCasingJointsPerSection;
-					casingFormCalcs('averageSectionLength');
-					break;
-				case 'averageSectionLength':
-					$scope.dados.operation.length = +$scope.dados.operation.numberOfCasingSections * +$scope.dados.operation.averageSectionLength;
-					$scope.dados.operation.numberOfCasingSections = Math.ceil(+$scope.dados.operation.length / +$scope.dados.operation.averageSectionLength);
-					casingFormCalcs('length');
-					break;
-				case 'numberOfCasingSections':
-					$scope.dados.operation.length = +$scope.dados.operation.numberOfCasingSections * +$scope.dados.operation.averageSectionLength;
-					casingFormCalcs('length');
-					break;
-				case 'length':
-					$scope.dados.operation.settlementStringSize = (+$scope.dados.operation.endBitDepth - (+$scope.dados.operation.length));
-					$scope.dados.operation.numberOfCasingSections = Math.ceil(+$scope.dados.operation.length / +$scope.dados.operation.averageSectionLength);
-					casingFormCalcs('settlementStringSize');
-					break;
-				case 'holeDepth':
-					$scope.dados.operation.settlementStringSize = (+$scope.dados.operation.holeDepth - (+$scope.dados.operation.length + +$scope.dados.operation.ratHole));
-					$scope.dados.operation.endBitDepth = (+$scope.dados.operation.holeDepth - +$scope.dados.operation.ratHole);
-					casingFormCalcs('settlementStringSize');
-					break;
-				case 'ratHole':
-					$scope.dados.operation.settlementStringSize = (+$scope.dados.operation.holeDepth - (+$scope.dados.operation.length));
-					$scope.dados.operation.endBitDepth = (+$scope.dados.operation.holeDepth - +$scope.dados.operation.ratHole);
-					casingFormCalcs('settlementStringSize');
-					break;
-				case 'settlementStringSize':
-				case 'averageStandLength':
-					$scope.dados.operation.numberOfJoints = Math.ceil(+$scope.dados.operation.settlementStringSize / +$scope.dados.operation.averageStandLength);
-					break;
-				case 'averageDPLength':
-				case 'numberOfDPPerStand':
-					$scope.dados.operation.averageStandLength = +$scope.dados.operation.averageDPLength * +$scope.dados.operation.numberOfDPPerStand;
-					casingFormCalcs('averageStandLength');
-					break;
-				default:
-					break;
+					case 'averageJointLength':
+					case 'numberOfCasingJointsPerSection':
+						$scope.dados.operation.averageSectionLength = +$scope.dados.operation.averageJointLength * +$scope.dados.operation.numberOfCasingJointsPerSection;
+						casingFormCalcs('averageSectionLength');
+						break;
+					case 'averageSectionLength':
+						$scope.dados.operation.length = +$scope.dados.operation.numberOfCasingSections * +$scope.dados.operation.averageSectionLength;
+						$scope.dados.operation.numberOfCasingSections = Math.ceil(+$scope.dados.operation.length / +$scope.dados.operation.averageSectionLength);
+						casingFormCalcs('length');
+						break;
+					case 'numberOfCasingSections':
+						$scope.dados.operation.length = +$scope.dados.operation.numberOfCasingSections * +$scope.dados.operation.averageSectionLength;
+						casingFormCalcs('length');
+						break;
+					case 'length':
+						$scope.dados.operation.settlementStringSize = (+$scope.dados.operation.endBitDepth - (+$scope.dados.operation.length));
+						$scope.dados.operation.numberOfCasingSections = Math.ceil(+$scope.dados.operation.length / +$scope.dados.operation.averageSectionLength);
+						casingFormCalcs('settlementStringSize');
+						break;
+					case 'holeDepth':
+						$scope.dados.operation.settlementStringSize = (+$scope.dados.operation.holeDepth - (+$scope.dados.operation.length + +$scope.dados.operation.ratHole));
+						$scope.dados.operation.endBitDepth = (+$scope.dados.operation.holeDepth - +$scope.dados.operation.ratHole);
+						casingFormCalcs('settlementStringSize');
+						break;
+					case 'ratHole':
+						$scope.dados.operation.settlementStringSize = (+$scope.dados.operation.holeDepth - (+$scope.dados.operation.length));
+						$scope.dados.operation.endBitDepth = (+$scope.dados.operation.holeDepth - +$scope.dados.operation.ratHole);
+						casingFormCalcs('settlementStringSize');
+						break;
+					case 'settlementStringSize':
+					case 'averageStandLength':
+						$scope.dados.operation.numberOfJoints = Math.ceil(+$scope.dados.operation.settlementStringSize / +$scope.dados.operation.averageStandLength);
+						break;
+					case 'averageDPLength':
+					case 'numberOfDPPerStand':
+						$scope.dados.operation.averageStandLength = +$scope.dados.operation.averageDPLength * +$scope.dados.operation.numberOfDPPerStand;
+						casingFormCalcs('averageStandLength');
+						break;
+					default:
+						break;
 				}
 
 			}
@@ -223,25 +261,25 @@
 			function riserFormCalcs(param) {
 
 				switch (param) {
-				case 'averageJointLength':
-					$scope.dados.operation.averageStandLength = +$scope.dados.operation.averageJointLength * +$scope.dados.operation.numberOfRiserPerSection;
-					riserFormCalcs('averageStandLength');
-					break;
-				case 'numberOfRiserPerSection':
-					$scope.dados.operation.averageStandLength = +$scope.dados.operation.averageJointLength * +$scope.dados.operation.numberOfRiserPerSection;
-					break;
-				case 'numberOfJoints':
-					$scope.dados.operation.startHoleDepth = +$scope.dados.operation.numberOfJoints * +$scope.dados.operation.averageStandLength;
-					break;
-				case 'averageStandLength':
-				case 'startHoleDepth':
-					$scope.dados.operation.numberOfJoints = Math.ceil(+$scope.dados.operation.startHoleDepth / +$scope.dados.operation.averageStandLength);
-					break;
-				case 'length':
-					$scope.dados.operation.numberOfJoints = Math.ceil((+$scope.dados.operation.startHoleDepth - (+$scope.dados.operation.length)) / +$scope.dados.operation.averageStandLength);
-					break;
-				default:
-					break;
+					case 'averageJointLength':
+						$scope.dados.operation.averageStandLength = +$scope.dados.operation.averageJointLength * +$scope.dados.operation.numberOfRiserPerSection;
+						riserFormCalcs('averageStandLength');
+						break;
+					case 'numberOfRiserPerSection':
+						$scope.dados.operation.averageStandLength = +$scope.dados.operation.averageJointLength * +$scope.dados.operation.numberOfRiserPerSection;
+						break;
+					case 'numberOfJoints':
+						$scope.dados.operation.startHoleDepth = +$scope.dados.operation.numberOfJoints * +$scope.dados.operation.averageStandLength;
+						break;
+					case 'averageStandLength':
+					case 'startHoleDepth':
+						$scope.dados.operation.numberOfJoints = Math.ceil(+$scope.dados.operation.startHoleDepth / +$scope.dados.operation.averageStandLength);
+						break;
+					case 'length':
+						$scope.dados.operation.numberOfJoints = Math.ceil((+$scope.dados.operation.startHoleDepth - (+$scope.dados.operation.length)) / +$scope.dados.operation.averageStandLength);
+						break;
+					default:
+						break;
 				}
 
 			}
@@ -249,45 +287,45 @@
 			function bhaFormCalcs(param) {
 
 				switch (param) {
-				case 'startHoleDepth':
-					$scope.dados.operation.holeDepth = $scope.dados.operation.startHoleDepth;
-					break;
-				case 'numberOfDPPerStand':
-				case 'averageDPLength':
-					$scope.dados.operation.averageStandLength = +$scope.dados.operation.numberOfDPPerStand * +$scope.dados.operation.averageDPLength;
-					// $scope.dados.operation.endBitDepth = +$scope.dados.operation.numberOfJoints * +$scope.dados.operation.averageStandLength + +$scope.dados.operation.length;
-					$scope.dados.operation.numberOfJoints = null;
-					$scope.dados.operation.endBitDepth = null;
-					break;
-				case 'endBitDepth':
-				case 'length':
-				case 'averageStandLength':
-					$scope.dados.operation.numberOfJoints = Math.ceil((+$scope.dados.operation.endBitDepth - +$scope.dados.operation.length) / +$scope.dados.operation.averageStandLength);
-					break;
-				case 'numberOfJoints':
-					$scope.dados.operation.endBitDepth = +$scope.dados.operation.numberOfJoints * +$scope.dados.operation.averageStandLength + +$scope.dados.operation.length;
-					break;
-				case 'inSlips':
-					$scope.dados.operation.inSlipsDefault = +$scope.dados.operation.inSlips;
-					break;
-				default:
-					break;
+					case 'startHoleDepth':
+						$scope.dados.operation.holeDepth = $scope.dados.operation.startHoleDepth;
+						break;
+					case 'numberOfDPPerStand':
+					case 'averageDPLength':
+						$scope.dados.operation.averageStandLength = +$scope.dados.operation.numberOfDPPerStand * +$scope.dados.operation.averageDPLength;
+						// $scope.dados.operation.endBitDepth = +$scope.dados.operation.numberOfJoints * +$scope.dados.operation.averageStandLength + +$scope.dados.operation.length;
+						$scope.dados.operation.numberOfJoints = null;
+						$scope.dados.operation.endBitDepth = null;
+						break;
+					case 'endBitDepth':
+					case 'length':
+					case 'averageStandLength':
+						$scope.dados.operation.numberOfJoints = Math.ceil((+$scope.dados.operation.endBitDepth - +$scope.dados.operation.length) / +$scope.dados.operation.averageStandLength);
+						break;
+					case 'numberOfJoints':
+						$scope.dados.operation.endBitDepth = +$scope.dados.operation.numberOfJoints * +$scope.dados.operation.averageStandLength + +$scope.dados.operation.length;
+						break;
+					case 'inSlips':
+						$scope.dados.operation.inSlipsDefault = +$scope.dados.operation.inSlips;
+						break;
+					default:
+						break;
 				}
 
 			}
 
 			function markTabAsVisited(index) {
 				$scope.visitedTab[index] = true;
-				$scope.dados.allTabsWereVisited = ($scope.visitedTab[0] == true) && ($scope.visitedTab[1] == true) && ($scope.visitedTab[2] == true);
+				$scope.dados.allTabsWereVisited = ($scope.visitedTab[0] === true) && ($scope.visitedTab[1] === true) && ($scope.visitedTab[2] === true);
 			}
 
 			function actionButtonSave() {
 
-				dialogFactory.showConfirmDialog('Save and exit?', function() {
+				dialogFactory.showConfirmDialog('Save and exit?', function () {
 
 					const operation = $scope.dados.operation;
 
-					if (operation.type == 'time') {
+					if (operation.type === 'time') {
 						operation.optimumTime = speedToTime($scope.dados.operation.contractParams.timeSpeed.voptimum);
 						operation.standardTime = speedToTime($scope.dados.operation.contractParams.timeSpeed.vstandard); // $scope.dados.operation.contractParams.timeSpeed.vstandard * 3600000;
 						operation.poorTime = speedToTime($scope.dados.operation.contractParams.timeSpeed.vpoor);
@@ -320,7 +358,7 @@
 					try { delete operation.timeSlices; } catch (e) { }
 					try { delete operation.section; } catch (e) { }
 
-					operationDataFactory.emitUpdateRunningOperation(operation);
+					vm.operationDataFactory.emitUpdateRunningOperation(operation);
 
 				}
 				/** Libera o menu apos sair da tela */
@@ -335,7 +373,7 @@
 				menuConfirmationFactory.setBlockMenu(false);
 
 				$location.path('/setup/well/' + $routeParams.wellId + '/section/').search();
-				operationDataFactory.emitRefreshQueue();
+				vm.operationDataFactory.emitRefreshQueue();
 
 			}
 
@@ -376,7 +414,7 @@
 			}
 
 			function confirmLeaving() {
-				dialogFactory.showCriticalDialog('Your changes will be lost. Proceed?', function() {
+				dialogFactory.showCriticalDialog('Your changes will be lost. Proceed?', function () {
 					$location.path('/setup/well/' + $routeParams.wellId + '/section/').search();
 
 					/** Libera o menu apos sair da tela */
@@ -426,7 +464,8 @@
 						return actionButtonConfirmCallback;
 					},
 					actionButtonCancelCallback() {
-						return actionButtonCancelCallback;
+						// tslint:disable-next-line:no-empty
+						return () => { };
 					},
 					importedOperation, // operação que será importada
 					currentOperation: $scope.dados.operation, // operação que está no formulário
@@ -442,7 +481,7 @@
 
 		function calcContractParamsConverter(value, unit) {
 
-			if (unit == 'min') {
+			if (unit === 'min') {
 				$scope.dados.result = minutesToMetersPerHour(value);
 			}
 
@@ -453,7 +492,7 @@
 				return 0;
 			}
 
-			return ( (1 * $scope.dados.operation.averageStandLength) / value ) * 60;
+			return ((1 * $scope.dados.operation.averageStandLength) / value) * 60;
 		}
 
 		function myFunction(value) {
@@ -461,7 +500,7 @@
 			const copyText = document.getElementById('result');
 
 			// /* Select the text field */
-			copyText.select();
+			(copyText as any).select();
 
 			/* Copy the text inside the text field */
 			document.execCommand('copy');
@@ -469,4 +508,4 @@
 
 	}
 
-})();
+}

@@ -1,15 +1,16 @@
+import { DMECService } from '../../../../xpd-resources/ng/xpd.dmec/dmec.service';
 
-(function() {
-	'use strict';
+export class DMECLogController {
+	// 'use strict';
 
-	angular.module('xpd.dmeclog')
-		.controller('DMecLogController', DMecLogController);
+	// angular.module('xpd.dmeclog')
+	// 	.controller('DMecLogController', DMecLogController);
 
-	DMecLogController.$inject = ['$scope', 'dmecService'];
+	public static $inject = ['$scope', 'dmecService'];
 
-	function DMecLogController($scope, dmecService) {
+	constructor($scope, dmecService: DMECService) {
 		dmecService.dmec($scope, 'xpd.dmec.log.dmecInputRangeForm');
 		$scope.initializeComponent();
 	}
 
-})();
+}

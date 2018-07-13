@@ -1,4 +1,6 @@
-import { IQProvider, IQService } from "../../../../node_modules/@types/angular";
+import { IQProvider, IQService } from '../../../../node_modules/@types/angular';
+import { SocketIOFactory } from '../socket.io/socket.factory';
+import { XPDAccessFactory } from '../xpd.access/accessfactory.factory';
 
 // (function() {
 // 	'use strict';
@@ -48,8 +50,10 @@ export class OperationDataFactory {
 		addEventListener,
 	};
 	public static eventsCallbacks: any = {};
+	public static operationData: any;
+	public operationData: any;
 
-	constructor(private $q: IQService, private socketFactory: SocketFactory, private xpdAccessFactory: XPDAccessFactory) { }
+	constructor(private $q: IQService, private socketFactory: SocketIOFactory, private xpdAccessFactory: XPDAccessFactory) { }
 
 	public addEventListener(origin, event, callback) {
 
@@ -74,8 +78,8 @@ export class OperationDataFactory {
 			resolve(OperationDataFactory);
 		} else {
 
-			self.socket = self.socketFactory(self.xpdAccessFactory.getOperationServerURL(), '/operation-socket', threads);
 			self.communicationChannel = {};
+			self.socket = self.socketFactory.create(self.xpdAccessFactory.getOperationServerURL(), '/operation-socket', threads);
 
 			self.socket.on('subjects', function (response) {
 
@@ -142,13 +146,15 @@ export class OperationDataFactory {
 	}
 
 	private setInterceptor(subject, communication) {
+		const self = this;
+
 		communication(function (contextRoot) {
 			if (contextRoot && contextRoot.name && contextRoot.data) {
 				const contextName = contextRoot.name;
 				const contextData = contextRoot.data;
 
-				loadContext(contextName, contextData);
-				loadEventListenersCallback(subject, contextData);
+				self.loadContext(contextName, contextData);
+				self.loadEventListenersCallback(subject, contextData);
 			}
 		});
 	}

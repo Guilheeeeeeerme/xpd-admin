@@ -1,10 +1,15 @@
-(function() {
-	'use strict';
+import * as angular from 'angular';
+import { IModalServiceInstance } from '../../../../../../../node_modules/@types/angular-ui-bootstrap';
+import { PhotoAPIService } from '../../../../../../xpd-resources/ng/xpd.setupapi/photo-setupapi.service';
+import { ScheduleSetupAPIService } from '../../../../../../xpd-resources/ng/xpd.setupapi/schedule-setupapi.service';
 
-	angular.module('xpd.admin')
-		.controller('UpsertMemberController', upsertMemberController);
+export class UpsertMemberController {
+	// 'use strict';
 
-	upsertMemberController.$inject = [
+	// angular.module('xpd.admin')
+	// 	.controller('UpsertMemberController', upsertMemberController);
+
+	public static $inject: string[] = [
 		'$scope',
 		'scheduleSetupAPIService',
 		'photoAPIService',
@@ -13,18 +18,29 @@
 		'removeMemberCallback',
 		'updateMemberCallback',
 		'insertMemberCallback'];
+	public actionButtonAdd: () => void;
+	public actionButtonCancel: () => void;
+	public actionButtonRemove: () => void;
 
-	function upsertMemberController($scope, scheduleSetupAPIService, photoAPIService, $modalInstance, $member, removeMemberCallback, updateMemberCallback, insertMemberCallback) {
+	constructor(
+		$scope: any,
+		scheduleSetupAPIService: ScheduleSetupAPIService,
+		photoAPIService: PhotoAPIService,
+		$modalInstance: IModalServiceInstance,
+		$member: any,
+		removeMemberCallback: any,
+		updateMemberCallback: any,
+		insertMemberCallback: any) {
 
-		if (!Window.UpsertMemberController) {
-			Window.UpsertMemberController = [];
+		if (!(Window as any).UpsertMemberController) {
+			(Window as any).UpsertMemberController = [];
 		}
 
-		Window.UpsertMemberController.push($modalInstance.close);
+		(Window as any).UpsertMemberController.push($modalInstance.close);
 
-		$modalInstance.close = function() {
-			while (Window.UpsertMemberController && Window.UpsertMemberController.length > 0) {
-				Window.UpsertMemberController.pop()();
+		$modalInstance.close = function () {
+			while ((Window as any).UpsertMemberController && (Window as any).UpsertMemberController.length > 0) {
+				(Window as any).UpsertMemberController.pop()();
 			}
 		};
 
@@ -39,14 +55,14 @@
 
 		photoAPIService.loadPhoto('tripin/member-pictures', $scope.modalData.photoPath, setImagePath);
 
-		$scope.$watch('modalData.photoPath', function(photoPath) {
+		$scope.$watch('modalData.photoPath', function (photoPath) {
 
 			try {
 
 				if (photoPath != null) {
 					photoAPIService.loadPhoto('tripin/member-pictures', photoPath, setImagePath);
 				} else {
-					if ($scope.modalData.function.id != 1) {
+					if ($scope.modalData.function.id !== 1) {
 						photoAPIService.loadPhoto('tripin/member-pictures', 'default', setImagePath);
 					} else {
 						photoAPIService.loadPhoto('tripin/member-pictures', 'team-photo', setImagePath);
@@ -54,17 +70,17 @@
 				}
 
 			} catch (e) {
-
+				// faça nada
 			}
 
 		}, true);
 
-		$scope.$watch('modalData.identification', function(identification) {
+		$scope.$watch('modalData.identification', function (identification) {
 
 			$scope.duplicatedIdentification = false;
 
 			if (identification != null) {
-				scheduleSetupAPIService.indentificationExists($scope.modalData.id, identification, function(exists) {
+				scheduleSetupAPIService.indentificationExists($scope.modalData.id, identification, function (exists) {
 					$scope.duplicatedIdentification = exists;
 				});
 			}
@@ -92,14 +108,14 @@
 
 			if (member.id !== null) {
 
-				scheduleSetupAPIService.updateMember(member, function(member) {
+				scheduleSetupAPIService.updateMember(member, function (member) {
 					$modalInstance.close();
 					updateMemberCallback(member);
 				});
 
 			} else {
 
-				scheduleSetupAPIService.insertMember(member, function(member) {
+				scheduleSetupAPIService.insertMember(member, function (member) {
 					$modalInstance.close();
 					insertMemberCallback(member);
 				});
@@ -110,9 +126,9 @@
 
 		function actionButtonRemove() {
 
-			const member = {id: $scope.modalData.id};
+			const member = { id: $scope.modalData.id };
 
-			scheduleSetupAPIService.removeMember(member, function(member) {
+			scheduleSetupAPIService.removeMember(member, function (member) {
 				$modalInstance.close();
 				removeMemberCallback(member);
 			});
@@ -125,11 +141,11 @@
 			const fd = new FormData();
 			fd.append('uploadedFile', files[0]);
 
-			photoAPIService.uploadPhoto(fd, 'tripin/member-pictures', function(data) {
+			photoAPIService.uploadPhoto(fd, 'tripin/member-pictures', function (data) {
 				$scope.modalData.photoPath = data.data.path;
 			});
 
 		}
 	}
 
-})();
+}

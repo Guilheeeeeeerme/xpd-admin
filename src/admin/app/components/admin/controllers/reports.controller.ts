@@ -1,12 +1,12 @@
-(function() {
-	'use strict';
+export class ReportsController {
+	// 'use strict';
 
-	angular.module('xpd.admin').controller('ReportsController', reportsController);
+	// angular.module('xpd.admin').controller('ReportsController', reportsController);
 
-	reportsController.$inject = ['$scope'];
+	public static $inject = ['$scope'];
 
-	function reportsController($scope) {
-
+	constructor($scope) {
+		// faça nada
 	}
 
-})();
+}

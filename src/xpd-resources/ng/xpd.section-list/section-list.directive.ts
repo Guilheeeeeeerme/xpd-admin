@@ -3,6 +3,7 @@
 // 	angular.module('xpd.admin').directive('xpdSectionList', xpdSectionList);
 // 	xpdSectionList.$inject = ['$filter', 'sectionSetupAPIService'];
 import template from '../xpd-resources/ng/xpd.section-list/section-list.template.html';
+import { SectionSetupAPIService } from '../xpd.setupapi/section-setupapi.service';
 
 export class XPDSectionListDirective implements ng.IDirective {
 

@@ -1,12 +1,16 @@
-(function() {
+export class OperationDashboardController {
 
-	'use strict';
+	// 'use strict';
 
-	angular.module('xpd.operation-dashboard').controller('OperationDashboardController', operationDashboardController);
+	// angular.module('xpd.operation-dashboard').controller('OperationDashboardController', operationDashboardController);
 
-	operationDashboardController.$inject = ['$scope', '$filter', 'operationDataFactory'];
+	public static $inject = ['$scope', '$filter', 'operationDataFactory'];
+	public actionButtonBuildForecast: (selectedLineName: any, eventType: any) => void;
+	public getTotalFailureTime: (startTime: any, endTime: any) => 0 | Date;
+	public getPanelStartState: (keyName: any) => any;
+	public changePanelState: (keyName: any) => void;
 
-	function operationDashboardController($scope, $filter, operationDataFactory) {
+	constructor($scope, $filter, operationDataFactory) {
 
 		const vm = this;
 
@@ -47,7 +51,7 @@
 
 			if ($scope.operationData.stateContext && $scope.operationData.forecastContext) {
 
-				let expectations = {};
+				let expectations: any = {};
 
 				try {
 
@@ -96,6 +100,7 @@
 
 					const nextActivities = [];
 
+					// tslint:disable-next-line:prefer-for-of
 					for (let index = 0;
 						index < estimatives.vTargetLine.length;
 						index++) {
@@ -276,7 +281,7 @@
 
 		function calcTimeSpent(line, state, eventType, isTripin) {
 			for (const i in line) {
-				if (line[i] && line[i][state] && line[i][state].isTripin == isTripin && line[i][state][eventType]) {
+				if (line[i] && line[i][state] && line[i][state].isTripin === isTripin && line[i][state][eventType]) {
 					return Math.abs(line[i][state][eventType].finalTime - line[i][state][eventType].startTime);
 				}
 			}
@@ -311,12 +316,12 @@
 
 				const event = lastEvents[index];
 
-				if (event.eventType == 'CONN') {
+				if (event.eventType === 'CONN') {
 					$scope.lastConnDuration = (event.duration / 1000);
 					conn = true;
 				}
 
-				if (event.eventType == 'TRIP') {
+				if (event.eventType === 'TRIP') {
 					$scope.lastTripDuration = (event.duration / 1000);
 					trip = true;
 				}
@@ -341,8 +346,8 @@
 		function changePanelState(keyName) {
 			const newState = !getPanelStartState(keyName);
 			$scope.statusPanel[keyName] = newState;
-			localStorage.setItem(keyName, newState);
+			localStorage.setItem(keyName, JSON.stringify(newState));
 		}
 	}
 
-})();
+}

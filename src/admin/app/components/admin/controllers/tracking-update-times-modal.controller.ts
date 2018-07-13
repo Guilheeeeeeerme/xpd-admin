@@ -1,12 +1,17 @@
-(function() {
+import * as angular from 'angular';
+import { IModalInstanceService } from '../../../../../../node_modules/@types/angular-ui-bootstrap';
 
-	'use strict',
+export class TrackingUpdateTimesController {
 
-	angular.module('xpd.admin').controller('TrackingUpdateTimesController', trackingUpdateTimesController);
+	// 'use strict',
 
-	trackingUpdateTimesController.$inject = ['$scope', '$uibModalInstance', 'selectedEvent', 'confirmCallback', 'changeEventStatusCallback'];
+	// angular.module('xpd.admin').controller('TrackingUpdateTimesController', trackingUpdateTimesController);
 
-	function trackingUpdateTimesController($scope, $uibModalInstance, selectedEvent, confirmCallback, changeEventStatusCallback) {
+	public static $inject = ['$scope', '$uibModalInstance', 'selectedEvent', 'confirmCallback', 'changeEventStatusCallback'];
+	public actionButtonClose: () => void;
+	public actionButtonSave: () => void;
+
+	constructor($scope, $uibModalInstance: IModalInstanceService, selectedEvent, confirmCallback, changeEventStatusCallback) {
 
 		const vm = this;
 
@@ -37,4 +42,4 @@
 
 	}
 
-})();
+}

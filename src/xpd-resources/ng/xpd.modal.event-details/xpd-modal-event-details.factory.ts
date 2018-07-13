@@ -20,7 +20,7 @@ export class EventDetailsModalFactory {
 			backdrop: 'static',
 			size: 'modal-sm',
 			windowClass: 'xpd-operation-modal',
-			templateUrl: modalTemplate,
+			template: modalTemplate,
 			controller: 'modalEventDetailsController as medController',
 			resolve: {
 				eventId() {

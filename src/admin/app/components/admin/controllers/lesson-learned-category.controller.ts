@@ -1,18 +1,34 @@
+import * as angular from 'angular';
+import { IModalService } from '../../../../../../node_modules/@types/angular-ui-bootstrap';
+import { DialogFactory } from '../../../../../xpd-resources/ng/xpd.dialog/xpd.dialog.factory';
+import { LessonLearnedSetupAPIService } from '../../../../../xpd-resources/ng/xpd.setupapi/lessonlearned-setupapi.service';
 /*
 * @Author: gustavogomides7
 * @Date:   2017-02-24 16:27:37
 * @Last Modified by:   Gezzy Ramos
 * @Last Modified time: 2017-08-28 11:31:26
 */
-(function() {
-	'use strict';
+export class LessonLearnedCategoryController {
+	// 'use strict';
 
-	angular.module('xpd.admin')
-		.controller('LessonLearnedCategoryController', lessonLearnedCategoryController);
+	// angular.module('xpd.admin')
+	// 	.controller('LessonLearnedCategoryController', lessonLearnedCategoryController);
 
-	lessonLearnedCategoryController.$inject = ['$scope', '$uibModal', 'dialogFactory', 'lessonLearnedSetupAPIService'];
+	public static $inject = ['$scope', '$uibModal', 'dialogFactory', 'lessonLearnedSetupAPIService'];
+	public actionClickAdd: (parentNode: any) => void;
+	public actionClickEdit: (node: any) => void;
+	public actionClickRemove: (node: any) => void;
+	public modalActionButtonSave: () => void;
+	public modalActionButtonClose: () => void;
+	public actionClickSelectItem: (node: any) => void;
+	public hasChildren: (node: any) => boolean;
 
-	function lessonLearnedCategoryController($scope, $modal, dialogFactory, lessonLearnedSetupAPIService) {
+	constructor(
+		$scope: any,
+		$modal: IModalService,
+		dialogFactory: DialogFactory,
+		lessonLearnedSetupAPIService: LessonLearnedSetupAPIService) {
+
 		const vm = this;
 
 		$scope.controller = vm;
@@ -92,7 +108,7 @@
 		function actionClickRemove(node) {
 
 			dialogFactory.showConfirmDialog('Do you want to remove this category?',
-				function() {
+				function () {
 					removeNode(node);
 				},
 			);
@@ -163,7 +179,7 @@
 
 			// remove o filho que esta no array do pai
 			for (const i in parentChildren) {
-				if (result.id == parentChildren[i].id) {
+				if (result.id === parentChildren[i].id) {
 					parentChildren.splice(i, 1);
 				}
 			}
@@ -197,7 +213,7 @@
 				const currentObj = objList[i];
 
 				// child to parent
-				if (currentObj.parentId == null || currentObj.parentId == undefined) {
+				if (currentObj.parentId == null || currentObj.parentId === undefined) {
 					categoryData.push(objList[i]);
 				} else {
 					objList[currentObj.parentId].children.push(currentObj);
@@ -217,4 +233,4 @@
 			return false;
 		}
 	}
-})();
+}

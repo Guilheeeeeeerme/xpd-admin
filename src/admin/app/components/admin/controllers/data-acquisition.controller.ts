@@ -1,12 +1,17 @@
-(function() {
-	'use strict';
+import { OperationDataFactory } from '../../../../../xpd-resources/ng/xpd.communication/operation-server-data.factory';
 
-	angular.module('xpd.admin')
-		.controller('DataAcquisitionController', dataAcquisitionController);
+export class DataAcquisitionController {
+	// 'use strict';
 
-	dataAcquisitionController.$inject = ['$scope', 'operationDataFactory'];
+	// angular.module('xpd.admin')
+	// 	.controller('DataAcquisitionController', dataAcquisitionController);
 
-	function dataAcquisitionController($scope, operationDataFactory) {
+	public static $inject = ['$scope', 'operationDataFactory'];
+	public operationDataFactory: any;
+	public changeViewAcquisition: () => void;
+	public changeViewReading: () => void;
+
+	constructor($scope, operationDataFactory: OperationDataFactory) {
 
 		const vm = this;
 
@@ -16,7 +21,7 @@
 		};
 
 		operationDataFactory.openConnection([]).then(function(response) {
-			operationDataFactory = response;
+			vm.operationDataFactory = response;
 			$scope.readingData = operationDataFactory.operationData.readingContext;
 			$scope.acquisitionData = operationDataFactory.operationData.dataAcquisitionContext;
 		});
@@ -42,4 +47,4 @@
 
 	}
 
-})();
+}

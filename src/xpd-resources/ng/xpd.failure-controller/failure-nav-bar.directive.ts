@@ -13,9 +13,12 @@
 
 // 	failureNavBar.$inject = ['$uibModal', 'categorySetupAPIService', 'operationDataFactory', 'dialogFactory'];
 
+import failureLessoModal from 'app/components/admin/views/modal/tabs-failure-lesson.modal.html';
 import { IModalService } from '../../../../node_modules/@types/angular-ui-bootstrap';
 import template from '../xpd-resources/ng/xpd.failure-controller/failure-nav-bar.template.html';
+import { OperationDataFactory } from '../xpd.communication/operation-server-data.factory';
 import { DialogFactory } from '../xpd.dialog/xpd.dialog.factory';
+import { CategorySetupAPIService } from '../xpd.setupapi/category-setupapi.service';
 
 export class FailureNavBarDirective implements ng.IDirective {
 	public static $inject: string[] = ['$uibModal', 'categorySetupAPIService', 'operationDataFactory', 'dialogFactory'];
@@ -40,72 +43,72 @@ export class FailureNavBarDirective implements ng.IDirective {
 		const self = this;
 
 		this.operationDataFactory.openConnection([]).then(function (response) {
-			self.operationDataFactory = response;
-		});
+			const operationDataFactory: any = response;
 
-		this.operationDataFactory.addEventListener('failureNavBar', 'setOnGoingFailureListener', loadOnGoingFailure);
+			this.operationDataFactory.addEventListener('failureNavBar', 'setOnGoingFailureListener', loadOnGoingFailure);
 
-		scope.actionButtonOpenFailureLessonModal = actionButtonOpenFailureLessonModal;
-		scope.actionButtonFinishFailureOnGoing = actionButtonFinishFailureOnGoing;
+			scope.actionButtonOpenFailureLessonModal = actionButtonOpenFailureLessonModal;
+			scope.actionButtonFinishFailureOnGoing = actionButtonFinishFailureOnGoing;
 
-		// loadOnGoingFailure();
+			// loadOnGoingFailure();
 
-		function loadOnGoingFailure() {
-			const failureContext = self.operationDataFactory.operationData.failureContext;
+			function loadOnGoingFailure() {
+				const failureContext = operationDataFactory.operationData.failureContext;
 
-			if (failureContext.onGoingFailure && failureContext.onGoingFailure != null) {
+				if (failureContext.onGoingFailure && failureContext.onGoingFailure != null) {
 
-				scope.onGoingFailure = self.operationDataFactory.operationData.failureContext.onGoingFailure;
+					scope.onGoingFailure = operationDataFactory.operationData.failureContext.onGoingFailure;
 
-				if (scope.onGoingFailure.npt) {
-					scope.failureClass = 'failure-npt';
-					scope.categoryClass = 'failure-npt-category';
+					if (scope.onGoingFailure.npt) {
+						scope.failureClass = 'failure-npt';
+						scope.categoryClass = 'failure-npt-category';
+					} else {
+						scope.failureClass = 'failure-normal';
+						scope.categoryClass = 'failure-normal-category';
+					}
+
+					scope.enableFinishFailure = true;
+
+					self.categorySetupAPIService.getCategoryName(scope.onGoingFailure.category.id, getCategoryNameSuccessCallback);
+
 				} else {
-					scope.failureClass = 'failure-normal';
-					scope.categoryClass = 'failure-normal-category';
+					scope.failureClass = '';
+					scope.failureTitle = 'No Failure on Going';
+					scope.enableFinishFailure = false;
 				}
+			}
 
-				scope.enableFinishFailure = true;
+			function getCategoryNameSuccessCallback(data) {
+				scope.failureTitle = 'Failure on Going';
+				scope.failureCategory = data.name;
+			}
 
-				self.categorySetupAPIService.getCategoryName(scope.onGoingFailure.category.id, getCategoryNameSuccessCallback);
+			function actionButtonOpenFailureLessonModal() {
+				self.$uibModal.open({
+					animation: true,
+					keyboard: false,
+					backdrop: 'static',
+					size: 'modal-sm',
+					windowClass: 'xpd-operation-modal',
+					template: failureLessoModal,
+					controller: 'TabsFailureLLCtrl as tbsController',
+				});
+			}
 
-			} else {
+			function actionButtonFinishFailureOnGoing() {
+				self.dialogFactory.showCriticalDialog('Are you sure you want to finish Failure?', finishFailureOnGoing);
+			}
+
+			function finishFailureOnGoing() {
 				scope.failureClass = '';
 				scope.failureTitle = 'No Failure on Going';
 				scope.enableFinishFailure = false;
+
+				scope.onGoingFailure.onGoing = false;
+
+				operationDataFactory.emitFinishFailureOnGoing();
 			}
-		}
-
-		function getCategoryNameSuccessCallback(data) {
-			scope.failureTitle = 'Failure on Going';
-			scope.failureCategory = data.name;
-		}
-
-		function actionButtonOpenFailureLessonModal() {
-			self.$uibModal.open({
-				animation: true,
-				keyboard: false,
-				backdrop: 'static',
-				size: 'modal-sm',
-				windowClass: 'xpd-operation-modal',
-				templateUrl: 'app/components/admin/views/modal/tabs-failure-lesson.modal.html',
-				controller: 'TabsCtrl as tbsController',
-			});
-		}
-
-		function actionButtonFinishFailureOnGoing() {
-			self.dialogFactory.showCriticalDialog('Are you sure you want to finish Failure?', finishFailureOnGoing);
-		}
-
-		function finishFailureOnGoing() {
-			scope.failureClass = '';
-			scope.failureTitle = 'No Failure on Going';
-			scope.enableFinishFailure = false;
-
-			scope.onGoingFailure.onGoing = false;
-
-			self.operationDataFactory.emitFinishFailureOnGoing();
-		}
+		});
 
 	}
 

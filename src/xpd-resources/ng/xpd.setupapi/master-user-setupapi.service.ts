@@ -1,35 +1,39 @@
-(function() {
-	'use strict';
+import { XPDAccessFactory } from '../xpd.access/accessfactory.factory';
+import { SetupAPIService } from './setupapi.service';
 
-	angular.module('xpd.setupapi').service('masterUserSetupAPIService', masterUserSetupAPIService);
+// (function() {
+// 	'use strict';
 
-	masterUserSetupAPIService.$inject = ['xpdAccessFactory', 'setupAPIService'];
+// 	angular.module('xpd.setupapi').service('masterUserSetupAPIService', masterUserSetupAPIService);
 
-	function masterUserSetupAPIService(xpdAccessFactory, setupAPIService) {
+// 	masterUserSetupAPIService.$inject = ['xpdAccessFactory', 'setupAPIService'];
 
-		const MASTER_USERNAME = 'admin';
+export class MasterUserSetupAPIService {
 
-		const vm = this;
+	public static $inject: string[] = ['xpdAccessFactory', 'setupAPIService'];
+	public MASTER_USERNAME: string;
 
-		vm.authenticate = authenticate;
-
-		function authenticate(object, successCallback, errorCallback) {
-
-			object.username = MASTER_USERNAME;
-
-			const req = {
-				method: 'POST',
-				url: xpdAccessFactory.getSetupURL() + 'setup/master-user/login',
-				headers: {
-					'Content-Type': 'application/json',
-				},
-				/*withCredentials: true,*/
-				data: object,
-			};
-
-			setupAPIService.doRequest(req, successCallback, errorCallback);
-		}
-
+	constructor(private xpdAccessFactory: XPDAccessFactory, private setupAPIService: SetupAPIService) {
+		this.MASTER_USERNAME = 'admin';
 	}
 
-})();
+	public authenticate(object, successCallback, errorCallback) {
+
+		object.username = this.MASTER_USERNAME;
+
+		const req = {
+			method: 'POST',
+			url: this.xpdAccessFactory.getSetupURL() + 'setup/master-user/login',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			/*withCredentials: true,*/
+			data: object,
+		};
+
+		this.setupAPIService.doRequest(req, successCallback, errorCallback);
+	}
+
+}
+
+// })();

@@ -1,119 +1,116 @@
-(function() {
-	'use strict';
+import { XPDAccessFactory } from '../xpd.access/accessfactory.factory';
+import { SetupAPIService } from './setupapi.service';
 
-	angular.module('xpd.setupapi').service('operationSetupAPIService', operationSetupAPIService);
+// (function() {
+// 	'use strict';
 
-	operationSetupAPIService.$inject = ['xpdAccessFactory', 'setupAPIService'];
+// 	angular.module('xpd.setupapi').service('operationSetupAPIService', operationSetupAPIService);
 
-	function operationSetupAPIService(xpdAccessFactory, setupAPIService) {
+// 	operationSetupAPIService.$inject = ['xpdAccessFactory', 'setupAPIService'];
 
-		const BASE_URL = xpdAccessFactory.getSetupURL() + 'setup/operation';
+export class OperationSetupAPIService {
 
-		const vm = this;
+	public static $inject: string[] = ['xpdAccessFactory', 'setupAPIService'];
+	public BASE_URL: string;
 
-		vm.getDefaultFields = getDefaultFields;
-		vm.getOperationAlarms = getOperationAlarms;
-		// vm.getOperationReadings = getOperationReadings;
-		vm.getOperationQueue = getOperationQueue;
-		vm.getObjectById = getObjectById;
-		vm.insertObject = insertObject;
-		vm.updateObject = updateObject;
-		vm.getList = getList;
-
-		function getOperationAlarms(operationId, successCallback, errorCallback) {
-
-			const req = {
-				method: 'GET',
-				url: BASE_URL + '/' + operationId + '/alarms',
-			};
-
-			setupAPIService.doRequest(req, successCallback, errorCallback);
-		}
-
-		function getObjectById(id, successCallback, errorCallback) {
-
-			const req = {
-				method: 'GET',
-				url: BASE_URL + '/' + id,
-			};
-
-			setupAPIService.doRequest(req, successCallback, errorCallback);
-		}
-
-		function getList(successCallback, errorCallback) {
-
-			const req = {
-				method: 'GET',
-				url: BASE_URL + '/list',
-			};
-
-			setupAPIService.doRequest(req, successCallback, errorCallback);
-		}
-
-		function insertObject(object, successCallback, errorCallback) {
-
-			const req = {
-				method: 'POST',
-				url: BASE_URL,
-				headers: {
-					'Content-Type': 'application/json',
-				},
-				data: object,
-			};
-
-			setupAPIService.doRequest(req, successCallback, errorCallback);
-
-		}
-
-		function updateObject(object, successCallback, errorCallback) {
-
-			const req = {
-				method: 'PUT',
-				url: BASE_URL + '/' + object.id,
-				headers: {
-					'Content-Type': 'application/json',
-				},
-				data: object,
-			};
-
-			setupAPIService.doRequest(req, successCallback, errorCallback);
-		}
-
-		function getDefaultFields(type, successCallback, errorCallback) {
-			const req = {
-				method: 'GET',
-				url: BASE_URL + '/default?type=' + type,
-				headers: {
-					'Content-Type': 'application/json',
-				},
-			};
-
-			setupAPIService.doRequest(req, successCallback, errorCallback);
-		}
-
-		// function getOperationReadings(operationId, successCallback, errorCallback) {
-
-		// 	$http.get(BASE_URL + '/' + operationId + '/readings')
-		// 		.then(
-		// 			function (response) {
-		// 				successCallback && successCallback(response.data.data);
-		// 			},
-		// 			function (error) {
-		// 				setupAPIService.generateToast(error.data, true);
-		// 				errorCallback && errorCallback(error);
-		// 			}
-		// 		);
-		// }
-
-		function getOperationQueue(wellId, successCallback, errorCallback) {
-
-			const req = {
-				method: 'GET',
-				url: xpdAccessFactory.getSetupURL() + 'operation-resources/operations-queue/' + wellId,
-			};
-
-			setupAPIService.doRequest(req, successCallback, errorCallback);
-		}
+	constructor(private xpdAccessFactory: XPDAccessFactory, private setupAPIService: SetupAPIService) {
+		this.BASE_URL = xpdAccessFactory.getSetupURL() + 'setup/operation';
 	}
 
-})();
+	public getOperationAlarms(operationId, successCallback, errorCallback?) {
+
+		const req = {
+			method: 'GET',
+			url: this.BASE_URL + '/' + operationId + '/alarms',
+		};
+
+		this.setupAPIService.doRequest(req, successCallback, errorCallback);
+	}
+
+	public getObjectById(id, successCallback, errorCallback?) {
+
+		const req = {
+			method: 'GET',
+			url: this.BASE_URL + '/' + id,
+		};
+
+		this.setupAPIService.doRequest(req, successCallback, errorCallback);
+	}
+
+	public getList(successCallback, errorCallback) {
+
+		const req = {
+			method: 'GET',
+			url: this.BASE_URL + '/list',
+		};
+
+		this.setupAPIService.doRequest(req, successCallback, errorCallback);
+	}
+
+	public insertObject(object, successCallback, errorCallback?) {
+
+		const req = {
+			method: 'POST',
+			url: this.BASE_URL,
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			data: object,
+		};
+
+		this.setupAPIService.doRequest(req, successCallback, errorCallback);
+
+	}
+
+	public updateObject(object, successCallback, errorCallback?) {
+
+		const req = {
+			method: 'PUT',
+			url: this.BASE_URL + '/' + object.id,
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			data: object,
+		};
+
+		this.setupAPIService.doRequest(req, successCallback, errorCallback);
+	}
+
+	public getDefaultFields(type, successCallback, errorCallback?) {
+		const req = {
+			method: 'GET',
+			url: this.BASE_URL + '/default?type=' + type,
+			headers: {
+				'Content-Type': 'application/json',
+			},
+		};
+
+		this.setupAPIService.doRequest(req, successCallback, errorCallback);
+	}
+
+	// function getOperationReadings(operationId, successCallback, errorCallback) {
+
+	// 	$http.get(BASE_URL + '/' + operationId + '/readings')
+	// 		.then(
+	// 			function (response) {
+	// 				successCallback && successCallback(response.data.data);
+	// 			},
+	// 			function (error) {
+	// 				setupAPIService.generateToast(error.data, true);
+	// 				errorCallback && errorCallback(error);
+	// 			}
+	// 		);
+	// }
+
+	public getOperationQueue(wellId, successCallback, errorCallback?) {
+
+		const req = {
+			method: 'GET',
+			url: this.xpdAccessFactory.getSetupURL() + 'operation-resources/operations-queue/' + wellId,
+		};
+
+		this.setupAPIService.doRequest(req, successCallback, errorCallback);
+	}
+}
+
+// })();

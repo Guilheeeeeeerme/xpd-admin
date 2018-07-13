@@ -1,11 +1,17 @@
-(function() {
-	'use strict';
+export class MemberSchedulerController {
+	// 'use strict';
 
-	angular.module('xpd.admin').controller('MemberSchedulerController', MemberSchedulerController);
+	// angular.module('xpd.admin').controller('MemberSchedulerController', MemberSchedulerController);
 
-	MemberSchedulerController.$inject = ['$scope', 'scheduleSetupAPIService', 'schedulerActionsService'];
+	public static $inject: string[] = ['$scope', 'scheduleSetupAPIService', 'schedulerActionsService'];
+	public actionButtonSchedulerSetupYear: (addYear: any) => void;
+	public actionButtonSchedulerSetupMonth: (month: any) => void;
+	public actionButtonSchedulerSetupDay: (date: any) => void;
+	public actionButtonMonthMode: () => void;
+	public actionButtonDayMode: () => void;
+	public actionButtonOnlyScheduled: () => void;
 
-	function MemberSchedulerController($scope, scheduleSetupAPIService, schedulerActionsService) {
+	constructor($scope, scheduleSetupAPIService, schedulerActionsService) {
 		const vm = this;
 
 		/**
@@ -86,7 +92,8 @@
 		}
 
 		function loadScheduleData() {
-			let fromDate, toDate;
+			let fromDate;
+			let toDate;
 
 			/**
              * SETTING UP DATE LIMITS
@@ -102,11 +109,11 @@
 			}
 
 			if ($scope.schedulerSetup.showOnlyScheduledMembers) {
-				scheduleSetupAPIService.getOnlyScheduled(fromDate, toDate, function(scheduleList) {
+				scheduleSetupAPIService.getOnlyScheduled(fromDate, toDate, function (scheduleList) {
 					$scope.dados.scheduleList = scheduleList;
 				});
 			} else {
-				scheduleSetupAPIService.fullScheduleByRangeDate(fromDate, toDate, function(scheduleList) {
+				scheduleSetupAPIService.fullScheduleByRangeDate(fromDate, toDate, function (scheduleList) {
 					$scope.dados.scheduleList = scheduleList;
 				});
 			}
@@ -124,4 +131,4 @@
 			}
 		}
 	}
-})();
+}

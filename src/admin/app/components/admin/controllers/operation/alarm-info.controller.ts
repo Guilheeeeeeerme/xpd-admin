@@ -1,11 +1,22 @@
-(function() {
-	'use strict';
+import * as angular from 'angular';
+import { IModalService } from '../../../../../../../node_modules/@types/angular-ui-bootstrap';
+import { AlarmSetupAPIService } from '../../../../../../xpd-resources/ng/xpd.setupapi/alarm-setupapi.service';
+import { AlarmCRUDService } from '../alarm/alarm.service';
 
-	angular.module('xpd.admin').controller('AlarmInfoController', alarmInfoController);
+export class AlarmInfoController {
+	// 'use strict';
 
-	alarmInfoController.$inject = ['$scope', '$uibModal', 'alarmSetupAPIService', 'alarmService'];
+	// angular.module('xpd.admin').controller('AlarmInfoController', alarmInfoController);
 
-	function alarmInfoController($scope, $uibModal, alarmSetupAPIService, alarmService) {
+	public static $inject = ['$scope', '$uibModal', 'alarmSetupAPIService', 'alarmCRUDService'];
+	public actionButtonAddAlarm: (_alarm: any) => void;
+	public actionButtonEditAlarm: (alarm: any) => void;
+	public actionButtonRemoveAlarm: (alarm: any) => void;
+	public actionButtonArchive: (alarm: any) => void;
+	public actionButtonUnarchive: (alarm: any) => void;
+	public actionButtonImport: (alarm: any) => void;
+
+	constructor ($scope: any, $uibModal: IModalService, alarmSetupAPIService: AlarmSetupAPIService, alarmCRUDService: AlarmCRUDService) {
 		const vm = this;
 
 		vm.actionButtonAddAlarm = actionButtonAddAlarm;
@@ -42,15 +53,15 @@
 			for (const i in alarms) {
 				const alarm = alarms[i];
 
-				if (alarm.enabled == false) {
+				if (alarm.enabled === false) {
 					alarm.enabled = false;
 				} else {
 					alarm.enabled = true;
 				}
 
-				if (alarm.archivedAlarm == true) {
+				if (alarm.archivedAlarm === true) {
 					$scope.alarms.archivedAlarms.push(alarm);
-				} else if (alarm.defaultAlarm == true) {
+				} else if (alarm.defaultAlarm === true) {
 					$scope.alarms.defaultAlarms.push(alarm);
 				} else {
 					$scope.alarms.historyAlarms.push(alarm);
@@ -98,7 +109,7 @@
 		function actionButtonAddAlarm(_alarm) {
 			const alarm = (!_alarm) ? null : _alarm;
 
-			alarmService.addAlarm(
+			alarmCRUDService.addAlarm(
 				alarm,
 				'xpd-modal-xxlg',
 				'app/components/admin/views/forms/alarm-info-upsert.modal.html',
@@ -128,7 +139,7 @@
 
 			$scope.alarmToUpdate = alarm;
 
-			alarmService.editAlarm(
+			alarmCRUDService.editAlarm(
 				alarm,
 				'xpd-modal-xxlg',
 				'app/components/admin/views/forms/alarm-info-upsert.modal.html',
@@ -144,9 +155,9 @@
 		}
 
 		function actionButtonRemoveAlarm(alarm) {
-			alarmService.removeAlarm(alarm);
+			alarmCRUDService.removeAlarm(alarm);
 		}
 
 	}
 
-})();
+}

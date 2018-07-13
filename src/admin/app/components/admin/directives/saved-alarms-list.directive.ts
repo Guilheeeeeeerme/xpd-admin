@@ -4,31 +4,31 @@
 * @Last Modified by:   Gezzy Ramos
 * @Last Modified time: 2017-08-28 18:14:51
 */
-(function() {
-	'use strict';
+// (function() {
+// 	'use strict';
 
-	angular.module('xpd.admin').directive('savedAlarmsList', savedAlarmsList);
+// 	angular.module('xpd.admin').directive('savedAlarmsList', savedAlarmsList);
 
-	function savedAlarmsList() {
-		return {
-			scope: {
-				heading: '@',
-				popover: '@',
-				alarmsList: '=',
-				showArchived: '=',
-				buttomIcon: '@',
-				alarmsToImport: '=',
-				actionClickItem: '=',
-				actionClickButton: '=',
-				actionImportButton: '=',
-			},
-			restrict: 'AE',
-			templateUrl: 'app/components/admin/directives/saved-alarms-list.template.html',
-			link,
-		};
+import template from 'app/components/admin/directives/saved-alarms-list.template.html';
 
-		function link(scope, element, attrs) {
+export class SavedAlarmsListDirectives implements ng.IDirective {
+	public scope = {
+		heading: '@',
+		popover: '@',
+		alarmsList: '=',
+		showArchived: '=',
+		buttomIcon: '@',
+		alarmsToImport: '=',
+		actionClickItem: '=',
+		actionClickButton: '=',
+		actionImportButton: '=',
+	};
+	public restrict = 'AE';
+	public template = template;
 
-		}
+	public static Factory(): ng.IDirectiveFactory {
+		return () => new SavedAlarmsListDirectives();
 	}
-})();
+}
+
+	// })();

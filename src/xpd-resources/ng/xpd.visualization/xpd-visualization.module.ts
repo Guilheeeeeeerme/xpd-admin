@@ -12,6 +12,7 @@ import { DisplacementAreaFactory } from './displacement-area.directive';
 import { DMECTrackingEventsDirective } from './dmec-tracking-events.directive';
 import { DMECTrackingDirective } from './dmec-tracking.directive';
 import { ForecastLineDirective } from './forecast-line.directive';
+import { ForecastWaterfallDirective } from './forecast-waterfall.directive';
 import { InSlipsDirective } from './in-slips.directive';
 import { MemberPerformanceDirective } from './member-performance.directive';
 import { NextActivitiesInformationPanelDirective } from './next-activities-information-panel.directive';
@@ -29,7 +30,6 @@ import { TripRulerDirective } from './trip-ruler.directive';
 import { UpcomingAlarmsPanelDirective } from './upcoming-alarms-panel.directive';
 import { WellInformationPanelDirective } from './well-information-panel.directive';
 import { XPDViewBoxDirective } from './xpd-view-box.directive';
-import { ForecastWaterfallDirective } from './forecast-waterfall.directive';
 
 const XPDVisualizationModule: angular.IModule = angular.module('xpd.visualization', [
 	ngIntersection.name,

@@ -1,56 +1,58 @@
-(function() {
-	'use strict';
+import { XPDAccessFactory } from '../xpd.access/accessfactory.factory';
+import { SetupAPIService } from './setupapi.service';
 
-	angular.module('xpd.setupapi').service('readingSetupAPIService', readingSetupAPIService);
+// (function() {
+// 	'use strict';
 
-	readingSetupAPIService.$inject = ['xpdAccessFactory', 'setupAPIService'];
+// 	angular.module('xpd.setupapi').service('readingSetupAPIService', readingSetupAPIService);
 
-	function readingSetupAPIService(xpdAccessFactory, setupAPIService) {
+// 	readingSetupAPIService.$inject = ['xpdAccessFactory', 'setupAPIService'];
 
-		const BASE_URL = xpdAccessFactory.getSetupURL() + 'setup/reading';
+export class ReadingSetupAPIService {
 
-		const vm = this;
+	public static $inject: string[] = ['xpdAccessFactory', 'setupAPIService'];
+	public BASE_URL: string;
 
-		vm.getAllReadingSince = getAllReadingSince;
-		vm.getTick = getTick;
-		vm.getAllReadingByStartEndTime = getAllReadingByStartEndTime;
-
-		function getAllReadingSince(from, successCallback, errorCallback) {
-			const req = {
-				method: 'GET',
-				url: BASE_URL + '/from/' + from,
-				headers: {
-					'Content-Type': 'application/json',
-				},
-			};
-
-			setupAPIService.doRequest(req, successCallback, errorCallback);
-		}
-
-		function getTick(tick, successCallback, errorCallback) {
-			const req = {
-				method: 'GET',
-				url: BASE_URL + '/tick/' + tick,
-				headers: {
-					'Content-Type': 'application/json',
-				},
-			};
-
-			setupAPIService.doRequest(req, successCallback, errorCallback);
-		}
-
-		function getAllReadingByStartEndTime(from, to, successCallback, errorCallback) {
-			const req = {
-				method: 'GET',
-				url: BASE_URL + '/from/' + from + ((to) ? ('/to/' + to) : ''),
-				// cache: (to) ? true : false,
-				headers: {
-					'Content-Type': 'application/json',
-				},
-			};
-
-			setupAPIService.doRequest(req, successCallback, errorCallback);
-		}
+	constructor(private xpdAccessFactory: XPDAccessFactory, private setupAPIService: SetupAPIService) {
+		this.BASE_URL = xpdAccessFactory.getSetupURL() + 'setup/reading';
 	}
 
-})();
+	public getAllReadingSince(from, successCallback, errorCallback) {
+		const req = {
+			method: 'GET',
+			url: this.BASE_URL + '/from/' + from,
+			headers: {
+				'Content-Type': 'application/json',
+			},
+		};
+
+		this.setupAPIService.doRequest(req, successCallback, errorCallback);
+	}
+
+	public getTick(tick, successCallback, errorCallback) {
+		const req = {
+			method: 'GET',
+			url: this.BASE_URL + '/tick/' + tick,
+			headers: {
+				'Content-Type': 'application/json',
+			},
+		};
+
+		this.setupAPIService.doRequest(req, successCallback, errorCallback);
+	}
+
+	public getAllReadingByStartEndTime(from, to, successCallback, errorCallback) {
+		const req = {
+			method: 'GET',
+			url: this.BASE_URL + '/from/' + from + ((to) ? ('/to/' + to) : ''),
+			// cache: (to) ? true : false,
+			headers: {
+				'Content-Type': 'application/json',
+			},
+		};
+
+		this.setupAPIService.doRequest(req, successCallback, errorCallback);
+	}
+}
+
+// })();

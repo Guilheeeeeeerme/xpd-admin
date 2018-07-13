@@ -5,7 +5,7 @@ import template from '../xpd-resources/ng/xpd.visualization/speed-gauge.template
 // 	.directive('speedGauge', speedGauge);
 
 export class SpeedGaugeDirective implements ng.IDirective {
-	public templateUrl = template;
+	public template = template;
 	public scope = {
 		readings: '=',
 		calculated: '=',

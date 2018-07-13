@@ -9,6 +9,7 @@
 // 	function modalLessonLearnedController($scope, $uibModalInstance, lessonLearnedSetupAPIService, selectedLessonLearned, modalSuccessCallback, modalErrorCallback) {
 import * as angular from 'angular';
 import { IModalServiceInstance } from 'angular-ui-bootstrap';
+import { LessonLearnedSetupAPIService } from '../xpd.setupapi/lessonlearned-setupapi.service';
 
 export class ModalLessonLearnedController {
 

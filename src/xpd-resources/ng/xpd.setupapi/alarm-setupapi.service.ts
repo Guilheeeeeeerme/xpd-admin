@@ -1,82 +1,82 @@
-(function() {
-	'use strict';
+import { XPDAccessFactory } from '../xpd.access/accessfactory.factory';
+import { SetupAPIService } from './setupapi.service';
 
-	angular.module('xpd.setupapi')
-		.service('alarmSetupAPIService', alarmSetupAPIService);
+// (function() {
+// 	'use strict';
 
-	alarmSetupAPIService.$inject = ['xpdAccessFactory', 'setupAPIService'];
+// 	angular.module('xpd.setupapi')
+// 		.service('alarmSetupAPIService', alarmSetupAPIService);
 
-	function alarmSetupAPIService(xpdAccessFactory, setupAPIService) {
+// 	alarmSetupAPIService.$inject = ['xpdAccessFactory', 'setupAPIService'];
 
-		const BASE_URL = xpdAccessFactory.getSetupURL() + 'setup/alarm';
+export class AlarmSetupAPIService {
 
-		const vm = this;
+	public static $inject: string[] = ['xpdAccessFactory', 'setupAPIService'];
+	public BASE_URL: string;
 
-		vm.insertAlarm = insertAlarm;
-		vm.updateAlarm = updateAlarm;
-		vm.removeAlarm = removeAlarm;
-		vm.updateArchive = updateArchive;
-		vm.getByOperationType = getByOperationType;
-
-		function insertAlarm(alarm, successCallback, errorCallback) {
-
-			const req = {
-				method: 'POST',
-				url: BASE_URL,
-				headers: {
-					'Content-Type': 'application/json',
-				},
-				data: alarm,
-			};
-
-			setupAPIService.doRequest(req, successCallback, errorCallback);
-		}
-
-		function removeAlarm(alarm, successCallback, errorCallback) {
-
-			const req = {
-				method: 'DELETE',
-				url: BASE_URL + '/' + alarm.id,
-				headers: {
-					'Content-Type': 'application/json',
-				},
-			};
-
-			setupAPIService.doRequest(req, successCallback, errorCallback);
-		}
-
-		function updateAlarm(alarm, successCallback, errorCallback) {
-
-			const req = {
-				method: 'PUT',
-				url: BASE_URL,
-				headers: {
-					'Content-Type': 'application/json',
-				},
-				data: alarm,
-			};
-
-			setupAPIService.doRequest(req, successCallback, errorCallback);
-		}
-
-		function updateArchive(id, archived, successCallback, errorCallback) {
-			const req = {
-				method: 'GET',
-				url: BASE_URL + '/' + id + '/archive/' + archived,
-			};
-
-			setupAPIService.doRequest(req, successCallback, errorCallback);
-		}
-
-		function getByOperationType(type, butNot, successCallback, errorCallback) {
-
-			const req = {
-				method: 'GET',
-				url: BASE_URL + '/of-operations/' + type + '/but-not-id/' + (butNot || 0),
-			};
-
-			setupAPIService.doRequest(req, successCallback, errorCallback);
-		}
+	constructor(private xpdAccessFactory: XPDAccessFactory, private setupAPIService: SetupAPIService) {
+		this.BASE_URL = xpdAccessFactory.getSetupURL() + 'setup/alarm';
 	}
 
-})();
+	public insertAlarm(alarm, successCallback, errorCallback) {
+
+		const req = {
+			method: 'POST',
+			url: this.BASE_URL,
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			data: alarm,
+		};
+
+		this.setupAPIService.doRequest(req, successCallback, errorCallback);
+	}
+
+	public removeAlarm(alarm, successCallback, errorCallback?) {
+
+		const req = {
+			method: 'DELETE',
+			url: this.BASE_URL + '/' + alarm.id,
+			headers: {
+				'Content-Type': 'application/json',
+			},
+		};
+
+		this.setupAPIService.doRequest(req, successCallback, errorCallback);
+	}
+
+	public updateAlarm(alarm, successCallback, errorCallback) {
+
+		const req = {
+			method: 'PUT',
+			url: this.BASE_URL,
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			data: alarm,
+		};
+
+		this.setupAPIService.doRequest(req, successCallback, errorCallback);
+	}
+
+	public updateArchive(id, archived, successCallback, errorCallback?) {
+		const req = {
+			method: 'GET',
+			url: this.BASE_URL + '/' + id + '/archive/' + archived,
+		};
+
+		this.setupAPIService.doRequest(req, successCallback, errorCallback);
+	}
+
+	public getByOperationType(type, butNot, successCallback, errorCallback?) {
+
+		const req = {
+			method: 'GET',
+			url: this.BASE_URL + '/of-operations/' + type + '/but-not-id/' + (butNot || 0),
+		};
+
+		this.setupAPIService.doRequest(req, successCallback, errorCallback);
+	}
+}
+
+// })();

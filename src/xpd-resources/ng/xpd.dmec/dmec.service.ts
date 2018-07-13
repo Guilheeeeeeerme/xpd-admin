@@ -1,3 +1,6 @@
+import { ReadingSetupAPIService } from '../xpd.setupapi/reading-setupapi.service';
+import { XPDIntervalService, XPDTimeoutService } from '../xpd.timers/xpd-timers.service';
+
 // (function() {
 // 	angular.module('xpd.dmec', []).service('dmecService', dmecService);
 
@@ -5,7 +8,21 @@
 // $xpdTimeout, $xpdInterval, $location, $routeParams, $q, readingSetupAPIService
 export class DMECService {
 
-	public dmec (scope, localStoragePath, getCurrentOperation, getCurrentReading) {
+	public static $inject: string[] = ['$xpdTimeout', '$xpdInterval', '$location', '$routeParams', '$q', 'readingSetupAPIService'];
+
+	constructor(
+		private $xpdTimeout: XPDTimeoutService,
+		private $xpdInterval: XPDIntervalService,
+		private $location: ng.ILocationService,
+		private $routeParams: any,
+		private $q: ng.IQService,
+		private readingSetupAPIService: ReadingSetupAPIService) {
+
+	}
+
+	public dmec(scope, localStoragePath, getCurrentOperation?, getCurrentReading?) {
+
+		const self = this;
 
 		const ONE_HOUR = 3600000;
 		const getTickFrequency = 1000;
@@ -45,6 +62,7 @@ export class DMECService {
 				new Date(endAtMillis + (intervalToShow / 2)),
 			);
 
+			// tslint:disable-next-line:no-empty
 			scope.initializeComponent = function () { };
 
 		}
@@ -68,7 +86,7 @@ export class DMECService {
 			const param = {};
 			param[localStoragePath] = JSON.stringify(scope.inputRangeForm);
 
-			$location.path($location.path()).search(param);
+			self.$location.path(self.$location.path()).search(param);
 
 			reload();
 		}
@@ -85,10 +103,10 @@ export class DMECService {
 		 */
 		function destroy() {
 			if (resetPageTimeout) {
-				$xpdTimeout.cancel(resetPageTimeout);
+				self.$xpdTimeout.cancel(resetPageTimeout);
 			}
 			if (getTickInterval) {
-				$xpdInterval.cancel(getTickInterval);
+				self.$xpdInterval.cancel(getTickInterval);
 			}
 		}
 		/**
@@ -109,7 +127,7 @@ export class DMECService {
 
 			const now = new Date().getTime();
 
-			scope.onReading = $q(function (resolve, reject) {
+			scope.onReading = self.$q(function (resolve, reject) {
 				if (getCurrentReading) {
 
 					const currentReading = getCurrentReading();
@@ -120,7 +138,7 @@ export class DMECService {
 					}
 
 				} else {
-					readingSetupAPIService.getTick((now - getTickFrequency), resolve, reject);
+					self.readingSetupAPIService.getTick((now - getTickFrequency), resolve, reject);
 				}
 			});
 
@@ -193,9 +211,9 @@ export class DMECService {
 					loopEndTimestamp = null;
 				}
 
-				promises.push($q(function (resolve, reject) {
+				promises.push(self.$q(function (resolve, reject) {
 
-					readingSetupAPIService.getAllReadingByStartEndTime(
+					self.readingSetupAPIService.getAllReadingByStartEndTime(
 						loopStartTime.getTime(),
 						loopEndTimestamp ? loopEndTimestamp : new Date().getTime(),
 						resolve,
@@ -207,9 +225,9 @@ export class DMECService {
 				loopStartTime = new Date(loopEndTime);
 			}
 
-			const onReadingSince = $q(function (resolve, reject) {
+			const onReadingSince = self.$q(function (resolve, reject) {
 
-				$q.all(promises).then(function (readingsList) {
+				self.$q.all(promises).then(function (readingsList) {
 
 					const parsedReadings = {};
 
@@ -241,7 +259,7 @@ export class DMECService {
 			scope.bitDepthPoints = null;
 			scope.maxDepth = null;
 
-			onReadingSince.then(function (readings) {
+			onReadingSince.then(function (readings: any) {
 				if (readings && readings.bitDepth) {
 					scope.bitDepthPoints = generateBitDepthPoints(readings.bitDepth);
 				} else {
@@ -251,8 +269,8 @@ export class DMECService {
 
 			onReadingSince.then(function () {
 				destroy();
-				resetPageTimeout = $xpdTimeout(reload, (ONE_HOUR / 2), scope);
-				getTickInterval = $xpdInterval(getTick, getTickFrequency, scope);
+				resetPageTimeout = self.$xpdTimeout.run(reload, (ONE_HOUR / 2), scope);
+				getTickInterval = self.$xpdInterval.run(getTick, getTickFrequency, scope);
 			});
 
 			scope.onReadingSince = onReadingSince;
@@ -269,7 +287,7 @@ export class DMECService {
 
 			try {
 
-				inputRangeForm = JSON.parse($routeParams[localStoragePath]);
+				inputRangeForm = JSON.parse(self.$routeParams[localStoragePath]);
 				// inputRangeForm = JSON.parse(localStorage.getItem(localStoragePath));
 			} catch (e) {
 				inputRangeForm = null;

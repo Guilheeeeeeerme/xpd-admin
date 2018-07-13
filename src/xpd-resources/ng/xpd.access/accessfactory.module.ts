@@ -18,4 +18,3 @@ XPDAccessModule.factory('securityInteceptor', SecurityInteceptorFactory);
 XPDAccessModule.config(SecurityConfig);
 XPDAccessModule.factory('xpdAccessFactory', XPDAccessFactory);
 XPDAccessModule.directive('accessFactoryDirective', AccessFactoryDirective.Factory());
-

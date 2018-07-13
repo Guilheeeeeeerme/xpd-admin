@@ -1,11 +1,15 @@
-(function() {
-	'use strict';
+export class OperationCopyOptionsModalController {
+	// 'use strict';
 
-	angular.module('xpd.admin').controller('OperationCopyOptionsModalController', operationCopyOptionsModalController);
+	// angular.module('xpd.admin').controller('OperationCopyOptionsModalController', operationCopyOptionsModalController);
 
-	operationCopyOptionsModalController.$inject = ['actionButtonConfirmCallback', 'actionButtonCancelCallback', 'importedOperation', 'currentOperation'];
+	public static $inject = ['actionButtonConfirmCallback', 'actionButtonCancelCallback', 'importedOperation', 'currentOperation'];
+	public flag: { operationInfo: boolean; contractPerformance: boolean; timeSlices: boolean; };
+	public bindImportFlag: (input: any) => void;
+	public actionButtonCancel: () => void;
+	public actionButtonConfirm: () => void;
 
-	function operationCopyOptionsModalController(actionButtonConfirmCallback, actionButtonCancelCallback, importedOperation, currentOperation) {
+	constructor(actionButtonConfirmCallback, actionButtonCancelCallback, importedOperation, currentOperation) {
 		const vm = this;
 
 		vm.flag = {
@@ -21,7 +25,9 @@
 		vm.actionButtonConfirm = actionButtonConfirm;
 
 		function actionButtonCancel() {
-			actionButtonCancelCallback && actionButtonCancelCallback();
+			if (actionButtonCancelCallback) {
+				actionButtonCancelCallback();
+			}
 		}
 
 		function actionButtonConfirm() {
@@ -30,11 +36,13 @@
 			processContractPerformance();
 			processTimeSlices();
 
-			actionButtonConfirmCallback && actionButtonConfirmCallback(newOperation);
+			if (actionButtonConfirmCallback) {
+				actionButtonConfirmCallback(newOperation);
+			}
 		}
 
 		function processOperationInfo() {
-			if (vm.flag.operationInfo == true) {
+			if (vm.flag.operationInfo === true) {
 				delete importedOperation.id;
 				delete importedOperation.startDate;
 				delete importedOperation.operationOrder;
@@ -50,7 +58,7 @@
 		}
 
 		function processContractPerformance() {
-			if (vm.flag.contractPerformance == true) {
+			if (vm.flag.contractPerformance === true) {
 				const contractParams = objectCleaning(importedOperation.contractParams);
 				if (contractParams[0]) {
 					newOperation.contractParams = changeKeyContractParams(contractParams);
@@ -61,7 +69,7 @@
 		}
 
 		function processTimeSlices() {
-			if (vm.flag.timeSlices == true) {
+			if (vm.flag.timeSlices === true) {
 				newOperation.timeSlices = objectCleaning(importedOperation.timeSlices);
 			} else {
 				newOperation.timeSlices = currentOperation.timeSlices;
@@ -99,15 +107,15 @@
 		 * dos atributos da operação
 		 */
 		function bindImportFlag(input) {
-			if (currentOperation.type == 'time') {
-				if (input == 'contract') {
+			if (currentOperation.type === 'time') {
+				if (input === 'contract') {
 					vm.flag.timeSlices = vm.flag.contractPerformance;
 				}
 
-				if (input == 'timeSlice') {
+				if (input === 'timeSlice') {
 					vm.flag.contractPerformance = vm.flag.timeSlices;
 				}
 			}
 		}
 	}
-})();
+}

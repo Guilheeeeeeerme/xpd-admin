@@ -9,6 +9,10 @@
 //
 import * as angular from 'angular';
 import { IModalServiceInstance } from 'angular-ui-bootstrap';
+import { OperationDataFactory } from '../xpd.communication/operation-server-data.factory';
+import { DialogFactory } from '../xpd.dialog/xpd.dialog.factory';
+import { CategorySetupAPIService } from '../xpd.setupapi/category-setupapi.service';
+import { FailureSetupAPIService } from '../xpd.setupapi/failure-setupapi.service';
 
 export class ModalFailureController {
 
@@ -25,6 +29,7 @@ export class ModalFailureController {
 	public modalActionButtonClose: () => void;
 	public actionOnGoingCheckboxClick: (value: any) => void;
 	public actionClickSelectItem: (node: any) => void;
+	public operationDataFactory: any;
 
 	constructor(
 		$scope: any,
@@ -46,7 +51,7 @@ export class ModalFailureController {
 		$scope.keepTimeBeforeNow = keepTimeBeforeNow;
 
 		operationDataFactory.openConnection([]).then(function (response) {
-			operationDataFactory = response;
+			vm.operationDataFactory = response;
 		});
 
 		$scope.category = {
@@ -123,12 +128,12 @@ export class ModalFailureController {
 		}
 
 		function registerFailure(failure) {
-			operationDataFactory.emitInsertFailure(failure);
+			vm.operationDataFactory.emitInsertFailure(failure);
 			upsertListenerCallback();
 		}
 
 		function updateFailure(failure) {
-			operationDataFactory.emitUpdateFailure(failure);
+			vm.operationDataFactory.emitUpdateFailure(failure);
 			upsertListenerCallback();
 		}
 
@@ -143,11 +148,15 @@ export class ModalFailureController {
 		}
 
 		function failureErrorCallback() {
-			dialogFactory.showConfirmDialog('Error on inserting failure, please try again!');
+			dialogFactory.showConfirmDialog('Error on inserting failure, please try again!', function() {
+				// faça nada
+			});
 		}
 
 		function nptAlreadyExists() {
-			dialogFactory.showConfirmDialog('NPT already exists in this time interval!');
+			dialogFactory.showConfirmDialog('NPT already exists in this time interval!', function() {
+				// faça nada
+			});
 		}
 
 		function modalActionButtonClose() {

@@ -1,41 +1,54 @@
-(function() {
-	'use strict',
+// (function() {
+// 	'use strict',
 
-	angular.module('xpd.setupapi').directive('photoApiDirective', photoApiDirective);
+// 	angular.module('xpd.setupapi').directive('photoApiDirective', photoApiDirective);
 
-	photoApiDirective.$inject = ['photoAPIService'];
+	// photoApiDirective.$inject = ['photoAPIService'];
 
-	function photoApiDirective(photoAPIService) {
+import { PhotoAPIService } from './photo-setupapi.service';
 
-		return {
-			restrict: 'A',
-			scope: {
-				photoApiDirectivePhotoName: '=',
-			},
-			link(scope, element, attrs) {
+export class PhotoApiDirective implements ng.IDirective {
 
-				scope.$watch('photoApiDirectivePhotoName', setPhoto);
+	public restrict: 'A';
+	public scope = {
+		photoApiDirectivePhotoName: '=',
+	};
 
-				function setPhoto(photoApiDirectivePhotoName) {
+	constructor(private photoAPIService: PhotoAPIService) { }
 
-					const photoName = scope.photoApiDirectivePhotoName || 'default';
-					const photoPath = attrs.photoApiDirectiveServerPath;
+	public link: ng.IDirectiveLinkFn = (
+		scope: any,
+		element: ng.IAugmentedJQuery,
+		attrs: ng.IAttributes,
+		ctrl: any,
+	) => {
 
-					photoAPIService.loadPhoto(photoPath, photoName, function(baseStr64) {
+		scope.$watch('photoApiDirectivePhotoName', setPhoto);
 
-						const image = 'data:image/jpeg;base64,' + baseStr64;
+		function setPhoto(photoApiDirectivePhotoName) {
 
-						if (element[0].tagName == 'image') {
-							element[0].setAttribute('href', image);
-						} else {
-							element[0].setAttribute('src', image);
-						}
-					});
+			const photoName = scope.photoApiDirectivePhotoName || 'default';
+			const photoPath = attrs.photoApiDirectiveServerPath;
+
+			this.photoAPIService.loadPhoto(photoPath, photoName, function(baseStr64) {
+
+				const image = 'data:image/jpeg;base64,' + baseStr64;
+
+				if (element[0].tagName == 'image') {
+					element[0].setAttribute('href', image);
+				} else {
+					element[0].setAttribute('src', image);
 				}
-
-			},
-		};
-
+			});
+		}
 	}
 
-})();
+	public static Factory(): ng.IDirectiveFactory {
+		const directive = (photoAPIService: PhotoAPIService) => new PhotoApiDirective(photoAPIService);
+		directive.$inject = ['photoAPIService'];
+		return directive;
+	}
+
+}
+
+// })();

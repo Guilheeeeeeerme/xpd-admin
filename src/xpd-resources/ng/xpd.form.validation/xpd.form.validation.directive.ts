@@ -11,7 +11,7 @@ export class XPDFormValidationDirective implements ng.IDirective {
 	public link: ng.IDirectiveLinkFn = (
 		scope: any,
 		element: ng.IAugmentedJQuery,
-		attributes: ng.IAttributes,
+		attrs: ng.IAttributes,
 		ctrl: any,
 	) => {
 
@@ -27,7 +27,7 @@ export class XPDFormValidationDirective implements ng.IDirective {
 		style += 'font-style: italic;';
 		style += 'display: table-footer-group;';
 
-		errorElement.style = style;
+		(errorElement as any).style = style;
 
 		parent.append(errorElement);
 

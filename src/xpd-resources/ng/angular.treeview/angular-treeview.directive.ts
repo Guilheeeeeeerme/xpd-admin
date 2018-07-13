@@ -32,6 +32,7 @@ export class TreeModelDirective implements ng.IDirective {
 		attrs: ng.IAttributes,
 		ctrl: any,
 	) => {
+		const self = this;
 
 		// tree id
 		const treeId = attrs.treeId;
@@ -78,7 +79,7 @@ export class TreeModelDirective implements ng.IDirective {
 			}
 
 			// Rendering template.
-			element.html('').append($compile(template)(scope));
+			element.html('').append(self.$compile(template)(scope));
 		}
 
 		function buildingTemplate(view) {

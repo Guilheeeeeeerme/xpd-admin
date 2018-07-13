@@ -1,11 +1,14 @@
-(function() {
-	'use strict';
+import { OperationSetupAPIService } from '../../../../xpd-resources/ng/xpd.setupapi/operation-setupapi.service';
 
-	angular.module('xpd.operationviewonly').controller('operationviewonlyController', operationviewonlyController);
+export class OperationviewonlyController {
+	// 'use strict';
 
-	operationviewonlyController.$inject = ['$scope', '$filter', '$sce', 'operationSetupAPIService'];
+	// angular.module('xpd.operationviewonly').controller('operationviewonlyController', operationviewonlyController);
 
-	function operationviewonlyController($scope, $filter, $sce, operationSetupAPIService) {
+	public static $inject = ['$scope', '$filter', '$sce', 'operationSetupAPIService'];
+	public toDate: (element: any) => any;
+
+	constructor($scope, $filter, $sce, operationSetupAPIService: OperationSetupAPIService) {
 		$scope.casingTypeSizeItems = [];
 
 		$scope.casingTypeSizeItems = [{
@@ -37,11 +40,11 @@
 		// }];
 
 		const queryDict = {};
-		location.search.substr(1).split('&').forEach(function(item) {
+		location.search.substr(1).split('&').forEach(function (item) {
 			queryDict[item.split('=')[0]] = item.split('=')[1];
 		});
 
-		const operationId = queryDict.operationid;
+		const operationId = (queryDict as any).operationid;
 
 		const vm = this;
 
@@ -122,4 +125,4 @@
 		}
 
 	}
-})();
+}

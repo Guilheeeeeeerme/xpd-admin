@@ -20,7 +20,6 @@ export default XPDAdminNavBarModule;
 
 XPDAdminNavBarModule.directive('xpdAdminNavBar', XPDAdminNavBarDirective.Factory());
 
-
 // (function() {
 // 	'use strict';
 

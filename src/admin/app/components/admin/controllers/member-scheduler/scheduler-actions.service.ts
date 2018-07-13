@@ -1,44 +1,62 @@
-(function() {
+import * as angular from 'angular';
+import { IModalService } from '../../../../../../../node_modules/@types/angular-ui-bootstrap';
+import { OperationDataFactory } from '../../../../../../xpd-resources/ng/xpd.communication/operation-server-data.factory';
+import { DialogFactory } from '../../../../../../xpd-resources/ng/xpd.dialog/xpd.dialog.factory';
+import { ScheduleSetupAPIService } from '../../../../../../xpd-resources/ng/xpd.setupapi/schedule-setupapi.service';
 
-	'use strict';
+export class SchedulerActionsService {
 
-	angular.module('xpd.admin')
-		.factory('schedulerActionsService', schedulerActionsService);
+	// 'use strict';
 
-	schedulerActionsService.$inject = ['$uibModal', 'operationDataFactory', 'scheduleSetupAPIService', 'dialogFactory'];
+	// angular.module('xpd.admin')
+	// 	.factory('schedulerActionsService', schedulerActionsService);
 
-	function schedulerActionsService($modal, operationDataFactory, scheduleSetupAPIService, dialogFactory) {
+	// schedulerActionsService.$inject = ['$uibModal', 'operationDataFactory', 'scheduleSetupAPIService', 'dialogFactory'];
+	public static $inject: string[] = ['$uibModal', 'operationDataFactory', 'scheduleSetupAPIService', 'dialogFactory'];
+
+	public operationDataFactory: any;
+	public onUpsertMember: any;
+	public onUpsertFunction: any;
+	public onUpsertSchedule: any;
+	public onRemoveSchedules: any;
+	public onMouseScheduleUpdate: any;
+	public onScheduleUpdate: any;
+	public onFunctionUpdate: any;
+	public onMemberUpdate: any;
+	public insertScheduleOnEmptyRow: any;
+	public addToGantt: any;
+	public removeFromGantt: any;
+	public updateFromGantt: any;
+
+	constructor(
+		$modal: IModalService,
+		operationDataFactory: OperationDataFactory,
+		scheduleSetupAPIService: ScheduleSetupAPIService,
+		dialogFactory: DialogFactory) {
 
 		let upsertMemberModal;
 		let upsertFunctionModal;
 		let upsertScheduleModal;
 		let removeSchedulesModal;
 
-		const schedulerActions = {
+		const self = this;
 
-			onUpsertMember,
-			onUpsertFunction,
-			onUpsertSchedule,
-			onRemoveSchedules,
+		self.onUpsertMember = onUpsertMember;
+		self.onUpsertFunction = onUpsertFunction;
+		self.onUpsertSchedule = onUpsertSchedule;
+		self.onRemoveSchedules = onRemoveSchedules;
+		self.onMouseScheduleUpdate = onMouseScheduleUpdate;
+		self.onScheduleUpdate = onScheduleUpdate;
+		self.onFunctionUpdate = onFunctionUpdate;
+		self.onMemberUpdate = onMemberUpdate;
+		self.insertScheduleOnEmptyRow = insertScheduleOnEmptyRow;
+		self.addToGantt = null;
+		self.removeFromGantt = null;
+		self.updateFromGantt = null;
 
-			onMouseScheduleUpdate,
-
-			onScheduleUpdate,
-			onFunctionUpdate,
-			onMemberUpdate,
-
-			insertScheduleOnEmptyRow,
-
-			addToGantt: null,
-			removeFromGantt: null,
-			updateFromGantt: null,
-		};
-
-		operationDataFactory.openConnection([]).then(function(response) {
-			operationDataFactory = response;
+		operationDataFactory.openConnection([]).then(function (response) {
+			self.operationDataFactory = response;
 		});
-
-		return schedulerActions;
 
 		// ##     ## ######## ##     ## ########  ######## ########
 		// ###   ### ##       ###   ### ##     ## ##       ##     ##
@@ -161,7 +179,7 @@
 		function onUpsertSchedule(sibling, schedule) {
 
 			if (sibling !== null && sibling.memberId !== null) {
-				schedule.member = {id: sibling.memberId};
+				schedule.member = { id: sibling.memberId };
 			}
 
 			if (upsertScheduleModal) {
@@ -216,7 +234,7 @@
 
 		function onRemoveSchedules(sibling, schedule) {
 			if (sibling !== null && sibling.memberId !== null) {
-				schedule.member = {id: sibling.memberId};
+				schedule.member = { id: sibling.memberId };
 			}
 
 			if (removeSchedulesModal) {
@@ -260,7 +278,7 @@
 
 		function onMouseScheduleUpdate(schedule) {
 
-			if (typeof(schedule.sib_id) !== 'undefined' && schedule.sib_id !== null) {
+			if (typeof (schedule.sib_id) !== 'undefined' && schedule.sib_id !== null) {
 
 				schedule = {
 					startDate: new Date(schedule.start_date),
@@ -269,14 +287,15 @@
 					shiftHours: new Date(schedule.end_date).getTime() - new Date(schedule.start_date).getTime(),
 				};
 
-				scheduleSetupAPIService.getCleanListBySchedule(schedule, function(deletedScheduleS) {
+				scheduleSetupAPIService.getCleanListBySchedule(schedule, function (deletedScheduleS) {
 
-					while ( deletedScheduleS && deletedScheduleS.length > 0 ) {
+					while (deletedScheduleS && deletedScheduleS.length > 0) {
 
+						// tslint:disable-next-line:variable-name
 						const _schedule = deletedScheduleS.pop();
 
-						if ( _schedule.id != schedule.id ) {
-							removeFromGantt('schedule', _schedule );
+						if (_schedule.id !== schedule.id) {
+							removeFromGantt('schedule', _schedule);
 						}
 					}
 
@@ -311,8 +330,8 @@
 
 			notifyRealTime(task);
 
-			if (schedulerActions.addToGantt) {
-				schedulerActions.addToGantt(type, task);
+			if (self.addToGantt) {
+				self.addToGantt(type, task);
 			} else {
 				console.log('addToGantt not implemented!');
 			}
@@ -322,8 +341,8 @@
 
 			notifyRealTime(task);
 
-			if (schedulerActions.removeFromGantt) {
-				schedulerActions.removeFromGantt(type, task);
+			if (self.removeFromGantt) {
+				self.removeFromGantt(type, task);
 			} else {
 				console.log('removeFromGantt not implemented!');
 			}
@@ -333,8 +352,8 @@
 
 			notifyRealTime(task);
 
-			if (schedulerActions.updateFromGantt) {
-				schedulerActions.updateFromGantt(type, task);
+			if (self.updateFromGantt) {
+				self.updateFromGantt(type, task);
 			} else {
 				notifyRealTime('updateFromGantt not implemented!');
 			}
@@ -348,27 +367,27 @@
 
 			if (task.member) {
 
-				let startOfDay = new Date();
+				let startOfDay: any = new Date();
 				startOfDay.setHours(0);
 				startOfDay.setMinutes(0);
 				startOfDay.setMilliseconds(0);
 				startOfDay = startOfDay.getTime();
 
-				const endOfDay = new Date( startOfDay + 86400000 ).getTime();
+				const endOfDay = new Date(startOfDay + 86400000).getTime();
 
 				const startDate = new Date(task.startDate).getTime();
 				const endDate = new Date(task.endDate).getTime();
 
 				if (startDate >= startOfDay && startDate <= endOfDay) {
-					operationDataFactory.emitOnShiftUpdate();
+					self.operationDataFactory.emitOnShiftUpdate();
 				} else if (endDate >= startOfDay && endDate <= endOfDay) {
-					operationDataFactory.emitOnShiftUpdate();
+					self.operationDataFactory.emitOnShiftUpdate();
 				} else if (startDate <= startOfDay && endDate >= endOfDay) {
-					operationDataFactory.emitOnShiftUpdate();
+					self.operationDataFactory.emitOnShiftUpdate();
 				}
 
 			} else {
-				operationDataFactory.emitOnShiftUpdate();
+				self.operationDataFactory.emitOnShiftUpdate();
 			}
 
 		}
@@ -384,19 +403,19 @@
 		}
 
 		function onMemberUpdate(member) {
-			scheduleSetupAPIService.getMemberById(member.memberId, function(member) {
+			scheduleSetupAPIService.getMemberById(member.memberId, function (member) {
 				onUpsertMember(null, member);
 			}, generalError);
 		}
 
 		function onFunctionUpdate(func) {
-			scheduleSetupAPIService.getFunctionById(func.functionId, function(func) {
+			scheduleSetupAPIService.getFunctionById(func.functionId, function (func) {
 				onUpsertFunction(func);
 			}, generalError);
 		}
 
 		function onScheduleUpdate(schedule) {
-			scheduleSetupAPIService.getScheduleById(schedule.id, function(schedule) {
+			scheduleSetupAPIService.getScheduleById(schedule.id, function (schedule) {
 				onUpsertSchedule(null, schedule);
 			}, generalError);
 		}
@@ -409,4 +428,4 @@
 
 	}
 
-})();
+}

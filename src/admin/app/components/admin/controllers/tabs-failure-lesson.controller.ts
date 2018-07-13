@@ -1,13 +1,14 @@
-(function() {
+export class TabsFailureLLCtrl {
 
-	'use strict';
+	// 'use strict';
 
-	angular.module('xpd.failure-controller')
-		.controller('TabsCtrl', TabsCtrl);
+	// angular.module('xpd.failure-controller')
+	// 	.controller('TabsFailureLLCtrl', TabsFailureLLCtrl);
 
-	TabsCtrl.$inject = ['$scope', '$uibModalInstance'];
+	public static $inject = ['$scope', '$uibModalInstance'];
+	public modalActionButtonClose: () => void;
 
-	function TabsCtrl($scope, $uibModalInstance) {
+	constructor($scope, $uibModalInstance) {
 		const vm = this;
 
 		$scope.controller = vm;
@@ -20,4 +21,4 @@
 
 	}
 
-})();
+}

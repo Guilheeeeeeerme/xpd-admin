@@ -1,11 +1,17 @@
-(function() {
-	'use strict';
+export class OperationConfigurationService {
+	// 'use strict';
 
-	angular.module('xpd.admin').service('OperationConfigurationService', operationConfigurationService);
+	// angular.module('xpd.admin').service('OperationConfigurationService', operationConfigurationService);
 
-	operationConfigurationService.$inject = ['$sce'];
+	public static $inject = ['$sce'];
+	public getCasingTypeSizeItems: () => Array<{ /*id: 1,*/ label: string; id: string; }>;
+	public getHtmlPopOver: () => any;
+	public getHtmlSlipsThreshold: () => any;
+	public getOperationViewTabs: (operation: any) => Array<{ title: string; url: string; }>;
+	public getCasingTripSpeedParams: (casingTypeId: any) => any;
+	public getRiserTripSpeedParams: (metaTypeId: any) => any;
 
-	function operationConfigurationService($sce) {
+	constructor($sce) {
 		const vm = this;
 
 		vm.getCasingTypeSizeItems = getCasingTypeSizeItems;
@@ -88,4 +94,5 @@
 				'than activity will be a <b>Connection</b></p>');
 		}
 	}
-})();
+
+}

@@ -1,11 +1,13 @@
-(function() {
-	'use strict';
+import { ScheduleSetupAPIService } from '../../../../../xpd-resources/ng/xpd.setupapi/schedule-setupapi.service';
 
-	angular.module('xpd.admin').controller('TeamController', teamController);
+export class TeamController {
+	// 'use strict';
 
-	teamController.$inject = ['$scope', 'scheduleSetupAPIService'];
+	// angular.module('xpd.admin').controller('TeamController', teamController);
 
-	function teamController($scope, scheduleSetupAPIService) {
+	public static $inject = ['$scope', 'scheduleSetupAPIService'];
+
+	constructor ($scope, scheduleSetupAPIService: ScheduleSetupAPIService) {
 
 		$scope.team = {
 			members: [],
@@ -15,15 +17,15 @@
 		scheduleSetupAPIService.getMemberScore(function(members) {
 
 			$scope.team.teams = members.filter(function(member) {
-				return member.function.id == 1;
+				return member.function.id === 1;
 			});
 
 			$scope.team.members = members.filter(function(member) {
-				return member.function.id != 1;
+				return member.function.id !== 1;
 			});
 
 		});
 
 	}
 
-})();
+}

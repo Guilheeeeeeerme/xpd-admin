@@ -1,85 +1,86 @@
-(function() {
-	'use strict';
+import { XPDAccessFactory } from '../xpd.access/accessfactory.factory';
+import { SetupAPIService } from './setupapi.service';
 
-	angular.module('xpd.setupapi')
-		.service('wellSetupAPIService', wellSetupAPIService);
+// (function() {
+// 	'use strict';
 
-	wellSetupAPIService.$inject = ['xpdAccessFactory', 'setupAPIService'];
+// 	angular.module('xpd.setupapi')
+// 		.service('wellSetupAPIService', wellSetupAPIService);
 
-	function wellSetupAPIService(xpdAccessFactory, setupAPIService) {
-		const BASE_URL = xpdAccessFactory.getSetupURL() + 'setup/well';
+// 	wellSetupAPIService.$inject = ['xpdAccessFactory', 'setupAPIService'];
 
-		const vm = this;
+export class WellSetupAPIService {
 
-		vm.getObjectById = getObjectById;
-		vm.insertObject = insertObject;
-		vm.removeObject = removeObject;
-		vm.updateObject = updateObject;
-		vm.getList = getList;
+	public static $inject: string[] = ['xpdAccessFactory', 'setupAPIService'];
+	public BASE_URL: string;
 
-		function insertObject(object, successCallback, errorCallback) {
+	constructor(private xpdAccessFactory: XPDAccessFactory, private setupAPIService: SetupAPIService) {
+		this.BASE_URL = xpdAccessFactory.getSetupURL() + 'setup/well';
+	}
 
-			const req = {
-				method: 'POST',
-				url: BASE_URL,
-				headers: {
-					'Content-Type': 'application/json',
-				},
-				data: object,
-			};
+	public insertObject(object, successCallback, errorCallback?) {
 
-			setupAPIService.doRequest(req, successCallback, errorCallback);
+		const req = {
+			method: 'POST',
+			url: this.BASE_URL,
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			data: object,
+		};
 
-		}
-
-		function removeObject(object, successCallback, errorCallback) {
-
-			const req = {
-				method: 'DELETE',
-				url: BASE_URL,
-				headers: {
-					'Content-Type': 'application/json',
-				},
-				data: object,
-			};
-
-			setupAPIService.doRequest(req, successCallback, errorCallback);
-		}
-
-		function updateObject(object, successCallback, errorCallback) {
-
-			const req = {
-				method: 'PUT',
-				url: BASE_URL + '/' + object.id,
-				headers: {
-					'Content-Type': 'application/json',
-				},
-				data: object,
-			};
-
-			setupAPIService.doRequest(req, successCallback, errorCallback);
-		}
-
-		function getList(successCallback, errorCallback) {
-
-			const req = {
-				method: 'GET',
-				url: BASE_URL + '/list',
-			};
-
-			setupAPIService.doRequest(req, successCallback, errorCallback);
-		}
-
-		function getObjectById(id, successCallback, errorCallback) {
-
-			const req = {
-				method: 'GET',
-				url: BASE_URL + '/' + id,
-			};
-
-			setupAPIService.doRequest(req, successCallback, errorCallback);
-		}
+		this.setupAPIService.doRequest(req, successCallback, errorCallback);
 
 	}
 
-})();
+	public removeObject(object, successCallback, errorCallback?) {
+
+		const req = {
+			method: 'DELETE',
+			url: this.BASE_URL,
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			data: object,
+		};
+
+		this.setupAPIService.doRequest(req, successCallback, errorCallback);
+	}
+
+	public updateObject(object, successCallback, errorCallback?) {
+
+		const req = {
+			method: 'PUT',
+			url: this.BASE_URL + '/' + object.id,
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			data: object,
+		};
+
+		this.setupAPIService.doRequest(req, successCallback, errorCallback);
+	}
+
+	public getList(successCallback, errorCallback?) {
+
+		const req = {
+			method: 'GET',
+			url: this.BASE_URL + '/list',
+		};
+
+		this.setupAPIService.doRequest(req, successCallback, errorCallback);
+	}
+
+	public getObjectById(id, successCallback, errorCallback?) {
+
+		const req = {
+			method: 'GET',
+			url: this.BASE_URL + '/' + id,
+		};
+
+		this.setupAPIService.doRequest(req, successCallback, errorCallback);
+	}
+
+}
+
+// })();

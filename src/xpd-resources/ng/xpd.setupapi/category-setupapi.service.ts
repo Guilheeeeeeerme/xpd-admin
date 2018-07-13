@@ -1,87 +1,87 @@
-(function() {
-	'use strict';
+import { XPDAccessFactory } from '../xpd.access/accessfactory.factory';
+import { SetupAPIService } from './setupapi.service';
 
-	angular.module('xpd.setupapi')
-		.service('categorySetupAPIService', categorySetupAPIService);
+// (function() {
+// 	'use strict';
 
-	categorySetupAPIService.$inject = ['xpdAccessFactory', 'setupAPIService'];
+// 	angular.module('xpd.setupapi')
+// 		.service('categorySetupAPIService', categorySetupAPIService);
 
-	function categorySetupAPIService(xpdAccessFactory, setupAPIService) {
+// 	categorySetupAPIService.$inject = ['xpdAccessFactory', 'setupAPIService'];
 
-		const BASE_URL = xpdAccessFactory.getSetupURL() + 'setup/category';
+export class CategorySetupAPIService {
 
-		const vm = this;
+	public static $inject: string[] = ['xpdAccessFactory', 'setupAPIService'];
+	public BASE_URL: string;
 
-		vm.getList = getList;
-		vm.insertObject = insertObject;
-		vm.removeObject = removeObject;
-		vm.updateObject = updateObject;
-		vm.getCategoryName = getCategoryName;
+	constructor(private xpdAccessFactory: XPDAccessFactory, private setupAPIService: SetupAPIService) {
+		this.BASE_URL = xpdAccessFactory.getSetupURL() + 'setup/category';
+	}
 
-		function getCategoryName(id, successCallback, errorCallback) {
+	public getCategoryName(id, successCallback, errorCallback?) {
 
-			const req = {
-				method: 'GET',
-				url: BASE_URL + '/' + id,
-			};
+		const req = {
+			method: 'GET',
+			url: this.BASE_URL + '/' + id,
+		};
 
-			setupAPIService.doRequest(req, successCallback, errorCallback);
-		}
+		this.setupAPIService.doRequest(req, successCallback, errorCallback);
+	}
 
-		function getList(successCallback, errorCallback) {
+	public getList(successCallback, errorCallback) {
 
-			const req = {
-				method: 'GET',
-				url: BASE_URL + '/list',
-			};
+		const req = {
+			method: 'GET',
+			url: this.BASE_URL + '/list',
+		};
 
-			setupAPIService.doRequest(req, successCallback, errorCallback);
-		}
+		this.setupAPIService.doRequest(req, successCallback, errorCallback);
+	}
 
-		function insertObject(object, successCallback, errorCallback) {
+	public insertObject(object, successCallback, errorCallback) {
 
-			const req = {
-				method: 'POST',
-				url: BASE_URL,
-				headers: {
-					'Content-Type': 'application/json',
-				},
-				data: object,
-			};
+		const req = {
+			method: 'POST',
+			url: this.BASE_URL,
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			data: object,
+		};
 
-			setupAPIService.doRequest(req, successCallback, errorCallback);
-		}
+		this.setupAPIService.doRequest(req, successCallback, errorCallback);
+	}
 
-		function removeObject(object, successCallback, errorCallback) {
+	public removeObject(object, successCallback, errorCallback) {
 
-			const req = {
-				method: 'DELETE',
-				url: BASE_URL,
-				headers: {
-					'Content-Type': 'application/json',
-				},
-				data: object,
-			};
+		const req = {
+			method: 'DELETE',
+			url: this.BASE_URL,
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			data: object,
+		};
 
-			setupAPIService.doRequest(req, successCallback, errorCallback);
-
-		}
-
-		function updateObject(object, successCallback, errorCallback) {
-
-			const req = {
-				method: 'PUT',
-				url: BASE_URL + '/' + object.id,
-				headers: {
-					'Content-Type': 'application/json',
-				},
-				data: object,
-			};
-
-			setupAPIService.doRequest(req, successCallback, errorCallback);
-
-		}
+		this.setupAPIService.doRequest(req, successCallback, errorCallback);
 
 	}
 
-})();
+	public updateObject(object, successCallback, errorCallback) {
+
+		const req = {
+			method: 'PUT',
+			url: this.BASE_URL + '/' + object.id,
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			data: object,
+		};
+
+		this.setupAPIService.doRequest(req, successCallback, errorCallback);
+
+	}
+
+}
+
+// })();

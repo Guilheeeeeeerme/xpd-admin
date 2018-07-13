@@ -35,7 +35,7 @@ export class DialogFactory {
 		this.$modal.open(modalOptions);
 	}
 
-	public showConfirmDialog(message, confirmCallback, cancelCallback?) {
+	public showConfirmDialog(message, confirmCallback?, cancelCallback?) {
 
 		// 	template: generateModalTemplate('Confirmation', message, CONFIRM_DIALOG)
 
@@ -48,7 +48,7 @@ export class DialogFactory {
 		this.$modal.open(modalOptions);
 	}
 
-	public showCriticalDialog(message, confirmCallback, cancelCallback?) {
+	public showCriticalDialog(message, confirmCallback?, cancelCallback?) {
 
 		// 	template: generateModalTemplate('Critical Confirmation', message, CRITICAL_DIALOG);
 

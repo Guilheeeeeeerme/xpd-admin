@@ -1,4 +1,5 @@
 import { IModalServiceInstance } from 'angular-ui-bootstrap';
+import { EventLogSetupAPIService } from '../xpd.setupapi/eventlog-setupapi.service';
 
 // (function() {
 
@@ -21,7 +22,7 @@ export class ModalEventDetailsController {
 	constructor(
 		$scope: any,
 		$uibModalInstance: IModalServiceInstance,
-		eventlogSetupAPIService: EventlogSetupAPIService,
+		eventlogSetupAPIService: EventLogSetupAPIService,
 		eventId: number) {
 
 		const vm = this;

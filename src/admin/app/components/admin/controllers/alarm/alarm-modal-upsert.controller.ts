@@ -1,25 +1,34 @@
+// tslint:disable-next-line:quotemark
+import { IModalInstanceService } from "../../../../../../../node_modules/@types/angular-ui-bootstrap";
+
 /*
 * @Author:
 * @Date:   2017-06-08 12:43:52
 * @Last Modified by:   Gezzy Ramos
 * @Last Modified time: 2017-06-13 18:00:57
 */
-(function() {
+// (function() {
 
-	'use strict';
+// 	'use strict';
 
-	angular.module('xpd.admin').controller('AlarmModalUpsertController', alarmModalUpsertController);
+// 	angular.module('xpd.admin').controller('AlarmModalUpsertController', alarmModalUpsertController);
 
-	alarmModalUpsertController.$inject = ['$scope', '$filter', '$uibModalInstance', 'operation', 'alarm', 'actionButtonSaveCallback', 'actionButtonCloseCallback'];
+// 	alarmModalUpsertController.$inject = ['$scope', '$filter', '$uibModalInstance', 'operation', 'alarm', 'actionButtonSaveCallback', 'actionButtonCloseCallback'];
 
-	function alarmModalUpsertController($scope, $filter, $uibModalInstance, $operation, $alarm, actionButtonSaveCallback, actionButtonCloseCallback) {
+export class AlarmModalUpsertController {
+
+	public static $inject: string[] = ['$scope', '$filter', '$uibModalInstance', 'operation', 'alarm', 'actionButtonSaveCallback', 'actionButtonCloseCallback'];
+
+	constructor(
+		private $scope: any,
+		private $filter: any,
+		private $uibModalInstance: IModalInstanceService,
+		private $operation: any,
+		private $alarm: any,
+		private actionButtonSaveCallback: any,
+		private actionButtonCloseCallback: any) {
 
 		const vm = this;
-
-		vm.actionButtonClose = actionButtonClose;
-		vm.actionButtonSave = actionButtonSave;
-
-		vm.init = init;
 
 		$scope.operation = $operation;
 		$scope.alarm = $alarm;
@@ -40,27 +49,35 @@
 
 		}
 
-		init();
-
-		function init() {
-			if ($scope.operation.type == 'time') {
-				$scope.alarm.alarmType = 'time';
-			}
-		}
-
-		function actionButtonSave() {
-
-			$scope.alarm.timeSlices = $scope.alarm.timeSlices.tripin.concat($scope.alarm.timeSlices.tripout);
-
-			actionButtonSaveCallback && actionButtonSaveCallback($scope.alarm);
-
-			$uibModalInstance.close();
-		}
-
-		function actionButtonClose() {
-			actionButtonCloseCallback && actionButtonCloseCallback();
-			$uibModalInstance.close();
-		}
-
+		this.init();
 	}
-})();
+
+	public init() {
+		if (this.$scope.operation.type === 'time') {
+			this.$scope.alarm.alarmType = 'time';
+		}
+	}
+
+	public actionButtonSave() {
+
+		this.$scope.alarm.timeSlices = this.$scope.alarm.timeSlices.tripin.concat(this.$scope.alarm.timeSlices.tripout);
+
+		if (this.actionButtonSaveCallback) {
+			this.actionButtonSaveCallback(this.$scope.alarm);
+		}
+
+		this.$uibModalInstance.close();
+	}
+
+	public actionButtonClose() {
+
+		if (this.actionButtonCloseCallback) {
+			this.actionButtonCloseCallback();
+		}
+
+		this.$uibModalInstance.close();
+	}
+
+}
+
+// })();

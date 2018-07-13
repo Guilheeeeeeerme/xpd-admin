@@ -4,7 +4,7 @@
 // 		.directive('rpdForm', rpdFormDirective);
 
 // 	rpdFormDirective.$inject = ['$filter', '$xpdTimeout'];
-
+import { TableExport } from 'tableexport';
 import template from '../xpd-resources/ng/xpd.rpd/rpd.template.html';
 import { XPDTimeoutService } from '../xpd.timers/xpd-timers.service';
 
@@ -112,8 +112,9 @@ export class XPDRPDFormDirective {
 		}
 
 		function prepareButtonsToExport() {
-
-			TableExport(element[0].getElementsByTagName('table'), {
+			// TODO: uai? como?
+			// tslint:disable-next-line:no-unused-expression
+			new TableExport(element[0].getElementsByTagName('table'), {
 				filename: 'RZX-RPD-' + scope.date,
 				headers: true,
 				footers: true,

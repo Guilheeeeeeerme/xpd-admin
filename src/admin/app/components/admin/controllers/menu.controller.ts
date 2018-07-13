@@ -1,18 +1,29 @@
-(function() {
-	'use strict';
+import { OperationDataFactory } from '../../../../../xpd-resources/ng/xpd.communication/operation-server-data.factory';
+import { DialogFactory } from '../../../../../xpd-resources/ng/xpd.dialog/xpd.dialog.factory';
 
-	angular.module('xpd.admin').controller('MenuController', menuController);
+export class MenuController {
+	// 'use strict';
 
-	menuController.$inject = ['$scope', 'operationDataFactory', 'dialogFactory'];
+	// angular.module('xpd.admin').controller('MenuController', menuController);
 
-	function menuController($scope, operationDataFactory, dialogFactory) {
+	public static $inject = ['$scope', 'operationDataFactory', 'dialogFactory'];
+	public operationDataFactory: any;
+	public actionButtonSetBitDepthMode: (mode: any) => void;
+	public actionButtonSetBitDepth: (bitDepth: any) => void;
+	public actionButtonSetSlipsThreshold: (threshold: any) => void;
+	public actionButtonSetBlockWeight: (blockWeight: any) => void;
+	public actionButtonSetStickUp: (stickUp: any) => void;
+	public actionButtonSetDelayOnUnreachable: (seconds: any) => void;
+	public actionButtonSetBlockSpeedInterval: (interval: any) => void;
+
+	constructor($scope, operationDataFactory: OperationDataFactory, dialogFactory: DialogFactory) {
 
 		const vm = this;
 
 		$scope.dados = {};
 
 		operationDataFactory.openConnection([]).then(function(response) {
-			operationDataFactory = response;
+			vm.operationDataFactory = response;
 			$scope.operationData = operationDataFactory.operationData;
 		});
 
@@ -28,7 +39,7 @@
 			const message = 'Change bit depth provider to ' + ((mode) ? 'XPD' : 'Rig') + '?';
 
 			dialogFactory.showCriticalDialog(message, function() {
-				operationDataFactory.emitSetBitDepthMode(mode);
+				vm.operationDataFactory.emitSetBitDepthMode(mode);
 			});
 		}
 
@@ -36,7 +47,7 @@
 			const message = 'Update bit depth to ' + bitDepth + 'm ?';
 
 			dialogFactory.showCriticalDialog(message, function() {
-				operationDataFactory.emitSetBitDepth(bitDepth);
+				vm.operationDataFactory.emitSetBitDepth(bitDepth);
 			});
 
 		}
@@ -45,7 +56,7 @@
 			const message = 'Update block weight to ' + blockWeight + 'klb ?';
 
 			dialogFactory.showCriticalDialog(message, function() {
-				operationDataFactory.emitUpdateBlockWeight(blockWeight);
+				vm.operationDataFactory.emitUpdateBlockWeight(blockWeight);
 			});
 
 		}
@@ -54,7 +65,7 @@
 			const message = 'Update slips threshold to ' + threshold + 'klb ?';
 
 			dialogFactory.showCriticalDialog(message, function() {
-				operationDataFactory.emitUpdateSlipsThreshold(threshold);
+				vm.operationDataFactory.emitUpdateSlipsThreshold(threshold);
 			});
 
 		}
@@ -63,7 +74,7 @@
 			const message = 'Update stick up to ' + stickUp + 'm ?';
 
 			dialogFactory.showCriticalDialog(message, function() {
-				operationDataFactory.emitUpdateStickUp(stickUp);
+				vm.operationDataFactory.emitUpdateStickUp(stickUp);
 			});
 
 		}
@@ -72,7 +83,7 @@
 			const message = 'Change delay seconds on unreachable target to ' + seconds + '?';
 
 			dialogFactory.showCriticalDialog(message, function() {
-				operationDataFactory.emitSetDelayOnUnreachableCheck(seconds);
+				vm.operationDataFactory.emitSetDelayOnUnreachableCheck(seconds);
 			});
 		}
 
@@ -80,9 +91,9 @@
 			const message = 'Change interval on block speed to ' + interval + '?';
 
 			dialogFactory.showCriticalDialog(message, function() {
-				operationDataFactory.emitSetBlockSpeedInterval(interval);
+				vm.operationDataFactory.emitSetBlockSpeedInterval(interval);
 			});
 		}
 	}
 
-})();
+}

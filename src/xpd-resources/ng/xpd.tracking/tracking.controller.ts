@@ -1,9 +1,10 @@
 import * as angular from 'angular';
 import { IModalService } from 'angular-ui-bootstrap';
-import { DialogFactory } from '../xpd.dialog/xpd.dialog.factory';
+import failureModalTemplate from 'app/components/admin/views/modal/failures.modal.html';
+import lessonLearnedModalTemplate from 'app/components/admin/views/modal/lesson-learned.modal.html';
 import { OperationDataFactory } from '../xpd.communication/operation-server-data.factory';
-import { XPDTimeoutService, XPDIntervalService } from '../xpd.timers/xpd-timers.service';
-
+import { DialogFactory } from '../xpd.dialog/xpd.dialog.factory';
+import { XPDIntervalService, XPDTimeoutService } from '../xpd.timers/xpd-timers.service';
 // (function() {
 // 	'use strict',
 
@@ -95,7 +96,8 @@ export class TrackingController {
 
 		operationDataFactory.openConnection([]).then(function (response) {
 			vm.operationDataFactory = response;
-			$scope.operationData = operationDataFactory.operationData;
+			// TODO: adaptacao as any
+			$scope.operationData = (operationDataFactory as any).operationData;
 
 			buildEventStruture();
 			buildTimeSlicesStruture();
@@ -169,12 +171,12 @@ export class TrackingController {
 
 		function actionButtonStartOperation(operation) {
 			dialogFactory.showConfirmDialog('Start current operation?', function () {
-				operationDataFactory.emitStartCurrentOperation(operation);
+				vm.operationDataFactory.emitStartCurrentOperation(operation);
 			});
 		}
 
 		function actionButtonFinishOperation() {
-			dialogFactory.showConfirmDialog('Finish running operation?', operationDataFactory.emitFinishRunningOperation);
+			dialogFactory.showConfirmDialog('Finish running operation?', vm.operationDataFactory.emitFinishRunningOperation);
 		}
 
 		function actionButtonStartCementation() {
@@ -192,7 +194,7 @@ export class TrackingController {
 		}
 
 		function startCementation() {
-			dialogFactory.showConfirmDialog('Are you sure you want to start the Cementing Procedure? This action cannot be undone.', operationDataFactory.emitStartCementation);
+			dialogFactory.showConfirmDialog('Are you sure you want to start the Cementing Procedure? This action cannot be undone.', vm.operationDataFactory.emitStartCementation);
 		}
 
 		function actionClickFailuresButton() {
@@ -202,9 +204,10 @@ export class TrackingController {
 				backdrop: 'static',
 				size: 'modal-sm',
 				windowClass: 'xpd-operation-modal',
-				templateUrl: 'app/components/admin/views/modal/failures.modal.html',
+				template: failureModalTemplate,
 				controller: 'FailuresController as fController',
 			});
+
 		}
 
 		function actionClickLessonsLearnedButton() {
@@ -214,13 +217,13 @@ export class TrackingController {
 				backdrop: 'static',
 				size: 'modal-sm',
 				windowClass: 'xpd-operation-modal',
-				templateUrl: 'app/components/admin/views/modal/lesson-learned.modal.html',
+				template: lessonLearnedModalTemplate,
 				controller: 'LessonLearnedController as llController',
 			});
 		}
 
 		function actionButtonStopCementation() {
-			dialogFactory.showCriticalDialog('Are you sure you want to stop the Cementing Procedure? This action cannot be undone.', operationDataFactory.emitStopCementation);
+			dialogFactory.showCriticalDialog('Are you sure you want to stop the Cementing Procedure? This action cannot be undone.', vm.operationDataFactory.emitStopCementation);
 		}
 
 		function circulateShiftList() {
@@ -275,34 +278,34 @@ export class TrackingController {
 
 		function actionButtonConfirmAcknowledgement(acknowledgement) {
 			dialogFactory.showConfirmDialog('Confirm Acknowledgement?', function () {
-				operationDataFactory.emitConfirmAcknowledgement(acknowledgement);
+				vm.operationDataFactory.emitConfirmAcknowledgement(acknowledgement);
 			});
 		}
 
 		function actionButtonUnconfirmAcknowledgement(acknowledgement) {
 			dialogFactory.showConfirmDialog('Unconfirm Acknowledgement?', function () {
-				operationDataFactory.emitUnconfirmAcknowledgement(acknowledgement);
+				vm.operationDataFactory.emitUnconfirmAcknowledgement(acknowledgement);
 			});
 		}
 
 		function actionButtonStartMakeUp() {
-			operationDataFactory.emitStartMakeUp();
+			vm.operationDataFactory.emitStartMakeUp();
 		}
 
 		function actionButtonStartLayDown() {
-			operationDataFactory.emitStartLayDown();
+			vm.operationDataFactory.emitStartLayDown();
 		}
 
 		function actionButtonFinishMakeUp() {
-			operationDataFactory.emitFinishMakeUp();
+			vm.operationDataFactory.emitFinishMakeUp();
 		}
 
 		function actionButtonFinishLayDown() {
-			operationDataFactory.emitFinishLayDown();
+			vm.operationDataFactory.emitFinishLayDown();
 		}
 
 		function actionButtonFinishDurationAlarm() {
-			operationDataFactory.emitFinishDurationAlarm();
+			vm.operationDataFactory.emitFinishDurationAlarm();
 		}
 
 		function actionButtonCloseAlarmsAcknowledgementModal() {
@@ -397,7 +400,7 @@ export class TrackingController {
 		}
 
 		function finishDurationAlarm() {
-			operationDataFactory.emitFinishDurationAlarm();
+			vm.operationDataFactory.emitFinishDurationAlarm();
 		}
 
 		// function changeTrackingContent() {

@@ -15,7 +15,7 @@ export class UpcomingAlarmsDirective implements ng.IDirective {
 		currentBitDepth: '=',
 		alarmContext: '=',
 	};
-	public templateUrl = template;
+	public template = template;
 
 	public link: ng.IDirectiveLinkFn = (
 		scope: any,

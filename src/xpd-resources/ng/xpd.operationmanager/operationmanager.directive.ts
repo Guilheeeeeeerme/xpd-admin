@@ -62,7 +62,7 @@ export class XPDOperationManagerDirective {
 		scope.actionDisabledCementation = actionDisabledCementation;
 		scope.onClickFinishDurationAlarm = onClickFinishDurationAlarm;
 
-		const modalBitDepth;
+		const modalBitDepth = null;
 
 		if (!attrs.view || attrs.view !== 'driller') {
 			scope.drillerView = false;

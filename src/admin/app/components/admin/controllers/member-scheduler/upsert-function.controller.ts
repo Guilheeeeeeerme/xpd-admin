@@ -1,22 +1,41 @@
-(function() {
-	'use strict';
+import * as angular from 'angular';
+import { IModalServiceInstance } from '../../../../../../../node_modules/@types/angular-ui-bootstrap';
+import { ScheduleSetupAPIService } from '../../../../../../xpd-resources/ng/xpd.setupapi/schedule-setupapi.service';
 
-	angular.module('xpd.admin')
-		.controller('UpsertFunctionController', upsertFunctionController);
+export class UpsertFunctionController {
+	// 'use strict';
 
-	upsertFunctionController.$inject = ['$scope', '$uibModalInstance', 'scheduleSetupAPIService', 'insertFunctionCallback', 'updateFunctionCallback', 'removeFunctionCallback', '$function'];
+	// angular.module('xpd.admin')
+	// 	.controller('UpsertFunctionController', upsertFunctionController);
 
-	function upsertFunctionController($scope, $modalInstance, scheduleSetupAPIService, insertFunctionCallback, updateFunctionCallback, removeFunctionCallback, $function) {
+	// upsertFunctionController.$inject = ['$scope', '$uibModalInstance', 'scheduleSetupAPIService', 'insertFunctionCallback', 'updateFunctionCallback', 'removeFunctionCallback', '$function'];
+	public static $inject: string[] = [
+		'$scope',
+		'$uibModalInstance',
+		'scheduleSetupAPIService',
+		'insertFunctionCallback',
+		'updateFunctionCallback',
+		'removeFunctionCallback',
+		'$function'];
 
-		if (!Window.UpsertFunctionController) {
-			Window.UpsertFunctionController = [];
+	constructor(
+		$scope: any,
+		$modalInstance: IModalServiceInstance,
+		scheduleSetupAPIService: ScheduleSetupAPIService,
+		insertFunctionCallback: any,
+		updateFunctionCallback: any,
+		removeFunctionCallback: any,
+		$function) {
+
+		if (!(Window as any).UpsertFunctionController) {
+			(Window as any).UpsertFunctionController = [];
 		}
 
-		Window.UpsertFunctionController.push($modalInstance.close);
+		(Window as any).UpsertFunctionController.push($modalInstance.close);
 
-		$modalInstance.close = function() {
-			while (Window.UpsertFunctionController && Window.UpsertFunctionController.length > 0) {
-				Window.UpsertFunctionController.pop()();
+		$modalInstance.close = function () {
+			while ((Window as any).UpsertFunctionController && (Window as any).UpsertFunctionController.length > 0) {
+				(Window as any).UpsertFunctionController.pop()();
 			}
 		};
 
@@ -40,12 +59,12 @@
 			console.log(func);
 
 			if (func.id !== null) {
-				scheduleSetupAPIService.updateFunction(func, function(func) {
+				scheduleSetupAPIService.updateFunction(func, function (func) {
 					$modalInstance.close();
 					updateFunctionCallback(func);
 				});
 			} else {
-				scheduleSetupAPIService.insertFunction(func, function(func) {
+				scheduleSetupAPIService.insertFunction(func, function (func) {
 					$modalInstance.close();
 					insertFunctionCallback(func);
 				});
@@ -54,13 +73,13 @@
 
 		function actionButtonRemove() {
 
-			const func = {id: $scope.modalData.id};
+			const func = { id: $scope.modalData.id };
 
-			scheduleSetupAPIService.removeFunction(func, function(func) {
+			scheduleSetupAPIService.removeFunction(func, function (func) {
 				$modalInstance.close();
 				removeFunctionCallback(func);
 			});
 		}
 	}
 
-})();
+}

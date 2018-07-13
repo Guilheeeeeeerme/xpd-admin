@@ -1,11 +1,29 @@
-(function() {
-	'use strict';
+import { IModalService } from '../../../../../../../node_modules/@types/angular-ui-bootstrap';
+import { OperationDataFactory } from '../../../../../../xpd-resources/ng/xpd.communication/operation-server-data.factory';
+import { DialogFactory } from '../../../../../../xpd-resources/ng/xpd.dialog/xpd.dialog.factory';
+import { SectionSetupAPIService } from '../../../../../../xpd-resources/ng/xpd.setupapi/section-setupapi.service';
+import { WellSetupAPIService } from '../../../../../../xpd-resources/ng/xpd.setupapi/well-setupapi.service';
 
-	angular.module('xpd.admin').controller('WellController', wellController);
+export class WellController {
+	// 'use strict';
 
-	wellController.$inject = ['$scope', '$uibModal', 'wellSetupAPIService', 'sectionSetupAPIService', 'dialogFactory', 'operationDataFactory'];
+	// angular.module('xpd.admin').controller('WellController', wellController);
 
-	function wellController($scope, $modal, wellSetupAPIService, sectionSetupAPIService, dialogFactory, operationDataFactory) {
+	public static $inject = ['$scope', '$uibModal', 'wellSetupAPIService', 'sectionSetupAPIService', 'dialogFactory', 'operationDataFactory'];
+	public operationDataFactory: any;
+	public actionButtonAddWell: () => void;
+	public actionButtonEditWell: (well: any) => void;
+	public actionButtonRemoveWell: (well: any) => void;
+	public actionButtonMakeCurrent: (well: any) => void;
+	public actionButtonMakeNotCurrent: (well: any) => void;
+
+	constructor(
+		$scope: any,
+		$modal: IModalService,
+		wellSetupAPIService: WellSetupAPIService,
+		sectionSetupAPIService: SectionSetupAPIService,
+		dialogFactory: DialogFactory,
+		operationDataFactory: OperationDataFactory) {
 
 		const vm = this;
 
@@ -14,7 +32,7 @@
 		};
 
 		operationDataFactory.openConnection([]).then(function(response) {
-			operationDataFactory = response;
+			vm.operationDataFactory = response;
 			$scope.operationData = operationDataFactory.operationData;
 		});
 
@@ -80,7 +98,7 @@
 		function actionButtonRemoveWell(well) {
 
 			sectionSetupAPIService.getListOfSectionsByWell(well.id, function(sectionList) {
-				if (sectionList.length == 0) {
+				if (sectionList.length === 0) {
 					removeWell(well);
 				} else {
 					dialogFactory.showMessageDialog('You can\'t delete a Well with Sections and Operations inside.', 'Unable to Remove Well');
@@ -93,7 +111,7 @@
 			if ($scope.operationData.operationContext.currentOperation && $scope.operationData.operationContext.currentOperation.running) {
 				dialogFactory.showMessageDialog('Unable to change Well due to Running Operation.', 'Error');
 			} else {
-				operationDataFactory.emitMakeCurrentWell(well);
+				vm.operationDataFactory.emitMakeCurrentWell(well);
 			}
 		}
 
@@ -102,7 +120,7 @@
 			if ($scope.operationData.operationContext.currentOperation && $scope.operationData.operationContext.currentOperation.running) {
 				dialogFactory.showMessageDialog('Unable to change Well due to Running Operation.', 'Error');
 			} else {
-				operationDataFactory.emitInterruptCurrentWell(well);
+				vm.operationDataFactory.emitInterruptCurrentWell(well);
 			}
 		}
 
@@ -124,4 +142,4 @@
 
 	}
 
-})();
+}

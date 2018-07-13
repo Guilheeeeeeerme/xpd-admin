@@ -1,22 +1,33 @@
-(function() {
-	'use strict';
+import * as angular from 'angular';
+import { IModalService, IModalServiceInstance } from '../../../../../../../node_modules/@types/angular-ui-bootstrap';
+import { ScheduleSetupAPIService } from '../../../../../../xpd-resources/ng/xpd.setupapi/schedule-setupapi.service';
 
-	angular.module('xpd.admin')
-		.controller('UpsertScheduleController', upsertScheduleController);
+export class UpsertScheduleController {
+	// 'use strict';
 
-	upsertScheduleController.$inject = ['$scope', '$uibModalInstance', 'scheduleSetupAPIService', 'insertScheduleCallback', 'updateScheduleCallback', 'removeScheduleCallback', '$schedule'];
+	// angular.module('xpd.admin')
+	// 	.controller('UpsertScheduleController', upsertScheduleController);
 
-	function upsertScheduleController($scope, $modalInstance, scheduleSetupAPIService, insertScheduleCallback, updateScheduleCallback, removeScheduleCallback, $schedule) {
+	public static $inject = ['$scope', '$uibModalInstance', 'scheduleSetupAPIService', 'insertScheduleCallback', 'updateScheduleCallback', 'removeScheduleCallback', '$schedule'];
 
-		if (!Window.UpsertScheduleController) {
-			Window.UpsertScheduleController = [];
+	constructor(
+		$scope: any,
+		$modalInstance: IModalServiceInstance,
+		scheduleSetupAPIService: ScheduleSetupAPIService,
+		insertScheduleCallback: any,
+		updateScheduleCallback: any,
+		removeScheduleCallback: any,
+		$schedule: any) {
+
+		if (!(Window as any).UpsertScheduleController) {
+			(Window as any).UpsertScheduleController = [];
 		}
 
-		Window.UpsertScheduleController.push($modalInstance.close);
+		(Window as any).UpsertScheduleController.push($modalInstance.close);
 
-		$modalInstance.close = function() {
-			while (Window.UpsertScheduleController && Window.UpsertScheduleController.length > 0) {
-				Window.UpsertScheduleController.pop()();
+		$modalInstance.close = function () {
+			while ((Window as any).UpsertScheduleController && (Window as any).UpsertScheduleController.length > 0) {
+				(Window as any).UpsertScheduleController.pop()();
 			}
 		};
 
@@ -63,6 +74,7 @@
 				startDate: new Date($scope.modalData.startDate),
 				member: $scope.modalData.member,
 				endDate: new Date($scope.modalData.endDate),
+				shiftHours: null,
 			};
 
 			schedule.shiftHours = schedule.endDate.getTime();
@@ -111,14 +123,14 @@
 
 		function removeSchedulesFromForm(schedule) {
 
-			return new Promise(function(resolve, reject) {
+			return new Promise(function (resolve, reject) {
 
-				scheduleSetupAPIService.getCleanListBySchedule(schedule, function(scheduleIds) {
+				scheduleSetupAPIService.getCleanListBySchedule(schedule, function (scheduleIds) {
 
 					console.log('Limpando %s Schedules', scheduleIds.length);
 
 					while (scheduleIds.length > 0) {
-						removeScheduleCallback( scheduleIds.pop() );
+						removeScheduleCallback(scheduleIds.pop());
 					}
 
 					resolve();
@@ -131,23 +143,23 @@
 
 		function updateScheduleFromForm(schedule) {
 
-			return new Promise(function(resolve, reject) {
+			return new Promise(function (resolve, reject) {
 
-				scheduleSetupAPIService.getCleanListBySchedule(schedule, function(scheduleIds) {
+				scheduleSetupAPIService.getCleanListBySchedule(schedule, function (scheduleIds) {
 
 					console.log('Limpando %s Schedules', scheduleIds.length);
 
 					while (scheduleIds.length > 0) {
 						const _schedule = scheduleIds.pop();
 
-						if (_schedule.id != schedule.id) {
+						if (_schedule.id !== schedule.id) {
 							removeScheduleCallback(_schedule);
 						}
 					}
 
 					console.log('Atualizando Schedule ' + schedule);
 
-					scheduleSetupAPIService.updateSchedule(schedule, function(schedule) {
+					scheduleSetupAPIService.updateSchedule(schedule, function (schedule) {
 						updateScheduleCallback(schedule);
 						resolve(schedule);
 					}, reject);
@@ -160,9 +172,9 @@
 
 		function insertScheduleFromForm(schedule) {
 
-			return new Promise(function(resolve, reject) {
+			return new Promise(function (resolve, reject) {
 
-				scheduleSetupAPIService.getCleanListBySchedule(schedule, function(scheduleIds) {
+				scheduleSetupAPIService.getCleanListBySchedule(schedule, function (scheduleIds) {
 
 					console.log('Limpando %s Schedules', scheduleIds.length);
 
@@ -172,7 +184,7 @@
 
 					console.log('Inserindo Schedule ' + schedule);
 
-					scheduleSetupAPIService.insertSchedule(schedule, function(schedule) {
+					scheduleSetupAPIService.insertSchedule(schedule, function (schedule) {
 						insertScheduleCallback(schedule);
 						resolve(schedule);
 					}, reject);
@@ -193,17 +205,18 @@
 				startDate: new Date($scope.modalData.startDate),
 				member: $scope.modalData.member,
 				endDate: new Date($scope.modalData.endDate),
+				shiftHours: null,
 			};
 
 			schedule.shiftHours = schedule.endDate.getTime();
 			schedule.shiftHours -= schedule.startDate.getTime();
 
 			if (!schedule.id) {
-				removeSchedulesFromForm(schedule).then(function() {
+				removeSchedulesFromForm(schedule).then(function () {
 					$modalInstance.close();
 				});
 			} else {
-				scheduleSetupAPIService.removeSchedule( { id: schedule.id }, function(schedule) {
+				scheduleSetupAPIService.removeSchedule({ id: schedule.id }, function (schedule) {
 					$modalInstance.close();
 					removeScheduleCallback(schedule);
 				});
@@ -213,4 +226,4 @@
 
 	}
 
-})();
+}

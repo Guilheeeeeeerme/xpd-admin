@@ -41,116 +41,117 @@ export class XPDAdminNavBarDirective implements ng.IDirective {
 
 		const self = this;
 
-		if (attrs.navOrigin === 'report') {
-			scope.onclickItemMenu = onclickItemMenuReport;
-		} else {
-			scope.onclickItemMenu = onclickItemMenuAdmin;
-		}
+		this.operationDataFactory.openConnection([]).then(function (operationDataFactory: any) {
 
-		this.operationDataFactory.openConnection([]).then(function (response) {
-			self.operationDataFactory = response;
+			if (attrs.navOrigin === 'report') {
+				scope.onclickItemMenu = onclickItemMenuReport;
+			} else {
+				scope.onclickItemMenu = onclickItemMenuAdmin;
+			}
+
 			checkIfHasRunningOperation();
+
+			self.operationDataFactory.addEventListener('menuConfirmationFactory', 'setOnRunningOperationListener', checkIfHasRunningOperation);
+			self.operationDataFactory.addEventListener('menuConfirmationFactory', 'setOnOperationChangeListener', checkIfHasRunningOperation);
+			self.operationDataFactory.addEventListener('menuConfirmationFactory', 'setOnNoCurrentOperationListener', checkIfHasRunningOperation);
+
+			function onclickItemMenuAdmin(path, newTab) {
+				const blockMenu = self.menuConfirmationFactory.getBlockMenu();
+
+				if (!blockMenu) {
+
+					redirectToPath(path, !!newTab);
+
+				} else {
+					const message = 'Your changes will be lost. Proceed?';
+
+					self.dialogFactory.showCriticalDialog(message, function () {
+						self.menuConfirmationFactory.setBlockMenu(false);
+						redirectToPath(path, !!newTab);
+					});
+				}
+			}
+
+			function onclickItemMenuReport(path, newTab) {
+
+				if (self.$location.port()) {
+
+					if (path === 'dmeclog.html#/') {
+						window.open('https://' + self.$location.host() + ':' + self.$location.port() + '/admin/dmeclog.html#');
+					} else {
+						if (newTab) {
+							window.open('https://' + self.$location.host() + ':' + self.$location.port() + '/admin/admin.html#' + path);
+						} else {
+							window.location.href = 'https://' + self.$location.host() + ':' + self.$location.port() + '/admin/admin.html#' + path;
+						}
+					}
+
+				} else {
+
+					const url = window.location.href.split('/pages')[0];
+
+					if (path === 'dmeclog.html#/') {
+						window.open(url + 'pages/dmeclog.html#');
+					} else {
+						if (newTab) {
+							window.open('https://' + url + 'pages/admin.html#' + path);
+						} else {
+							window.location.href = url + 'pages/admin.html#' + path;
+						}
+					}
+
+				}
+			}
+
+			function redirectToPath(path, newTab) {
+
+				if (self.$location.port()) {
+
+					if (path === 'dmeclog.html#/') {
+						window.open('https://' + self.$location.host() + ':' + self.$location.port() + '/admin/dmeclog.html#');
+					} else if (path === 'reports.html#/') {
+						window.location.href = 'https://' + self.$location.host() + ':' + self.$location.port() + '/admin/' + path;
+					} else {
+						if (!window.location.href.endsWith(path)) {
+							if (newTab) {
+								window.open('admin.html#' + path);
+							} else {
+								self.$location.url(path);
+							}
+						}
+					}
+
+				} else {
+
+					const url = window.location.href.split('pages')[0];
+
+					if (path === 'dmeclog.html#/') {
+						window.open(url + '/pages/' + path);
+					} else if (path === 'reports.html#/') {
+						window.location.href = url + '/pages/' + path;
+					} else {
+						if (!window.location.href.endsWith(path)) {
+							if (newTab) {
+								window.open('admin.html#' + path);
+							} else {
+								self.$location.url(path);
+							}
+						}
+					}
+
+				}
+			}
+
+			function checkIfHasRunningOperation() {
+				const context = operationDataFactory.operationData.operationContext;
+				if (context && context.currentOperation && context.currentOperation.running && context.currentOperation.type !== 'time') {
+					scope.hasRunningOperation = true;
+				} else {
+					scope.hasRunningOperation = false;
+				}
+			}
 		});
 
-		this.operationDataFactory.addEventListener('menuConfirmationFactory', 'setOnRunningOperationListener', checkIfHasRunningOperation);
-		this.operationDataFactory.addEventListener('menuConfirmationFactory', 'setOnOperationChangeListener', checkIfHasRunningOperation);
-		this.operationDataFactory.addEventListener('menuConfirmationFactory', 'setOnNoCurrentOperationListener', checkIfHasRunningOperation);
-
-		function onclickItemMenuAdmin(path, newTab) {
-			const blockMenu = self.menuConfirmationFactory.getBlockMenu();
-
-			if (!blockMenu) {
-
-				redirectToPath(path, !!newTab);
-
-			} else {
-				const message = 'Your changes will be lost. Proceed?';
-
-				self.dialogFactory.showCriticalDialog(message, function () {
-					self.menuConfirmationFactory.setBlockMenu(false);
-					redirectToPath(path, !!newTab);
-				});
-			}
-		}
-
-		function onclickItemMenuReport(path, newTab) {
-
-			if (self.$location.port()) {
-
-				if (path === 'dmeclog.html#/') {
-					window.open('https://' + self.$location.host() + ':' + self.$location.port() + '/admin/dmeclog.html#');
-				} else {
-					if (newTab) {
-						window.open('https://' + self.$location.host() + ':' + self.$location.port() + '/admin/admin.html#' + path);
-					} else {
-						window.location.href = 'https://' + self.$location.host() + ':' + self.$location.port() + '/admin/admin.html#' + path;
-					}
-				}
-
-			} else {
-
-				const url = window.location.href.split('/pages')[0];
-
-				if (path === 'dmeclog.html#/') {
-					window.open(url + 'pages/dmeclog.html#');
-				} else {
-					if (newTab) {
-						window.open('https://' + url + 'pages/admin.html#' + path);
-					} else {
-						window.location.href = url + 'pages/admin.html#' + path;
-					}
-				}
-
-			}
-		}
-
-		function redirectToPath(path, newTab) {
-
-			if (self.$location.port()) {
-
-				if (path === 'dmeclog.html#/') {
-					window.open('https://' + self.$location.host() + ':' + self.$location.port() + '/admin/dmeclog.html#');
-				} else if (path === 'reports.html#/') {
-					window.location.href = 'https://' + self.$location.host() + ':' + self.$location.port() + '/admin/' + path;
-				} else {
-					if (!window.location.href.endsWith(path)) {
-						if (newTab) {
-							window.open('admin.html#' + path);
-						} else {
-							$location.url(path);
-						}
-					}
-				}
-
-			} else {
-
-				const url = window.location.href.split('pages')[0];
-
-				if (path === 'dmeclog.html#/') {
-					window.open(url + '/pages/' + path);
-				} else if (path === 'reports.html#/') {
-					window.location.href = url + '/pages/' + path;
-				} else {
-					if (!window.location.href.endsWith(path)) {
-						if (newTab) {
-							window.open('admin.html#' + path);
-						} else {
-							self.$location.url(path);
-						}
-					}
-				}
-
-			}
-		}
-
-		function checkIfHasRunningOperation() {
-			const context = self.operationDataFactory.operationData.operationContext;
-			if (context && context.currentOperation && context.currentOperation.running && context.currentOperation.type !== 'time') {
-				scope.hasRunningOperation = true;
-			} else {
-				scope.hasRunningOperation = false;
-			}
-		}
 	}
 
 	public static Factory(): ng.IDirectiveFactory {

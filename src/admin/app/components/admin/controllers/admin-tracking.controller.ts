@@ -1,15 +1,41 @@
-(function() {
-	'use strict';
+import { IQProvider, IQService } from '../../../../../../node_modules/@types/angular';
+import { OperationDataFactory } from '../../../../../xpd-resources/ng/xpd.communication/operation-server-data.factory';
+import { EventDetailsModalFactory } from '../../../../../xpd-resources/ng/xpd.modal.event-details/xpd-modal-event-details.factory';
+import { FailureModalFactory } from '../../../../../xpd-resources/ng/xpd.modal.failure/xpd-modal-failure.factory';
+import { LessonLearnedModalFactory } from '../../../../../xpd-resources/ng/xpd.modal.lessonlearned/xpd-modal-lessonlearned.factory';
+import { EventLogSetupAPIService } from '../../../../../xpd-resources/ng/xpd.setupapi/eventlog-setupapi.service';
+import { FailureSetupAPIService } from '../../../../../xpd-resources/ng/xpd.setupapi/failure-setupapi.service';
+import { LessonLearnedSetupAPIService } from '../../../../../xpd-resources/ng/xpd.setupapi/lessonlearned-setupapi.service';
 
-	angular.module('xpd.admin').controller('AdminTrackingController', adminTrackingController);
+export class AdminTrackingController {
+	// 'use strict';
 
-	adminTrackingController.$inject = ['$scope', '$q', 'operationDataFactory', 'eventDetailsModal', 'failureModal', 'eventlogSetupAPIService', 'lessonLearnedModal', 'failureSetupAPIService', 'lessonLearnedSetupAPIService', 'dialogFactory', '$rootScope'];
+	// angular.module('xpd.admin').controller('AdminTrackingController', adminTrackingController);
 
-	function adminTrackingController($scope, $q, operationDataFactory, eventDetailsModal, failureModal, eventlogSetupAPIService, lessonLearnedModal, failureSetupAPIService, lessonLearnedSetupAPIService, dialogFactory, $rootScope) {
+	public static $inject = ['$scope', '$q', 'operationDataFactory', 'eventDetailsModal', 'failureModal', 'eventlogSetupAPIService', 'lessonLearnedModal', 'failureSetupAPIService', 'lessonLearnedSetupAPIService', '$rootScope'];
+	public actionOpenDropdownMenu: ($event: any, eventLog: any) => void;
+	public actionClickEventDetailsButton: () => void;
+	public actionClickFailuresButton: () => void;
+	public actionClickLessonsLearnedButton: () => void;
+	public operationDataFactory: {};
+
+	constructor(
+		$scope: any,
+		$q: IQService,
+		operationDataFactory: OperationDataFactory,
+		eventDetailsModal: EventDetailsModalFactory,
+		failureModal: FailureModalFactory,
+		eventlogSetupAPIService: EventLogSetupAPIService,
+		lessonLearnedModal: LessonLearnedModalFactory,
+		failureSetupAPIService: FailureSetupAPIService,
+		lessonLearnedSetupAPIService: LessonLearnedSetupAPIService,
+		$rootScope: any) {
 
 		const vm = this;
 
-		let eventStartTime, eventEndTime, eventId;
+		let eventStartTime;
+		let eventEndTime;
+		let eventId;
 		let listTrackingEventByOperationPromise = null;
 
 		vm.actionOpenDropdownMenu = actionOpenDropdownMenu;
@@ -19,8 +45,8 @@
 
 		$rootScope.XPDmodule = 'admin';
 
-		operationDataFactory.openConnection([]).then(function(response) {
-			operationDataFactory = response;
+		operationDataFactory.openConnection([]).then(function (response) {
+			vm.operationDataFactory = response;
 			$scope.operationData = operationDataFactory.operationData;
 		});
 
@@ -39,7 +65,7 @@
 				if (!listTrackingEventByOperationPromise) {
 					listTrackingEventByOperationPromise = listTrackingEventByOperation($scope.operationData.operationContext.currentOperation.id);
 
-					listTrackingEventByOperationPromise.then(function(trackingEvents) {
+					listTrackingEventByOperationPromise.then(function (trackingEvents) {
 						organizeEventsOnLists(trackingEvents);
 						listTrackingEventByOperationPromise = null;
 					});
@@ -50,7 +76,7 @@
 
 		function actionOpenDropdownMenu($event, eventLog) {
 
-			const modalOption = document.querySelector('.slips-to-slips-dropdown-menu');
+			const modalOption: any = document.querySelector('.slips-to-slips-dropdown-menu');
 
 			modalOption.style.top = ($event.clientY) + 'px';
 			modalOption.style.left = ($event.clientX) + 'px';
@@ -72,8 +98,6 @@
 		function actionClickFailuresButton() {
 			failureModal.open(
 				getSelectedEvent(),
-				insertFailureCallback,
-				updateFailureCallback,
 			);
 		}
 
@@ -118,7 +142,7 @@
 		}
 
 		function listTrackingEventByOperation(operationId) {
-			return $q(function(resolve, reject) {
+			return $q(function (resolve, reject) {
 				eventlogSetupAPIService.listTrackingEventByOperation(operationId, resolve, reject);
 			});
 		}
@@ -131,19 +155,19 @@
 			$scope.dados.connectionTimes = [];
 			$scope.dados.tripTimes = [];
 
-			trackingEvents.map(function(event) {
+			trackingEvents.map(function (event) {
 
 				if (event.id && event.duration) {
 
-					if (event.eventType == 'CONN') {
+					if (event.eventType === 'CONN') {
 						$scope.dados.connectionEvents.push(event);
 					}
 
-					if (event.eventType == 'TRIP') {
+					if (event.eventType === 'TRIP') {
 						$scope.dados.tripEvents.push(event);
 					}
 
-					if (event.eventType == 'TIME') {
+					if (event.eventType === 'TIME') {
 						$scope.dados.timeEvents.push(event);
 					}
 
@@ -156,4 +180,4 @@
 
 		}
 	}
-})();
+}

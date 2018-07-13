@@ -1,17 +1,35 @@
+import * as angular from 'angular';
+import { VCruisingCalculatorService } from '../../../../../xpd-resources/ng/xpd.calculation/calculation.service';
+import { OperationDataFactory } from '../../../../../xpd-resources/ng/xpd.communication/operation-server-data.factory';
+import { DialogFactory } from '../../../../../xpd-resources/ng/xpd.dialog/xpd.dialog.factory';
 /*
 * @Author:
 * @Date:   2017-05-19 15:12:22
 * @Last Modified by:   Gezzy Ramos
 * @Last Modified time: 2017-09-19 16:40:21
 */
-(function() {
-	'use strict';
+export class PlannerController {
+	// 'use strict';
 
-	angular.module('xpd.admin').controller('PlannerController', plannerController);
+	// angular.module('xpd.admin').controller('PlannerController', plannerController);
 
-	plannerController.$inject = ['$scope', '$filter', 'operationDataFactory', 'dialogFactory', 'vCruisingCalculator'];
+	public static $inject = ['$scope', '$filter', 'operationDataFactory', 'dialogFactory', 'vCruisingCalculator'];
+	public operationDataFactory: any;
+	public actionSelectActivityToPlan: (stateName: any, eventType: any) => void;
+	public selectActivityOnInit: (index: any, stateName: any, eventType: any) => void;
+	public actionButtonApplyTrip: () => void;
+	public actionButtonApplyConn: () => void;
+	public sumTripConnduration: (stateSettings: any) => number;
+	public timeSlicesContext: any;
+	public stateContext: any;
+	public vtargetContext: any;
 
-	function plannerController($scope, $filter, operationDataFactory, dialogFactory, vCruisingCalculator) {
+	constructor(
+		$scope,
+		$filter,
+		operationDataFactory: OperationDataFactory,
+		dialogFactory: DialogFactory,
+		vCruisingCalculator: VCruisingCalculatorService) {
 
 		const vm = this;
 
@@ -20,8 +38,8 @@
 			timeSlices: null,
 		};
 
-		operationDataFactory.openConnection([]).then(function(response) {
-			operationDataFactory = response;
+		operationDataFactory.openConnection([]).then(function (response) {
+			vm.operationDataFactory = response;
 			$scope.operationData = operationDataFactory.operationData;
 
 			startWatching();
@@ -52,9 +70,9 @@
 		}
 
 		function stopWatching() {
-			vm.timeSlicesContext && vm.timeSlicesContext();
-			vm.stateContext && vm.stateContext();
-			vm.vtargetContext && vm.vtargetContext();
+			if (vm.timeSlicesContext) { vm.timeSlicesContext(); }
+			if (vm.stateContext) { vm.stateContext(); }
+			if (vm.vtargetContext) { vm.vtargetContext(); }
 		}
 
 		function loadTimeSlice() {
@@ -87,7 +105,7 @@
 					const eventType = j;
 					const param = state.calcVREParams[j];
 
-					if (eventType != 'TIME') {
+					if (eventType !== 'TIME') {
 						setAllActivitiesParams(stateName, state, eventType, param, state.stateType);
 					}
 
@@ -129,11 +147,11 @@
 				};
 			}
 
-			if (eventType == 'TRIP') {
+			if (eventType === 'TRIP') {
 
 				let displacement;
 
-				if (stateName == 'casing') {
+				if (stateName === 'casing') {
 					displacement = $scope.operationData.operationContext.currentOperation.averageSectionLength;
 				} else {
 					displacement = $scope.operationData.operationContext.currentOperation.averageStandLength;
@@ -176,14 +194,14 @@
 		}
 
 		function selectActivityOnInit(index, stateName, eventType) {
-			if (index == 0) {
+			if (index === 0) {
 				actionSelectActivityToPlan(stateName, eventType);
 			}
 		}
 
 		function actionButtonApply() {
 
-			const eventData = {};
+			const eventData: any = {};
 
 			eventData.stateKey = $scope.dados.selectedState;
 			eventData.eventKey = $scope.dados.selectedEventType;
@@ -194,7 +212,7 @@
 			eventData.safetySpeedLimitPercentage = +$scope.dados.settings[$scope.dados.selectedState][$scope.dados.selectedEventType].targetSafetySpeedLimit / +$scope.dados.settings[$scope.dados.selectedState][$scope.dados.selectedEventType].optimumSafetySpeedLimit;
 			eventData.stateType = $scope.dados.settings[$scope.dados.selectedState][$scope.dados.selectedEventType].stateType;
 
-			operationDataFactory.emitUpdateContractParams(eventData);
+			vm.operationDataFactory.emitUpdateContractParams(eventData);
 
 		}
 
@@ -225,7 +243,7 @@
 		}
 
 		function actionButtonApplyConn() {
-			dialogFactory.showConfirmDialog('Are you sure you want to apply this change?', function() {
+			dialogFactory.showConfirmDialog('Are you sure you want to apply this change?', function () {
 
 				try {
 
@@ -233,7 +251,7 @@
 					// .map(addOperationInfo);
 					$scope.dados.timeSlices.tripout = prepareTimeSlices($scope.dados.timeSlices.tripout);
 					// .map(addOperationInfo);
-					operationDataFactory.emitUpdateTimeSlices($scope.dados.timeSlices);
+					vm.operationDataFactory.emitUpdateTimeSlices($scope.dados.timeSlices);
 
 					$scope.dados.timeSlices.tripin = $filter('filter')($scope.dados.timeSlices.tripin, returnValidTimeSlices);
 					$scope.dados.timeSlices.tripout = $filter('filter')($scope.dados.timeSlices.tripout, returnValidTimeSlices);
@@ -250,9 +268,9 @@
 
 		function actionButtonApplyTrip() {
 
-			dialogFactory.showConfirmDialog('Are you sure you want to apply this change?', function() {
+			dialogFactory.showConfirmDialog('Are you sure you want to apply this change?', function () {
 
-				operationDataFactory.emitUpdateInSlips($scope.operationData.operationContext.currentOperation.inSlips);
+				vm.operationDataFactory.emitUpdateInSlips($scope.operationData.operationContext.currentOperation.inSlips);
 				actionButtonApply();
 
 			});
@@ -273,4 +291,4 @@
 
 	}
 
-})();
+}

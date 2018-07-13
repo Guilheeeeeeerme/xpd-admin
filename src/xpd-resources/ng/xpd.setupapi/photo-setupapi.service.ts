@@ -1,85 +1,94 @@
-(function() {
-	'use strict',
+import angular = require('angular');
+import { XPDAccessFactory } from '../xpd.access/accessfactory.factory';
+import { SetupAPIService } from './setupapi.service';
 
-	angular.module('xpd.setupapi').service('photoAPIService', photoAPIService);
+// (function() {
+// 	'use strict',
 
-	photoAPIService.$inject = ['$http', 'xpdAccessFactory', 'setupAPIService'];
+// 	angular.module('xpd.setupapi').service('photoAPIService', photoAPIService);
 
-	function photoAPIService($http, xpdAccessFactory, setupAPIService) {
+// 	photoAPIService.$inject = ['$http', 'xpdAccessFactory', 'setupAPIService'];
 
-		const vm = this;
+export class PhotoAPIService {
 
-		vm.loadPhoto = loadPhoto;
-		vm.uploadPhoto = uploadPhoto;
+	public static $inject: string[] = ['$http', 'xpdAccessFactory', 'setupAPIService'];
+	public BASE_URL: string;
 
-		function loadPhoto(path, name, successCallback, errorCallback) {
+	constructor(private $http: ng.IHttpService, private xpdAccessFactory: XPDAccessFactory, private setupAPIService: SetupAPIService) {
+		this.BASE_URL = xpdAccessFactory.getSetupURL();
+	}
 
-			const request = {
-				method: 'GET',
-				url: xpdAccessFactory.getSetupURL() + path + '/load/' + name,
-				responseType: 'arraybuffer',
-			};
-
-			$http(request).then(
-				function(response) {
-					successCallback && successCallback(_arrayBufferToBase64(response.data));
-				},
-				function(error) {
-					setupAPIService.generateToast(error);
-					errorCallback && errorCallback(error);
-				},
-			);
+	protected _arrayBufferToBase64(buffer) {
+		let binary = '';
+		const bytes = new Uint8Array(buffer);
+		const len = bytes.byteLength;
+		for (let i = 0; i < len; i++) {
+			binary += String.fromCharCode(bytes[i]);
 		}
+		return window.btoa(binary);
+	}
 
-		function uploadPhoto(fd, path, successCallback, errorCallback) {
+	public loadPhoto(path, name, successCallback, errorCallback?) {
 
-			// console.log(xpdAccessFactory.getSetupURL() + path + "/upload");
-			// console.log("----------------");
+		const request = {
+			method: 'GET',
+			url: this.BASE_URL + path + '/load/' + name,
+			responseType: 'arraybuffer',
+		};
 
-			$http.post(xpdAccessFactory.getSetupURL() + path + '/upload', fd, {
-				withCredentials: false,
-				headers: {
-					'Content-Type': undefined,
-				},
-				transformRequest: angular.identity,
-				params: {
-					fd,
-				},
-			}).then(
-				successCallback,
-				function(error) {
-					setupAPIService.generateToast(error);
-					errorCallback && errorCallback(error);
-				},
-			);
+		this.$http(request).then(
+			function(response) {
+				if (successCallback) {
+					successCallback(this._arrayBufferToBase64(response.data));
+				}
+			},
+			function(error) {
+				this.setupAPIService.generateToast(error);
+				if (errorCallback) {
+					errorCallback(error);
+				}
+			},
+		);
+	}
 
-		}
+	public uploadPhoto(fd, path, successCallback, errorCallback?) {
 
-		// xpd-setup-api/tripin/rig-pictures/load/default
-
-		function getObjectById(modelURL, id, successCallback, errorCallback) {
-			$http.get(xpdAccessFactory.getSetupURL() + modelURL + '/' + id)
-				.then(
-					function(response) {
-						successCallback && successCallback(response.data);
-					},
-					function(error) {
-						setupAPIService.generateToast(error);
-						errorCallback && errorCallback(error);
-					},
-				);
-		}
-
-		function _arrayBufferToBase64(buffer) {
-			let binary = '';
-			const bytes = new Uint8Array(buffer);
-			const len = bytes.byteLength;
-			for (let i = 0; i < len; i++) {
-				binary += String.fromCharCode(bytes[i]);
-			}
-			return window.btoa(binary);
-		}
+		this.$http.post(this.BASE_URL + path + '/upload', fd, {
+			withCredentials: false,
+			headers: {
+				'Content-Type': undefined,
+			},
+			transformRequest: angular.identity,
+			params: {
+				fd,
+			},
+		}).then(
+			successCallback,
+			function(error) {
+				this.setupAPIService.generateToast(error);
+				if (errorCallback) {
+					errorCallback(error);
+				}
+			},
+		);
 
 	}
 
-})();
+	// xpd-setup-api/tripin/rig-pictures/load/default
+
+	// function getObjectById(modelURL, id, successCallback, errorCallback) {
+	// 	$http.get(xpdAccessFactory.getSetupURL() + modelURL + '/' + id)
+	// 		.then(
+	// 			function(response) {
+	// 				successCallback && successCallback(response.data);
+	// 			},
+	// 			function(error) {
+	// 				setupAPIService.generateToast(error);
+	// 				errorCallback && errorCallback(error);
+	// 			},
+	// 		);
+	// }
+
+}
+
+// })();
