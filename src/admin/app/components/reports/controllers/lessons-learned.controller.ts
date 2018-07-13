@@ -1,18 +1,23 @@
-/*
-* @Author: Gezzy Ramos
-* @Date:   2017-05-11 10:58:18
-* @Last Modified by:   Gezzy Ramos
-* @Last Modified time: 2017-08-28 10:58:15
-*/
-(function() {
-	'use strict';
+import { ReportsSetupAPIService } from '../../../../../xpd-resources/ng/xpd.setupapi/reports-setupapi.service';
 
-	angular.module('xpd.reports')
-		.controller('LessonsLearnedController', lessonsLearnedController);
+export class LessonsLearnedController {
+	// 'use strict';
 
-	lessonsLearnedController.$inject = ['$scope', '$uibModal', 'reportsSetupAPIService'];
+	// angular.module('xpd.reports').controller('LessonsLearnedController', lessonsLearnedController);
 
-	function lessonsLearnedController($scope, $modal, reportsSetupAPIService) {
+	public static $inject = ['$scope', '$uibModal', 'reportsSetupAPIService'];
+	public totalTime: any;
+	public totalLessons: any;
+	public nodeList: any[];
+	public chartPareto: { title: string; data: any[]; totalTime: number; };
+	public chartDonut: { title: any; data: any[]; };
+	public onClickFilterButton: (fromDate: any, toDate: any) => void;
+	public actionButtonSelectCategory: (node: any) => void;
+	public actionClickBreadcrumbs: (key: any, node: any) => void;
+	public actionButtonClickCategory: (category: any) => void;
+	public modalActionButtonClose: () => void;
+
+	constructor($scope, $modal, reportsSetupAPIService: ReportsSetupAPIService) {
 		const vm = this;
 
 		vm.totalTime = null;
@@ -74,7 +79,7 @@
          */
 		function getLessonListSuccessCallback(result) {
 
-			if (Object.keys(result.lessons_learned).length == 0) {
+			if (Object.keys(result.lessons_learned).length === 0) {
 				vm.nodeList = [];
 				return;
 			}
@@ -118,22 +123,22 @@
 			lesson.time = time;
 
 			/** Time / SelfTime */
-			if (node.time == undefined) {
+			if (node.time === undefined) {
 				node.time = 0;
 			}
 
-			if (node.selfTime == undefined) {
+			if (node.selfTime === undefined) {
 				node.selfTime = 0;
 			}
 
 			node.selfTime += time;
 
 			/** BestPractincesTime / SelfBestPractincesTime */
-			if (node.bestPracticesTime == undefined) {
+			if (node.bestPracticesTime === undefined) {
 				node.bestPracticesTime = 0;
 			}
 
-			if (node.selfBestPracticesTime == undefined) {
+			if (node.selfBestPracticesTime === undefined) {
 				node.selfBestPracticesTime = 0;
 			}
 
@@ -419,7 +424,7 @@
 					color: colors[light],
 				};
 
-				if (nodes[i].bestPracticesTime == 0) {
+				if (nodes[i].bestPracticesTime === 0) {
 
 					pie[j] = {
 						name: nodes[i].name,
@@ -434,7 +439,7 @@
 
 					paretoItem.bestPractices.y = nodes[i].bestPracticesLength;
 
-					if (nodes[i].bestPracticesTime == nodes[i].time) {
+					if (nodes[i].bestPracticesTime === nodes[i].time) {
 
 						pie[j] = {
 							name: nodes[i].name,
@@ -515,5 +520,5 @@
 
 		}
 	}
-
-})();
+}
+// })();

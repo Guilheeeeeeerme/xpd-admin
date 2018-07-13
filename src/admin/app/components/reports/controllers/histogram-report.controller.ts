@@ -1,18 +1,15 @@
-/*
-* @Author: Xavier
-* @Date:   2017-05-11 10:06:57
-* @Last Modified by:   Gezzy Ramos
-* @Last Modified time: 2017-07-27 09:48:23
-*/
-(function() {
-	'use strict';
+import { ReportsSetupAPIService } from '../../../../../xpd-resources/ng/xpd.setupapi/reports-setupapi.service';
 
-	angular.module('xpd.reports')
-		.controller('HistogramReportController', histogramReportController);
+export class HistogramReportController {
+	// 'use strict';
 
-	histogramReportController.$inject = ['$scope', 'reportsSetupAPIService'];
+	// angular.module('xpd.reports').controller('HistogramReportController', histogramReportController);
 
-	function histogramReportController($scope, reportsSetupAPIService) {
+	public static $inject = ['$scope', 'reportsSetupAPIService'];
+	public getColSize: () => number;
+	public actionFilterButton: (fromDate: any, toDate: any) => void;
+
+	constructor($scope, reportsSetupAPIService: ReportsSetupAPIService) {
 		const vm = this;
 
 		const parentData = $scope.reportsData;
@@ -91,13 +88,13 @@
 		function groupOperationByState(activities) {
 
 			for (const i in activities) {
-				if (activities[i].operationType == 'bha') {
+				if (activities[i].operationType === 'bha') {
 					operationTypes.bha.activities.push(activities[i]);
-				} else if (activities[i].operationType == 'casing') {
+				} else if (activities[i].operationType === 'casing') {
 					operationTypes.casing.activities.push(activities[i]);
-				} else if (activities[i].operationType == 'riser') {
+				} else if (activities[i].operationType === 'riser') {
 					operationTypes.riser.activities.push(activities[i]);
-				} else if (activities[i].operationType == 'time') {
+				} else if (activities[i].operationType === 'time') {
 					operationTypes.time.activities.push(activities[i]);
 				} else {
 					operationTypes.none.activities.push(activities[i]);
@@ -105,4 +102,5 @@
 			}
 		}
 	}
-})();
+}
+// })();

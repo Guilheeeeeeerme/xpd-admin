@@ -1,12 +1,13 @@
-(function() {
-	'use strict';
+import { ReportsSetupAPIService } from '../../../../../xpd-resources/ng/xpd.setupapi/reports-setupapi.service';
 
-	angular.module('xpd.reports')
-		.controller('DepthController', depthController);
+export class DepthController {
+	// 'use strict';
 
-	depthController.$inject = ['$scope', '$routeParams', 'reportSetupAPIService'];
+	// angular.module('xpd.reports').controller('DepthController', depthController);
 
-	function depthController($scope, $routeParams, reportSetupAPIService) {
+	public static $inject = ['$scope', '$routeParams', 'reportSetupAPIService'];
+
+	constructor($scope, $routeParams, reportSetupAPIService: ReportsSetupAPIService) {
 
 		const vm = this;
 
@@ -40,24 +41,23 @@
 		}
 
 		function getPlannedGraphicDataOperationSuccessCallback(result) {
-			console.log('planejado', result);
 
 			$scope.depthData.plannedDataChart.vOptimum = result.points_voptimum;
 			$scope.depthData.plannedDataChart.vPoor = result.points_vpoor;
 			$scope.depthData.plannedDataChart.vStandard = result.points_vstandard;
 
 			const black = '#000';
-			let rgb_value = 154;
+			let rgbValue = 154;
 			for (let i = 1, len = result.depthLimits.length; i < len; i++) {
 
-				const plotBand = new Object();
+				const plotBand: any = new Object();
 
 				plotBand.from = result.depthLimits[i - 1].endDepth;
 				plotBand.to = result.depthLimits[i].endDepth;
 				plotBand.text = result.depthLimits[i].title;
 
-				rgb_value -= 30;
-				plotBand.backgroundColor = rgbToHex(200, rgb_value, rgb_value);
+				rgbValue -= 30;
+				plotBand.backgroundColor = rgbToHex(200, rgbValue, rgbValue);
 
 				plotBand.textColor = black;
 
@@ -84,4 +84,5 @@
 			console.log(error);
 		}
 	}
-})();
+}
+// })();

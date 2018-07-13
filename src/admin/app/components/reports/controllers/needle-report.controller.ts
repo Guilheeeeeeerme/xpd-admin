@@ -1,18 +1,14 @@
-/*
-* @Author:
-* @Date:   2017-05-09 14:48:15
-* @Last Modified by:   Gezzy Ramos
-* @Last Modified time: 2017-05-17 11:17:17
-*/
-(function() {
-	'use strict';
+import { ReportsSetupAPIService } from '../../../../../xpd-resources/ng/xpd.setupapi/reports-setupapi.service';
 
-	angular.module('xpd.reports')
-		.controller('ReportNeedleController', reportNeedleController);
+export class NeedleReportController {
+	// 'use strict';
 
-	reportNeedleController.$inject = ['$scope', 'reportsSetupAPIService'];
+	// angular.module('xpd.reports').controller('ReportNeedleController', reportNeedleController);
 
-	function reportNeedleController($scope, reportsSetupAPIService) {
+	public static $inject = ['$scope', 'reportsSetupAPIService'];
+	public onClickFilterButton: (fromDate: any, toDate: any) => void;
+
+	constructor($scope, reportsSetupAPIService: ReportsSetupAPIService) {
 		const vm = this;
 
 		$scope.needleData = {
@@ -130,16 +126,16 @@
 			// });
 
 			for (const i in activities) {
-				if (activities[i].operationType == 'bha') {
+				if (activities[i].operationType === 'bha') {
 					operationTypes.bha.activities.push(activities[i]);
 					// operationTypes.bha.activities = sortActivities(operationTypes.bha.activities, bhaStates);
-				} else if (activities[i].operationType == 'casing') {
+				} else if (activities[i].operationType === 'casing') {
 					operationTypes.casing.activities.push(activities[i]);
 					// operationTypes.casing.activities = sortActivities(operationTypes.casing.activities, casingStates);
-				} else if (activities[i].operationType == 'riser') {
+				} else if (activities[i].operationType === 'riser') {
 					operationTypes.riser.activities.push(activities[i]);
 					// operationTypes.riser.activities = sortActivities(operationTypes.riser.activities, riserStates);
-				} else if (activities[i].operationType == 'time') {
+				} else if (activities[i].operationType === 'time') {
 					operationTypes.time.activities.push(activities[i]);
 					// operationTypes.time.activities = sortActivities(operationTypes.time.activities, timeState);
 				} else {
@@ -230,4 +226,5 @@
 		// 	return activity;
 		// }
 	}
-})();
+}
+// })();

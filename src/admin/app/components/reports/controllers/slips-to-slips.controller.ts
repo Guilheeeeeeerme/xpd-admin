@@ -1,12 +1,14 @@
-(function() {
-	'use strict';
+import { EventlogSetupAPIService } from '../../../../../xpd-resources/ng/xpd.setupapi/eventlog-setupapi.service';
 
-	angular.module('xpd.reports')
-		.controller('SlipsToSlipsController', slipsToSlipsController);
+export class SlipsToSlipsController {
+	// 'use strict';
 
-	slipsToSlipsController.$inject = ['$scope', '$routeParams', 'eventlogSetupAPIService'];
+	// angular.module('xpd.reports').controller('SlipsToSlipsController', slipsToSlipsController);
 
-	function slipsToSlipsController($scope, $routeParams, eventlogSetupAPIService) {
+	public static $inject = ['$scope', '$routeParams', 'eventlogSetupAPIService'];
+	public onChangePeriod: (fromDate: any, toDate: any) => void;
+
+	constructor($scope, $routeParams, eventlogSetupAPIService: EventlogSetupAPIService) {
 		const vm = this;
 
 		$scope.slipsToSlipsData = {
@@ -26,7 +28,7 @@
 
 			if (operationId != null) {
 
-				((eventType == 'connections') ? $scope.slipsToSlipsData.type = 'CONN' : $scope.slipsToSlipsData.type = 'TRIP');
+				((eventType === 'connections') ? $scope.slipsToSlipsData.type = 'CONN' : $scope.slipsToSlipsData.type = 'TRIP');
 
 				eventlogSetupAPIService.listByFilters($scope.slipsToSlipsData.type, operationId, null, null, null,
 					   getEventTimesSuccessCallback,
@@ -36,7 +38,7 @@
 		}
 
 		function getEventTimesSuccessCallback(times) {
-			if (times == null || times.length == 0) { return; }
+			if (times == null || times.length === 0) { return; }
 
    times.reverse();
 
@@ -72,4 +74,5 @@
 			console.log(error);
 		}
 	}
-})();
+}
+// })();

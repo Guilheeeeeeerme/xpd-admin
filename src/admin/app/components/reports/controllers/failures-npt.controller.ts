@@ -1,18 +1,29 @@
+import { ReportsSetupAPIService } from '../../../../../xpd-resources/ng/xpd.setupapi/reports-setupapi.service';
+
 /*
 * @Author: Gezzy Ramos
 * @Date:   2017-05-09 14:48:15
 * @Last Modified by:   Gezzy Ramos
 * @Last Modified time: 2017-08-28 10:57:31
 */
-(function() {
-	'use strict';
+export class FailuresNptController {
+	// 'use strict';
 
-	angular.module('xpd.reports')
-		.controller('FailuresNptController', failuresNptController);
+	// angular.module('xpd.reports').controller('FailuresNptController', failuresNptController);
 
-	failuresNptController.$inject = ['$scope', '$uibModal', 'reportsSetupAPIService'];
+	public static $inject = ['$scope', '$uibModal', 'reportsSetupAPIService'];
+	public totalTime: any;
+	public totalFailures: any;
+	public nodeList: any[];
+	public chartPareto: { title: string; data: any[]; totalTime: number; };
+	public chartDonut: { title: any; data: any[]; };
+	public onClickFilterButton: (fromDate: any, toDate: any) => void;
+	public actionButtonSelectCategory: (node: any) => void;
+	public actionClickBreadcrumbs: (key: any, node: any) => void;
+	public actionButtonClickCategory: (category: any) => void;
+	public modalActionButtonClose: () => void;
 
-	function failuresNptController($scope, $modal, reportsSetupAPIService) {
+	constructor($scope, $modal, reportsSetupAPIService: ReportsSetupAPIService) {
 		const vm = this;
 
 		vm.totalTime = null;
@@ -74,7 +85,7 @@
 		 */
 		function getFailureListSuccessCallback(result) {
 
-			if (Object.keys(result.failures).length == 0) {
+			if (Object.keys(result.failures).length === 0) {
 				vm.nodeList = [];
 				return;
 			}
@@ -116,22 +127,22 @@
 			failure.time = time;
 
 			/** Time / SelfTime */
-			if (node.time == undefined) {
+			if (node.time === undefined) {
 				node.time = 0;
 			}
 
-			if (node.selfTime == undefined) {
+			if (node.selfTime === undefined) {
 				node.selfTime = 0;
 			}
 
 			node.selfTime += time;
 
 			/**  NptTime / SelfNPtTime */
-			if (node.nptTime == undefined) {
+			if (node.nptTime === undefined) {
 				node.nptTime = 0;
 			}
 
-			if (node.selfNptTime == undefined) {
+			if (node.selfNptTime === undefined) {
 				node.selfNptTime = 0;
 			}
 
@@ -173,7 +184,7 @@
 				{name: 'Failure / Delay Categories'},
 			];
 
-   reportsSetupAPIService.getFailuresNptDataChart(
+   			reportsSetupAPIService.getFailuresNptDataChart(
 				fromDate,
 				toDate,
 				getFailureListSuccessCallback,
@@ -388,7 +399,7 @@
          */
 		function makeSeriesDataChart(nodes) {
 
-			const chartDonut = {};
+			const chartDonut: any = {};
 			const donut = [];
 			const pie = [];
 
@@ -430,7 +441,7 @@
 					color: colors[light],
 				};
 
-				if (nodes[i].nptTime == 0) {
+				if (nodes[i].nptTime === 0) {
 
 					pie[j] = {
 						name: nodes[i].name,
@@ -444,7 +455,7 @@
 
 					paretoItem.npts.y = nodes[i].failuresNptLength;
 
-					if (nodes[i].nptTime == nodes[i].time) {
+					if (nodes[i].nptTime === nodes[i].time) {
 						pie[j] = {
 							name: nodes[i].name,
 							y: nodes[i].time,
@@ -490,7 +501,7 @@
 				paretoData.push(paretoItem);
 			}
 
-			const chartPareto = {
+			const chartPareto: any = {
 				categories: [],
 				failures: [],
 				npts: [],
@@ -506,7 +517,7 @@
 
 			let accPercent = 0;
 
-			for (i = 0; i < paretoData.length; i++) {
+			for (let i = 0; i < paretoData.length; i++) {
 				const paretoItem = paretoData[i];
 				accPercent += paretoItem.percent;
 
@@ -523,4 +534,5 @@
 		}
 
 	}
-})();
+}
+// })();

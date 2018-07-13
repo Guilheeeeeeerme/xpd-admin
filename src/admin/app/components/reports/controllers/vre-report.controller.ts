@@ -1,18 +1,15 @@
-/*
-* @Author: Gezzy Ramos
-* @Date:   2017-05-11 09:57:02
-* @Last Modified by:   gustavogomides7
-* @Last Modified time: 2017-06-05 18:14:15
-*/
-(function() {
-	'use strict';
+import { ReportsSetupAPIService } from '../../../../../xpd-resources/ng/xpd.setupapi/reports-setupapi.service';
+import { WellSetupAPIService } from '../../../../../xpd-resources/ng/xpd.setupapi/well-setupapi.service';
 
-	angular.module('xpd.reports')
-		.controller('VreReportController', vreReportController);
+export class VreReportController {
+	// 'use strict';
 
-	vreReportController.$inject = ['$scope', 'wellSetupAPIService', 'reportsSetupAPIService'];
+	// angular.module('xpd.reports').controller('VreReportController', vreReportController);
 
-	function vreReportController($scope, wellSetupAPIService, reportsSetupAPIService) {
+	public static $inject = ['$scope', 'wellSetupAPIService', 'reportsSetupAPIService'];
+	public onClickFilterButton: (fromDate: any, toDate: any) => void;
+
+	constructor($scope, wellSetupAPIService: WellSetupAPIService, reportsSetupAPIService: ReportsSetupAPIService) {
 		const vm = this;
 
 		$scope.vreData = {
@@ -100,4 +97,5 @@
 			);
 		}
 	}
-})();
+}
+// })();

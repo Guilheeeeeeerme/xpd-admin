@@ -1,12 +1,18 @@
-(function() {
-	'use strict';
+import { ReportsSetupAPIService } from '../../../../../xpd-resources/ng/xpd.setupapi/reports-setupapi.service';
 
-	angular.module('xpd.reports')
-		.controller('BitDepthTimeController', bitDepthTimeController);
+export class BitDepthTimeController {
+	// 'use strict';
 
-	bitDepthTimeController.$inject = ['$scope', '$routeParams', 'reportsSetupAPIService'];
+	// angular.module('xpd.reports').controller('BitDepthTimeController', bitDepthTimeController);
 
-	function bitDepthTimeController($scope, $routeParams, reportsSetupAPIService) {
+	public static $inject = ['$scope', '$routeParams', 'reportsSetupAPIService'];
+	public setCurrentPlannedEvent: (event: any) => void;
+	public setCurrentExecutedEvent: (event: any) => void;
+	public setHoleDepth: (event: any) => void;
+	public setCurrentPoint: (event: any) => void;
+	public getAlarmsFromEvent: (event: any) => any;
+
+	constructor($scope, $routeParams, reportsSetupAPIService: ReportsSetupAPIService) {
 
 		const vm = this;
 
@@ -222,5 +228,6 @@
 		}
 
 	}
+}
 
-})();
+// })();

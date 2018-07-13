@@ -1,12 +1,12 @@
-(function() {
-	'use strict';
+// (function() {
+// 'use strict';
 
-	angular.module('xpd.reports')
-		.config(reportConfig);
+// angular.module('xpd.reports').config(reportConfig);
 
-	reportConfig.$inject = ['$routeProvider'];
+export class ReportConfig {
+	public static $inject = ['$routeProvider'];
 
-	function reportConfig($routeProvider) {
+	constructor($routeProvider) {
 
 		$routeProvider
 			.when('/', {
@@ -72,4 +72,6 @@
 		// 	controller: 'DepthController as dController'
 		// });
 	}
-})();
+}
+
+// })();

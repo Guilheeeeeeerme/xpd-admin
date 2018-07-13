@@ -1,18 +1,14 @@
-/*
-* @Author: Gezzy Ramos
-* @Date:   2017-05-11 09:57:23
-* @Last Modified by:   Gezzy Ramos
-* @Last Modified time: 2017-05-17 11:28:09
-*/
-(function() {
-	'use-strict';
+import { ReportsSetupAPIService } from '../../../../../xpd-resources/ng/xpd.setupapi/reports-setupapi.service';
 
-	angular.module('xpd.reports')
-		.controller('VreScoreController', vreScoreController);
+export class VreScoreController {
+	// 'use-strict';
 
-	vreScoreController.$inject = ['$scope', 'reportsSetupAPIService'];
+	// angular.module('xpd.reports').controller('VreScoreController', vreScoreController);
 
-	function vreScoreController($scope, reportsSetupAPIService) {
+	public static $inject = ['$scope', 'reportsSetupAPIService'];
+	public onClickFilterButton: (fromDate: any, toDate: any) => boolean;
+
+	constructor($scope, reportsSetupAPIService: ReportsSetupAPIService) {
 
 		const vm = this;
 
@@ -82,7 +78,7 @@
 
 		function onClickFilterButton(fromDate, toDate) {
 
-			if (toDate == undefined) { return false; }
+			if (toDate === undefined) { return false; }
 
 			$scope.$parent.rController.getFailuresOnInterval(fromDate, toDate);
 
@@ -99,15 +95,15 @@
 		}
 
 		// function setColorToLastIndexVre(dataChart) {
-	            // var lastIndexVre;
-	            // var lastValueVre;
-	            //
-	            // for (var i = dataChart.activities.length - 1; i >= 0; i--) {
-	            //     lastIndexVre = dataChart.activities[i].vre.length -1;
-	            //     lastValueVre = dataChart.activities[i].vre[lastIndexVre];
-	            //
-	            //     dataChart.activities[i].vre[lastIndexVre] = {y: lastValueVre, color:'rgba(157, 195, 231,1)'};
-	            // }
+		// 	var lastIndexVre;
+		// 	var lastValueVre;
+
+		// 	for (var i = dataChart.activities.length - 1; i >= 0; i--) {
+		// 		lastIndexVre = dataChart.activities[i].vre.length -1;
+		// 		lastValueVre = dataChart.activities[i].vre[lastIndexVre];
+
+		// 		dataChart.activities[i].vre[lastIndexVre] = {y: lastValueVre, color:'rgba(157, 195, 231,1)'};
+		// 	}
 		// }
 
 		function groupOperationByState(activities) {
@@ -156,13 +152,13 @@
 			});
 
 			for (const i in activities) {
-				if (activities[i].$$operationType == 'bha') {
+				if (activities[i].$$operationType === 'bha') {
 					operationTypes.bha.activities.push(activities[i]);
-				} else if (activities[i].$$operationType == 'casing') {
+				} else if (activities[i].$$operationType === 'casing') {
 					operationTypes.casing.activities.push(activities[i]);
-				} else if (activities[i].$$operationType == 'riser') {
+				} else if (activities[i].$$operationType === 'riser') {
 					operationTypes.riser.activities.push(activities[i]);
-				} else if (activities[i].$$operationType == 'time') {
+				} else if (activities[i].$$operationType === 'time') {
 					operationTypes.time.activities.push(activities[i]);
 				} else {
 					operationTypes.none.activities.push(activities[i]);
@@ -193,5 +189,5 @@
 		}
 
 	}
-
-})();
+}
+// })();

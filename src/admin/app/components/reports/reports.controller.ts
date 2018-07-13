@@ -1,20 +1,15 @@
-/*
-* @Author: Gezzy Ramos
-* @Date:   2017-05-11 09:58:24
-* @Last Modified by:   Gezzy Ramos
-* @Last Modified time: 2017-11-07 10:57:17
-*/
-(function() {
-	'use strict';
 
-	angular.module('xpd.reports')
-		.controller('ReportsController', reportsController);
+export class ReportsController {
+	// 'use strict';
 
-	reportsController.$inject = ['$scope', 'operationSetupAPIService', 'wellSetupAPIService', 'operationDataFactory'];
+	// angular.module('xpd.reports')
+	// 	.controller('ReportsController', reportsController);
 
-	function reportsController($scope, operationSetupAPIService, wellSetupAPIService, operationDataFactory) {
+	public static $inject = ['$scope', 'operationSetupAPIService', 'wellSetupAPIService', 'operationDataFactory'];
+	public getFailuresOnInterval: (startTime: any, endTime: any) => void;
 
-		// --declarations--
+	constructor($scope, operationSetupAPIService, wellSetupAPIService, operationDataFactory) {
+
 		const vm = this;
 
 		$scope.reportsData = {
@@ -29,16 +24,15 @@
 
 		vm.getFailuresOnInterval = getFailuresOnInterval;
 
-		operationDataFactory.openConnection([]).then(function(response) {
+		operationDataFactory.openConnection([]).then(function (response) {
 			operationDataFactory = response;
 		});
 
-		// --actions--
-		if (!localStorage.getItem('xpd.admin.reports.reportsData.toDate')  || !localStorage.getItem('xpd.admin.reports.reportsData.fromDate') ) {
+		if (!localStorage.getItem('xpd.admin.reports.reportsData.toDate') || !localStorage.getItem('xpd.admin.reports.reportsData.fromDate')) {
 			setCurrentDate();
 		} else {
-			$scope.reportsData.toDate = new Date(localStorage.getItem('xpd.admin.reports.reportsData.toDate') );
-			$scope.reportsData.fromDate = new Date(localStorage.getItem('xpd.admin.reports.reportsData.fromDate') );
+			$scope.reportsData.toDate = new Date(localStorage.getItem('xpd.admin.reports.reportsData.toDate'));
+			$scope.reportsData.fromDate = new Date(localStorage.getItem('xpd.admin.reports.reportsData.fromDate'));
 		}
 
 		getWellList();
@@ -73,9 +67,8 @@
 
 		}
 
-		// --implements--
 		function getWellList() {
-			wellSetupAPIService.getList(function(wells) {
+			wellSetupAPIService.getList(function (wells) {
 				getWellSuccessCallback(wells);
 			}, getWellErrorCallback);
 		}
@@ -173,4 +166,4 @@
 			return failuresOnInterval;
 		}
 	}
-})();
+}
