@@ -13,8 +13,8 @@
 
 // 	failureNavBar.$inject = ['$uibModal', 'categorySetupAPIService', 'operationDataFactory', 'dialogFactory'];
 
+import { IModalService } from 'angular-ui-bootstrap';
 import failureLessoModal from 'app/components/admin/views/modal/tabs-failure-lesson.modal.html';
-import { IModalService } from '../../../../node_modules/@types/angular-ui-bootstrap';
 import template from '../xpd-resources/ng/xpd.failure-controller/failure-nav-bar.template.html';
 import { OperationDataFactory } from '../xpd.communication/operation-server-data.factory';
 import { DialogFactory } from '../xpd.dialog/xpd.dialog.factory';

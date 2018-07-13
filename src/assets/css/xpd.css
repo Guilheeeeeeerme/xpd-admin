@@ -245,11 +245,11 @@ small, .font_small {
 }
 
 .gantt_cell .gantt_tree_icon.gantt_folder_closed, .gantt_cell .gantt_tree_icon.gantt_folder_open {
-    background-image: url("./img/hard-hat.png");
+    background-image: url("../img/hard-hat.png");
 }
 
 .gantt_cell .gantt_tree_icon.gantt_file {
-    background-image: url("./img/worker-icon.png");
+    background-image: url("../img/worker-icon.png");
 }
 
 .team_gantt_task_row .gantt_cell, .team_gantt_row  .gantt_cell{
@@ -260,12 +260,12 @@ small, .font_small {
 
 .team_gantt_row_parent .gantt_cell .gantt_tree_icon.gantt_folder_closed,
 .team_gantt_row_parent .gantt_cell .gantt_tree_icon.gantt_folder_open{
-    background-image: url(./img/teams-icon.png);
+    background-image: url("../img/teams-icon.png");
     background-size: 26px 31px;
 }
 
 .team_gantt_row_child .gantt_cell .gantt_tree_icon.gantt_file{
-    background-image: url(./img/team-icon.png);
+    background-image: url("../img/team-icon.png");
     background-size: 26px 31px;
 }
 

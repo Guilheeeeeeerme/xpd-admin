@@ -2,11 +2,12 @@ import * as angular from 'angular';
 import 'angular-animate';
 import 'angular-toastr';
 
+import XPDAccessModule from '../xpd.access/accessfactory.module';
 import XPDSpinnerModule from '../xpd.spinner/xpd-spinner.module';
 import { AdminUserSetupAPIService } from './admin-user-setupapi.service';
 import { AlarmSetupAPIService } from './alarm-setupapi.service';
 import { CategorySetupAPIService } from './category-setupapi.service';
-import { EventlogSetupAPIService } from './eventlog-setupapi.service';
+import { EventLogSetupAPIService } from './eventlog-setupapi.service';
 import { FailureSetupAPIService } from './failure-setupapi.service';
 import { LessonLearnedSetupAPIService } from './lessonlearned-setupapi.service';
 import { MasterUserSetupAPIService } from './master-user-setupapi.service';
@@ -22,7 +23,7 @@ import { SetupAPIService } from './setupapi.service';
 import { WellSetupAPIService } from './well-setupapi.service';
 
 const XPDSetupAPIModule: angular.IModule = angular.module('xpd.setupapi', [
-	'xpd.accessfactory',
+	XPDAccessModule.name,
 	'toastr',
 	'ngAnimate',
 	XPDSpinnerModule.name,
@@ -42,7 +43,7 @@ XPDSetupAPIModule.service('operationSetupAPIService', OperationSetupAPIService);
 XPDSetupAPIModule.service('masterUserSetupAPIService', MasterUserSetupAPIService);
 XPDSetupAPIModule.service('lessonLearnedSetupAPIService', LessonLearnedSetupAPIService);
 XPDSetupAPIModule.service('failureSetupAPIService', FailureSetupAPIService);
-XPDSetupAPIModule.service('eventlogSetupAPIService', EventlogSetupAPIService);
+XPDSetupAPIModule.service('eventlogSetupAPIService', EventLogSetupAPIService);
 XPDSetupAPIModule.service('categorySetupAPIService', CategorySetupAPIService);
 XPDSetupAPIModule.service('alarmSetupAPIService', AlarmSetupAPIService);
 XPDSetupAPIModule.service('adminUserSetupAPIService', AdminUserSetupAPIService);

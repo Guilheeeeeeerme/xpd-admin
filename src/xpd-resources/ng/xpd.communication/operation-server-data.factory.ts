@@ -1,4 +1,4 @@
-import { IQProvider, IQService } from '../../../../node_modules/@types/angular';
+import { IQProvider, IQService } from 'angular';
 import { SocketIOFactory } from '../socket.io/socket.factory';
 import { XPDAccessFactory } from '../xpd.access/accessfactory.factory';
 

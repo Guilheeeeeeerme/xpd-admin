@@ -10,9 +10,9 @@
 // })();
 
 import * as angular from 'angular';
-import { FailuresController } from '../../../admin/app/components/admin/controllers/failures.controller';
-import { LessonLearnedController } from '../../../admin/app/components/admin/controllers/lesson-learned.controller';
-import { TabsFailureLLCtrl } from '../../../admin/app/components/admin/controllers/tabs-failure-lesson.controller';
+import { FailuresController } from '../../../components/admin/controllers/failures.controller';
+import { LessonLearnedController } from '../../../components/admin/controllers/lesson-learned.controller';
+import { TabsFailureLLCtrl } from '../../../components/admin/controllers/tabs-failure-lesson.controller';
 import { FailureNavBarDirective } from './failure-nav-bar.directive';
 
 const XPDFailureNavBarController: angular.IModule  = angular.module('xpd.failure-controller', [

@@ -1,0 +1,477 @@
+<header>
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <img class="xpd-header-logo" src="../xpd-resources/img/xpd-logo.png" />
+            </div>
+            <ul class="nav navbar-nav navbar-right">
+                <li class="xpd-view-only-exit-button-bg">
+                    <a nref="#" onclick="window.close();">
+                        Exit
+                        <span class="glyphicon glyphicon-log-out"></span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+</header>
+
+<div class="container">
+
+    <fieldset ng-disabled="true">
+        <h2>{{ dados.operation.type | uppercase }} Information</h2>
+
+        <div class="row" ng-if="dados.operation.type =='time'">
+
+            <div class="form-group" ng-class="{ 'has-error': operationController.info.name.$invalid  && !operationController.info.name.$pristine }">
+                <label for="name">Name*</label>
+                <input type="text" class="form-control" id="name" ng-model="dados.operation.name" autofocus="true" name="name" required ng-disabled="dados.operation.custom == false">
+            </div>
+
+            <div class="col-md-4">
+
+                <div class="form-group" ng-class="{ 'has-error': operationController.info.optimumTime.$invalid  && !operationController.info.optimumTime.$pristine }">
+                    <label for="optimumTime">Optimum Time*</label>
+                    <div name="optimumTime" id="optimumTime">{{ (dados.operation.optimumTime / 1000) | secondsToHourMinutesSeconds }}
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="form-group" ng-class="{ 'has-error': operationController.info.standardTime.$invalid  && !operationController.info.standardTime.$pristine }">
+                    <label for="standardTime">Standard Time*</label>
+                    <div name="standardTime" id="standardTime">{{ (dados.operation.standardTime / 1000) | secondsToHourMinutesSeconds }}
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+
+                <div class="form-group" ng-class="{ 'has-error': operationController.info.poorTime.$invalid  && !operationController.info.poorTime.$pristine }">
+                    <label for="poorTime">Poor Time*</label>
+                    <div name="poorTime" id="poorTime">{{ ( dados.operation.poorTime / 1000) | secondsToHourMinutesSeconds }}</div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="row" ng-include="'riser-general-info.template.html'" ng-if="dados.operation.type =='riser'">
+        </div>
+
+        <div class="row" ng-include="'casing-general-info.template.html'" ng-if="dados.operation.type =='casing'">
+        </div>
+
+        <div class="row" ng-include="'bha-general-info.template.html'" ng-if="dados.operation.type =='bha'">
+        </div>
+
+
+        <h3 ng-hide="dados.operation.type =='time'">Contract Parameters</h3>
+
+
+        <div class="container" ng-if="dados.operation.type == 'bha'">
+            <div class="row">
+                <div class="col-md-12 panel panel-default" ng-if="!dados.operation.bopSetted">
+                    <operation-contract-info-table operation="dados.operation" class="table table-condensed" state="Open Sea" state-id="openSea"
+                        contract-params="dados.contractParams" trip-unit="m/h" trip-required="false" conn-unit="Con/h" conn-required="true"
+                        contract-form="ovoController.contract" view-only="true" ui-popover="htmlPopover" />
+                </div>
+                <div class="col-md-12 panel panel-default" ng-if="dados.operation.bopSetted">
+                    <operation-contract-info-table operation="dados.operation" class="table table-condensed" state="Cased Well" state-id="cased"
+                        contract-params="dados.contractParams" trip-unit="m/h" trip-required="false" conn-unit="Con/h" conn-required="true"
+                        contract-form="ovoController.contract" view-only="true" ui-popover="htmlPopover" />
+                </div>
+                <div class="col-md-12 panel panel-default">
+                    <operation-contract-info-table operation="dados.operation" class="table table-condensed" state="Open Hole" state-id="openHole"
+                        contract-params="dados.contractParams" trip-unit="m/h" trip-required="false" conn-unit="Con/h" conn-required="true"
+                        contract-form="ovoController.contract" view-only="true" ui-popover="htmlPopover" />
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12 panel panel-default">
+                    <operation-contract-info-table operation="dados.operation" class="table table-condensed" state="Drilling Run" state-id="drilling"
+                        contract-params="dados.contractParams" trip-unit="m/h" trip-required="false" conn-unit="Con/h" conn-required="true"
+                        contract-form="ovoController.contract" view-only="true" ui-popover="htmlPopover" />
+                </div>
+                <!-- <div class="col-md-12 panel panel-default">
+                    <operation-contract-info-table operation="dados.operation"  class="table table-condensed" state="Break DP Per Unit"
+                           state-id="inBreakDPInterval" contract-params="dados.contractParams" trip-unit="m/h"
+                           trip-required="true" conn-unit="Jt/h" conn-required="true"
+                           contract-form="ovoController.contract" view-only="true"/>
+                </div> -->
+            </div>
+
+            <div class="row">
+                <div class="col-md-12 panel panel-default">
+                    <table class="table table-condensed table-contract-info">
+                        <caption>BHA Assembly</caption>
+                        <thead>
+                            <tr>
+                                <th>Indicator</th>
+                                <th>V. Optimum</th>
+                                <th>V. Standard</th>
+                                <th>V. Poor</th>
+                                <th></th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Make Up</td>
+
+                                <td>
+                                    <contract-time-input disabled="true" ng-model="dados.contractParams.makeUpSpeed.voptimum" name="makeUpSpeedVoptimum" id="makeUpSpeed.voptimum">
+
+                                </td>
+
+                                <td>
+                                    <contract-time-input disabled="true" ng-model="dados.contractParams.makeUpSpeed.vstandard" name="makeUpSpeedVstandard" id="makeUpSpeed.vstandard">
+
+                                </td>
+
+                                <td>
+                                    <contract-time-input disabled="true" ng-model="dados.contractParams.makeUpSpeed.vpoor" name="makeUpSpeedVpoor" id="makeUpSpeed.vpoor">
+
+                                </td>
+
+                                <td>
+                                    <div class="checkbox">
+                                        <label>
+                                            <input type="checkbox" ng-model="dados.contractParams.makeUpSpeed.contractIndicator"> Contract
+                                        </label>
+                                    </div>
+                                </td>
+
+                                <td>
+                                    <div class="checkbox">
+                                        <label>
+                                            <input type="checkbox" ng-model="dados.contractParams.makeUpSpeed.ssoIndicator"> SSO
+                                        </label>
+                                    </div>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>Lay Down</td>
+
+                                <td>
+                                    <contract-time-input disabled="true" ng-model="dados.contractParams.layDownSpeed.voptimum" name="layDownSpeedVoptimum" id="layDownSpeed.voptimum">
+
+                                </td>
+
+                                <td>
+                                    <contract-time-input disabled="true" ng-model="dados.contractParams.layDownSpeed.vstandard" name="layDownSpeedVstandard"
+                                        id="layDownSpeed.vstandard">
+
+                                </td>
+
+                                <td>
+                                    <contract-time-input disabled="true" ng-model="dados.contractParams.layDownSpeed.vpoor" name="layDownSpeedVpoor" id="layDownSpeed.vpoor">
+
+                                </td>
+
+                                <td>
+                                    <div class="checkbox">
+                                        <label>
+                                            <input type="checkbox" ng-model="dados.contractParams.layDownSpeed.contractIndicator"> Contract
+                                        </label>
+                                    </div>
+                                </td>
+
+                                <td>
+                                    <div class="checkbox">
+                                        <label>
+                                            <input type="checkbox" ng-model="dados.contractParams.layDownSpeed.ssoIndicator"> SSO
+                                        </label>
+                                    </div>
+                                </td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="container" ng-if="dados.operation.type =='casing'">
+            <div class="row">
+                <div class="col-md-12 panel panel-default">
+                    <operation-contract-info-table operation="dados.operation" class="table table-condensed" state="Casing" state-id="casing"
+                        contract-params="dados.contractParams" trip-unit="m/h" trip-required="false" conn-unit="Conn/h" conn-required="false"
+                        contract-form="ovoController.contract" view-only="true" ui-popover="htmlPopover" />
+                </div>
+                <div class="col-md-12 panel panel-default">
+                    <operation-contract-info-table operation="dados.operation" class="table table-condensed" state="Settlement String Trip" state-id="settlementString"
+                        contract-params="dados.contractParams" trip-unit="m/h" trip-required="false" conn-unit="Conn/h" conn-required="false"
+                        contract-form="ovoController.contract" view-only="true" ui-popover="htmlPopover" />
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12 panel panel-default">
+                    <operation-contract-info-table operation="dados.operation" class="table table-condensed" state="Below Shoe Depth Trip" state-id="belowShoeDepth"
+                        contract-params="dados.contractParams" trip-unit="m/h" trip-required="false" conn-unit="Conn/h" conn-required="false"
+                        contract-form="ovoController.contract" view-only="true" ui-popover="htmlPopover" />
+                </div>
+                <!-- <div class="col-md-12 panel panel-default">
+                    <operation-contract-info-table operation="dados.operation"  class="table table-condensed" state="Break DP Per Unit"
+                           state-id="inBreakDPInterval"
+                           trip-unit="m/h" trip-required="true" conn-unit="Jt/h" conn-required="true"
+                           contract-params="dados.contractParams"
+                           contract-form="ovoController.contract" view-only="true"
+                           ui-popover="htmlPopover"/>
+                </div> -->
+            </div>
+
+            <div class="row">
+                <div class="col-md-12 panel panel-default">
+                    <table class="table table-condensed table-contract-info">
+                        <caption>Cementing</caption>
+                        <thead>
+                            <tr>
+                                <th>Indicator</th>
+                                <th>V. Optimum</th>
+                                <th>V. Standard</th>
+                                <th>V. Poor</th>
+                                <th></th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Cementing</td>
+
+                                <td>
+                                    <contract-time-input disabled="true" ng-model="dados.contractParams.cementationSpeed.voptimum" name="cementingSpeedVoptimum"
+                                        id="cementationSpeed.voptimum">
+
+                                </td>
+
+                                <td>
+                                    <contract-time-input disabled="true" ng-model="dados.contractParams.cementationSpeed.vstandard" name="cementingSpeedVstandard"
+                                        id="cementationSpeed.vstandard">
+
+                                </td>
+
+                                <td>
+                                    <contract-time-input disabled="true" ng-model="dados.contractParams.cementationSpeed.vpoor" name="cementingSpeedVpoor" id="cementationSpeed.vpoor">
+
+                                </td>
+
+                                <td>
+                                    <div class="checkbox">
+                                        <label>
+                                            <input type="checkbox" ng-model="dados.contractParams.cementationSpeed.contractIndicator"> Contract
+                                        </label>
+                                    </div>
+                                </td>
+
+                                <td>
+                                    <div class="checkbox">
+                                        <label>
+                                            <input type="checkbox" ng-model="dados.contractParams.cementationSpeed.ssoIndicator"> SSO
+                                        </label>
+                                    </div>
+                                </td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="row" ng-if="dados.operation.type =='riser'">
+
+            <div class="col-md-12 panel panel-default">
+                <operation-contract-info-table operation="dados.operation" class="table table-condensed" state="Ascent Riser Trip" state-id="ascentRiser"
+                    trip-unit="m/h" trip-required="true" conn-unit="Jt/h" conn-required="true" contract-params="dados.contractParams"
+                    contract-form="ovoController.contract" view-only="true" ui-popover="htmlPopover" />
+            </div>
+
+            <div class="col-md-12 panel panel-default">
+                <operation-contract-info-table operation="dados.operation" class="table table-condensed" state="Descent Riser Trip" state-id="descendRiser"
+                    trip-unit="m/h" trip-required="true" conn-unit="Jt/h" conn-required="true" contract-params="dados.contractParams"
+                    contract-form="ovoController.contract" view-only="true" ui-popover="htmlPopover" />
+            </div>
+
+            <div class="row">
+                <div class="col-md-12 panel panel-default">
+
+                    <table class="table table-condensed table-contract-info">
+                        <caption>BOP Assembly</caption>
+                        <thead>
+                            <tr>
+                                <th>Indicator</th>
+                                <th>V. Optimum</th>
+                                <th>V. Standard</th>
+                                <th>V. Poor</th>
+                                <th></th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Make Up</td>
+
+                                <td>
+
+
+                                    <contract-time-input disabled="true" ng-model="dados.contractParams.makeUpSpeed.voptimum" name="makeUpSpeedVoptimum" id="makeUpSpeed.voptimum">
+
+                                        <td>
+
+                                            <contract-time-input disabled="true" ng-model="dados.contractParams.makeUpSpeed.vstandard" name="makeUpSpeedVstandard" id="makeUpSpeed.vstandard">
+
+                                        </td>
+
+                                        <td>
+
+
+
+                                            <contract-time-input disabled="true" ng-model="dados.contractParams.makeUpSpeed.vpoor" name="makeUpSpeedVpoor" id="makeUpSpeed.vpoor">
+                                        </td>
+
+                                        <td>
+                                            <div class="checkbox">
+                                                <label>
+                                                    <input type="checkbox" ng-model="dados.contractParams.makeUpSpeed.contractIndicator"> Contract
+                                                </label>
+                                            </div>
+                                        </td>
+
+                                        <td>
+                                            <div class="checkbox">
+                                                <label>
+                                                    <input type="checkbox" ng-model="dados.contractParams.makeUpSpeed.ssoIndicator"> SSO
+                                                </label>
+                                            </div>
+                                        </td>
+                            </tr>
+
+                            <tr>
+                                <td>Lay Down</td>
+
+                                <td>
+
+                                    <contract-time-input disabled="true" ng-model="dados.contractParams.layDownSpeed.voptimum" name="layDownSpeedVoptimum" id="layDownSpeed.voptimum">
+
+                                </td>
+
+                                <td>
+
+                                    <contract-time-input disabled="true" ng-model="dados.contractParams.layDownSpeed.vstandard" name="layDownSpeedVstandard"
+                                        id="layDownSpeed.vstandard">
+                                </td>
+
+                                <td>
+
+                                    <contract-time-input disabled="true" ng-model="dados.contractParams.layDownSpeed.vpoor" name="layDownSpeedVpoor" id="layDownSpeed.vpoor">
+                                </td>
+
+                                <td>
+                                    <div class="checkbox">
+                                        <label>
+                                            <input type="checkbox" ng-model="dados.contractParams.layDownSpeed.contractIndicator"> Contract
+                                        </label>
+                                    </div>
+                                </td>
+
+                                <td>
+                                    <div class="checkbox">
+                                        <label>
+                                            <input type="checkbox" ng-model="dados.contractParams.layDownSpeed.ssoIndicator"> SSO
+                                        </label>
+                                    </div>
+                                </td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div ng-if="dados.operation.type == 'time'">
+            <h3> Tasks </h3>
+
+            <div class="row">
+                <div class="col-md-offset-1 col-md-9">
+                    <table class="table table-condensed table-hovered">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Name</th>
+                                <th>Duration</th>
+                                <th>Percentage</th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="timeSlice in dados.timeSlices">
+                                <td> {{ timeSlice.timeOrder }} </td>
+                                <td> {{ timeSlice.name }} </td>
+                                <td> {{ ( ( ( timeSlice.percentage / 100 ) * 3600000 / dados.contractParams.timeSpeed.voptimum)
+                                    / 1000) | secondsToHourMinutesSeconds }} </td>
+                                <td> {{ timeSlice.percentage }} % </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <h3>Alarms</h3>
+
+        <div class="row">
+            <div class="col-md-offset-1 col-md-9">
+                <table class="table table-condensed table-hovered">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>Name</th>
+                            <th>Start at - Finish at</th>
+                            <th></th>
+                            <th></th>
+                            <th>Message</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <tr ng-repeat="alarm in dados.alarms">
+                            <td>
+                                <span class="glyphicon glyphicon-arrow-down" ng-if="alarm.tripin && !alarm.tripout"></span>
+                                <span class="glyphicon glyphicon-arrow-up" ng-if="!alarm.tripin && alarm.tripout"></span>
+                                <span class="glyphicon glyphicon-sort" ng-if="alarm.tripin && alarm.tripout"></span>
+                            </td>
+                            <td>{{alarm.name}}</td>
+                            <td ng-if="alarm.alarmType == 'depth'">
+                                {{ alarm.startDepth | number:2 }} - {{ alarm.endDepth | number:2 }}
+                            </td>
+                            <td ng-if="alarm.alarmType == 'time'">
+                                {{ovoController.toDate(alarm.startTime)}} - {{ovoController.toDate(alarm.endTime)}}
+                            </td>
+                            <td ng-class="alarm.triggered? 'alarm-triggered':'alarm-not-triggered'">
+                                <em>{{alarm.triggered? 'Trigered':'Not Triggered'}}</em>
+                            </td>
+                            <td>
+                                <span class="glyphicon glyphicon-hourglass" ng-if="alarm.isDurationAlarm"></span>
+                                <span class="glyphicon glyphicon-scale" ng-if="!alarm.isDurationAlarm && alarm.alarmType != 'time'"></span>
+                                <span class="glyphicon glyphicon-time" ng-if="alarm.alarmType == 'time'"></span>
+                            </td>
+                            <td> {{ alarm.message }}</td>
+                        </tr>
+                    </tbody>
+
+                    <tfoot>
+                        <tr ng-if="!dados.alarms || dados.alarms.length == 0">
+                            <td colspan="4">No alarms.</td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+
+    </fieldset>
+</div>

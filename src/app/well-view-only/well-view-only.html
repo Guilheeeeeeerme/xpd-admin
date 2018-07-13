@@ -1,0 +1,98 @@
+<header>
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <img class="xpd-header-logo" src="../xpd-resources/img/xpd-logo.png" />
+            </div>
+
+            <ul class="nav navbar-nav navbar-right">
+                <li class="xpd-view-only-exit-button-bg">
+                    <a nref="#" onclick="window.close();">
+                        Exit
+                        <span class="glyphicon glyphicon-log-out"></span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+</header>
+
+<div class="container-fluid">
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">
+                <b>Well Name: </b>{{dados.currentWell.name}}
+                <b ng-if="dados.currentWell.current">(CURRENT)</b>
+            </h3>
+        </div>
+        <div class="panel-body">
+            <div class="row">
+                <div>
+                    <table class="table borderless">
+                        <tr>
+                            <th>Air Gap (m)</th>
+                            <th>Water Depth (m)</th>
+                            <th>Hole Depth (m)</th>
+                            <th>Last Section Shoe Depth (m)</th>
+                            <th>Last BOP Status</th>
+                        </tr>
+
+                        <tr>
+                            <td>{{dados.currentWell.airGap}}</td>
+                            <td>
+                                <span ng-if="!dados.currentWell.onshore">{{dados.currentWell.waterDepth | number: 2}}</span>
+                                <span ng-if="dados.currentWell.onshore">
+                                    <i>Onshore</i>
+                                </span>
+                            </td>
+
+                            <td>
+                                <span ng-if="dados.currentWell.holeDepth">{{dados.currentWell.holeDepth | number: 2}}</span>
+                                <span ng-if="!dados.currentWell.holeDepth">Not setted</span>
+                            </td>
+
+                            <td>
+                                <span ng-if="dados.currentWell.shoeDepth">{{dados.currentWell.shoeDepth | number: 2}}</span>
+                                <span ng-if="!dados.currentWell.shoeDepth">Not setted</span>
+                            </td>
+
+                            <td>
+                                <span ng-if="dados.currentWell.bopSetted">Setted</span>
+                                <span ng-if="!dados.currentWell.bopSetted">Not setted</span>
+                            </td>
+
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <table class="table">
+                <caption>
+                    Sections
+                </caption>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Size (in)</th>
+                        <th>MD Top (m)</th>
+                        <th>MD Bottom (m)</th>
+                        <!-- <th>Casing Outer Diameter</th>
+                    <th>Casing Inner Diameter</th>  -->
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <tr ng-repeat="section in dados.sectionList | orderBy : 'id' track by section.id">
+                        <td>{{section.name}}</td>
+                        <td>{{section.size}}</td>
+                        <td>{{section.mdTop | number: 2}}</td>
+                        <td>{{section.mdBottom | number: 2}}</td>
+                        <!-- <td>{{section.outerDiameter}}</td>
+                    <td>{{section.innerDiameter}}</td>  -->
+                    </tr>
+                    <tr ng-if="dados.sectionList.length === 0">
+                        <td colspan="4"> No Sections</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
