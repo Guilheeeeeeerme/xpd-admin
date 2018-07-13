@@ -10,6 +10,17 @@ import { SlipsToSlipsController } from './controllers/slips-to-slips.controller'
 import { VreReportController } from './controllers/vre-report.controller';
 import { VreScoreController } from './controllers/vre-score.controller';
 import { BitDepthTimeDirective } from './directives/bit-depth-time.directive';
+import { DepthLineChartDirective } from './directives/depth-line-chart.directive';
+import { EventDurationHistogram } from './directives/event-duration-histogram.directive';
+import { FailuresNptChartDirective } from './directives/failures-npt-chart.directive';
+import { FailuresParetoChart } from './directives/failures-pareto-chart.directive';
+import { LessonsLearnedChart } from './directives/lessons-learned-chart.directive';
+import { LessonsParetoChart } from './directives/lessons-pareto-chart.directive';
+import { ReportNeedleChart } from './directives/needle-report.directive';
+import { SlipsToSlipsBarChart } from './directives/slips-to-slips-bar-chart.directive';
+import { TablePeriod } from './directives/table-period.directive';
+import { VreBarChart } from './directives/vre-bar-chart.directive';
+import { VreScoreBarChart } from './directives/vre-score-bar-chart.directive';
 import { ReportConfig } from './reports.config';
 import { ReportsController } from './reports.controller';
 
@@ -36,6 +47,7 @@ const XPDReportsModule: angular.IModule = angular.module('xpd.reports', [
 export default XPDReportsModule;
 
 XPDReportsModule.config(ReportConfig);
+
 XPDReportsModule.controller('reportsController', ReportsController);
 XPDReportsModule.controller('bitDepthTimeController', BitDepthTimeController);
 XPDReportsModule.controller('depthController', DepthController);
@@ -46,4 +58,16 @@ XPDReportsModule.controller('needleReportController', NeedleReportController);
 XPDReportsModule.controller('slipsToSlipsController', SlipsToSlipsController);
 XPDReportsModule.controller('vreReportController', VreReportController);
 XPDReportsModule.controller('vreScoreController', VreScoreController);
+
 XPDReportsModule.directive('bitDepthTimeDirective', BitDepthTimeDirective.Factory());
+XPDReportsModule.directive('depthLineChartDirective', DepthLineChartDirective.Factory());
+XPDReportsModule.directive('eventDurationHistogram', EventDurationHistogram.Factory());
+XPDReportsModule.directive('failuresNptChartDirective', FailuresNptChartDirective.Factory());
+XPDReportsModule.directive('failuresParetoChart', FailuresParetoChart.Factory());
+XPDReportsModule.directive('lessonsLearnedChart', LessonsLearnedChart.Factory());
+XPDReportsModule.directive('lessonsParetoChart', LessonsParetoChart.Factory());
+XPDReportsModule.directive('reportNeedleChart', ReportNeedleChart.Factory());
+XPDReportsModule.directive('slipsToSlipsBarChart', SlipsToSlipsBarChart.Factory());
+XPDReportsModule.directive('tablePeriod', TablePeriod.Factory());
+XPDReportsModule.directive('vreBarChart', VreBarChart.Factory());
+XPDReportsModule.directive('vreScoreBarChart', VreScoreBarChart.Factory());

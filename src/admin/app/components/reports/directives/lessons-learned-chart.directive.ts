@@ -1,98 +1,118 @@
-(function() {
-	'use strict';
+// (function() {
+// 	'use strict';
 
-	angular.module('xpd.reports')
-		.directive('lessonsLearnedChart', lessonsLearnedChart);
+// 	angular.module('xpd.reports').directive('lessonsLearnedChart', lessonsLearnedChart);
 
-	lessonsLearnedChart.$inject = ['highchartsService', '$filter'];
+import { HighchartsService } from '../../../../../xpd-resources/ng/highcharts/highcharts.service';
 
-	function lessonsLearnedChart(highchartsService, $filter) {
-		return {
-			restrict: 'EA',
-			scope: {
-				chartData: '=',
-				chartTitle: '=',
-			},
-			link,
-		};
+export class LessonsLearnedChart {
 
-		function link(scope, elem, attr) {
+	public static $inject: string[] = ['highchartsService', '$filter'];
+	public restrict: 'EA';
+	public scope: {
+		chartData: '=',
+		chartTitle: '=',
+	};
 
-			highchartsService.highcharts().then(function(Highcharts) {
+	constructor(
+		private $filter: ng.IFilterFilter,
+		private highchartsService: HighchartsService) {
+	}
 
-				scope.$watchGroup(['chartData', 'chartTitle'], function(newValue) {
-					if (newValue) {
-						createChart(newValue[0], newValue[1]);
-					}
-				});
+	public link: ng.IDirectiveLinkFn = (
+		scope: any,
+		elem: ng.IAugmentedJQuery,
+		attrs: ng.IAttributes,
+		ctrl: any,
+	) => {
 
-				function createChart(chartData, chartTitle) {
+		this.highchartsService.highcharts().then(function (Highcharts) {
 
-					return Highcharts.chart(elem[0], {
-
-  				        chart: {
-  				        	backgroundColor: 'transparent',
-  				        	height: 350,
-  				            spacingTop: 20,
-  				            type: 'pie',
-  				        },
-						legend: {
-							labelFormatter() {
-								return this.name + ' ' + this.type;
-							},
-						},
-  				        title: {
-  					        text: chartTitle,
-  					        style: {
-  					        	color: '#00807f',
-  					        },
-  					      },
-  					    plotOptions: {
-  					        pie: {
-  					            allowPointSelect: true,
-  					            cursor: 'pointer',
-  					            dataLabels: {
-  					                enabled: true,
-  					                format: '{point.name}: {point.percentage:.2f} %',
-  					                style: {
-  					                	fontSize: '15px',
-  					                },
-									distance: 5,
-  					            },
-								point: {
-									events: {
-										legendItemClick() {
-											return false;
-										},
-									},
-								},
-  					        },
-  					    },
-  					    series: [{
-				            name: 'Percentage',
-				            data: chartData.pie,
-							allowPointSelect: false,
-				            size: '50%',
-				            dataLabels: {
-				            	enabled: false,
-				            },
-						    tooltip: {
-						        pointFormat: '{point.name} {point.type}: <b>{point.percentage:.2f}%</b>',
-						    },
-				        }, {
-				            name: 'Percentage',
-				            data: chartData.donut,
-				            size: '80%',
-				            innerSize: '70%',
-							tooltip: {
-								pointFormatter() {
-									return '' + this.name + ': ' + $filter('secondsToHourMinutes')(this.y);
-								},
-							},
-			        }],
-  				    });
+			scope.$watchGroup(['chartData', 'chartTitle'], function (newValue) {
+				if (newValue) {
+					createChart(newValue[0], newValue[1]);
 				}
 			});
-		}
+
+			function createChart(chartData, chartTitle) {
+
+				return Highcharts.chart(elem[0], {
+
+					chart: {
+						backgroundColor: 'transparent',
+						height: 350,
+						spacingTop: 20,
+						type: 'pie',
+					},
+					legend: {
+						labelFormatter() {
+							return this.name + ' ' + this.type;
+						},
+					},
+					title: {
+						text: chartTitle,
+						style: {
+							color: '#00807f',
+						},
+					},
+					plotOptions: {
+						pie: {
+							allowPointSelect: true,
+							cursor: 'pointer',
+							dataLabels: {
+								enabled: true,
+								format: '{point.name}: {point.percentage:.2f} %',
+								style: {
+									fontSize: '15px',
+								},
+								distance: 5,
+							},
+							point: {
+								events: {
+									legendItemClick() {
+										return false;
+									},
+								},
+							},
+						},
+					},
+					series: [{
+						name: 'Percentage',
+						data: chartData.pie,
+						allowPointSelect: false,
+						size: '50%',
+						dataLabels: {
+							enabled: false,
+						},
+						tooltip: {
+							pointFormat: '{point.name} {point.type}: <b>{point.percentage:.2f}%</b>',
+						},
+					}, {
+						name: 'Percentage',
+						data: chartData.donut,
+						size: '80%',
+						innerSize: '70%',
+						tooltip: {
+							pointFormatter() {
+								return '' + this.name + ': ' + this.$filter('secondsToHourMinutes')(this.y);
+							},
+						},
+					}],
+				});
+			}
+		});
 	}
-})();
+
+	public static Factory(): ng.IDirectiveFactory {
+		const directive = (
+			$filter: ng.IFilterFilter,
+			highchartsService: HighchartsService,
+		) => new LessonsLearnedChart(
+			$filter,
+			highchartsService,
+			);
+
+		return directive;
+	}
+}
+// }) ();

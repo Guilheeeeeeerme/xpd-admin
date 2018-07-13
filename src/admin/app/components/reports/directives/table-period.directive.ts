@@ -1,66 +1,72 @@
-(function() {
-	'use strict';
+// (function() {
+// 	'use strict';
 
-	angular.module('xpd.reports')
-		.directive('tablePeriod', tablePeriod);
+// 	angular.module('xpd.reports').directive('tablePeriod', tablePeriod);
 
-	tablePeriod.$inject = [];
+import template from 'app/components/reports/directives/table-period.template.html';
 
-	function tablePeriod() {
-		return {
-			restrict: 'EA',
-			templateUrl: 'app/components/reports/directives/table-period.template.html',
-			scope: {
-				initialDate: '=',
-				finalDate: '=',
-				minDate: '=',
-				maxDate: '=',
-				functionChangePeriod: '=',
-				dateTime: '=',
-			},
-			link,
-		};
+export class TablePeriod {
 
-		function link(scope, elem, attr) {
+	public restrict: 'EA';
+	public template = template;
+	public scope: {
+		initialDate: '=',
+		finalDate: '=',
+		minDate: '=',
+		maxDate: '=',
+		functionChangePeriod: '=',
+		dateTime: '=',
+	};
 
-			scope.$watchGroup(['minDate', 'maxDate'], function(newValues) {
-				setLimitDateInInput(newValues[0], newValues[1]);
-			}, true);
+	public link: ng.IDirectiveLinkFn = (
+		scope: any,
+		elem: ng.IAugmentedJQuery,
+		attrs: ng.IAttributes,
+		ctrl: any,
+	) => {
 
-			scope.onDataRangeChange = onDataRangeChange;
+		scope.$watchGroup(['minDate', 'maxDate'], function (newValues) {
+			setLimitDateInInput(newValues[0], newValues[1]);
+		}, true);
 
-			function setLimitDateInInput(minDate, maxDate) {
+		scope.onDataRangeChange = onDataRangeChange;
 
-				if (attr.maxDate != null && attr.minDate != null) {
+		function setLimitDateInInput(minDate, maxDate) {
 
-					const dateTimeInputs = elem[0].querySelectorAll('.table-period-date-limit');
-					const max = toJSONLocal(maxDate);
-					const min = toJSONLocal(minDate);
+			if (attrs.maxDate != null && attrs.minDate != null) {
 
-					dateTimeInputs[0].max = max;
-					dateTimeInputs[0].min = min;
+				const dateTimeInputs: any = elem[0].querySelectorAll('.table-period-date-limit');
+				const max = toJSONLocal(maxDate);
+				const min = toJSONLocal(minDate);
 
-					dateTimeInputs[1].max = max;
-					dateTimeInputs[1].min = min;
+				dateTimeInputs[0].max = max;
+				dateTimeInputs[0].min = min;
 
-				}
+				dateTimeInputs[1].max = max;
+				dateTimeInputs[1].min = min;
+
 			}
-
-			function toJSONLocal(date) {
-
-				if (date == undefined) { return; }
-
-				const local = new Date(date);
-				local.setMinutes(date.getMinutes() - date.getTimezoneOffset());
-				return local.toJSON().slice(0, 19);
-			}
-
-			function onDataRangeChange() {
-				if (scope.initialDate && scope.initialDate.getTime() > scope.finalDate.getTime()) {
-					scope.initialDate = new Date(scope.finalDate.getFullYear(), scope.finalDate.getMonth(), scope.finalDate.getDate(), 0, 0, 0, 0);
-				}
-			}
-
 		}
+
+		function toJSONLocal(date) {
+
+			if (date === undefined) { return; }
+
+			const local = new Date(date);
+			local.setMinutes(date.getMinutes() - date.getTimezoneOffset());
+			return local.toJSON().slice(0, 19);
+		}
+
+		function onDataRangeChange() {
+			if (scope.initialDate && scope.initialDate.getTime() > scope.finalDate.getTime()) {
+				scope.initialDate = new Date(scope.finalDate.getFullYear(), scope.finalDate.getMonth(), scope.finalDate.getDate(), 0, 0, 0, 0);
+			}
+		}
+
 	}
-})();
+
+	public static Factory(): ng.IDirectiveFactory {
+		return () => new TablePeriod();
+	}
+}
+// }) ();
