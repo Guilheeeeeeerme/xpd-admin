@@ -9,7 +9,7 @@
 //
 import * as angular from 'angular';
 import { IModalServiceInstance } from 'angular-ui-bootstrap';
-import { OperationDataService } from '../xpd.communication/operation-server-data.factory';
+import { OperationServerService } from '../xpd.communication/operation-server.service';
 import { DialogService } from '../xpd.dialog/xpd.dialog.factory';
 import { CategorySetupAPIService } from '../xpd.setupapi/category-setupapi.service';
 import { FailureSetupAPIService } from '../xpd.setupapi/failure-setupapi.service';
@@ -38,7 +38,7 @@ export class ModalFailureController {
 		failureSetupAPIService: FailureSetupAPIService,
 		selectedFailure: any,
 		dialogService: DialogService,
-		operationDataService: OperationDataService) {
+		operationDataService: OperationServerService) {
 
 		const vm = this;
 

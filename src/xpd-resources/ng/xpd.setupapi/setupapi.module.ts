@@ -2,8 +2,8 @@ import * as angular from 'angular';
 import 'angular-animate';
 import 'angular-toastr';
 
-import XPDAccessModule from '../xpd.access/accessfactory.module';
-import XPDSpinnerModule from '../xpd.spinner/xpd-spinner.module';
+import { XPDAccessModule } from '../xpd.access/accessfactory.module';
+import { XPDSpinnerModule } from '../xpd.spinner/xpd-spinner.module';
 import { AdminUserSetupAPIService } from './admin-user-setupapi.service';
 import { AlarmSetupAPIService } from './alarm-setupapi.service';
 import { CategorySetupAPIService } from './category-setupapi.service';
@@ -28,7 +28,7 @@ const XPDSetupAPIModule: angular.IModule = angular.module('xpd.setupapi', [
 	'ngAnimate',
 	XPDSpinnerModule.name,
 ]);
-export default XPDSetupAPIModule;
+export  { XPDSetupAPIModule }
 
 XPDSetupAPIModule.config(SetupAPIConfig);
 XPDSetupAPIModule.service('setupAPIService', SetupAPIService);

@@ -10,7 +10,7 @@ import { XPDAccessService } from '../xpd.access/access.service';
 
 // operationDataFactory.$inject = ['$q', 'socketService', 'xpdAccessService'];
 
-export class OperationDataService {
+export class OperationServerService {
 
 	public static $inject: string[] = ['$q', 'socketService', 'xpdAccessService'];
 
@@ -48,11 +48,8 @@ export class OperationDataService {
 	private operationDataFactory: any = {
 		operationData: {},
 	};
-	private socketDefer: angular.IDeferred<{}>;
 
-	constructor(private $q: IQService, private socketService: SocketIOService, private xpdAccessService: XPDAccessService) {
-		this.socketDefer = this.$q.defer();
-	}
+	constructor(private $q: IQService, private socketService: SocketIOService, private xpdAccessService: XPDAccessService) { }
 
 	public addEventListener(origin, event, callback) {
 
@@ -67,7 +64,7 @@ export class OperationDataService {
 		const self = this;
 
 		if (!threads || threads.length === 0) {
-			threads = OperationDataService.THREADS;
+			threads = OperationServerService.THREADS;
 		}
 
 		return self.$q(function (resolve, reject) {
@@ -107,7 +104,6 @@ export class OperationDataService {
 					}
 
 					resolve(self.operationDataFactory);
-					self.socketDefer.resolve(self.operationDataFactory);
 
 				});
 			}
@@ -183,9 +179,7 @@ export class OperationDataService {
 		if (self.eventsCallbacks && self.eventsCallbacks[listenerName]) {
 			for (const origin in self.eventsCallbacks[listenerName]) {
 				try {
-					self.socketDefer.promise.then(() => {
-						self.eventsCallbacks[listenerName][origin](context);
-					});
+					self.eventsCallbacks[listenerName][origin](context);
 				} catch (e) {
 					console.error(e);
 				}

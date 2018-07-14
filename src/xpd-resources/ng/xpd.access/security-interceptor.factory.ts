@@ -4,7 +4,10 @@
 // 	angular.module('xpd.accessfactory')
 // 		.factory('securityInteceptor', securityInteceptor);
 // @ts-ignore
-export default function securityInteceptor() {
+
+export { SecurityInteceptorFactory  };
+
+function SecurityInteceptorFactory () {
 
 	let c1;
 	let c2;

@@ -16,7 +16,7 @@
 import { IModalService } from 'angular-ui-bootstrap';
 import failureLessoModal from 'app/components/admin/views/modal/tabs-failure-lesson.modal.html';
 import template from '../xpd-resources/ng/xpd.failure-controller/failure-nav-bar.template.html';
-import { OperationDataService } from '../xpd.communication/operation-server-data.factory';
+import { OperationServerService } from '../xpd.communication/operation-server.service';
 import { DialogService } from '../xpd.dialog/xpd.dialog.factory';
 import { CategorySetupAPIService } from '../xpd.setupapi/category-setupapi.service';
 
@@ -31,7 +31,7 @@ export class FailureNavBarDirective implements ng.IDirective {
 	constructor(
 		private $uibModal: IModalService,
 		private categorySetupAPIService: CategorySetupAPIService,
-		private operationDataService: OperationDataService,
+		private operationDataService: OperationServerService,
 		private dialogService: DialogService) { }
 
 	public link: ng.IDirectiveLinkFn = (
@@ -116,7 +116,7 @@ export class FailureNavBarDirective implements ng.IDirective {
 		return (
 			$uibModal: IModalService,
 			categorySetupAPIService: CategorySetupAPIService,
-			operationDataService: OperationDataService,
+			operationDataService: OperationServerService,
 			dialogService: DialogService) => new FailureNavBarDirective(
 				$uibModal,
 				categorySetupAPIService,

@@ -14,7 +14,7 @@ import { UpsertFunctionController } from '../../components/admin/controllers/mem
 import { UpsertMemberController } from '../../components/admin/controllers/member-scheduler/upsert-member.controller';
 import { UpsertScheduleController } from '../../components/admin/controllers/member-scheduler/upsert-schedule.controller';
 import { MenuController } from '../../components/admin/controllers/menu.controller';
-import XPDOperationDashboardModule from '../../components/admin/controllers/operation-dashboard/operation-dashboard.module';
+import { XPDOperationDashboardModule } from '../../components/admin/controllers/operation-dashboard/operation-dashboard.module';
 import { AlarmInfoController } from '../../components/admin/controllers/operation/alarm-info.controller';
 import { OperationConfigurationService } from '../../components/admin/controllers/operation/operation-configuration.service';
 import { OperationCopyOptionsModalController } from '../../components/admin/controllers/operation/operation-copy-options-modal.controller';
@@ -29,32 +29,32 @@ import { WellUpsertController } from '../../components/admin/controllers/well/we
 import { WellController } from '../../components/admin/controllers/well/well.controller';
 import { SavedAlarmsListDirectives } from '../../components/admin/directives/saved-alarms-list.directive';
 import { VREListTableDirective } from '../../components/admin/directives/vre-list-table.directive';
-import AngularTreeviewModule from '../../xpd-resources/ng/angular.treeview/angular-treeview.module';
-import XPDGanttModule from '../../xpd-resources/ng/gantt/gantt.module';
-import XPDHighchartsModule from '../../xpd-resources/ng/highcharts/highcharts.module';
-import XPDAdminNavBarModule from '../../xpd-resources/ng/xpd.admin-nav-bar/admin-nav-bar.module';
-import XPDCalculationModule from '../../xpd-resources/ng/xpd.calculation/calculation.module';
-import XPDContractParamModule from '../../xpd-resources/ng/xpd.contract-param/contract-param.module';
-import XPDContractTimeInputModule from '../../xpd-resources/ng/xpd.contract-time-input/contract-time-input.module';
-import XPDDMECModule from '../../xpd-resources/ng/xpd.dmec/dmec.module';
-import XPDFilterModule from '../../xpd-resources/ng/xpd.filters/xpd-filter.module';
-import XPDFormValidationModule from '../../xpd-resources/ng/xpd.form.validation/xpd.form.validation.module';
-import XPDMenuConfirmationModule from '../../xpd-resources/ng/xpd.menu-confirmation/menu-confirmation.module';
-import XPDEventDetailsModule from '../../xpd-resources/ng/xpd.modal.event-details/xpd-modal-event-details.module';
-import XPDFailureModule from '../../xpd-resources/ng/xpd.modal.failure/xpd-modal-failure.module';
-import XPDLayDownConfirmationModule from '../../xpd-resources/ng/xpd.modal.laydown-confirmation/xpd.modal.laydown-confirmation.module';
-import XPDLessonLearnedModule from '../../xpd-resources/ng/xpd.modal.lessonlearned/xpd-modal-lessonlearned.module';
-import XPDPlannerModule from '../../xpd-resources/ng/xpd.planner/planner.module';
-import XPDRegisterAlarmModule from '../../xpd-resources/ng/xpd.register-alarm-modal/register-alarm-modal.module';
+import { AngularTreeviewModule } from '../../xpd-resources/ng/angular.treeview/angular-treeview.module';
+import { XPDGanttModule } from '../../xpd-resources/ng/gantt/gantt.module';
+import { XPDHighchartsModule } from '../../xpd-resources/ng/highcharts/highcharts.module';
+import { XPDAdminNavBarModule } from '../../xpd-resources/ng/xpd.admin-nav-bar/admin-nav-bar.module';
+import { XPDCalculationModule } from '../../xpd-resources/ng/xpd.calculation/calculation.module';
+import { XPDContractParamModule } from '../../xpd-resources/ng/xpd.contract-param/contract-param.module';
+import { XPDContractTimeInputModule } from '../../xpd-resources/ng/xpd.contract-time-input/contract-time-input.module';
+import { XPDDMECModule } from '../../xpd-resources/ng/xpd.dmec/dmec.module';
+import { XPDFiltersModule } from '../../xpd-resources/ng/xpd.filters/xpd-filter.module';
+import { XPDFormValidationModule } from '../../xpd-resources/ng/xpd.form.validation/xpd.form.validation.module';
+import { XPDMenuConfirmationModule } from '../../xpd-resources/ng/xpd.menu-confirmation/menu-confirmation.module';
+import { XPDEventDetailsModule } from '../../xpd-resources/ng/xpd.modal.event-details/xpd-modal-event-details.module';
+import { XPDFailureModule } from '../../xpd-resources/ng/xpd.modal.failure/xpd-modal-failure.module';
+import { XPDLayDownConfirmationModule } from '../../xpd-resources/ng/xpd.modal.laydown-confirmation/xpd.modal.laydown-confirmation.module';
+import { XPDLessonLearnedModule } from '../../xpd-resources/ng/xpd.modal.lessonlearned/xpd-modal-lessonlearned.module';
+import { XPDPlannerModule } from '../../xpd-resources/ng/xpd.planner/planner.module';
+import { XPDRegisterAlarmModule } from '../../xpd-resources/ng/xpd.register-alarm-modal/register-alarm-modal.module';
 import { XPDRPDFormDirective } from '../../xpd-resources/ng/xpd.rpd/rpd.directive';
 import { XPDSectionListDirective } from '../../xpd-resources/ng/xpd.section-list/section-list.directive';
-import XPDSetupFormInputModule from '../../xpd-resources/ng/xpd.setup-form-input/setup-form-input.module';
-import XPDSetupAPIModule from '../../xpd-resources/ng/xpd.setupapi/setupapi.module';
-import XPDSwitchModule from '../../xpd-resources/ng/xpd.switch/xpd.switch.module';
-import XPDTimeSliceModule from '../../xpd-resources/ng/xpd.time-slices-table/time-slices-table.module';
-import XPDTimersModule from '../../xpd-resources/ng/xpd.timers/xpd-timers.module';
-import XPDTrackingModule from '../../xpd-resources/ng/xpd.tracking/tracking.module';
-import XPDZeroTimeZoneModule from '../../xpd-resources/ng/xpd.zerotimezone/xpd.zerotimezone.module';
+import { XPDSetupFormInputModule } from '../../xpd-resources/ng/xpd.setup-form-input/setup-form-input.module';
+import { XPDSetupAPIModule } from '../../xpd-resources/ng/xpd.setupapi/setupapi.module';
+import { XPDSwitchModule } from '../../xpd-resources/ng/xpd.switch/xpd.switch.module';
+import { XPDTimeSliceModule } from '../../xpd-resources/ng/xpd.time-slices-table/time-slices-table.module';
+import { XPDTimersModule } from '../../xpd-resources/ng/xpd.timers/xpd-timers.module';
+import { XPDTrackingModule } from '../../xpd-resources/ng/xpd.tracking/tracking.module';
+import { XPDZeroTimeZoneModule } from '../../xpd-resources/ng/xpd.zerotimezone/xpd.zerotimezone.module';
 import { ReportsController } from '../reports/reports.controller';
 import { AdminConfig } from './admin.config';
 import { AdminRunScope } from './admin.run';
@@ -70,7 +70,7 @@ const XPDAdminModule: angular.IModule = angular.module('xpd.admin', [
 	XPDGanttModule.name,
 	XPDCalculationModule.name,
 	XPDContractParamModule.name,
-	XPDFilterModule.name,
+	XPDFiltersModule.name,
 	XPDTimersModule.name,
 	XPDContractTimeInputModule.name,
 	AngularTreeviewModule.name,
@@ -89,7 +89,7 @@ const XPDAdminModule: angular.IModule = angular.module('xpd.admin', [
 	XPDTimeSliceModule.name,
 ]);
 
-export default XPDAdminModule;
+export { XPDAdminModule };
 
 XPDAdminModule.directive('xpdSectionList', XPDSectionListDirective.Factory());
 XPDAdminModule.directive('rpdForm', XPDRPDFormDirective.Factory());

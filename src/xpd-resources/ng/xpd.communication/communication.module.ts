@@ -6,13 +6,13 @@
 // })();
 
 import * as angular from 'angular';
-import XPDSocketIOModule from '../socket.io/socketio.module';
-import XPDAccessModule from '../xpd.access/accessfactory.module';
-import { OperationDataService } from './operation-server-data.factory';
+import { XPDSocketIOModule } from '../socket.io/socketio.module';
+import { XPDAccessModule } from '../xpd.access/accessfactory.module';
+import { OperationServerService } from './operation-server.service';
 
 const XPDCommunicationModule: angular.IModule = angular.module('xpd.communication', [
 	XPDSocketIOModule.name,
 	XPDAccessModule.name]);
-export default XPDCommunicationModule;
+export { XPDCommunicationModule };
 
-XPDCommunicationModule.service('operationDataService', OperationDataService);
+XPDCommunicationModule.service('operationDataService', OperationServerService);

@@ -10,7 +10,7 @@ export class OperationConfig {
 
 	constructor($routeProvider) {
 
-		$routeProvider.when('/operation-view-only', {
+		$routeProvider.when('/', {
 			template: OperationViewOnlyTemplate,
 			controller: 'OperationViewOnlyController as ovoController',
 		});

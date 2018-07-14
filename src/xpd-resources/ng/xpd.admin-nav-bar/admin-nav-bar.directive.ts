@@ -11,7 +11,7 @@
 // 		.directive('xpdAdminNavBar', xpdAdminNavBar);
 
 // 	xpdAdminNavBar.$inject = ['$location', 'menuConfirmationService', 'operationDataService', 'dialogService'];
-import { OperationDataService } from '../xpd.communication/operation-server-data.factory';
+import { OperationServerService } from '../xpd.communication/operation-server.service';
 import { DialogService } from '../xpd.dialog/xpd.dialog.factory';
 import { MenuConfirmationService } from '../xpd.menu-confirmation/menu-confirmation.factory';
 import template from './admin-nav-bar.template.html';
@@ -30,7 +30,7 @@ export class XPDAdminNavBarDirective implements ng.IDirective {
 	constructor(
 		private $location: ng.ILocationService,
 		private menuConfirmationService: MenuConfirmationService,
-		private operationDataService: OperationDataService,
+		private operationDataService: OperationServerService,
 		private dialogService: DialogService) { }
 
 	public link: ng.IDirectiveLinkFn = (
@@ -160,7 +160,7 @@ export class XPDAdminNavBarDirective implements ng.IDirective {
 		return (
 			$location: ng.ILocationService,
 			menuConfirmationService: MenuConfirmationService,
-			operationDataService: OperationDataService,
+			operationDataService: OperationServerService,
 			dialogService: DialogService) => new XPDAdminNavBarDirective(
 				$location,
 				menuConfirmationService,

@@ -16,6 +16,6 @@ import * as angular from 'angular';
 import { XPDAdminNavBarDirective } from './admin-nav-bar.directive';
 
 const XPDAdminNavBarModule: angular.IModule  = angular.module('xpd.admin-nav-bar', []);
-export default XPDAdminNavBarModule;
+export { XPDAdminNavBarModule };
 
 XPDAdminNavBarModule.directive('xpdAdminNavBar', XPDAdminNavBarDirective.Factory());

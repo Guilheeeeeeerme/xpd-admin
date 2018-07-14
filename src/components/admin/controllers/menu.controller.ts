@@ -1,4 +1,4 @@
-import { OperationDataService } from '../../../xpd-resources/ng/xpd.communication/operation-server-data.factory';
+import { OperationServerService } from '../../../xpd-resources/ng/xpd.communication/operation-server.service';
 import { DialogService } from '../../../xpd-resources/ng/xpd.dialog/xpd.dialog.factory';
 
 export class MenuController {
@@ -16,7 +16,7 @@ export class MenuController {
 	public actionButtonSetDelayOnUnreachable: (seconds: any) => void;
 	public actionButtonSetBlockSpeedInterval: (interval: any) => void;
 
-	constructor($scope, operationDataService: OperationDataService, dialogService: DialogService) {
+	constructor($scope, operationDataService: OperationServerService, dialogService: DialogService) {
 
 		const vm = this;
 

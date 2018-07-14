@@ -21,8 +21,8 @@ module.exports = {
 		'd3-dmec-chart.worker': './src/workers/d3-dmec-chart.worker.ts',
 		'xpd-timers.worker': './src/workers/xpd-timers.worker.ts',
 		'admin': './src/app/admin/admin.ts',
-		// 'dmeclog': './src/dmec-log/dmeclog.ts',
-		// 'reports': './src/reports/reports.ts',
+		'dmec-log': './src/app/dmec-log/dmec-log.ts',
+		'reports': './src/app/reports/reports.ts',
 		'operation-view-only': './src/app/operation-view-only/operation-view-only.ts',
 		'well-view-only': './src/app/well-view-only/well-view-only.ts',
 	},
@@ -37,7 +37,7 @@ module.exports = {
 		new HtmlWebpackPlugin({
 			title: 'XPD Admin',
 			chunks: ['admin'],
-			template: './src/app/admin/index.html',
+			template: './src/app/admin/admin.html',
 			filename: 'admin.html',
 			meta: metaInfo,
 			favicon: './src/assets/img/favicon.ico'
@@ -46,7 +46,7 @@ module.exports = {
 		new HtmlWebpackPlugin({
 			title: 'Operation Settings Overview',
 			chunks: ['operation-view-only'],
-			template: './src/app/operation-view-only/index.html',
+			template: './src/app/operation-view-only/operation-view-only.html',
 			filename: 'operation-view-only.html',
 			meta: metaInfo,
 			favicon: './src/assets/img/favicon.ico'
@@ -55,17 +55,20 @@ module.exports = {
 		new HtmlWebpackPlugin({
 			title: 'Well Settings Overview',
 			chunks: ['well-view-only'],
-			template: './src/app/well-view-only/index.html',
+			template: './src/app/well-view-only/well-view-only.html',
 			filename: 'well-view-only.html',
 			meta: metaInfo,
 			favicon: './src/assets/img/favicon.ico'
 		}),
 
-		new CopyWebpackPlugin([{
-			from: 'src/js/**/*',
-			to: 'assets/js',
-		}],
-			{ debug: true })
+		new CopyWebpackPlugin([
+			{
+				from: './src/assets/js/dhtmlxgantt.js',
+				to: './assets/js/',
+			}],
+			{
+				debug: true
+			})
 	],
 
 	// plugins: [

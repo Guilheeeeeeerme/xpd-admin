@@ -1,6 +1,6 @@
 import * as angular from 'angular';
 import { IModalService } from 'angular-ui-bootstrap';
-import { OperationDataService } from '../../../../xpd-resources/ng/xpd.communication/operation-server-data.factory';
+import { OperationServerService } from '../../../../xpd-resources/ng/xpd.communication/operation-server.service';
 import { DialogService } from '../../../../xpd-resources/ng/xpd.dialog/xpd.dialog.factory';
 import { MenuConfirmationService } from '../../../../xpd-resources/ng/xpd.menu-confirmation/menu-confirmation.factory';
 import { OperationSetupAPIService } from '../../../../xpd-resources/ng/xpd.setupapi/operation-setupapi.service';
@@ -36,7 +36,7 @@ export class OperationController {
 		$routeParams: any,
 		$location: any,
 		$uibModal: IModalService,
-		operationDataService: OperationDataService,
+		operationDataService: OperationServerService,
 		dialogService: DialogService,
 		wellSetupAPIService: WellSetupAPIService,
 		sectionSetupAPIService: SectionSetupAPIService,

@@ -1,4 +1,4 @@
-import { OperationDataService } from '../../../xpd-resources/ng/xpd.communication/operation-server-data.factory';
+import { OperationServerService } from '../../../xpd-resources/ng/xpd.communication/operation-server.service';
 import { DialogService } from '../../../xpd-resources/ng/xpd.dialog/xpd.dialog.factory';
 import { LessonLearnedModalService } from '../../../xpd-resources/ng/xpd.modal.lessonlearned/xpd-modal-lessonlearned.service';
 import { LessonLearnedSetupAPIService } from '../../../xpd-resources/ng/xpd.setupapi/lessonlearned-setupapi.service';
@@ -17,7 +17,7 @@ export class LessonLearnedController {
 		private $scope: any,
 		private lessonLearnedModal: LessonLearnedModalService,
 		private lessonLearnedSetupAPIService: LessonLearnedSetupAPIService,
-		operationDataService: OperationDataService,
+		operationDataService: OperationServerService,
 		private dialogService: DialogService) {
 		const vm = this;
 

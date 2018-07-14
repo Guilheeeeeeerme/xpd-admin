@@ -1,5 +1,5 @@
 import { IQProvider, IQService } from 'angular';
-import { OperationDataService } from '../../../xpd-resources/ng/xpd.communication/operation-server-data.factory';
+import { OperationServerService } from '../../../xpd-resources/ng/xpd.communication/operation-server.service';
 import { EventDetailsModalService } from '../../../xpd-resources/ng/xpd.modal.event-details/xpd-modal-event-details.factory';
 import { FailureModalFactory } from '../../../xpd-resources/ng/xpd.modal.failure/xpd-modal-failure.factory';
 import { LessonLearnedModalService } from '../../../xpd-resources/ng/xpd.modal.lessonlearned/xpd-modal-lessonlearned.service';
@@ -22,7 +22,7 @@ export class AdminTrackingController {
 	constructor(
 		$scope: any,
 		$q: IQService,
-		operationDataService: OperationDataService,
+		operationDataService: OperationServerService,
 		eventDetailsModal: EventDetailsModalService,
 		failureModal: FailureModalFactory,
 		eventlogSetupAPIService: EventLogSetupAPIService,

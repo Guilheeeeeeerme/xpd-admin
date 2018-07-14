@@ -1,6 +1,6 @@
 import * as angular from 'angular';
 import { VCruisingCalculatorService } from '../../../xpd-resources/ng/xpd.calculation/calculation.service';
-import { OperationDataService } from '../../../xpd-resources/ng/xpd.communication/operation-server-data.factory';
+import { OperationServerService } from '../../../xpd-resources/ng/xpd.communication/operation-server.service';
 import { DialogService } from '../../../xpd-resources/ng/xpd.dialog/xpd.dialog.factory';
 /*
 * @Author:
@@ -27,7 +27,7 @@ export class PlannerController {
 	constructor(
 		$scope,
 		$filter,
-		operationDataService: OperationDataService,
+		operationDataService: OperationServerService,
 		dialogService: DialogService,
 		vCruisingCalculator: VCruisingCalculatorService) {
 

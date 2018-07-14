@@ -1,4 +1,4 @@
-import { OperationSetupAPIService } from '../../xpd-resources/ng/xpd.setupapi/operation-setupapi.service';
+import { OperationSetupAPIService } from '../../../../xpd-resources/ng/xpd.setupapi/operation-setupapi.service';
 
 export class OperationViewOnlyController {
 	// 'use strict';

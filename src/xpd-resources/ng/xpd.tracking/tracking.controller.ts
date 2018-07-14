@@ -1,6 +1,6 @@
 import * as angular from 'angular';
 import { IModalService } from 'angular-ui-bootstrap';
-import { OperationDataService } from '../xpd.communication/operation-server-data.factory';
+import { OperationServerService } from '../xpd.communication/operation-server.service';
 import { DialogService } from '../xpd.dialog/xpd.dialog.factory';
 import { XPDIntervalService, XPDTimeoutService } from '../xpd.timers/xpd-timers.service';
 
@@ -41,7 +41,7 @@ export class TrackingController {
 		private $xpdInterval: XPDIntervalService,
 		private $xpdTimeout: XPDTimeoutService,
 		private $uibModal: IModalService,
-		operationDataService: OperationDataService,
+		operationDataService: OperationServerService,
 		private dialogService: DialogService) {
 
 		const vm = this;

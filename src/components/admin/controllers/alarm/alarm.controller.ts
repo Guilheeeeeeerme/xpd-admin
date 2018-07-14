@@ -11,7 +11,7 @@
 
 // 	alarmController.$inject = ['$scope', 'operationDataService', 'operationSetupAPIService', 'alarmCRUDService'];
 import * as angular from 'angular';
-import { OperationDataService } from '../../../../xpd-resources/ng/xpd.communication/operation-server-data.factory';
+import { OperationServerService } from '../../../../xpd-resources/ng/xpd.communication/operation-server.service';
 import { OperationSetupAPIService } from '../../../../xpd-resources/ng/xpd.setupapi/operation-setupapi.service';
 import { AlarmCRUDService } from './alarm.service';
 
@@ -100,7 +100,7 @@ export class AlarmController {
 
 	constructor(
 		private $scope: any,
-		operationDataService: OperationDataService,
+		operationDataService: OperationServerService,
 		operationSetupAPIService: OperationSetupAPIService,
 		private alarmCRUDService: AlarmCRUDService) {
 

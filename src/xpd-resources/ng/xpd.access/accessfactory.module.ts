@@ -9,10 +9,10 @@ import * as angular from 'angular';
 import { XPDAccessService } from './access.service';
 import { AccessFactoryDirective } from './accessfactory.directive';
 import { SecurityConfig } from './security-interceptor.config';
-import SecurityInteceptorFactory from './security-interceptor.factory';
+import { SecurityInteceptorFactory } from './security-interceptor.factory';
 
 const XPDAccessModule: angular.IModule  = angular.module('xpd.accessfactory', []);
-export default XPDAccessModule;
+export { XPDAccessModule };
 
 XPDAccessModule.factory('securityInteceptor', SecurityInteceptorFactory);
 XPDAccessModule.config(SecurityConfig);

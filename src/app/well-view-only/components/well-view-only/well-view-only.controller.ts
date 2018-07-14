@@ -1,5 +1,5 @@
-import { SectionSetupAPIService } from '../../xpd-resources/ng/xpd.setupapi/section-setupapi.service';
-import { WellSetupAPIService } from '../../xpd-resources/ng/xpd.setupapi/well-setupapi.service';
+import { SectionSetupAPIService } from '../../../../xpd-resources/ng/xpd.setupapi/section-setupapi.service';
+import { WellSetupAPIService } from '../../../../xpd-resources/ng/xpd.setupapi/well-setupapi.service';
 
 export class WellViewOnlyController {
 

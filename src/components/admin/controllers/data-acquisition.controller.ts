@@ -1,4 +1,4 @@
-import { OperationDataService } from '../../../xpd-resources/ng/xpd.communication/operation-server-data.factory';
+import { OperationServerService } from '../../../xpd-resources/ng/xpd.communication/operation-server.service';
 
 export class DataAcquisitionController {
 	// 'use strict';
@@ -11,7 +11,7 @@ export class DataAcquisitionController {
 	public changeViewReading: () => void;
 	public operationDataFactory: any;
 
-	constructor($scope, operationDataService: OperationDataService) {
+	constructor($scope, operationDataService: OperationServerService) {
 
 		const vm = this;
 

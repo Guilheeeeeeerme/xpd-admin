@@ -1,4 +1,4 @@
-import { OperationDataService } from "../../../../xpd-resources/ng/xpd.communication/operation-server-data.factory";
+import { OperationServerService } from "../../../../xpd-resources/ng/xpd.communication/operation-server.service";
 
 export class OperationDashboardController {
 
@@ -13,7 +13,7 @@ export class OperationDashboardController {
 	public changePanelState: (keyName: any) => void;
 	public operationDataFactory: any;
 
-	constructor($scope, $filter, operationDataService: OperationDataService) {
+	constructor($scope, $filter, operationDataService: OperationServerService) {
 
 		const vm = this;
 

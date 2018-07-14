@@ -1,4 +1,4 @@
-import { OperationDataService } from '../../../xpd-resources/ng/xpd.communication/operation-server-data.factory';
+import { OperationServerService } from '../../../xpd-resources/ng/xpd.communication/operation-server.service';
 import { DialogService } from '../../../xpd-resources/ng/xpd.dialog/xpd.dialog.factory';
 import { FailureModalFactory } from '../../../xpd-resources/ng/xpd.modal.failure/xpd-modal-failure.factory';
 
@@ -18,7 +18,7 @@ export class FailuresController {
 	constructor(
 		$scope,
 		failureModal: FailureModalFactory,
-		operationDataService: OperationDataService,
+		operationDataService: OperationServerService,
 		dialogService: DialogService) {
 
 		const vm = this;

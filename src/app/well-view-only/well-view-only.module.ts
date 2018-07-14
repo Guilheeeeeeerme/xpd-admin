@@ -3,10 +3,10 @@ import 'angular-animate';
 import 'angular-route';
 import 'angular-toastr';
 import 'angular-ui-bootstrap';
-import XPDDialogModule from '../../xpd-resources/ng/xpd.dialog/xpd.dialog.module';
-import XPDSetupAPIModule from '../../xpd-resources/ng/xpd.setupapi/setupapi.module';
+import { XPDDialogModule } from '../../xpd-resources/ng/xpd.dialog/xpd.dialog.module';
+import { XPDSetupAPIModule } from '../../xpd-resources/ng/xpd.setupapi/setupapi.module';
 import { WellConfig } from './well-view-only.config';
-import { WellViewOnlyController } from './well-view-only.controller';
+import { WellViewOnlyController } from './components/well-view-only/well-view-only.controller';
 
 const XPDWellViewOnlyModule: angular.IModule = angular.module('xpd.wellviewonly', [
 	XPDDialogModule.name,
@@ -19,4 +19,4 @@ const XPDWellViewOnlyModule: angular.IModule = angular.module('xpd.wellviewonly'
 XPDWellViewOnlyModule.config(WellConfig);
 XPDWellViewOnlyModule.controller('WellViewOnlyController', WellViewOnlyController);
 
-export default XPDWellViewOnlyModule;
+export { XPDWellViewOnlyModule };

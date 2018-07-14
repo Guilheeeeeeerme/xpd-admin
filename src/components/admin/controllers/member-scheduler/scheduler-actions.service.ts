@@ -1,6 +1,6 @@
 import * as angular from 'angular';
 import { IModalService } from 'angular-ui-bootstrap';
-import { OperationDataService } from '../../../../xpd-resources/ng/xpd.communication/operation-server-data.factory';
+import { OperationServerService } from '../../../../xpd-resources/ng/xpd.communication/operation-server.service';
 import { DialogService } from '../../../../xpd-resources/ng/xpd.dialog/xpd.dialog.factory';
 import { ScheduleSetupAPIService } from '../../../../xpd-resources/ng/xpd.setupapi/schedule-setupapi.service';
 
@@ -30,7 +30,7 @@ export class SchedulerActionsService {
 
 	constructor(
 		$modal: IModalService,
-		operationDataService: OperationDataService,
+		operationDataService: OperationServerService,
 		scheduleSetupAPIService: ScheduleSetupAPIService,
 		dialogService: DialogService) {
 

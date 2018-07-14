@@ -1,4 +1,4 @@
-import { OperationDataService } from '../../xpd-resources/ng/xpd.communication/operation-server-data.factory';
+import { OperationServerService } from '../../xpd-resources/ng/xpd.communication/operation-server.service';
 import { OperationSetupAPIService } from '../../xpd-resources/ng/xpd.setupapi/operation-setupapi.service';
 import { WellSetupAPIService } from '../../xpd-resources/ng/xpd.setupapi/well-setupapi.service';
 
@@ -16,7 +16,7 @@ export class ReportsController {
 		$scope,
 		operationSetupAPIService: OperationSetupAPIService,
 		wellSetupAPIService: WellSetupAPIService,
-		operationDataService: OperationDataService) {
+		operationDataService: OperationServerService) {
 
 		const vm = this;
 

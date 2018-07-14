@@ -3,14 +3,14 @@
 
 import * as angular from 'angular';
 
-const XPDFilterModule: angular.IModule = angular.module('xpd.filters', []);
-export default XPDFilterModule;
+const XPDFiltersModule: angular.IModule = angular.module('xpd.filters', []);
+export { XPDFiltersModule };
 
-XPDFilterModule.filter('percentage', percentage);
-XPDFilterModule.filter('secondsToHourMinutes', secondsToHourMinutes);
-XPDFilterModule.filter('xpdStateLabelFilter', xpdStateLabelFilter);
-XPDFilterModule.filter('xpdEventLabelFilter', xpdEventLabelFilter);
-XPDFilterModule.filter('secondsToHourMinutesSeconds', secondsToHourMinutesSeconds);
+XPDFiltersModule.filter('percentage', percentage);
+XPDFiltersModule.filter('secondsToHourMinutes', secondsToHourMinutes);
+XPDFiltersModule.filter('xpdStateLabelFilter', xpdStateLabelFilter);
+XPDFiltersModule.filter('xpdEventLabelFilter', xpdEventLabelFilter);
+XPDFiltersModule.filter('secondsToHourMinutesSeconds', secondsToHourMinutesSeconds);
 
 percentage.$inject = ['$filter'];
 xpdStateLabelFilter.$inject = ['$filter'];

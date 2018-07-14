@@ -2,8 +2,8 @@
 import * as angular from 'angular';
 
 // import * as uiBootstrap from 'angular-ui-bootstrap';
-import XPDCalculationModule from '../xpd.calculation/calculation.module';
-import ngIntersection from '../xpd.intersection/xpd-intersection.module';
+import { XPDCalculationModule } from '../xpd.calculation/calculation.module';
+import { ngIntersection } from '../xpd.intersection/xpd-intersection.module';
 import { ConnRulerDirective } from './conn-ruler.directive';
 import { ConsistencyInformationPanelDirective } from './consistency-information-panel.directive';
 import { D3DMECChartModalController } from './d3-dmec-chart-modal.controller';
@@ -36,7 +36,7 @@ const XPDVisualizationModule: angular.IModule = angular.module('xpd.visualizatio
 	XPDCalculationModule.name,
 ]);
 
-export default XPDVisualizationModule;
+export  { XPDVisualizationModule }
 
 XPDVisualizationModule.directive('tripRuler', TripRulerDirective.Factory());
 XPDVisualizationModule.directive('upcomingAlarmsPanel', UpcomingAlarmsPanelDirective.Factory());
