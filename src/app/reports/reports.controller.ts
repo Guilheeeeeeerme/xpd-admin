@@ -1,3 +1,6 @@
+import { OperationDataService } from '../../xpd-resources/ng/xpd.communication/operation-server-data.factory';
+import { OperationSetupAPIService } from '../../xpd-resources/ng/xpd.setupapi/operation-setupapi.service';
+import { WellSetupAPIService } from '../../xpd-resources/ng/xpd.setupapi/well-setupapi.service';
 
 export class ReportsController {
 	// 'use strict';
@@ -5,10 +8,15 @@ export class ReportsController {
 	// angular.module('xpd.reports')
 	// 	.controller('ReportsController', reportsController);
 
-	public static $inject = ['$scope', 'operationSetupAPIService', 'wellSetupAPIService', 'operationDataFactory'];
+	public static $inject = ['$scope', 'operationSetupAPIService', 'wellSetupAPIService', 'operationDataService'];
 	public getFailuresOnInterval: (startTime: any, endTime: any) => void;
+	public operationDataFactory: any;
 
-	constructor($scope, operationSetupAPIService, wellSetupAPIService, operationDataFactory) {
+	constructor(
+		$scope,
+		operationSetupAPIService: OperationSetupAPIService,
+		wellSetupAPIService: WellSetupAPIService,
+		operationDataService: OperationDataService) {
 
 		const vm = this;
 
@@ -24,8 +32,8 @@ export class ReportsController {
 
 		vm.getFailuresOnInterval = getFailuresOnInterval;
 
-		operationDataFactory.openConnection([]).then(function (response) {
-			operationDataFactory = response;
+		operationDataService.openConnection([]).then(function (operationDataFactory) {
+			vm.operationDataFactory = operationDataFactory;
 		});
 
 		if (!localStorage.getItem('xpd.admin.reports.reportsData.toDate') || !localStorage.getItem('xpd.admin.reports.reportsData.fromDate')) {
@@ -36,7 +44,7 @@ export class ReportsController {
 		}
 
 		getWellList();
-		operationDataFactory.addEventListener('reportsController', 'setOnFailureChangeListener', onFailureChange);
+		operationDataService.addEventListener('reportsController', 'setOnFailureChangeListener', onFailureChange);
 
 		operationSetupAPIService.getList(
 			currentOperationSuccessCallback,
@@ -145,7 +153,7 @@ export class ReportsController {
 
 		function checkNptOnInterval(startInterval, endInterval) {
 
-			const failureList = operationDataFactory.operationData.failureContext.failureList;
+			const failureList = vm.operationDataFactory.operationData.failureContext.failureList;
 			const failuresOnInterval = [];
 
 			for (const i in failureList) {

@@ -12,7 +12,7 @@
 // 		.directive('xpdSetupFormInput', xpdSetupFormInput);
 
 // 	xpdSetupFormInput.$inject = [];
-import template from '../xpd-resources/ng/xpd.setup-form-input/setup-form-input.template.html';
+import template from './setup-form-input.template.html';
 
 export class XPDSetupFormInputDirective implements ng.IDirective {
 

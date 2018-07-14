@@ -1,4 +1,5 @@
-import io from 'socket.io-client';
+
+import * as io from 'socket.io-client';
 
 export class IOSocket {
 	private static instance: IOSocket;

@@ -11,27 +11,28 @@
 // 	angular.module('xpd.failure-controller')
 // 		.directive('failureNavBar', failureNavBar);
 
-// 	failureNavBar.$inject = ['$uibModal', 'categorySetupAPIService', 'operationDataFactory', 'dialogFactory'];
+// 	failureNavBar.$inject = ['$uibModal', 'categorySetupAPIService', 'operationDataService', 'dialogService'];
 
 import { IModalService } from 'angular-ui-bootstrap';
 import failureLessoModal from 'app/components/admin/views/modal/tabs-failure-lesson.modal.html';
 import template from '../xpd-resources/ng/xpd.failure-controller/failure-nav-bar.template.html';
-import { OperationDataFactory } from '../xpd.communication/operation-server-data.factory';
-import { DialogFactory } from '../xpd.dialog/xpd.dialog.factory';
+import { OperationDataService } from '../xpd.communication/operation-server-data.factory';
+import { DialogService } from '../xpd.dialog/xpd.dialog.factory';
 import { CategorySetupAPIService } from '../xpd.setupapi/category-setupapi.service';
 
 export class FailureNavBarDirective implements ng.IDirective {
-	public static $inject: string[] = ['$uibModal', 'categorySetupAPIService', 'operationDataFactory', 'dialogFactory'];
+	public static $inject: string[] = ['$uibModal', 'categorySetupAPIService', 'operationDataService', 'dialogService'];
 
 	public scope = {};
 	public restrict = 'EA';
 	public template = template;
+	public operationDataFactory: any;
 
 	constructor(
 		private $uibModal: IModalService,
 		private categorySetupAPIService: CategorySetupAPIService,
-		private operationDataFactory: OperationDataFactory,
-		private dialogFactory: DialogFactory) { }
+		private operationDataService: OperationDataService,
+		private dialogService: DialogService) { }
 
 	public link: ng.IDirectiveLinkFn = (
 		scope: any,
@@ -42,10 +43,9 @@ export class FailureNavBarDirective implements ng.IDirective {
 
 		const self = this;
 
-		this.operationDataFactory.openConnection([]).then(function (response) {
-			const operationDataFactory: any = response;
-
-			this.operationDataFactory.addEventListener('failureNavBar', 'setOnGoingFailureListener', loadOnGoingFailure);
+		this.operationDataService.openConnection([]).then(function (operationDataFactory: any) {
+			self.operationDataFactory = operationDataFactory;
+			self.operationDataFactory.addEventListener('failureNavBar', 'setOnGoingFailureListener', loadOnGoingFailure);
 
 			scope.actionButtonOpenFailureLessonModal = actionButtonOpenFailureLessonModal;
 			scope.actionButtonFinishFailureOnGoing = actionButtonFinishFailureOnGoing;
@@ -96,7 +96,7 @@ export class FailureNavBarDirective implements ng.IDirective {
 			}
 
 			function actionButtonFinishFailureOnGoing() {
-				self.dialogFactory.showCriticalDialog('Are you sure you want to finish Failure?', finishFailureOnGoing);
+				self.dialogService.showCriticalDialog('Are you sure you want to finish Failure?', finishFailureOnGoing);
 			}
 
 			function finishFailureOnGoing() {
@@ -116,12 +116,12 @@ export class FailureNavBarDirective implements ng.IDirective {
 		return (
 			$uibModal: IModalService,
 			categorySetupAPIService: CategorySetupAPIService,
-			operationDataFactory: OperationDataFactory,
-			dialogFactory: DialogFactory) => new FailureNavBarDirective(
+			operationDataService: OperationDataService,
+			dialogService: DialogService) => new FailureNavBarDirective(
 				$uibModal,
 				categorySetupAPIService,
-				operationDataFactory,
-				dialogFactory);
+				operationDataService,
+				dialogService);
 	}
 }
 

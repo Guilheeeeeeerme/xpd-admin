@@ -9,8 +9,9 @@
 import * as angular from 'angular';
 import { IModalService } from 'angular-ui-bootstrap';
 import * as d3 from 'd3';
-import modalTemplate from '../xpd-resources/ng/xpd.visualization/d3-dmec-chart-modal.template.html';
-import template from '../xpd-resources/ng/xpd.visualization/d3-dmec-chart.template.html';
+import modalTemplate from './d3-dmec-chart-modal.template.html';
+import template from './d3-dmec-chart.template.html';
+// import Worker from './d3-dmec-chart.worker.js';
 
 export class D3DMECChartDirective implements ng.IDirective {
 	public restrict = 'E';
@@ -33,7 +34,7 @@ export class D3DMECChartDirective implements ng.IDirective {
 	) => {
 		const self = this;
 
-		const worker = new Worker('./d3-dmec-chart.worker.js');
+		const worker = new Worker('./d3-dmec-chart.worker/d3-dmec-chart.worker.js');
 
 		if (!localStorage.getItem('xpd.admin.dmec.dmecTracks')) {
 			localStorage.setItem('xpd.admin.dmec.dmecTracks', JSON.stringify(this.getDefaultTracks()));

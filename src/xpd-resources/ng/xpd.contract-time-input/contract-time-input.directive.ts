@@ -14,7 +14,7 @@
 
 // 	contractTimeInput.$inject = [];
 import * as angular from 'angular';
-import template from '../xpd-resources/ng/xpd.contract-time-input/contract-time-input.template.html';
+import template from './contract-time-input.template.html';
 
 export class ContractTimeInputDirective {
 	public static $inject: string[] = [];

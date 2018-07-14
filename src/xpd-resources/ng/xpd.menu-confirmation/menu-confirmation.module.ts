@@ -6,12 +6,12 @@
 */
 
 // 	angular.module('xpd.menu-confirmation')
-// 		.factory('menuConfirmationFactory', menuConfirmationFactory);
+// 		.factory('menuConfirmationService', menuConfirmationService);
 
 import * as angular from 'angular';
-import { MenuConfirmationFactory } from './menu-confirmation.factory';
+import { MenuConfirmationService } from './menu-confirmation.factory';
 
 const XPDMenuConfirmationModule: angular.IModule = angular.module('xpd.menu-confirmation', []);
 export default XPDMenuConfirmationModule;
 
-XPDMenuConfirmationModule.factory('menuConfirmationFactory', MenuConfirmationFactory);
+XPDMenuConfirmationModule.service('menuConfirmationService', MenuConfirmationService);

@@ -1,4 +1,4 @@
-import template from './xpd-resources/ng/xpd.visualization/upcoming-alarms-panel.template.html';
+import template from './upcoming-alarms-panel.template.html';
 
 export class UpcomingAlarmsPanelDirective implements ng.IDirective {
 

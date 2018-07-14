@@ -4,10 +4,10 @@
 // 		.directive('dmecTrackingEvents', dmecTrackingEvents);
 // 	dmecTrackingEvents.$inject = ['$uibModal', 'd3Service', 'eventDetailsModal', 'failureModal', 'lessonLearnedModal'];
 import * as d3 from 'd3';
-import template from '../xpd-resources/ng/xpd.visualization/dmec-tracking-events.template.html';
-import { EventDetailsModalFactory } from '../xpd.modal.event-details/xpd-modal-event-details.factory';
+import { EventDetailsModalService } from '../xpd.modal.event-details/xpd-modal-event-details.factory';
 import { FailureModalFactory } from '../xpd.modal.failure/xpd-modal-failure.factory';
-import { LessonLearnedModalFactory } from '../xpd.modal.lessonlearned/xpd-modal-lessonlearned.factory';
+import { LessonLearnedModalService } from '../xpd.modal.lessonlearned/xpd-modal-lessonlearned.service';
+import template from './dmec-tracking-events.template.html';
 
 export class DMECTrackingEventsDirective implements ng.IDirective {
 	public template = template;
@@ -25,9 +25,9 @@ export class DMECTrackingEventsDirective implements ng.IDirective {
 	};
 
 	constructor(
-		private eventDetailsModal: EventDetailsModalFactory,
+		private eventDetailsModal: EventDetailsModalService,
 		private failureModal: FailureModalFactory,
-		private lessonLearnedModal: LessonLearnedModalFactory) {
+		private lessonLearnedModal: LessonLearnedModalService) {
 	}
 
 	public link: ng.IDirectiveLinkFn = (
@@ -321,9 +321,9 @@ export class DMECTrackingEventsDirective implements ng.IDirective {
 
 	public static Factory(): ng.IDirectiveFactory {
 		const directive = (
-			eventDetailsModal: EventDetailsModalFactory,
+			eventDetailsModal: EventDetailsModalService,
 			failureModal: FailureModalFactory,
-			lessonLearnedModal: LessonLearnedModalFactory,
+			lessonLearnedModal: LessonLearnedModalService,
 		) => new DMECTrackingEventsDirective(
 			eventDetailsModal,
 			failureModal,

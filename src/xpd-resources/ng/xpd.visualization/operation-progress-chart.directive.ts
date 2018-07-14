@@ -3,7 +3,7 @@
 // 	.directive('operationProgressChart', operationProgressChart);
 // operationProgressChart.$inject = ['d3Service'];
 import * as d3 from 'd3';
-import template from '../xpd-resources/ng/xpd.visualization/operation-progress-chart.template.html';
+import template from './operation-progress-chart.template.html';
 
 export class OperationProgressChartDirective implements ng.IDirective {
 	public template = template;

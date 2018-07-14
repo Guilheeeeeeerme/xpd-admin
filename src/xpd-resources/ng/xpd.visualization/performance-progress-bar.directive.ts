@@ -3,7 +3,7 @@
 // 	.directive('performanceProgressBar', performanceProgressBar);
 
 // performanceProgressBar.$inject = [];
-import template from '../xpd-resources/ng/xpd.visualization/performance-progress-bar.template.html';
+import template from './performance-progress-bar.template.html';
 
 export class PerformanceProgressBarDirective implements ng.IDirective {
 	public template = template;

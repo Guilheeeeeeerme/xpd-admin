@@ -1,4 +1,4 @@
-import { XPDAccessFactory } from '../xpd.access/accessfactory.factory';
+import { XPDAccessService } from '../xpd.access/access.service';
 import { SetupAPIService } from './setupapi.service';
 
 // (function() {
@@ -7,15 +7,15 @@ import { SetupAPIService } from './setupapi.service';
 // 	angular.module('xpd.setupapi')
 // 		.service('reportsSetupAPIService', reportsSetupAPIService);
 
-	// reportsSetupAPIService.$inject = ['xpdAccessFactory', 'setupAPIService'];
+	// reportsSetupAPIService.$inject = ['xpdAccessService', 'setupAPIService'];
 
 export class ReportsSetupAPIService {
 
-	public static $inject: string[] = ['xpdAccessFactory', 'setupAPIService'];
+	public static $inject: string[] = ['xpdAccessService', 'setupAPIService'];
 	public BASE_URL: string;
 
-	constructor(private xpdAccessFactory: XPDAccessFactory, private setupAPIService: SetupAPIService) {
-		this.BASE_URL = xpdAccessFactory.getSetupURL() + 'setup/reports';
+	constructor(private xpdAccessService: XPDAccessService, private setupAPIService: SetupAPIService) {
+		this.BASE_URL = xpdAccessService.getSetupURL() + 'setup/reports';
 	}
 
 	public getVreList(fromDate, toDate, successCallback, errorCallback) {
@@ -120,7 +120,7 @@ export class ReportsSetupAPIService {
 
 		const req = {
 			method: 'GET',
-			url: this.xpdAccessFactory.getReportsAPIURL() + 'planning/well/' + wellId,
+			url: this.xpdAccessService.getReportsAPIURL() + 'planning/well/' + wellId,
 		};
 
 		this.setupAPIService.doRequest(req, successCallback, errorCallback);
@@ -131,7 +131,7 @@ export class ReportsSetupAPIService {
 
 		const req = {
 			method: 'GET',
-			url: this.xpdAccessFactory.getReportsAPIURL() + 'planning/well/' + wellId + '/operation/' + operationId,
+			url: this.xpdAccessService.getReportsAPIURL() + 'planning/well/' + wellId + '/operation/' + operationId,
 		};
 
 		this.setupAPIService.doRequest(req, successCallback, errorCallback);
@@ -142,7 +142,7 @@ export class ReportsSetupAPIService {
 
 		const req = {
 			method: 'GET',
-			url: this.xpdAccessFactory.getReportsAPIURL() + 'executed/operation/' + operationId,
+			url: this.xpdAccessService.getReportsAPIURL() + 'executed/operation/' + operationId,
 		};
 
 		this.setupAPIService.doRequest(req, successCallback, errorCallback);

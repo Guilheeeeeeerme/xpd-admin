@@ -1,5 +1,5 @@
 import { IModalService } from 'angular-ui-bootstrap';
-import modalTemplate from '../xpd-resources/ng/xpd.modal.failure/xpd-modal-failure.template.html';
+import modalTemplate from './xpd-modal-failure.template.html';
 
 // (function() {
 // 	'use strict';

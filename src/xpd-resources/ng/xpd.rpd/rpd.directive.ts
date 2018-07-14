@@ -5,8 +5,8 @@
 
 // 	rpdFormDirective.$inject = ['$filter', '$xpdTimeout'];
 import { TableExport } from 'tableexport';
-import template from '../xpd-resources/ng/xpd.rpd/rpd.template.html';
 import { XPDTimeoutService } from '../xpd.timers/xpd-timers.service';
+import template from './rpd.template.html';
 
 export class XPDRPDFormDirective {
 

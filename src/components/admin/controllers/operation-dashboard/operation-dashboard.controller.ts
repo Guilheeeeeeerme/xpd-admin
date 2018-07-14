@@ -1,16 +1,19 @@
+import { OperationDataService } from "../../../../xpd-resources/ng/xpd.communication/operation-server-data.factory";
+
 export class OperationDashboardController {
 
 	// 'use strict';
 
 	// angular.module('xpd.operation-dashboard').controller('OperationDashboardController', operationDashboardController);
 
-	public static $inject = ['$scope', '$filter', 'operationDataFactory'];
+	public static $inject = ['$scope', '$filter', 'operationDataService'];
 	public actionButtonBuildForecast: (selectedLineName: any, eventType: any) => void;
 	public getTotalFailureTime: (startTime: any, endTime: any) => 0 | Date;
 	public getPanelStartState: (keyName: any) => any;
 	public changePanelState: (keyName: any) => void;
+	public operationDataFactory: any;
 
-	constructor($scope, $filter, operationDataFactory) {
+	constructor($scope, $filter, operationDataService: OperationDataService) {
 
 		const vm = this;
 
@@ -28,8 +31,8 @@ export class OperationDashboardController {
 			timeEvents: [],
 		};
 
-		operationDataFactory.openConnection([]).then(function(response) {
-			operationDataFactory = response;
+		operationDataService.openConnection([]).then(function(operationDataFactory: any) {
+			vm.operationDataFactory = operationDataFactory;
 			$scope.operationData = operationDataFactory.operationData;
 			main();
 		});
@@ -39,13 +42,13 @@ export class OperationDashboardController {
 		vm.getPanelStartState = getPanelStartState;
 		vm.changePanelState = changePanelState;
 
-		operationDataFactory.addEventListener('operationDashboardController', 'setOnOptimumLineListener', main);
-		operationDataFactory.addEventListener('operationDashboardController', 'setOnActualLineListener', main);
-		operationDataFactory.addEventListener('operationDashboardController', 'setOnForecastChangeListener', main);
+		operationDataService.addEventListener('operationDashboardController', 'setOnOptimumLineListener', main);
+		operationDataService.addEventListener('operationDashboardController', 'setOnActualLineListener', main);
+		operationDataService.addEventListener('operationDashboardController', 'setOnForecastChangeListener', main);
 
-		operationDataFactory.addEventListener('operationDashboardController', 'setOnJointChangeListener', generateEstimatives);
-		operationDataFactory.addEventListener('operationDashboardController', 'setOnCurrentJointListener', generateEstimatives);
-		operationDataFactory.addEventListener('operationDashboardController', 'setOnNoCurrentJointListener', generateEstimatives);
+		operationDataService.addEventListener('operationDashboardController', 'setOnJointChangeListener', generateEstimatives);
+		operationDataService.addEventListener('operationDashboardController', 'setOnCurrentJointListener', generateEstimatives);
+		operationDataService.addEventListener('operationDashboardController', 'setOnNoCurrentJointListener', generateEstimatives);
 
 		function generateEstimatives() {
 

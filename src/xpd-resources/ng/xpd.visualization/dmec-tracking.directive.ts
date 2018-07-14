@@ -3,8 +3,8 @@
 // 	angular.module('xpd.visualization').directive('dmecTracking', dmecTrackingDirective);
 // 	dmecTrackingDirective.$inject = ['dmecService'];
 
-import template from '../xpd-resources/ng/xpd.visualization/dmec-tracking.template.html';
 import { DMECService } from '../xpd.dmec/dmec.service';
+import template from './dmec-tracking.template.html';
 
 export class DMECTrackingDirective implements ng.IDirective {
 	public scope = {

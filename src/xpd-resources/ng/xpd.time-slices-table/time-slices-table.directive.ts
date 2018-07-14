@@ -6,7 +6,7 @@
 
 // 	timeSlicesTable.$inject = [];
 import * as angular from 'angular';
-import template from '../xpd-resources/ng/xpd.time-slices-table/time-slices-table.template.html';
+import template from './time-slices-table.template.html';
 
 export class TimeSlicesTableDirective implements ng.IDirective {
 	public restrict = 'E';

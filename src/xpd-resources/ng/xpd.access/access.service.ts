@@ -3,12 +3,12 @@
 
 // 	angular
 // 		.module('xpd.accessfactory')
-// 		.factory('xpdAccessFactory', xpdAccessFactory);
+// 		.factory('xpdAccessService', xpdAccessService);
 
-// 	xpdAccessFactory.$inject = [];
+// 	xpdAccessService.$inject = [];
 
 /* @ngInject */
-export class XPDAccessFactory {
+export class XPDAccessService {
 
 	public static $inject: string[] = [];
 	private server: any;

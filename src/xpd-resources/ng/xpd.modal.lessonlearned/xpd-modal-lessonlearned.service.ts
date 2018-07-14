@@ -1,5 +1,5 @@
 import { IModalService } from 'angular-ui-bootstrap';
-import modalTemplate from '../xpd-resources/ng/xpd.modal.lessonlearned/xpd-modal-lessonlearned.template.html';
+import modalTemplate from './xpd-modal-lessonlearned.template.html';
 
 // (function() {
 // 	'use strict';
@@ -8,7 +8,7 @@ import modalTemplate from '../xpd-resources/ng/xpd.modal.lessonlearned/xpd-modal
 
 // 	lessonLearnedModal.$inject = ['$uibModal'];
 
-export class LessonLearnedModalFactory {
+export class LessonLearnedModalService {
 
 	constructor (private $uibModal: IModalService) {
 

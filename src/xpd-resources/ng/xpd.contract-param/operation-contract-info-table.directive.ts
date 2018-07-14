@@ -7,8 +7,8 @@
 
 // 	operationContractInfoTable.$inject = ['vCruisingCalculator'];
 
-import template from '../xpd-resources/ng/xpd.contract-param/operation-contract-info-table.template.html';
 import { VCruisingCalculatorService } from '../xpd.calculation/calculation.service';
+import template from './operation-contract-info-table.template.html';
 
 export class OperationContractInfoTableDirective {
 	public static $inject: string[] = ['vCruisingCalculator'];

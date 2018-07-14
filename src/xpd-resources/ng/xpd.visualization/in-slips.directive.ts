@@ -4,7 +4,7 @@
 
 // inSlips.$inject = [];
 
-import template from '../xpd-resources/ng/xpd.visualization/in-slips.template.html';
+import template from './in-slips.template.html';
 
 export class InSlipsDirective implements ng.IDirective {
 

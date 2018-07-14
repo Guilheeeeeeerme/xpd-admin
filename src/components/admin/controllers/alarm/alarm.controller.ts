@@ -9,15 +9,15 @@
 
 // 	angular.module('xpd.admin').controller('AlarmController', alarmController);
 
-// 	alarmController.$inject = ['$scope', 'operationDataFactory', 'operationSetupAPIService', 'alarmCRUDService'];
+// 	alarmController.$inject = ['$scope', 'operationDataService', 'operationSetupAPIService', 'alarmCRUDService'];
 import * as angular from 'angular';
-import { OperationDataFactory } from '../../../../xpd-resources/ng/xpd.communication/operation-server-data.factory';
+import { OperationDataService } from '../../../../xpd-resources/ng/xpd.communication/operation-server-data.factory';
 import { OperationSetupAPIService } from '../../../../xpd-resources/ng/xpd.setupapi/operation-setupapi.service';
 import { AlarmCRUDService } from './alarm.service';
 
 export class AlarmController {
 
-	public static $inject: string[] = ['$scope', 'operationDataFactory', 'operationSetupAPIService', 'alarmCRUDService'];
+	public static $inject: string[] = ['$scope', 'operationDataService', 'operationSetupAPIService', 'alarmCRUDService'];
 	public operationDataFactory: any;
 
 	public actionButtonEditAlarm(alarm) {
@@ -100,7 +100,7 @@ export class AlarmController {
 
 	constructor(
 		private $scope: any,
-		operationDataFactory: OperationDataFactory,
+		operationDataService: OperationDataService,
 		operationSetupAPIService: OperationSetupAPIService,
 		private alarmCRUDService: AlarmCRUDService) {
 
@@ -115,20 +115,20 @@ export class AlarmController {
 			depthAlarms: [],
 		};
 
-		operationDataFactory.openConnection([]).then(function (response) {
-			vm.operationDataFactory = response;
+		operationDataService.openConnection([]).then(function (operationDataFactory: any) {
+			vm.operationDataFactory = operationDataFactory;
 			$scope.operationData = operationDataFactory.operationData;
 
 			loadOperation(operationDataFactory.operationData.operationContext);
 		});
 
-		operationDataFactory.addEventListener('alarmController', 'setOnOperationChangeListener', loadOperation);
-		operationDataFactory.addEventListener('alarmController', 'setOnCurrentOperationListener', loadOperation);
-		operationDataFactory.addEventListener('alarmController', 'setOnRunningOperationListener', loadOperation);
+		operationDataService.addEventListener('alarmController', 'setOnOperationChangeListener', loadOperation);
+		operationDataService.addEventListener('alarmController', 'setOnCurrentOperationListener', loadOperation);
+		operationDataService.addEventListener('alarmController', 'setOnRunningOperationListener', loadOperation);
 
-		operationDataFactory.addEventListener('alarmController', 'setOnAlarmsChangeListener', reloadAlarms);
-		operationDataFactory.addEventListener('alarmController', 'setOnDurationAlarmListener', reloadAlarms);
-		operationDataFactory.addEventListener('alarmController', 'setOnSpeedRestrictionAlarmListener', reloadAlarms);
+		operationDataService.addEventListener('alarmController', 'setOnAlarmsChangeListener', reloadAlarms);
+		operationDataService.addEventListener('alarmController', 'setOnDurationAlarmListener', reloadAlarms);
+		operationDataService.addEventListener('alarmController', 'setOnSpeedRestrictionAlarmListener', reloadAlarms);
 
 		function loadOperation(operationContext) {
 			if (!operationContext) { return; }

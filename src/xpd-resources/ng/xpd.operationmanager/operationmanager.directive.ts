@@ -3,14 +3,14 @@
 
 // 	angular.module('xpd.operationmanager', []).directive('xpdOperationManager', xpdOperationManager);
 
-// 	xpdOperationManager.$inject = ['$uibModal', 'dialogFactory'];
+// 	xpdOperationManager.$inject = ['$uibModal', 'dialogService'];
 import { IModalService } from 'angular-ui-bootstrap';
-import template from '../xpd-resources/ng/xpd.operationmanager/operationmanager.template.html';
-import { DialogFactory } from '../xpd.dialog/xpd.dialog.factory';
+import { DialogService } from '../xpd.dialog/xpd.dialog.factory';
+import template from './operationmanager.template.html';
 
 export class XPDOperationManagerDirective {
 
-	public static $inject: string[] = ['$uibModal', 'dialogFactory'];
+	public static $inject: string[] = ['$uibModal', 'dialogService'];
 
 	public scope = {
 		currentOperation: '=',
@@ -36,7 +36,7 @@ export class XPDOperationManagerDirective {
 	public restrict = 'EA';
 	public template = template;
 
-	constructor(private $uibModal: IModalService, private dialogFactory: DialogFactory) {
+	constructor(private $uibModal: IModalService, private dialogService: DialogService) {
 
 	}
 
@@ -109,24 +109,24 @@ export class XPDOperationManagerDirective {
 		}
 
 		function onClickStartMakeUp() {
-			self.dialogFactory.showCriticalDialog('Are you sure you want to start ' + checkIsBhaOrBOP() + ' Make Up?', startMakeUp);
+			self.dialogService.showCriticalDialog('Are you sure you want to start ' + checkIsBhaOrBOP() + ' Make Up?', startMakeUp);
 		}
 
 		function onClickStartLayDown() {
-			self.dialogFactory.showCriticalDialog('This action will start ' + checkIsBhaOrBOP() + ' Lay Down. Are you sure you want to do this?', startLayDown);
+			self.dialogService.showCriticalDialog('This action will start ' + checkIsBhaOrBOP() + ' Lay Down. Are you sure you want to do this?', startLayDown);
 		}
 
 		function onClickFinishMakeUp() {
 			if (scope.bitDepthContext.bitDepth < scope.currentOperation.length) {
 				messageBitDepth(scope.currentOperation.length);
 			} else {
-				self.dialogFactory.showCriticalDialog({ templateHtml: 'This action will set bit depth at <b>' + scope.currentOperation.length + '</b>m. Are you sure you want to finish ' + checkIsBhaOrBOP() + ' Make Up?' }, finishMakeUp);
+				self.dialogService.showCriticalDialog({ templateHtml: 'This action will set bit depth at <b>' + scope.currentOperation.length + '</b>m. Are you sure you want to finish ' + checkIsBhaOrBOP() + ' Make Up?' }, finishMakeUp);
 			}
 
 		}
 
 		function onClickFinishLayDown() {
-			self.dialogFactory.showCriticalDialog({ templateHtml: 'This action will end operation. Are you sure you want to finish ' + checkIsBhaOrBOP() + ' Lay Down?' }, finishLayDown);
+			self.dialogService.showCriticalDialog({ templateHtml: 'This action will end operation. Are you sure you want to finish ' + checkIsBhaOrBOP() + ' Lay Down?' }, finishLayDown);
 		}
 
 		function actionDisabledCementation() {
@@ -134,7 +134,7 @@ export class XPDOperationManagerDirective {
 		}
 
 		function onClickFinishDurationAlarm() {
-			self.dialogFactory.showConfirmDialog('Are you sure you want to finish this duration alarm? This action cannot be undone.', scope.actionButtonFinishDurationAlarm);
+			self.dialogService.showConfirmDialog('Are you sure you want to finish this duration alarm? This action cannot be undone.', scope.actionButtonFinishDurationAlarm);
 		}
 
 		function checkIsBhaOrBOP() {
@@ -142,19 +142,19 @@ export class XPDOperationManagerDirective {
 		}
 
 		function startMakeUp() {
-			self.dialogFactory.showConfirmDialog('Are you sure you want to start Make Up? This action cannot be undone.', scope.actionButtonStartMakeUp);
+			self.dialogService.showConfirmDialog('Are you sure you want to start Make Up? This action cannot be undone.', scope.actionButtonStartMakeUp);
 		}
 
 		function startLayDown() {
-			self.dialogFactory.showConfirmDialog('Are you sure you want to start Lay Down? This action cannot be undone.', scope.actionButtonStartLayDown);
+			self.dialogService.showConfirmDialog('Are you sure you want to start Lay Down? This action cannot be undone.', scope.actionButtonStartLayDown);
 		}
 
 		function finishMakeUp() {
-			self.dialogFactory.showConfirmDialog('Are you sure you want to finish Make Up? This action cannot be undone.', scope.actionButtonFinishMakeUp);
+			self.dialogService.showConfirmDialog('Are you sure you want to finish Make Up? This action cannot be undone.', scope.actionButtonFinishMakeUp);
 		}
 
 		function finishLayDown() {
-			self.dialogFactory.showConfirmDialog('Are you sure you want to finish Lay Down? This action cannot be undone.', scope.actionButtonFinishLayDown);
+			self.dialogService.showConfirmDialog('Are you sure you want to finish Lay Down? This action cannot be undone.', scope.actionButtonFinishLayDown);
 		}
 
 		function messageBitDepth(acceptableBitDepth) {
@@ -166,7 +166,7 @@ export class XPDOperationManagerDirective {
 				bitDepthOrigin = 'RIG';
 			}
 
-			self.dialogFactory.showMessageDialog({
+			self.dialogService.showMessageDialog({
 				templateHtml: 'You are using <b>' + bitDepthOrigin + '</b> bit depth, and your current position is <b>' + scope.bitDepthContext.bitDepth + '</b>m,  please move the bit depth to <b>' + acceptableBitDepth + '</b>m to proceed.',
 			});
 		}
@@ -178,7 +178,7 @@ export class XPDOperationManagerDirective {
 	}
 
 	public static Factory(): ng.IDirectiveFactory {
-		return ($uibModal: IModalService, dialogFactory: DialogFactory) => new XPDOperationManagerDirective($uibModal, dialogFactory);
+		return ($uibModal: IModalService, dialogService: DialogService) => new XPDOperationManagerDirective($uibModal, dialogService);
 	}
 
 }

@@ -4,7 +4,7 @@ import { IModalServiceInstance } from 'angular-ui-bootstrap';
 // 	'use strict';
 
 // 	angular.module('xpd.dialog')
-// 		.factory('dialogFactory', dialogFactory)
+// 		.factory('dialogService', dialogService)
 // 		.controller('dialogController', dialogController);
 
 // 	dialogController.$inject = ['$scope', '$uibModalInstance', 'content', 'confirmCallback', 'cancelCallback'];

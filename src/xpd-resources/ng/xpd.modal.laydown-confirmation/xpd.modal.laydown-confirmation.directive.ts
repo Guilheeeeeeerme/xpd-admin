@@ -6,17 +6,19 @@
 
 // 	app.directive('laydownConfirmation', laydownConfirmation);
 
-// 	laydownConfirmation.$inject = ['$uibModal', 'operationDataFactory'];
+// 	laydownConfirmation.$inject = ['$uibModal', 'operationDataService'];
 
 import { IModalService } from 'angular-ui-bootstrap';
-import modalTemplate from '../xpd-resources/ng/xpd.modal.laydown-confirmation/xpd.modal.laydown-confirmation.template.html';
-import { OperationDataFactory } from '../xpd.communication/operation-server-data.factory';
+import { OperationDataService } from '../xpd.communication/operation-server-data.factory';
+import modalTemplate from './xpd.modal.laydown-confirmation.template.html';
 
 export class LayDownConfirmationDirective implements ng.IDirective {
 
-	constructor(private $uibModal: IModalService, private operationDataFactory: OperationDataFactory) { }
+	public operationDataFactory: any;
+	public layDownDetectedModal: any;
+	constructor(private $uibModal: IModalService, private operationDataService: OperationDataService) { }
 
-	public scope: {
+	public scope: any = {
 		dismissable: '<',
 	};
 
@@ -26,55 +28,62 @@ export class LayDownConfirmationDirective implements ng.IDirective {
 		attributes: ng.IAttributes,
 		ctrl: any,
 	) => {
+		const vm = this;
 
-		const self: LayDownConfirmationDirective = this;
+		this.operationDataService.openConnection([]).then(function (operationDataFactory) {
+			vm.operationDataFactory = (operationDataFactory as any);
 
-		let layDownDetectedModal = null;
-
-		this.operationDataFactory.openConnection([]).then(function (op) {
-			const operationDataFactory: any = (op as any);
 			scope.actionButtonStartLaydown = actionButtonStartLaydown;
 
-			this.operationDataFactory.addEventListener('trackingController', 'setOnStateChangeListener', checkCurrentState);
-			this.operationDataFactory.addEventListener('trackingController', 'setOnCurrentStateListener', checkCurrentState);
-			this.operationDataFactory.addEventListener('trackingController', 'setOnChangeLaydownStatusListener', checkCurrentState);
+			vm.operationDataFactory.addEventListener('trackingController', 'setOnStateChangeListener', (stateContext: any) => {
+				vm.checkCurrentState(stateContext);
+			});
+
+			vm.operationDataFactory.addEventListener('trackingController', 'setOnCurrentStateListener', (stateContext: any) => {
+				vm.checkCurrentState(stateContext);
+			});
+
+			vm.operationDataFactory.addEventListener('trackingController', 'setOnChangeLaydownStatusListener', (stateContext: any) => {
+				vm.checkCurrentState(stateContext);
+			});
 
 			function actionButtonStartLaydown() {
-				operationDataFactory.emitStartLayDown();
+				vm.operationDataFactory.emitStartLayDown();
 			}
 
-			function checkCurrentState(stateContext) {
-
-				// console.log(stateContext.currentState, stateContext.layDownDetected);
-
-				if (!layDownDetectedModal && stateContext.currentState === 'layDown' && stateContext.layDownDetected === true) {
-					scope.buttonNameStartLayDown = 'Start ' + (operationDataFactory.operationData.operationContext.currentOperation.type === 'bha' ? 'BHA' : 'BOP') + ' Lay Down';
-
-					layDownDetectedModal = self.$uibModal.open({
-						keyboard: false,
-						animation: false,
-						scope,
-						size: 'lg',
-						backdrop: !!scope.dismissable,
-						windowClass: 'laydown-confirmation-modal',
-						template: modalTemplate,
-					});
-
-				} else if (layDownDetectedModal) {
-					if (layDownDetectedModal && layDownDetectedModal.close) {
-						layDownDetectedModal.close();
-					}
-					layDownDetectedModal = null;
-				}
-
-			}
 		});
 
 	}
 
+	private checkCurrentState(stateContext) {
+
+		// console.log(stateContext.currentState, stateContext.layDownDetected);
+
+		if (!this.layDownDetectedModal && stateContext.currentState === 'layDown' && stateContext.layDownDetected === true) {
+			this.scope.buttonNameStartLayDown = 'Start ' + (this.operationDataFactory.operationData.operationContext.currentOperation.type === 'bha' ? 'BHA' : 'BOP') + ' Lay Down';
+
+			this.layDownDetectedModal = this.$uibModal.open({
+				keyboard: false,
+				animation: false,
+				scope: this.scope,
+				size: 'lg',
+				backdrop: !!this.scope.dismissable,
+				windowClass: 'laydown-confirmation-modal',
+				template: modalTemplate,
+			});
+
+		} else if (this.layDownDetectedModal) {
+			if (this.layDownDetectedModal && this.layDownDetectedModal.close) {
+				this.layDownDetectedModal.close();
+			}
+			this.layDownDetectedModal = null;
+		}
+
+	}
+
 	public static Factory(): ng.IDirectiveFactory {
-		const directive = ($uibModal, operationDataFactory) => new LayDownConfirmationDirective($uibModal, operationDataFactory);
-		directive.$inject = ['$uibModal', 'operationDataFactory'];
+		const directive = ($uibModal, operationDataService) => new LayDownConfirmationDirective($uibModal, operationDataService);
+		directive.$inject = ['$uibModal', 'operationDataService'];
 		return directive;
 	}
 }

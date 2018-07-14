@@ -1,59 +1,51 @@
+namespace worker.d3.dmec {
 
-(function () {
+const ctx: Worker = self as any;
 
-	'use strict';
+ctx.addEventListener('message', (event) => {
+	const data = event.data;
 
-	function getRandomArbitrary(min, max) {
-		return Math.floor(Math.random() * (max - min) + min);
-	}
+	// var threadId = getRandomArbitrary(0, 1000) + ' ' + data.cmd;
+	// var startTime = new Date().getTime();
+	// console.log('%s começou', threadId);
 
-	addEventListener('message', onEvent, false);
-
-	function onEvent(event) {
-		var data = event.data;
-		var self = this;
-
-		// var threadId = getRandomArbitrary(0, 1000) + ' ' + data.cmd;
-		// var startTime = new Date().getTime();
-		// console.log('%s começou', threadId);
-
-		switch (data.cmd) {
+	switch (data.cmd) {
 
 		case 'find-point':
 			getPoint(data.timestamp, data.tracks, data.oldPoints, data.newPoints).then(function (points) {
-				self.postMessage({
+				ctx.postMessage({
 					cmd: data.cmd,
-					points: points
+					points: points,
 				});
 			});
 			break;
 		case 'find-point-avl':
 			getParamPointAVL(data.timestamp, data.param, data.oldPoints, data.newPoints).then(function (point) {
-				self.postMessage({
+				ctx.postMessage({
 					cmd: data.cmd,
 					point: point,
-					param: data.param
+					param: data.param,
 				});
 			});
 			break;
 		case 'find-point-linear':
 			getParamPointLinear(data.timestamp, data.param, data.oldPoints, data.newPoints).then(function (point) {
-				self.postMessage({
+				ctx.postMessage({
 					cmd: data.cmd,
 					point: point,
-					param: data.param
+					param: data.param,
 				});
 			});
 			break;
 		case 'handle-overflow':
-			this.postMessage({
+			ctx.postMessage({
 				cmd: data.cmd,
 				trackName: data.trackName,
 				points: overflowPoints(data.tracks, data.points)
 			});
 			break;
 		case 'reading-to-points':
-			this.postMessage({
+			ctx.postMessage({
 				cmd: data.cmd,
 				points: readingsToPoints(data.readings, data.tracks)
 			});
@@ -62,11 +54,13 @@
 			console.log('[Worker] Unable to handle ', data);
 			break;
 
-		}
+	}
 
-		// var endTime = new Date().getTime();
-		// console.log('%s terminou [%s ms]', threadId, (endTime - startTime));
+	// var endTime = new Date().getTime();
+	// console.log('%s terminou [%s ms]', threadId, (endTime - startTime));
 
+	function getRandomArbitrary(min, max) {
+		return Math.floor(Math.random() * (max - min) + min);
 	}
 
 	function overflowPoints(tracks, points) {
@@ -132,6 +126,7 @@
 			return result;
 		}
 	}
+
 	function getPoint(timestamp, tracks, oldPoints, newPoints) {
 
 		var promises = [];
@@ -249,7 +244,6 @@
 
 	}
 
-
 	function readingsToPoints(readings, tracks) {
 		var points = {};
 
@@ -289,4 +283,6 @@
 
 	}
 
-})();
+}, false);
+
+}

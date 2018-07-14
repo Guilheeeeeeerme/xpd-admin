@@ -1,5 +1,5 @@
 import * as angular from 'angular';
-import { IModalServiceInstance } from '../../../../../node_modules/@types/angular-ui-bootstrap';
+import { IModalServiceInstance } from 'angular-ui-bootstrap';
 import { PhotoAPIService } from '../../../../xpd-resources/ng/xpd.setupapi/photo-setupapi.service';
 import { ScheduleSetupAPIService } from '../../../../xpd-resources/ng/xpd.setupapi/schedule-setupapi.service';
 

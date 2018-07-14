@@ -1,21 +1,21 @@
 import * as angular from 'angular';
 import { IModalService } from 'angular-ui-bootstrap';
-import { DialogFactory } from '../../../../xpd-resources/ng/xpd.dialog/xpd.dialog.factory';
+import { DialogService } from '../../../../xpd-resources/ng/xpd.dialog/xpd.dialog.factory';
 // (function() {
 // 	'use strict';
 
 // 	angular.module('xpd.admin')
 // 		.service('alarmCRUDService', alarmCRUDService);
 
-// 	alarmCRUDService.$inject = ['$uibModal', 'dialogFactory'];
+// 	alarmCRUDService.$inject = ['$uibModal', 'dialogService'];
 
 export class AlarmCRUDService {
 
-	public static $inject: string[] = ['$uibModal', 'dialogFactory'];
+	public static $inject: string[] = ['$uibModal', 'dialogService'];
 
 	constructor(
 		private $uibModal: IModalService,
-		private dialogFactory: DialogFactory) {
+		private dialogService: DialogService) {
 
 	}
 
@@ -87,7 +87,7 @@ export class AlarmCRUDService {
 	 */
 	public removeAlarm(alarm, callback?) {
 
-		this.dialogFactory.showConfirmDialog('Are you sure you want to delete this alarm?', function () {
+		this.dialogService.showConfirmDialog('Are you sure you want to delete this alarm?', function () {
 
 			if (alarm.id == null) {
 				alarm = null;

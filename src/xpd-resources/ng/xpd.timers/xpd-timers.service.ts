@@ -1,5 +1,8 @@
 
 // tslint:disable-next-line:max-classes-per-file
+
+// import Worker from './xpd-timers.worker.js';
+
 class XPDAsync {
 
 	public cancel(worker) {
@@ -13,7 +16,7 @@ class XPDAsync {
 	public doAsync(type, callback, timeout, scope) {
 		const self = this;
 
-		const worker = new Worker('./xpd-timers.worker.js');
+		const worker = new Worker('./xpd-timers.worker/xpd-timers.worker.js');
 
 		worker.postMessage({
 			cmd: type,

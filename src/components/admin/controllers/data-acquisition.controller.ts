@@ -1,4 +1,4 @@
-import { OperationDataFactory } from '../../../xpd-resources/ng/xpd.communication/operation-server-data.factory';
+import { OperationDataService } from '../../../xpd-resources/ng/xpd.communication/operation-server-data.factory';
 
 export class DataAcquisitionController {
 	// 'use strict';
@@ -6,12 +6,12 @@ export class DataAcquisitionController {
 	// angular.module('xpd.admin')
 	// 	.controller('DataAcquisitionController', dataAcquisitionController);
 
-	public static $inject = ['$scope', 'operationDataFactory'];
-	public operationDataFactory: any;
+	public static $inject = ['$scope', 'operationDataService'];
 	public changeViewAcquisition: () => void;
 	public changeViewReading: () => void;
+	public operationDataFactory: any;
 
-	constructor($scope, operationDataFactory: OperationDataFactory) {
+	constructor($scope, operationDataService: OperationDataService) {
 
 		const vm = this;
 
@@ -20,8 +20,8 @@ export class DataAcquisitionController {
 			readingJson: false,
 		};
 
-		operationDataFactory.openConnection([]).then(function(response) {
-			vm.operationDataFactory = response;
+		operationDataService.openConnection([]).then(function(operationDataFactory: any) {
+			vm.operationDataFactory = operationDataFactory;
 			$scope.readingData = operationDataFactory.operationData.readingContext;
 			$scope.acquisitionData = operationDataFactory.operationData.dataAcquisitionContext;
 		});

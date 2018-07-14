@@ -3,7 +3,7 @@
 
 // 	angular.module('xpd.switch', [])
 // 		.directive('xpdSwitch', xpdSwitch);
-import template from '../xpd-resources/ng/xpd.switch/xpd.switch.template.html';
+import template from './xpd.switch.template.html';
 
 export class XPDSwitchDirective implements ng.IDirective {
 

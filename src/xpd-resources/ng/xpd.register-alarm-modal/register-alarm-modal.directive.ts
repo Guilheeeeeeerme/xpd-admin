@@ -5,7 +5,7 @@
 // 		.directive('registerAlarmModal', registerAlarmModal);
 
 // 	registerAlarmModal.$inject = [];
-import template from '../xpd-resources/ng/xpd.register-alarm-modal/register-alarm-modal.template.html';
+import template from './register-alarm-modal.template.html';
 
 export class RegisterAlarmModalDirective implements ng.IDirective {
 	public restrict = 'E';

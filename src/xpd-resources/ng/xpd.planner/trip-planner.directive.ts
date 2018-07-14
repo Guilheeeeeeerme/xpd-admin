@@ -4,8 +4,8 @@
 // 		.directive('xpdTripPlanner', xpdTripPlanner);
 
 // 	xpdTripPlanner.$inject = ['vCruisingCalculator'];
-import template from '../xpd-resources/ng/xpd.planner/trip-planner.template.html';
 import { VCruisingCalculatorService } from '../xpd.calculation/calculation.service';
+import template from './trip-planner.template.html';
 export class XPDTripPlannerDirective {
 
 	public static $inject: string[] = ['vCruisingCalculator'];

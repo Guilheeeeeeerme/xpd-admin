@@ -1,5 +1,5 @@
 import angular = require('angular');
-import { XPDAccessFactory } from '../xpd.access/accessfactory.factory';
+import { XPDAccessService } from '../xpd.access/access.service';
 import { SetupAPIService } from './setupapi.service';
 
 // (function() {
@@ -7,15 +7,15 @@ import { SetupAPIService } from './setupapi.service';
 
 // 	angular.module('xpd.setupapi').service('photoAPIService', photoAPIService);
 
-// 	photoAPIService.$inject = ['$http', 'xpdAccessFactory', 'setupAPIService'];
+// 	photoAPIService.$inject = ['$http', 'xpdAccessService', 'setupAPIService'];
 
 export class PhotoAPIService {
 
-	public static $inject: string[] = ['$http', 'xpdAccessFactory', 'setupAPIService'];
+	public static $inject: string[] = ['$http', 'xpdAccessService', 'setupAPIService'];
 	public BASE_URL: string;
 
-	constructor(private $http: ng.IHttpService, private xpdAccessFactory: XPDAccessFactory, private setupAPIService: SetupAPIService) {
-		this.BASE_URL = xpdAccessFactory.getSetupURL();
+	constructor(private $http: ng.IHttpService, private xpdAccessService: XPDAccessService, private setupAPIService: SetupAPIService) {
+		this.BASE_URL = xpdAccessService.getSetupURL();
 	}
 
 	protected _arrayBufferToBase64(buffer) {
@@ -37,12 +37,12 @@ export class PhotoAPIService {
 		};
 
 		this.$http(request).then(
-			function(response) {
+			(response) => {
 				if (successCallback) {
 					successCallback(this._arrayBufferToBase64(response.data));
 				}
 			},
-			function(error) {
+			(error) => {
 				this.setupAPIService.generateToast(error);
 				if (errorCallback) {
 					errorCallback(error);
@@ -77,7 +77,7 @@ export class PhotoAPIService {
 	// xpd-setup-api/tripin/rig-pictures/load/default
 
 	// function getObjectById(modelURL, id, successCallback, errorCallback) {
-	// 	$http.get(xpdAccessFactory.getSetupURL() + modelURL + '/' + id)
+	// 	$http.get(xpdAccessService.getSetupURL() + modelURL + '/' + id)
 	// 		.then(
 	// 			function(response) {
 	// 				successCallback && successCallback(response.data);

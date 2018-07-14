@@ -23,6 +23,8 @@ export class PhotoApiDirective implements ng.IDirective {
 		ctrl: any,
 	) => {
 
+		const vm = this;
+
 		scope.$watch('photoApiDirectivePhotoName', setPhoto);
 
 		function setPhoto(photoApiDirectivePhotoName) {
@@ -30,11 +32,11 @@ export class PhotoApiDirective implements ng.IDirective {
 			const photoName = scope.photoApiDirectivePhotoName || 'default';
 			const photoPath = attrs.photoApiDirectiveServerPath;
 
-			this.photoAPIService.loadPhoto(photoPath, photoName, function(baseStr64) {
+			vm.photoAPIService.loadPhoto(photoPath, photoName, function(baseStr64) {
 
 				const image = 'data:image/jpeg;base64,' + baseStr64;
 
-				if (element[0].tagName == 'image') {
+				if (element[0].tagName === 'image') {
 					element[0].setAttribute('href', image);
 				} else {
 					element[0].setAttribute('src', image);

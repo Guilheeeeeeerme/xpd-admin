@@ -1,8 +1,8 @@
 import { IQProvider, IQService } from 'angular';
-import { OperationDataFactory } from '../../../xpd-resources/ng/xpd.communication/operation-server-data.factory';
-import { EventDetailsModalFactory } from '../../../xpd-resources/ng/xpd.modal.event-details/xpd-modal-event-details.factory';
+import { OperationDataService } from '../../../xpd-resources/ng/xpd.communication/operation-server-data.factory';
+import { EventDetailsModalService } from '../../../xpd-resources/ng/xpd.modal.event-details/xpd-modal-event-details.factory';
 import { FailureModalFactory } from '../../../xpd-resources/ng/xpd.modal.failure/xpd-modal-failure.factory';
-import { LessonLearnedModalFactory } from '../../../xpd-resources/ng/xpd.modal.lessonlearned/xpd-modal-lessonlearned.factory';
+import { LessonLearnedModalService } from '../../../xpd-resources/ng/xpd.modal.lessonlearned/xpd-modal-lessonlearned.service';
 import { EventLogSetupAPIService } from '../../../xpd-resources/ng/xpd.setupapi/eventlog-setupapi.service';
 import { FailureSetupAPIService } from '../../../xpd-resources/ng/xpd.setupapi/failure-setupapi.service';
 import { LessonLearnedSetupAPIService } from '../../../xpd-resources/ng/xpd.setupapi/lessonlearned-setupapi.service';
@@ -12,7 +12,7 @@ export class AdminTrackingController {
 
 	// angular.module('xpd.admin').controller('AdminTrackingController', adminTrackingController);
 
-	public static $inject = ['$scope', '$q', 'operationDataFactory', 'eventDetailsModal', 'failureModal', 'eventlogSetupAPIService', 'lessonLearnedModal', 'failureSetupAPIService', 'lessonLearnedSetupAPIService', '$rootScope'];
+	public static $inject = ['$scope', '$q', 'operationDataService', 'eventDetailsModal', 'failureModal', 'eventlogSetupAPIService', 'lessonLearnedModal', 'failureSetupAPIService', 'lessonLearnedSetupAPIService', '$rootScope'];
 	public actionOpenDropdownMenu: ($event: any, eventLog: any) => void;
 	public actionClickEventDetailsButton: () => void;
 	public actionClickFailuresButton: () => void;
@@ -22,11 +22,11 @@ export class AdminTrackingController {
 	constructor(
 		$scope: any,
 		$q: IQService,
-		operationDataFactory: OperationDataFactory,
-		eventDetailsModal: EventDetailsModalFactory,
+		operationDataService: OperationDataService,
+		eventDetailsModal: EventDetailsModalService,
 		failureModal: FailureModalFactory,
 		eventlogSetupAPIService: EventLogSetupAPIService,
-		lessonLearnedModal: LessonLearnedModalFactory,
+		lessonLearnedModal: LessonLearnedModalService,
 		failureSetupAPIService: FailureSetupAPIService,
 		lessonLearnedSetupAPIService: LessonLearnedSetupAPIService,
 		$rootScope: any) {
@@ -45,15 +45,15 @@ export class AdminTrackingController {
 
 		$rootScope.XPDmodule = 'admin';
 
-		operationDataFactory.openConnection([]).then(function (response) {
-			vm.operationDataFactory = response;
-			$scope.operationData = operationDataFactory.operationData;
+		operationDataService.openConnection([]).then(function (operationDataFactory) {
+			vm.operationDataFactory = operationDataFactory;
+			$scope.operationData = (operationDataFactory as any).operationData;
 		});
 
 		loadEvents();
 
-		operationDataFactory.addEventListener('adminTrackingController', 'setOnEventChangeListener', loadEvents);
-		operationDataFactory.addEventListener('adminTrackingController', 'setOnParallelEventChangeListener', loadEvents);
+		operationDataService.addEventListener('adminTrackingController', 'setOnEventChangeListener', loadEvents);
+		operationDataService.addEventListener('adminTrackingController', 'setOnParallelEventChangeListener', loadEvents);
 
 		function loadEvents() {
 

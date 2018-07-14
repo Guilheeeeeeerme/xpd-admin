@@ -4,13 +4,13 @@
 
 // 	angular.module('xpd.modal-failure').controller('modalFailureController', modalFailureController);
 
-// 	modalFailureController.$inject = ['$scope', '$uibModalInstance', 'categorySetupAPIService', 'failureSetupAPIService', 'selectedFailure', 'dialogFactory', 'operationDataFactory'];
+// 	modalFailureController.$inject = ['$scope', '$uibModalInstance', 'categorySetupAPIService', 'failureSetupAPIService', 'selectedFailure', 'dialogService', 'operationDataService'];
 
 //
 import * as angular from 'angular';
 import { IModalServiceInstance } from 'angular-ui-bootstrap';
-import { OperationDataFactory } from '../xpd.communication/operation-server-data.factory';
-import { DialogFactory } from '../xpd.dialog/xpd.dialog.factory';
+import { OperationDataService } from '../xpd.communication/operation-server-data.factory';
+import { DialogService } from '../xpd.dialog/xpd.dialog.factory';
 import { CategorySetupAPIService } from '../xpd.setupapi/category-setupapi.service';
 import { FailureSetupAPIService } from '../xpd.setupapi/failure-setupapi.service';
 
@@ -22,8 +22,8 @@ export class ModalFailureController {
 		'categorySetupAPIService',
 		'failureSetupAPIService',
 		'selectedFailure',
-		'dialogFactory',
-		'operationDataFactory',
+		'dialogService',
+		'operationDataService',
 	];
 	public modalActionButtonSave: () => void;
 	public modalActionButtonClose: () => void;
@@ -37,8 +37,8 @@ export class ModalFailureController {
 		categorySetupAPIService: CategorySetupAPIService,
 		failureSetupAPIService: FailureSetupAPIService,
 		selectedFailure: any,
-		dialogFactory: DialogFactory,
-		operationDataFactory: OperationDataFactory) {
+		dialogService: DialogService,
+		operationDataService: OperationDataService) {
 
 		const vm = this;
 
@@ -50,8 +50,8 @@ export class ModalFailureController {
 		$scope.now = now;
 		$scope.keepTimeBeforeNow = keepTimeBeforeNow;
 
-		operationDataFactory.openConnection([]).then(function (response) {
-			vm.operationDataFactory = response;
+		operationDataService.openConnection([]).then(function (operationDataFactory: any) {
+			vm.operationDataFactory = operationDataFactory;
 		});
 
 		$scope.category = {
@@ -138,9 +138,9 @@ export class ModalFailureController {
 		}
 
 		function upsertListenerCallback() {
-			operationDataFactory.addEventListener('modalFailureController', 'setOnFailureChangeListener', failureSuccessCallback);
-			operationDataFactory.addEventListener('modalFailureController', 'setOnErrorUpsertFailureListener', failureErrorCallback);
-			operationDataFactory.addEventListener('modalFailureController', 'setOnNptAlreadyExistsListener', nptAlreadyExists);
+			vm.operationDataFactory.addEventListener('modalFailureController', 'setOnFailureChangeListener', failureSuccessCallback);
+			vm.operationDataFactory.addEventListener('modalFailureController', 'setOnErrorUpsertFailureListener', failureErrorCallback);
+			vm.operationDataFactory.addEventListener('modalFailureController', 'setOnNptAlreadyExistsListener', nptAlreadyExists);
 		}
 
 		function failureSuccessCallback() {
@@ -148,13 +148,13 @@ export class ModalFailureController {
 		}
 
 		function failureErrorCallback() {
-			dialogFactory.showConfirmDialog('Error on inserting failure, please try again!', function() {
+			dialogService.showConfirmDialog('Error on inserting failure, please try again!', function() {
 				// faça nada
 			});
 		}
 
 		function nptAlreadyExists() {
-			dialogFactory.showConfirmDialog('NPT already exists in this time interval!', function() {
+			dialogService.showConfirmDialog('NPT already exists in this time interval!', function() {
 				// faça nada
 			});
 		}

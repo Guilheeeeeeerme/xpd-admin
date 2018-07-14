@@ -1,7 +1,7 @@
 import * as angular from 'angular';
 import { IModalService } from 'angular-ui-bootstrap';
-import { OperationDataFactory } from '../../../../xpd-resources/ng/xpd.communication/operation-server-data.factory';
-import { DialogFactory } from '../../../../xpd-resources/ng/xpd.dialog/xpd.dialog.factory';
+import { OperationDataService } from '../../../../xpd-resources/ng/xpd.communication/operation-server-data.factory';
+import { DialogService } from '../../../../xpd-resources/ng/xpd.dialog/xpd.dialog.factory';
 import { ScheduleSetupAPIService } from '../../../../xpd-resources/ng/xpd.setupapi/schedule-setupapi.service';
 
 export class SchedulerActionsService {
@@ -11,8 +11,8 @@ export class SchedulerActionsService {
 	// angular.module('xpd.admin')
 	// 	.factory('schedulerActionsService', schedulerActionsService);
 
-	// schedulerActionsService.$inject = ['$uibModal', 'operationDataFactory', 'scheduleSetupAPIService', 'dialogFactory'];
-	public static $inject: string[] = ['$uibModal', 'operationDataFactory', 'scheduleSetupAPIService', 'dialogFactory'];
+	// schedulerActionsService.$inject = ['$uibModal', 'operationDataService', 'scheduleSetupAPIService', 'dialogService'];
+	public static $inject: string[] = ['$uibModal', 'operationDataService', 'scheduleSetupAPIService', 'dialogService'];
 
 	public operationDataFactory: any;
 	public onUpsertMember: any;
@@ -30,9 +30,9 @@ export class SchedulerActionsService {
 
 	constructor(
 		$modal: IModalService,
-		operationDataFactory: OperationDataFactory,
+		operationDataService: OperationDataService,
 		scheduleSetupAPIService: ScheduleSetupAPIService,
-		dialogFactory: DialogFactory) {
+		dialogService: DialogService) {
 
 		let upsertMemberModal;
 		let upsertFunctionModal;
@@ -54,8 +54,8 @@ export class SchedulerActionsService {
 		self.removeFromGantt = null;
 		self.updateFromGantt = null;
 
-		operationDataFactory.openConnection([]).then(function (response) {
-			self.operationDataFactory = response;
+		operationDataService.openConnection([]).then(function (operationDataFactory) {
+			self.operationDataFactory = operationDataFactory;
 		});
 
 		// ##     ## ######## ##     ## ########  ######## ########
@@ -399,7 +399,7 @@ export class SchedulerActionsService {
 		/**************************************************************************/
 
 		function generalError(error) {
-			dialogFactory.showCriticalDialog(JSON.stringify(error));
+			dialogService.showCriticalDialog(JSON.stringify(error));
 		}
 
 		function onMemberUpdate(member) {

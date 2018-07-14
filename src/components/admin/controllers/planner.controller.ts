@@ -1,7 +1,7 @@
 import * as angular from 'angular';
 import { VCruisingCalculatorService } from '../../../xpd-resources/ng/xpd.calculation/calculation.service';
-import { OperationDataFactory } from '../../../xpd-resources/ng/xpd.communication/operation-server-data.factory';
-import { DialogFactory } from '../../../xpd-resources/ng/xpd.dialog/xpd.dialog.factory';
+import { OperationDataService } from '../../../xpd-resources/ng/xpd.communication/operation-server-data.factory';
+import { DialogService } from '../../../xpd-resources/ng/xpd.dialog/xpd.dialog.factory';
 /*
 * @Author:
 * @Date:   2017-05-19 15:12:22
@@ -13,7 +13,7 @@ export class PlannerController {
 
 	// angular.module('xpd.admin').controller('PlannerController', plannerController);
 
-	public static $inject = ['$scope', '$filter', 'operationDataFactory', 'dialogFactory', 'vCruisingCalculator'];
+	public static $inject = ['$scope', '$filter', 'operationDataService', 'dialogService', 'vCruisingCalculator'];
 	public operationDataFactory: any;
 	public actionSelectActivityToPlan: (stateName: any, eventType: any) => void;
 	public selectActivityOnInit: (index: any, stateName: any, eventType: any) => void;
@@ -27,8 +27,8 @@ export class PlannerController {
 	constructor(
 		$scope,
 		$filter,
-		operationDataFactory: OperationDataFactory,
-		dialogFactory: DialogFactory,
+		operationDataService: OperationDataService,
+		dialogService: DialogService,
 		vCruisingCalculator: VCruisingCalculatorService) {
 
 		const vm = this;
@@ -38,8 +38,8 @@ export class PlannerController {
 			timeSlices: null,
 		};
 
-		operationDataFactory.openConnection([]).then(function (response) {
-			vm.operationDataFactory = response;
+		operationDataService.openConnection([]).then(function (operationDataFactory: any) {
+			vm.operationDataFactory = operationDataFactory;
 			$scope.operationData = operationDataFactory.operationData;
 
 			startWatching();
@@ -243,7 +243,7 @@ export class PlannerController {
 		}
 
 		function actionButtonApplyConn() {
-			dialogFactory.showConfirmDialog('Are you sure you want to apply this change?', function () {
+			dialogService.showConfirmDialog('Are you sure you want to apply this change?', function () {
 
 				try {
 
@@ -268,7 +268,7 @@ export class PlannerController {
 
 		function actionButtonApplyTrip() {
 
-			dialogFactory.showConfirmDialog('Are you sure you want to apply this change?', function () {
+			dialogService.showConfirmDialog('Are you sure you want to apply this change?', function () {
 
 				vm.operationDataFactory.emitUpdateInSlips($scope.operationData.operationContext.currentOperation.inSlips);
 				actionButtonApply();

@@ -10,27 +10,28 @@
 // 	angular.module('xpd.admin-nav-bar', [])
 // 		.directive('xpdAdminNavBar', xpdAdminNavBar);
 
-// 	xpdAdminNavBar.$inject = ['$location', 'menuConfirmationFactory', 'operationDataFactory', 'dialogFactory'];
-import template from '../xpd-resources/ng/xpd.admin-nav-bar/admin-nav-bar.template.html';
-import { OperationDataFactory } from '../xpd.communication/operation-server-data.factory';
-import { DialogFactory } from '../xpd.dialog/xpd.dialog.factory';
-import { MenuConfirmationFactory } from '../xpd.menu-confirmation/menu-confirmation.factory';
+// 	xpdAdminNavBar.$inject = ['$location', 'menuConfirmationService', 'operationDataService', 'dialogService'];
+import { OperationDataService } from '../xpd.communication/operation-server-data.factory';
+import { DialogService } from '../xpd.dialog/xpd.dialog.factory';
+import { MenuConfirmationService } from '../xpd.menu-confirmation/menu-confirmation.factory';
+import template from './admin-nav-bar.template.html';
 
 export class XPDAdminNavBarDirective implements ng.IDirective {
 
-	public static $inject: string[] = ['$location', 'menuConfirmationFactory', 'operationDataFactory', 'dialogFactory'];
+	public static $inject: string[] = ['$location', 'menuConfirmationService', 'operationDataService', 'dialogService'];
 
 	public scope = {
 
 	};
 	public restrict = 'E';
 	public template = template;
+	public operationDataFactory: any;
 
 	constructor(
 		private $location: ng.ILocationService,
-		private menuConfirmationFactory: MenuConfirmationFactory,
-		private operationDataFactory: OperationDataFactory,
-		private dialogFactory: DialogFactory) { }
+		private menuConfirmationService: MenuConfirmationService,
+		private operationDataService: OperationDataService,
+		private dialogService: DialogService) { }
 
 	public link: ng.IDirectiveLinkFn = (
 		scope: any,
@@ -41,7 +42,8 @@ export class XPDAdminNavBarDirective implements ng.IDirective {
 
 		const self = this;
 
-		this.operationDataFactory.openConnection([]).then(function (operationDataFactory: any) {
+		this.operationDataService.openConnection([]).then(function (operationDataFactory: any) {
+			self.operationDataFactory = operationDataFactory;
 
 			if (attrs.navOrigin === 'report') {
 				scope.onclickItemMenu = onclickItemMenuReport;
@@ -51,12 +53,12 @@ export class XPDAdminNavBarDirective implements ng.IDirective {
 
 			checkIfHasRunningOperation();
 
-			self.operationDataFactory.addEventListener('menuConfirmationFactory', 'setOnRunningOperationListener', checkIfHasRunningOperation);
-			self.operationDataFactory.addEventListener('menuConfirmationFactory', 'setOnOperationChangeListener', checkIfHasRunningOperation);
-			self.operationDataFactory.addEventListener('menuConfirmationFactory', 'setOnNoCurrentOperationListener', checkIfHasRunningOperation);
+			self.operationDataService.addEventListener('menuConfirmationService', 'setOnRunningOperationListener', checkIfHasRunningOperation);
+			self.operationDataService.addEventListener('menuConfirmationService', 'setOnOperationChangeListener', checkIfHasRunningOperation);
+			self.operationDataService.addEventListener('menuConfirmationService', 'setOnNoCurrentOperationListener', checkIfHasRunningOperation);
 
 			function onclickItemMenuAdmin(path, newTab) {
-				const blockMenu = self.menuConfirmationFactory.getBlockMenu();
+				const blockMenu = self.menuConfirmationService.getBlockMenu();
 
 				if (!blockMenu) {
 
@@ -65,8 +67,8 @@ export class XPDAdminNavBarDirective implements ng.IDirective {
 				} else {
 					const message = 'Your changes will be lost. Proceed?';
 
-					self.dialogFactory.showCriticalDialog(message, function () {
-						self.menuConfirmationFactory.setBlockMenu(false);
+					self.dialogService.showCriticalDialog(message, function () {
+						self.menuConfirmationService.setBlockMenu(false);
 						redirectToPath(path, !!newTab);
 					});
 				}
@@ -157,13 +159,13 @@ export class XPDAdminNavBarDirective implements ng.IDirective {
 	public static Factory(): ng.IDirectiveFactory {
 		return (
 			$location: ng.ILocationService,
-			menuConfirmationFactory: MenuConfirmationFactory,
-			operationDataFactory: OperationDataFactory,
-			dialogFactory: DialogFactory) => new XPDAdminNavBarDirective(
+			menuConfirmationService: MenuConfirmationService,
+			operationDataService: OperationDataService,
+			dialogService: DialogService) => new XPDAdminNavBarDirective(
 				$location,
-				menuConfirmationFactory,
-				operationDataFactory,
-				dialogFactory,
+				menuConfirmationService,
+				operationDataService,
+				dialogService,
 			);
 	}
 }

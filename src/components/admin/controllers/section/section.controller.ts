@@ -1,15 +1,15 @@
 import { IModalService } from 'angular-ui-bootstrap';
+import { OperationDataService } from '../../../../xpd-resources/ng/xpd.communication/operation-server-data.factory';
+import { DialogService } from '../../../../xpd-resources/ng/xpd.dialog/xpd.dialog.factory';
 import { SectionSetupAPIService } from '../../../../xpd-resources/ng/xpd.setupapi/section-setupapi.service';
-import { DialogFactory } from '../../../../xpd-resources/ng/xpd.dialog/xpd.dialog.factory';
 import { WellSetupAPIService } from '../../../../xpd-resources/ng/xpd.setupapi/well-setupapi.service';
-import { OperationDataFactory } from '../../../../xpd-resources/ng/xpd.communication/operation-server-data.factory';
 
 export class SectionController {
 	// 'use strict';
 
 	// angular.module('xpd.admin').controller('SectionController', sectionController);
 
-	public static $inject = ['$scope', '$filter', '$location', '$uibModal', '$routeParams', 'sectionSetupAPIService', 'dialogFactory', 'wellSetupAPIService', 'operationDataFactory'];
+	public static $inject = ['$scope', '$filter', '$location', '$uibModal', '$routeParams', 'sectionSetupAPIService', 'dialogService', 'wellSetupAPIService', 'operationDataService'];
 	public operationDataFactory: any;
 	public actionButtonAddSection: () => void;
 	public actionButtonEditSection: (section: any) => void;
@@ -28,9 +28,9 @@ export class SectionController {
 		$modal: IModalService,
 		$routeParams: any,
 		sectionSetupAPIService: SectionSetupAPIService,
-		dialogFactory: DialogFactory,
+		dialogService: DialogService,
 		wellSetupAPIService: WellSetupAPIService,
-		operationDataFactory: OperationDataFactory) {
+		operationDataService: OperationDataService) {
 
 		const vm = this;
 
@@ -65,8 +65,8 @@ export class SectionController {
 
 		}, true);
 
-		operationDataFactory.openConnection([]).then(function (response) {
-			vm.operationDataFactory = response;
+		operationDataService.openConnection([]).then(function (operationDataFactory: any) {
+			vm.operationDataFactory = operationDataFactory;
 			$scope.operationData = operationDataFactory.operationData;
 		});
 
@@ -83,16 +83,16 @@ export class SectionController {
 
 		vm.actionButtonMakeCurrent = actionButtonMakeCurrent;
 
-		operationDataFactory.addEventListener('sectionController', 'setOnOperationQueueChangeListener', loadSectionList);
-		operationDataFactory.addEventListener('sectionController', 'setOnCurrentOperationQueueListener', loadSectionList);
-		operationDataFactory.addEventListener('sectionController', 'setOnNoCurrentOperationQueueListener', loadSectionList);
-		operationDataFactory.addEventListener('sectionController', 'setOnUnableToMakeCurrentListener', unableToMakeCurrent);
+		this.operationDataFactory.addEventListener('sectionController', 'setOnOperationQueueChangeListener', loadSectionList);
+		this.operationDataFactory.addEventListener('sectionController', 'setOnCurrentOperationQueueListener', loadSectionList);
+		this.operationDataFactory.addEventListener('sectionController', 'setOnNoCurrentOperationQueueListener', loadSectionList);
+		this.operationDataFactory.addEventListener('sectionController', 'setOnUnableToMakeCurrentListener', unableToMakeCurrent);
 
 		loadSectionList();
 
 		function actionButtonMakeCurrent(operation) {
 			if ($scope.operationData.operationContext.currentOperation && $scope.operationData.operationContext.currentOperation.running) {
-				dialogFactory.showMessageDialog('Unable to make operation #' + operation.id + ', ' + operation.name + ' current due to running operation', 'Error');
+				dialogService.showMessageDialog('Unable to make operation #' + operation.id + ', ' + operation.name + ' current due to running operation', 'Error');
 			} else {
 				vm.operationDataFactory.emitMakeCurrentOperation(operation);
 			}
@@ -164,7 +164,7 @@ export class SectionController {
 
 		function actionButtonRemoveSection(section) {
 
-			dialogFactory.showCriticalDialog({ templateHtml: 'By <b>removing</b> a Section you will no longer be able to access its operations. Proceed?' }, function () {
+			dialogService.showCriticalDialog({ templateHtml: 'By <b>removing</b> a Section you will no longer be able to access its operations. Proceed?' }, function () {
 				vm.operationDataFactory.emitRemoveSection(section);
 			});
 
@@ -233,13 +233,13 @@ export class SectionController {
 		}
 
 		function actionButtonRemoveOperation(operation) {
-			dialogFactory.showCriticalDialog({ templateHtml: 'By <b>removing</b> a Operation you will not be able to start it and all the data will be lost. Proceed?' }, function () {
+			dialogService.showCriticalDialog({ templateHtml: 'By <b>removing</b> a Operation you will not be able to start it and all the data will be lost. Proceed?' }, function () {
 				vm.operationDataFactory.emitRemoveOperation(operation);
 			});
 		}
 
 		function unableToMakeCurrent(operation) {
-			dialogFactory.showMessageDialog('Unable to make operation #' + operation.nextOperation.name + ' current', 'Error');
+			dialogService.showMessageDialog('Unable to make operation #' + operation.nextOperation.name + ' current', 'Error');
 		}
 	}
 

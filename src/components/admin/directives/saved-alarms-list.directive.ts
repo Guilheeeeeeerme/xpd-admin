@@ -9,7 +9,7 @@
 
 // 	angular.module('xpd.admin').directive('savedAlarmsList', savedAlarmsList);
 
-import template from 'app/components/admin/directives/saved-alarms-list.template.html';
+import template from './saved-alarms-list.template.html';
 
 export class SavedAlarmsListDirectives implements ng.IDirective {
 	public scope = {

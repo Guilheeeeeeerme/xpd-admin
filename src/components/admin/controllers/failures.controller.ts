@@ -1,5 +1,5 @@
-import { OperationDataFactory } from '../../../xpd-resources/ng/xpd.communication/operation-server-data.factory';
-import { DialogFactory } from '../../../xpd-resources/ng/xpd.dialog/xpd.dialog.factory';
+import { OperationDataService } from '../../../xpd-resources/ng/xpd.communication/operation-server-data.factory';
+import { DialogService } from '../../../xpd-resources/ng/xpd.dialog/xpd.dialog.factory';
 import { FailureModalFactory } from '../../../xpd-resources/ng/xpd.modal.failure/xpd-modal-failure.factory';
 
 export class FailuresController {
@@ -9,13 +9,18 @@ export class FailuresController {
 	// angular.module('xpd.failure-controller')
 	// 	.controller('FailuresController', FailuresController);
 
-	public static $inject = ['$scope', 'failureModal', 'operationDataFactory', 'dialogFactory'];
+	public static $inject = ['$scope', 'failureModal', 'operationDataService', 'dialogService'];
 	public actionClickButtonAddFailure: () => void;
 	public actionClickButtonRemoveFailure: (failure: any) => void;
 	public actionClickButtonEditFailure: (selectedFailure: any) => void;
 	public operationDataFactory: any;
 
-	constructor ($scope, failureModal: FailureModalFactory, operationDataFactory: OperationDataFactory, dialogFactory: DialogFactory) {
+	constructor(
+		$scope,
+		failureModal: FailureModalFactory,
+		operationDataService: OperationDataService,
+		dialogService: DialogService) {
+
 		const vm = this;
 
 		$scope.modalData = {
@@ -33,17 +38,16 @@ export class FailuresController {
 		vm.actionClickButtonRemoveFailure = actionClickButtonRemoveFailure;
 		vm.actionClickButtonEditFailure = actionClickButtonEditFailure;
 
-		operationDataFactory.operationData = [];
-		operationDataFactory.openConnection([]).then(function(response) {
-			vm.operationDataFactory = response;
+		operationDataService.openConnection([]).then(function (operationDataFactory: any) {
+			vm.operationDataFactory = operationDataFactory;
 			$scope.modalData.operation = operationDataFactory.operationData.operationContext.currentOperation;
 			$scope.modalData.failuresList = operationDataFactory.operationData.failureContext.failureList;
 		});
 
-		operationDataFactory.addEventListener('failuresController', 'setOnFailureChangeListener', populateFailureList);
+		operationDataService.addEventListener('failuresController', 'setOnFailureChangeListener', populateFailureList);
 
 		function populateFailureList() {
-			const failureContext = operationDataFactory.operationData.failureContext;
+			const failureContext = vm.operationDataFactory.operationData.failureContext;
 
 			$scope.modalData.failuresList = failureContext.failureList;
 			$scope.modalData.failureOnGoing = failureContext.failureOnGoing;
@@ -72,8 +76,8 @@ export class FailuresController {
 		}
 
 		function actionClickButtonRemoveFailure(failure) {
-			dialogFactory.showConfirmDialog('Do you want to remove this failure',
-				function() {
+			dialogService.showConfirmDialog('Do you want to remove this failure',
+				function () {
 					removeFailure(failure);
 				},
 			);

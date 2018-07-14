@@ -4,7 +4,7 @@
 
 // operationInformationPanel.$inject = [];
 
-import template from '../xpd-resources/ng/xpd.visualization/operation-information-panel.template.html';
+import template from './operation-information-panel.template.html';
 
 export class OperationInformationPanelDirective implements ng.IDirective {
 	public restrict = 'EA';

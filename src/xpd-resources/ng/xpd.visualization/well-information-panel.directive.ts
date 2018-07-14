@@ -1,4 +1,4 @@
-import template from './xpd-resources/ng/xpd.visualization/well-information-panel.template.html';
+import template from './well-information-panel.template.html';
 
 export class WellInformationPanelDirective implements ng.IDirective {
 

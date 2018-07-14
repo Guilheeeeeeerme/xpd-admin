@@ -1,16 +1,18 @@
 import * as angular from 'angular';
 import { IModalService } from 'angular-ui-bootstrap';
-import failureModalTemplate from 'app/components/admin/views/modal/failures.modal.html';
-import lessonLearnedModalTemplate from 'app/components/admin/views/modal/lesson-learned.modal.html';
-import { OperationDataFactory } from '../xpd.communication/operation-server-data.factory';
-import { DialogFactory } from '../xpd.dialog/xpd.dialog.factory';
+import { OperationDataService } from '../xpd.communication/operation-server-data.factory';
+import { DialogService } from '../xpd.dialog/xpd.dialog.factory';
 import { XPDIntervalService, XPDTimeoutService } from '../xpd.timers/xpd-timers.service';
+
+import failureModalTemplate from '../../../components/admin/views/modal/failures.modal.html';
+import lessonLearnedModalTemplate from '../../../components/admin/views/modal/lesson-learned.modal.html';
+
 // (function() {
 // 	'use strict',
 
 // 	angular.module('xpd.tracking').controller('TrackingController', trackingController);
 
-// 	trackingController.$inject = ['$scope', '$xpdInterval', '$xpdTimeout', '$uibModal', 'operationDataFactory', 'dialogFactory', '$filter'];
+// 	trackingController.$inject = ['$scope', '$xpdInterval', '$xpdTimeout', '$uibModal', 'operationDataService', 'dialogService', '$filter'];
 
 export class TrackingController {
 
@@ -21,26 +23,10 @@ export class TrackingController {
 		'$xpdInterval',
 		'$xpdTimeout',
 		'$uibModal',
-		'operationDataFactory',
-		'dialogFactory',
+		'operationDataService',
+		'dialogService',
 	];
-
-	public actionButtonStartOperation: (operation: any) => void;
-	public actionButtonFinishOperation: () => void;
-	public actionButtonStartCementation: () => void;
-	public actionButtonStopCementation: () => void;
-	public flashGoDiv: () => void;
-	public actionClickFailuresButton: () => void;
-	public actionClickLessonsLearnedButton: () => void;
-	public actionButtonCloseAlarmsAcknowledgementModal: () => void;
-	public actionButtonUnconfirmAcknowledgement: (acknowledgement: any) => void;
-	public actionButtonConfirmAcknowledgement: (acknowledgement: any) => void;
-	public actionButtonStartMakeUp: () => void;
-	public actionButtonStartLayDown: () => void;
-	public actionButtonFinishMakeUp: () => void;
-	public actionButtonFinishLayDown: () => void;
-	public actionButtonFinishDurationAlarm: () => void;
-	public finishDurationAlarm: () => void;
+	public circulateShiftListInterval: any;
 
 	// constructor(
 	// 	$scope: any,
@@ -51,18 +37,18 @@ export class TrackingController {
 	// 	modalErrorCallback: any) {
 
 	constructor(
-		$scope: any,
-		$xpdInterval: XPDIntervalService,
-		$xpdTimeout: XPDTimeoutService,
-		$uibModal: IModalService,
-		operationDataFactory: OperationDataFactory,
-		dialogFactory: DialogFactory) {
+		private $scope: any,
+		private $xpdInterval: XPDIntervalService,
+		private $xpdTimeout: XPDTimeoutService,
+		private $uibModal: IModalService,
+		operationDataService: OperationDataService,
+		private dialogService: DialogService) {
 
 		const vm = this;
 
-		$scope.$on('$destroy', destroy);
+		$scope.$on('$destroy', this.destroy);
 
-		const circulateShiftListInterval = $xpdInterval.run(circulateShiftList, 10000, $scope);
+		const circulateShiftListInterval = $xpdInterval.run(this.circulateShiftList, 10000, $scope);
 
 		$scope.dados = {
 			connectionTimes: [],
@@ -94,321 +80,310 @@ export class TrackingController {
 			depthAlarms: [],
 		};
 
-		operationDataFactory.openConnection([]).then(function (response) {
-			vm.operationDataFactory = response;
+		operationDataService.openConnection([]).then(function (operationDataFactory: any) {
+			vm.operationDataFactory = operationDataFactory;
 			// TODO: adaptacao as any
-			$scope.operationData = (operationDataFactory as any).operationData;
+			$scope.operationData = operationDataFactory.operationData;
 
-			buildEventStruture();
-			buildTimeSlicesStruture();
-			removeTeamsFromShift();
-			buildAcknowledgementList();
+			vm.buildEventStruture();
+			vm.buildTimeSlicesStruture();
+			vm.removeTeamsFromShift();
+			vm.buildAcknowledgementList();
+
+			// vm.changeTrackingContent = changeTrackingContent;
+
+			/**
+			 * ADMIN ONLY
+			 */
+
+			// * MODAL ACTIONS *//
+
+			// * ALARM *//
+
+			// buildEventStruture();
+			operationDataService.addEventListener('trackingController', 'setOnEventChangeListener', (data) => { vm.buildEventStruture(); });
+			operationDataService.addEventListener('trackingController', 'setOnCurrentEventListener', (data) => { vm.buildEventStruture(); });
+			operationDataService.addEventListener('trackingController', 'setOnNoCurrentEventListener', (data) => { vm.buildEventStruture(); });
+			operationDataService.addEventListener('trackingController', 'setOnEventLogUpdateListener', (data) => { vm.buildEventStruture(); });
+			operationDataService.addEventListener('trackingController', 'setOnWaitEventListener', (data) => { vm.buildEventStruture(); });
+
+			// buildTimeSlicesStruture();
+			operationDataService.addEventListener('trackingController', 'setOnTimeSlicesChangeListener', (data) => { vm.buildTimeSlicesStruture(); });
+			operationDataService.addEventListener('trackingController', 'setOnTimeSlicesListener', (data) => { vm.buildTimeSlicesStruture(); });
+			operationDataService.addEventListener('trackingController', 'setOnNoTimeSlicesListener', (data) => { vm.buildTimeSlicesStruture(); });
+
+			operationDataService.addEventListener('trackingController', 'setOnAboveSpeedLimitListener', (data) => { vm.onAboveSpeedLimit(); });
+			operationDataService.addEventListener('trackingController', 'setOnUnreachableTargetListener', (data) => { vm.onUnreachableTarget(); });
+
+			// removeTeamsFromShift();
+			operationDataService.addEventListener('trackingController', 'setOnShiftListener', (data) => { vm.removeTeamsFromShift(); });
+
+			// buildAcknowledgementList();
+			operationDataService.addEventListener('trackingController', 'setOnAlarmsChangeListener', (data) => { vm.buildAcknowledgementList(); });
+			operationDataService.addEventListener('trackingController', 'setOnCurrentAlarmsListener', (data) => { vm.buildAcknowledgementList(); });
+			operationDataService.addEventListener('trackingController', 'setOnNoCurrentAlarmsListener', (data) => { vm.buildAcknowledgementList(); });
+			operationDataService.addEventListener('trackingController', 'setOnSpeedRestrictionAlarmListener', (data) => { vm.buildAcknowledgementList(); });
+			operationDataService.addEventListener('trackingController', 'setOnDurationAlarmListener', (data) => { vm.buildAcknowledgementList(); });
+			operationDataService.addEventListener('trackingController', 'setOnNoCurrentAlarmListener', (data) => { vm.buildAcknowledgementList(); });
+			operationDataService.addEventListener('trackingController', 'setOnExpectedAlarmChangeListener', (data) => { vm.buildAcknowledgementList(); });
+
+		});
+	}
+
+	public actionButtonStartOperation(operation: any) {
+		const vm = this;
+		this.dialogService.showConfirmDialog('Start current operation?', function () {
+			vm.operationDataFactory.emitStartCurrentOperation(operation);
+		});
+	}
+
+	public actionButtonFinishOperation() {
+		const vm = this;
+		this.dialogService.showConfirmDialog('Finish running operation?', vm.operationDataFactory.emitFinishRunningOperation);
+	}
+
+	public actionButtonStartCementation() {
+
+		const operationEndBitDepth = this.$scope.operationData.operationContext.currentOperation.endBitDepth;
+		const currentBitDepth = this.$scope.operationData.bitDepthContext.bitDepth;
+
+		if (operationEndBitDepth > currentBitDepth) {
+			this.dialogService.showCriticalDialog({
+				templateHtml: '<b>Important !!!</b> The current bit depth is about <b>' + currentBitDepth.toFixed(2) + '</b> Please make sure the entire casing string is bellow shoe depth due to start cemementing.',
+			}, this.startCementation);
+		} else {
+			this.startCementation();
+		}
+	}
+
+	public actionButtonStopCementation() {
+		const vm = this;
+		this.dialogService.showCriticalDialog('Are you sure you want to stop the Cementing Procedure? This action cannot be undone.', vm.operationDataFactory.emitStopCementation);
+	}
+
+	public flashGoDiv() {
+		const vm = this;
+		this.$scope.flags.showGo = true;
+
+		this.$xpdTimeout.run(function () {
+			vm.$scope.flags.showGo = false;
+		}, 500, this.$scope);
+	}
+
+	public actionClickFailuresButton() {
+		this.$uibModal.open({
+			animation: true,
+			keyboard: false,
+			backdrop: 'static',
+			size: 'modal-sm',
+			windowClass: 'xpd-operation-modal',
+			template: failureModalTemplate,
+			controller: 'FailuresController as fController',
 		});
 
-		vm.actionButtonStartOperation = actionButtonStartOperation;
-		vm.actionButtonFinishOperation = actionButtonFinishOperation;
-		vm.actionButtonStartCementation = actionButtonStartCementation;
-		vm.actionButtonStopCementation = actionButtonStopCementation;
-		vm.flashGoDiv = flashGoDiv;
-		// vm.changeTrackingContent = changeTrackingContent;
+	}
 
-		/**
-		 * ADMIN ONLY
-		 */
-		vm.actionClickFailuresButton = actionClickFailuresButton;
-		vm.actionClickLessonsLearnedButton = actionClickLessonsLearnedButton;
+	public actionClickLessonsLearnedButton() {
+		this.$uibModal.open({
+			animation: true,
+			keyboard: false,
+			backdrop: 'static',
+			size: 'modal-sm',
+			windowClass: 'xpd-operation-modal',
+			template: lessonLearnedModalTemplate,
+			controller: 'LessonLearnedController as llController',
+		});
+	}
 
-		// * MODAL ACTIONS *//
-		vm.actionButtonCloseAlarmsAcknowledgementModal = actionButtonCloseAlarmsAcknowledgementModal;
-		vm.actionButtonUnconfirmAcknowledgement = actionButtonUnconfirmAcknowledgement;
-		vm.actionButtonConfirmAcknowledgement = actionButtonConfirmAcknowledgement;
+	public actionButtonCloseAlarmsAcknowledgementModal() {
+		this.$scope.$uibModalInstance.close();
+	}
 
-		// * ASSEMBLY *//
-		vm.actionButtonStartMakeUp = actionButtonStartMakeUp;
-		vm.actionButtonStartLayDown = actionButtonStartLayDown;
-		vm.actionButtonFinishMakeUp = actionButtonFinishMakeUp;
-		vm.actionButtonFinishLayDown = actionButtonFinishLayDown;
-		vm.actionButtonFinishDurationAlarm = actionButtonFinishDurationAlarm;
+	public actionButtonUnconfirmAcknowledgement(acknowledgement) {
+		const vm = this;
+		this.dialogService.showConfirmDialog('Unconfirm Acknowledgement?', function () {
+			vm.operationDataFactory.emitUnconfirmAcknowledgement(acknowledgement);
+		});
+	}
 
-		// * ALARM *//
-		vm.finishDurationAlarm = finishDurationAlarm;
+	public actionButtonConfirmAcknowledgement(acknowledgement) {
+		const vm = this;
+		this.dialogService.showConfirmDialog('Confirm Acknowledgement?', function () {
+			vm.operationDataFactory.emitConfirmAcknowledgement(acknowledgement);
+		});
+	}
 
-		// buildEventStruture();
-		operationDataFactory.addEventListener('trackingController', 'setOnEventChangeListener', buildEventStruture);
-		operationDataFactory.addEventListener('trackingController', 'setOnCurrentEventListener', buildEventStruture);
-		operationDataFactory.addEventListener('trackingController', 'setOnNoCurrentEventListener', buildEventStruture);
-		operationDataFactory.addEventListener('trackingController', 'setOnEventLogUpdateListener', buildEventStruture);
-		operationDataFactory.addEventListener('trackingController', 'setOnWaitEventListener', buildEventStruture);
+	public actionButtonStartMakeUp() {
+		this.operationDataFactory.emitStartMakeUp();
+	}
 
-		// buildTimeSlicesStruture();
-		operationDataFactory.addEventListener('trackingController', 'setOnTimeSlicesChangeListener', buildTimeSlicesStruture);
-		operationDataFactory.addEventListener('trackingController', 'setOnTimeSlicesListener', buildTimeSlicesStruture);
-		operationDataFactory.addEventListener('trackingController', 'setOnNoTimeSlicesListener', buildTimeSlicesStruture);
+	public actionButtonStartLayDown() {
+		this.operationDataFactory.emitStartLayDown();
+	}
 
-		operationDataFactory.addEventListener('trackingController', 'setOnAboveSpeedLimitListener', onAboveSpeedLimit);
-		operationDataFactory.addEventListener('trackingController', 'setOnUnreachableTargetListener', onUnreachableTarget);
+	public actionButtonFinishMakeUp() {
+		this.operationDataFactory.emitFinishMakeUp();
+	}
 
-		// removeTeamsFromShift();
-		operationDataFactory.addEventListener('trackingController', 'setOnShiftListener', removeTeamsFromShift);
+	public actionButtonFinishLayDown() {
+		this.operationDataFactory.emitFinishLayDown();
+	}
 
-		// buildAcknowledgementList();
-		operationDataFactory.addEventListener('trackingController', 'setOnAlarmsChangeListener', buildAcknowledgementList);
-		operationDataFactory.addEventListener('trackingController', 'setOnCurrentAlarmsListener', buildAcknowledgementList);
-		operationDataFactory.addEventListener('trackingController', 'setOnNoCurrentAlarmsListener', buildAcknowledgementList);
-		operationDataFactory.addEventListener('trackingController', 'setOnSpeedRestrictionAlarmListener', buildAcknowledgementList);
-		operationDataFactory.addEventListener('trackingController', 'setOnDurationAlarmListener', buildAcknowledgementList);
-		operationDataFactory.addEventListener('trackingController', 'setOnNoCurrentAlarmListener', buildAcknowledgementList);
-		operationDataFactory.addEventListener('trackingController', 'setOnExpectedAlarmChangeListener', buildAcknowledgementList);
+	public actionButtonFinishDurationAlarm() {
+		this.operationDataFactory.emitFinishDurationAlarm();
+	}
 
-		/**
+	public finishDurationAlarm() {
+		this.operationDataFactory.emitFinishDurationAlarm();
+	}
+
+	/**
 		 * Quando sair do controller
 		 */
-		function destroy() {
-			if (circulateShiftListInterval) {
-				$xpdInterval.cancel(circulateShiftListInterval);
-			}
+	private destroy() {
+		if (this.circulateShiftListInterval) {
+			this.$xpdInterval.cancel(this.circulateShiftListInterval);
 		}
+	}
 
-		function actionButtonStartOperation(operation) {
-			dialogFactory.showConfirmDialog('Start current operation?', function () {
-				vm.operationDataFactory.emitStartCurrentOperation(operation);
-			});
+	private startCementation() {
+		this.dialogService.showConfirmDialog('Are you sure you want to start the Cementing Procedure? This action cannot be undone.', this.operationDataFactory.emitStartCementation);
+	}
+
+	private circulateShiftList() {
+		if (this.$scope.operationData.shiftContext.onShift != null && this.$scope.operationData.shiftContext.onShift.length > 1) {
+			this.$scope.operationData.shiftContext.onShift.push(this.$scope.operationData.shiftContext.onShift.shift());
 		}
+	}
 
-		function actionButtonFinishOperation() {
-			dialogFactory.showConfirmDialog('Finish running operation?', vm.operationDataFactory.emitFinishRunningOperation);
+	private removeTeamsFromShift() {
+		if (this.$scope.operationData.shiftContext != null && this.$scope.operationData.shiftContext.onShift != null) {
+			this.$scope.operationData.shiftContext.onShift = this.$scope.operationData.shiftContext.onShift.filter(this.filterMembersOnly);
 		}
+	}
 
-		function actionButtonStartCementation() {
+	private buildAcknowledgementList() {
 
-			const operationEndBitDepth = $scope.operationData.operationContext.currentOperation.endBitDepth;
-			const currentBitDepth = $scope.operationData.bitDepthContext.bitDepth;
+		this.$scope.acknowledgement.depthAlarms = [];
+		this.$scope.acknowledgement.timeAlarms = [];
 
-			if (operationEndBitDepth > currentBitDepth) {
-				dialogFactory.showCriticalDialog({
-					templateHtml: '<b>Important !!!</b> The current bit depth is about <b>' + currentBitDepth.toFixed(2) + '</b> Please make sure the entire casing string is bellow shoe depth due to start cemementing.',
-				}, startCementation);
-			} else {
-				startCementation();
-			}
-		}
+		this.$scope.flags.hasAlarm = false;
+		this.$scope.flags.hasMessage = false;
 
-		function startCementation() {
-			dialogFactory.showConfirmDialog('Are you sure you want to start the Cementing Procedure? This action cannot be undone.', vm.operationDataFactory.emitStartCementation);
-		}
+		const alarmContext = this.$scope.operationData.alarmContext;
 
-		function actionClickFailuresButton() {
-			$uibModal.open({
-				animation: true,
-				keyboard: false,
-				backdrop: 'static',
-				size: 'modal-sm',
-				windowClass: 'xpd-operation-modal',
-				template: failureModalTemplate,
-				controller: 'FailuresController as fController',
-			});
+		if (alarmContext) {
+			const acknowledgements = alarmContext.acknowledgementList;
 
-		}
+			for (const i in acknowledgements) {
+				const alarm = acknowledgements[i].alarm;
 
-		function actionClickLessonsLearnedButton() {
-			$uibModal.open({
-				animation: true,
-				keyboard: false,
-				backdrop: 'static',
-				size: 'modal-sm',
-				windowClass: 'xpd-operation-modal',
-				template: lessonLearnedModalTemplate,
-				controller: 'LessonLearnedController as llController',
-			});
-		}
-
-		function actionButtonStopCementation() {
-			dialogFactory.showCriticalDialog('Are you sure you want to stop the Cementing Procedure? This action cannot be undone.', vm.operationDataFactory.emitStopCementation);
-		}
-
-		function circulateShiftList() {
-			if ($scope.operationData.shiftContext.onShift != null && $scope.operationData.shiftContext.onShift.length > 1) {
-				$scope.operationData.shiftContext.onShift.push($scope.operationData.shiftContext.onShift.shift());
-			}
-		}
-
-		function removeTeamsFromShift() {
-			if ($scope.operationData.shiftContext != null && $scope.operationData.shiftContext.onShift != null) {
-				$scope.operationData.shiftContext.onShift = $scope.operationData.shiftContext.onShift.filter(filterMembersOnly);
-			}
-		}
-
-		function buildAcknowledgementList() {
-
-			$scope.acknowledgement.depthAlarms = [];
-			$scope.acknowledgement.timeAlarms = [];
-
-			$scope.flags.hasAlarm = false;
-			$scope.flags.hasMessage = false;
-
-			const alarmContext = $scope.operationData.alarmContext;
-
-			if (alarmContext) {
-				const acknowledgements = alarmContext.acknowledgementList;
-
-				for (const i in acknowledgements) {
-					const alarm = acknowledgements[i].alarm;
-
-					if (alarm.alarmType === 'depth') {
-						if (!acknowledgements[i].acknowledgeTime) {
-							$scope.flags.hasAlarm = true;
-						}
-
-						$scope.acknowledgement.depthAlarms.push(acknowledgements[i]);
-
-					} else {
-						if (!acknowledgements[i].acknowledgeTime) {
-							$scope.flags.hasMessage = true;
-						}
-
-						$scope.acknowledgement.timeAlarms.push(acknowledgements[i]);
+				if (alarm.alarmType === 'depth') {
+					if (!acknowledgements[i].acknowledgeTime) {
+						this.$scope.flags.hasAlarm = true;
 					}
+
+					this.$scope.acknowledgement.depthAlarms.push(acknowledgements[i]);
+
+				} else {
+					if (!acknowledgements[i].acknowledgeTime) {
+						this.$scope.flags.hasMessage = true;
+					}
+
+					this.$scope.acknowledgement.timeAlarms.push(acknowledgements[i]);
 				}
 			}
 		}
+	}
 
-		function filterMembersOnly(shift) {
-			return shift.member.function.id !== 1;
+	private filterMembersOnly(shift) {
+		return shift.member.function.id !== 1;
+	}
+
+	private onAboveSpeedLimit() {
+		const vm = this;
+
+		if (this.$scope.flags.showSlowDown === true) {
+			return;
 		}
 
-		function actionButtonConfirmAcknowledgement(acknowledgement) {
-			dialogFactory.showConfirmDialog('Confirm Acknowledgement?', function () {
-				vm.operationDataFactory.emitConfirmAcknowledgement(acknowledgement);
-			});
-		}
+		this.$scope.flags.showSlowDown = true;
 
-		function actionButtonUnconfirmAcknowledgement(acknowledgement) {
-			dialogFactory.showConfirmDialog('Unconfirm Acknowledgement?', function () {
-				vm.operationDataFactory.emitUnconfirmAcknowledgement(acknowledgement);
-			});
-		}
+		this.$xpdTimeout.run(function () {
+			vm.$scope.flags.showSlowDown = false;
+		}, 1500, this.$scope);
+	}
 
-		function actionButtonStartMakeUp() {
-			vm.operationDataFactory.emitStartMakeUp();
-		}
+	private onUnreachableTarget() {
+		/*
+		 if ($scope.flags.showUnreachable == true)
+		 return;
 
-		function actionButtonStartLayDown() {
-			vm.operationDataFactory.emitStartLayDown();
-		}
+		 $scope.flags.showUnreachable = true;
 
-		function actionButtonFinishMakeUp() {
-			vm.operationDataFactory.emitFinishMakeUp();
-		}
+		 $xpdTimeout(function() {
+		 $scope.flags.showUnreachable = false;
+		 }, 500);
+		 */
+	}
 
-		function actionButtonFinishLayDown() {
-			vm.operationDataFactory.emitFinishLayDown();
-		}
+	private buildEventStruture() {
 
-		function actionButtonFinishDurationAlarm() {
-			vm.operationDataFactory.emitFinishDurationAlarm();
-		}
+		const eventContext = this.$scope.operationData.eventContext;
 
-		function actionButtonCloseAlarmsAcknowledgementModal() {
-			$scope.$uibModalInstance.close();
-		}
+		if (eventContext && eventContext.currentEvent != null && eventContext.currentEvent.eventType === 'WAIT') {
 
-		function onAboveSpeedLimit() {
-
-			if ($scope.flags.showSlowDown === true) {
-				return;
-			}
-
-			$scope.flags.showSlowDown = true;
-
-			$xpdTimeout.run(function () {
-				$scope.flags.showSlowDown = false;
-			}, 1500, $scope);
-		}
-
-		function onUnreachableTarget() {
-			/*
-             if ($scope.flags.showUnreachable == true)
-             return;
-
-             $scope.flags.showUnreachable = true;
-
-             $xpdTimeout(function() {
-             $scope.flags.showUnreachable = false;
-             }, 500);
-             */
-		}
-
-		function flashGoDiv() {
-			$scope.flags.showGo = true;
-
-			$xpdTimeout.run(function () {
-				$scope.flags.showGo = false;
-			}, 500, $scope);
-		}
-
-		function buildEventStruture() {
-
-			const eventContext = $scope.operationData.eventContext;
-
-			if (eventContext && eventContext.currentEvent != null && eventContext.currentEvent.eventType === 'WAIT') {
-
-				$scope.dados.timeBlocks = [{
-					name: 'Waiting for Readings',
-					percentage: 100,
-				}];
-
-			}
+			this.$scope.dados.timeBlocks = [{
+				name: 'Waiting for Readings',
+				percentage: 100,
+			}];
 
 		}
-
-		function buildTimeSlicesStruture() {
-
-			const timeSlicesContext = $scope.operationData.timeSlicesContext;
-
-			if (timeSlicesContext && timeSlicesContext.currentTimeSlices != null) {
-
-				try {
-					timeSlicesContext.currentTimeSlices = timeSlicesContext.currentTimeSlices.map(function (ts) {
-
-						if (ts.enabled === false) {
-							ts.enabled = false;
-						} else {
-							ts.enabled = true;
-						}
-
-						return ts;
-					});
-				} catch (error) {
-					console.error(error);
-				}
-
-				timeSlicesContext.currentTimeSlices = (
-					timeSlicesContext.currentTimeSlices.filter(function (ts) {
-						return ts.enabled = true;
-					}));
-
-				$scope.dados.timeBlocks = angular.copy(timeSlicesContext.currentTimeSlices);
-
-			} else {
-				$scope.dados.timeBlocks = [{
-					name: 'Undefined',
-					percentage: 100,
-					timeOrder: 1,
-				}];
-			}
-
-		}
-
-		function finishDurationAlarm() {
-			vm.operationDataFactory.emitFinishDurationAlarm();
-		}
-
-		// function changeTrackingContent() {
-		// 	$scope.flags.showDMEC = !$scope.flags.showDMEC;
-		// 	localStorage.setItem('xpd.admin.tracking.openDmecAsDefault', $scope.flags.showDMEC);
-		// }
 
 	}
+
+	private buildTimeSlicesStruture() {
+
+		const timeSlicesContext = this.$scope.operationData.timeSlicesContext;
+
+		if (timeSlicesContext && timeSlicesContext.currentTimeSlices != null) {
+
+			try {
+				timeSlicesContext.currentTimeSlices = timeSlicesContext.currentTimeSlices.map(function (ts) {
+
+					if (ts.enabled === false) {
+						ts.enabled = false;
+					} else {
+						ts.enabled = true;
+					}
+
+					return ts;
+				});
+			} catch (error) {
+				console.error(error);
+			}
+
+			timeSlicesContext.currentTimeSlices = (
+				timeSlicesContext.currentTimeSlices.filter(function (ts) {
+					return ts.enabled = true;
+				}));
+
+			this.$scope.dados.timeBlocks = angular.copy(timeSlicesContext.currentTimeSlices);
+
+		} else {
+			this.$scope.dados.timeBlocks = [{
+				name: 'Undefined',
+				percentage: 100,
+				timeOrder: 1,
+			}];
+		}
+
+	}
+
+	// function changeTrackingContent() {
+	// 	$scope.flags.showDMEC = !$scope.flags.showDMEC;
+	// 	localStorage.setItem('xpd.admin.tracking.openDmecAsDefault', $scope.flags.showDMEC);
+	// }
 }
 
 // })();

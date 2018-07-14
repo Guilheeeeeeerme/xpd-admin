@@ -1,5 +1,4 @@
-import { DMECService } from "../../xpd-resources/ng/xpd.dmec/dmec.service";
-
+import { DMECService } from '../../xpd-resources/ng/xpd.dmec/dmec.service';
 
 export class DMECLogController {
 	// 'use strict';

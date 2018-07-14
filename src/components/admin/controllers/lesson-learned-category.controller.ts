@@ -1,6 +1,6 @@
 import * as angular from 'angular';
 import { IModalService } from 'angular-ui-bootstrap';
-import { DialogFactory } from '../../../xpd-resources/ng/xpd.dialog/xpd.dialog.factory';
+import { DialogService } from '../../../xpd-resources/ng/xpd.dialog/xpd.dialog.factory';
 import { LessonLearnedSetupAPIService } from '../../../xpd-resources/ng/xpd.setupapi/lessonlearned-setupapi.service';
 /*
 * @Author: gustavogomides7
@@ -14,7 +14,7 @@ export class LessonLearnedCategoryController {
 	// angular.module('xpd.admin')
 	// 	.controller('LessonLearnedCategoryController', lessonLearnedCategoryController);
 
-	public static $inject = ['$scope', '$uibModal', 'dialogFactory', 'lessonLearnedSetupAPIService'];
+	public static $inject = ['$scope', '$uibModal', 'dialogService', 'lessonLearnedSetupAPIService'];
 	public actionClickAdd: (parentNode: any) => void;
 	public actionClickEdit: (node: any) => void;
 	public actionClickRemove: (node: any) => void;
@@ -26,7 +26,7 @@ export class LessonLearnedCategoryController {
 	constructor(
 		$scope: any,
 		$modal: IModalService,
-		dialogFactory: DialogFactory,
+		dialogService: DialogService,
 		lessonLearnedSetupAPIService: LessonLearnedSetupAPIService) {
 
 		const vm = this;
@@ -107,7 +107,7 @@ export class LessonLearnedCategoryController {
 
 		function actionClickRemove(node) {
 
-			dialogFactory.showConfirmDialog('Do you want to remove this category?',
+			dialogService.showConfirmDialog('Do you want to remove this category?',
 				function () {
 					removeNode(node);
 				},
@@ -162,7 +162,7 @@ export class LessonLearnedCategoryController {
 		}
 
 		function upsertNodeErrorCallback(error) {
-			dialogFactory.showConfirmDialog(error.message);
+			dialogService.showConfirmDialog(error.message);
 		}
 
 		function removeNode(node) {
@@ -187,7 +187,7 @@ export class LessonLearnedCategoryController {
 		}
 
 		function removeNodeErrorCallback(error) {
-			dialogFactory.showConfirmDialog(error.message);
+			dialogService.showConfirmDialog(error.message);
 		}
 
 		function actionClickSelectItem(node) {

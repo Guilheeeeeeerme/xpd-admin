@@ -3,7 +3,7 @@
 // 	angular.module('xpd.planner')
 // 		.directive('xpdConnectionPlanner', xpdConnectionPlanner);
 import * as angular from 'angular';
-import template from '../xpd-resources/ng/xpd.planner/connection-planner.template.html';
+import template from './connection-planner.template.html';
 
 export class XPDConnectionPlannerDirective implements ng.IDirective {
 	public scope = {

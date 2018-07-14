@@ -1,6 +1,6 @@
 import * as angular from 'angular';
 import { IModalService } from 'angular-ui-bootstrap';
-import { DialogFactory } from '../../../xpd-resources/ng/xpd.dialog/xpd.dialog.factory';
+import { DialogService } from '../../../xpd-resources/ng/xpd.dialog/xpd.dialog.factory';
 import { CategorySetupAPIService } from '../../../xpd-resources/ng/xpd.setupapi/category-setupapi.service';
 
 export class FailureDelayCategoryController {
@@ -9,7 +9,7 @@ export class FailureDelayCategoryController {
 	// angular.module('xpd.admin')
 	// 	.controller('FailureDelayCategoryController', failureDelayCategoryController);
 
-	public static $inject = ['$scope', '$uibModal', 'dialogFactory', 'categorySetupAPIService'];
+	public static $inject = ['$scope', '$uibModal', 'dialogService', 'categorySetupAPIService'];
 	public actionClickAdd: (parentNode: any) => void;
 	public actionClickEdit: (node: any) => void;
 	public actionClickRemove: (node: any) => void;
@@ -18,7 +18,7 @@ export class FailureDelayCategoryController {
 	public actionClickSelectItem: (node: any) => void;
 	public hasChildren: (node: any) => boolean;
 
-	constructor($scope, $modal: IModalService, dialogFactory: DialogFactory, categorySetupAPIService: CategorySetupAPIService) {
+	constructor($scope, $modal: IModalService, dialogService: DialogService, categorySetupAPIService: CategorySetupAPIService) {
 		const vm = this;
 
 		$scope.controller = vm;
@@ -97,7 +97,7 @@ export class FailureDelayCategoryController {
 
 		function actionClickRemove(node) {
 
-			dialogFactory.showConfirmDialog('Do you want to remove this category?',
+			dialogService.showConfirmDialog('Do you want to remove this category?',
 				function () {
 					removeNode(node);
 				},
@@ -152,7 +152,7 @@ export class FailureDelayCategoryController {
 		}
 
 		function upsertNodeErrorCallback(error) {
-			dialogFactory.showConfirmDialog(error.message);
+			dialogService.showConfirmDialog(error.message);
 		}
 
 		function removeNode(node) {
@@ -177,7 +177,7 @@ export class FailureDelayCategoryController {
 		}
 
 		function removeNodeErrorCallback(error) {
-			dialogFactory.showConfirmDialog(error.message);
+			dialogService.showConfirmDialog(error.message);
 		}
 
 		function actionClickSelectItem(node) {

@@ -1,8 +1,8 @@
 import * as angular from 'angular';
 import { IModalService } from 'angular-ui-bootstrap';
-import { OperationDataFactory } from '../../../../xpd-resources/ng/xpd.communication/operation-server-data.factory';
-import { DialogFactory } from '../../../../xpd-resources/ng/xpd.dialog/xpd.dialog.factory';
-import { MenuConfirmationFactory } from '../../../../xpd-resources/ng/xpd.menu-confirmation/menu-confirmation.factory';
+import { OperationDataService } from '../../../../xpd-resources/ng/xpd.communication/operation-server-data.factory';
+import { DialogService } from '../../../../xpd-resources/ng/xpd.dialog/xpd.dialog.factory';
+import { MenuConfirmationService } from '../../../../xpd-resources/ng/xpd.menu-confirmation/menu-confirmation.factory';
 import { OperationSetupAPIService } from '../../../../xpd-resources/ng/xpd.setupapi/operation-setupapi.service';
 import { SectionSetupAPIService } from '../../../../xpd-resources/ng/xpd.setupapi/section-setupapi.service';
 import { WellSetupAPIService } from '../../../../xpd-resources/ng/xpd.setupapi/well-setupapi.service';
@@ -13,7 +13,7 @@ export class OperationController {
 
 	// angular.module('xpd.admin').controller('OperationController', operationController);
 
-	public static $inject = ['$scope', '$routeParams', '$location', '$uibModal', 'operationDataFactory', 'dialogFactory', 'wellSetupAPIService', 'sectionSetupAPIService', 'operationSetupAPIService', 'OperationConfigurationService', 'menuConfirmationFactory'];
+	public static $inject = ['$scope', '$routeParams', '$location', '$uibModal', 'operationDataService', 'dialogService', 'wellSetupAPIService', 'sectionSetupAPIService', 'operationSetupAPIService', 'OperationConfigurationService', 'menuConfirmationService'];
 	public changeImportedOperation: (operationId: any) => void;
 	public contract: any;
 	public actionButtonSave: () => void;
@@ -36,13 +36,13 @@ export class OperationController {
 		$routeParams: any,
 		$location: any,
 		$uibModal: IModalService,
-		operationDataFactory: OperationDataFactory,
-		dialogFactory: DialogFactory,
+		operationDataService: OperationDataService,
+		dialogService: DialogService,
 		wellSetupAPIService: WellSetupAPIService,
 		sectionSetupAPIService: SectionSetupAPIService,
 		operationSetupAPIService: OperationSetupAPIService,
 		operationConfigurationService: OperationConfigurationService,
-		menuConfirmationFactory: MenuConfirmationFactory) {
+		menuConfirmationService: MenuConfirmationService) {
 
 		const vm = this;
 
@@ -74,10 +74,10 @@ export class OperationController {
 		 * Impede que o usuario saia da tela
 		 * de edição sem confirmacao do mesmo
 		 */
-		menuConfirmationFactory.setBlockMenu(true);
+		menuConfirmationService.setBlockMenu(true);
 
-		operationDataFactory.openConnection([]).then(function (response) {
-			vm.operationDataFactory = response;
+		operationDataService.openConnection([]).then(function (operationDataFactory) {
+			vm.operationDataFactory = operationDataFactory;
 		});
 
 		function getOperation() {
@@ -321,7 +321,7 @@ export class OperationController {
 
 			function actionButtonSave() {
 
-				dialogFactory.showConfirmDialog('Save and exit?', function () {
+				dialogService.showConfirmDialog('Save and exit?', function () {
 
 					const operation = $scope.dados.operation;
 
@@ -362,7 +362,7 @@ export class OperationController {
 
 				}
 				/** Libera o menu apos sair da tela */
-				menuConfirmationFactory.setBlockMenu(false);
+				menuConfirmationService.setBlockMenu(false);
 
 				$location.path('/setup/well/' + $routeParams.wellId + '/section/').search();
 
@@ -370,7 +370,7 @@ export class OperationController {
 
 			function insertOperationCallback() {
 				/** Libera o menu apos sair da tela */
-				menuConfirmationFactory.setBlockMenu(false);
+				menuConfirmationService.setBlockMenu(false);
 
 				$location.path('/setup/well/' + $routeParams.wellId + '/section/').search();
 				vm.operationDataFactory.emitRefreshQueue();
@@ -414,11 +414,11 @@ export class OperationController {
 			}
 
 			function confirmLeaving() {
-				dialogFactory.showCriticalDialog('Your changes will be lost. Proceed?', function () {
+				dialogService.showCriticalDialog('Your changes will be lost. Proceed?', function () {
 					$location.path('/setup/well/' + $routeParams.wellId + '/section/').search();
 
 					/** Libera o menu apos sair da tela */
-					menuConfirmationFactory.setBlockMenu(false);
+					menuConfirmationService.setBlockMenu(false);
 				});
 			}
 

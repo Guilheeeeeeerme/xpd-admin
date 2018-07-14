@@ -12,8 +12,10 @@
       "node_modules/@types"
     ],
     "lib": [
+      "webworker",
+      "scripthost",
       "es2017",
-      "dom"
+      "dom",
     ]
   },
   "include": [

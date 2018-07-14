@@ -1,5 +1,5 @@
 import { IRootScopeService } from 'angular';
-import { XPDAccessFactory } from '../xpd.access/accessfactory.factory';
+import { XPDAccessService } from '../xpd.access/access.service';
 import { SetupAPIService } from './setupapi.service';
 
 // (function() {
@@ -7,15 +7,15 @@ import { SetupAPIService } from './setupapi.service';
 
 // 	angular.module('xpd.setupapi').service('eventlogSetupAPIService', eventlogSetupAPIService);
 
-// 	eventlogSetupAPIService.$inject = ['xpdAccessFactory', 'setupAPIService', '$rootScope'];
+// 	eventlogSetupAPIService.$inject = ['xpdAccessService', 'setupAPIService', '$rootScope'];
 
 export class EventLogSetupAPIService {
 
-	public static $inject: string[] = ['$rootScope', 'xpdAccessFactory', 'setupAPIService'];
+	public static $inject: string[] = ['$rootScope', 'xpdAccessService', 'setupAPIService'];
 	public BASE_URL: string;
 
-	constructor(private $rootScope: IRootScopeService, private xpdAccessFactory: XPDAccessFactory, private setupAPIService: SetupAPIService) {
-		this.BASE_URL = xpdAccessFactory.getSetupURL() + 'setup/event';
+	constructor(private $rootScope: IRootScopeService, private xpdAccessService: XPDAccessService, private setupAPIService: SetupAPIService) {
+		this.BASE_URL = xpdAccessService.getSetupURL() + 'setup/event';
 	}
 
 	public listTrackingEventByOperation(operationId, successCallback, errorCallback) {

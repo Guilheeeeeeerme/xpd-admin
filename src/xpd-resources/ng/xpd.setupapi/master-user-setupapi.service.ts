@@ -1,4 +1,4 @@
-import { XPDAccessFactory } from '../xpd.access/accessfactory.factory';
+import { XPDAccessService } from '../xpd.access/access.service';
 import { SetupAPIService } from './setupapi.service';
 
 // (function() {
@@ -6,14 +6,14 @@ import { SetupAPIService } from './setupapi.service';
 
 // 	angular.module('xpd.setupapi').service('masterUserSetupAPIService', masterUserSetupAPIService);
 
-// 	masterUserSetupAPIService.$inject = ['xpdAccessFactory', 'setupAPIService'];
+// 	masterUserSetupAPIService.$inject = ['xpdAccessService', 'setupAPIService'];
 
 export class MasterUserSetupAPIService {
 
-	public static $inject: string[] = ['xpdAccessFactory', 'setupAPIService'];
+	public static $inject: string[] = ['xpdAccessService', 'setupAPIService'];
 	public MASTER_USERNAME: string;
 
-	constructor(private xpdAccessFactory: XPDAccessFactory, private setupAPIService: SetupAPIService) {
+	constructor(private xpdAccessService: XPDAccessService, private setupAPIService: SetupAPIService) {
 		this.MASTER_USERNAME = 'admin';
 	}
 
@@ -23,7 +23,7 @@ export class MasterUserSetupAPIService {
 
 		const req = {
 			method: 'POST',
-			url: this.xpdAccessFactory.getSetupURL() + 'setup/master-user/login',
+			url: this.xpdAccessService.getSetupURL() + 'setup/master-user/login',
 			headers: {
 				'Content-Type': 'application/json',
 			},

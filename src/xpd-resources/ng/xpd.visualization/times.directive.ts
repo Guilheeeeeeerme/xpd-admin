@@ -1,6 +1,6 @@
 
 import * as d3 from 'd3';
-import template from '../xpd-resources/ng/xpd.visualization/times.template.html';
+import template from './times.template.html';
 // angular.module('xpd.visualization')
 // 	.directive('times', times);
 

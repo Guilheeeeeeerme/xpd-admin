@@ -3,7 +3,7 @@
 
 // 	angular.module('xpd.admin').directive('vreListTable', vreListTable);
 
-import template from 'app/components/admin/directives/vre-list-table.template.html';
+import template from './vre-list-table.template.html';
 
 export class VREListTableDirective implements ng.IDirective {
 	public scope = {

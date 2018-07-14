@@ -1,6 +1,6 @@
-import { OperationDataFactory } from '../../../xpd-resources/ng/xpd.communication/operation-server-data.factory';
-import { DialogFactory } from '../../../xpd-resources/ng/xpd.dialog/xpd.dialog.factory';
-import { LessonLearnedModalFactory } from '../../../xpd-resources/ng/xpd.modal.lessonlearned/xpd-modal-lessonlearned.factory';
+import { OperationDataService } from '../../../xpd-resources/ng/xpd.communication/operation-server-data.factory';
+import { DialogService } from '../../../xpd-resources/ng/xpd.dialog/xpd.dialog.factory';
+import { LessonLearnedModalService } from '../../../xpd-resources/ng/xpd.modal.lessonlearned/xpd-modal-lessonlearned.service';
 import { LessonLearnedSetupAPIService } from '../../../xpd-resources/ng/xpd.setupapi/lessonlearned-setupapi.service';
 
 export class LessonLearnedController {
@@ -10,15 +10,15 @@ export class LessonLearnedController {
 	// angular.module('xpd.failure-controller')
 	// 	.controller('LessonLearnedController', LessonLearnedController);
 
-	public static $inject = ['$scope', 'lessonLearnedModal', 'lessonLearnedSetupAPIService', 'operationDataFactory', 'dialogFactory'];
+	public static $inject = ['$scope', 'lessonLearnedModal', 'lessonLearnedSetupAPIService', 'operationDataService', 'dialogService'];
 	public operationDataFactory: any;
 
 	constructor(
 		private $scope: any,
-		private lessonLearnedModal: LessonLearnedModalFactory,
+		private lessonLearnedModal: LessonLearnedModalService,
 		private lessonLearnedSetupAPIService: LessonLearnedSetupAPIService,
-		operationDataFactory: OperationDataFactory,
-		private dialogFactory: DialogFactory) {
+		operationDataService: OperationDataService,
+		private dialogService: DialogService) {
 		const vm = this;
 
 		$scope.modalData = {
@@ -31,8 +31,8 @@ export class LessonLearnedController {
 			},
 		};
 
-		operationDataFactory.openConnection([]).then(function (response) {
-			vm.operationDataFactory = response;
+		operationDataService.openConnection([]).then(function (operationDataFactory: any) {
+			vm.operationDataFactory = operationDataFactory;
 			$scope.modalData.operation = operationDataFactory.operationData.operationContext.currentOperation;
 		});
 
@@ -49,7 +49,7 @@ export class LessonLearnedController {
 
 	public actionClickButtonRemoveLessonLearned(lessonlearned) {
 		const self = this;
-		this.dialogFactory.showConfirmDialog('Do you want to remove this Lesson Learned?',
+		this.dialogService.showConfirmDialog('Do you want to remove this Lesson Learned?',
 			function () {
 				self.removelessonlearned(lessonlearned);
 			},
@@ -91,7 +91,7 @@ export class LessonLearnedController {
 	}
 
 	private lessonLearnedModalErrorCallback() {
-		this.dialogFactory.showConfirmDialog('Error on inserting lesson learned, please try again!');
+		this.dialogService.showConfirmDialog('Error on inserting lesson learned, please try again!');
 	}
 
 	private removelessonlearned(lessonlearned) {

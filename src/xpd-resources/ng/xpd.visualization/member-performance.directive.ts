@@ -4,7 +4,7 @@
 
 // memberPerformance.$inject = [];
 
-import template from '../xpd-resources/ng/xpd.visualization/member-performance.template.html';
+import template from './member-performance.template.html';
 
 export class MemberPerformanceDirective implements ng.IDirective {
 	public template = template;

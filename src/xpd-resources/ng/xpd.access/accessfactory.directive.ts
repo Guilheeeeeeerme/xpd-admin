@@ -4,14 +4,14 @@
 // 	angular.module('xpd.accessfactory')
 // 		.directive('accessFactoryDirective', accessFactoryDirective);
 
-// 	accessFactoryDirective.$inject = ['$uibModal', 'dialogFactory'];
+// 	accessFactoryDirective.$inject = ['$uibModal', 'dialogService'];
 import { IModalService } from 'angular-ui-bootstrap';
-import template from '../xpd-resources/ng/xpd.access/accessfactory.template.html';
-import { DialogFactory } from '../xpd.dialog/xpd.dialog.factory';
+import template from '../xpd.access/accessfactory.template.html';
+import { DialogService } from '../xpd.dialog/xpd.dialog.factory';
 
 export class AccessFactoryDirective implements ng.IDirective {
 
-	public static $inject: string[] = ['$uibModal', 'dialogFactory'];
+	public static $inject: string[] = ['$uibModal', 'dialogService'];
 
 	public restrict = 'E';
 		public scope = {
@@ -20,7 +20,7 @@ export class AccessFactoryDirective implements ng.IDirective {
 		};
 		public template = template;
 
-	constructor(private $uibModal: IModalService, private dialogFactory: DialogFactory) {
+	constructor(private $uibModal: IModalService, private dialogService: DialogService) {
 
 	}
 
@@ -39,7 +39,7 @@ export class AccessFactoryDirective implements ng.IDirective {
 		scope.actionButtonCancel = actionButtonCancel;
 
 		function actionButtonSave() {
-			self.dialogFactory.showConfirmDialog('This action will reload your aplication screen. Proceed?', actionProceed);
+			self.dialogService.showConfirmDialog('This action will reload your aplication screen. Proceed?', actionProceed);
 		}
 
 		function actionProceed() {
@@ -70,7 +70,7 @@ export class AccessFactoryDirective implements ng.IDirective {
 	}
 
 	public static Factory(): ng.IDirectiveFactory {
-		return ($uibModal: IModalService, dialogFactory: DialogFactory) => new AccessFactoryDirective($uibModal, dialogFactory);
+		return ($uibModal: IModalService, dialogService: DialogService) => new AccessFactoryDirective($uibModal, dialogService);
 	}
 
 }

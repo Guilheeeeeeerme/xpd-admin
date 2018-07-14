@@ -1,4 +1,4 @@
-import { XPDAccessFactory } from '../xpd.access/accessfactory.factory';
+import { XPDAccessService } from '../xpd.access/access.service';
 import { SetupAPIService } from './setupapi.service';
 
 // (function() {
@@ -7,18 +7,18 @@ import { SetupAPIService } from './setupapi.service';
 // 	angular.module('xpd.setupapi')
 // 		.service('scheduleSetupAPIService', scheduleSetupAPIService);
 
-// 	scheduleSetupAPIService.$inject = ['xpdAccessFactory', 'setupAPIService'];
+// 	scheduleSetupAPIService.$inject = ['xpdAccessService', 'setupAPIService'];
 
 export class ScheduleSetupAPIService {
 
-	public static $inject: string[] = ['xpdAccessFactory', 'setupAPIService'];
+	public static $inject: string[] = ['xpdAccessService', 'setupAPIService'];
 	public BASE_URL: string;
 	public FUNCTION_URL: string;
 	public MEMBER_URL: string;
 	public SCHEDULE_URL: string;
 
-	constructor(private xpdAccessFactory: XPDAccessFactory, private setupAPIService: SetupAPIService) {
-		this.BASE_URL = xpdAccessFactory.getSetupURL();
+	constructor(private xpdAccessService: XPDAccessService, private setupAPIService: SetupAPIService) {
+		this.BASE_URL = xpdAccessService.getSetupURL();
 		this.FUNCTION_URL = this.BASE_URL + 'setup/function';
 		this.MEMBER_URL = this.BASE_URL + 'setup/member';
 		this.SCHEDULE_URL = this.BASE_URL + 'setup/schedule';

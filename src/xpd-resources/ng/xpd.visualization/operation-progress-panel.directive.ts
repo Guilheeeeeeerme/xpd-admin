@@ -4,7 +4,7 @@
 
 // operationProgressPanel.$inject = [];
 
-import template from '../xpd-resources/ng/xpd.visualization/operation-progress-panel.template.html';
+import template from './operation-progress-panel.template.html';
 
 export class OperationProgressPanelDirective implements ng.IDirective {
 	public restrict = 'EA';

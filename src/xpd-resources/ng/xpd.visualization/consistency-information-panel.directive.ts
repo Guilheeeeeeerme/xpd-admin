@@ -5,7 +5,7 @@
 // 		.directive('consistencyInformationPanel', consistencyInformationPanel);
 
 // 	consistencyInformationPanel.$inject = [];
-import template from '../xpd-resources/ng/xpd.visualization/consistency-information-panel.template.html';
+import template from './consistency-information-panel.template.html';
 
 export class ConsistencyInformationPanelDirective implements ng.IDirective {
 

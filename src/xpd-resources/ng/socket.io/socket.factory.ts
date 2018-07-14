@@ -4,11 +4,11 @@ import { IOSocket } from './io-socket';
 // 	'use strict';
 
 // 	angular.module('socketIO')
-// 		.factory('socketFactory', socketFactory);
+// 		.factory('socketService', socketService);
 
-// 	socketFactory.$inject = ['$rootScope'];
+// 	socketService.$inject = ['$rootScope'];
 
-export class SocketIOFactory {
+export class SocketIOService {
 	constructor(private $rootScope) {}
 
 	public create(url: string, namespace: string, threads: string[]) {

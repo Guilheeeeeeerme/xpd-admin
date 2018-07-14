@@ -1,12 +1,12 @@
-import { OperationDataFactory } from '../../../xpd-resources/ng/xpd.communication/operation-server-data.factory';
-import { DialogFactory } from '../../../xpd-resources/ng/xpd.dialog/xpd.dialog.factory';
+import { OperationDataService } from '../../../xpd-resources/ng/xpd.communication/operation-server-data.factory';
+import { DialogService } from '../../../xpd-resources/ng/xpd.dialog/xpd.dialog.factory';
 
 export class MenuController {
 	// 'use strict';
 
 	// angular.module('xpd.admin').controller('MenuController', menuController);
 
-	public static $inject = ['$scope', 'operationDataFactory', 'dialogFactory'];
+	public static $inject = ['$scope', 'operationDataService', 'dialogService'];
 	public operationDataFactory: any;
 	public actionButtonSetBitDepthMode: (mode: any) => void;
 	public actionButtonSetBitDepth: (bitDepth: any) => void;
@@ -16,14 +16,14 @@ export class MenuController {
 	public actionButtonSetDelayOnUnreachable: (seconds: any) => void;
 	public actionButtonSetBlockSpeedInterval: (interval: any) => void;
 
-	constructor($scope, operationDataFactory: OperationDataFactory, dialogFactory: DialogFactory) {
+	constructor($scope, operationDataService: OperationDataService, dialogService: DialogService) {
 
 		const vm = this;
 
 		$scope.dados = {};
 
-		operationDataFactory.openConnection([]).then(function(response) {
-			vm.operationDataFactory = response;
+		operationDataService.openConnection([]).then(function(operationDataFactory: any) {
+			vm.operationDataFactory = operationDataFactory;
 			$scope.operationData = operationDataFactory.operationData;
 		});
 
@@ -38,7 +38,7 @@ export class MenuController {
 		function actionButtonSetBitDepthMode(mode) {
 			const message = 'Change bit depth provider to ' + ((mode) ? 'XPD' : 'Rig') + '?';
 
-			dialogFactory.showCriticalDialog(message, function() {
+			dialogService.showCriticalDialog(message, function() {
 				vm.operationDataFactory.emitSetBitDepthMode(mode);
 			});
 		}
@@ -46,7 +46,7 @@ export class MenuController {
 		function actionButtonSetBitDepth(bitDepth) {
 			const message = 'Update bit depth to ' + bitDepth + 'm ?';
 
-			dialogFactory.showCriticalDialog(message, function() {
+			dialogService.showCriticalDialog(message, function() {
 				vm.operationDataFactory.emitSetBitDepth(bitDepth);
 			});
 
@@ -55,7 +55,7 @@ export class MenuController {
 		function actionButtonSetBlockWeight(blockWeight) {
 			const message = 'Update block weight to ' + blockWeight + 'klb ?';
 
-			dialogFactory.showCriticalDialog(message, function() {
+			dialogService.showCriticalDialog(message, function() {
 				vm.operationDataFactory.emitUpdateBlockWeight(blockWeight);
 			});
 
@@ -64,7 +64,7 @@ export class MenuController {
 		function actionButtonSetSlipsThreshold(threshold) {
 			const message = 'Update slips threshold to ' + threshold + 'klb ?';
 
-			dialogFactory.showCriticalDialog(message, function() {
+			dialogService.showCriticalDialog(message, function() {
 				vm.operationDataFactory.emitUpdateSlipsThreshold(threshold);
 			});
 
@@ -73,7 +73,7 @@ export class MenuController {
 		function actionButtonSetStickUp(stickUp) {
 			const message = 'Update stick up to ' + stickUp + 'm ?';
 
-			dialogFactory.showCriticalDialog(message, function() {
+			dialogService.showCriticalDialog(message, function() {
 				vm.operationDataFactory.emitUpdateStickUp(stickUp);
 			});
 
@@ -82,7 +82,7 @@ export class MenuController {
 		function actionButtonSetDelayOnUnreachable(seconds) {
 			const message = 'Change delay seconds on unreachable target to ' + seconds + '?';
 
-			dialogFactory.showCriticalDialog(message, function() {
+			dialogService.showCriticalDialog(message, function() {
 				vm.operationDataFactory.emitSetDelayOnUnreachableCheck(seconds);
 			});
 		}
@@ -90,7 +90,7 @@ export class MenuController {
 		function actionButtonSetBlockSpeedInterval(interval) {
 			const message = 'Change interval on block speed to ' + interval + '?';
 
-			dialogFactory.showCriticalDialog(message, function() {
+			dialogService.showCriticalDialog(message, function() {
 				vm.operationDataFactory.emitSetBlockSpeedInterval(interval);
 			});
 		}

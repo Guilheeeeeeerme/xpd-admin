@@ -1,4 +1,4 @@
-import { XPDAccessFactory } from '../xpd.access/accessfactory.factory';
+import { XPDAccessService } from '../xpd.access/access.service';
 import { SetupAPIService } from './setupapi.service';
 
 // (function() {
@@ -7,14 +7,14 @@ import { SetupAPIService } from './setupapi.service';
 // 	angular.module('xpd.setupapi')
 // 		.service('sectionSetupAPIService', sectionSetupAPIService);
 
-// sectionSetupAPIService.$inject = ['xpdAccessFactory', 'setupAPIService'];
+// sectionSetupAPIService.$inject = ['xpdAccessService', 'setupAPIService'];
 
 export class SectionSetupAPIService {
-	public static $inject: string[] = ['xpdAccessFactory', 'setupAPIService'];
+	public static $inject: string[] = ['xpdAccessService', 'setupAPIService'];
 	public BASE_URL: string;
 
-	constructor(private xpdAccessFactory: XPDAccessFactory, private setupAPIService: SetupAPIService) {
-		this.BASE_URL = xpdAccessFactory.getSetupURL() + 'setup/section';
+	constructor(private xpdAccessService: XPDAccessService, private setupAPIService: SetupAPIService) {
+		this.BASE_URL = xpdAccessService.getSetupURL() + 'setup/section';
 	}
 
 	public getObjectById(id, successCallback, errorCallback?) {

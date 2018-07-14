@@ -4,7 +4,7 @@
 
 // nextActivitiesInformationPanel.$inject = [];
 
-import template from '../xpd-resources/ng/xpd.visualization/next-activities-information-panel.template.html';
+import template from './next-activities-information-panel.template.html';
 
 export class NextActivitiesInformationPanelDirective implements ng.IDirective {
 	public restrict = 'EA';

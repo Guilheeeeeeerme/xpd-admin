@@ -4,11 +4,11 @@ import { IModalService } from 'angular-ui-bootstrap';
 // 	'use strict';
 
 // 	angular.module('xpd.dialog')
-// 		.factory('dialogFactory', dialogFactory);
+// 		.factory('dialogService', dialogService);
 
-// 	dialogFactory.$inject = ['$uibModal'];
+// 	dialogService.$inject = ['$uibModal'];
 
-export class DialogFactory {
+export class DialogService {
 
 	public static readonly MESSAGE_DIALOG = 'MESSAGE_DIALOG';
 	public static readonly CONFIRM_DIALOG = 'CONFIRM_DIALOG';
@@ -30,7 +30,7 @@ export class DialogFactory {
 
 		const modalOptions = this.generateModalOptions(message, callback, null);
 
-		this.addContentToModal(modalOptions, title, message, DialogFactory.MESSAGE_DIALOG);
+		this.addContentToModal(modalOptions, title, message, DialogService.MESSAGE_DIALOG);
 
 		this.$modal.open(modalOptions);
 	}
@@ -43,7 +43,7 @@ export class DialogFactory {
 
 		const modalOptions = this.generateModalOptions(message, confirmCallback, cancelCallback);
 
-		this.addContentToModal(modalOptions, 'Confirmation', message, DialogFactory.CONFIRM_DIALOG);
+		this.addContentToModal(modalOptions, 'Confirmation', message, DialogService.CONFIRM_DIALOG);
 
 		this.$modal.open(modalOptions);
 	}
@@ -56,7 +56,7 @@ export class DialogFactory {
 
 		const modalOptions = this.generateModalOptions(message, confirmCallback, cancelCallback);
 
-		this.addContentToModal(modalOptions, 'Critical Confirmation', message, DialogFactory.CRITICAL_DIALOG);
+		this.addContentToModal(modalOptions, 'Critical Confirmation', message, DialogService.CRITICAL_DIALOG);
 
 		this.$modal.open(modalOptions);
 	}
@@ -103,7 +103,7 @@ export class DialogFactory {
 
 	private generateModalTemplate(title, content, type) {
 		let header;
-		if (type === DialogFactory.CRITICAL_DIALOG) {
+		if (type === DialogService.CRITICAL_DIALOG) {
 			header = '<div class="modal-header alert alert-danger">' +
 				'<h3 class="modal-title">' + title + '</h3>' +
 				'</div>';
@@ -115,9 +115,9 @@ export class DialogFactory {
 
 		let body = '';
 
-		if (type === DialogFactory.CRITICAL_DIALOG) {
+		if (type === DialogService.CRITICAL_DIALOG) {
 			body += '<div class="modal-body xpd-modal-body-critical">';
-		} else if (type === DialogFactory.CONFIRM_DIALOG) {
+		} else if (type === DialogService.CONFIRM_DIALOG) {
 			body += '<div class="modal-body xpd-modal-body-confirm">';
 		} else {
 			body += '<div class="modal-body xpd-modal-body-message">';
@@ -135,13 +135,13 @@ export class DialogFactory {
 
 		let footer = '<div class="modal-footer">';
 
-		if (type === DialogFactory.MESSAGE_DIALOG) {
+		if (type === DialogService.MESSAGE_DIALOG) {
 
 			footer += '<div class="col-xs-12 text-center">' +
 				'<button class="btn-modal btn-primary" type="button" ng-click="actionButtonYes()">OK</button>' +
 				'</div>';
 
-		} else if (type === DialogFactory.CONFIRM_DIALOG || type === DialogFactory.CRITICAL_DIALOG) {
+		} else if (type === DialogService.CONFIRM_DIALOG || type === DialogService.CRITICAL_DIALOG) {
 			footer += '<div class=" col-xs-6 text-center">' +
 				'<button class="btn-modal btn-primary" type="button" ng-click="actionButtonYes()">YES</button>' +
 				'</div>' +
@@ -154,9 +154,9 @@ export class DialogFactory {
 
 		let modalContent = '';
 
-		if (type === DialogFactory.CRITICAL_DIALOG) {
+		if (type === DialogService.CRITICAL_DIALOG) {
 			modalContent += '<div class="modal-content xpd-modal-content-critical">';
-		} else if (type === DialogFactory.CONFIRM_DIALOG) {
+		} else if (type === DialogService.CONFIRM_DIALOG) {
 			modalContent += '<div class="modal-content xpd-modal-content-confirm">';
 		} else {
 			modalContent += '<div class="modal-content xpd-modal-content-message">';

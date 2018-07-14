@@ -8,11 +8,11 @@
 // 	'use strict';
 
 // 	angular.module('xpd.menu-confirmation')
-// 		.factory('menuConfirmationFactory', menuConfirmationFactory);
+// 		.factory('menuConfirmationService', menuConfirmationService);
 
-// 	menuConfirmationFactory.$inject = [];
+// 	menuConfirmationService.$inject = [];
 
-export class MenuConfirmationFactory {
+export class MenuConfirmationService {
 
 	public static $inject: string[] = [];
 

@@ -19,6 +19,4 @@ const XPDWellViewOnlyModule: angular.IModule = angular.module('xpd.wellviewonly'
 XPDWellViewOnlyModule.config(WellConfig);
 XPDWellViewOnlyModule.controller('WellViewOnlyController', WellViewOnlyController);
 
-angular.element(document).ready(function () {
-	angular.bootstrap(document, [XPDWellViewOnlyModule.name]);
-});
+export default XPDWellViewOnlyModule;

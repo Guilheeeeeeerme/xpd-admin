@@ -4,7 +4,7 @@
 
 // performanceParameterBar.$inject = [];
 
-import template from '../xpd-resources/ng/xpd.visualization/performance-parameter-bar.template.html';
+import template from './performance-parameter-bar.template.html';
 
 export class PerformanceParameterBarDirective implements ng.IDirective {
 	public template = template;

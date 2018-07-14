@@ -1,4 +1,4 @@
-import { XPDAccessFactory } from '../xpd.access/accessfactory.factory';
+import { XPDAccessService } from '../xpd.access/access.service';
 import { SetupAPIService } from './setupapi.service';
 
 // (function() {
@@ -6,15 +6,15 @@ import { SetupAPIService } from './setupapi.service';
 
 // 	angular.module('xpd.setupapi').service('operationSetupAPIService', operationSetupAPIService);
 
-// 	operationSetupAPIService.$inject = ['xpdAccessFactory', 'setupAPIService'];
+// 	operationSetupAPIService.$inject = ['xpdAccessService', 'setupAPIService'];
 
 export class OperationSetupAPIService {
 
-	public static $inject: string[] = ['xpdAccessFactory', 'setupAPIService'];
+	public static $inject: string[] = ['xpdAccessService', 'setupAPIService'];
 	public BASE_URL: string;
 
-	constructor(private xpdAccessFactory: XPDAccessFactory, private setupAPIService: SetupAPIService) {
-		this.BASE_URL = xpdAccessFactory.getSetupURL() + 'setup/operation';
+	constructor(private xpdAccessService: XPDAccessService, private setupAPIService: SetupAPIService) {
+		this.BASE_URL = xpdAccessService.getSetupURL() + 'setup/operation';
 	}
 
 	public getOperationAlarms(operationId, successCallback, errorCallback?) {
@@ -106,7 +106,7 @@ export class OperationSetupAPIService {
 
 		const req = {
 			method: 'GET',
-			url: this.xpdAccessFactory.getSetupURL() + 'operation-resources/operations-queue/' + wellId,
+			url: this.xpdAccessService.getSetupURL() + 'operation-resources/operations-queue/' + wellId,
 		};
 
 		this.setupAPIService.doRequest(req, successCallback, errorCallback);

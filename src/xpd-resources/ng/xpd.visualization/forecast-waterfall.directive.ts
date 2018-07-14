@@ -7,7 +7,7 @@
 // 	forecastWaterfall.$inject = ['$filter', 'highchartsService'];
 
 import { HighchartsService } from '../highcharts/highcharts.service';
-import template from '../xpd-resources/ng/xpd.forecast-waterfall/forecast-waterfall.template.html';
+import template from './forecast-waterfall.template.html';
 
 export class ForecastWaterfallDirective implements ng.IDirective {
 	public static $inject: string[] = ['$filter', 'highchartsService'];

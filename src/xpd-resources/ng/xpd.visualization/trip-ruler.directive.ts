@@ -1,5 +1,5 @@
 import * as d3 from 'd3';
-import template from './xpd-resources/ng/xpd.visualization/trip-ruler.template.html';
+import template from './trip-ruler.template.html';
 
 export class TripRulerDirective implements ng.IDirective {
 	public template = template;

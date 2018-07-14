@@ -5,7 +5,7 @@
 // 		.directive('displacementArea', displacementArea);
 // 	displacementArea.$inject = ['d3Service'];
 import * as d3 from 'd3';
-import template from '../xpd-resources/ng/xpd.visualization/displacement-area.template.html';
+import template from './displacement-area.template.html';
 
 export class DisplacementAreaFactory implements ng.IDirective {
 	public template = template;

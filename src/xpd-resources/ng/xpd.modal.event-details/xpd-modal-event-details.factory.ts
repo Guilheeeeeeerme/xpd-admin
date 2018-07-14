@@ -5,9 +5,9 @@
 
 // 	eventDetailsModal.$inject = ['$uibModal'];
 import { IModalService } from 'angular-ui-bootstrap';
-import modalTemplate from '../xpd-resources/ng/xpd.modal.event-details/xpd-modal-event-details.template.html';
+import modalTemplate from './xpd-modal-event-details.template.html';
 
-export class EventDetailsModalFactory {
+export class EventDetailsModalService {
 
 	constructor(private $uibModal: IModalService) {
 
