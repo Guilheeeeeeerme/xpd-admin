@@ -11,9 +11,9 @@
 // 		.directive('xpdAdminNavBar', xpdAdminNavBar);
 
 // 	xpdAdminNavBar.$inject = ['$location', 'menuConfirmationService', 'operationDataService', 'dialogService'];
-import { OperationServerService } from '../xpd.communication/operation-server.service';
 import { DialogService } from '../xpd.dialog/xpd.dialog.factory';
 import { MenuConfirmationService } from '../xpd.menu-confirmation/menu-confirmation.factory';
+import { OperationDataService } from '../xpd.operation-data/operation-data.service';
 import template from './admin-nav-bar.template.html';
 
 export class XPDAdminNavBarDirective implements ng.IDirective {
@@ -30,7 +30,7 @@ export class XPDAdminNavBarDirective implements ng.IDirective {
 	constructor(
 		private $location: ng.ILocationService,
 		private menuConfirmationService: MenuConfirmationService,
-		private operationDataService: OperationServerService,
+		private operationDataService: OperationDataService,
 		private dialogService: DialogService) { }
 
 	public link: ng.IDirectiveLinkFn = (
@@ -42,8 +42,8 @@ export class XPDAdminNavBarDirective implements ng.IDirective {
 
 		const self = this;
 
-		this.operationDataService.openConnection([]).then(function (operationDataFactory: any) {
-			self.operationDataFactory = operationDataFactory;
+		this.operationDataService.openConnection([]).then(function () {
+			self.operationDataFactory = self.operationDataService.operationDataFactory;
 
 			if (attrs.navOrigin === 'report') {
 				scope.onclickItemMenu = onclickItemMenuReport;
@@ -53,9 +53,9 @@ export class XPDAdminNavBarDirective implements ng.IDirective {
 
 			checkIfHasRunningOperation();
 
-			self.operationDataService.addEventListener('menuConfirmationService', 'setOnRunningOperationListener', checkIfHasRunningOperation);
-			self.operationDataService.addEventListener('menuConfirmationService', 'setOnOperationChangeListener', checkIfHasRunningOperation);
-			self.operationDataService.addEventListener('menuConfirmationService', 'setOnNoCurrentOperationListener', checkIfHasRunningOperation);
+			self.operationDataService.on('setOnRunningOperationListener', checkIfHasRunningOperation);
+			self.operationDataService.on('setOnOperationChangeListener', checkIfHasRunningOperation);
+			self.operationDataService.on('setOnNoCurrentOperationListener', checkIfHasRunningOperation);
 
 			function onclickItemMenuAdmin(path, newTab) {
 				const blockMenu = self.menuConfirmationService.getBlockMenu();
@@ -145,7 +145,7 @@ export class XPDAdminNavBarDirective implements ng.IDirective {
 			}
 
 			function checkIfHasRunningOperation() {
-				const context = operationDataFactory.operationData.operationContext;
+				const context = self.operationDataFactory.operationData.operationContext;
 				if (context && context.currentOperation && context.currentOperation.running && context.currentOperation.type !== 'time') {
 					scope.hasRunningOperation = true;
 				} else {
@@ -160,7 +160,7 @@ export class XPDAdminNavBarDirective implements ng.IDirective {
 		return (
 			$location: ng.ILocationService,
 			menuConfirmationService: MenuConfirmationService,
-			operationDataService: OperationServerService,
+			operationDataService: OperationDataService,
 			dialogService: DialogService) => new XPDAdminNavBarDirective(
 				$location,
 				menuConfirmationService,

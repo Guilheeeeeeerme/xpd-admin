@@ -10,7 +10,7 @@
         "forin": false,
         "object-literal-shorthand": false,
         "space-before-function-paren": false,
-        "only-arrow-functions": true,
+        "only-arrow-functions": false,
         "object-literal-sort-keys": false,
         "member-ordering": false,
         "max-line-length": false,

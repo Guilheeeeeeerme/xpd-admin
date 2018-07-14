@@ -1,11 +1,11 @@
 import * as angular from 'angular';
 import { IModalService } from 'angular-ui-bootstrap';
-import { OperationServerService } from '../xpd.communication/operation-server.service';
 import { DialogService } from '../xpd.dialog/xpd.dialog.factory';
 import { XPDIntervalService, XPDTimeoutService } from '../xpd.timers/xpd-timers.service';
 
 import failureModalTemplate from '../../../components/admin/views/modal/failures.modal.html';
 import lessonLearnedModalTemplate from '../../../components/admin/views/modal/lesson-learned.modal.html';
+import { OperationDataService } from '../xpd.operation-data/operation-data.service';
 
 // (function() {
 // 	'use strict',
@@ -26,7 +26,6 @@ export class TrackingController {
 		'operationDataService',
 		'dialogService',
 	];
-	public circulateShiftListInterval: any;
 
 	// constructor(
 	// 	$scope: any,
@@ -38,17 +37,13 @@ export class TrackingController {
 
 	constructor(
 		private $scope: any,
-		private $xpdInterval: XPDIntervalService,
+		$xpdInterval: XPDIntervalService,
 		private $xpdTimeout: XPDTimeoutService,
 		private $uibModal: IModalService,
-		operationDataService: OperationServerService,
+		operationDataService: OperationDataService,
 		private dialogService: DialogService) {
 
 		const vm = this;
-
-		$scope.$on('$destroy', this.destroy);
-
-		const circulateShiftListInterval = $xpdInterval.run(this.circulateShiftList, 10000, $scope);
 
 		$scope.dados = {
 			connectionTimes: [],
@@ -80,10 +75,19 @@ export class TrackingController {
 			depthAlarms: [],
 		};
 
-		operationDataService.openConnection([]).then(function (operationDataFactory: any) {
-			vm.operationDataFactory = operationDataFactory;
+		setInterval(function () {
+			console.log($scope.operationData);
+		}, 500);
+
+		operationDataService.openConnection([]).then(function () {
+
+			vm.operationDataFactory = operationDataService.operationDataFactory;
 			// TODO: adaptacao as any
-			$scope.operationData = operationDataFactory.operationData;
+			$scope.operationData = vm.operationDataFactory.operationData;
+
+			$xpdInterval.run(() => {
+				vm.circulateShiftList();
+			}, 10000, $scope);
 
 			vm.buildEventStruture();
 			vm.buildTimeSlicesStruture();
@@ -101,31 +105,31 @@ export class TrackingController {
 			// * ALARM *//
 
 			// buildEventStruture();
-			operationDataService.addEventListener('trackingController', 'setOnEventChangeListener', (data) => { vm.buildEventStruture(); });
-			operationDataService.addEventListener('trackingController', 'setOnCurrentEventListener', (data) => { vm.buildEventStruture(); });
-			operationDataService.addEventListener('trackingController', 'setOnNoCurrentEventListener', (data) => { vm.buildEventStruture(); });
-			operationDataService.addEventListener('trackingController', 'setOnEventLogUpdateListener', (data) => { vm.buildEventStruture(); });
-			operationDataService.addEventListener('trackingController', 'setOnWaitEventListener', (data) => { vm.buildEventStruture(); });
+			operationDataService.on('setOnEventChangeListener', (data) => { vm.buildEventStruture(); });
+			operationDataService.on('setOnCurrentEventListener', (data) => { vm.buildEventStruture(); });
+			operationDataService.on('setOnNoCurrentEventListener', (data) => { vm.buildEventStruture(); });
+			operationDataService.on('setOnEventLogUpdateListener', (data) => { vm.buildEventStruture(); });
+			operationDataService.on('setOnWaitEventListener', (data) => { vm.buildEventStruture(); });
 
 			// buildTimeSlicesStruture();
-			operationDataService.addEventListener('trackingController', 'setOnTimeSlicesChangeListener', (data) => { vm.buildTimeSlicesStruture(); });
-			operationDataService.addEventListener('trackingController', 'setOnTimeSlicesListener', (data) => { vm.buildTimeSlicesStruture(); });
-			operationDataService.addEventListener('trackingController', 'setOnNoTimeSlicesListener', (data) => { vm.buildTimeSlicesStruture(); });
+			operationDataService.on('setOnTimeSlicesChangeListener', (data) => { vm.buildTimeSlicesStruture(); });
+			operationDataService.on('setOnTimeSlicesListener', (data) => { vm.buildTimeSlicesStruture(); });
+			operationDataService.on('setOnNoTimeSlicesListener', (data) => { vm.buildTimeSlicesStruture(); });
 
-			operationDataService.addEventListener('trackingController', 'setOnAboveSpeedLimitListener', (data) => { vm.onAboveSpeedLimit(); });
-			operationDataService.addEventListener('trackingController', 'setOnUnreachableTargetListener', (data) => { vm.onUnreachableTarget(); });
+			operationDataService.on('setOnAboveSpeedLimitListener', (data) => { vm.onAboveSpeedLimit(); });
+			operationDataService.on('setOnUnreachableTargetListener', (data) => { vm.onUnreachableTarget(); });
 
 			// removeTeamsFromShift();
-			operationDataService.addEventListener('trackingController', 'setOnShiftListener', (data) => { vm.removeTeamsFromShift(); });
+			operationDataService.on('setOnShiftListener', (data) => { vm.removeTeamsFromShift(); });
 
 			// buildAcknowledgementList();
-			operationDataService.addEventListener('trackingController', 'setOnAlarmsChangeListener', (data) => { vm.buildAcknowledgementList(); });
-			operationDataService.addEventListener('trackingController', 'setOnCurrentAlarmsListener', (data) => { vm.buildAcknowledgementList(); });
-			operationDataService.addEventListener('trackingController', 'setOnNoCurrentAlarmsListener', (data) => { vm.buildAcknowledgementList(); });
-			operationDataService.addEventListener('trackingController', 'setOnSpeedRestrictionAlarmListener', (data) => { vm.buildAcknowledgementList(); });
-			operationDataService.addEventListener('trackingController', 'setOnDurationAlarmListener', (data) => { vm.buildAcknowledgementList(); });
-			operationDataService.addEventListener('trackingController', 'setOnNoCurrentAlarmListener', (data) => { vm.buildAcknowledgementList(); });
-			operationDataService.addEventListener('trackingController', 'setOnExpectedAlarmChangeListener', (data) => { vm.buildAcknowledgementList(); });
+			operationDataService.on('setOnAlarmsChangeListener', (data) => { vm.buildAcknowledgementList(); });
+			operationDataService.on('setOnCurrentAlarmsListener', (data) => { vm.buildAcknowledgementList(); });
+			operationDataService.on('setOnNoCurrentAlarmsListener', (data) => { vm.buildAcknowledgementList(); });
+			operationDataService.on('setOnSpeedRestrictionAlarmListener', (data) => { vm.buildAcknowledgementList(); });
+			operationDataService.on('setOnDurationAlarmListener', (data) => { vm.buildAcknowledgementList(); });
+			operationDataService.on('setOnNoCurrentAlarmListener', (data) => { vm.buildAcknowledgementList(); });
+			operationDataService.on('setOnExpectedAlarmChangeListener', (data) => { vm.buildAcknowledgementList(); });
 
 		});
 	}
@@ -235,15 +239,6 @@ export class TrackingController {
 
 	public finishDurationAlarm() {
 		this.operationDataFactory.emitFinishDurationAlarm();
-	}
-
-	/**
-		 * Quando sair do controller
-		 */
-	private destroy() {
-		if (this.circulateShiftListInterval) {
-			this.$xpdInterval.cancel(this.circulateShiftListInterval);
-		}
 	}
 
 	private startCementation() {

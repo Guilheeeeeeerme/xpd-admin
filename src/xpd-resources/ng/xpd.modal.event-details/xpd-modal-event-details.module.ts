@@ -3,7 +3,7 @@ import { ModalEventDetailsController } from './xpd-modal-event-details.controlle
 import { EventDetailsModalService } from './xpd-modal-event-details.factory';
 
 const XPDEventDetailsModule: angular.IModule = angular.module('xpd.modal-event-details', []);
-export  { XPDEventDetailsModule }
+export  { XPDEventDetailsModule };
 
 XPDEventDetailsModule.service('eventDetailsModal', EventDetailsModalService);
 XPDEventDetailsModule.controller('modalEventDetailsController', ModalEventDetailsController);

@@ -5,7 +5,6 @@ import 'angular-toastr';
 import { AngularTreeviewModule } from '../../xpd-resources/ng/angular.treeview/angular-treeview.module';
 import { XPDHighchartsModule } from '../../xpd-resources/ng/highcharts/highcharts.module';
 import { XPDAdminNavBarModule } from '../../xpd-resources/ng/xpd.admin-nav-bar/admin-nav-bar.module';
-import { XPDCommunicationModule } from '../../xpd-resources/ng/xpd.communication/communication.module';
 import { XPDDialogModule } from '../../xpd-resources/ng/xpd.dialog/xpd.dialog.module';
 import { XPDFailureNavBarController } from '../../xpd-resources/ng/xpd.failure-controller/failure-nv-bar.module';
 import { XPDFiltersModule } from '../../xpd-resources/ng/xpd.filters/xpd-filter.module';
@@ -13,6 +12,7 @@ import { XPDMenuConfirmationModule } from '../../xpd-resources/ng/xpd.menu-confi
 import { XPDFailureModule } from '../../xpd-resources/ng/xpd.modal.failure/xpd-modal-failure.module';
 import { XPDLayDownConfirmationModule } from '../../xpd-resources/ng/xpd.modal.laydown-confirmation/xpd.modal.laydown-confirmation.module';
 import { XPDLessonLearnedModule } from '../../xpd-resources/ng/xpd.modal.lessonlearned/xpd-modal-lessonlearned.module';
+import { XPDOperationDataModule } from '../../xpd-resources/ng/xpd.operation-data/operation-data.module';
 import { XPDSetupAPIModule } from '../../xpd-resources/ng/xpd.setupapi/setupapi.module';
 import { XPDTimersModule } from '../../xpd-resources/ng/xpd.timers/xpd-timers.module';
 import { BitDepthTimeController } from './controllers/bit-depth-time.controller';
@@ -46,7 +46,7 @@ const XPDReportsModule: angular.IModule = angular.module('xpd.reports', [
 	XPDFiltersModule.name,
 	XPDTimersModule.name,
 	XPDHighchartsModule.name,
-	XPDCommunicationModule.name,
+	XPDOperationDataModule.name,
 	XPDLayDownConfirmationModule.name,
 	XPDMenuConfirmationModule.name,
 	XPDAdminNavBarModule.name,

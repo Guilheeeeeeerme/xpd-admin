@@ -7,8 +7,8 @@ import { XPDContractTimeInputModule } from '../../xpd-resources/ng/xpd.contract-
 import { XPDDialogModule } from '../../xpd-resources/ng/xpd.dialog/xpd.dialog.module';
 import { XPDSetupFormInputDirective } from '../../xpd-resources/ng/xpd.setup-form-input/setup-form-input.directive';
 import { XPDSetupAPIModule } from '../../xpd-resources/ng/xpd.setupapi/setupapi.module';
-import { OperationConfig } from './operation-view-only.config';
 import { OperationViewOnlyController } from './components/operation-view-only/operation-view-only.controller';
+import { OperationConfig } from './operation-view-only.config';
 
 const XPDOperationViewOnlyModule: angular.IModule = angular.module('xpd.operationviewonly', [
 	XPDDialogModule.name,

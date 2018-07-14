@@ -1,8 +1,8 @@
-import { IQProvider, IQService } from 'angular';
-import { OperationServerService } from '../../../xpd-resources/ng/xpd.communication/operation-server.service';
+import { IQService } from 'angular';
 import { EventDetailsModalService } from '../../../xpd-resources/ng/xpd.modal.event-details/xpd-modal-event-details.factory';
 import { FailureModalFactory } from '../../../xpd-resources/ng/xpd.modal.failure/xpd-modal-failure.factory';
 import { LessonLearnedModalService } from '../../../xpd-resources/ng/xpd.modal.lessonlearned/xpd-modal-lessonlearned.service';
+import { OperationDataService } from '../../../xpd-resources/ng/xpd.operation-data/operation-data.service';
 import { EventLogSetupAPIService } from '../../../xpd-resources/ng/xpd.setupapi/eventlog-setupapi.service';
 import { FailureSetupAPIService } from '../../../xpd-resources/ng/xpd.setupapi/failure-setupapi.service';
 import { LessonLearnedSetupAPIService } from '../../../xpd-resources/ng/xpd.setupapi/lessonlearned-setupapi.service';
@@ -17,12 +17,12 @@ export class AdminTrackingController {
 	public actionClickEventDetailsButton: () => void;
 	public actionClickFailuresButton: () => void;
 	public actionClickLessonsLearnedButton: () => void;
-	public operationDataFactory: {};
+	public operationDataFactory: any;
 
 	constructor(
 		$scope: any,
 		$q: IQService,
-		operationDataService: OperationServerService,
+		operationDataService: OperationDataService,
 		eventDetailsModal: EventDetailsModalService,
 		failureModal: FailureModalFactory,
 		eventlogSetupAPIService: EventLogSetupAPIService,
@@ -45,15 +45,15 @@ export class AdminTrackingController {
 
 		$rootScope.XPDmodule = 'admin';
 
-		operationDataService.openConnection([]).then(function (operationDataFactory) {
-			vm.operationDataFactory = operationDataFactory;
-			$scope.operationData = (operationDataFactory as any).operationData;
+		operationDataService.openConnection([]).then(function () {
+			vm.operationDataFactory = operationDataService.operationDataFactory;
+			$scope.operationData = vm.operationDataFactory.operationData;
 		});
 
 		loadEvents();
 
-		operationDataService.addEventListener('adminTrackingController', 'setOnEventChangeListener', loadEvents);
-		operationDataService.addEventListener('adminTrackingController', 'setOnParallelEventChangeListener', loadEvents);
+		operationDataService.on('setOnEventChangeListener', loadEvents);
+		operationDataService.on('setOnParallelEventChangeListener', loadEvents);
 
 		function loadEvents() {
 

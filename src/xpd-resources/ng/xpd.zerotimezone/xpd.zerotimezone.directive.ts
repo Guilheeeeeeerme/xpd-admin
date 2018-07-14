@@ -11,7 +11,7 @@ export class XPDZeroTimeZoneDirective implements ng.IDirective {
 		ctrl: any,
 	) => {
 
-		ctrl.$formatters.push(function(value) {
+		ctrl.$formatters.push((value) => {
 			value = new Date(value);
 
 			let date = new Date(Date.parse(value));
@@ -20,7 +20,7 @@ export class XPDZeroTimeZoneDirective implements ng.IDirective {
 			return date;
 		});
 
-		ctrl.$parsers.push(function(value) {
+		ctrl.$parsers.push((value) => {
 			value = new Date(value);
 
 			const date = new Date(value.getTime() - (60000 * value.getTimezoneOffset()));

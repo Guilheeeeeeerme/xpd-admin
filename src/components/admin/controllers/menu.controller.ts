@@ -1,5 +1,5 @@
-import { OperationServerService } from '../../../xpd-resources/ng/xpd.communication/operation-server.service';
 import { DialogService } from '../../../xpd-resources/ng/xpd.dialog/xpd.dialog.factory';
+import { OperationDataService } from '../../../xpd-resources/ng/xpd.operation-data/operation-data.service';
 
 export class MenuController {
 	// 'use strict';
@@ -16,15 +16,15 @@ export class MenuController {
 	public actionButtonSetDelayOnUnreachable: (seconds: any) => void;
 	public actionButtonSetBlockSpeedInterval: (interval: any) => void;
 
-	constructor($scope, operationDataService: OperationServerService, dialogService: DialogService) {
+	constructor($scope, operationDataService: OperationDataService, dialogService: DialogService) {
 
 		const vm = this;
 
 		$scope.dados = {};
 
-		operationDataService.openConnection([]).then(function(operationDataFactory: any) {
-			vm.operationDataFactory = operationDataFactory;
-			$scope.operationData = operationDataFactory.operationData;
+		operationDataService.openConnection([]).then(function() {
+			vm.operationDataFactory = operationDataService.operationDataFactory;
+			$scope.operationData = vm.operationDataFactory.operationData;
 		});
 
 		vm.actionButtonSetBitDepthMode = actionButtonSetBitDepthMode;

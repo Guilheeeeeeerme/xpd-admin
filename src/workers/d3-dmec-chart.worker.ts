@@ -41,13 +41,13 @@ ctx.addEventListener('message', (event) => {
 			ctx.postMessage({
 				cmd: data.cmd,
 				trackName: data.trackName,
-				points: overflowPoints(data.tracks, data.points)
+				points: overflowPoints(data.tracks, data.points),
 			});
 			break;
 		case 'reading-to-points':
 			ctx.postMessage({
 				cmd: data.cmd,
-				points: readingsToPoints(data.readings, data.tracks)
+				points: readingsToPoints(data.readings, data.tracks),
 			});
 			break;
 		default:
@@ -65,7 +65,7 @@ ctx.addEventListener('message', (event) => {
 
 	function overflowPoints(tracks, points) {
 
-		var result = {};
+		const result = {};
 
 		tracks.map(function (track) {
 			result[track.param] = handleOverflow(points[track.param], track);
@@ -75,24 +75,24 @@ ctx.addEventListener('message', (event) => {
 
 		function handleOverflow(points, track) {
 
-			var result = [];
-			var distance = 0;
-			var lastPoint = null;
+			const result = [];
+			let distance = 0;
+			let lastPoint = null;
 
 			distance = Math.abs(track.max - track.min);
 
 			points.map(function (point) {
 
-				var empty = {
+				const empty = {
 					x: point.x,
 					y: null,
-					actual: null
+					actual: null,
 				};
 
 				if (point.y != null) {
 
 					point.overflow = 0;
-					var tempPoint = null;
+					let tempPoint = null;
 
 					while (point.y < track.min) {
 						tempPoint = JSON.parse(JSON.stringify(point));
@@ -129,7 +129,7 @@ ctx.addEventListener('message', (event) => {
 
 	function getPoint(timestamp, tracks, oldPoints, newPoints) {
 
-		var promises = [];
+		const promises = [];
 
 		tracks.map(function (track) {
 			promises.push(getParamPointAVL(timestamp, track.param, oldPoints, newPoints));
@@ -140,9 +140,9 @@ ctx.addEventListener('message', (event) => {
 
 			Promise.all(promises).then(function (top) {
 
-				var reading = {};
+				const reading = {};
 
-				for (var i in top) {
+				for (const i in top) {
 					reading[top[i].param] = top[i].point;
 				}
 
@@ -158,7 +158,7 @@ ctx.addEventListener('message', (event) => {
 
 		return new Promise(function (resolve, reject) {
 
-			var points = [];
+			let points = [];
 
 			if (newPoints &&
 				newPoints[param] &&
@@ -178,10 +178,10 @@ ctx.addEventListener('message', (event) => {
 
 			while (points && points.length > 1) {
 
-				var half = Math.ceil(points.length / 2);
+				const half = Math.ceil(points.length / 2);
 
-				var firstHalf = points.slice(0, half);
-				var lastHalf = points.slice(-1 * half);
+				const firstHalf = points.slice(0, half);
+				const lastHalf = points.slice(-1 * half);
 
 				if (lastHalf &&
 					lastHalf.length &&
@@ -197,7 +197,7 @@ ctx.addEventListener('message', (event) => {
 
 			resolve({
 				param: param,
-				point: points[0] || null
+				point: points[0] || null,
 			});
 
 		});
@@ -208,7 +208,7 @@ ctx.addEventListener('message', (event) => {
 
 		return new Promise(function (resolve, reject) {
 
-			var points = [];
+			let points = [];
 
 			if (newPoints &&
 				newPoints[param] &&
@@ -237,7 +237,7 @@ ctx.addEventListener('message', (event) => {
 
 			resolve({
 				param: param,
-				point: points[0] || null
+				point: points[0] || null,
 			});
 
 		});
@@ -245,7 +245,7 @@ ctx.addEventListener('message', (event) => {
 	}
 
 	function readingsToPoints(readings, tracks) {
-		var points = {};
+		const points = {};
 
 		readings.map(preparePoints);
 
@@ -255,10 +255,10 @@ ctx.addEventListener('message', (event) => {
 
 			function convertToXY(track) {
 
-				var xyPoint = {
+				const xyPoint = {
 					x: reading.timestamp,
 					y: reading[track.param] || null,
-					actual: reading[track.param] || null
+					actual: reading[track.param] || null,
 				};
 
 				if (!points[track.param]) {

@@ -3,6 +3,6 @@ import 'angular-spinner';
 import { SpinnerConfig } from './xpd-spinner.config';
 
 const XPDSpinnerModule: angular.IModule = angular.module('xpd-spinner', ['angularSpinner']);
-export  { XPDSpinnerModule }
+export  { XPDSpinnerModule };
 
 XPDSpinnerModule.config(SpinnerConfig);

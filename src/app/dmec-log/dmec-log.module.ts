@@ -3,9 +3,9 @@ import 'angular-ui-bootstrap';
 
 import { XPDHighchartsModule } from '../../xpd-resources/ng/highcharts/highcharts.module';
 import { XPDCalculationModule } from '../../xpd-resources/ng/xpd.calculation/calculation.module';
-import { XPDCommunicationModule } from '../../xpd-resources/ng/xpd.communication/communication.module';
 import { XPDDMECModule } from '../../xpd-resources/ng/xpd.dmec/dmec.module';
 import { XPDFiltersModule } from '../../xpd-resources/ng/xpd.filters/xpd-filter.module';
+import { XPDOperationDataModule } from '../../xpd-resources/ng/xpd.operation-data/operation-data.module';
 import { XPDSetupAPIModule } from '../../xpd-resources/ng/xpd.setupapi/setupapi.module';
 import { XPDTimersModule } from '../../xpd-resources/ng/xpd.timers/xpd-timers.module';
 import { XPDVisualizationModule } from '../../xpd-resources/ng/xpd.visualization/xpd-visualization.module';
@@ -20,7 +20,7 @@ const XPDDMECLogModule: angular.IModule  = angular.module('xpd.dmeclog', [
 	XPDHighchartsModule.name,
 	XPDVisualizationModule.name,
 	XPDCalculationModule.name,
-	XPDCommunicationModule.name]);
+	XPDOperationDataModule.name]);
 
 export { XPDDMECLogModule };
 

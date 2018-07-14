@@ -1,7 +1,7 @@
 import * as angular from 'angular';
 import { IModalService } from 'angular-ui-bootstrap';
-import { OperationServerService } from '../../../../xpd-resources/ng/xpd.communication/operation-server.service';
 import { DialogService } from '../../../../xpd-resources/ng/xpd.dialog/xpd.dialog.factory';
+import { OperationDataService } from '../../../../xpd-resources/ng/xpd.operation-data/operation-data.service';
 import { ScheduleSetupAPIService } from '../../../../xpd-resources/ng/xpd.setupapi/schedule-setupapi.service';
 
 export class SchedulerActionsService {
@@ -30,7 +30,7 @@ export class SchedulerActionsService {
 
 	constructor(
 		$modal: IModalService,
-		operationDataService: OperationServerService,
+		operationDataService: OperationDataService,
 		scheduleSetupAPIService: ScheduleSetupAPIService,
 		dialogService: DialogService) {
 
@@ -54,8 +54,8 @@ export class SchedulerActionsService {
 		self.removeFromGantt = null;
 		self.updateFromGantt = null;
 
-		operationDataService.openConnection([]).then(function (operationDataFactory) {
-			self.operationDataFactory = operationDataFactory;
+		operationDataService.openConnection([]).then(function () {
+			self.operationDataFactory = operationDataService.operationDataFactory;
 		});
 
 		// ##     ## ######## ##     ## ########  ######## ########

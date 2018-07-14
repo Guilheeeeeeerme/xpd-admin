@@ -1,6 +1,6 @@
-import { OperationServerService } from '../../../xpd-resources/ng/xpd.communication/operation-server.service';
 import { DialogService } from '../../../xpd-resources/ng/xpd.dialog/xpd.dialog.factory';
 import { FailureModalFactory } from '../../../xpd-resources/ng/xpd.modal.failure/xpd-modal-failure.factory';
+import { OperationDataService } from '../../../xpd-resources/ng/xpd.operation-data/operation-data.service';
 
 export class FailuresController {
 
@@ -18,7 +18,7 @@ export class FailuresController {
 	constructor(
 		$scope,
 		failureModal: FailureModalFactory,
-		operationDataService: OperationServerService,
+		operationDataService: OperationDataService,
 		dialogService: DialogService) {
 
 		const vm = this;
@@ -38,13 +38,13 @@ export class FailuresController {
 		vm.actionClickButtonRemoveFailure = actionClickButtonRemoveFailure;
 		vm.actionClickButtonEditFailure = actionClickButtonEditFailure;
 
-		operationDataService.openConnection([]).then(function (operationDataFactory: any) {
-			vm.operationDataFactory = operationDataFactory;
-			$scope.modalData.operation = operationDataFactory.operationData.operationContext.currentOperation;
-			$scope.modalData.failuresList = operationDataFactory.operationData.failureContext.failureList;
+		operationDataService.openConnection([]).then(function () {
+			vm.operationDataFactory = operationDataService.operationDataFactory;
+			$scope.modalData.operation = vm.operationDataFactory.operationData.operationContext.currentOperation;
+			$scope.modalData.failuresList = vm.operationDataFactory.operationData.failureContext.failureList;
 		});
 
-		operationDataService.addEventListener('failuresController', 'setOnFailureChangeListener', populateFailureList);
+		operationDataService.on('setOnFailureChangeListener', populateFailureList);
 
 		function populateFailureList() {
 			const failureContext = vm.operationDataFactory.operationData.failureContext;

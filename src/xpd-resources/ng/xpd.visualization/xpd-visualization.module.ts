@@ -36,7 +36,7 @@ const XPDVisualizationModule: angular.IModule = angular.module('xpd.visualizatio
 	XPDCalculationModule.name,
 ]);
 
-export  { XPDVisualizationModule }
+export  { XPDVisualizationModule };
 
 XPDVisualizationModule.directive('tripRuler', TripRulerDirective.Factory());
 XPDVisualizationModule.directive('upcomingAlarmsPanel', UpcomingAlarmsPanelDirective.Factory());

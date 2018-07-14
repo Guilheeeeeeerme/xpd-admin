@@ -1,7 +1,7 @@
 import * as angular from 'angular';
 import { VCruisingCalculatorService } from '../../../xpd-resources/ng/xpd.calculation/calculation.service';
-import { OperationServerService } from '../../../xpd-resources/ng/xpd.communication/operation-server.service';
 import { DialogService } from '../../../xpd-resources/ng/xpd.dialog/xpd.dialog.factory';
+import { OperationDataService } from '../../../xpd-resources/ng/xpd.operation-data/operation-data.service';
 /*
 * @Author:
 * @Date:   2017-05-19 15:12:22
@@ -27,7 +27,7 @@ export class PlannerController {
 	constructor(
 		$scope,
 		$filter,
-		operationDataService: OperationServerService,
+		operationDataService: OperationDataService,
 		dialogService: DialogService,
 		vCruisingCalculator: VCruisingCalculatorService) {
 
@@ -38,9 +38,9 @@ export class PlannerController {
 			timeSlices: null,
 		};
 
-		operationDataService.openConnection([]).then(function (operationDataFactory: any) {
-			vm.operationDataFactory = operationDataFactory;
-			$scope.operationData = operationDataFactory.operationData;
+		operationDataService.openConnection([]).then(function () {
+			vm.operationDataFactory = operationDataService.operationDataFactory;
+			$scope.operationData = vm.operationDataFactory.operationData;
 
 			startWatching();
 

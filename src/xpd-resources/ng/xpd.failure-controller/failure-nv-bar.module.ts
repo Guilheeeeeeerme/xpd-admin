@@ -13,13 +13,13 @@ import * as angular from 'angular';
 import { FailuresController } from '../../../components/admin/controllers/failures.controller';
 import { LessonLearnedController } from '../../../components/admin/controllers/lesson-learned.controller';
 import { TabsFailureLLCtrl } from '../../../components/admin/controllers/tabs-failure-lesson.controller';
-import { XPDCommunicationModule } from '../xpd.communication/communication.module';
 import { XPDDialogModule } from '../xpd.dialog/xpd.dialog.module';
+import { XPDOperationDataModule } from '../xpd.operation-data/operation-data.module';
 import { XPDSetupAPIModule } from '../xpd.setupapi/setupapi.module';
 import { FailureNavBarDirective } from './failure-nav-bar.directive';
 
 const XPDFailureNavBarController: angular.IModule  = angular.module('xpd.failure-controller', [
-	XPDCommunicationModule.name,
+	XPDOperationDataModule.name,
 	XPDSetupAPIModule.name,
 	XPDDialogModule.name,
 ]);

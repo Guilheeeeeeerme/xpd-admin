@@ -1,8 +1,8 @@
 import * as angular from 'angular';
 import { IModalService } from 'angular-ui-bootstrap';
-import { OperationServerService } from '../../../../xpd-resources/ng/xpd.communication/operation-server.service';
 import { DialogService } from '../../../../xpd-resources/ng/xpd.dialog/xpd.dialog.factory';
 import { MenuConfirmationService } from '../../../../xpd-resources/ng/xpd.menu-confirmation/menu-confirmation.factory';
+import { OperationDataService } from '../../../../xpd-resources/ng/xpd.operation-data/operation-data.service';
 import { OperationSetupAPIService } from '../../../../xpd-resources/ng/xpd.setupapi/operation-setupapi.service';
 import { SectionSetupAPIService } from '../../../../xpd-resources/ng/xpd.setupapi/section-setupapi.service';
 import { WellSetupAPIService } from '../../../../xpd-resources/ng/xpd.setupapi/well-setupapi.service';
@@ -36,7 +36,7 @@ export class OperationController {
 		$routeParams: any,
 		$location: any,
 		$uibModal: IModalService,
-		operationDataService: OperationServerService,
+		operationDataService: OperationDataService,
 		dialogService: DialogService,
 		wellSetupAPIService: WellSetupAPIService,
 		sectionSetupAPIService: SectionSetupAPIService,
@@ -76,8 +76,8 @@ export class OperationController {
 		 */
 		menuConfirmationService.setBlockMenu(true);
 
-		operationDataService.openConnection([]).then(function (operationDataFactory) {
-			vm.operationDataFactory = operationDataFactory;
+		operationDataService.openConnection([]).then(function () {
+			vm.operationDataFactory = operationDataService.operationDataFactory;
 		});
 
 		function getOperation() {

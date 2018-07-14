@@ -1,17 +1,8 @@
-// (function() {
-// 	'use strict';
-
-// 	let module = angular.module('xpd.visualization');
-
-// 	module.directive('d3DmecChart', d3DmecChart);
-
-// 	d3DmecChart.$inject = ['$q', '$uibModal'];
 import * as angular from 'angular';
 import { IModalService } from 'angular-ui-bootstrap';
 import * as d3 from 'd3';
 import modalTemplate from './d3-dmec-chart-modal.template.html';
 import template from './d3-dmec-chart.template.html';
-// import Worker from './d3-dmec-chart.worker.js';
 
 export class D3DMECChartDirective implements ng.IDirective {
 	public restrict = 'E';
@@ -24,7 +15,10 @@ export class D3DMECChartDirective implements ng.IDirective {
 		onReadingSince: '=',
 	};
 
-	constructor(private $q: ng.IQService, private $modal: IModalService) { }
+	constructor(
+		private $q: ng.IQService,
+		private $route: angular.route.IRouteService,
+		private $modal: IModalService) { }
 
 	public link: ng.IDirectiveLinkFn = (
 		scope: any,
@@ -32,7 +26,7 @@ export class D3DMECChartDirective implements ng.IDirective {
 		attrs: ng.IAttributes,
 		ctrl: any,
 	) => {
-		const self = this;
+		const vm = this;
 
 		const worker = new Worker('./d3-dmec-chart.worker/d3-dmec-chart.worker.js');
 
@@ -145,7 +139,7 @@ export class D3DMECChartDirective implements ng.IDirective {
 			// tslint:disable-next-line:no-shadowed-variable
 			function readingsToPoints(readings, tracks) {
 
-				return self.$q(function (resolve, reject) {
+				return vm.$q(function (resolve, reject) {
 
 					if (tracks != null && tracks.length > 0 && readings != null && readings.length > 0) {
 
@@ -324,7 +318,7 @@ export class D3DMECChartDirective implements ng.IDirective {
 					points,
 				});
 
-				const promise = self.$q(function (resolve, reject) {
+				const promise = vm.$q(function (resolve, reject) {
 					waitTheWorker('handle-overflow', function (event) {
 						resolve(event.data);
 					});
@@ -513,7 +507,7 @@ export class D3DMECChartDirective implements ng.IDirective {
 					newPoints: scope.newPoints,
 				});
 
-				const promise = self.$q(function (resolve, reject) {
+				const promise = vm.$q(function (resolve, reject) {
 					waitTheWorker('find-point', function (message) {
 						if (message.data.cmd === 'find-point') {
 							const reading = message.data.points;
@@ -579,7 +573,7 @@ export class D3DMECChartDirective implements ng.IDirective {
 			}
 
 			function openScaleModal() {
-				self.$modal.open({
+				vm.$modal.open({
 					animation: false,
 					keyboard: false,
 					backdrop: 'static',
@@ -592,7 +586,7 @@ export class D3DMECChartDirective implements ng.IDirective {
 						},
 						onTracksChange() {
 							return function () {
-								location.reload();
+								vm.$route.reload();
 							};
 						},
 					},
@@ -664,8 +658,12 @@ export class D3DMECChartDirective implements ng.IDirective {
 	}
 
 	public static Factory(): ng.IDirectiveFactory {
-		const directive = ($q: ng.IQService, $uibModal: IModalService) => new D3DMECChartDirective($q, $uibModal);
-		directive.$inject = ['$q', '$uibModal'];
+		const directive = (
+			$q: ng.IQService,
+			$route: angular.route.IRouteService,
+			$uibModal: IModalService) => new D3DMECChartDirective($q, $route, $uibModal);
+
+		directive.$inject = ['$q', '$route', '$uibModal'];
 		return directive;
 	}
 

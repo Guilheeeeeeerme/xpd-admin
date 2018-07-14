@@ -18,9 +18,9 @@
 // TODO: QUANDO ACABAR TUDO, REVER ESSE MODULO
 import * as angular from 'angular';
 import 'angular-ui-bootstrap';
-import { XPDCommunicationModule } from '../xpd.communication/communication.module';
 import { XPDDialogModule } from '../xpd.dialog/xpd.dialog.module';
 import { XPDFailureModule } from '../xpd.modal.failure/xpd-modal-failure.module';
+import { XPDOperationDataModule } from '../xpd.operation-data/operation-data.module';
 import { XPDOperationManagerModule } from '../xpd.operationmanager/operationmanager.module';
 import { XPDScoredEventModule } from '../xpd.scoredevent/scoredevent.module';
 import { XPDSetupAPIModule } from '../xpd.setupapi/setupapi.module';
@@ -30,7 +30,7 @@ import { TrackingController } from './tracking.controller';
 
 const XPDTrackingModule: angular.IModule = angular.module('xpd.tracking', [
 	'ui.bootstrap',
-	XPDCommunicationModule.name,
+	XPDOperationDataModule.name,
 	XPDOperationManagerModule.name,
 	XPDScoredEventModule.name,
 	XPDDialogModule.name,
@@ -39,5 +39,5 @@ const XPDTrackingModule: angular.IModule = angular.module('xpd.tracking', [
 	XPDSetupAPIModule.name,
 	XPDVisualizationModule.name,
 ]);
-export  { XPDTrackingModule }
+export  { XPDTrackingModule };
 XPDTrackingModule.controller('TrackingController', TrackingController);

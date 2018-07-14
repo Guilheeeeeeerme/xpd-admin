@@ -6,11 +6,9 @@ export class XPDViewBoxDirective implements ng.IDirective {
 	public link: ng.IDirectiveLinkFn = (
 		scope: ng.IScope,
 		element: ng.IAugmentedJQuery,
-		attributes: ng.IAttributes,
-		ctrl: any,
 	) => {
 
-		scope.$watch('xpdViewBox', function(xpdViewBox: any) {
+		scope.$watch('xpdViewBox', (xpdViewBox: any) => {
 			if (xpdViewBox != null) {
 				element[0].setAttribute('viewBox', xpdViewBox);
 			}

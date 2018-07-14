@@ -9,8 +9,8 @@
 //
 import * as angular from 'angular';
 import { IModalServiceInstance } from 'angular-ui-bootstrap';
-import { OperationServerService } from '../xpd.communication/operation-server.service';
 import { DialogService } from '../xpd.dialog/xpd.dialog.factory';
+import { OperationDataService } from '../xpd.operation-data/operation-data.service';
 import { CategorySetupAPIService } from '../xpd.setupapi/category-setupapi.service';
 import { FailureSetupAPIService } from '../xpd.setupapi/failure-setupapi.service';
 
@@ -38,7 +38,7 @@ export class ModalFailureController {
 		failureSetupAPIService: FailureSetupAPIService,
 		selectedFailure: any,
 		dialogService: DialogService,
-		operationDataService: OperationServerService) {
+		operationDataService: OperationDataService) {
 
 		const vm = this;
 
@@ -50,8 +50,8 @@ export class ModalFailureController {
 		$scope.now = now;
 		$scope.keepTimeBeforeNow = keepTimeBeforeNow;
 
-		operationDataService.openConnection([]).then(function (operationDataFactory: any) {
-			vm.operationDataFactory = operationDataFactory;
+		operationDataService.openConnection([]).then(function () {
+			vm.operationDataFactory = operationDataService.operationDataFactory;
 		});
 
 		$scope.category = {

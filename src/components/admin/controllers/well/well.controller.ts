@@ -1,6 +1,6 @@
 import { IModalService } from 'angular-ui-bootstrap';
-import { OperationServerService } from '../../../../xpd-resources/ng/xpd.communication/operation-server.service';
 import { DialogService } from '../../../../xpd-resources/ng/xpd.dialog/xpd.dialog.factory';
+import { OperationDataService } from '../../../../xpd-resources/ng/xpd.operation-data/operation-data.service';
 import { SectionSetupAPIService } from '../../../../xpd-resources/ng/xpd.setupapi/section-setupapi.service';
 import { WellSetupAPIService } from '../../../../xpd-resources/ng/xpd.setupapi/well-setupapi.service';
 
@@ -18,7 +18,7 @@ export class WellController {
 		private wellSetupAPIService: WellSetupAPIService,
 		private sectionSetupAPIService: SectionSetupAPIService,
 		private dialogService: DialogService,
-		operationDataService: OperationServerService) {
+		operationDataService: OperationDataService) {
 
 		const vm = this;
 
@@ -26,9 +26,9 @@ export class WellController {
 			wellList: [],
 		};
 
-		operationDataService.openConnection([]).then(function (operationDataFactory: any) {
-			vm.operationDataFactory = operationDataFactory;
-			$scope.operationData = operationDataFactory.operationData;
+		operationDataService.openConnection([]).then(function () {
+			vm.operationDataFactory = operationDataService.operationDataFactory;
+			$scope.operationData = vm.operationDataFactory.operationData;
 		});
 
 		this.operationDataFactory.addEventListener('wellController', 'setOnCurrentWellListener', this.loadWellList);

@@ -11,17 +11,19 @@ import { DialogService } from '../xpd.dialog/xpd.dialog.factory';
 
 export class AccessFactoryDirective implements ng.IDirective {
 
-	public static $inject: string[] = ['$uibModal', 'dialogService'];
+	public static $inject: string[] = ['$uibModal', '$route', 'dialogService'];
 
 	public restrict = 'E';
-		public scope = {
-			hideReports: '@',
-			hideSetup: '@',
-		};
-		public template = template;
+	public scope = {
+		hideReports: '@',
+		hideSetup: '@',
+	};
+	public template = template;
 
-	constructor(private $uibModal: IModalService, private dialogService: DialogService) {
-
+	constructor(
+		private $uibModal: IModalService,
+		private $route: angular.route.IRouteService,
+		private dialogService: DialogService) {
 	}
 
 	public link: ng.IDirectiveLinkFn = (
@@ -30,7 +32,7 @@ export class AccessFactoryDirective implements ng.IDirective {
 		attrs: ng.IAttributes,
 		ctrl: any,
 	) => {
-		const self = this;
+		const vm = this;
 
 		let modalInstance;
 
@@ -39,12 +41,12 @@ export class AccessFactoryDirective implements ng.IDirective {
 		scope.actionButtonCancel = actionButtonCancel;
 
 		function actionButtonSave() {
-			self.dialogService.showConfirmDialog('This action will reload your aplication screen. Proceed?', actionProceed);
+			vm.dialogService.showConfirmDialog('This action will reload your aplication screen. Proceed?', actionProceed);
 		}
 
 		function actionProceed() {
 			localStorage.setItem('xpd.admin.XPDAccessData', JSON.stringify(scope.dados.XPDAccessData));
-			location.reload();
+			vm.$route.reload();
 		}
 
 		function actionButtonCancel() {
@@ -58,7 +60,7 @@ export class AccessFactoryDirective implements ng.IDirective {
 			};
 
 			if (!modalInstance) {
-				modalInstance = self.$uibModal.open({
+				modalInstance = vm.$uibModal.open({
 					animation: true,
 					size: 'sm',
 					backdrop: false,
@@ -70,7 +72,10 @@ export class AccessFactoryDirective implements ng.IDirective {
 	}
 
 	public static Factory(): ng.IDirectiveFactory {
-		return ($uibModal: IModalService, dialogService: DialogService) => new AccessFactoryDirective($uibModal, dialogService);
+		return (
+			$uibModal: IModalService,
+			$route: angular.route.IRouteService,
+			dialogService: DialogService) => new AccessFactoryDirective($uibModal, $route, dialogService);
 	}
 
 }

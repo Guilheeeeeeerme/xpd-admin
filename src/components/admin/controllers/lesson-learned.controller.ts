@@ -1,6 +1,6 @@
-import { OperationServerService } from '../../../xpd-resources/ng/xpd.communication/operation-server.service';
 import { DialogService } from '../../../xpd-resources/ng/xpd.dialog/xpd.dialog.factory';
 import { LessonLearnedModalService } from '../../../xpd-resources/ng/xpd.modal.lessonlearned/xpd-modal-lessonlearned.service';
+import { OperationDataService } from '../../../xpd-resources/ng/xpd.operation-data/operation-data.service';
 import { LessonLearnedSetupAPIService } from '../../../xpd-resources/ng/xpd.setupapi/lessonlearned-setupapi.service';
 
 export class LessonLearnedController {
@@ -17,7 +17,7 @@ export class LessonLearnedController {
 		private $scope: any,
 		private lessonLearnedModal: LessonLearnedModalService,
 		private lessonLearnedSetupAPIService: LessonLearnedSetupAPIService,
-		operationDataService: OperationServerService,
+		operationDataService: OperationDataService,
 		private dialogService: DialogService) {
 		const vm = this;
 
@@ -31,9 +31,9 @@ export class LessonLearnedController {
 			},
 		};
 
-		operationDataService.openConnection([]).then(function (operationDataFactory: any) {
-			vm.operationDataFactory = operationDataFactory;
-			$scope.modalData.operation = operationDataFactory.operationData.operationContext.currentOperation;
+		operationDataService.openConnection([]).then(function () {
+			vm.operationDataFactory = operationDataService.operationDataFactory;
+			$scope.modalData.operation = vm.operationDataFactory.operationData.operationContext.currentOperation;
 		});
 
 		this.populateLessionLearnedList();

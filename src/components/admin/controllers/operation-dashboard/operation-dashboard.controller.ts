@@ -1,4 +1,4 @@
-import { OperationServerService } from "../../../../xpd-resources/ng/xpd.communication/operation-server.service";
+import { OperationDataService } from '../../../../xpd-resources/ng/xpd.operation-data/operation-data.service';
 
 export class OperationDashboardController {
 
@@ -13,7 +13,7 @@ export class OperationDashboardController {
 	public changePanelState: (keyName: any) => void;
 	public operationDataFactory: any;
 
-	constructor($scope, $filter, operationDataService: OperationServerService) {
+	constructor($scope, $filter, operationDataService: OperationDataService) {
 
 		const vm = this;
 
@@ -31,9 +31,9 @@ export class OperationDashboardController {
 			timeEvents: [],
 		};
 
-		operationDataService.openConnection([]).then(function(operationDataFactory: any) {
-			vm.operationDataFactory = operationDataFactory;
-			$scope.operationData = operationDataFactory.operationData;
+		operationDataService.openConnection([]).then(function() {
+			vm.operationDataFactory = operationDataService.operationDataFactory;
+			$scope.operationData = vm.operationDataFactory.operationData;
 			main();
 		});
 
@@ -42,13 +42,13 @@ export class OperationDashboardController {
 		vm.getPanelStartState = getPanelStartState;
 		vm.changePanelState = changePanelState;
 
-		operationDataService.addEventListener('operationDashboardController', 'setOnOptimumLineListener', main);
-		operationDataService.addEventListener('operationDashboardController', 'setOnActualLineListener', main);
-		operationDataService.addEventListener('operationDashboardController', 'setOnForecastChangeListener', main);
+		operationDataService.on('setOnOptimumLineListener', main);
+		operationDataService.on('setOnActualLineListener', main);
+		operationDataService.on('setOnForecastChangeListener', main);
 
-		operationDataService.addEventListener('operationDashboardController', 'setOnJointChangeListener', generateEstimatives);
-		operationDataService.addEventListener('operationDashboardController', 'setOnCurrentJointListener', generateEstimatives);
-		operationDataService.addEventListener('operationDashboardController', 'setOnNoCurrentJointListener', generateEstimatives);
+		operationDataService.on('setOnJointChangeListener', generateEstimatives);
+		operationDataService.on('setOnCurrentJointListener', generateEstimatives);
+		operationDataService.on('setOnNoCurrentJointListener', generateEstimatives);
 
 		function generateEstimatives() {
 

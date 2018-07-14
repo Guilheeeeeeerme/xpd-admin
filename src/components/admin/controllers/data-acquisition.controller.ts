@@ -1,4 +1,4 @@
-import { OperationServerService } from '../../../xpd-resources/ng/xpd.communication/operation-server.service';
+import { OperationDataService } from '../../../xpd-resources/ng/xpd.operation-data/operation-data.service';
 
 export class DataAcquisitionController {
 	// 'use strict';
@@ -11,7 +11,7 @@ export class DataAcquisitionController {
 	public changeViewReading: () => void;
 	public operationDataFactory: any;
 
-	constructor($scope, operationDataService: OperationServerService) {
+	constructor($scope, operationDataService: OperationDataService) {
 
 		const vm = this;
 
@@ -20,10 +20,10 @@ export class DataAcquisitionController {
 			readingJson: false,
 		};
 
-		operationDataService.openConnection([]).then(function(operationDataFactory: any) {
-			vm.operationDataFactory = operationDataFactory;
-			$scope.readingData = operationDataFactory.operationData.readingContext;
-			$scope.acquisitionData = operationDataFactory.operationData.dataAcquisitionContext;
+		operationDataService.openConnection([]).then(function() {
+			vm.operationDataFactory = operationDataService.operationDataFactory;
+			$scope.readingData = vm.operationDataFactory.operationData.readingContext;
+			$scope.acquisitionData = vm.operationDataFactory.operationData.dataAcquisitionContext;
 		});
 
 		vm.changeViewAcquisition = changeViewAcquisition;

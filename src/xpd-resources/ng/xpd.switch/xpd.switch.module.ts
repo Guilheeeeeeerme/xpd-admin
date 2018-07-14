@@ -3,7 +3,7 @@ import * as angular from 'angular';
 import { XPDSwitchDirective } from './xpd.switch.directive';
 
 const XPDSwitchModule: angular.IModule = angular.module('xpd.switch', []);
-export  { XPDSwitchModule }
+export  { XPDSwitchModule };
 
 XPDSwitchModule.directive('xpdSwitch', XPDSwitchDirective.Factory());
 

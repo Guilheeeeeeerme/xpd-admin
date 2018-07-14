@@ -9,14 +9,14 @@
 // 	laydownConfirmation.$inject = ['$uibModal', 'operationDataService'];
 
 import { IModalService } from 'angular-ui-bootstrap';
-import { OperationServerService } from '../xpd.communication/operation-server.service';
+import { OperationDataService } from '../xpd.operation-data/operation-data.service';
 import modalTemplate from './xpd.modal.laydown-confirmation.template.html';
 
 export class LayDownConfirmationDirective implements ng.IDirective {
 
 	public operationDataFactory: any;
 	public layDownDetectedModal: any;
-	constructor(private $uibModal: IModalService, private operationDataService: OperationServerService) { }
+	constructor(private $uibModal: IModalService, private operationDataService: OperationDataService) { }
 
 	public scope: any = {
 		dismissable: '<',
@@ -30,8 +30,8 @@ export class LayDownConfirmationDirective implements ng.IDirective {
 	) => {
 		const vm = this;
 
-		this.operationDataService.openConnection([]).then(function (operationDataFactory) {
-			vm.operationDataFactory = (operationDataFactory as any);
+		this.operationDataService.openConnection([]).then(function () {
+			vm.operationDataFactory = vm.operationDataService.operationDataFactory;
 
 			scope.actionButtonStartLaydown = actionButtonStartLaydown;
 

@@ -1,4 +1,4 @@
-import { OperationServerService } from '../../xpd-resources/ng/xpd.communication/operation-server.service';
+import { OperationDataService } from '../../xpd-resources/ng/xpd.operation-data/operation-data.service';
 import { OperationSetupAPIService } from '../../xpd-resources/ng/xpd.setupapi/operation-setupapi.service';
 import { WellSetupAPIService } from '../../xpd-resources/ng/xpd.setupapi/well-setupapi.service';
 
@@ -16,7 +16,7 @@ export class ReportsController {
 		$scope,
 		operationSetupAPIService: OperationSetupAPIService,
 		wellSetupAPIService: WellSetupAPIService,
-		operationDataService: OperationServerService) {
+		operationDataService: OperationDataService) {
 
 		const vm = this;
 
@@ -32,8 +32,8 @@ export class ReportsController {
 
 		vm.getFailuresOnInterval = getFailuresOnInterval;
 
-		operationDataService.openConnection([]).then(function (operationDataFactory) {
-			vm.operationDataFactory = operationDataFactory;
+		operationDataService.openConnection([]).then(function () {
+			vm.operationDataFactory = operationDataService.operationDataFactory;
 		});
 
 		if (!localStorage.getItem('xpd.admin.reports.reportsData.toDate') || !localStorage.getItem('xpd.admin.reports.reportsData.fromDate')) {
@@ -44,7 +44,7 @@ export class ReportsController {
 		}
 
 		getWellList();
-		operationDataService.addEventListener('reportsController', 'setOnFailureChangeListener', onFailureChange);
+		operationDataService.on('setOnFailureChangeListener', onFailureChange);
 
 		operationSetupAPIService.getList(
 			currentOperationSuccessCallback,

@@ -2,7 +2,7 @@ import * as angular from 'angular';
 import { XPDScoredEventsDirective } from './scoredevent.directive';
 
 const XPDScoredEventModule: angular.IModule = angular.module('xpd.setup-form-input', ['xpd.setupapi']);
-export  { XPDScoredEventModule }
+export  { XPDScoredEventModule };
 
 XPDScoredEventModule.directive('xpdScoredEvents', XPDScoredEventsDirective.Factory());
 

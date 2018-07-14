@@ -16,8 +16,8 @@
 import { IModalService } from 'angular-ui-bootstrap';
 import failureLessoModal from 'app/components/admin/views/modal/tabs-failure-lesson.modal.html';
 import template from '../xpd-resources/ng/xpd.failure-controller/failure-nav-bar.template.html';
-import { OperationServerService } from '../xpd.communication/operation-server.service';
 import { DialogService } from '../xpd.dialog/xpd.dialog.factory';
+import { OperationDataService } from '../xpd.operation-data/operation-data.service';
 import { CategorySetupAPIService } from '../xpd.setupapi/category-setupapi.service';
 
 export class FailureNavBarDirective implements ng.IDirective {
@@ -31,7 +31,7 @@ export class FailureNavBarDirective implements ng.IDirective {
 	constructor(
 		private $uibModal: IModalService,
 		private categorySetupAPIService: CategorySetupAPIService,
-		private operationDataService: OperationServerService,
+		private operationDataService: OperationDataService,
 		private dialogService: DialogService) { }
 
 	public link: ng.IDirectiveLinkFn = (
@@ -43,8 +43,9 @@ export class FailureNavBarDirective implements ng.IDirective {
 
 		const self = this;
 
-		this.operationDataService.openConnection([]).then(function (operationDataFactory: any) {
-			self.operationDataFactory = operationDataFactory;
+		this.operationDataService.openConnection([]).then(function () {
+			self.operationDataFactory = self.operationDataService.operationDataFactory;
+
 			self.operationDataFactory.addEventListener('failureNavBar', 'setOnGoingFailureListener', loadOnGoingFailure);
 
 			scope.actionButtonOpenFailureLessonModal = actionButtonOpenFailureLessonModal;
@@ -53,11 +54,11 @@ export class FailureNavBarDirective implements ng.IDirective {
 			// loadOnGoingFailure();
 
 			function loadOnGoingFailure() {
-				const failureContext = operationDataFactory.operationData.failureContext;
+				const failureContext = self.operationDataFactory.operationData.failureContext;
 
 				if (failureContext.onGoingFailure && failureContext.onGoingFailure != null) {
 
-					scope.onGoingFailure = operationDataFactory.operationData.failureContext.onGoingFailure;
+					scope.onGoingFailure = self.operationDataFactory.operationData.failureContext.onGoingFailure;
 
 					if (scope.onGoingFailure.npt) {
 						scope.failureClass = 'failure-npt';
@@ -106,7 +107,7 @@ export class FailureNavBarDirective implements ng.IDirective {
 
 				scope.onGoingFailure.onGoing = false;
 
-				operationDataFactory.emitFinishFailureOnGoing();
+				self.operationDataFactory.emitFinishFailureOnGoing();
 			}
 		});
 
@@ -116,7 +117,7 @@ export class FailureNavBarDirective implements ng.IDirective {
 		return (
 			$uibModal: IModalService,
 			categorySetupAPIService: CategorySetupAPIService,
-			operationDataService: OperationServerService,
+			operationDataService: OperationDataService,
 			dialogService: DialogService) => new FailureNavBarDirective(
 				$uibModal,
 				categorySetupAPIService,

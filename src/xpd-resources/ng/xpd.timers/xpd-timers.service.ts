@@ -46,7 +46,6 @@ export class XPDIntervalService extends XPDAsync {
 	public run(callback, timeout, scope) {
 		const worker = this.doAsync('interval', callback, timeout, scope);
 		return worker;
-
 	}
 }
 

@@ -28,7 +28,7 @@ const XPDSetupAPIModule: angular.IModule = angular.module('xpd.setupapi', [
 	'ngAnimate',
 	XPDSpinnerModule.name,
 ]);
-export  { XPDSetupAPIModule }
+export  { XPDSetupAPIModule };
 
 XPDSetupAPIModule.config(SetupAPIConfig);
 XPDSetupAPIModule.service('setupAPIService', SetupAPIService);
