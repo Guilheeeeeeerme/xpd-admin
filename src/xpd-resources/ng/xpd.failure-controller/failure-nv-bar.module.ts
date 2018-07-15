@@ -10,6 +10,7 @@
 // })();
 
 import * as angular from 'angular';
+import 'angular-ui-bootstrap';
 import { FailuresController } from '../../../components/admin/controllers/failures.controller';
 import { LessonLearnedController } from '../../../components/admin/controllers/lesson-learned.controller';
 import { TabsFailureLLCtrl } from '../../../components/admin/controllers/tabs-failure-lesson.controller';
@@ -19,6 +20,7 @@ import { XPDSetupAPIModule } from '../xpd.setupapi/setupapi.module';
 import { FailureNavBarDirective } from './failure-nav-bar.directive';
 
 const XPDFailureNavBarController: angular.IModule  = angular.module('xpd.failure-controller', [
+	'ui.bootstrap',
 	XPDOperationDataModule.name,
 	XPDSetupAPIModule.name,
 	XPDDialogModule.name,

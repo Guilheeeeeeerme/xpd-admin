@@ -118,7 +118,7 @@ export class AlarmCRUDService {
 			keyboard: false,
 			backdrop: 'static',
 			size: 'lg',
-			templateUrl: template,
+			template: template,
 			controller: 'AlarmModalUpsertController as amuController',
 			windowClass,
 			resolve: {

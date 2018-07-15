@@ -75,10 +75,6 @@ export class TrackingController {
 			depthAlarms: [],
 		};
 
-		setInterval(function () {
-			console.log($scope.operationData);
-		}, 500);
-
 		operationDataService.openConnection([]).then(function () {
 
 			vm.operationDataFactory = operationDataService.operationDataFactory;

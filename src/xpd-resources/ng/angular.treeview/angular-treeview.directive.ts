@@ -22,7 +22,9 @@
 */
 
 export class TreeModelDirective implements ng.IDirective {
+
 	public restrict = 'A';
+	public static $inject = ['$compile'];
 
 	constructor(public $compile: any) { }
 
@@ -146,8 +148,6 @@ export class TreeModelDirective implements ng.IDirective {
 	}
 
 	public static Factory(): ng.IDirectiveFactory {
-		const directive = ($compile: any) => new TreeModelDirective($compile);
-		directive.$inject = ['$compile'];
-		return directive;
+		return ($compile: any) => new TreeModelDirective($compile);
 	}
 }

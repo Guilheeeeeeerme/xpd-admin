@@ -3,6 +3,14 @@
 
 // angular.module('xpd.reports').config(reportConfig);
 
+import BitDepthTimeTemplate from './app/components/reports/views/bit-depth-time.template.html';
+import FailuresNptTemplate from './app/components/reports/views/failures-npt.template.html';
+import HistogramReportTemplate from './app/components/reports/views/histogram-report.template.html';
+import LessonsLearnedTemplate from './app/components/reports/views/lessons-learned.template.html';
+import ReportNeedleTemplate from './app/components/reports/views/needle-report.template.html';
+import VreScoreReportTemplate from './app/components/reports/views/vre-score.template.html';
+import VreReportTemplate from './app/components/reports/views/vre.template.html';
+
 export class ReportConfig {
 	public static $inject = ['$routeProvider'];
 
@@ -10,40 +18,42 @@ export class ReportConfig {
 
 		$routeProvider
 			.when('/', {
-				templateUrl: './app/components/reports/views/vre.template.html',
+				template: VreReportTemplate,
 				controller: 'VreReportController as vController',
 			})
 
 			.when('/vre/', {
-				templateUrl: './app/components/reports/views/vre.template.html',
+				template: VreReportTemplate,
 				controller: 'VreReportController as vController',
 			})
 
 			.when('/vre-score/', {
-				templateUrl: './app/components/reports/views/vre-score.template.html',
+				template: VreScoreReportTemplate,
 				controller: 'VreScoreController as vsController',
 			})
 
 			.when('/histogram/', {
-				templateUrl: './app/components/reports/views/histogram-report.template.html',
+				template: HistogramReportTemplate,
 				controller: 'HistogramReportController as hrController',
 			})
 
 			.when('/needle-report/', {
-				templateUrl: './app/components/reports/views/needle-report.template.html',
+				template: ReportNeedleTemplate,
 				controller: 'ReportNeedleController as rnController',
 			})
 
 			.when('/failures-npt/', {
-				templateUrl: './app/components/reports/views/failures-npt.template.html',
+				template: FailuresNptTemplate,
 				controller: 'FailuresNptController as fnController',
 			})
+
 			.when('/lessons-learned/', {
-				templateUrl: './app/components/reports/views/lessons-learned.template.html',
+				template: LessonsLearnedTemplate,
 				controller: 'LessonsLearnedController as llController',
 			})
+
 			.when('/bit-depth-time/:wellId?', {
-				templateUrl: './app/components/reports/views/bit-depth-time.template.html',
+				template: BitDepthTimeTemplate,
 				controller: 'BitDepthTimeController as bdtController',
 			});
 

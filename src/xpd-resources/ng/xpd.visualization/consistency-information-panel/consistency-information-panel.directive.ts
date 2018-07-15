@@ -8,6 +8,7 @@
 import template from './consistency-information-panel.template.html';
 
 export class ConsistencyInformationPanelDirective implements ng.IDirective {
+	public static $inject = [];
 
 	public restrict = 'EA';
 	public template = template;

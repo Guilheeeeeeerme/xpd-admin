@@ -5,6 +5,7 @@ import modalTemplate from './d3-dmec-chart-modal.template.html';
 import template from './d3-dmec-chart.template.html';
 
 export class D3DMECChartDirective implements ng.IDirective {
+	public static $inject = ['$q', '$window', '$uibModal'];
 	public restrict = 'E';
 	public template = template;
 	public scope = {
@@ -17,7 +18,7 @@ export class D3DMECChartDirective implements ng.IDirective {
 
 	constructor(
 		private $q: ng.IQService,
-		private $route: angular.route.IRouteService,
+		private $window: angular.IWindowService,
 		private $modal: IModalService) { }
 
 	public link: ng.IDirectiveLinkFn = (
@@ -586,7 +587,7 @@ export class D3DMECChartDirective implements ng.IDirective {
 						},
 						onTracksChange() {
 							return function () {
-								vm.$route.reload();
+								vm.$window.location.reload();
 							};
 						},
 					},
@@ -658,13 +659,10 @@ export class D3DMECChartDirective implements ng.IDirective {
 	}
 
 	public static Factory(): ng.IDirectiveFactory {
-		const directive = (
+		return (
 			$q: ng.IQService,
-			$route: angular.route.IRouteService,
-			$uibModal: IModalService) => new D3DMECChartDirective($q, $route, $uibModal);
-
-		directive.$inject = ['$q', '$route', '$uibModal'];
-		return directive;
+			$window: angular.IWindowService,
+			$uibModal: IModalService) => new D3DMECChartDirective($q, $window, $uibModal);
 	}
 
 }

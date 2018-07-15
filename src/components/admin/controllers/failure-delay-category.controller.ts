@@ -2,6 +2,7 @@ import * as angular from 'angular';
 import { IModalService } from 'angular-ui-bootstrap';
 import { DialogService } from '../../../xpd-resources/ng/xpd.dialog/xpd.dialog.factory';
 import { CategorySetupAPIService } from '../../../xpd-resources/ng/xpd.setupapi/category-setupapi.service';
+import upsertcategorytemplate from '../views/modal/upsert-category.modal.html';
 
 export class FailureDelayCategoryController {
 	// 'use strict';
@@ -74,7 +75,7 @@ export class FailureDelayCategoryController {
 				keyboard: false,
 				backdrop: 'static',
 				size: 'modal-sm',
-				templateUrl: 'app/components/admin/views/modal/upsert-category.modal.html',
+				template: upsertcategorytemplate,
 				scope: $scope,
 			});
 
@@ -90,7 +91,7 @@ export class FailureDelayCategoryController {
 				keyboard: false,
 				backdrop: 'static',
 				size: 'modal-sm',
-				templateUrl: 'app/components/admin/views/modal/upsert-category.modal.html',
+				template: upsertcategorytemplate,
 				scope: $scope,
 			});
 		}

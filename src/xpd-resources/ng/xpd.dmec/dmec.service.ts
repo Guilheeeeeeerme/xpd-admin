@@ -1,3 +1,4 @@
+import { IWindowService } from 'angular';
 import { ReadingSetupAPIService } from '../xpd.setupapi/reading-setupapi.service';
 import { XPDIntervalService, XPDTimeoutService } from '../xpd.timers/xpd-timers.service';
 
@@ -12,7 +13,7 @@ export class DMECService {
 		'$xpdTimeout',
 		'$xpdInterval',
 		'$location',
-		'$route',
+		'$window',
 		'$routeParams',
 		'$q',
 		'readingSetupAPIService'];
@@ -21,7 +22,7 @@ export class DMECService {
 		private $xpdTimeout: XPDTimeoutService,
 		private $xpdInterval: XPDIntervalService,
 		private $location: ng.ILocationService,
-		private $route: angular.route.IRouteService,
+		private $window: IWindowService,
 		private $routeParams: any,
 		private $q: ng.IQService,
 		private readingSetupAPIService: ReadingSetupAPIService) {
@@ -101,7 +102,7 @@ export class DMECService {
 		 * Recarregar a página
 		 */
 		function reload() {
-			vm.$route.reload();
+			vm.$window.location.reload();
 		}
 
 		/**

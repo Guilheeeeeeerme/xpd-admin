@@ -13,9 +13,19 @@
 // })();
 
 import * as angular from 'angular';
+import 'angular-route';
+import { XPDDialogModule } from '../xpd.dialog/xpd.dialog.module';
+import { XPDMenuConfirmationModule } from '../xpd.menu-confirmation/menu-confirmation.module';
+import { XPDOperationDataModule } from '../xpd.operation-data/operation-data.module';
 import { XPDAdminNavBarDirective } from './admin-nav-bar.directive';
 
-const XPDAdminNavBarModule: angular.IModule  = angular.module('xpd.admin-nav-bar', []);
+const XPDAdminNavBarModule: angular.IModule  = angular.module('xpd.admin-nav-bar', [
+	'ngRoute',
+	XPDMenuConfirmationModule.name,
+	XPDDialogModule.name,
+	XPDOperationDataModule.name,
+
+]);
 export { XPDAdminNavBarModule };
 
 XPDAdminNavBarModule.directive('xpdAdminNavBar', XPDAdminNavBarDirective.Factory());

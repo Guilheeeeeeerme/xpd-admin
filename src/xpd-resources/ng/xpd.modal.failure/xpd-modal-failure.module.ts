@@ -1,5 +1,4 @@
 import * as angular from 'angular';
-import { EventDetailsModalService } from '../xpd.modal.event-details/xpd-modal-event-details.factory';
 import { ModalFailureController } from './xpd-modal-failure.controller';
 import { FailureModalFactory } from './xpd-modal-failure.factory';
 

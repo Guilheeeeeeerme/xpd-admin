@@ -15,7 +15,7 @@ export class XPDAccessService {
 
 	constructor() {
 
-		let XPDAccessData = (window as any).XPDAccessData;
+		let XPDAccessData;
 
 		// 	tem algo no local storage?
 		if (localStorage.getItem('xpd.admin.XPDAccessData')) {

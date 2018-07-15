@@ -4,26 +4,26 @@
 
         <div class="col-md-9">
             <h3 class="panel-title">
-            
+
                 <strong> {{well.name}} </strong>/
                 <strong> {{section.name}} </strong>/
-            
+
                 <!-- <strong> {{ dados.operation.id != null?'Edit':'New' }} </strong> -->
-            
+
                 <strong> {{dados.operation.name}} </strong>
                 <span ng-if="dados.operation.type =='bha'">[BHA]</span>
                 <span ng-if="dados.operation.type =='casing'">[Casing]</span>
                 <span ng-if="dados.operation.type =='riser'">[Riser]</span>
                 <span ng-if="dados.operation.type =='time'">[Time]</span>
-            
+
             </h3>
         </div>
 
         <div class="col-md-3">
-            <div ng-class="{ 'dropdown': !open, 'dropdown open': open }"  ng-init="open = false" >
+            <div ng-class="{ 'dropdown': !open, 'dropdown open': open }" ng-init="open = false">
 
                 <a class="btn btn-sm fa fa-calculator" ng-click="open = !open"></a>
-            
+
                 <ul class="dropdown-menu col-md-12">
                     <div class="form-group col-md-12">
                         <label>Unit:</label>
@@ -34,9 +34,7 @@
 
                     <div class="form-group col-md-12">
                         <label>Value:</label>
-                        <input type="number" class="form-control"
-                            ng-model="value"
-                            ng-change="operationController.calcContractParamsConverter(value, unit)">
+                        <input type="number" class="form-control" ng-model="value" ng-change="operationController.calcContractParamsConverter(value, unit)">
                     </div>
 
                     <div class="form-group col-md-11">
@@ -51,7 +49,7 @@
             </div>
         </div>
 
-       
+
 
         <!-- <div class="col-md-3 form-group-sm">
             <label for="sort" class="col-sm-2 control-label">Import:</label>
@@ -74,7 +72,26 @@
 
             <uib-tab index="$index" ng-repeat="tab in tabs" heading="{{tab.title}}" select="operationController.markTabAsVisited($index)">
                 <br/>
-                <div class="container-fluid padding-bottom-container" ng-include="tab.url"></div>
+
+                <div nf-if="tab.general" class="container-fluid padding-bottom-container" ng-if="dados.operation.type =='bha'">
+                    <bha-general-template>
+
+                    </bha-general-template>
+                </div>
+                <div nf-if="tab.contract" class="container-fluid padding-bottom-container" ng-if="dados.operation.type =='bha'">
+                    <contract-general-template>
+
+                    </contract-general-template>
+                </div>
+
+                <!-- <div nf-if="tab.general" class="container-fluid padding-bottom-container" ng-if="dados.operation.type =='casing'">[Casing]</div>
+                <div nf-if="tab.general" class="container-fluid padding-bottom-container" ng-if="dados.operation.type =='riser'">[Riser]</div>
+                <div nf-if="tab.general" class="container-fluid padding-bottom-container" ng-if="dados.operation.type =='time'">[Time]</div>
+
+                <div nf-if="tab.alarm" class="container-fluid padding-bottom-container">
+                    <alarm-info-template></alarm-info-template>
+                </div> -->
+
             </uib-tab>
 
         </uib-tabset>

@@ -6,6 +6,9 @@ import { ReportsSetupAPIService } from '../../../xpd-resources/ng/xpd.setupapi/r
 * @Last Modified by:   Gezzy Ramos
 * @Last Modified time: 2017-08-28 10:57:31
 */
+
+import template from 'app/components/reports/views/modal/failures-npt-report.modal.html';
+
 export class FailuresNptController {
 	// 'use strict';
 
@@ -383,7 +386,7 @@ export class FailuresNptController {
 				backdrop: 'static',
 				size: 'modal-sm',
 				windowClass: 'xpd-operation-modal',
-				templateUrl: 'app/components/reports/views/modal/failures-npt-report.modal.html',
+				template: template,
 				scope: $scope,
 			});
 		}

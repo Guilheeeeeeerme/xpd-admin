@@ -9,6 +9,7 @@ import template from './displacement-area.template.html';
 
 export class DisplacementAreaFactory implements ng.IDirective {
 	public template = template;
+	public static $inject = [];
 	public scope = {
 		slipsTime: '<',
 		accelerationTimeLimit: '<',

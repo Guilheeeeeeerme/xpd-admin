@@ -12,7 +12,7 @@ export class AdminTrackingController {
 
 	// angular.module('xpd.admin').controller('AdminTrackingController', adminTrackingController);
 
-	public static $inject = ['$scope', '$q', 'operationDataService', 'eventDetailsModal', 'failureModal', 'eventlogSetupAPIService', 'lessonLearnedModal', 'failureSetupAPIService', 'lessonLearnedSetupAPIService', '$rootScope'];
+	public static $inject = ['$scope', '$q', 'operationDataService', 'eventDetailsModalService', 'failureModal', 'eventlogSetupAPIService', 'lessonLearnedModal', 'failureSetupAPIService', 'lessonLearnedSetupAPIService', '$rootScope'];
 	public actionOpenDropdownMenu: ($event: any, eventLog: any) => void;
 	public actionClickEventDetailsButton: () => void;
 	public actionClickFailuresButton: () => void;
@@ -23,7 +23,7 @@ export class AdminTrackingController {
 		$scope: any,
 		$q: IQService,
 		operationDataService: OperationDataService,
-		eventDetailsModal: EventDetailsModalService,
+		eventDetailsModalService: EventDetailsModalService,
 		failureModal: FailureModalFactory,
 		eventlogSetupAPIService: EventLogSetupAPIService,
 		lessonLearnedModal: LessonLearnedModalService,
@@ -92,7 +92,7 @@ export class AdminTrackingController {
 		}
 
 		function actionClickEventDetailsButton() {
-			eventDetailsModal.open(eventId);
+			eventDetailsModalService.open(eventId);
 		}
 
 		function actionClickFailuresButton() {

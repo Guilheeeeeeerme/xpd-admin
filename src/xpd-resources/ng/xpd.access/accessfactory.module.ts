@@ -6,15 +6,20 @@
 // })();
 
 import * as angular from 'angular';
+import 'angular-ui-bootstrap';
+import { XPDDialogModule } from '../xpd.dialog/xpd.dialog.module';
 import { XPDAccessService } from './access.service';
 import { AccessFactoryDirective } from './accessfactory.directive';
-import { SecurityConfig } from './security-interceptor.config';
+import { SecurityInterceptorConfig } from './security-interceptor.config';
 import { SecurityInteceptorFactory } from './security-interceptor.factory';
 
-const XPDAccessModule: angular.IModule  = angular.module('xpd.accessfactory', []);
+const XPDAccessModule: angular.IModule = angular.module('xpd.accessfactory', [
+	'ui.bootstrap',
+	XPDDialogModule.name,
+]);
 export { XPDAccessModule };
 
 XPDAccessModule.factory('securityInteceptor', SecurityInteceptorFactory);
-XPDAccessModule.config(SecurityConfig);
+XPDAccessModule.config(SecurityInterceptorConfig);
 XPDAccessModule.service('xpdAccessService', XPDAccessService);
 XPDAccessModule.directive('accessFactoryDirective', AccessFactoryDirective.Factory());

@@ -5,13 +5,14 @@
 // 		.directive('accessFactoryDirective', accessFactoryDirective);
 
 // 	accessFactoryDirective.$inject = ['$uibModal', 'dialogService'];
+import { IWindowService } from 'angular';
 import { IModalService } from 'angular-ui-bootstrap';
 import template from '../xpd.access/accessfactory.template.html';
 import { DialogService } from '../xpd.dialog/xpd.dialog.factory';
 
 export class AccessFactoryDirective implements ng.IDirective {
 
-	public static $inject: string[] = ['$uibModal', '$route', 'dialogService'];
+	public static $inject: string[] = ['$uibModal', '$window', 'dialogService'];
 
 	public restrict = 'E';
 	public scope = {
@@ -22,7 +23,7 @@ export class AccessFactoryDirective implements ng.IDirective {
 
 	constructor(
 		private $uibModal: IModalService,
-		private $route: angular.route.IRouteService,
+		private $window: ng.IWindowService,
 		private dialogService: DialogService) {
 	}
 
@@ -46,7 +47,7 @@ export class AccessFactoryDirective implements ng.IDirective {
 
 		function actionProceed() {
 			localStorage.setItem('xpd.admin.XPDAccessData', JSON.stringify(scope.dados.XPDAccessData));
-			vm.$route.reload();
+			vm.$window.location.reload();
 		}
 
 		function actionButtonCancel() {
@@ -74,8 +75,8 @@ export class AccessFactoryDirective implements ng.IDirective {
 	public static Factory(): ng.IDirectiveFactory {
 		return (
 			$uibModal: IModalService,
-			$route: angular.route.IRouteService,
-			dialogService: DialogService) => new AccessFactoryDirective($uibModal, $route, dialogService);
+			$window: IWindowService,
+			dialogService: DialogService) => new AccessFactoryDirective($uibModal, $window, dialogService);
 	}
 
 }

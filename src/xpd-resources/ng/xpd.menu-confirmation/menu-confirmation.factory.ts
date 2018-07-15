@@ -1,17 +1,3 @@
-/*
-* @Author: Gezzy Ramos
-* @Date:   2017-05-15 17:09:13
-* @Last Modified by:   Gezzy Ramos
-* @Last Modified time: 2017-05-16 17:35:49
-// */
-// (function() {
-// 	'use strict';
-
-// 	angular.module('xpd.menu-confirmation')
-// 		.factory('menuConfirmationService', menuConfirmationService);
-
-// 	menuConfirmationService.$inject = [];
-
 export class MenuConfirmationService {
 
 	public static $inject: string[] = [];
@@ -27,5 +13,3 @@ export class MenuConfirmationService {
 		this.blockMenu = value;
 	}
 }
-
-	// })();

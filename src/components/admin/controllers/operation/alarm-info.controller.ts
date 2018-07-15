@@ -1,6 +1,7 @@
 import * as angular from 'angular';
 import { IModalService } from 'angular-ui-bootstrap';
 import { AlarmSetupAPIService } from '../../../../xpd-resources/ng/xpd.setupapi/alarm-setupapi.service';
+import alarmInfoTemplate from '../../views/forms/alarm-info-upsert.modal.html';
 import { AlarmCRUDService } from '../alarm/alarm.service';
 
 export class AlarmInfoController {
@@ -112,7 +113,7 @@ export class AlarmInfoController {
 			alarmCRUDService.addAlarm(
 				alarm,
 				'xpd-modal-xxlg',
-				'app/components/admin/views/forms/alarm-info-upsert.modal.html',
+				alarmInfoTemplate,
 				actionButtonSaveCallback,
 				actionButtonCloseCallback,
 				$scope.dados.operation,
@@ -142,7 +143,7 @@ export class AlarmInfoController {
 			alarmCRUDService.editAlarm(
 				alarm,
 				'xpd-modal-xxlg',
-				'app/components/admin/views/forms/alarm-info-upsert.modal.html',
+				alarmInfoTemplate,
 				function(updatedAlarm) {
 					for (const field in updatedAlarm) {
 						$scope.alarmToUpdate[field] = updatedAlarm[field];

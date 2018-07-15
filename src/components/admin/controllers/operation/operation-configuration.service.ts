@@ -7,9 +7,9 @@ export class OperationConfigurationService {
 	public getCasingTypeSizeItems: () => Array<{ /*id: 1,*/ label: string; id: string; }>;
 	public getHtmlPopOver: () => any;
 	public getHtmlSlipsThreshold: () => any;
-	public getOperationViewTabs: (operation: any) => Array<{ title: string; url: string; }>;
 	public getCasingTripSpeedParams: (casingTypeId: any) => any;
 	public getRiserTripSpeedParams: (metaTypeId: any) => any;
+	public getOperationViewTabs: (operation: any) => Array<{ title: string; general: boolean; contract?: undefined; alarm?: undefined; } | { title: string; contract: boolean; general?: undefined; alarm?: undefined; } | { title: string; alarm: boolean; general?: undefined; contract?: undefined; }>;
 
 	constructor($sce) {
 		const vm = this;
@@ -67,20 +67,23 @@ export class OperationConfigurationService {
 				return [
 					{
 						title: 'Operation Info',
-						url: './app/components/admin/views/forms/' + operation.type + '-general-info.template.html',
+						general: true,
 					},
 				];
 			} else {
 				return [
 					{
 						title: 'Operation Info',
-						url: './app/components/admin/views/forms/' + operation.type + '-general-info.template.html',
+						general: true,
 					},
 					{
 						title: 'Contract Performance',
-						url: './app/components/admin/views/forms/' + operation.type + '-contract-info.template.html',
+						contract: true,
 					},
-					{ title: 'Alarms', url: './app/components/admin/views/forms/alarm-info.template.html' },
+					{
+						title: 'Alarms',
+						alarm: true,
+					},
 				];
 			}
 		}

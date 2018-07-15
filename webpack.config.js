@@ -1,5 +1,6 @@
 
 var path = require('path');
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 
@@ -34,6 +35,8 @@ module.exports = {
 
 	plugins: [
 
+		// new UglifyJsPlugin(),
+
 		new HtmlWebpackPlugin({
 			title: 'XPD Admin',
 			chunks: ['admin'],
@@ -61,15 +64,18 @@ module.exports = {
 			favicon: './src/assets/img/favicon.ico'
 		}),
 
-		new CopyWebpackPlugin([
-			{
+		new CopyWebpackPlugin(
+			[{
 				from: './src/assets/js/dhtmlxgantt.js',
 				to: './assets/js/',
 			}],
 			{
 				debug: true
-			})
+			}
+		)
 	],
+
+	
 
 	// plugins: [
 	// 	new webpack.ProvidePlugin({

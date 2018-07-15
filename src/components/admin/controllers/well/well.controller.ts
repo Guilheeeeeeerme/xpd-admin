@@ -3,6 +3,7 @@ import { DialogService } from '../../../../xpd-resources/ng/xpd.dialog/xpd.dialo
 import { OperationDataService } from '../../../../xpd-resources/ng/xpd.operation-data/operation-data.service';
 import { SectionSetupAPIService } from '../../../../xpd-resources/ng/xpd.setupapi/section-setupapi.service';
 import { WellSetupAPIService } from '../../../../xpd-resources/ng/xpd.setupapi/well-setupapi.service';
+import wellUpsertTemplate from '../../views/modal/well-upsert.modal.html';
 
 export class WellController {
 	// 'use strict';
@@ -31,9 +32,9 @@ export class WellController {
 			$scope.operationData = vm.operationDataFactory.operationData;
 		});
 
-		this.operationDataFactory.addEventListener('wellController', 'setOnCurrentWellListener', this.loadWellList);
-		this.operationDataFactory.addEventListener('wellController', 'setOnNoCurrentWellListener', this.loadWellList);
-		this.operationDataFactory.addEventListener('wellController', 'setOnWellChangeListener', this.loadWellList);
+		operationDataService.on('setOnCurrentWellListener', () => this.loadWellList() );
+		operationDataService.on('setOnNoCurrentWellListener', () => this.loadWellList() );
+		operationDataService.on('setOnWellChangeListener', () => this.loadWellList() );
 
 		this.loadWellList();
 
@@ -47,7 +48,7 @@ export class WellController {
 			keyboard: false,
 			backdrop: 'static',
 			size: 'lg',
-			templateUrl: 'app/components/admin/views/modal/well-upsert.modal.html',
+			template: wellUpsertTemplate,
 			controller: 'WellUpsertController as wuController',
 			resolve: {
 				callback() {
@@ -68,7 +69,7 @@ export class WellController {
 			keyboard: false,
 			backdrop: 'static',
 			size: 'lg',
-			templateUrl: 'app/components/admin/views/modal/well-upsert.modal.html',
+			template: wellUpsertTemplate,
 			controller: 'WellUpsertController as wuController',
 			resolve: {
 				callback() {

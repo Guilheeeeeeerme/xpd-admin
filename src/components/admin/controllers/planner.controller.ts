@@ -54,15 +54,6 @@ export class PlannerController {
 		vm.actionButtonApplyConn = actionButtonApplyConn;
 		vm.sumTripConnduration = sumTripConnduration;
 
-		// operationDataFactory.addEventListener('plannerController', 'setOnTimeSlicesChangeListener', loadTimeSlice);
-		// operationDataFactory.addEventListener('plannerController', 'setOnTimeSlicesListener', loadTimeSlice);
-		// operationDataFactory.addEventListener('plannerController', 'setOnNoTimeSlicesListener', loadTimeSlice);
-
-		// operationDataFactory.addEventListener('plannerController', 'setOnVtargetsChangeListener', loadOperationStates);
-		// operationDataFactory.addEventListener('plannerController', 'setOnInitVtargetListener', loadOperationStates);
-		// operationDataFactory.addEventListener('plannerController', 'setOnNoVtargetListener', loadOperationStates);
-		// operationDataFactory.addEventListener('plannerController', 'setOnOperationVtargetsReadyListener', loadOperationStates);
-
 		function startWatching() {
 			vm.timeSlicesContext = $scope.$watch('operationData.timeSlicesContext', loadTimeSlice, true);
 			vm.stateContext = $scope.$watch('operationData.stateContext', loadOperationStates, true);

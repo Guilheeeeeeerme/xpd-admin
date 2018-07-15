@@ -2,6 +2,7 @@ import * as angular from 'angular';
 import { IModalService } from 'angular-ui-bootstrap';
 import { DialogService } from '../../../xpd-resources/ng/xpd.dialog/xpd.dialog.factory';
 import { LessonLearnedSetupAPIService } from '../../../xpd-resources/ng/xpd.setupapi/lessonlearned-setupapi.service';
+import upsertCategoryTemplate from '../views/modal/upsert-category.modal.html';
 /*
 * @Author: gustavogomides7
 * @Date:   2017-02-24 16:27:37
@@ -84,7 +85,7 @@ export class LessonLearnedCategoryController {
 				keyboard: false,
 				backdrop: 'static',
 				size: 'modal-sm',
-				templateUrl: 'app/components/admin/views/modal/upsert-category.modal.html',
+				template: upsertCategoryTemplate,
 				scope: $scope,
 			});
 
@@ -100,7 +101,7 @@ export class LessonLearnedCategoryController {
 				keyboard: false,
 				backdrop: 'static',
 				size: 'modal-sm',
-				templateUrl: 'app/components/admin/views/modal/upsert-category.modal.html',
+				template: upsertCategoryTemplate,
 				scope: $scope,
 			});
 		}

@@ -3,6 +3,10 @@ import { IModalService } from 'angular-ui-bootstrap';
 import { DialogService } from '../../../../xpd-resources/ng/xpd.dialog/xpd.dialog.factory';
 import { OperationDataService } from '../../../../xpd-resources/ng/xpd.operation-data/operation-data.service';
 import { ScheduleSetupAPIService } from '../../../../xpd-resources/ng/xpd.setupapi/schedule-setupapi.service';
+import removeScheduleTemplate from '../../views/modal/remove-schedule.modal.html';
+import upsertFunctionTemplate from '../../views/modal/upsert-function.modal.html';
+import upsertMemberTemplate from '../../views/modal/upsert-member.modal.html';
+import upsertScheduleTemplate from '../../views/modal/upsert-schedule.modal.html';
 
 export class SchedulerActionsService {
 
@@ -83,7 +87,7 @@ export class SchedulerActionsService {
 				keyboard: false,
 				backdrop: 'static',
 				size: 'modal-sm',
-				templateUrl: 'app/components/admin/views/modal/upsert-member.modal.html',
+				template: upsertMemberTemplate,
 				controller: 'UpsertMemberController as uwController',
 				resolve: {
 					insertMemberCallback() {
@@ -136,7 +140,7 @@ export class SchedulerActionsService {
 				keyboard: false,
 				backdrop: 'static',
 				size: 'modal-sm',
-				templateUrl: 'app/components/admin/views/modal/upsert-function.modal.html',
+				template: upsertFunctionTemplate,
 				controller: 'UpsertFunctionController as ufController',
 				resolve: {
 					insertFunctionCallback() {
@@ -193,7 +197,7 @@ export class SchedulerActionsService {
 				keyboard: false,
 				backdrop: 'static',
 				size: 'modal-sm',
-				templateUrl: 'app/components/admin/views/modal/upsert-schedule.modal.html',
+				template: upsertScheduleTemplate,
 				controller: 'UpsertScheduleController as ueController',
 				resolve: {
 					insertScheduleCallback() {
@@ -248,7 +252,7 @@ export class SchedulerActionsService {
 				keyboard: false,
 				backdrop: 'static',
 				size: 'modal-sm',
-				templateUrl: 'app/components/admin/views/modal/remove-schedule.modal.html',
+				template: removeScheduleTemplate,
 				controller: 'UpsertScheduleController as ueController',
 				resolve: {
 					insertScheduleCallback() {

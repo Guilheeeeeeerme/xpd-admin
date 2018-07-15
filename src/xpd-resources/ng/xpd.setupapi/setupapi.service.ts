@@ -40,6 +40,7 @@ export class SetupAPIService {
 	}
 
 	public doRequest(req, successCallback, errorCallback) {
+		const self = this;
 
 		const request = this.$http(req);
 
@@ -73,7 +74,9 @@ export class SetupAPIService {
 					errorCallback(error);
 				}
 			},
-		).finally(this.finallySpinner);
+		).finally(() => {
+			self.finallySpinner();
+		});
 
 	}
 

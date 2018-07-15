@@ -6,6 +6,7 @@ import { OperationDataService } from '../../../../xpd-resources/ng/xpd.operation
 import { OperationSetupAPIService } from '../../../../xpd-resources/ng/xpd.setupapi/operation-setupapi.service';
 import { SectionSetupAPIService } from '../../../../xpd-resources/ng/xpd.setupapi/section-setupapi.service';
 import { WellSetupAPIService } from '../../../../xpd-resources/ng/xpd.setupapi/well-setupapi.service';
+import operationCopyTemplate from '../../views/modal/operation-copy-options.modal.html';
 import { OperationConfigurationService } from './operation-configuration.service';
 
 export class OperationController {
@@ -457,7 +458,7 @@ export class OperationController {
 				animation: true,
 				keyboard: false,
 				backdrop: 'static',
-				templateUrl: 'app/components/admin/views/modal/operation-copy-options.modal.html',
+				template: operationCopyTemplate,
 				controller: 'OperationCopyOptionsModalController as ocomController',
 				resolve: {
 					actionButtonConfirmCallback() {

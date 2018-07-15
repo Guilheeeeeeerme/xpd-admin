@@ -2,14 +2,15 @@
 import * as angular from 'angular';
 
 // import * as uiBootstrap from 'angular-ui-bootstrap';
+import 'angular-ui-bootstrap';
 import { XPDCalculationModule } from '../xpd.calculation/calculation.module';
 import { ngIntersection } from '../xpd.intersection/xpd-intersection.module';
-import { ConnRulerDirective } from './conn-ruler.directive';
-import { ConsistencyInformationPanelDirective } from './consistency-information-panel.directive';
-import { D3DMECChartModalController } from './d3-dmec-chart-modal.controller';
-import { D3DMECChartDirective } from './d3-dmec-chart.directive';
-import { DisplacementAreaFactory } from './displacement-area.directive';
-import { DMECTrackingEventsDirective } from './dmec-tracking-events.directive';
+import { ConnRulerDirective } from './conn-ruler/conn-ruler.directive';
+import { ConsistencyInformationPanelDirective } from './consistency-information-panel/consistency-information-panel.directive';
+import { D3DMECChartModalController } from './d3-dmec-chart/d3-dmec-chart-modal.controller';
+import { D3DMECChartDirective } from './d3-dmec-chart/d3-dmec-chart.directive';
+import { DisplacementAreaFactory } from './displacement-area/displacement-area.directive';
+import { DMECTrackingEventsDirective } from './dmec-tracking-events/dmec-tracking-events.directive';
 import { DMECTrackingDirective } from './dmec-tracking.directive';
 import { ForecastLineDirective } from './forecast-line.directive';
 import { ForecastWaterfallDirective } from './forecast-waterfall.directive';
@@ -32,6 +33,7 @@ import { WellInformationPanelDirective } from './well-information-panel.directiv
 import { XPDViewBoxDirective } from './xpd-view-box.directive';
 
 const XPDVisualizationModule: angular.IModule = angular.module('xpd.visualization', [
+	'ui.bootstrap',
 	ngIntersection.name,
 	XPDCalculationModule.name,
 ]);

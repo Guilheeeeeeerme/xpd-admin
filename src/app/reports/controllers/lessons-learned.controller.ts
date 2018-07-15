@@ -1,3 +1,4 @@
+import template from 'app/components/reports/views/modal/lessons-learned-report.modal.html';
 import { ReportsSetupAPIService } from '../../../xpd-resources/ng/xpd.setupapi/reports-setupapi.service';
 
 export class LessonsLearnedController {
@@ -366,7 +367,7 @@ export class LessonsLearnedController {
 				backdrop: 'static',
 				size: 'modal-sm',
 				windowClass: 'xpd-operation-modal',
-				templateUrl: 'app/components/reports/views/modal/lessons-learned-report.modal.html',
+				template: template,
 				scope: $scope,
 			});
 		}

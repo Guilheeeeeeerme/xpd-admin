@@ -13,6 +13,8 @@
 import * as angular from 'angular';
 import { OperationDataService } from '../../../../xpd-resources/ng/xpd.operation-data/operation-data.service';
 import { OperationSetupAPIService } from '../../../../xpd-resources/ng/xpd.setupapi/operation-setupapi.service';
+import depthAlarmTemplate from '../../views/modal/depth-alarm-upsert.modal.html';
+import timeAlarmTemplate from '../../views/modal/time-alarm-upsert.modal.html';
 import { AlarmCRUDService } from './alarm.service';
 
 export class AlarmController {
@@ -26,10 +28,10 @@ export class AlarmController {
 		let template;
 		let windowClass = '';
 		if (alarm.alarmType === 'time') {
-			template = 'app/components/admin/views/modal/time-alarm-upsert.modal.html';
+			template = timeAlarmTemplate;
 		} else {
 			windowClass = 'xpd-modal-xxlg';
-			template = 'app/components/admin/views/modal/depth-alarm-upsert.modal.html';
+			template = depthAlarmTemplate;
 		}
 
 		this.alarmCRUDService.editAlarm(
@@ -54,7 +56,7 @@ export class AlarmController {
 		this.alarmCRUDService.addAlarm(
 			alarm,
 			'',
-			'app/components/admin/views/modal/time-alarm-upsert.modal.html',
+			timeAlarmTemplate,
 			this.actionButtonSaveCallback,
 			this.actionButtonCloseCallback,
 			this.$scope.alarmData.operation,
@@ -71,7 +73,7 @@ export class AlarmController {
 		this.alarmCRUDService.addAlarm(
 			alarm,
 			'xpd-modal-xxlg',
-			'app/components/admin/views/modal/depth-alarm-upsert.modal.html',
+			depthAlarmTemplate,
 			this.actionButtonSaveCallback,
 			this.actionButtonCloseCallback,
 			this.$scope.alarmData.operation,

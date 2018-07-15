@@ -2,11 +2,11 @@
 // 	'use strict';
 // 	angular.module('xpd.visualization')
 // 		.directive('dmecTrackingEvents', dmecTrackingEvents);
-// 	dmecTrackingEvents.$inject = ['$uibModal', 'd3Service', 'eventDetailsModal', 'failureModal', 'lessonLearnedModal'];
+// 	dmecTrackingEvents.$inject = ['$uibModal', 'd3Service', 'eventDetailsModalService', 'failureModal', 'lessonLearnedModal'];
 import * as d3 from 'd3';
-import { EventDetailsModalService } from '../xpd.modal.event-details/xpd-modal-event-details.factory';
-import { FailureModalFactory } from '../xpd.modal.failure/xpd-modal-failure.factory';
-import { LessonLearnedModalService } from '../xpd.modal.lessonlearned/xpd-modal-lessonlearned.service';
+import { EventDetailsModalService } from '../../xpd.modal.event-details/xpd-modal-event-details.factory';
+import { FailureModalFactory } from '../../xpd.modal.failure/xpd-modal-failure.factory';
+import { LessonLearnedModalService } from '../../xpd.modal.lessonlearned/xpd-modal-lessonlearned.service';
 import template from './dmec-tracking-events.template.html';
 
 export class DMECTrackingEventsDirective implements ng.IDirective {
@@ -25,7 +25,7 @@ export class DMECTrackingEventsDirective implements ng.IDirective {
 	};
 
 	constructor(
-		private eventDetailsModal: EventDetailsModalService,
+		private eventDetailsModalService: EventDetailsModalService,
 		private failureModal: FailureModalFactory,
 		private lessonLearnedModal: LessonLearnedModalService) {
 	}
@@ -273,7 +273,7 @@ export class DMECTrackingEventsDirective implements ng.IDirective {
 		}
 
 		function actionOpenDetailsModal() {
-			self.eventDetailsModal.open(scope.selectedEvent.id);
+			self.eventDetailsModalService.open(scope.selectedEvent.id);
 			closeDetailsMenu();
 		}
 
@@ -321,16 +321,16 @@ export class DMECTrackingEventsDirective implements ng.IDirective {
 
 	public static Factory(): ng.IDirectiveFactory {
 		const directive = (
-			eventDetailsModal: EventDetailsModalService,
+			eventDetailsModalService: EventDetailsModalService,
 			failureModal: FailureModalFactory,
 			lessonLearnedModal: LessonLearnedModalService,
 		) => new DMECTrackingEventsDirective(
-			eventDetailsModal,
+			eventDetailsModalService,
 			failureModal,
 			lessonLearnedModal,
 			);
 
-		directive.$inject = ['eventDetailsModal', 'failureModal', 'lessonLearnedModal'];
+		directive.$inject = ['eventDetailsModalService', 'failureModal', 'lessonLearnedModal'];
 		return directive;
 	}
 }

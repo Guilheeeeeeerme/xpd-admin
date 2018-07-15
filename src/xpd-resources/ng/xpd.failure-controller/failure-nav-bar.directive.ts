@@ -21,7 +21,11 @@ import { OperationDataService } from '../xpd.operation-data/operation-data.servi
 import { CategorySetupAPIService } from '../xpd.setupapi/category-setupapi.service';
 
 export class FailureNavBarDirective implements ng.IDirective {
-	public static $inject: string[] = ['$uibModal', 'categorySetupAPIService', 'operationDataService', 'dialogService'];
+	public static $inject: string[] = [
+		'$uibModal',
+		'categorySetupAPIService',
+		'operationDataService',
+		'dialogService'];
 
 	public scope = {};
 	public restrict = 'EA';
@@ -46,7 +50,7 @@ export class FailureNavBarDirective implements ng.IDirective {
 		this.operationDataService.openConnection([]).then(function () {
 			self.operationDataFactory = self.operationDataService.operationDataFactory;
 
-			self.operationDataFactory.addEventListener('failureNavBar', 'setOnGoingFailureListener', loadOnGoingFailure);
+			self.operationDataService.on('setOnGoingFailureListener', loadOnGoingFailure);
 
 			scope.actionButtonOpenFailureLessonModal = actionButtonOpenFailureLessonModal;
 			scope.actionButtonFinishFailureOnGoing = actionButtonFinishFailureOnGoing;

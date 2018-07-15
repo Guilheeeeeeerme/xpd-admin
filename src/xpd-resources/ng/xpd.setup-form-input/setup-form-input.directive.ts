@@ -16,6 +16,8 @@ import template from './setup-form-input.template.html';
 
 export class XPDSetupFormInputDirective implements ng.IDirective {
 
+	public static $inject = [];
+
 	public restrict = 'E';
 	public scope = {
 		type: '@',
@@ -41,8 +43,16 @@ export class XPDSetupFormInputDirective implements ng.IDirective {
 	};
 	public template = template;
 
+	public link(scope: any) {
+		setInterval(function () {
+			console.log('guilherme', scope);
+		}, 1000);
+	}
+
 	public static Factory(): ng.IDirectiveFactory {
-		return () => new XPDSetupFormInputDirective();
+		const directive = () => new XPDSetupFormInputDirective();
+		directive.$inject = [];
+		return directive;
 	}
 
 }

@@ -35,15 +35,15 @@ export class LayDownConfirmationDirective implements ng.IDirective {
 
 			scope.actionButtonStartLaydown = actionButtonStartLaydown;
 
-			vm.operationDataFactory.addEventListener('trackingController', 'setOnStateChangeListener', (stateContext: any) => {
+			vm.operationDataService.on('setOnStateChangeListener', (stateContext: any) => {
 				vm.checkCurrentState(stateContext);
 			});
 
-			vm.operationDataFactory.addEventListener('trackingController', 'setOnCurrentStateListener', (stateContext: any) => {
+			vm.operationDataService.on('setOnCurrentStateListener', (stateContext: any) => {
 				vm.checkCurrentState(stateContext);
 			});
 
-			vm.operationDataFactory.addEventListener('trackingController', 'setOnChangeLaydownStatusListener', (stateContext: any) => {
+			vm.operationDataService.on('setOnChangeLaydownStatusListener', (stateContext: any) => {
 				vm.checkCurrentState(stateContext);
 			});
 

@@ -5,7 +5,7 @@
 
 // secureConfig.$inject = ['$httpProvider'];
 
-export class SecurityConfig {
+export class SecurityInterceptorConfig {
 
 	public static $inject: string[] = ['$httpProvider'];
 

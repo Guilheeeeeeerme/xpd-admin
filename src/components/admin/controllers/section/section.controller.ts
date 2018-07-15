@@ -3,6 +3,7 @@ import { DialogService } from '../../../../xpd-resources/ng/xpd.dialog/xpd.dialo
 import { OperationDataService } from '../../../../xpd-resources/ng/xpd.operation-data/operation-data.service';
 import { SectionSetupAPIService } from '../../../../xpd-resources/ng/xpd.setupapi/section-setupapi.service';
 import { WellSetupAPIService } from '../../../../xpd-resources/ng/xpd.setupapi/well-setupapi.service';
+import sectionUpsertTemplate from '../../views/modal/section-upsert.modal.html';
 
 export class SectionController {
 	// 'use strict';
@@ -83,10 +84,10 @@ export class SectionController {
 
 		vm.actionButtonMakeCurrent = actionButtonMakeCurrent;
 
-		this.operationDataFactory.addEventListener('sectionController', 'setOnOperationQueueChangeListener', loadSectionList);
-		this.operationDataFactory.addEventListener('sectionController', 'setOnCurrentOperationQueueListener', loadSectionList);
-		this.operationDataFactory.addEventListener('sectionController', 'setOnNoCurrentOperationQueueListener', loadSectionList);
-		this.operationDataFactory.addEventListener('sectionController', 'setOnUnableToMakeCurrentListener', unableToMakeCurrent);
+		operationDataService.on('setOnOperationQueueChangeListener', loadSectionList);
+		operationDataService.on('setOnCurrentOperationQueueListener', loadSectionList);
+		operationDataService.on('setOnNoCurrentOperationQueueListener', loadSectionList);
+		operationDataService.on('setOnUnableToMakeCurrentListener', unableToMakeCurrent);
 
 		loadSectionList();
 
@@ -125,7 +126,7 @@ export class SectionController {
 				keyboard: false,
 				backdrop: 'static',
 				size: 'md',
-				templateUrl: 'app/components/admin/views/modal/section-upsert.modal.html',
+				template: sectionUpsertTemplate,
 				controller: 'SectionUpsertController as suController',
 				resolve: {
 					callback() {
@@ -149,7 +150,7 @@ export class SectionController {
 				keyboard: false,
 				backdrop: 'static',
 				size: 'md',
-				templateUrl: 'app/components/admin/views/modal/section-upsert.modal.html',
+				template: sectionUpsertTemplate,
 				controller: 'SectionUpsertController as suController',
 				resolve: {
 					callback() {

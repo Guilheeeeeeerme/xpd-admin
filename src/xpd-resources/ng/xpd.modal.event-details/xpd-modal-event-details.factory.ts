@@ -1,9 +1,9 @@
 // (function() {
 // 	'use strict';
 
-// 	angular.module('xpd.modal-event-details').factory('eventDetailsModal', eventDetailsModal);
+// 	angular.module('xpd.modal-event-details').factory('eventDetailsModalService', eventDetailsModalService);
 
-// 	eventDetailsModal.$inject = ['$uibModal'];
+// 	eventDetailsModalService.$inject = ['$uibModal'];
 import { IModalService } from 'angular-ui-bootstrap';
 import modalTemplate from './xpd-modal-event-details.template.html';
 

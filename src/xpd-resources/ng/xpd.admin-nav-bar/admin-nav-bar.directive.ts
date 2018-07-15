@@ -18,7 +18,11 @@ import template from './admin-nav-bar.template.html';
 
 export class XPDAdminNavBarDirective implements ng.IDirective {
 
-	public static $inject: string[] = ['$location', 'menuConfirmationService', 'operationDataService', 'dialogService'];
+	public static $inject: string[] = [
+		'$location',
+		'menuConfirmationService',
+		'operationDataService',
+		'dialogService'];
 
 	public scope = {
 

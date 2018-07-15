@@ -9,6 +9,7 @@ import * as d3 from 'd3';
 import template from './conn-ruler.template.html';
 
 export class ConnRulerDirective implements ng.IDirective {
+	public static $inject = [];
 	public template = template;
 	public scope = {
 		chronometer: '=',

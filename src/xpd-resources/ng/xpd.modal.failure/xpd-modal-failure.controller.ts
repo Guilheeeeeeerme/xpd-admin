@@ -138,9 +138,9 @@ export class ModalFailureController {
 		}
 
 		function upsertListenerCallback() {
-			vm.operationDataFactory.addEventListener('modalFailureController', 'setOnFailureChangeListener', failureSuccessCallback);
-			vm.operationDataFactory.addEventListener('modalFailureController', 'setOnErrorUpsertFailureListener', failureErrorCallback);
-			vm.operationDataFactory.addEventListener('modalFailureController', 'setOnNptAlreadyExistsListener', nptAlreadyExists);
+			operationDataService.on('setOnFailureChangeListener', failureSuccessCallback);
+			operationDataService.on('setOnErrorUpsertFailureListener', failureErrorCallback);
+			operationDataService.on('setOnNptAlreadyExistsListener', nptAlreadyExists);
 		}
 
 		function failureSuccessCallback() {

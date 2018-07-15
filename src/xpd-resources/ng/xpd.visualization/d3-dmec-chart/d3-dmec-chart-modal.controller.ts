@@ -6,7 +6,11 @@ import { IModalInstanceService } from 'angular-ui-bootstrap';
 // function D3DMECChartModalController($scope, $modalInstance, tracks, onTracksChange) {
 export class D3DMECChartModalController {
 
-	public static $inject: string[] = ['$scope', '$uibModalInstance', 'tracks', 'onTracksChange'];
+	public static $inject: string[] = [
+		'$scope',
+		'$uibModalInstance',
+		'tracks',
+		'onTracksChange'];
 
 	constructor(
 		$scope: any,
