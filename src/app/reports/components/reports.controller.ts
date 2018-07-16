@@ -44,7 +44,7 @@ export class ReportsController {
 		});
 
 		operationSetupAPIService.getList((operationList) => {
-			this.currentOperationSuccessCallback(operationList)
+			this.currentOperationSuccessCallback(operationList);
 		});
 
 	}

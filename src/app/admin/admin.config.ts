@@ -72,7 +72,7 @@ function AdminConfig($routeProvider) {
 		template: MemberSchedulerTemplate,
 		controller: 'MemberSchedulerController as memberSchedulerController',
 	});
-	
+
 	$routeProvider.when('/shift-report/:wellId', {
 		template: rpdTemplate,
 		controller: 'RPDController',
@@ -82,7 +82,7 @@ function AdminConfig($routeProvider) {
 		controller: 'RPDController',
 	});
 	$routeProvider.when('/planner', {
-		templateUrl: PlannerTemplate,
+		template: PlannerTemplate,
 		controller: 'PlannerController as pController',
 	});
 	$routeProvider.when('/alarm', {
