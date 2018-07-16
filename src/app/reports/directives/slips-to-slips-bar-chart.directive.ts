@@ -3,8 +3,8 @@
 
 // 	angular.module('xpd.reports').directive('slipsToSlipsBarChart', slipsToSlipsBarChart);
 
-import template from 'app/components/reports/directives/slips-to-slips-bar-chart.template.html';
 import * as d3 from 'd3';
+import template from './slips-to-slips-bar-chart.template.html';
 
 export class SlipsToSlipsBarChart {
 

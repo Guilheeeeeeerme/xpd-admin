@@ -3,8 +3,8 @@
 
 // 	angular.module('xpd.reports').directive('eventDurationHistogram', eventDurationHistogram);
 
-import template from 'app/components/reports/directives/event-duration-histogram.template.html';
 import { HighchartsService } from '../../shared/highcharts/highcharts.service';
+import template from './event-duration-histogram.template.html';
 
 export class EventDurationHistogram {
 

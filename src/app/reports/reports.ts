@@ -19,4 +19,4 @@ import './../../assets/css/xpd-visualization.css';
 
 import './../../assets/css/angular.treeview.css';
 
-import { XPDReportsModule } from './reports.module';
+import './reports.module';

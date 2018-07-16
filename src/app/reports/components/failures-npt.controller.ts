@@ -5,8 +5,8 @@
 * @Last Modified time: 2017-08-28 10:57:31
 */
 
-import template from 'app/components/reports/views/modal/failures-npt-report.modal.html';
 import { ReportsSetupAPIService } from '../../shared/xpd.setupapi/reports-setupapi.service';
+import template from './modal/failures-npt-report.modal.html';
 
 export class FailuresNptController {
 	// 'use strict';

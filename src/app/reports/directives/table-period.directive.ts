@@ -3,7 +3,7 @@
 
 // 	angular.module('xpd.reports').directive('tablePeriod', tablePeriod);
 
-import template from 'app/components/reports/directives/table-period.template.html';
+import template from './table-period.template.html';
 
 export class TablePeriod {
 

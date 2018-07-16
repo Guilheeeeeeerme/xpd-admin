@@ -1,16 +1,15 @@
 
-import DMECTemplate from './dmec-log.html';
+import DMECTemplate from './components/dmec-log/dmec-log.template.html';
 
-export class AdminConfig {
-	public static $inject = ['$routeProvider'];
+DMECConfig.$inject = ['$routeProvider'];
 
-	constructor($routeProvider) {
+function DMECConfig($routeProvider) {
 
-		$routeProvider.when('/', {
-			template: DMECTemplate,
-			controller: 'DMecLogController as dmlController',
-		});
-
-	}
+	$routeProvider.when('/', {
+		template: DMECTemplate,
+		controller: 'DMecLogController as dmlController',
+	});
 
 }
+
+export { DMECConfig };

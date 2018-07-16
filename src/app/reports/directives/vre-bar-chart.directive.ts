@@ -3,9 +3,9 @@
 // 	'use strict',
 
 // 	angular.module('xpd.reports').directive('vreBarChart', vreBarChart);
-import template from 'app/components/reports/directives/vre-bar-chart.template.html';
 import * as d3 from 'd3';
 import { XPDTimeoutService } from '../../shared/xpd.timers/xpd-timers.service';
+import template from './vre-bar-chart.template.html';
 
 export class VreBarChart {
 

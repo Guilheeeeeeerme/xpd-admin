@@ -37,7 +37,7 @@ export class OperationSetupAPIService {
 		this.setupAPIService.doRequest(req, successCallback, errorCallback);
 	}
 
-	public getList(successCallback, errorCallback) {
+	public getList(successCallback, errorCallback?) {
 
 		const req = {
 			method: 'GET',

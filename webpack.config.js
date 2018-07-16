@@ -50,7 +50,7 @@ module.exports = {
 		new HtmlWebpackPlugin({
 			title: 'XPD Reports',
 			chunks: ['reports'],
-			template: './src/app/reports/reports.html',
+			template: './src/app/reports/reports.view.html',
 			filename: 'reports.html',
 			meta: metaInfo,
 			favicon: './src/assets/img/favicon.ico'

@@ -21,10 +21,10 @@ export class TrackingController {
 
 	constructor(
 		private $scope: any,
-		$xpdInterval: XPDIntervalService,
+		private $xpdInterval: XPDIntervalService,
 		private $xpdTimeout: XPDTimeoutService,
 		private $uibModal: IModalService,
-		operationDataService: OperationDataService,
+		private operationDataService: OperationDataService,
 		private dialogService: DialogService) {
 
 		const vm = this;
@@ -59,20 +59,8 @@ export class TrackingController {
 			depthAlarms: [],
 		};
 
-		$xpdInterval.run(() => {
-			vm.circulateShiftList();
-		}, 10000, $scope);
-
-		operationDataService.openConnection([]).then(function () {
-			vm.operationDataFactory = operationDataService.operationDataFactory;
-			// TODO: adaptacao as any
-			$scope.operationData = vm.operationDataFactory.operationData;
-
-			vm.buildEventStruture();
-			vm.buildTimeSlicesStruture();
-			vm.removeTeamsFromShift();
-			vm.buildAcknowledgementList();
-
+		operationDataService.openConnection([]).then(() => {
+			vm.init();
 		});
 		// vm.changeTrackingContent = changeTrackingContent;
 
@@ -113,48 +101,79 @@ export class TrackingController {
 
 	}
 
+	private init() {
+		const vm = this;
+
+		vm.$xpdInterval.run(() => {
+			vm.circulateShiftList();
+		}, 10000, vm.$scope);
+
+		vm.operationDataFactory = vm.operationDataService.operationDataFactory;
+		// TODO: adaptacao as any
+		vm.$scope.operationData = vm.operationDataFactory.operationData;
+
+		vm.buildEventStruture();
+		vm.buildTimeSlicesStruture();
+		vm.removeTeamsFromShift();
+		vm.buildAcknowledgementList();
+	}
+
 	public actionButtonStartOperation(operation: any) {
 		const vm = this;
-		this.dialogService.showConfirmDialog('Start current operation?', function () {
-			vm.operationDataFactory.emitStartCurrentOperation(operation);
-		});
+		vm.dialogService.showConfirmDialog(
+			'Start current operation?', () => {
+				vm.operationDataFactory.emitStartCurrentOperation(operation);
+			});
 	}
 
 	public actionButtonFinishOperation() {
 		const vm = this;
-		this.dialogService.showConfirmDialog('Finish running operation?', vm.operationDataFactory.emitFinishRunningOperation);
+		vm.dialogService.showConfirmDialog(
+			'Finish running operation?', () => {
+				vm.operationDataFactory.emitFinishRunningOperation();
+			});
 	}
 
 	public actionButtonStartCementation() {
+		const vm = this;
 
-		const operationEndBitDepth = this.$scope.operationData.operationContext.currentOperation.endBitDepth;
-		const currentBitDepth = this.$scope.operationData.bitDepthContext.bitDepth;
+		const operationEndBitDepth = vm.$scope.operationData.operationContext.currentOperation.endBitDepth;
+		const currentBitDepth = vm.$scope.operationData.bitDepthContext.bitDepth;
 
 		if (operationEndBitDepth > currentBitDepth) {
-			this.dialogService.showCriticalDialog({
-				templateHtml: '<b>Important !!!</b> The current bit depth is about <b>' + currentBitDepth.toFixed(2) + '</b> Please make sure the entire casing string is bellow shoe depth due to start cemementing.',
-			}, this.startCementation);
+			vm.dialogService.showCriticalDialog({
+				templateHtml:
+					'<b>Important !!!</b> The current bit depth is about <b>' +
+					currentBitDepth.toFixed(2) +
+					'</b> Please make sure the entire casing string is bellow shoe depth due to start cemementing.',
+			}, () => {
+				vm.startCementation();
+			});
 		} else {
-			this.startCementation();
+			vm.startCementation();
 		}
 	}
 
 	public actionButtonStopCementation() {
 		const vm = this;
-		this.dialogService.showCriticalDialog('Are you sure you want to stop the Cementing Procedure? This action cannot be undone.', vm.operationDataFactory.emitStopCementation);
+		vm.dialogService.showCriticalDialog(
+			'Are you sure you want to stop the Cementing Procedure? This action cannot be undone.', () => {
+				vm.operationDataFactory.emitStopCementation();
+			});
 	}
 
 	public flashGoDiv() {
 		const vm = this;
-		this.$scope.flags.showGo = true;
+		vm.$scope.flags.showGo = true;
 
-		this.$xpdTimeout.run(function () {
+		vm.$xpdTimeout.run(function () {
 			vm.$scope.flags.showGo = false;
-		}, 500, this.$scope);
+		}, 500, vm.$scope);
 	}
 
 	public actionClickFailuresButton() {
-		this.$uibModal.open({
+		const vm = this;
+		vm.$uibModal.open({
 			animation: true,
 			keyboard: false,
 			backdrop: 'static',
@@ -167,7 +186,8 @@ export class TrackingController {
 	}
 
 	public actionClickLessonsLearnedButton() {
-		this.$uibModal.open({
+		const vm = this;
+		vm.$uibModal.open({
 			animation: true,
 			keyboard: false,
 			backdrop: 'static',
@@ -179,19 +199,20 @@ export class TrackingController {
 	}
 
 	public actionButtonCloseAlarmsAcknowledgementModal() {
-		this.$scope.$uibModalInstance.close();
+		const vm = this;
+		vm.$scope.$uibModalInstance.close();
 	}
 
 	public actionButtonUnconfirmAcknowledgement(acknowledgement) {
 		const vm = this;
-		this.dialogService.showConfirmDialog('Unconfirm Acknowledgement?', function () {
+		vm.dialogService.showConfirmDialog('Unconfirm Acknowledgement?', () => {
 			vm.operationDataFactory.emitUnconfirmAcknowledgement(acknowledgement);
 		});
 	}
 
 	public actionButtonConfirmAcknowledgement(acknowledgement) {
 		const vm = this;
-		this.dialogService.showConfirmDialog('Confirm Acknowledgement?', function () {
+		vm.dialogService.showConfirmDialog('Confirm Acknowledgement?', () => {
 			vm.operationDataFactory.emitConfirmAcknowledgement(acknowledgement);
 		});
 	}
@@ -221,7 +242,11 @@ export class TrackingController {
 	}
 
 	private startCementation() {
-		this.dialogService.showConfirmDialog('Are you sure you want to start the Cementing Procedure? This action cannot be undone.', this.operationDataFactory.emitStartCementation);
+		const vm = this;
+		this.dialogService.showConfirmDialog(
+			'Are you sure you want to start the Cementing Procedure? This action cannot be undone.', () => {
+				vm.operationDataFactory.emitStartCementation();
+			});
 	}
 
 	private circulateShiftList() {
@@ -232,7 +257,9 @@ export class TrackingController {
 
 	private removeTeamsFromShift() {
 		if (this.$scope.operationData.shiftContext != null && this.$scope.operationData.shiftContext.onShift != null) {
-			this.$scope.operationData.shiftContext.onShift = this.$scope.operationData.shiftContext.onShift.filter(this.filterMembersOnly);
+			this.$scope.operationData.shiftContext.onShift = this.$scope.operationData.shiftContext.onShift.filter((shift) => {
+				return shift.member.function.id !== 1;
+			});
 		}
 	}
 
@@ -268,10 +295,6 @@ export class TrackingController {
 				}
 			}
 		}
-	}
-
-	private filterMembersOnly(shift) {
-		return shift.member.function.id !== 1;
 	}
 
 	private onAboveSpeedLimit() {

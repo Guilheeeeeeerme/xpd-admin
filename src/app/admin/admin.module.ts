@@ -29,7 +29,6 @@ import { WellUpsertController } from '../../components/admin/controllers/well/we
 import { WellController } from '../../components/admin/controllers/well/well.controller';
 import { SavedAlarmsListDirectives } from '../../components/admin/directives/saved-alarms-list.directive';
 import { VREListTableDirective } from '../../components/admin/directives/vre-list-table.directive';
-import { ReportsController } from '../reports/reports.controller';
 import { XPDSharedModule } from '../shared/shared.module';
 import { AdminConfig } from './admin.config';
 import { AdminRunScope } from './admin.run';
@@ -68,7 +67,6 @@ XPDAdminModule.controller('FailureDelayCategoryController', FailureDelayCategory
 XPDAdminModule.controller('LessonLearnedCategoryController', LessonLearnedCategoryController);
 XPDAdminModule.controller('MenuController', MenuController);
 XPDAdminModule.controller('PlannerController', PlannerController);
-XPDAdminModule.controller('ReportsController', ReportsController);
 XPDAdminModule.controller('RpdController', RPDController);
 XPDAdminModule.controller('TeamController', TeamController);
 XPDAdminModule.controller('TrackingUpdateTimesController', TrackingUpdateTimesController);

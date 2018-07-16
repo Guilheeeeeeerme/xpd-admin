@@ -3,13 +3,13 @@
 
 // angular.module('xpd.reports').config(reportConfig);
 
-import BitDepthTimeTemplate from './app/components/reports/views/bit-depth-time.template.html';
-import FailuresNptTemplate from './app/components/reports/views/failures-npt.template.html';
-import HistogramReportTemplate from './app/components/reports/views/histogram-report.template.html';
-import LessonsLearnedTemplate from './app/components/reports/views/lessons-learned.template.html';
-import ReportNeedleTemplate from './app/components/reports/views/needle-report.template.html';
-import VreScoreReportTemplate from './app/components/reports/views/vre-score.template.html';
-import VreReportTemplate from './app/components/reports/views/vre.template.html';
+import BitDepthTimeTemplate from './components/bit-depth-time.template.html';
+import FailuresNptTemplate from './components/failures-npt.template.html';
+import HistogramReportTemplate from './components/histogram-report.template.html';
+import LessonsLearnedTemplate from './components/lessons-learned.template.html';
+import ReportNeedleTemplate from './components/needle-report.template.html';
+import VreScoreReportTemplate from './components/vre-score.template.html';
+import VreReportTemplate from './components/vre.template.html';
 
 export class ReportConfig {
 	public static $inject = ['$routeProvider'];
