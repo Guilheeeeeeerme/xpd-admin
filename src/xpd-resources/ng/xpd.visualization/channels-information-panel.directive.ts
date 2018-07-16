@@ -4,7 +4,7 @@
 // 	angular.module('xpd.visualization').directive('channelsInformationPanel', channelsInformationPanel);
 
 // 	channelsInformationPanel.$inject = [];
-import template from '../xpd-resources/ng/xpd.visualization/channels-information-panel.template.html';
+import template from './channels-information-panel.template.html';
 
 export class ChannelsInformationPanel implements ng.IDirective {
 	public restrict = 'EA';

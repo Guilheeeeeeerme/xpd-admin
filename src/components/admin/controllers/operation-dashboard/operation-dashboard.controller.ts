@@ -13,6 +13,8 @@ export class OperationDashboardController {
 	public getPanelStartState: (keyName: any) => any;
 	public changePanelState: (keyName: any) => void;
 	public operationDataFactory: any;
+	public selectedPoint: (point: any) => void;
+	public removeReadingFromList: (index: any) => void;
 
 	constructor($scope, $filter, operationDataService: OperationDataService, readingSetupAPIService: ReadingSetupAPIService) {
 
