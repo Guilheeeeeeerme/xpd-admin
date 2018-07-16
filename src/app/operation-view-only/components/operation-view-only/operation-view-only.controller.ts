@@ -122,7 +122,7 @@ export class OperationViewOnlyController {
 	}
 
 	private getHtmlPopOver() {
-		return this.$sce.trustAsHtml('<img class="img-responsible" width="200px" height="auto" src="../xpd-resources/img/imagem_acceleration.png">');
+		return this.$sce.trustAsHtml('<img class="img-responsible" width="200px" height="auto" src="../../../../assets/img/imagem_acceleration.png">');
 	}
 
 	public toDate(element: any) {

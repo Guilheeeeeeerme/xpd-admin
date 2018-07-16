@@ -51,7 +51,6 @@ export class XPDSetupFormInputDirective implements ng.IDirective {
 
 	public static Factory(): ng.IDirectiveFactory {
 		const directive = () => new XPDSetupFormInputDirective();
-		directive.$inject = [];
 		return directive;
 	}
 
