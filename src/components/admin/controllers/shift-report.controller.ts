@@ -1,6 +1,6 @@
-import { EventLogSetupAPIService } from '../../../xpd-resources/ng/xpd.setupapi/eventlog-setupapi.service';
-import { SectionSetupAPIService } from '../../../xpd-resources/ng/xpd.setupapi/section-setupapi.service';
-import { WellSetupAPIService } from '../../../xpd-resources/ng/xpd.setupapi/well-setupapi.service';
+import { EventLogSetupAPIService } from '../../../app/shared/xpd.setupapi/eventlog-setupapi.service';
+import { SectionSetupAPIService } from '../../../app/shared/xpd.setupapi/section-setupapi.service';
+import { WellSetupAPIService } from '../../../app/shared/xpd.setupapi/well-setupapi.service';
 
 export class RPDController {
 	// 'use strict';

@@ -1,14 +1,21 @@
-import { OperationSetupAPIService } from '../../../../xpd-resources/ng/xpd.setupapi/operation-setupapi.service';
+import { OperationSetupAPIService } from '../../../shared/xpd.setupapi/operation-setupapi.service';
 
 export class OperationViewOnlyController {
 	// 'use strict';
 
 	// angular.module('xpd.operationviewonly').controller('OperationViewOnlyController', OperationViewOnlyController);
 
-	public static $inject = ['$scope', '$filter', '$sce', 'operationSetupAPIService'];
-	public toDate: (element: any) => any;
+	public static $inject = ['$scope', '$routeParams', '$filter', '$sce', 'operationSetupAPIService'];
 
-	constructor($scope, $filter, $sce, operationSetupAPIService: OperationSetupAPIService) {
+	constructor(
+		private $scope: any,
+		$routeParams: angular.route.IRouteParamsService,
+		private $filter,
+		private $sce: ng.ISCEService,
+		operationSetupAPIService: OperationSetupAPIService) {
+
+		const vm = this;
+
 		$scope.casingTypeSizeItems = [];
 
 		$scope.casingTypeSizeItems = [{
@@ -39,16 +46,8 @@ export class OperationViewOnlyController {
 		// 	label: 'Section of 3 joints of casing greater than or equal to 12" and smaller than 16"'
 		// }];
 
-		const queryDict = {};
-		location.search.substr(1).split('&').forEach(function (item) {
-			queryDict[item.split('=')[0]] = item.split('=')[1];
-		});
-
-		const operationId = (queryDict as any).operationid;
-
-		const vm = this;
-
-		vm.toDate = toDate;
+		$routeParams.operationId = +$routeParams.operationId;
+		const operationId = $routeParams.operationId;
 
 		$scope.dados = {
 			operation: null,
@@ -56,54 +55,15 @@ export class OperationViewOnlyController {
 
 		$scope.dados.timeSlices = [];
 
-		$scope.htmlPopover = getHtmlPopOver();
+		$scope.htmlPopover = this.getHtmlPopOver();
 
 		operationSetupAPIService.getObjectById(operationId,
-			loadOperationCallback,
-			loadOperationErrorCallback);
-
-		function loadOperationCallback(data) {
-
-			const contractParams = {};
-
-			// Array to Object
-			for (const i in data.contractParams) {
-				contractParams[data.contractParams[i].type] = data.contractParams[i];
-				delete contractParams[data.contractParams[i].type].type;
-			}
-
-			// try{
-			// 	$scope.dados.timeSlices = data.timeSlices.map(function(ts){
-			// 		if(ts.enabled == false){
-			// 			ts.enabled = false;
-			// 		}else{
-			// 			ts.enabled = true;
-			// 		}
-
-			// 		return ts;
-			// 	});
-			// }catch(_ex){
-			// 	console.error(_ex);
-			// }
-
-			$scope.dados.timeSlices = data.timeSlices;
-			// $scope.dados.timeSlices = $filter('orderBy')($filter('filter')(data.timeSlices, { enabled: true }), 'timeOrder');
-			$scope.dados.contractParams = contractParams;
-			$scope.dados.alarms = data.alarms;
-			delete data.timeSlices;
-			delete data.contractParams;
-			delete data.alarms;
-
-			$scope.dados.operation = data;
-		}
-
-		function toDate(element) {
-			return $filter('date')(new Date(element), 'short', '+0000');
-		}
-
-		function loadOperationErrorCallback() {
-			console.log('Error loading Operation!');
-		}
+			(operation: any) => {
+				vm.loadOperationCallback(operation);
+			},
+			() => {
+				vm.loadOperationErrorCallback();
+			});
 
 		$scope.set = [
 			{
@@ -120,9 +80,52 @@ export class OperationViewOnlyController {
 			},
 		];
 
-		function getHtmlPopOver() {
-			return $sce.trustAsHtml('<img class="img-responsible" width="200px" height="auto" src="../xpd-resources/img/imagem_acceleration.png">');
+	}
+
+	private loadOperationCallback(operation) {
+
+		const contractParams = {};
+
+		// Array to Object
+		for (const i in operation.contractParams) {
+			contractParams[operation.contractParams[i].type] = operation.contractParams[i];
+			delete contractParams[operation.contractParams[i].type].type;
 		}
 
+		// try{
+		// 	$scope.dados.timeSlices = data.timeSlices.map(function(ts){
+		// 		if(ts.enabled == false){
+		// 			ts.enabled = false;
+		// 		}else{
+		// 			ts.enabled = true;
+		// 		}
+
+		// 		return ts;
+		// 	});
+		// }catch(_ex){
+		// 	console.error(_ex);
+		// }
+
+		this.$scope.dados.timeSlices = operation.timeSlices;
+		// $scope.dados.timeSlices = $filter('orderBy')($filter('filter')(data.timeSlices, { enabled: true }), 'timeOrder');
+		this.$scope.dados.contractParams = contractParams;
+		this.$scope.dados.alarms = operation.alarms;
+		delete operation.timeSlices;
+		delete operation.contractParams;
+		delete operation.alarms;
+
+		this.$scope.dados.operation = operation;
+	}
+
+	private loadOperationErrorCallback() {
+		console.log('Error loading Operation!');
+	}
+
+	private getHtmlPopOver() {
+		return this.$sce.trustAsHtml('<img class="img-responsible" width="200px" height="auto" src="../xpd-resources/img/imagem_acceleration.png">');
+	}
+
+	public toDate(element: any) {
+		return this.$filter('date')(new Date(element), 'short', '+0000');
 	}
 }

@@ -1,5 +1,3 @@
-import { ReportsSetupAPIService } from '../../../xpd-resources/ng/xpd.setupapi/reports-setupapi.service';
-
 /*
 * @Author: Gezzy Ramos
 * @Date:   2017-05-09 14:48:15
@@ -8,6 +6,7 @@ import { ReportsSetupAPIService } from '../../../xpd-resources/ng/xpd.setupapi/r
 */
 
 import template from 'app/components/reports/views/modal/failures-npt-report.modal.html';
+import { ReportsSetupAPIService } from '../../shared/xpd.setupapi/reports-setupapi.service';
 
 export class FailuresNptController {
 	// 'use strict';

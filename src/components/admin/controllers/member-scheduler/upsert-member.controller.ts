@@ -1,7 +1,7 @@
 import * as angular from 'angular';
 import { IModalServiceInstance } from 'angular-ui-bootstrap';
-import { PhotoAPIService } from '../../../../xpd-resources/ng/xpd.setupapi/photo-setupapi.service';
-import { ScheduleSetupAPIService } from '../../../../xpd-resources/ng/xpd.setupapi/schedule-setupapi.service';
+import { PhotoAPIService } from '../../../../app/shared/xpd.setupapi/photo-setupapi.service';
+import { ScheduleSetupAPIService } from '../../../../app/shared/xpd.setupapi/schedule-setupapi.service';
 
 export class UpsertMemberController {
 	// 'use strict';

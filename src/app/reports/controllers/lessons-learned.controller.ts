@@ -1,5 +1,5 @@
 import template from 'app/components/reports/views/modal/lessons-learned-report.modal.html';
-import { ReportsSetupAPIService } from '../../../xpd-resources/ng/xpd.setupapi/reports-setupapi.service';
+import { ReportsSetupAPIService } from '../../shared/xpd.setupapi/reports-setupapi.service';
 
 export class LessonsLearnedController {
 	// 'use strict';

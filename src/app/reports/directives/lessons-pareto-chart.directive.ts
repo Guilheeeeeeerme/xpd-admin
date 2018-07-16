@@ -1,10 +1,9 @@
+import { HighchartsService } from '../../shared/highcharts/highcharts.service';
 
 // (function() {
 	// 	'use stric';
 
 	// 	angular.module('xpd.reports').directive('lessonsParetoChart', lessonsParetoChart);
-
-import { HighchartsService } from '../../../xpd-resources/ng/highcharts/highcharts.service';
 
 export class LessonsParetoChart {
 

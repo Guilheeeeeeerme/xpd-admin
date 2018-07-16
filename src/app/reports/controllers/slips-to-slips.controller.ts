@@ -1,4 +1,4 @@
-import { EventLogSetupAPIService } from '../../../xpd-resources/ng/xpd.setupapi/eventlog-setupapi.service';
+import { EventLogSetupAPIService } from '../../shared/xpd.setupapi/eventlog-setupapi.service';
 
 export class SlipsToSlipsController {
 	// 'use strict';

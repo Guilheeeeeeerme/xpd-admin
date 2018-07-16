@@ -1,4 +1,4 @@
-import { ScheduleSetupAPIService } from '../../../xpd-resources/ng/xpd.setupapi/schedule-setupapi.service';
+import { ScheduleSetupAPIService } from '../../../app/shared/xpd.setupapi/schedule-setupapi.service';
 
 export class TeamController {
 	// 'use strict';

@@ -1,5 +1,5 @@
-import { OperationDataService } from '../../../../xpd-resources/ng/xpd.operation-data/operation-data.service';
-import { ReadingSetupAPIService } from '../../../../xpd-resources/ng/xpd.setupapi/reading-setupapi.service';
+import { OperationDataService } from '../../../../app/shared/xpd.operation-data/operation-data.service';
+import { ReadingSetupAPIService } from '../../../../app/shared/xpd.setupapi/reading-setupapi.service';
 
 export class OperationDashboardController {
 
@@ -16,7 +16,11 @@ export class OperationDashboardController {
 	public selectedPoint: (point: any) => void;
 	public removeReadingFromList: (index: any) => void;
 
-	constructor($scope, $filter, operationDataService: OperationDataService, readingSetupAPIService: ReadingSetupAPIService) {
+	constructor(
+		$scope,
+		$filter,
+		operationDataService: OperationDataService,
+		readingSetupAPIService: ReadingSetupAPIService) {
 
 		const vm = this;
 
@@ -37,7 +41,7 @@ export class OperationDashboardController {
 			timeEvents: [],
 		};
 
-		operationDataService.openConnection([]).then(function() {
+		operationDataService.openConnection([]).then(function () {
 			vm.operationDataFactory = operationDataService.operationDataFactory;
 			$scope.operationData = vm.operationDataFactory.operationData;
 			main();
@@ -70,19 +74,19 @@ export class OperationDashboardController {
 					const estimatives = $scope.operationData.forecastContext.estimatives;
 					const estimatedAt = new Date(estimatives.estimatedAt).getTime();
 
-					const vTargetStateJointInterval = estimatives.vTargetEstimative.filter(function(line) {
+					const vTargetStateJointInterval = estimatives.vTargetEstimative.filter(function (line) {
 						return line[currentState] != null;
 					})[0][currentState];
 
-					const vOptimumStateJointInterval = estimatives.vOptimumEstimative.filter(function(line) {
+					const vOptimumStateJointInterval = estimatives.vOptimumEstimative.filter(function (line) {
 						return line[currentState] != null;
 					})[0][currentState];
 
-					const vStandardStateJointInterval = estimatives.vStandardEstimative.filter(function(line) {
+					const vStandardStateJointInterval = estimatives.vStandardEstimative.filter(function (line) {
 						return line[currentState] != null;
 					})[0][currentState];
 
-					const vPoorStateJointInterval = estimatives.vPoorEstimative.filter(function(line) {
+					const vPoorStateJointInterval = estimatives.vPoorEstimative.filter(function (line) {
 						return line[currentState] != null;
 					})[0][currentState];
 
@@ -403,7 +407,7 @@ export class OperationDashboardController {
 			'#5B4534', '#FDE8DC', '#404E55', '#0089A3', '#CB7E98', '#A4E804', '#324E72', '#6A3A4C',
 			'#83AB58', '#001C1E', '#D1F7CE', '#004B28', '#C8D0F6', '#A3A489', '#806C66', '#222800',
 			'#BF5650', '#E83000', '#66796D', '#DA007C', '#FF1A59', '#8ADBB4', '#1E0200', '#5B4E51',
-			'#C895C5', '#320033', '#FF6832', '#66E1D3', '#CFCDAC', '#D0AC94', '#7ED379', '#012C58'
+			'#C895C5', '#320033', '#FF6832', '#66E1D3', '#CFCDAC', '#D0AC94', '#7ED379', '#012C58',
 		];
 
 		function getColor() {

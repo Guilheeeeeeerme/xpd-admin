@@ -1,7 +1,7 @@
 import * as angular from 'angular';
 import { IModalService } from 'angular-ui-bootstrap';
-import { DialogService } from '../../../xpd-resources/ng/xpd.dialog/xpd.dialog.factory';
-import { CategorySetupAPIService } from '../../../xpd-resources/ng/xpd.setupapi/category-setupapi.service';
+import { DialogService } from '../../../app/shared/xpd.dialog/xpd.dialog.factory';
+import { CategorySetupAPIService } from '../../../app/shared/xpd.setupapi/category-setupapi.service';
 import upsertcategorytemplate from '../views/modal/upsert-category.modal.html';
 
 export class FailureDelayCategoryController {

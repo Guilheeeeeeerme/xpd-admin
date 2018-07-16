@@ -1,8 +1,8 @@
 import { IModalService } from 'angular-ui-bootstrap';
-import { DialogService } from '../../../../xpd-resources/ng/xpd.dialog/xpd.dialog.factory';
-import { OperationDataService } from '../../../../xpd-resources/ng/xpd.operation-data/operation-data.service';
-import { SectionSetupAPIService } from '../../../../xpd-resources/ng/xpd.setupapi/section-setupapi.service';
-import { WellSetupAPIService } from '../../../../xpd-resources/ng/xpd.setupapi/well-setupapi.service';
+import { DialogService } from '../../../../app/shared/xpd.dialog/xpd.dialog.factory';
+import { OperationDataService } from '../../../../app/shared/xpd.operation-data/operation-data.service';
+import { SectionSetupAPIService } from '../../../../app/shared/xpd.setupapi/section-setupapi.service';
+import { WellSetupAPIService } from '../../../../app/shared/xpd.setupapi/well-setupapi.service';
 import wellUpsertTemplate from '../../views/modal/well-upsert.modal.html';
 
 export class WellController {

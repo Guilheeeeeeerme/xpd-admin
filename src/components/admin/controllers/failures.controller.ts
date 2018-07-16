@@ -1,6 +1,6 @@
-import { DialogService } from '../../../xpd-resources/ng/xpd.dialog/xpd.dialog.factory';
-import { FailureModalFactory } from '../../../xpd-resources/ng/xpd.modal.failure/xpd-modal-failure.factory';
-import { OperationDataService } from '../../../xpd-resources/ng/xpd.operation-data/operation-data.service';
+import { DialogService } from '../../../app/shared/xpd.dialog/xpd.dialog.factory';
+import { FailureModalFactory } from '../../../app/shared/xpd.modal.failure/xpd-modal-failure.factory';
+import { OperationDataService } from '../../../app/shared/xpd.operation-data/operation-data.service';
 
 export class FailuresController {
 

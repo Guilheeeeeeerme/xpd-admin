@@ -1,6 +1,6 @@
 import * as angular from 'angular';
 import { IModalService } from 'angular-ui-bootstrap';
-import { DialogService } from '../../../../xpd-resources/ng/xpd.dialog/xpd.dialog.factory';
+import { DialogService } from '../../../../app/shared/xpd.dialog/xpd.dialog.factory';
 // (function() {
 // 	'use strict';
 

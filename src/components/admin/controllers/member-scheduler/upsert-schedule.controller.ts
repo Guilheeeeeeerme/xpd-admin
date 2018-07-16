@@ -1,6 +1,6 @@
 import * as angular from 'angular';
-import { IModalService, IModalServiceInstance } from 'angular-ui-bootstrap';
-import { ScheduleSetupAPIService } from '../../../../xpd-resources/ng/xpd.setupapi/schedule-setupapi.service';
+import { IModalServiceInstance } from 'angular-ui-bootstrap';
+import { ScheduleSetupAPIService } from '../../../../app/shared/xpd.setupapi/schedule-setupapi.service';
 
 export class UpsertScheduleController {
 	// 'use strict';

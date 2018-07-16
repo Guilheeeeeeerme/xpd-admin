@@ -1,44 +1,46 @@
-import { SectionSetupAPIService } from '../../../../xpd-resources/ng/xpd.setupapi/section-setupapi.service';
-import { WellSetupAPIService } from '../../../../xpd-resources/ng/xpd.setupapi/well-setupapi.service';
+import { SectionSetupAPIService } from '../../../shared/xpd.setupapi/section-setupapi.service';
+import { WellSetupAPIService } from '../../../shared/xpd.setupapi/well-setupapi.service';
 
 export class WellViewOnlyController {
 
-	public static $inject = ['$scope', 'wellSetupAPIService', 'sectionSetupAPIService'];
+	public static $inject = ['$scope', '$routeParams', 'wellSetupAPIService', 'sectionSetupAPIService'];
 
 	constructor(
-		$scope: any,
+		private $scope: any,
+		$routeParams: ng.route.IRouteParamsService,
 		wellSetupAPIService: WellSetupAPIService,
 		sectionSetupAPIService: SectionSetupAPIService) {
 
-		const queryDict: any = {};
-		location.search.substr(1).split('&').forEach(function (item) {
-			queryDict[item.split('=')[0]] = item.split('=')[1];
-		});
+		const vm = this;
 
-		const wellId = queryDict.wellid;
+		$routeParams.wellId = +$routeParams.wellId;
+		const wellId = $routeParams.wellId;
 
 		$scope.dados = {
 			well: null,
 			sectionList: [],
 		};
 
-		wellSetupAPIService.getObjectById(wellId, function (well) {
-			loadWellCallback(well);
-		},
-			loadWellErrorCallback);
+		wellSetupAPIService.getObjectById(wellId, (well: any) => {
+			vm.loadWellCallback(well);
+		}, () => {
+			vm.loadWellErrorCallback();
+		});
 
-		sectionSetupAPIService.getListOfSectionsByWell(wellId, loadSectionListCallback);
+		sectionSetupAPIService.getListOfSectionsByWell(wellId, (sectionList) => {
+			vm.loadSectionListCallback(sectionList);
+		});
+	}
 
-		function loadWellCallback(data) {
-			$scope.dados.currentWell = data;
-		}
+	private loadWellCallback(data) {
+		this.$scope.dados.currentWell = data;
+	}
 
-		function loadSectionListCallback(sectionList) {
-			$scope.dados.sectionList = sectionList;
-		}
+	private loadSectionListCallback(sectionList) {
+		this.$scope.dados.sectionList = sectionList;
+	}
 
-		function loadWellErrorCallback() {
-			console.log('Error loading Well!');
-		}
+	private loadWellErrorCallback() {
+		console.log('Error loading Well!');
 	}
 }

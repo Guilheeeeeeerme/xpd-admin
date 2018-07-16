@@ -1,7 +1,7 @@
 import * as angular from 'angular';
-import { VCruisingCalculatorService } from '../../../xpd-resources/ng/xpd.calculation/calculation.service';
-import { DialogService } from '../../../xpd-resources/ng/xpd.dialog/xpd.dialog.factory';
-import { OperationDataService } from '../../../xpd-resources/ng/xpd.operation-data/operation-data.service';
+import { VCruisingCalculatorService } from '../../../app/shared/xpd.calculation/calculation.service';
+import { DialogService } from '../../../app/shared/xpd.dialog/xpd.dialog.factory';
+import { OperationDataService } from '../../../app/shared/xpd.operation-data/operation-data.service';
 /*
 * @Author:
 * @Date:   2017-05-19 15:12:22

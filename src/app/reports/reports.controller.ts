@@ -1,6 +1,6 @@
-import { OperationDataService } from '../../xpd-resources/ng/xpd.operation-data/operation-data.service';
-import { OperationSetupAPIService } from '../../xpd-resources/ng/xpd.setupapi/operation-setupapi.service';
-import { WellSetupAPIService } from '../../xpd-resources/ng/xpd.setupapi/well-setupapi.service';
+import { OperationDataService } from '../shared/xpd.operation-data/operation-data.service';
+import { OperationSetupAPIService } from '../shared/xpd.setupapi/operation-setupapi.service';
+import { WellSetupAPIService } from '../shared/xpd.setupapi/well-setupapi.service';
 
 export class ReportsController {
 	// 'use strict';
