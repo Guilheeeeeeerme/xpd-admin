@@ -13,6 +13,8 @@ export class WellViewOnlyController {
 
 		const vm = this;
 
+		console.log($routeParams.wellId);
+
 		$routeParams.wellId = +$routeParams.wellId;
 		const wellId = $routeParams.wellId;
 

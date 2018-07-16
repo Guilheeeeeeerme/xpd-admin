@@ -3,23 +3,22 @@
 
 // angular.module('xpd.reports').config(reportConfig);
 
-import OperationViewOnlyTemplate from './operation-view-only.html';
+import OperationViewOnlyTemplate from './components/operation-view-only/operation-view-only.template.html';
 
-export class OperationConfig {
-	public static $inject = ['$routeProvider'];
+OperationConfig.$inject = ['$routeProvider'];
 
-	constructor($routeProvider) {
+function OperationConfig($routeProvider) {
 
-		$routeProvider.when('/', {
-			template: OperationViewOnlyTemplate,
-			controller: 'OperationViewOnlyController as ovoController',
-		});
+	$routeProvider.when('/', {
+		template: OperationViewOnlyTemplate,
+		controller: 'OperationViewOnlyController as ovoController',
+	});
 
-		$routeProvider.when('/:operationId', {
-			template: OperationViewOnlyTemplate,
-			controller: 'OperationViewOnlyController as ovoController',
-		});
-
-	}
+	$routeProvider.when('/:operationId', {
+		template: OperationViewOnlyTemplate,
+		controller: 'OperationViewOnlyController as ovoController',
+	});
 
 }
+
+export { OperationConfig };

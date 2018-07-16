@@ -43,12 +43,6 @@ export class XPDSetupFormInputDirective implements ng.IDirective {
 	};
 	public template = template;
 
-	public link(scope: any) {
-		setInterval(function () {
-			console.log('guilherme', scope);
-		}, 1000);
-	}
-
 	public static Factory(): ng.IDirectiveFactory {
 		const directive = () => new XPDSetupFormInputDirective();
 		return directive;
