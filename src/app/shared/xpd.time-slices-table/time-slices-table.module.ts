@@ -10,4 +10,4 @@ import { TimeSlicesTableDirective } from './time-slices-table.directive';
 const XPDTimeSliceModule: angular.IModule = angular.module('xpd.time-slices-table', []);
 export  { XPDTimeSliceModule };
 
-XPDTimeSliceModule.directive('timeSlicesTable', TimeSlicesTableDirective.Factory());
+XPDTimeSliceModule.directive('xpdTimeSlicesTable', TimeSlicesTableDirective.Factory());

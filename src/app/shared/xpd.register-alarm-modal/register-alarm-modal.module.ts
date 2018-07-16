@@ -4,4 +4,4 @@ import { RegisterAlarmModalDirective } from './register-alarm-modal.directive';
 const XPDRegisterAlarmModule: angular.IModule = angular.module('xpd.register-alarm-form', []);
 export  { XPDRegisterAlarmModule };
 
-XPDRegisterAlarmModule.directive('registerAlarmModal', RegisterAlarmModalDirective.Factory());
+XPDRegisterAlarmModule.directive('xpdRegisterAlarmModal', RegisterAlarmModalDirective.Factory());

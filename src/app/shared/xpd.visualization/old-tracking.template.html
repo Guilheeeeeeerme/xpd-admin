@@ -7,7 +7,7 @@
             </div>
             <div class="xpd-chart-container-content">
                 <div ng-if="currentOperation && currentOperation.running && currentEvent != null"
-                    class="xpd-chart" times='connectionTimes' max-seconds="175" max-bars="200" selected-event="selectedEvent"
+                    class="xpd-chart" xpd-times='connectionTimes' max-seconds="175" max-bars="200" selected-event="selectedEvent"
                     action-open-dropdown-menu="actionOpenDropdownMenu">
                 </div>
 
@@ -25,7 +25,7 @@
 
             <div class="xpd-chart-container-content">
                 <div ng-if="currentOperation && currentOperation.running && currentEvent != null"
-                    class="xpd-chart" times='tripTimes' max-seconds="100" max-bars="200" action-open-dropdown-menu="actionOpenDropdownMenu"
+                    class="xpd-chart" xpd-times='tripTimes' max-seconds="100" max-bars="200" action-open-dropdown-menu="actionOpenDropdownMenu"
                     selected-event="selectedEvent">
 
                 </div>
@@ -147,7 +147,7 @@
 
         <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 speed-gauge-chart-container">
 
-            <div speed-gauge class="speed-gauge-chart"
+            <div xpd-speed-gauge class="speed-gauge-chart"
                 has-alarm="flags.hasAlarm"
                 has-message="flags.hasMessage"
                 readings='currentReading'
@@ -160,7 +160,7 @@
 
         <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 trip-ruler-chart-container">
 
-            <div trip-ruler show-slow-down="flags.showSlowDown" class="trip-ruler-chart" readings='currentReading'
+            <div xpd-trip-ruler show-slow-down="flags.showSlowDown" class="trip-ruler-chart" readings='currentReading'
                 calculated='currentCalculated' current-event="{{currentEvent}}"
                 operation='currentOperation' expected-changing="changingStatesList"
                 expected-alarm-changing="changingAlarmsList" unreachable="unreachable">
@@ -170,7 +170,7 @@
 
         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 in-slips-chart-container">
 
-            <div in-slips class="in-slips-chart" calculated='currentTimeCalculated' target='currentOperation.inSlips'>
+            <div xpd-in-slips class="in-slips-chart" calculated='currentTimeCalculated' target='currentOperation.inSlips'>
             </div>
         </div>
 
@@ -181,7 +181,7 @@
         class="event-conn-container">
 
         <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8 conn-ruler-chart-container">
-            <div conn-ruler class=" conn-ruler-chart" chronometer="( currentTick / 1000 )" vtarget-duration='taskExpectedDuration' time-blocks="timeBlocks"
+            <div xpd-conn-ruler class=" conn-ruler-chart" chronometer="( currentTick / 1000 )" vtarget-duration='taskExpectedDuration' time-blocks="timeBlocks"
                 flash-go-div="dController.flashGoDiv">
             </div>
 
@@ -189,7 +189,7 @@
 
         <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 trip-ruler-chart-container">
 
-            <div trip-ruler show-slow-down="flags.showSlowDown" class=" trip-ruler-chart" readings='currentReading'
+            <div xpd-trip-ruler show-slow-down="flags.showSlowDown" class=" trip-ruler-chart" readings='currentReading'
                 calculated='currentCalculated' current-event="{{currentEvent}}"
                 operation='currentOperation'>
             </div>
@@ -203,7 +203,7 @@
         class="event-conn-container">
 
         <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8 conn-ruler-chart-container">
-            <div conn-ruler class=" conn-ruler-chart" chronometer="( currentTick / 1000 )" vtarget-duration='taskExpectedDuration' time-blocks="timeBlocks"
+            <div xpd-conn-ruler class=" conn-ruler-chart" chronometer="( currentTick / 1000 )" vtarget-duration='taskExpectedDuration' time-blocks="timeBlocks"
                 flash-go-div="dController.flashGoDiv">
             </div>
 
@@ -211,7 +211,7 @@
 
         <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 trip-ruler-chart-container">
 
-            <div trip-ruler show-slow-down="flags.showSlowDown" class=" trip-ruler-chart" readings='currentReading'
+            <div xpd-trip-ruler show-slow-down="flags.showSlowDown" class=" trip-ruler-chart" readings='currentReading'
                 calculated='currentCalculated' current-event="{{currentEvent}}"
                 operation='currentOperation'>
             </div>

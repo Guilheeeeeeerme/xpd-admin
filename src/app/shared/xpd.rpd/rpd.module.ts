@@ -5,4 +5,4 @@ const XPDRPDModule: angular.IModule  = angular.module('xpd.rpd-form', []);
 
 export { XPDRPDModule };
 
-XPDRPDModule.directive('rpdForm', XPDRPDFormDirective.Factory());
+XPDRPDModule.directive('xpdRpdForm', XPDRPDFormDirective.Factory());

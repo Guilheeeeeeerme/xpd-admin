@@ -7,14 +7,14 @@
     </div>
 
     <div class="col-md-12 panel panel-default" >
-        <operation-contract-info-table operation="dados.operation"  class="table table-condensed" state="Open Sea" state-id="openSea"
+        <xpd-operation-contract-info-table operation="dados.operation"  class="table table-condensed" state="Open Sea" state-id="openSea"
             contract-params="dados.operation.contractParams" trip-unit="m/h" trip-required conn-unit="Con/h"
             conn-required contract-form="operationController.contract"
             ui-popover="htmlPopover"/>
     </div>
 
     <div class="col-md-12 panel panel-default" >
-        <operation-contract-info-table operation="dados.operation"  class="table table-condensed" state="Cased Well" state-id="cased"
+        <xpd-operation-contract-info-table operation="dados.operation"  class="table table-condensed" state="Cased Well" state-id="cased"
             contract-params="dados.operation.contractParams" trip-unit="m/h" trip-required conn-unit="Con/h"
             conn-required contract-form="operationController.contract"
             ui-popover="htmlPopover"/>
@@ -22,21 +22,21 @@
 
     <div class="col-md-12 panel panel-default">
             <!-- safety-based="true" -->
-        <operation-contract-info-table operation="dados.operation"  class="table table-condensed" state="Open Hole" 
+        <xpd-operation-contract-info-table operation="dados.operation"  class="table table-condensed" state="Open Hole" 
             state-id="openHole" contract-params="dados.operation.contractParams" trip-unit="m/h" trip-required
             conn-unit="Con/h" conn-required contract-form="operationController.contract"
             ui-popover="htmlPopover"/>
     </div>
 
     <div class="col-md-12 panel panel-default">
-        <operation-contract-info-table operation="dados.operation"  class="table table-condensed" state="Drilling Run" state-id="drilling"
+        <xpd-operation-contract-info-table operation="dados.operation"  class="table table-condensed" state="Drilling Run" state-id="drilling"
             contract-params="dados.operation.contractParams" trip-unit="m/h" trip-required conn-unit="Con/h"
             conn-required contract-form="operationController.contract"
             ui-popover="htmlPopover"/>
     </div>
 
     <!-- <div class="col-md-12 panel panel-default">
-        <operation-contract-info-table operation="dados.operation"  class="table table-condensed" state="Break DP Per Unit"
+        <xpd-operation-contract-info-table operation="dados.operation"  class="table table-condensed" state="Break DP Per Unit"
           state-id="inBreakDPInterval" contract-params="dados.operation.contractParams" trip-unit="m/h"
           trip-required conn-unit="Jt/h" conn-required contract-form="operationController.contract"
           ui-popover="htmlPopover"/>
@@ -60,7 +60,7 @@
                 <td>Make Up</td>
 
                 <td ng-class="{ 'has-error': operationController.contract.makeUpSpeedVoptimum.$invalid }">
-                    <contract-time-input 
+                    <xpd-contract-time-input 
                         required="true"
                         min="{{ dados.operation.contractParams.makeUpSpeed.vstandard }}" 
                         ng-model="dados.operation.contractParams.makeUpSpeed.voptimum"
@@ -70,7 +70,7 @@
                 </td>
 
                 <td ng-class="{ 'has-error': operationController.contract.makeUpSpeedVstandard.$invalid }">
-                    <contract-time-input  
+                    <xpd-contract-time-input  
                         required="true"
                         min="{{ dados.operation.contractParams.makeUpSpeed.vpoor }}" 
                         max="{{ dados.operation.contractParams.makeUpSpeed.voptimum }}" 
@@ -81,7 +81,7 @@
                 </td>
 
                 <td ng-class="{ 'has-error': operationController.contract.makeUpSpeedVpoor.$invalid }">
-                    <contract-time-input                    
+                    <xpd-contract-time-input                    
                         required="true"
                         min="0" 
                         max="{{ dados.operation.contractParams.makeUpSpeed.vstandard }}" 
@@ -133,7 +133,7 @@
                 <td>Lay Down</td>
 
                 <td ng-class="{ 'has-error': operationController.contract.layDownSpeedVoptimum.$invalid }">
-                    <contract-time-input                 
+                    <xpd-contract-time-input                 
                         required="true" 
                         min="{{ dados.operation.contractParams.layDownSpeed.vstandard }}" 
                         ng-model="dados.operation.contractParams.layDownSpeed.voptimum"
@@ -143,7 +143,7 @@
                 </td>
 
                 <td ng-class="{ 'has-error': operationController.contract.layDownSpeedVstandard.$invalid }">
-                    <contract-time-input 
+                    <xpd-contract-time-input 
                         required="true" 
                         max="{{ dados.operation.contractParams.layDownSpeed.voptimum }}" 
                         min="{{ dados.operation.contractParams.layDownSpeed.vpoor }}" 
@@ -154,7 +154,7 @@
                 </td>
 
                 <td ng-class="{ 'has-error': operationController.contract.layDownSpeedVpoor.$invalid }">
-                    <contract-time-input 
+                    <xpd-contract-time-input 
                         required="true" 
                         max="{{ dados.operation.contractParams.layDownSpeed.vstandard }}" 
                         min="0" 

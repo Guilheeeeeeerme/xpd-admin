@@ -1,7 +1,7 @@
 <form name="operationController.contract" type="text/ng-template" id="riser-contract-info.template.html">
 
     <div class="col-md-12 panel panel-default">
-        <operation-contract-info-table operation="dados.operation" 
+        <xpd-operation-contract-info-table operation="dados.operation" 
                 class="table table-condensed"
                 state="Ascent Riser"
                 state-id="ascentRiser"
@@ -15,7 +15,7 @@
     </div>
 
     <div class="col-md-12 panel panel-default">
-        <operation-contract-info-table operation="dados.operation" 
+        <xpd-operation-contract-info-table operation="dados.operation" 
                 class="table table-condensed"
                 state="Descent Riser"
                 state-id="descendRiser"
@@ -47,7 +47,7 @@
                 <td>Make Up</td>
 
                 <td ng-class="{ 'has-error': operationController.contract.makeUpSpeedVoptimum.$invalid }">
-                    <contract-time-input 
+                    <xpd-contract-time-input 
                         required="true" 
                         ng-model="dados.operation.contractParams.makeUpSpeed.voptimum"
                         min="{{dados.operation.contractParams.makeUpSpeed.vstandard}}"
@@ -57,7 +57,7 @@
                 </td>
 
                 <td ng-class="{ 'has-error': operationController.contract.makeUpSpeedVstandard.$invalid }">
-                    <contract-time-input 
+                    <xpd-contract-time-input 
                         required="true" 
                         ng-model="dados.operation.contractParams.makeUpSpeed.vstandard"
                         min="{{dados.operation.contractParams.makeUpSpeed.vpoor}}"
@@ -68,7 +68,7 @@
                 </td>
 
                 <td ng-class="{ 'has-error': operationController.contract.makeUpSpeedVpoor.$invalid }">
-                    <contract-time-input 
+                    <xpd-contract-time-input 
                         required="true" 
                         ng-model="dados.operation.contractParams.makeUpSpeed.vpoor"
                         max="{{dados.operation.contractParams.makeUpSpeed.vstandard}}"
@@ -120,7 +120,7 @@
                 <td>Lay Down</td>
 
                 <td ng-class="{ 'has-error': operationController.contract.layDownSpeedVoptimum.$invalid }">
-                    <contract-time-input 
+                    <xpd-contract-time-input 
                         required="true" 
                         ng-model="dados.operation.contractParams.layDownSpeed.voptimum"
                         min="{{dados.operation.contractParams.layDownSpeed.vstandard}}"
@@ -130,7 +130,7 @@
                 </td>
 
                 <td ng-class="{ 'has-error': operationController.contract.layDownSpeedVstandard.$invalid }">
-                    <contract-time-input 
+                    <xpd-contract-time-input 
                         required="true" 
                         ng-model="dados.operation.contractParams.layDownSpeed.vstandard"
                         max="{{dados.operation.contractParams.layDownSpeed.voptimum}}"
@@ -141,7 +141,7 @@
                 </td>
 
                 <td ng-class="{ 'has-error': operationController.contract.layDownSpeedVpoor.$invalid }">
-                    <contract-time-input 
+                    <xpd-contract-time-input 
                         required="true"
                         ng-model="dados.operation.contractParams.layDownSpeed.vpoor"
                         min="0"

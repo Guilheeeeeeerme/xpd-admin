@@ -4,7 +4,7 @@ import { ContractTimeInputDirective } from './contract-time-input.directive';
 const XPDContractTimeInputModule: angular.IModule  = angular.module('xpd.contractTimeInput', []);
 export { XPDContractTimeInputModule };
 
-XPDContractTimeInputModule.directive('contractTimeInput', ContractTimeInputDirective.Factory());
+XPDContractTimeInputModule.directive('xpdContractTimeInput', ContractTimeInputDirective.Factory());
 
 // (function() {
 

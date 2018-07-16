@@ -77,7 +77,7 @@
                     Operation Progress
                 </div>
                 <div class="xpd-chart-container-content" ng-if="dados.settings[dados.selectedState][dados.selectedEventType].stateName && operationData.operationProgressContext.operationProgressData[dados.settings[dados.selectedState][dados.selectedEventType].stateName]">
-                    <div class="xpd-chart" operation-progress-chart progress-data="operationData.operationProgressContext.operationProgressData[dados.settings[dados.selectedState][dados.selectedEventType].stateName]"
+                    <div class="xpd-chart" xpd-operation-progress-chart progress-data="operationData.operationProgressContext.operationProgressData[dados.settings[dados.selectedState][dados.selectedEventType].stateName]"
                         progress-data-delay="operationData.operationProgressContext.progressDataDelay"></div>
 
 
@@ -117,7 +117,7 @@
                     <div 
                         class="xpd-chart" 
                         is-tripin = "operationData.suboperationContext.currentSuboperation.tripin"
-                        forecast-line settings='dados.settings' 
+                        xpd-forecast-line settings='dados.settings' 
                         state="{{dados.selectedState}}" 
                         type="{{dados.selectedEventType}}"
                         v-target-line="operationData.forecastContext.vTargetEstimative" 
@@ -128,7 +128,7 @@
                     <div 
                         class="xpd-chart" 
                         is-tripin = "operationData.suboperationContext.currentSuboperation.tripin"
-                        forecast-line settings='dados.settings' 
+                        xpd-forecast-line settings='dados.settings' 
                         state="{{dados.selectedState}}" 
                         type="{{ 'BOTH' }}" 
                         v-target-line="operationData.forecastContext.vTargetEstimative"

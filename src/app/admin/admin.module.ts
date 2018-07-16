@@ -47,7 +47,7 @@ XPDAdminModule.controller('AlarmModalUpsertController', AlarmModalUpsertControll
 XPDAdminModule.controller('AlarmController', AlarmController);
 XPDAdminModule.service('alarmCRUDService', AlarmCRUDService);
 XPDAdminModule.controller('MemberSchedulerController', MemberSchedulerController);
-XPDAdminModule.directive('memberScheduler', MemberSchedulerDirective.Factory());
+XPDAdminModule.directive('xpdMemberScheduler', MemberSchedulerDirective.Factory());
 XPDAdminModule.service('schedulerActionsService', SchedulerActionsService);
 XPDAdminModule.controller('UpsertFunctionController', UpsertFunctionController);
 XPDAdminModule.controller('UpsertMemberController', UpsertMemberController);
@@ -72,5 +72,5 @@ XPDAdminModule.controller('ReportsController', ReportsController);
 XPDAdminModule.controller('RpdController', RPDController);
 XPDAdminModule.controller('TeamController', TeamController);
 XPDAdminModule.controller('TrackingUpdateTimesController', TrackingUpdateTimesController);
-XPDAdminModule.directive('savedAlarmsList', SavedAlarmsListDirectives.Factory());
-XPDAdminModule.directive('vreListTable', VREListTableDirective.Factory());
+XPDAdminModule.directive('xpdSavedAlarmsList', SavedAlarmsListDirectives.Factory());
+XPDAdminModule.directive('xpdVreListTable', VREListTableDirective.Factory());

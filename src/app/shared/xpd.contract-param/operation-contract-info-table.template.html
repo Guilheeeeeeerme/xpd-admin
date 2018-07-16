@@ -223,7 +223,7 @@
                     {{connRequired==="true"?"*":""}}</td>
 
                 <td ng-class="{ 'has-error': contractForm[stateId+'ConnectionSpeedVOptimum'].$invalid }">
-                   <contract-time-input
+                   <xpd-contract-time-input
                         id="{{stateId}}-contract-info-voptimum"
                         name="{{stateId}}ConnectionSpeedVOptimum"
                         ng-model="contractParams[stateId+'ConnectionSpeed'].voptimum"
@@ -234,7 +234,7 @@
                 </td>
                 
                 <td ng-class="{ 'has-error': contractForm[stateId+'ConnectionSpeedVStandard'].$invalid }">
-                    <contract-time-input
+                    <xpd-contract-time-input
                         id="{{stateId}}-contract-info-vstandard"
                         name="{{stateId}}ConnectionSpeedVStandard"
                         max="{{contractParams[stateId+'ConnectionSpeed'].voptimum}}"
@@ -247,7 +247,7 @@
 
                 <td ng-class="{ 'has-error': contractForm[stateId+'ConnectionSpeedVPoor'].$invalid }">
                     
-                    <contract-time-input
+                    <xpd-contract-time-input
                         id="{{stateId}}-contract-info-vpoor"
                         name="{{stateId}}ConnectionSpeedVPoor"
                         max="{{contractParams[stateId+'ConnectionSpeed'].vstandard}}"

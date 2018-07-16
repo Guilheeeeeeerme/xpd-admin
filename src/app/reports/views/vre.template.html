@@ -3,7 +3,7 @@
 <div class="row">
 	<div 
 		class="col-md-6 col-md-offset-6"
-		table-period
+		xpd-table-period
 		function-change-period="vController.onClickFilterButton"
 		initial-date="reportsData.fromDate"
 		final-date="reportsData.toDate">
@@ -12,7 +12,7 @@
 
 <div ng-if="vreData.vreList && vreData.vreList.length>0"
 	class="col-md-12"
-	vre-bar-chart
+	xpd-vre-bar-chart
 	period="vreData.period"
 	vre-list-data="vreData.vreList"
 	vre-daily-data="vreData.vreDaily">

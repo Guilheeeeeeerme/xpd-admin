@@ -19,7 +19,7 @@
                 <td>Time limits</td>
 
                 <td ng-class="{ 'has-error': operationController.contract.timeSpeed.voptimum.$invalid  && !operationController.contract.timeSpeed.voptimum.$pristine }">
-                    <contract-time-input 
+                    <xpd-contract-time-input 
                         ng-model="dados.operation.contractParams.timeSpeed.voptimum"
                         name="timeSpeed.voptimum" 
                         id="timeSpeed.voptimum"
@@ -29,7 +29,7 @@
                 </td>
 
                 <td ng-class="{ 'has-error': operationController.contract.timeSpeed.vstandard.$invalid  && !operationController.contract.timeSpeed.vstandard.$pristine }">
-                    <contract-time-input 
+                    <xpd-contract-time-input 
                         ng-model="dados.operation.contractParams.timeSpeed.vstandard"
                         name="timeSpeed.vstandard" 
                         id="timeSpeed.vstandard"
@@ -39,7 +39,7 @@
                 </td>
 
                 <td ng-class="{ 'has-error': operationController.contract.timeSpeed.vpoor.$invalid  && !operationController.contract.timeSpeed.vpoor.$pristine }">
-                    <contract-time-input 
+                    <xpd-contract-time-input 
                         ng-model="dados.operation.contractParams.timeSpeed.vpoor" 
                         name="timeSpeed.vpoor"
                         id="timeSpeed.vpoor"
