@@ -19,7 +19,7 @@ import { FailureNavBarDirective } from './failure-nav-bar.directive';
 const XPDFailureNavBarController: angular.IModule  = angular.module('xpd.failure-controller', []);
 export { XPDFailureNavBarController };
 
-XPDFailureNavBarController.directive('failureNavBar', FailureNavBarDirective.Factory());
+XPDFailureNavBarController.directive('xpdFailureNavBar', FailureNavBarDirective.Factory());
 XPDFailureNavBarController.controller('FailuresController', FailuresController);
 XPDFailureNavBarController.controller('LessonLearnedController', LessonLearnedController);
 XPDFailureNavBarController.controller('TabsFailureLLCtrl', TabsFailureLLCtrl);

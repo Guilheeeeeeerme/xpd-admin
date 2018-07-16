@@ -3,33 +3,33 @@
     <div class="container-fluid scrollable-content">
 
         <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8 scrollable-content" ng-controller="AdminTrackingController as atController">
-            <dmec-tracking current-operation="operationData.operationContext.currentOperation" current-event="operationData.eventContext.currentEvent"
+            <xpd-dmec-tracking current-operation="operationData.operationContext.currentOperation" current-event="operationData.eventContext.currentEvent"
                 current-tick="operationData.chronometerContext.tick" current-block-position="operationData.readingContext.currentReading.blockPosition"
                 current-reading="operationData.readingContext.currentReading" connection-events="dados.connectionEvents" trip-events="dados.tripEvents"
                 time-events="dados.timeEvents" selected-point="odController.selectedPoint" last-selected-point="lastSelectedPoint" remove-marker="removeMarker">
-            </dmec-tracking>
+            </xpd-dmec-tracking>
         </div>
 
         <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4 scrollable-content">
 
-            <channels-information-panel
-+                on-init="odController.getPanelStartState" 
-+                on-click-collapse="odController.changePanelState"
-+                collapse = "statusPanel['panelChanelsIsCollapsed']"
-+                readings="selectedReadings"
-+                remove-reading= "odController.removeReadingFromList">
-+            </channels-information-panel>
+            <xpd-channels-information-panel
+                on-init="odController.getPanelStartState" 
+                on-click-collapse="odController.changePanelState"
+                collapse = "statusPanel['panelChanelsIsCollapsed']"
+                readings="selectedReadings"
+                remove-reading= "odController.removeReadingFromList">
+            </xpd-channels-information-panel>
 
             <!-- Well Information -->
-            <well-information-panel
+            <xpd-well-information-panel
                 on-init="odController.getPanelStartState" 
                 on-click-collapse="odController.changePanelState"
                 collapse = "statusPanel['panelWellIsCollapsed']"
                 well="operationData.wellContext.currentWell">
-            </well-information-panel>
+            </xpd-well-information-panel>
 
             <!-- Operation Information -->
-            <operation-information-panel
+            <xpd-operation-information-panel
                 on-init="odController.getPanelStartState"
                 on-click-collapse="odController.changePanelState"
                 collapse = "statusPanel['panelOperationInfoIsCollapsed']"
@@ -45,10 +45,10 @@
                 standard-expected-duration="expectations.vStandardStateExpectedDuration"
                 poor-expected-duration="expectations.vPoorStateExpectedDuration"
                 well="operationData.wellContext.currentWell">
-            </operation-information-panel>
+            </xpd-operation-information-panel>
 
             <!-- Consistency Information -->
-            <consistency-information-panel
+            <xpd-consistency-information-panel
                 on-init="odController.getPanelStartState"
                 on-click-collapse="odController.changePanelState"
                 collapse= "statusPanel['panelConsistencyInfoIsCollapsed']"
@@ -62,10 +62,10 @@
                 last-trip-duration="lastTripDuration"
                 last-conn-duration="lastConnDuration"
                 event-property="eventProperty">
-            </consistency-information-panel>
+            </xpd-consistency-information-panel>
 
             <!-- Next Activities Information -->
-            <next-activities-information-panel
+            <xpd-next-activities-information-panel
                 on-init="odController.getPanelStartState"
                 on-click-collapse="odController.changePanelState"
                 collapse = "statusPanel['panelNextActivityIsCollapsed']"
@@ -73,15 +73,15 @@
                 initial-planning="operationData.suboperationContext.currentSuboperation.jointIntervals"
                 operation="operationData.operationContext.currentOperation"
                 activities="expectations.nextActivities">
-            </next-activities-information-panel>
+            </xpd-next-activities-information-panel>
 
-            <operation-progress-panel
+            <xpd-operation-progress-panel
                 on-init="odController.getPanelStartState"
                 on-click-collapse="odController.changePanelState"
                 collapse = "statusPanel['panelOperationProgressIsCollapsed']"
                 current-score="operationData.scoreContext.currentScore" 
                 progress-data="operationData.operationProgressContext.operationProgressData[operationData.stateContext.currentState]">
-            </operation-progress-panel>
+            </xpd-operation-progress-panel>
 
             <div class="panel panel-default">
 
@@ -108,8 +108,8 @@
                         Poor
                     </button>
 
-                    <forecast-waterfall horizontal="false" data-data-chart="forecast">
-                    </forecast-waterfall>
+                    <xpd-forecast-waterfall horizontal="false" data-data-chart="forecast">
+                    </xpd-forecast-waterfall>
 
                 </div>
 
@@ -162,9 +162,9 @@
 
             </div>
 
-            <upcoming-alarms-panel tripin-alarms="operationData.alarmContext.tripin" tripout-alarms="operationData.alarmContext.tripout"
+            <xpd-upcoming-alarms-panel tripin-alarms="operationData.alarmContext.tripin" tripout-alarms="operationData.alarmContext.tripout"
                 current-direction="operationData.directionContext" current-bit-depth="operationData.bitDepthContext.bitDepth">
-            </upcoming-alarms-panel>
+            </xpd-upcoming-alarms-panel>
 
             <!-- Failures -->
             <div class="panel panel-default">

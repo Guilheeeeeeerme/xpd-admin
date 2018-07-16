@@ -3,7 +3,7 @@
 
 	<div class="row">
 		<div class="col-md-6 col-md-offset-6"
-			table-period initial-date="reportsData.fromDate"
+			xpd-table-period initial-date="reportsData.fromDate"
 			final-date="reportsData.toDate"
 			function-change-period="llController.onClickFilterButton">
 		</div>
@@ -15,13 +15,13 @@
 		<div class="row failure-report-chart">
 
 			<div class="col-md-5"
-				lessons-learned-chart
+				xpd-lessons-learned-chart
 				chart-data="llController.chartDonut.data"
 				chart-title="llController.chartDonut.title">
 			</div>
 
 			<div class="col-md-7"
-				lessons-pareto-chart
+				xpd-lessons-pareto-chart
 				chart-data="llController.chartPareto.data"
 				chart-title="llController.chartDonut.title">
 			</div>

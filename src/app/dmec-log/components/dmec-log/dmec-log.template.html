@@ -79,9 +79,9 @@
 
 </nav>
 
-<time-zoom-tool ng-if="zoomStartAt && zoomEndAt" zoom-start-at="zoomStartAt" zoom-end-at="zoomEndAt" set-zoom="setZoom">
-</time-zoom-tool>
+<xpd-time-zoom-tool ng-if="zoomStartAt && zoomEndAt" zoom-start-at="zoomStartAt" zoom-end-at="zoomEndAt" set-zoom="setZoom">
+</xpd-time-zoom-tool>
 
-<d3-dmec-chart ng-if="dmecTrackingStartAt && zoomStartAt && zoomEndAt" threads="4" horizontal="false" on-reading-since="onReadingSince"
+<xpd-d3-dmec-chart ng-if="dmecTrackingStartAt && zoomStartAt && zoomEndAt" threads="4" horizontal="false" on-reading-since="onReadingSince"
     actual-start-at="dmecTrackingStartAt" on-reading="onReading" zoom-start-at="zoomStartAt" zoom-end-at="zoomEndAt">
-</d3-dmec-chart>
+</xpd-d3-dmec-chart>

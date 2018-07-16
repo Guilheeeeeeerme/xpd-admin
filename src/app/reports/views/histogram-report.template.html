@@ -4,7 +4,7 @@
 
 <div class="row">
 	<div class="col-md-6 col-md-offset-6"
-		table-period initial-date="reportsData.fromDate"
+		xpd-table-period initial-date="reportsData.fromDate"
 		final-date="reportsData.toDate"
 		function-change-period="hrController.actionFilterButton">
 	</div>
@@ -20,7 +20,7 @@
 			<div ng-if="type.activities && type.activities.length>0" 
 				ng-repeat="activity in type.activities track by $index"
 				class="col-md-{{hrController.getColSize()}} histogram-report-col">
-				<div event-duration-histogram chart-data="activity"></div>
+				<div xpd-event-duration-histogram chart-data="activity"></div>
 			</div>
 		</div>
 	</div>

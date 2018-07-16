@@ -73,7 +73,7 @@
                             <div class="form-group" ng-class="{ 'has-error': operationController.info.voptimum.$invalid  && !operationController.info.voptimum.$pristine }">
                                 <label for="voptimum">Optimum Time*</label>
     
-                                <contract-time-input
+                                <xpd-contract-time-input
                                     at-most= "Standard Time"
                                     min= "{{dados.operation.contractParams.timeSpeed.vstandard}}"
                                     contract-time-form= "operationController.info"
@@ -89,7 +89,7 @@
                             <div class="form-group" ng-class="{ 'has-error': operationController.info.vstandard.$invalid  && !operationController.info.vstandard.$pristine }">
                                 <label for="vstandard">Standard Time*</label>
     
-                                <contract-time-input
+                                <xpd-contract-time-input
                                     at-least= "Optimum Time"
                                     at-most= "Poor Time"
                                     min= "{{dados.operation.contractParams.timeSpeed.vpoor}}"
@@ -107,7 +107,7 @@
                             <div class="form-group" ng-class="{ 'has-error': operationController.info.vpoor.$invalid  && !operationController.info.vpoor.$pristine }">
                                 <label for="vpoor">Poor Time*</label>
     
-                                <contract-time-input
+                                <xpd-contract-time-input
                                     at-least= "Standard Time"
                                     max= "{{dados.operation.contractParams.timeSpeed.vstandard}}"
                                     ng-model="dados.operation.contractParams.timeSpeed.vpoor"
@@ -134,13 +134,13 @@
             <div class="row" ng-show="dados.operation.contractParams.timeSpeed.voptimum != null">
                 <div class="col-md-12">
 
-                    <time-slices-table
+                    <xpd-time-slices-table
                         ng-init="dados.operation.timeSlices = ( dados.operation.timeSlices | filter: { tripin: true } )"
                         name = "leftPercentage"
                         time-slice-form = "operationController.info"
                         ng-model = "dados.operation.timeSlices"
                         duration = "{{3600 / dados.operation.contractParams.timeSpeed.voptimum}}">
-                    </time-slices-table>
+                    </xpd-time-slices-table>
                    
                 </div>
             </div>

@@ -351,14 +351,14 @@
     padding: 0px;
 }
 
-.speed-gauge-container > speed-gauge {
+.speed-gauge-container > xpd-speed-gauge {
     display: block;
     height: 100%;
     max-height: 100%;
     min-height: 100%;
 }
 
-.speed-gauge-container > speed-gauge > svg {
+.speed-gauge-container > xpd-speed-gauge > svg {
     padding-top: 50px;
     padding-bottom: 50px;
 }

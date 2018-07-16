@@ -12,7 +12,7 @@
 
         <div ng-if="team.teams != null && team.teams.length > 0"
              class="col-xs-6 col-sm-4 col-md-3 xpd-chart-container-content" ng-repeat="value in team.teams">
-            <div member-performance member="value">
+            <div xpd-member-performance member="value">
             </div>
         </div>
 
@@ -26,7 +26,7 @@
 
         <div ng-if="team.members != null && team.members.length > 0"
              class="col-xs-6 col-sm-4 col-md-3 xpd-chart-container-content" ng-repeat="value in team.members">
-            <div member-performance member="value">
+            <div xpd-member-performance member="value">
             </div>
         </div>
 

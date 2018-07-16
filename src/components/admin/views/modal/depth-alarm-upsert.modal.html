@@ -1,6 +1,6 @@
 <form name="amuController.alarmForm" accept-charset="utf-8">
 
-    <register-alarm-modal
+    <xpd-register-alarm-modal
         alarm="alarm"
         operation= "operation"
         alarm-type = "depth"
@@ -8,13 +8,13 @@
         alarm-form="amuController.alarmForm"
         action-save-alarm= "amuController.actionButtonSave"
         action-cancel-alarm= "amuController.actionButtonClose">
-    </register-alarm-modal>
+    </xpd-register-alarm-modal>
 
 </form>
 
 <script type="text/ng-template" id="/alarm-info-upsert-optimum-time.html">
 
-    <contract-time-input 
+    <xpd-contract-time-input 
         id='optimumTime' 
         disabled="{{alarm.startDepth != alarm.endDepth}}"
         required="{{alarm.startDepth == alarm.endDepth}}" 

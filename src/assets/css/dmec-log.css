@@ -8,7 +8,7 @@ body {
 	margin: 0;
 }
 
-d3-dmec-chart {
+xpd-d3-dmec-chart {
 	display: block;
 	z-index: 8;
 	height: 90vh;
@@ -18,7 +18,7 @@ d3-dmec-chart {
 	background: black;
 }
 
-time-zoom-tool {
+xpd-time-zoom-tool {
 	z-index: 10;
 	position: absolute;
 	bottom: 0;

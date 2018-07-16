@@ -1,28 +1,28 @@
 <form name="operationController.contract"  type="text/ng-template" id="casing-contract-info.template.html">
 
     <div class="col-md-12 panel panel-default">
-        <operation-contract-info-table operation="dados.operation"  class="table table-condensed" state="Casing" state-id="casing"
+        <xpd-operation-contract-info-table operation="dados.operation"  class="table table-condensed" state="Casing" state-id="casing"
           contract-params="dados.operation.contractParams" trip-unit="m/h" trip-required conn-unit="Conn/h"
           conn-required contract-form="operationController.contract"
           ui-popover="htmlPopover"/>
     </div>
 
     <div class="col-md-12 panel panel-default">
-        <operation-contract-info-table operation="dados.operation"  class="table table-condensed" state="Settlement String Trip"
+        <xpd-operation-contract-info-table operation="dados.operation"  class="table table-condensed" state="Settlement String Trip"
           state-id="settlementString" contract-params="dados.operation.contractParams" trip-unit="m/h"
           trip-required conn-unit="Conn/h" conn-required contract-form="operationController.contract"
           ui-popover="htmlPopover"/>
     </div>
 
     <div class="col-md-12 panel panel-default">
-        <operation-contract-info-table operation="dados.operation"  class="table table-condensed" state="Below Shoe Depth Trip"
+        <xpd-operation-contract-info-table operation="dados.operation"  class="table table-condensed" state="Below Shoe Depth Trip"
           state-id="belowShoeDepth" contract-params="dados.operation.contractParams" trip-unit="m/h"
           trip-required conn-unit="Conn/h" conn-required contract-form="operationController.contract"
           ui-popover="htmlPopover"/>
     </div>
 
     <!-- <div class="col-md-12 panel panel-default">
-        <operation-contract-info-table operation="dados.operation"  class="table table-condensed" state="Break DP Per Unit"
+        <xpd-operation-contract-info-table operation="dados.operation"  class="table table-condensed" state="Break DP Per Unit"
           state-id="inBreakDPInterval" contract-params="dados.operation.contractParams" trip-unit="m/h"
           trip-required conn-unit="Jt/h" conn-required contract-form="operationController.contract"
           ui-popover="htmlPopover"/>
@@ -46,7 +46,7 @@
                 <td>Cementing</td>
 
                 <td ng-class="{ 'has-error': operationController.contract.cementationSpeedVoptimum.$invalid }">
-                    <contract-time-input
+                    <xpd-contract-time-input
                         required="true" 
                         min="{{dados.operation.contractParams.cementationSpeed.vstandard}}"
                         ng-model="dados.operation.contractParams.cementationSpeed.voptimum"
@@ -56,7 +56,7 @@
                 </td>
 
                 <td ng-class="{ 'has-error': operationController.contract.cementationSpeedVstandard.$invalid }">
-                    <contract-time-input
+                    <xpd-contract-time-input
                         required="true" 
                         max="{{dados.operation.contractParams.cementationSpeed.voptimum}}"
                         min="{{dados.operation.contractParams.cementationSpeed.vpoor}}"
@@ -67,7 +67,7 @@
                 </td>
 
                 <td ng-class="{ 'has-error': operationController.contract.cementationSpeedVpoor.$invalid }">
-                    <contract-time-input
+                    <xpd-contract-time-input
                         required="true" 
                         max="{{dados.operation.contractParams.cementationSpeed.vstandard}}"
                         min="0"

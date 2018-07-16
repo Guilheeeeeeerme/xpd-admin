@@ -29,7 +29,7 @@ XPDSetupAPIModule.service('scheduleSetupAPIService', ScheduleSetupAPIService);
 XPDSetupAPIModule.service('reportsSetupAPIService', ReportsSetupAPIService);
 XPDSetupAPIModule.service('readingSetupAPIService', ReadingSetupAPIService);
 XPDSetupAPIModule.service('photoAPIService', PhotoAPIService);
-XPDSetupAPIModule.directive('photoApiDirective', PhotoApiDirective.Factory());
+XPDSetupAPIModule.directive('xpdPhotoApiDirective', PhotoApiDirective.Factory());
 XPDSetupAPIModule.service('operationSetupAPIService', OperationSetupAPIService);
 XPDSetupAPIModule.service('masterUserSetupAPIService', MasterUserSetupAPIService);
 XPDSetupAPIModule.service('lessonLearnedSetupAPIService', LessonLearnedSetupAPIService);

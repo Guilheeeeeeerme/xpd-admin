@@ -72,17 +72,17 @@
         <div class="container" ng-if="dados.operation.type == 'bha'">
             <div class="row">
                 <div class="col-md-12 panel panel-default" ng-if="!dados.operation.bopSetted">
-                    <operation-contract-info-table operation="dados.operation" class="table table-condensed" state="Open Sea" state-id="openSea"
+                    <xpd-operation-contract-info-table operation="dados.operation" class="table table-condensed" state="Open Sea" state-id="openSea"
                         contract-params="dados.contractParams" trip-unit="m/h" trip-required="false" conn-unit="Con/h" conn-required="true"
                         contract-form="ovoController.contract" view-only="true" ui-popover="htmlPopover" />
                 </div>
                 <div class="col-md-12 panel panel-default" ng-if="dados.operation.bopSetted">
-                    <operation-contract-info-table operation="dados.operation" class="table table-condensed" state="Cased Well" state-id="cased"
+                    <xpd-operation-contract-info-table operation="dados.operation" class="table table-condensed" state="Cased Well" state-id="cased"
                         contract-params="dados.contractParams" trip-unit="m/h" trip-required="false" conn-unit="Con/h" conn-required="true"
                         contract-form="ovoController.contract" view-only="true" ui-popover="htmlPopover" />
                 </div>
                 <div class="col-md-12 panel panel-default">
-                    <operation-contract-info-table operation="dados.operation" class="table table-condensed" state="Open Hole" state-id="openHole"
+                    <xpd-operation-contract-info-table operation="dados.operation" class="table table-condensed" state="Open Hole" state-id="openHole"
                         contract-params="dados.contractParams" trip-unit="m/h" trip-required="false" conn-unit="Con/h" conn-required="true"
                         contract-form="ovoController.contract" view-only="true" ui-popover="htmlPopover" />
                 </div>
@@ -90,12 +90,12 @@
 
             <div class="row">
                 <div class="col-md-12 panel panel-default">
-                    <operation-contract-info-table operation="dados.operation" class="table table-condensed" state="Drilling Run" state-id="drilling"
+                    <xpd-operation-contract-info-table operation="dados.operation" class="table table-condensed" state="Drilling Run" state-id="drilling"
                         contract-params="dados.contractParams" trip-unit="m/h" trip-required="false" conn-unit="Con/h" conn-required="true"
                         contract-form="ovoController.contract" view-only="true" ui-popover="htmlPopover" />
                 </div>
                 <!-- <div class="col-md-12 panel panel-default">
-                    <operation-contract-info-table operation="dados.operation"  class="table table-condensed" state="Break DP Per Unit"
+                    <xpd-operation-contract-info-table operation="dados.operation"  class="table table-condensed" state="Break DP Per Unit"
                            state-id="inBreakDPInterval" contract-params="dados.contractParams" trip-unit="m/h"
                            trip-required="true" conn-unit="Jt/h" conn-required="true"
                            contract-form="ovoController.contract" view-only="true"/>
@@ -121,17 +121,17 @@
                                 <td>Make Up</td>
 
                                 <td>
-                                    <contract-time-input disabled="true" ng-model="dados.contractParams.makeUpSpeed.voptimum" name="makeUpSpeedVoptimum" id="makeUpSpeed.voptimum">
+                                    <xpd-contract-time-input disabled="true" ng-model="dados.contractParams.makeUpSpeed.voptimum" name="makeUpSpeedVoptimum" id="makeUpSpeed.voptimum">
 
                                 </td>
 
                                 <td>
-                                    <contract-time-input disabled="true" ng-model="dados.contractParams.makeUpSpeed.vstandard" name="makeUpSpeedVstandard" id="makeUpSpeed.vstandard">
+                                    <xpd-contract-time-input disabled="true" ng-model="dados.contractParams.makeUpSpeed.vstandard" name="makeUpSpeedVstandard" id="makeUpSpeed.vstandard">
 
                                 </td>
 
                                 <td>
-                                    <contract-time-input disabled="true" ng-model="dados.contractParams.makeUpSpeed.vpoor" name="makeUpSpeedVpoor" id="makeUpSpeed.vpoor">
+                                    <xpd-contract-time-input disabled="true" ng-model="dados.contractParams.makeUpSpeed.vpoor" name="makeUpSpeedVpoor" id="makeUpSpeed.vpoor">
 
                                 </td>
 
@@ -156,18 +156,18 @@
                                 <td>Lay Down</td>
 
                                 <td>
-                                    <contract-time-input disabled="true" ng-model="dados.contractParams.layDownSpeed.voptimum" name="layDownSpeedVoptimum" id="layDownSpeed.voptimum">
+                                    <xpd-contract-time-input disabled="true" ng-model="dados.contractParams.layDownSpeed.voptimum" name="layDownSpeedVoptimum" id="layDownSpeed.voptimum">
 
                                 </td>
 
                                 <td>
-                                    <contract-time-input disabled="true" ng-model="dados.contractParams.layDownSpeed.vstandard" name="layDownSpeedVstandard"
+                                    <xpd-contract-time-input disabled="true" ng-model="dados.contractParams.layDownSpeed.vstandard" name="layDownSpeedVstandard"
                                         id="layDownSpeed.vstandard">
 
                                 </td>
 
                                 <td>
-                                    <contract-time-input disabled="true" ng-model="dados.contractParams.layDownSpeed.vpoor" name="layDownSpeedVpoor" id="layDownSpeed.vpoor">
+                                    <xpd-contract-time-input disabled="true" ng-model="dados.contractParams.layDownSpeed.vpoor" name="layDownSpeedVpoor" id="layDownSpeed.vpoor">
 
                                 </td>
 
@@ -198,24 +198,24 @@
         <div class="container" ng-if="dados.operation.type =='casing'">
             <div class="row">
                 <div class="col-md-12 panel panel-default">
-                    <operation-contract-info-table operation="dados.operation" class="table table-condensed" state="Casing" state-id="casing"
+                    <xpd-operation-contract-info-table operation="dados.operation" class="table table-condensed" state="Casing" state-id="casing"
                         contract-params="dados.contractParams" trip-unit="m/h" trip-required="false" conn-unit="Conn/h" conn-required="false"
                         contract-form="ovoController.contract" view-only="true" ui-popover="htmlPopover" />
                 </div>
                 <div class="col-md-12 panel panel-default">
-                    <operation-contract-info-table operation="dados.operation" class="table table-condensed" state="Settlement String Trip" state-id="settlementString"
+                    <xpd-operation-contract-info-table operation="dados.operation" class="table table-condensed" state="Settlement String Trip" state-id="settlementString"
                         contract-params="dados.contractParams" trip-unit="m/h" trip-required="false" conn-unit="Conn/h" conn-required="false"
                         contract-form="ovoController.contract" view-only="true" ui-popover="htmlPopover" />
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-12 panel panel-default">
-                    <operation-contract-info-table operation="dados.operation" class="table table-condensed" state="Below Shoe Depth Trip" state-id="belowShoeDepth"
+                    <xpd-operation-contract-info-table operation="dados.operation" class="table table-condensed" state="Below Shoe Depth Trip" state-id="belowShoeDepth"
                         contract-params="dados.contractParams" trip-unit="m/h" trip-required="false" conn-unit="Conn/h" conn-required="false"
                         contract-form="ovoController.contract" view-only="true" ui-popover="htmlPopover" />
                 </div>
                 <!-- <div class="col-md-12 panel panel-default">
-                    <operation-contract-info-table operation="dados.operation"  class="table table-condensed" state="Break DP Per Unit"
+                    <xpd-operation-contract-info-table operation="dados.operation"  class="table table-condensed" state="Break DP Per Unit"
                            state-id="inBreakDPInterval"
                            trip-unit="m/h" trip-required="true" conn-unit="Jt/h" conn-required="true"
                            contract-params="dados.contractParams"
@@ -243,19 +243,19 @@
                                 <td>Cementing</td>
 
                                 <td>
-                                    <contract-time-input disabled="true" ng-model="dados.contractParams.cementationSpeed.voptimum" name="cementingSpeedVoptimum"
+                                    <xpd-contract-time-input disabled="true" ng-model="dados.contractParams.cementationSpeed.voptimum" name="cementingSpeedVoptimum"
                                         id="cementationSpeed.voptimum">
 
                                 </td>
 
                                 <td>
-                                    <contract-time-input disabled="true" ng-model="dados.contractParams.cementationSpeed.vstandard" name="cementingSpeedVstandard"
+                                    <xpd-contract-time-input disabled="true" ng-model="dados.contractParams.cementationSpeed.vstandard" name="cementingSpeedVstandard"
                                         id="cementationSpeed.vstandard">
 
                                 </td>
 
                                 <td>
-                                    <contract-time-input disabled="true" ng-model="dados.contractParams.cementationSpeed.vpoor" name="cementingSpeedVpoor" id="cementationSpeed.vpoor">
+                                    <xpd-contract-time-input disabled="true" ng-model="dados.contractParams.cementationSpeed.vpoor" name="cementingSpeedVpoor" id="cementationSpeed.vpoor">
 
                                 </td>
 
@@ -285,13 +285,13 @@
         <div class="row" ng-if="dados.operation.type =='riser'">
 
             <div class="col-md-12 panel panel-default">
-                <operation-contract-info-table operation="dados.operation" class="table table-condensed" state="Ascent Riser Trip" state-id="ascentRiser"
+                <xpd-operation-contract-info-table operation="dados.operation" class="table table-condensed" state="Ascent Riser Trip" state-id="ascentRiser"
                     trip-unit="m/h" trip-required="true" conn-unit="Jt/h" conn-required="true" contract-params="dados.contractParams"
                     contract-form="ovoController.contract" view-only="true" ui-popover="htmlPopover" />
             </div>
 
             <div class="col-md-12 panel panel-default">
-                <operation-contract-info-table operation="dados.operation" class="table table-condensed" state="Descent Riser Trip" state-id="descendRiser"
+                <xpd-operation-contract-info-table operation="dados.operation" class="table table-condensed" state="Descent Riser Trip" state-id="descendRiser"
                     trip-unit="m/h" trip-required="true" conn-unit="Jt/h" conn-required="true" contract-params="dados.contractParams"
                     contract-form="ovoController.contract" view-only="true" ui-popover="htmlPopover" />
             </div>
@@ -318,11 +318,11 @@
                                 <td>
 
 
-                                    <contract-time-input disabled="true" ng-model="dados.contractParams.makeUpSpeed.voptimum" name="makeUpSpeedVoptimum" id="makeUpSpeed.voptimum">
+                                    <xpd-contract-time-input disabled="true" ng-model="dados.contractParams.makeUpSpeed.voptimum" name="makeUpSpeedVoptimum" id="makeUpSpeed.voptimum">
 
                                         <td>
 
-                                            <contract-time-input disabled="true" ng-model="dados.contractParams.makeUpSpeed.vstandard" name="makeUpSpeedVstandard" id="makeUpSpeed.vstandard">
+                                            <xpd-contract-time-input disabled="true" ng-model="dados.contractParams.makeUpSpeed.vstandard" name="makeUpSpeedVstandard" id="makeUpSpeed.vstandard">
 
                                         </td>
 
@@ -330,7 +330,7 @@
 
 
 
-                                            <contract-time-input disabled="true" ng-model="dados.contractParams.makeUpSpeed.vpoor" name="makeUpSpeedVpoor" id="makeUpSpeed.vpoor">
+                                            <xpd-contract-time-input disabled="true" ng-model="dados.contractParams.makeUpSpeed.vpoor" name="makeUpSpeedVpoor" id="makeUpSpeed.vpoor">
                                         </td>
 
                                         <td>
@@ -355,19 +355,19 @@
 
                                 <td>
 
-                                    <contract-time-input disabled="true" ng-model="dados.contractParams.layDownSpeed.voptimum" name="layDownSpeedVoptimum" id="layDownSpeed.voptimum">
+                                    <xpd-contract-time-input disabled="true" ng-model="dados.contractParams.layDownSpeed.voptimum" name="layDownSpeedVoptimum" id="layDownSpeed.voptimum">
 
                                 </td>
 
                                 <td>
 
-                                    <contract-time-input disabled="true" ng-model="dados.contractParams.layDownSpeed.vstandard" name="layDownSpeedVstandard"
+                                    <xpd-contract-time-input disabled="true" ng-model="dados.contractParams.layDownSpeed.vstandard" name="layDownSpeedVstandard"
                                         id="layDownSpeed.vstandard">
                                 </td>
 
                                 <td>
 
-                                    <contract-time-input disabled="true" ng-model="dados.contractParams.layDownSpeed.vpoor" name="layDownSpeedVpoor" id="layDownSpeed.vpoor">
+                                    <xpd-contract-time-input disabled="true" ng-model="dados.contractParams.layDownSpeed.vpoor" name="layDownSpeedVpoor" id="layDownSpeed.vpoor">
                                 </td>
 
                                 <td>

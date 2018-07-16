@@ -6,4 +6,4 @@ const XPDContractParamModule: angular.IModule = angular.module('xpd.contract-par
 
 export { XPDContractParamModule };
 
-XPDContractParamModule.directive('operationContractInfoTable', OperationContractInfoTableDirective.Factory());
+XPDContractParamModule.directive('xpdOperationContractInfoTable', OperationContractInfoTableDirective.Factory());
