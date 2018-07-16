@@ -14,6 +14,9 @@ export class NextActivitiesInformationPanelDirective implements ng.IDirective {
 		onClickCollapse: '=',
 		collapse: '=',
 		activities: '=',
+		operation: '=',
+		currentActivityElapsedTime: '=',
+		initialPlanning: '=',
 	};
 
 	public static Factory(): ng.IDirectiveFactory {

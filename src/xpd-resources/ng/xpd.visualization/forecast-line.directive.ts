@@ -12,7 +12,7 @@ export class ForecastLineDirective implements ng.IDirective {
 
 	public template = template;
 	public scope = {
-		vTargetLine: '=',
+		targetLine: '=',
 		actualLine: '=',
 		isTripin: '=',
 		settings: '=',
@@ -51,7 +51,7 @@ export class ForecastLineDirective implements ng.IDirective {
 			buildActualLine();
 		});
 
-		scope.$watch('vTargetLine', function () {
+		scope.$watch('targetLine', function () {
 			buildvTargetLine();
 		}, true);
 
@@ -127,7 +127,7 @@ export class ForecastLineDirective implements ng.IDirective {
 				return;
 			}
 
-			const vTargetLine = getVtargetLine(scope.state, scope.type);
+			const targetLine = getVtargetLine(scope.state, scope.type);
 			let actualLine = null;
 
 			try {
@@ -136,11 +136,11 @@ export class ForecastLineDirective implements ng.IDirective {
 				console.log(e);
 			}
 
-			let actualFinalTime = (actualLine != null) ? actualLine.finalTime : vTargetLine.startTime;
-			const actualFinalJoint = (actualLine != null) ? actualLine.finalJoint : vTargetLine.initialJoint;
+			let actualFinalTime = (actualLine != null) ? actualLine.finalTime : targetLine.startTime;
+			const actualFinalJoint = (actualLine != null) ? actualLine.finalJoint : targetLine.initialJoint;
 
-			const optimumFinalTime = vTargetLine.finalTime;
-			const optimumFinalJoint = vTargetLine.finalJoint;
+			const optimumFinalTime = targetLine.finalTime;
+			const optimumFinalJoint = targetLine.finalJoint;
 
 			const points = [];
 
@@ -195,13 +195,13 @@ export class ForecastLineDirective implements ng.IDirective {
 		function getVtargetLine(state, type) {
 			const isTripin = scope.isTripin === false ? false : true;
 
-			for (const i in scope.vTargetLine) {
-				const vTargetLine = scope.vTargetLine[i];
+			for (const i in scope.targetLine) {
+				const targetLine = scope.targetLine[i];
 
-				if (vTargetLine[state] &&
-					vTargetLine[state].isTripin === isTripin &&
-					vTargetLine[state][type]) {
-					return vTargetLine[state][type];
+				if (targetLine[state] &&
+					targetLine[state].isTripin === isTripin &&
+					targetLine[state][type]) {
+					return targetLine[state][type];
 				}
 
 			}

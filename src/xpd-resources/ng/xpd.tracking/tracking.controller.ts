@@ -76,7 +76,6 @@ export class TrackingController {
 		};
 
 		operationDataService.openConnection([]).then(function () {
-
 			vm.operationDataFactory = operationDataService.operationDataFactory;
 			// TODO: adaptacao as any
 			$scope.operationData = vm.operationDataFactory.operationData;

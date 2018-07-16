@@ -50,7 +50,7 @@ export class OperationDashboardController {
 		vm.selectedPoint = selectedPoint;
 		vm.removeReadingFromList = removeReadingFromList;
 
-		operationDataService.on('setOnOptimumLineListener', main);
+		operationDataService.on('setOnvOptimumEstimativeListener', main);
 		operationDataService.on('setOnActualLineListener', main);
 		operationDataService.on('setOnForecastChangeListener', main);
 
@@ -70,19 +70,19 @@ export class OperationDashboardController {
 					const estimatives = $scope.operationData.forecastContext.estimatives;
 					const estimatedAt = new Date(estimatives.estimatedAt).getTime();
 
-					const vTargetStateJointInterval = estimatives.vTargetLine.filter(function(line) {
+					const vTargetStateJointInterval = estimatives.vTargetEstimative.filter(function(line) {
 						return line[currentState] != null;
 					})[0][currentState];
 
-					const vOptimumStateJointInterval = estimatives.vOptimumLine.filter(function(line) {
+					const vOptimumStateJointInterval = estimatives.vOptimumEstimative.filter(function(line) {
 						return line[currentState] != null;
 					})[0][currentState];
 
-					const vStandardStateJointInterval = estimatives.vStandardLine.filter(function(line) {
+					const vStandardStateJointInterval = estimatives.vStandardEstimative.filter(function(line) {
 						return line[currentState] != null;
 					})[0][currentState];
 
-					const vPoorStateJointInterval = estimatives.vPoorLine.filter(function(line) {
+					const vPoorStateJointInterval = estimatives.vPoorEstimative.filter(function(line) {
 						return line[currentState] != null;
 					})[0][currentState];
 
@@ -113,16 +113,16 @@ export class OperationDashboardController {
 
 					// tslint:disable-next-line:prefer-for-of
 					for (let index = 0;
-						index < estimatives.vTargetLine.length;
+						index < estimatives.vTargetEstimative.length;
 						index++) {
 
 						try {
 
-							const vTargetLine = estimatives.vTargetLine[index];
+							const vTargetEstimative = estimatives.vTargetEstimative[index];
 
-							const state = Object.keys(vTargetLine)[0];
+							const state = Object.keys(vTargetEstimative)[0];
 							let startTime = estimatedAt;
-							const duration = (vTargetLine[state].BOTH.finalTime * 1000);
+							const duration = (vTargetEstimative[state].BOTH.finalTime * 1000);
 
 							if (nextActivities.length > 0) {
 								startTime = nextActivities[nextActivities.length - 1].finalTime;
@@ -133,7 +133,7 @@ export class OperationDashboardController {
 								duration,
 								startTime,
 								finalTime: (startTime + duration),
-								isTripin: vTargetLine[state].BOTH.isTripin,
+								isTripin: vTargetEstimative[state].BOTH.isTripin,
 							};
 
 							nextActivities.push(activity);
@@ -170,7 +170,7 @@ export class OperationDashboardController {
 				generateEstimatives();
 
 				if (!selectedBaseLine) {
-					selectedBaseLine = 'vOptimumLine';
+					selectedBaseLine = 'vOptimumEstimative';
 				}
 
 				if (!selectedEventType) {
@@ -187,7 +187,7 @@ export class OperationDashboardController {
 		}
 
 		/**
-		 * @param {string} selectedLineName: vOptimumLine | vStandardLine | vPoorLine
+		 * @param {string} selectedLineName: vOptimumEstimative | vStandardEstimative | vPoorEstimative
 		 * @param {string} eventType : CONN | TRIP | BOTH
 		 */
 		function actionButtonBuildForecast(selectedLineName, eventType) {
@@ -203,9 +203,9 @@ export class OperationDashboardController {
 			/**
 			 * Os tres parametros para definir cores
 			 */
-			const vOptimumLine = $scope.operationData.forecastContext.vOptimumLine;
-			const standardLine = $scope.operationData.forecastContext.vStandardLine;
-			const poorLine = $scope.operationData.forecastContext.vPoorLine;
+			const vOptimumEstimative = $scope.operationData.forecastContext.vOptimumEstimative;
+			const vStandardEstimative = $scope.operationData.forecastContext.vStandardEstimative;
+			const vPoorEstimative = $scope.operationData.forecastContext.vPoorEstimative;
 
 			/**
 			 * O que realmente aconteceu
@@ -258,9 +258,9 @@ export class OperationDashboardController {
 
 				const directionLabel = isTripin === false ? 'TRIPOUT' : 'TRIPIN';
 
-				const optimumTimeSpent = calcTimeSpent(vOptimumLine, state, eventType, isTripin);
-				const standardTimeSpent = calcTimeSpent(standardLine, state, eventType, isTripin);
-				const poorTimeSpent = calcTimeSpent(poorLine, state, eventType, isTripin);
+				const optimumTimeSpent = calcTimeSpent(vOptimumEstimative, state, eventType, isTripin);
+				const standardTimeSpent = calcTimeSpent(vStandardEstimative, state, eventType, isTripin);
+				const poorTimeSpent = calcTimeSpent(vPoorEstimative, state, eventType, isTripin);
 
 				if (actualLine[state] && actualLine[state][directionLabel] && actualLine[state][directionLabel][eventType]) {
 

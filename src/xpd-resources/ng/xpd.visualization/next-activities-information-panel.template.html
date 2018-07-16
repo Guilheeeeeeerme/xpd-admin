@@ -1,7 +1,13 @@
 <div class="panel panel-default">
 
 	<div class="panel-heading clearfix" ng-init="onInit('panelNextActivityIsCollapsed')" ng-click="onClickCollapse('panelNextActivityIsCollapsed')">
-		<h4 class="panel-title pull-left">Next Activities</h4>
+		<h4 class="panel-title pull-left">Next Activities
+			<span ng-if="operation">
+				for
+				<strong>{{ operation.name }}</strong> at
+				<strong>{{ operation.section.name }}</strong>
+			</span>
+		</h4>
 		<div class="btn-group pull-right">
 			<i type="button" class="pull-right glyphicon pointer" ng-class="{'glyphicon-chevron-down': collapse, 'glyphicon-chevron-up': !collapse}">
 			</i>
