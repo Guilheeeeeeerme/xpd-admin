@@ -1,11 +1,11 @@
 import { IQService } from 'angular';
-import { EventDetailsModalService } from '../../../xpd-resources/ng/xpd.modal.event-details/xpd-modal-event-details.factory';
-import { FailureModalFactory } from '../../../xpd-resources/ng/xpd.modal.failure/xpd-modal-failure.factory';
-import { LessonLearnedModalService } from '../../../xpd-resources/ng/xpd.modal.lessonlearned/xpd-modal-lessonlearned.service';
-import { OperationDataService } from '../../../xpd-resources/ng/xpd.operation-data/operation-data.service';
-import { EventLogSetupAPIService } from '../../../xpd-resources/ng/xpd.setupapi/eventlog-setupapi.service';
-import { FailureSetupAPIService } from '../../../xpd-resources/ng/xpd.setupapi/failure-setupapi.service';
-import { LessonLearnedSetupAPIService } from '../../../xpd-resources/ng/xpd.setupapi/lessonlearned-setupapi.service';
+import { EventDetailsModalService } from '../../../app/shared/xpd.modal.event-details/xpd-modal-event-details.factory';
+import { FailureModalFactory } from '../../../app/shared/xpd.modal.failure/xpd-modal-failure.factory';
+import { LessonLearnedModalService } from '../../../app/shared/xpd.modal.lessonlearned/xpd-modal-lessonlearned.service';
+import { OperationDataService } from '../../../app/shared/xpd.operation-data/operation-data.service';
+import { EventLogSetupAPIService } from '../../../app/shared/xpd.setupapi/eventlog-setupapi.service';
+import { FailureSetupAPIService } from '../../../app/shared/xpd.setupapi/failure-setupapi.service';
+import { LessonLearnedSetupAPIService } from '../../../app/shared/xpd.setupapi/lessonlearned-setupapi.service';
 
 export class AdminTrackingController {
 	// 'use strict';

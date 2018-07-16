@@ -21,6 +21,7 @@ module.exports = {
 	entry: {
 		'd3-dmec-chart.worker': './src/workers/d3-dmec-chart.worker.ts',
 		'xpd-timers.worker': './src/workers/xpd-timers.worker.ts',
+
 		'admin': './src/app/admin/admin.ts',
 		'dmec-log': './src/app/dmec-log/dmec-log.ts',
 		'reports': './src/app/reports/reports.ts',
@@ -51,6 +52,15 @@ module.exports = {
 			chunks: ['operation-view-only'],
 			template: './src/app/operation-view-only/operation-view-only.html',
 			filename: 'operation-view-only.html',
+			meta: metaInfo,
+			favicon: './src/assets/img/favicon.ico'
+		}),
+
+		new HtmlWebpackPlugin({
+			title: 'XPD Reports',
+			chunks: ['reports'],
+			template: './src/app/reports/reports.html',
+			filename: 'reports.html',
 			meta: metaInfo,
 			favicon: './src/assets/img/favicon.ico'
 		}),

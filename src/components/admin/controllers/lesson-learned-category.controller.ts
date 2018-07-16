@@ -1,7 +1,7 @@
 import * as angular from 'angular';
 import { IModalService } from 'angular-ui-bootstrap';
-import { DialogService } from '../../../xpd-resources/ng/xpd.dialog/xpd.dialog.factory';
-import { LessonLearnedSetupAPIService } from '../../../xpd-resources/ng/xpd.setupapi/lessonlearned-setupapi.service';
+import { DialogService } from '../../../app/shared/xpd.dialog/xpd.dialog.factory';
+import { LessonLearnedSetupAPIService } from '../../../app/shared/xpd.setupapi/lessonlearned-setupapi.service';
 import upsertCategoryTemplate from '../views/modal/upsert-category.modal.html';
 /*
 * @Author: gustavogomides7

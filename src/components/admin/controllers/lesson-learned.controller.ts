@@ -1,7 +1,7 @@
-import { DialogService } from '../../../xpd-resources/ng/xpd.dialog/xpd.dialog.factory';
-import { LessonLearnedModalService } from '../../../xpd-resources/ng/xpd.modal.lessonlearned/xpd-modal-lessonlearned.service';
-import { OperationDataService } from '../../../xpd-resources/ng/xpd.operation-data/operation-data.service';
-import { LessonLearnedSetupAPIService } from '../../../xpd-resources/ng/xpd.setupapi/lessonlearned-setupapi.service';
+import { DialogService } from '../../../app/shared/xpd.dialog/xpd.dialog.factory';
+import { LessonLearnedModalService } from '../../../app/shared/xpd.modal.lessonlearned/xpd-modal-lessonlearned.service';
+import { OperationDataService } from '../../../app/shared/xpd.operation-data/operation-data.service';
+import { LessonLearnedSetupAPIService } from '../../../app/shared/xpd.setupapi/lessonlearned-setupapi.service';
 
 export class LessonLearnedController {
 

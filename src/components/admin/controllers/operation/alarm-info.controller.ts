@@ -1,6 +1,6 @@
 import * as angular from 'angular';
 import { IModalService } from 'angular-ui-bootstrap';
-import { AlarmSetupAPIService } from '../../../../xpd-resources/ng/xpd.setupapi/alarm-setupapi.service';
+import { AlarmSetupAPIService } from '../../../../app/shared/xpd.setupapi/alarm-setupapi.service';
 import alarmInfoTemplate from '../../views/forms/alarm-info-upsert.modal.html';
 import { AlarmCRUDService } from '../alarm/alarm.service';
 

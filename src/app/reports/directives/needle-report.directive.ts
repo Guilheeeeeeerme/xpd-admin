@@ -4,7 +4,7 @@
 // 	angular.module('xpd.reports').directive('reportNeedleChart', reportNeedleChart);
 
 import * as d3 from 'd3';
-import { HighchartsService } from '../../../xpd-resources/ng/highcharts/highcharts.service';
+import { HighchartsService } from '../../shared/highcharts/highcharts.service';
 
 export class ReportNeedleChart {
 	public static $inject: string[] = ['highchartsService'];

@@ -15,6 +15,11 @@ export class OperationConfig {
 			controller: 'OperationViewOnlyController as ovoController',
 		});
 
+		$routeProvider.when('/:operationId', {
+			template: OperationViewOnlyTemplate,
+			controller: 'OperationViewOnlyController as ovoController',
+		});
+
 	}
 
 }

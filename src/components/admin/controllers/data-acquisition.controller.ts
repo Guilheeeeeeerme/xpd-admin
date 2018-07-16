@@ -1,4 +1,4 @@
-import { OperationDataService } from '../../../xpd-resources/ng/xpd.operation-data/operation-data.service';
+import { OperationDataService } from '../../../app/shared/xpd.operation-data/operation-data.service';
 
 export class DataAcquisitionController {
 	// 'use strict';

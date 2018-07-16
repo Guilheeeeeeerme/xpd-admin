@@ -4,7 +4,7 @@
 // 	angular.module('xpd.reports').directive('bitDepthTime', bitDepthTime);
 
 import * as d3 from 'd3';
-import { HighchartsService } from '../../../xpd-resources/ng/highcharts/highcharts.service';
+import { HighchartsService } from '../../shared/highcharts/highcharts.service';
 
 export class BitDepthTimeDirective implements ng.IDirective {
 	public static $inject: string[] = ['$filter', 'highchartsService'];

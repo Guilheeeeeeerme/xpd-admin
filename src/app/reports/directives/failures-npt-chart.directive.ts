@@ -1,10 +1,9 @@
+import { HighchartsService } from '../../shared/highcharts/highcharts.service';
 
 // (function() {
 // 	'use strict';
 
 // 	angular.module('xpd.reports').directive('failuresNptChart', failuresNptChart);
-
-import { HighchartsService } from '../../../xpd-resources/ng/highcharts/highcharts.service';
 
 export class FailuresNptChartDirective {
 

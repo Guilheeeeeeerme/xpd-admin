@@ -1,5 +1,5 @@
-import { ReportsSetupAPIService } from '../../../xpd-resources/ng/xpd.setupapi/reports-setupapi.service';
-import { WellSetupAPIService } from '../../../xpd-resources/ng/xpd.setupapi/well-setupapi.service';
+import { ReportsSetupAPIService } from '../../shared/xpd.setupapi/reports-setupapi.service';
+import { WellSetupAPIService } from '../../shared/xpd.setupapi/well-setupapi.service';
 
 export class VreReportController {
 	// 'use strict';

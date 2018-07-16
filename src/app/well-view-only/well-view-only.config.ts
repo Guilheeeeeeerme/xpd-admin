@@ -15,6 +15,11 @@ export class WellConfig {
 			controller: 'WellViewOnlyController as wvoController',
 		});
 
+		$routeProvider.when('/:wellId', {
+			template: WellViewOnlyTemplate,
+			controller: 'WellViewOnlyController as wvoController',
+		});
+
 	}
 
 }

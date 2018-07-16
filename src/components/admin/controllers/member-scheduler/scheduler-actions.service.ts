@@ -1,8 +1,8 @@
 import * as angular from 'angular';
 import { IModalService } from 'angular-ui-bootstrap';
-import { DialogService } from '../../../../xpd-resources/ng/xpd.dialog/xpd.dialog.factory';
-import { OperationDataService } from '../../../../xpd-resources/ng/xpd.operation-data/operation-data.service';
-import { ScheduleSetupAPIService } from '../../../../xpd-resources/ng/xpd.setupapi/schedule-setupapi.service';
+import { DialogService } from '../../../../app/shared/xpd.dialog/xpd.dialog.factory';
+import { OperationDataService } from '../../../../app/shared/xpd.operation-data/operation-data.service';
+import { ScheduleSetupAPIService } from '../../../../app/shared/xpd.setupapi/schedule-setupapi.service';
 import removeScheduleTemplate from '../../views/modal/remove-schedule.modal.html';
 import upsertFunctionTemplate from '../../views/modal/upsert-function.modal.html';
 import upsertMemberTemplate from '../../views/modal/upsert-member.modal.html';

@@ -1,4 +1,4 @@
-import { GanttService } from '../../../../xpd-resources/ng/gantt/gantt.service';
+import { GanttService } from '../../../../app/shared/gantt/gantt.service';
 
 export class MemberSchedulerDirective implements ng.IDirective {
 	// 'use strict';

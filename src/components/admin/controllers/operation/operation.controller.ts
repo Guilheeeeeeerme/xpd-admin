@@ -1,11 +1,11 @@
 import * as angular from 'angular';
 import { IModalService } from 'angular-ui-bootstrap';
-import { DialogService } from '../../../../xpd-resources/ng/xpd.dialog/xpd.dialog.factory';
-import { MenuConfirmationService } from '../../../../xpd-resources/ng/xpd.menu-confirmation/menu-confirmation.factory';
-import { OperationDataService } from '../../../../xpd-resources/ng/xpd.operation-data/operation-data.service';
-import { OperationSetupAPIService } from '../../../../xpd-resources/ng/xpd.setupapi/operation-setupapi.service';
-import { SectionSetupAPIService } from '../../../../xpd-resources/ng/xpd.setupapi/section-setupapi.service';
-import { WellSetupAPIService } from '../../../../xpd-resources/ng/xpd.setupapi/well-setupapi.service';
+import { DialogService } from '../../../../app/shared/xpd.dialog/xpd.dialog.factory';
+import { MenuConfirmationService } from '../../../../app/shared/xpd.menu-confirmation/menu-confirmation.factory';
+import { OperationDataService } from '../../../../app/shared/xpd.operation-data/operation-data.service';
+import { OperationSetupAPIService } from '../../../../app/shared/xpd.setupapi/operation-setupapi.service';
+import { SectionSetupAPIService } from '../../../../app/shared/xpd.setupapi/section-setupapi.service';
+import { WellSetupAPIService } from '../../../../app/shared/xpd.setupapi/well-setupapi.service';
 import operationCopyTemplate from '../../views/modal/operation-copy-options.modal.html';
 import { OperationConfigurationService } from './operation-configuration.service';
 
