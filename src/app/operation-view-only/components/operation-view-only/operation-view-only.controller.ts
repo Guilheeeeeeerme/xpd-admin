@@ -121,7 +121,8 @@ export class OperationViewOnlyController {
 		];
 
 		function getHtmlPopOver() {
-			return $sce.trustAsHtml('<img class="img-responsible" width="200px" height="auto" src="../xpd-resources/img/imagem_acceleration.png">');
+			return $sce.trustAsHtml('<img class="img-responsible" width="200px" height="auto" src="../../../../assets/img/imagem_acceleration.png">');
+			// return $sce.trustAsHtml('<img class="img-responsible" width="200px" height="auto" src="../xpd-resources/img/imagem_acceleration.png">');
 		}
 
 	}
