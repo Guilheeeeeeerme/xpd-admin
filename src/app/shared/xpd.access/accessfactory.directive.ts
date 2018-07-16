@@ -65,7 +65,7 @@ export class AccessFactoryDirective implements ng.IDirective {
 					animation: true,
 					size: 'sm',
 					backdrop: false,
-					templateUrl: 'accessFactoryDirectiveModal.html',
+					templateUrl: 'accessfactory.template.html',
 					scope,
 				});
 			}

@@ -172,7 +172,7 @@ export class XPDOperationManagerDirective {
 		}
 
 		scope.operationQueuePopover = {
-			templateUrl: 'operationQueueTemplate.html',
+			templateUrl: 'operationmanager.template.html',
 			title: 'Operation Queue',
 		};
 	}

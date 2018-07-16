@@ -72,59 +72,59 @@ ctx.addEventListener('message', (event) => {
 		});
 
 		return result;
+	}
 
-		function handleOverflow(points, track) {
+	function handleOverflow(points, track) {
 
-			const result = [];
-			let distance = 0;
-			let lastPoint = null;
+		const result = [];
+		let distance = 0;
+		let lastPoint = null;
 
-			distance = Math.abs(track.max - track.min);
+		distance = Math.abs(track.max - track.min);
 
-			points.map(function (point) {
+		points.map(function (point) {
 
-				const empty = {
-					x: point.x,
-					y: null,
-					actual: null,
-				};
+			const empty = {
+				x: point.x,
+				y: null,
+				actual: null,
+			};
 
-				if (point.y != null) {
+			if (point.y != null) {
 
-					point.overflow = 0;
-					let tempPoint = null;
+				point.overflow = 0;
+				let tempPoint = null;
 
-					while (point.y < track.min) {
-						tempPoint = JSON.parse(JSON.stringify(point));
-						point.overflow++;
-						point.y += distance;
-					}
-
-					while (point.y > track.max) {
-						tempPoint = JSON.parse(JSON.stringify(point));
-						point.overflow--;
-						point.y -= distance;
-					}
-
-					if (lastPoint != null && lastPoint.overflow != point.overflow) {
-						if (tempPoint) {
-							result.push(tempPoint); tempPoint;
-						}
-						result.push(empty);
-					}
-
-					lastPoint = point;
-
-				} else {
-					lastPoint = null;
+				while (point.y < track.min) {
+					tempPoint = JSON.parse(JSON.stringify(point));
+					point.overflow++;
+					point.y += distance;
 				}
 
-				result.push(point);
+				while (point.y > track.max) {
+					tempPoint = JSON.parse(JSON.stringify(point));
+					point.overflow--;
+					point.y -= distance;
+				}
 
-			});
+				if (lastPoint != null && lastPoint.overflow !== point.overflow) {
+					if (tempPoint) {
+						result.push(tempPoint);
+					}
+					result.push(empty);
+				}
 
-			return result;
-		}
+				lastPoint = point;
+
+			} else {
+				lastPoint = null;
+			}
+
+			result.push(point);
+
+		});
+
+		return result;
 	}
 
 	function getPoint(timestamp, tracks, oldPoints, newPoints) {
@@ -268,8 +268,8 @@ ctx.addEventListener('message', (event) => {
 				// points[track.param].push(xyPoint);
 
 				if (points[track.param].length >= 2 &&
-					points[track.param][points[track.param].length - 1].y == xyPoint.y &&
-					points[track.param][points[track.param].length - 2].y == xyPoint.y) {
+					points[track.param][points[track.param].length - 1].y === xyPoint.y &&
+					points[track.param][points[track.param].length - 2].y === xyPoint.y) {
 					points[track.param][points[track.param].length - 1] = xyPoint;
 				} else {
 					points[track.param].push(xyPoint);

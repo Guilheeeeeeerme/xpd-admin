@@ -9,7 +9,7 @@ export class OperationConfigurationService {
 	public getHtmlSlipsThreshold: () => any;
 	public getCasingTripSpeedParams: (casingTypeId: any) => any;
 	public getRiserTripSpeedParams: (metaTypeId: any) => any;
-	public getOperationViewTabs: (operation: any) => Array<{ title: string; general: boolean; contract?: undefined; alarm?: undefined; } | { title: string; contract: boolean; general?: undefined; alarm?: undefined; } | { title: string; alarm: boolean; general?: undefined; contract?: undefined; }>;
+	public getOperationViewTabs: (operation: any) => Array<{ title: string; url: string; }>;
 
 	constructor($sce) {
 		const vm = this;
@@ -67,26 +67,50 @@ export class OperationConfigurationService {
 				return [
 					{
 						title: 'Operation Info',
-						general: true,
+						url: operation.type + '-general-info.template.html',
 					},
 				];
 			} else {
 				return [
 					{
 						title: 'Operation Info',
-						general: true,
-					},
-					{
+						url: operation.type + '-general-info.template.html',
+					}, {
 						title: 'Contract Performance',
-						contract: true,
-					},
-					{
-						title: 'Alarms',
-						alarm: true,
-					},
+						url: operation.type + '-contract-info.template.html',
+					}, {
+						title: 'Alarms', url: 'alarm-info.template.html',
+				 	},
 				];
 			}
 		}
+
+		// function getOperationViewTabs(operation) {
+
+		// 	if (operation.running) {
+		// 		return [
+		// 			{
+		// 				title: 'Operation Info',
+		// 				general: true,
+		// 			},
+		// 		];
+		// 	} else {
+		// 		return [
+		// 			{
+		// 				title: 'Operation Info',
+		// 				general: true,
+		// 			},
+		// 			{
+		// 				title: 'Contract Performance',
+		// 				contract: true,
+		// 			},
+		// 			{
+		// 				title: 'Alarms',
+		// 				alarm: true,
+		// 			},
+		// 		];
+		// 	}
+		// }
 
 		function getHtmlPopOver() {
 			return $sce.trustAsHtml('<img class="img-responsible" width="200px" height="auto" src="../xpd-resources/img/imagem_acceleration.png">');

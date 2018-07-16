@@ -165,7 +165,7 @@
                         
                             <div ng-if="alarm.isDurationAlarm" class="form-group" ng-class="{ 'has-error': alarmForm.optimumTime.$invalid  && !alarmForm.optimumTime.$pristine }">
                                 <label for="optimumTime">Procedure Duration*</label>
-                                <div ng-include src="'/alarm-info-upsert-optimum-time.html'"></div>
+                                <div ng-include src="'alarm-info-upsert-optimum-time.html'"></div>
 
                                 <small class="has-error form-error-message">
                                     <i ng-if="alarmForm.timeSlicesTripin.$invalid || alarmForm.timeSlicesTripout.$invalid">
@@ -284,7 +284,7 @@
                         <div class="col-md-6 col-md-offset-3 form-group" ng-class="{ 'has-error': alarmForm.optimumTime.$invalid  && !alarmForm.optimumTime.$pristine }">
                             <label for="optimumTime">Procedure Duration*</label>
 
-                            <div ng-include src="'/alarm-info-upsert-optimum-time.html'"></div>
+                            <div ng-include src="'alarm-info-upsert-optimum-time.html'"></div>
 
                         </div>
                     </div>

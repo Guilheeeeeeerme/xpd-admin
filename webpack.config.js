@@ -41,17 +41,8 @@ module.exports = {
 		new HtmlWebpackPlugin({
 			title: 'XPD Admin',
 			chunks: ['admin'],
-			template: './src/app/admin/admin.html',
+			template: './src/app/admin/admin.view.html',
 			filename: 'admin.html',
-			meta: metaInfo,
-			favicon: './src/assets/img/favicon.ico'
-		}),
-
-		new HtmlWebpackPlugin({
-			title: 'Operation Settings Overview',
-			chunks: ['operation-view-only'],
-			template: './src/app/operation-view-only/operation-view-only.html',
-			filename: 'operation-view-only.html',
 			meta: metaInfo,
 			favicon: './src/assets/img/favicon.ico'
 		}),
@@ -68,8 +59,17 @@ module.exports = {
 		new HtmlWebpackPlugin({
 			title: 'Well Settings Overview',
 			chunks: ['well-view-only'],
-			template: './src/app/well-view-only/well-view-only.html',
+			template: './src/app/well-view-only/well-view-only.view.html',
 			filename: 'well-view-only.html',
+			meta: metaInfo,
+			favicon: './src/assets/img/favicon.ico'
+		}),
+
+		new HtmlWebpackPlugin({
+			title: 'Operation Settings Overview',
+			chunks: ['operation-view-only'],
+			template: './src/app/operation-view-only/operation-view-only.view.html',
+			filename: 'operation-view-only.html',
 			meta: metaInfo,
 			favicon: './src/assets/img/favicon.ico'
 		}),
@@ -85,28 +85,8 @@ module.exports = {
 		)
 	],
 
-	
-
-	// plugins: [
-	// 	new webpack.ProvidePlugin({
-	// 		jQuery: 'jquery',
-	// 		$: 'jquery',
-	// 		jquery: 'jquery'
-	// 	})
-	// ],
-
 	module: {
 		rules: [
-
-			// {
-			//   loader: 'worker-loader',
-			//   options: { publicPath: '/workers/' },
-			// }
-
-			// {
-			//   test: /\.worker\.js$/,
-			//   use: { loader: 'worker-loader' }
-			// },
 
 			{
 				test: /\.tsx?$/,
@@ -123,24 +103,11 @@ module.exports = {
 			{
 				test: /\.html$/,
 				exclude: /node_modules/,
-				loader: "html-loader?exportAsEs6Default"
+				loader: "html-loader?exportAsEs6Default",
+				// options: {
+				// 	attrs: [':data-src']
+				// },
 			},
-
-			// {
-			// 	test: /\.tsx?$/,
-			// 	use: 'ts-loader',
-			// 	exclude: /node_modules/
-			// },
-
-			// {
-			// 	test: /\.(html)$/,
-			// 	use: {
-			// 		loader: 'html-loader',
-			// 		options: {
-			// 			attrs: [':data-src']
-			// 		}
-			// 	}
-			// },
 
 			{
 				test: /\.css$/,

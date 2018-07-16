@@ -123,9 +123,7 @@ export class DialogService {
 			body += '<div class="modal-body xpd-modal-body-message">';
 		}
 
-		if (content.templateUrl) {
-			body += '<div ng-include src="' + 'content.templateUrl' + '"></div>';
-		} else if (content.templateHtml) {
+		if (content.templateHtml) {
 			body += '<div>' + content.templateHtml + '</div>';
 		} else {
 			body += '<p>{{content.message}}</p>';

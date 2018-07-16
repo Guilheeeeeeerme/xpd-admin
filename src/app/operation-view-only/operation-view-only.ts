@@ -4,4 +4,6 @@ import './../../../node_modules/angular-toastr/dist/angular-toastr.css';
 
 import './../../assets/css/xpd.css';
 
-import { XPDOperationViewOnlyModule } from './operation-view-only.module';
+// @require './../../components/admin/views/forms/*.html';
+
+import './operation-view-only.module';

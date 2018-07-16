@@ -56,7 +56,7 @@ export class SetupAPIService {
 		}
 
 		request.then(
-			function (response: any) {
+			(response: any) => {
 				if (response && response.data && (response.data.isWrappedResponse || response.data.timestamp)) {
 					if (successCallback) {
 						successCallback(response.data.data);
@@ -68,7 +68,7 @@ export class SetupAPIService {
 				}
 
 			},
-			function (error) {
+			(error) => {
 				this.generateToast(error);
 				if (errorCallback) {
 					errorCallback(error);

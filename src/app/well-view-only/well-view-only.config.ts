@@ -1,25 +1,19 @@
-// (function() {
-// 'use strict';
+import WellViewOnlyTemplate from './components/well-view-only/well-view-only.template.html';
 
-// angular.module('xpd.reports').config(reportConfig);
+WellConfig.$inject = ['$routeProvider'];
 
-import WellViewOnlyTemplate from './well-view-only.html';
+function WellConfig($routeProvider) {
 
-export class WellConfig {
-	public static $inject = ['$routeProvider'];
+	$routeProvider.when('/', {
+		template: WellViewOnlyTemplate,
+		controller: 'WellViewOnlyController as wvoController',
+	});
 
-	constructor($routeProvider) {
-
-		$routeProvider.when('/', {
-			template: WellViewOnlyTemplate,
-			controller: 'WellViewOnlyController as wvoController',
-		});
-
-		$routeProvider.when('/:wellId', {
-			template: WellViewOnlyTemplate,
-			controller: 'WellViewOnlyController as wvoController',
-		});
-
-	}
+	$routeProvider.when('/:wellId', {
+		template: WellViewOnlyTemplate,
+		controller: 'WellViewOnlyController as wvoController',
+	});
 
 }
+
+export { WellConfig };
