@@ -5,6 +5,7 @@ import * as angular from 'angular';
 import 'angular-ui-bootstrap';
 import { XPDCalculationModule } from '../xpd.calculation/calculation.module';
 import { ngIntersection } from '../xpd.intersection/xpd-intersection.module';
+import { ChannelsInformationPanel } from './channels-information-panel.directive';
 import { ConnRulerDirective } from './conn-ruler/conn-ruler.directive';
 import { ConsistencyInformationPanelDirective } from './consistency-information-panel/consistency-information-panel.directive';
 import { D3DMECChartModalController } from './d3-dmec-chart/d3-dmec-chart-modal.controller';
@@ -66,3 +67,4 @@ XPDVisualizationModule.controller('D3DMECChartModalController', D3DMECChartModal
 XPDVisualizationModule.directive('consistencyInformationPanel', ConsistencyInformationPanelDirective.Factory());
 XPDVisualizationModule.directive('connRuler', ConnRulerDirective.Factory());
 XPDVisualizationModule.directive('forecastWaterfall', ForecastWaterfallDirective.Factory());
+XPDVisualizationModule.directive('channelsInformationPanel', ChannelsInformationPanel.Factory());

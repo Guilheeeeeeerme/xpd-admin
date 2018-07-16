@@ -16,6 +16,9 @@ export class DMECTrackingDirective implements ng.IDirective {
 		currentTick: '=',
 		currentBlockPosition: '=',
 		currentReading: '=',
+		selectedPoint: '=',
+		lastSelectedPoint: '=',
+		removeMarker: '=',
 	};
 	public restrict = 'AE';
 	public template = template;
@@ -28,6 +31,8 @@ export class DMECTrackingDirective implements ng.IDirective {
 		attributes: ng.IAttributes,
 		ctrl: any,
 	) => {
+		scope.setSelectedPoint = setSelectedPoint;
+
 		this.dmecService.dmec(scope,
 			'xpd.admin.dmec.dmecInputRangeForm',
 			function () {
@@ -37,6 +42,10 @@ export class DMECTrackingDirective implements ng.IDirective {
 				return scope.currentReading;
 			},
 		);
+
+		function setSelectedPoint(position) {
+			scope.selectedPoint(position);
+		}
 	}
 
 	public static Factory(): ng.IDirectiveFactory {
