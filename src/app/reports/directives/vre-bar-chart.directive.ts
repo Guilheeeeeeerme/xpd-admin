@@ -12,11 +12,14 @@ export class VreBarChart {
 	public static $inject = ['$filter', '$xpdTimeout'];
 	public restrict: 'EA';
 	public template = template;
-	public scope: {
+	public scope = {
 		vreListData: '=',
 		vreDailyData: '=',
 		period: '=',
 	};
+	public widthSvg: any;
+	public heightSvg: number;
+	public xAxisScale: d3.ScaleLinear<number, number>;
 
 	constructor(
 		private $filter: ng.IFilterFilter,
@@ -29,63 +32,81 @@ export class VreBarChart {
 		attrs: ng.IAttributes,
 		ctrl: any,
 	) => {
-		let xAxisScale;
-		let widthSvg;
-		let heightSvg;
+		const vm = this;
 
 		scope.drawChartReady = false;
 
-		scope.$watchGroup(['vreListData', 'vreDailyData'], function (newValues) {
-			this.$xpdTimeout(function () {
-				drawVreChart(newValues[0], newValues[1]);
-			}, 500, scope);
+		scope.$watchGroup(['vreListData', 'vreDailyData'], (newValues) => {
+			// this.$xpdTimeout.run(() => {
+			if (newValues[0] && newValues[1]) {
+				vm.drawVreChart(scope, elem, newValues[0], newValues[1]);
+			}
+			// }, 500, scope);
 		}, true);
+	}
 
-		function drawVreChart(vreListData, vreDailyData) {
+	public drawXAxis = (point) => {
+		const vm = this;
+		return vm.xAxisScale(point);
+	}
 
-			scope.drawChartReady = true;
+	public getBarScale = (vre) => {
+		const vm = this;
+		const xVre = vm.xAxisScale(vre * 100);
+		const xLine = vm.xAxisScale(0);
 
-			const padding = 3;
-			const table = d3.select(elem[0]);
-			const svgSelection = table.select('svg');
-			widthSvg = svgSelection[0][0].width.animVal.value;
-			heightSvg = Number(window.getComputedStyle(document.querySelector('td.vre-svg-container')).height);
-
-			xAxisScale = d3.scaleLinear()
-				.domain([-20, 10])
-				.range([padding, widthSvg - padding]);
-
+		if (vre >= 0) {
+			return xLine;
+		} else {
+			return xVre;
 		}
+	}
 
-		scope.drawXAxis = function drawXAxis(point) {
-			return xAxisScale(point);
-		};
+	public setBarWidth = (vre) => {
+		const vm = this;
+		const xVre = vm.xAxisScale(vre * 100);
+		const xLine = vm.xAxisScale(0);
 
-		scope.getBarScale = function getBarScale(vre) {
-			const xVre = xAxisScale(vre * 100);
-			const xLine = xAxisScale(0);
+		if (vre > 0) {
+			return xVre - xLine;
+		} else {
+			return xLine - xVre;
+		}
+	}
 
-			if (vre >= 0) {
-				return xLine;
-			} else {
-				return xVre;
-			}
-		};
+	public setBarHeight = () => {
+		const vm = this;
+		return (vm.heightSvg - 8) + 'px';
+	}
 
-		scope.setBarWidth = function setBarWidth(vre) {
-			const xVre = xAxisScale(vre * 100);
-			const xLine = xAxisScale(0);
+	private drawVreChart(scope, elem, vreListData, vreDailyData) {
 
-			if (vre > 0) {
-				return xVre - xLine;
-			} else {
-				return xLine - xVre;
-			}
-		};
+		const vm = this;
 
-		scope.setBarHeight = function setBarHeight() {
-			return (heightSvg - 8) + 'px';
-		};
+		scope.drawChartReady = true;
+
+		const padding = 3;
+		const table = d3.select(elem[0]);
+
+		const svgSelection = table.select('svg');
+		const svgTd = table.select('td.vre-svg-container');
+
+		vm.widthSvg = ((svgSelection.node() as any).getBoundingClientRect()).width;
+		vm.heightSvg = ((svgTd.node() as any).getBoundingClientRect()).height;
+
+		console.log({
+			widthSvg: vm.widthSvg,
+			heightSvg: vm.heightSvg,
+			domain: [-20, 10],
+			range: [padding, vm.widthSvg - padding],
+		});
+
+		// debugger;
+
+		vm.xAxisScale = d3.scaleLinear()
+			.domain([-20, 10])
+			.range([padding, vm.widthSvg - padding]);
+
 	}
 
 	public static Factory(): ng.IDirectiveFactory {
@@ -95,7 +116,7 @@ export class VreBarChart {
 		) => new VreBarChart(
 			$filter,
 			$xpdTimeout,
-		);
+			);
 
 		return directive;
 	}

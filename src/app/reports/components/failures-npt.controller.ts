@@ -11,7 +11,7 @@ import template from './modal/failures-npt-report.modal.html';
 export class FailuresNptController {
 	// 'use strict';
 
-	// angular.module('xpd.reports').controller('FailuresNptController', failuresNptController);
+	// angular.module('xpd.reports').controller('FailuresNptController', FailuresNptController);
 
 	public static $inject = ['$scope', '$uibModal', 'reportsSetupAPIService'];
 	public totalTime: any;

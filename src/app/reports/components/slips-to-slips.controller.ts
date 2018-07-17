@@ -3,7 +3,7 @@ import { EventLogSetupAPIService } from '../../shared/xpd.setupapi/eventlog-setu
 export class SlipsToSlipsController {
 	// 'use strict';
 
-	// angular.module('xpd.reports').controller('SlipsToSlipsController', slipsToSlipsController);
+	// angular.module('xpd.reports').controller('SlipsToSlipsController', SlipsToSlipsController);
 
 	public static $inject = ['$scope', '$routeParams', 'eventlogSetupAPIService'];
 	public onChangePeriod: (fromDate: any, toDate: any) => void;

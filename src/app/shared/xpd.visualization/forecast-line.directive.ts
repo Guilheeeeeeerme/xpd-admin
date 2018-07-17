@@ -11,7 +11,7 @@ export class ForecastLineDirective implements ng.IDirective {
 	constructor(private $filter: ng.IFilterFilter, private intersectionFactory) { }
 
 	public template = template;
-	public scope: {
+	public scope = {
 		targetLine: '=',
 		actualLine: '=',
 		isTripin: '=',

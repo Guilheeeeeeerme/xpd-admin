@@ -1,9 +1,9 @@
 import { ReportsSetupAPIService } from '../../shared/xpd.setupapi/reports-setupapi.service';
 
-export class VreScoreController {
+export class VREScoreController {
 	// 'use-strict';
 
-	// angular.module('xpd.reports').controller('VreScoreController', vreScoreController);
+	// angular.module('xpd.reports').controller('VREScoreController', VREScoreController);
 
 	public static $inject = ['$scope', 'reportsSetupAPIService'];
 	public onClickFilterButton: (fromDate: any, toDate: any) => boolean;

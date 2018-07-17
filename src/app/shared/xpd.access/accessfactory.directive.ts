@@ -15,7 +15,7 @@ export class AccessFactoryDirective implements ng.IDirective {
 	public static $inject: string[] = ['$uibModal', '$window', 'dialogService'];
 
 	public restrict = 'E';
-	public scope: {
+	public scope = {
 		hideReports: '@',
 		hideSetup: '@',
 	};

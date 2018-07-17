@@ -8,14 +8,12 @@ export class ReportsController {
 	public operationDataFactory: any;
 
 	constructor(
-		private $scope,
-		private operationSetupAPIService: OperationSetupAPIService,
-		private wellSetupAPIService: WellSetupAPIService,
-		private operationDataService: OperationDataService) {
+		public $scope,
+		public operationSetupAPIService: OperationSetupAPIService,
+		public wellSetupAPIService: WellSetupAPIService,
+		public operationDataService: OperationDataService) {
 
 		const vm = this;
-
-		console.log('oi');
 
 		$scope.reportsData = {
 			currentOperation: null,

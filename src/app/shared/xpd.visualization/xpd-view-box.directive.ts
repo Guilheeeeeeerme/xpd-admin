@@ -1,6 +1,6 @@
 export class XPDViewBoxDirective implements ng.IDirective {
-	public scope: {
-		'xpdViewBox': '=',
+	public scope = {
+		xpdViewBox: '=',
 	};
 
 	public link: ng.IDirectiveLinkFn = (

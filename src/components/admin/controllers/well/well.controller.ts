@@ -19,7 +19,7 @@ export class WellController {
 		private wellSetupAPIService: WellSetupAPIService,
 		private sectionSetupAPIService: SectionSetupAPIService,
 		private dialogService: DialogService,
-		operationDataService: OperationDataService) {
+		private operationDataService: OperationDataService) {
 
 		const vm = this;
 
@@ -27,7 +27,7 @@ export class WellController {
 			wellList: [],
 		};
 
-		operationDataService.openConnection([]).then(function () {
+		operationDataService.openConnection([]).then(() => {
 			vm.operationDataFactory = operationDataService.operationDataFactory;
 			$scope.operationData = vm.operationDataFactory.operationData;
 		});
@@ -52,7 +52,7 @@ export class WellController {
 			controller: 'WellUpsertController as wuController',
 			resolve: {
 				callback() {
-					return self.upsertCallback;
+					return (well1) => { self.upsertCallback(well1); };
 				},
 				initialData() {
 					return well;
@@ -73,7 +73,7 @@ export class WellController {
 			controller: 'WellUpsertController as wuController',
 			resolve: {
 				callback() {
-					return self.upsertCallback;
+					return (well) => { self.upsertCallback(well); };
 				},
 				initialData() {
 					return {};

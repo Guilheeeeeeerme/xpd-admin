@@ -9,7 +9,7 @@ export class LessonsLearnedChart {
 
 	public static $inject: string[] = ['highchartsService', '$filter'];
 	public restrict: 'EA';
-	public scope: {
+	public scope = {
 		chartData: '=',
 		chartTitle: '=',
 	};

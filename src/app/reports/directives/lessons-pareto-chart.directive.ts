@@ -9,7 +9,7 @@ export class LessonsParetoChart {
 
 	public static $inject: string[] = ['highchartsService'];
 	public restrict: 'EA';
-	public scope: {
+	public scope = {
 		chartData: '=',
 		chartTitle: '=',
 	};

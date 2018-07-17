@@ -9,7 +9,7 @@ export class VreScoreBarChart {
 
 	public static $inject: string[] = ['highchartsService'];
 	public restrict: 'EA';
-	public scope: {
+	public scope = {
 		chartCategories: '=',
 		chartData: '=',
 		chartScale: '=',

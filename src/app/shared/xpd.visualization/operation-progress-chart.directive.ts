@@ -7,7 +7,7 @@ import template from './operation-progress-chart.template.html';
 
 export class OperationProgressChartDirective implements ng.IDirective {
 	public template = template;
-	public scope: {
+	public scope = {
 		progressData: '=',
 		progressDataDelay: '=',
 	};

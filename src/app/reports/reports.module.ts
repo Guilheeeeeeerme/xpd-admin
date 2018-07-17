@@ -9,8 +9,8 @@ import { LessonsLearnedController } from './components/lessons-learned.controlle
 import { NeedleReportController } from './components/needle-report.controller';
 import { ReportsController } from './components/reports.controller';
 import { SlipsToSlipsController } from './components/slips-to-slips.controller';
-import { VreReportController } from './components/vre-report.controller';
-import { VreScoreController } from './components/vre-score.controller';
+import { VREReportController } from './components/vre-report.controller';
+import { VREScoreController } from './components/vre-score.controller';
 import { BitDepthTimeDirective } from './directives/bit-depth-time.directive';
 import { DepthLineChartDirective } from './directives/depth-line-chart.directive';
 import { EventDurationHistogram } from './directives/event-duration-histogram.directive';
@@ -34,15 +34,15 @@ export { XPDReportsModule };
 XPDReportsModule.config(ReportConfig);
 
 XPDReportsModule.controller('ReportsController', ReportsController);
-XPDReportsModule.controller('bitDepthTimeController', BitDepthTimeController);
+XPDReportsModule.controller('BitDepthTimeController', BitDepthTimeController);
 XPDReportsModule.controller('depthController', DepthController);
-XPDReportsModule.controller('failuresNptController', FailuresNptController);
-XPDReportsModule.controller('histogramReportController', HistogramReportController);
-XPDReportsModule.controller('lessonsLearnedController', LessonsLearnedController);
-XPDReportsModule.controller('needleReportController', NeedleReportController);
-XPDReportsModule.controller('slipsToSlipsController', SlipsToSlipsController);
-XPDReportsModule.controller('vreReportController', VreReportController);
-XPDReportsModule.controller('vreScoreController', VreScoreController);
+XPDReportsModule.controller('FailuresNptController', FailuresNptController);
+XPDReportsModule.controller('HistogramReportController', HistogramReportController);
+XPDReportsModule.controller('LessonsLearnedController', LessonsLearnedController);
+XPDReportsModule.controller('NeedleReportController', NeedleReportController);
+XPDReportsModule.controller('SlipsToSlipsController', SlipsToSlipsController);
+XPDReportsModule.controller('VREReportController', VREReportController);
+XPDReportsModule.controller('VREScoreController', VREScoreController);
 
 XPDReportsModule.directive('xpdBitDepthTime', BitDepthTimeDirective.Factory());
 XPDReportsModule.directive('xpdDepthLineChart', DepthLineChartDirective.Factory());
