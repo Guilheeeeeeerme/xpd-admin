@@ -18,7 +18,7 @@ export class LayDownConfirmationDirective implements ng.IDirective {
 	public layDownDetectedModal: any;
 	constructor(private $uibModal: IModalService, private operationDataService: OperationDataService) { }
 
-	public scope: any = {
+	public scope: {
 		dismissable: '<',
 	};
 
@@ -30,54 +30,53 @@ export class LayDownConfirmationDirective implements ng.IDirective {
 	) => {
 		const vm = this;
 
-		this.operationDataService.openConnection([]).then(function () {
+		this.operationDataService.openConnection([]).then(() => {
+
 			vm.operationDataFactory = vm.operationDataService.operationDataFactory;
 
-			scope.actionButtonStartLaydown = actionButtonStartLaydown;
+			scope.actionButtonStartLaydown = () => {
+				vm.operationDataFactory.emitStartLayDown();
+			};
 
 			vm.operationDataService.on('setOnStateChangeListener', (stateContext: any) => {
-				vm.checkCurrentState(stateContext);
+				checkCurrentState(stateContext);
 			});
 
 			vm.operationDataService.on('setOnCurrentStateListener', (stateContext: any) => {
-				vm.checkCurrentState(stateContext);
+				checkCurrentState(stateContext);
 			});
 
 			vm.operationDataService.on('setOnChangeLaydownStatusListener', (stateContext: any) => {
-				vm.checkCurrentState(stateContext);
+				checkCurrentState(stateContext);
 			});
-
-			function actionButtonStartLaydown() {
-				vm.operationDataFactory.emitStartLayDown();
-			}
 
 		});
 
-	}
+		const checkCurrentState = (stateContext) => {
 
-	private checkCurrentState(stateContext) {
+			// console.log(stateContext.currentState, stateContext.layDownDetected);
 
-		// console.log(stateContext.currentState, stateContext.layDownDetected);
+			if (!this.layDownDetectedModal && stateContext.currentState === 'layDown' && stateContext.layDownDetected === true) {
+				scope.buttonNameStartLayDown = 'Start ' + (this.operationDataFactory.operationData.operationContext.currentOperation.type === 'bha' ? 'BHA' : 'BOP') + ' Lay Down';
 
-		if (!this.layDownDetectedModal && stateContext.currentState === 'layDown' && stateContext.layDownDetected === true) {
-			this.scope.buttonNameStartLayDown = 'Start ' + (this.operationDataFactory.operationData.operationContext.currentOperation.type === 'bha' ? 'BHA' : 'BOP') + ' Lay Down';
+				this.layDownDetectedModal = this.$uibModal.open({
+					keyboard: false,
+					animation: false,
+					scope: scope,
+					size: 'lg',
+					backdrop: !!scope.dismissable,
+					windowClass: 'laydown-confirmation-modal',
+					template: modalTemplate,
+				});
 
-			this.layDownDetectedModal = this.$uibModal.open({
-				keyboard: false,
-				animation: false,
-				scope: this.scope,
-				size: 'lg',
-				backdrop: !!this.scope.dismissable,
-				windowClass: 'laydown-confirmation-modal',
-				template: modalTemplate,
-			});
-
-		} else if (this.layDownDetectedModal) {
-			if (this.layDownDetectedModal && this.layDownDetectedModal.close) {
-				this.layDownDetectedModal.close();
+			} else if (this.layDownDetectedModal) {
+				if (this.layDownDetectedModal && this.layDownDetectedModal.close) {
+					this.layDownDetectedModal.close();
+				}
+				this.layDownDetectedModal = null;
 			}
-			this.layDownDetectedModal = null;
-		}
+
+		};
 
 	}
 

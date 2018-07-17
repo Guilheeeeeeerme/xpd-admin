@@ -85,7 +85,9 @@
 
             <div class="panel panel-default">
 
-                <div class="panel-heading clearfix" ng-init="odController.getPanelStartState('panelOperationIsCollapsed')" ng-click="odController.changePanelState('panelOperationIsCollapsed')">
+                <div class="panel-heading clearfix" 
+                    ng-init="odController.getPanelStartState('panelOperationIsCollapsed')" 
+                    ng-click="odController.changePanelState('panelOperationIsCollapsed')">
                     <h4 class="panel-title pull-left">
                         Trip {{ operationData.directionContext.tripin?'In': 'Out' }} Sub Operation Forecast</h4>
                     <div class="btn-group pull-right">
@@ -117,7 +119,10 @@
 
             <div class="panel panel-default">
 
-                <div class="panel-heading clearfix" ng-init="odController.getPanelStartState('panelCurrentAlarmIsCollapsed')" ng-click="odController.changePanelState('panelCurrentAlarmIsCollapsed')">
+                <div 
+                    class="panel-heading clearfix" 
+                    ng-init="odController.getPanelStartState('panelCurrentAlarmIsCollapsed')" 
+                    ng-click="odController.changePanelState('panelCurrentAlarmIsCollapsed')">
                     <h4 class="panel-title pull-left">Current Alarm</h4>
                     <div class="btn-group pull-right">
                         <i type="button" class="pull-right glyphicon pointer" ng-class="{'glyphicon-chevron-down': statusPanel['panelCurrentAlarmIsCollapsed'], 'glyphicon-chevron-up': !statusPanel['panelCurrentAlarmIsCollapsed']}">
@@ -169,7 +174,10 @@
             <!-- Failures -->
             <div class="panel panel-default">
 
-                <div class="panel-heading clearfix" ng-init="odController.getPanelStartState('panelFailuresIsCollapsed')" ng-click="odController.changePanelState('panelFailuresIsCollapsed')">
+                <div 
+                    class="panel-heading clearfix" 
+                    ng-init="odController.getPanelStartState('panelFailuresIsCollapsed')" 
+                    ng-click="odController.changePanelState('panelFailuresIsCollapsed')">
                     <h4 class="panel-title pull-left">Failures</h4>
                     <div class="btn-group pull-right">
                         <i type="button" class="pull-right glyphicon pointer" ng-class="{'glyphicon-chevron-down': statusPanel['panelFailuresIsCollapsed'], 'glyphicon-chevron-up': !statusPanel['panelFailuresIsCollapsed']}">

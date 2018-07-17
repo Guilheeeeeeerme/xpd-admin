@@ -14,9 +14,13 @@
 
 // import * as highcharts from '../assets/js/highcharts.js';
 
-import 'highcharts';
-import 'highcharts-more';
-import 'highcharts-multicolor-series';
+import * as Highcharts from 'highcharts';
+
+declare var require: any;
+// tslint:disable-next-line:no-var-requires
+require('highcharts/highcharts-more')(Highcharts);
+// tslint:disable-next-line:no-var-requires
+require('highcharts-multicolor-series')(Highcharts);
 
 export class HighchartsService {
 
@@ -29,20 +33,19 @@ export class HighchartsService {
 		this.highchartDefer = this.$q.defer();
 
 		const self = this;
-
 		// Load client in the browser
-		this.$rootScope.$apply(function () {
-			(window as any).Highcharts.theme = self.getHighchartsTheme();
-			(window as any).Highcharts.setOptions(self.getHighchartsTheme());
+		// this.$rootScope.$apply(function () {
+		Highcharts.theme = self.getHighchartsTheme();
+		Highcharts.setOptions(self.getHighchartsTheme());
 
-			(window as any).Highcharts.setOptions({
-				global: {
-					timezoneOffset: new Date().getTimezoneOffset(),
-				},
-			});
-
-			self.highchartDefer.resolve((window as any).Highcharts);
+		Highcharts.setOptions({
+			global: {
+				timezoneOffset: new Date().getTimezoneOffset(),
+			},
 		});
+
+		self.highchartDefer.resolve(Highcharts);
+		// });
 	}
 
 	private getHighchartsTheme() {

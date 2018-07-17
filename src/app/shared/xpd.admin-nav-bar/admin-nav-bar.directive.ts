@@ -24,9 +24,6 @@ export class XPDAdminNavBarDirective implements ng.IDirective {
 		'operationDataService',
 		'dialogService'];
 
-	public scope = {
-
-	};
 	public restrict = 'E';
 	public template = template;
 	public operationDataFactory: any;

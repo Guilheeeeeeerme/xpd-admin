@@ -27,7 +27,6 @@ export class FailureNavBarDirective implements ng.IDirective {
 		'operationDataService',
 		'dialogService'];
 
-	public scope = {};
 	public restrict = 'EA';
 	public template = template;
 	public operationDataFactory: any;

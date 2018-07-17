@@ -2,6 +2,7 @@ import * as angular from 'angular';
 import { VCruisingCalculatorService } from '../../../app/shared/xpd.calculation/calculation.service';
 import { DialogService } from '../../../app/shared/xpd.dialog/xpd.dialog.factory';
 import { OperationDataService } from '../../../app/shared/xpd.operation-data/operation-data.service';
+
 /*
 * @Author:
 * @Date:   2017-05-19 15:12:22
@@ -9,277 +10,264 @@ import { OperationDataService } from '../../../app/shared/xpd.operation-data/ope
 * @Last Modified time: 2017-09-19 16:40:21
 */
 export class PlannerController {
-	// 'use strict';
-
-	// angular.module('xpd.admin').controller('PlannerController', plannerController);
 
 	public static $inject = ['$scope', '$filter', 'operationDataService', 'dialogService', 'vCruisingCalculator'];
 	public operationDataFactory: any;
-	public actionSelectActivityToPlan: (stateName: any, eventType: any) => void;
-	public selectActivityOnInit: (index: any, stateName: any, eventType: any) => void;
-	public actionButtonApplyTrip: () => void;
-	public actionButtonApplyConn: () => void;
-	public sumTripConnduration: (stateSettings: any) => number;
 	public timeSlicesContext: any;
 	public stateContext: any;
 	public vtargetContext: any;
 
 	constructor(
-		$scope,
-		$filter,
-		operationDataService: OperationDataService,
-		dialogService: DialogService,
-		vCruisingCalculator: VCruisingCalculatorService) {
-
-		const vm = this;
+		public $scope,
+		public $filter,
+		public operationDataService: OperationDataService,
+		public dialogService: DialogService,
+		public vCruisingCalculator: VCruisingCalculatorService) {
 
 		$scope.dados = {
 			settings: null,
 			timeSlices: null,
 		};
 
-		operationDataService.openConnection([]).then(function () {
-			vm.operationDataFactory = operationDataService.operationDataFactory;
-			$scope.operationData = vm.operationDataFactory.operationData;
+		operationDataService.openConnection([]).then(() => {
 
-			startWatching();
+			console.log('oi');
 
-			loadOperationStates();
-			loadTimeSlice();
+			this.operationDataFactory = operationDataService.operationDataFactory;
+			$scope.operationData = this.operationDataFactory.operationData;
+
+			this.startWatching();
+
+			this.loadOperationStates();
+			this.loadTimeSlice();
 		});
 
-		vm.actionSelectActivityToPlan = actionSelectActivityToPlan;
-		vm.selectActivityOnInit = selectActivityOnInit;
-		vm.actionButtonApplyTrip = actionButtonApplyTrip;
-		vm.actionButtonApplyConn = actionButtonApplyConn;
-		vm.sumTripConnduration = sumTripConnduration;
+	}
 
-		function startWatching() {
-			vm.timeSlicesContext = $scope.$watch('operationData.timeSlicesContext', loadTimeSlice, true);
-			vm.stateContext = $scope.$watch('operationData.stateContext', loadOperationStates, true);
-			vm.vtargetContext = $scope.$watch('operationData.vtargetContext', loadOperationStates, true);
+	private startWatching() {
+		this.timeSlicesContext = this.$scope.$watch('operationData.timeSlicesContext', (data) => { this.loadTimeSlice(); }, true);
+		this.stateContext = this.$scope.$watch('operationData.stateContext', (data) => { this.loadOperationStates(); }, true);
+		this.vtargetContext = this.$scope.$watch('operationData.vtargetContext', (data) => { this.loadOperationStates(); }, true);
+	}
+
+	private stopWatching() {
+		if (this.timeSlicesContext) { this.timeSlicesContext(); }
+		if (this.stateContext) { this.stateContext(); }
+		if (this.vtargetContext) { this.vtargetContext(); }
+	}
+
+	private loadTimeSlice() {
+
+		if (!this.$scope.operationData.timeSlicesContext || !this.$scope.operationData.timeSlicesContext.timeSlices) {
+			this.$scope.dados.timeSlices = null;
+			return;
 		}
 
-		function stopWatching() {
-			if (vm.timeSlicesContext) { vm.timeSlicesContext(); }
-			if (vm.stateContext) { vm.stateContext(); }
-			if (vm.vtargetContext) { vm.vtargetContext(); }
+		this.$scope.dados.timeSlices = angular.copy(this.$scope.operationData.timeSlicesContext.timeSlices);
+
+	}
+
+	private loadOperationStates() {
+
+		if (!this.$scope.operationData.vtargetContext ||
+			!this.$scope.operationData.stateContext ||
+			!this.$scope.operationData.vtargetContext.vTargetPercentages ||
+			!this.$scope.operationData.stateContext.operationStates) {
+
+			this.$scope.dados.settings = null;
+			return;
 		}
 
-		function loadTimeSlice() {
+		for (const i in this.$scope.operationData.stateContext.operationStates) {
+			const stateName = i;
+			const state = this.$scope.operationData.stateContext.operationStates[i];
 
-			if (!$scope.operationData.timeSlicesContext || !$scope.operationData.timeSlicesContext.timeSlices) {
-				$scope.dados.timeSlices = null;
-				return;
-			}
+			for (const j in state.calcVREParams) {
+				const eventType = j;
+				const param = state.calcVREParams[j];
 
-			$scope.dados.timeSlices = angular.copy($scope.operationData.timeSlicesContext.timeSlices);
-
-		}
-
-		function loadOperationStates() {
-
-			if (!$scope.operationData.vtargetContext ||
-				!$scope.operationData.stateContext ||
-				!$scope.operationData.vtargetContext.vTargetPercentages ||
-				!$scope.operationData.stateContext.operationStates) {
-
-				$scope.dados.settings = null;
-				return;
-			}
-
-			for (const i in $scope.operationData.stateContext.operationStates) {
-				const stateName = i;
-				const state = $scope.operationData.stateContext.operationStates[i];
-
-				for (const j in state.calcVREParams) {
-					const eventType = j;
-					const param = state.calcVREParams[j];
-
-					if (eventType !== 'TIME') {
-						setAllActivitiesParams(stateName, state, eventType, param, state.stateType);
-					}
-
-				}
-			}
-
-		}
-
-		function setAllActivitiesParams(stateName, state, eventType, params, stateType) {
-
-			if ($scope.dados.settings == null) {
-				$scope.dados.settings = {};
-			}
-
-			if ($scope.dados.settings[stateName] == null) {
-				$scope.dados.settings[stateName] = {};
-			}
-
-			if ($scope.dados.settings[stateName][eventType] == null) {
-				$scope.dados.settings[stateName][eventType] = {
-
-					label: stateType + ' [' + eventType + ']',
-
-					stateName,
-					stateType: state.calcVREParams[eventType].type,
-					eventType,
-
-					optimumAccelerationTimeLimit: +params.accelerationTimeLimit,
-					targetAccelerationTimeLimit: +params.accelerationTimeLimit * +$scope.operationData.vtargetContext.vTargetPercentages[stateName][eventType].accelerationTimeLimitPercentage,
-
-					optimumDecelerationTimeLimit: +params.decelerationTimeLimit,
-					targetDecelerationTimeLimit: +params.decelerationTimeLimit * +$scope.operationData.vtargetContext.vTargetPercentages[stateName][eventType].decelerationTimeLimitPercentage,
-
-					optimumSafetySpeedLimit: +params.safetySpeedLimit,
-					targetSafetySpeedLimit: +params.safetySpeedLimit * +$scope.operationData.vtargetContext.vTargetPercentages[stateName][eventType].safetySpeedLimitPercentage,
-
-					optimumSpeed: +params.voptimum,
-					targetSpeed: +params.voptimum * +$scope.operationData.vtargetContext.vTargetPercentages[stateName][eventType].voptimumPercentage,
-				};
-			}
-
-			if (eventType === 'TRIP') {
-
-				let displacement;
-
-				if (stateName === 'casing') {
-					displacement = $scope.operationData.operationContext.currentOperation.averageSectionLength;
-				} else {
-					displacement = $scope.operationData.operationContext.currentOperation.averageStandLength;
+				if (eventType !== 'TIME') {
+					this.setAllActivitiesParams(stateName, state, eventType, param, state.stateType);
 				}
 
-				$scope.dados.settings[stateName][eventType].displacement = displacement;
+			}
+		}
 
-				const targetSpeed = $scope.dados.settings[stateName][eventType].targetSpeed;
+	}
 
-				const time = (displacement / targetSpeed) - $scope.operationData.operationContext.currentOperation.inSlips;
+	private setAllActivitiesParams(stateName, state, eventType, params, stateType) {
 
-				const accelerationTimeLimit = $scope.dados.settings[stateName][eventType].targetAccelerationTimeLimit;
-				const decelerationTimeLimit = $scope.dados.settings[stateName][eventType].targetDecelerationTimeLimit;
+		if (this.$scope.dados.settings == null) {
+			this.$scope.dados.settings = {};
+		}
 
-				const vcruising = vCruisingCalculator.calculate((displacement / time), time, accelerationTimeLimit, decelerationTimeLimit);
+		if (this.$scope.dados.settings[stateName] == null) {
+			this.$scope.dados.settings[stateName] = {};
+		}
 
-				$scope.dados.settings[stateName][eventType].vcruising = vcruising;
+		if (this.$scope.dados.settings[stateName][eventType] == null) {
+			this.$scope.dados.settings[stateName][eventType] = {
 
-				$scope.dados.settings[stateName][eventType].targetTime = displacement / $scope.dados.settings[stateName][eventType].targetSpeed;
-				$scope.dados.settings[stateName][eventType].optimumTime = displacement / $scope.dados.settings[stateName][eventType].optimumSpeed;
+				label: stateType + ' [' + eventType + ']',
+
+				stateName,
+				stateType: state.calcVREParams[eventType].type,
+				eventType,
+
+				optimumAccelerationTimeLimit: +params.accelerationTimeLimit,
+				targetAccelerationTimeLimit: +params.accelerationTimeLimit * +this.$scope.operationData.vtargetContext.vTargetPercentages[stateName][eventType].accelerationTimeLimitPercentage,
+
+				optimumDecelerationTimeLimit: +params.decelerationTimeLimit,
+				targetDecelerationTimeLimit: +params.decelerationTimeLimit * +this.$scope.operationData.vtargetContext.vTargetPercentages[stateName][eventType].decelerationTimeLimitPercentage,
+
+				optimumSafetySpeedLimit: +params.safetySpeedLimit,
+				targetSafetySpeedLimit: +params.safetySpeedLimit * +this.$scope.operationData.vtargetContext.vTargetPercentages[stateName][eventType].safetySpeedLimitPercentage,
+
+				optimumSpeed: +params.voptimum,
+				targetSpeed: +params.voptimum * +this.$scope.operationData.vtargetContext.vTargetPercentages[stateName][eventType].voptimumPercentage,
+			};
+		}
+
+		if (eventType === 'TRIP') {
+
+			let displacement;
+
+			if (stateName === 'casing') {
+				displacement = this.$scope.operationData.operationContext.currentOperation.averageSectionLength;
 			} else {
-
-				$scope.dados.settings[stateName][eventType].targetTime = 1 / $scope.dados.settings[stateName][eventType].targetSpeed;
-				$scope.dados.settings[stateName][eventType].optimumTime = 1 / $scope.dados.settings[stateName][eventType].optimumSpeed;
+				displacement = this.$scope.operationData.operationContext.currentOperation.averageStandLength;
 			}
 
+			this.$scope.dados.settings[stateName][eventType].displacement = displacement;
+
+			const targetSpeed = this.$scope.dados.settings[stateName][eventType].targetSpeed;
+
+			const time = (displacement / targetSpeed) - this.$scope.operationData.operationContext.currentOperation.inSlips;
+
+			const accelerationTimeLimit = this.$scope.dados.settings[stateName][eventType].targetAccelerationTimeLimit;
+			const decelerationTimeLimit = this.$scope.dados.settings[stateName][eventType].targetDecelerationTimeLimit;
+
+			const vcruising = this.vCruisingCalculator.calculate((displacement / time), time, accelerationTimeLimit, decelerationTimeLimit);
+
+			this.$scope.dados.settings[stateName][eventType].vcruising = vcruising;
+
+			this.$scope.dados.settings[stateName][eventType].targetTime = displacement / this.$scope.dados.settings[stateName][eventType].targetSpeed;
+			this.$scope.dados.settings[stateName][eventType].optimumTime = displacement / this.$scope.dados.settings[stateName][eventType].optimumSpeed;
+		} else {
+
+			this.$scope.dados.settings[stateName][eventType].targetTime = 1 / this.$scope.dados.settings[stateName][eventType].targetSpeed;
+			this.$scope.dados.settings[stateName][eventType].optimumTime = 1 / this.$scope.dados.settings[stateName][eventType].optimumSpeed;
 		}
 
-		function actionSelectActivityToPlan(stateName, eventType) {
+	}
 
-			stopWatching();
+	public actionSelectActivityToPlan(stateName, eventType) {
 
-			$scope.dados.selectedEventType = null;
+		this.stopWatching();
 
-			$scope.dados.leftPercentage = 0;
+		this.$scope.dados.selectedEventType = null;
 
-			$scope.dados.selectedState = stateName;
-			$scope.dados.selectedEventType = eventType;
+		this.$scope.dados.leftPercentage = 0;
 
+		this.$scope.dados.selectedState = stateName;
+		this.$scope.dados.selectedEventType = eventType;
+
+	}
+
+	public selectActivityOnInit(index, stateName, eventType) {
+		if (index === 0) {
+			this.actionSelectActivityToPlan(stateName, eventType);
 		}
+	}
 
-		function selectActivityOnInit(index, stateName, eventType) {
-			if (index === 0) {
-				actionSelectActivityToPlan(stateName, eventType);
+	private actionButtonApply() {
+
+		const eventData: any = {};
+
+		eventData.stateKey = this.$scope.dados.selectedState;
+		eventData.eventKey = this.$scope.dados.selectedEventType;
+
+		eventData.voptimumPercentage = +this.$scope.dados.settings[this.$scope.dados.selectedState][this.$scope.dados.selectedEventType].targetSpeed / +this.$scope.dados.settings[this.$scope.dados.selectedState][this.$scope.dados.selectedEventType].optimumSpeed;
+		eventData.accelerationTimeLimitPercentage = +this.$scope.dados.settings[this.$scope.dados.selectedState][this.$scope.dados.selectedEventType].targetAccelerationTimeLimit / +this.$scope.dados.settings[this.$scope.dados.selectedState][this.$scope.dados.selectedEventType].optimumAccelerationTimeLimit;
+		eventData.decelerationTimeLimitPercentage = +this.$scope.dados.settings[this.$scope.dados.selectedState][this.$scope.dados.selectedEventType].targetDecelerationTimeLimit / +this.$scope.dados.settings[this.$scope.dados.selectedState][this.$scope.dados.selectedEventType].optimumDecelerationTimeLimit;
+		eventData.safetySpeedLimitPercentage = +this.$scope.dados.settings[this.$scope.dados.selectedState][this.$scope.dados.selectedEventType].targetSafetySpeedLimit / +this.$scope.dados.settings[this.$scope.dados.selectedState][this.$scope.dados.selectedEventType].optimumSafetySpeedLimit;
+		eventData.stateType = this.$scope.dados.settings[this.$scope.dados.selectedState][this.$scope.dados.selectedEventType].stateType;
+
+		this.operationDataFactory.emitUpdateContractParams(eventData);
+
+	}
+
+	private prepareTimeSlices(timeSlices) {
+
+		let timeOrder = 1;
+
+		for (const i in timeSlices) {
+			const timeSlice = timeSlices[i];
+
+			timeSlice.timeOrder = timeOrder;
+
+			if (timeSlice.percentage > 0) {
+				timeOrder++;
+			} else {
+				timeSlice.enabled = false;
+				timeSlice.canDelete = true;
 			}
-		}
 
-		function actionButtonApply() {
-
-			const eventData: any = {};
-
-			eventData.stateKey = $scope.dados.selectedState;
-			eventData.eventKey = $scope.dados.selectedEventType;
-
-			eventData.voptimumPercentage = +$scope.dados.settings[$scope.dados.selectedState][$scope.dados.selectedEventType].targetSpeed / +$scope.dados.settings[$scope.dados.selectedState][$scope.dados.selectedEventType].optimumSpeed;
-			eventData.accelerationTimeLimitPercentage = +$scope.dados.settings[$scope.dados.selectedState][$scope.dados.selectedEventType].targetAccelerationTimeLimit / +$scope.dados.settings[$scope.dados.selectedState][$scope.dados.selectedEventType].optimumAccelerationTimeLimit;
-			eventData.decelerationTimeLimitPercentage = +$scope.dados.settings[$scope.dados.selectedState][$scope.dados.selectedEventType].targetDecelerationTimeLimit / +$scope.dados.settings[$scope.dados.selectedState][$scope.dados.selectedEventType].optimumDecelerationTimeLimit;
-			eventData.safetySpeedLimitPercentage = +$scope.dados.settings[$scope.dados.selectedState][$scope.dados.selectedEventType].targetSafetySpeedLimit / +$scope.dados.settings[$scope.dados.selectedState][$scope.dados.selectedEventType].optimumSafetySpeedLimit;
-			eventData.stateType = $scope.dados.settings[$scope.dados.selectedState][$scope.dados.selectedEventType].stateType;
-
-			vm.operationDataFactory.emitUpdateContractParams(eventData);
+			timeSlice.operation = {
+				id: this.$scope.operationData.operationContext.currentOperation.id,
+			};
 
 		}
 
-		function prepareTimeSlices(timeSlices) {
+		return timeSlices;
 
-			let timeOrder = 1;
+	}
 
-			for (const i in timeSlices) {
-				const timeSlice = timeSlices[i];
+	public actionButtonApplyConn() {
+		this.dialogService.showConfirmDialog('Are you sure you want to apply this change?', () => {
 
-				timeSlice.timeOrder = timeOrder;
+			try {
 
-				if (timeSlice.percentage > 0) {
-					timeOrder++;
-				} else {
-					timeSlice.enabled = false;
-					timeSlice.canDelete = true;
-				}
+				this.$scope.dados.timeSlices.tripin = this.prepareTimeSlices(this.$scope.dados.timeSlices.tripin);
+				// .map(addOperationInfo);
+				this.$scope.dados.timeSlices.tripout = this.prepareTimeSlices(this.$scope.dados.timeSlices.tripout);
+				// .map(addOperationInfo);
+				this.operationDataFactory.emitUpdateTimeSlices(this.$scope.dados.timeSlices);
 
-				timeSlice.operation = {
-					id: $scope.operationData.operationContext.currentOperation.id,
-				};
+				this.$scope.dados.timeSlices.tripin = this.$filter('filter')(this.$scope.dados.timeSlices.tripin, this.returnValidTimeSlices);
+				this.$scope.dados.timeSlices.tripout = this.$filter('filter')(this.$scope.dados.timeSlices.tripout, this.returnValidTimeSlices);
 
+			} catch (e) {
+				//
 			}
 
-			return timeSlices;
+			this.actionButtonApply();
 
-		}
+		});
 
-		function actionButtonApplyConn() {
-			dialogService.showConfirmDialog('Are you sure you want to apply this change?', function () {
+	}
 
-				try {
+	public actionButtonApplyTrip() {
 
-					$scope.dados.timeSlices.tripin = prepareTimeSlices($scope.dados.timeSlices.tripin);
-					// .map(addOperationInfo);
-					$scope.dados.timeSlices.tripout = prepareTimeSlices($scope.dados.timeSlices.tripout);
-					// .map(addOperationInfo);
-					vm.operationDataFactory.emitUpdateTimeSlices($scope.dados.timeSlices);
+		this.dialogService.showConfirmDialog('Are you sure you want to apply this change?', () => {
 
-					$scope.dados.timeSlices.tripin = $filter('filter')($scope.dados.timeSlices.tripin, returnValidTimeSlices);
-					$scope.dados.timeSlices.tripout = $filter('filter')($scope.dados.timeSlices.tripout, returnValidTimeSlices);
+			this.operationDataFactory.emitUpdateInSlips(this.$scope.operationData.operationContext.currentOperation.inSlips);
+			this.actionButtonApply();
 
-				} catch (e) {
-					//
-				}
+		});
 
-				actionButtonApply();
+	}
 
-			});
+	public sumTripConnduration(stateSettings) {
 
-		}
+		const tripDuration = stateSettings.TRIP.targetTime * 1000;
+		const connDuration = stateSettings.CONN.targetTime * 1000;
 
-		function actionButtonApplyTrip() {
+		return tripDuration + connDuration;
+	}
 
-			dialogService.showConfirmDialog('Are you sure you want to apply this change?', function () {
-
-				vm.operationDataFactory.emitUpdateInSlips($scope.operationData.operationContext.currentOperation.inSlips);
-				actionButtonApply();
-
-			});
-
-		}
-
-		function sumTripConnduration(stateSettings) {
-
-			const tripDuration = stateSettings.TRIP.targetTime * 1000;
-			const connDuration = stateSettings.CONN.targetTime * 1000;
-
-			return tripDuration + connDuration;
-		}
-
-		function returnValidTimeSlices(timeSlice) {
-			return timeSlice.percentage > 0;
-		}
-
+	private returnValidTimeSlices(timeSlice) {
+		return timeSlice.percentage > 0;
 	}
 
 }

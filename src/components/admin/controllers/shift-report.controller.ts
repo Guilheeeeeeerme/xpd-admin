@@ -3,9 +3,6 @@ import { SectionSetupAPIService } from '../../../app/shared/xpd.setupapi/section
 import { WellSetupAPIService } from '../../../app/shared/xpd.setupapi/well-setupapi.service';
 
 export class RPDController {
-	// 'use strict';
-
-	// angular.module('xpd.admin').controller('RpdController', rpdController);
 
 	public static $inject = ['$scope', '$routeParams', '$location', '$filter', 'wellSetupAPIService', 'sectionSetupAPIService', 'eventlogSetupAPIService'];
 

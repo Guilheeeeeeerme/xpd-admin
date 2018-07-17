@@ -29,7 +29,7 @@ export class ReadingSetupAPIService {
 		this.setupAPIService.doRequest(req, successCallback, errorCallback);
 	}
 
-	public getTick(tick, successCallback, errorCallback) {
+	public getTick(tick, successCallback, errorCallback?) {
 		const req = {
 			method: 'GET',
 			url: this.BASE_URL + '/tick/' + tick,

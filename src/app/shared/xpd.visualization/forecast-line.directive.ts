@@ -8,10 +8,10 @@ import template from './forecast-line.template.html';
 
 export class ForecastLineDirective implements ng.IDirective {
 
-	constructor(private $filter: ng.IFilterFilter, private intersectionFactory: IntersectionFactory) { }
+	constructor(private $filter: ng.IFilterFilter, private intersectionFactory) { }
 
 	public template = template;
-	public scope = {
+	public scope: {
 		targetLine: '=',
 		actualLine: '=',
 		isTripin: '=',
@@ -41,43 +41,7 @@ export class ForecastLineDirective implements ng.IDirective {
 
 		scope.svg.viewBox = '0 0 100 ' + scope.chart.height;
 
-		const pathGenerator = d3.line()
-			.x(function (d: any) { return scope.xScale(d.x); })
-			.y(function (d: any) { return scope.yScale(d.y); })
-			.curve(d3.curveStepAfter);
-
-		scope.$watch('isTripin', function () {
-			buildvTargetLine();
-			buildActualLine();
-		});
-
-		scope.$watch('targetLine', function () {
-			buildvTargetLine();
-		}, true);
-
-		scope.$watch('actualLine', function () {
-			buildActualLine();
-		}, true);
-
-		scope.$watch('settings', function () {
-			buildExpectedLine();
-		}, true);
-
-		scope.$watch('expectedLine', intersect, true);
-
-		scope.$watch('state', function () {
-			buildvTargetLine();
-			buildActualLine();
-			buildExpectedLine();
-		}, true);
-
-		scope.$watch('type', function () {
-			buildvTargetLine();
-			buildActualLine();
-			buildExpectedLine();
-		}, true);
-
-		function buildActualLine() {
+		const buildActualLine = () => {
 
 			delete scope.actualPath;
 
@@ -90,9 +54,9 @@ export class ForecastLineDirective implements ng.IDirective {
 			}
 
 			buildExpectedLine();
-		}
+		};
 
-		function buildvTargetLine() {
+		const buildvTargetLine = () => {
 
 			delete scope.optimumPath;
 
@@ -111,9 +75,9 @@ export class ForecastLineDirective implements ng.IDirective {
 			scope.xScaleTicks = scope.xScale.ticks();
 
 			scope.optimumPath = pathGenerator(getVtargetLine(scope.state, scope.type).points);
-		}
+		};
 
-		function buildExpectedLine() {
+		const buildExpectedLine = () => {
 
 			delete scope.expectedPath;
 
@@ -175,9 +139,9 @@ export class ForecastLineDirective implements ng.IDirective {
 			};
 
 			scope.expectedPath = pathGenerator(points);
-		}
+		};
 
-		function getActualLine(state, type) {
+		const getActualLine = (state, type) => {
 			const isTripin = scope.isTripin === false ? false : true;
 			const directionLabel = isTripin === false ? 'TRIPOUT' : 'TRIPIN';
 
@@ -190,9 +154,9 @@ export class ForecastLineDirective implements ng.IDirective {
 				return null;
 			}
 
-		}
+		};
 
-		function getVtargetLine(state, type) {
+		const getVtargetLine = (state, type) => {
 			const isTripin = scope.isTripin === false ? false : true;
 
 			for (const i in scope.targetLine) {
@@ -208,9 +172,9 @@ export class ForecastLineDirective implements ng.IDirective {
 
 			return null;
 
-		}
+		};
 
-		function intersect(expectedLine) {
+		const intersect = (expectedLine) => {
 
 			const optimum = {
 				start: null,
@@ -265,7 +229,7 @@ export class ForecastLineDirective implements ng.IDirective {
 				}
 
 			} catch (e) {
-
+				console.error(e);
 			}
 
 			if (expected.end && expected.end.x) {
@@ -274,12 +238,48 @@ export class ForecastLineDirective implements ng.IDirective {
 				scope.balance = null;
 			}
 
-		}
+		};
+
+		const pathGenerator = d3.line()
+			.x((d: any) => scope.xScale(d.x))
+			.y((d: any) => scope.yScale(d.y))
+			.curve(d3.curveStepAfter);
+
+		scope.$watch('isTripin', () => {
+			buildvTargetLine();
+			buildActualLine();
+		});
+
+		scope.$watch('targetLine', () => {
+			buildvTargetLine();
+		}, true);
+
+		scope.$watch('actualLine', () => {
+			buildActualLine();
+		}, true);
+
+		scope.$watch('settings', () => {
+			buildExpectedLine();
+		}, true);
+
+		scope.$watch('expectedLine', intersect, true);
+
+		scope.$watch('state', () => {
+			buildvTargetLine();
+			buildActualLine();
+			buildExpectedLine();
+		}, true);
+
+		scope.$watch('type', () => {
+			buildvTargetLine();
+			buildActualLine();
+			buildExpectedLine();
+		}, true);
 
 	}
 
 	public static Factory(): ng.IDirectiveFactory {
-		const directive = ($filter: ng.IFilterFilter, intersectionFactory: IntersectionFactory) => new ForecastLineDirective($filter, intersectionFactory);
+		const directive = ($filter: ng.IFilterFilter, intersectionFactory) => new ForecastLineDirective($filter, intersectionFactory);
 		directive.$inject = ['$filter', 'intersectionFactory'];
 		return directive;
 	}

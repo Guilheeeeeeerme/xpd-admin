@@ -97,4 +97,3 @@ function AdminConfig($routeProvider) {
 }
 
 export { AdminConfig };
-

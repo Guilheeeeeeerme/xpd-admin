@@ -67,7 +67,7 @@ XPDAdminModule.controller('FailureDelayCategoryController', FailureDelayCategory
 XPDAdminModule.controller('LessonLearnedCategoryController', LessonLearnedCategoryController);
 XPDAdminModule.controller('MenuController', MenuController);
 XPDAdminModule.controller('PlannerController', PlannerController);
-XPDAdminModule.controller('RpdController', RPDController);
+XPDAdminModule.controller('RPDController', RPDController);
 XPDAdminModule.controller('TeamController', TeamController);
 XPDAdminModule.controller('TrackingUpdateTimesController', TrackingUpdateTimesController);
 XPDAdminModule.directive('xpdSavedAlarmsList', SavedAlarmsListDirectives.Factory());

@@ -7,36 +7,35 @@
 
 IntersectionFactory.$inject = [];
 
-// tslint:disable-next-line:only-arrow-functions
 function IntersectionFactory() {
 
-	const intersection: any = () => {
+	const intersection: any = function () {
 		const vector: any = {};
-		vector.oA = (segment) => {
+		vector.oA = function (segment) {
 			return segment.start;
 		};
-		vector.AB = (segment) => {
+		vector.AB = function (segment) {
 			const start = segment.start;
 			const end = segment.end;
 			return { x: end.x - start.x, y: end.y - start.y };
 		};
-		vector.add = (v1, v2) => {
+		vector.add = function (v1, v2) {
 			return { x: v1.x + v2.x, y: v1.y + v2.y };
 		};
-		vector.sub = (v1, v2) => {
+		vector.sub = function (v1, v2) {
 			return { x: v1.x - v2.x, y: v1.y - v2.y };
 		};
-		vector.scalarMult = (s, v) => {
+		vector.scalarMult = function (s, v) {
 			return { x: s * v.x, y: s * v.y };
 		};
-		vector.crossProduct = (v1, v2) => {
+		vector.crossProduct = function (v1, v2) {
 			return (v1.x * v2.y) - (v2.x * v1.y);
 		};
 		const self: any = {};
-		self.vector = (segment) => {
+		self.vector = function (segment) {
 			return vector.AB(segment);
 		};
-		self.intersectSegments = (a, b) => {
+		self.intersectSegments = function (a, b) {
 			// turn a = p + t*r where 0<=t<=1 (parameter)
 			// b = q + u*s where 0<=u<=1 (parameter)
 			const p = vector.oA(a);
@@ -49,18 +48,16 @@ function IntersectionFactory() {
 			const qmp = vector.sub(q, p);
 			const numerator = vector.crossProduct(qmp, s);
 			const t = numerator / cross;
-			// tslint:disable-next-line:no-shadowed-variable
-			const intersection = vector.add(p, vector.scalarMult(t, r));
-			return intersection;
+			return vector.add(p, vector.scalarMult(t, r));
 		};
-		self.isParallel = (a, b) => {
+		self.isParallel = function (a, b) {
 			// a and b are line segments.
 			// returns true if a and b are parallel (or co-linear)
 			const r = vector.AB(a);
 			const s = vector.AB(b);
 			return (vector.crossProduct(r, s) === 0);
 		};
-		self.isCollinear = (a, b) => {
+		self.isCollinear = function (a, b) {
 			// a and b are line segments.
 			// returns true if a and b are co-linear
 			const p = vector.oA(a);
@@ -70,7 +67,7 @@ function IntersectionFactory() {
 			const s = vector.AB(b);
 			return (vector.crossProduct(vector.sub(p, q), r) === 0);
 		};
-		self.safeIntersect = (a, b) => {
+		self.safeIntersect = function (a, b) {
 			if (self.isParallel(a, b) === false) {
 				return self.intersectSegments(a, b);
 			} else {
@@ -83,7 +80,7 @@ function IntersectionFactory() {
 	intersection.intersect = intersection().safeIntersect;
 	intersection.isParallel = intersection().isParallel;
 	intersection.isCollinear = intersection().isCollinear;
-	intersection.describe = (a, b) => {
+	intersection.describe = function (a, b) {
 		const isCollinear = intersection().isCollinear(a, b);
 		const isParallel = intersection().isParallel(a, b);
 		let pointOfIntersection;

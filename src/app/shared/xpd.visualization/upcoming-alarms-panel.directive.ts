@@ -4,7 +4,7 @@ export class UpcomingAlarmsPanelDirective implements ng.IDirective {
 
 	public retrict = 'EA';
 	public template = template;
-	public scope: any = {
+	public scope: {
 		tripinAlarms: '=',
 		tripoutAlarms: '=',
 		currentDirection: '=',
@@ -19,20 +19,20 @@ export class UpcomingAlarmsPanelDirective implements ng.IDirective {
 	) => {
 
 		scope.$watch('currentBitDepth', () => {
-			this.listNextAlarms();
+			this.listNextAlarms(scope);
 		});
 
 		scope.$watch('currentDirection', () => {
-			scope.alarmListSorted = this.getAlarmByDirectionSorted();
-			this.listNextAlarms();
+			scope.alarmListSorted = this.getAlarmByDirectionSorted(scope);
+			this.listNextAlarms(scope);
 		});
 
 		scope.$watch('tripinAlarms', () => {
-			scope.alarmListSorted = this.getAlarmByDirectionSorted();
+			scope.alarmListSorted = this.getAlarmByDirectionSorted(scope);
 		}, true);
 
 		scope.$watch('tripoutAlarms', () => {
-			scope.alarmListSorted = this.getAlarmByDirectionSorted();
+			scope.alarmListSorted = this.getAlarmByDirectionSorted(scope);
 		}, true);
 
 	}
@@ -41,35 +41,36 @@ export class UpcomingAlarmsPanelDirective implements ng.IDirective {
 		return () => new UpcomingAlarmsPanelDirective();
 	}
 
-	private getAlarmByDirectionSorted() {
-		if (this.scope.currentDirection) {
-			if (this.scope.currentDirection.tripin && this.scope.tripinAlarms) {
-				return this.scope.tripinAlarms.sort((a, b) => {
+	private getAlarmByDirectionSorted($scope) {
+
+		if ($scope.currentDirection) {
+			if ($scope.currentDirection.tripin && $scope.tripinAlarms) {
+				return $scope.tripinAlarms.sort((a, b) => {
 					return a.startDepth - b.startDepth;
 				});
-			} else if (!this.scope.currentDirection.tripin && this.scope.tripoutAlarms) {
-				return this.scope.tripoutAlarms.sort((a, b) => {
+			} else if (!$scope.currentDirection.tripin && $scope.tripoutAlarms) {
+				return $scope.tripoutAlarms.sort((a, b) => {
 					return b.startDepth - a.startDepth;
 				});
 			}
 		}
 	}
 
-	private listNextAlarms() {
+	private listNextAlarms($scope) {
 
 		const nextAlarms = [];
 
-		if (!this.scope.currentBitDepth && this.scope.alarmListSorted) {
-			this.scope.nextAlarms = this.scope.alarmListSorted.slice(0, 3);
-		} else {
-			for (const alarm of this.scope.alarmListSorted) {
+		if (!$scope.currentBitDepth && $scope.alarmListSorted) {
+			$scope.nextAlarms = $scope.alarmListSorted.slice(0, 3);
+		} else if ($scope.alarmListSorted) {
+			for (const alarm of $scope.alarmListSorted) {
 
-				if (this.scope.currentDirection.tripin && alarm.startDepth >= this.scope.currentBitDepth
+				if ($scope.currentDirection.tripin && alarm.startDepth >= $scope.currentBitDepth
 					&& (!alarm.triggered || alarm.alwaysTripin)) {
 					nextAlarms.push(alarm);
 				}
 
-				if (!this.scope.currentDirection.tripin && alarm.startDepth <= this.scope.currentBitDepth
+				if (!$scope.currentDirection.tripin && alarm.startDepth <= $scope.currentBitDepth
 					&& (!alarm.triggered || alarm.alwaysTripout)) {
 					nextAlarms.push(alarm);
 				}
@@ -80,7 +81,7 @@ export class UpcomingAlarmsPanelDirective implements ng.IDirective {
 			}
 		}
 
-		this.scope.nextAlarms = nextAlarms;
+		$scope.nextAlarms = nextAlarms;
 	}
 
 }

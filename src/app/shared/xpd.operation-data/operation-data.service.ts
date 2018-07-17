@@ -1,6 +1,7 @@
 
 import { EventEmitter } from 'events';
 import * as io from 'socket.io-client';
+import { IPromise, IQService, IRootScopeService } from '../../../../node_modules/@types/angular';
 import { XPDAccessService } from '../xpd.access/access.service';
 
 // (function() {
@@ -14,8 +15,6 @@ import { XPDAccessService } from '../xpd.access/access.service';
 export class OperationDataService {
 
 	private observer: EventEmitter;
-
-	public static $inject = ['xpdAccessService'];
 
 	public static THREADS = [
 		'failure',
@@ -50,8 +49,17 @@ export class OperationDataService {
 	};
 
 	public socket: any;
+	private locked: boolean;
+	private operationDataDefer: angular.IDeferred<{}>;
+	public static $inject = ['$q', '$rootScope', 'xpdAccessService'];
 
-	constructor(private accessService: XPDAccessService) {
+	constructor(
+		$q: IQService,
+		private $rootScope: IRootScopeService,
+		private accessService: XPDAccessService) {
+
+		this.operationDataDefer = $q.defer();
+		this.locked = false;
 		this.observer = new EventEmitter();
 	}
 
@@ -63,7 +71,7 @@ export class OperationDataService {
 		this.observer.on(subject, callback);
 	}
 
-	public openConnection(threads: string[]): Promise<null> {
+	public openConnection(threads: string[]): IPromise<{}> {
 
 		if (!threads || threads.length === 0) {
 			threads = OperationDataService.THREADS;
@@ -71,7 +79,10 @@ export class OperationDataService {
 
 		const self: OperationDataService = this;
 
-		return new Promise((resolve, reject) => {
+		if (!self.locked) {
+			console.log('Criando conexão com operation server');
+
+			self.locked = true;
 
 			const options = {
 				reconnectionAttempts: Infinity,
@@ -95,6 +106,12 @@ export class OperationDataService {
 
 			socket.on('subjects', (response) => {
 
+				const getEmitFunction = (channelKey) => {
+					return (data) => {
+						communicationChannel[channelKey](data);
+					};
+				};
+
 				const ContextSubjects = response.ContextSubjects;
 				const UserActions = response.UserActions;
 				const communicationChannel: any = {};
@@ -111,17 +128,15 @@ export class OperationDataService {
 					}
 				}
 
-				function getEmitFunction(channelKey) {
-					return (data) => {
-						communicationChannel[channelKey](data);
-					};
-				}
-
-				resolve();
+				self.operationDataDefer.resolve();
 
 			});
 
-		});
+		} else {
+			console.log('Reusando conexão com operation server');
+		}
+
+		return self.operationDataDefer.promise;
 
 	}
 
@@ -192,6 +207,7 @@ export class OperationDataService {
 		for (const i in context) {
 			self.operationDataFactory.operationData[target][i] = context[i];
 		}
+
 	}
 
 	private loadEventListenersCallback(listenerName, data) {
@@ -200,8 +216,16 @@ export class OperationDataService {
 	}
 
 	private setOn(socket, eventName): any {
+		const vm = this;
+
 		return (callback) => {
-			socket.on(eventName, callback);
+			// socket.on(eventName, callback);
+			socket.on(eventName, function wrapper() {
+				const args = arguments;
+				vm.$rootScope.$apply(() => {
+					callback.apply(socket, args);
+				});
+			});
 		};
 	}
 

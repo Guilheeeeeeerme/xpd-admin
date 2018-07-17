@@ -4,12 +4,11 @@
 // timeZoomTool.$inject = ['$filter', 'd3Service'];
 import * as angular from 'angular';
 import * as d3 from 'd3';
-import { parseSvg } from 'd3-interpolate/src/transform/parse';
 import template from './time-zoom-tool.template.html';
 
 export class TimeZoomToolDirective implements ng.IDirective {
 
-	constructor(private $filter: ng.IFilterFilter) { }
+	constructor(private $filter: any) { }
 
 	public restrict = 'E';
 	public template = template;
@@ -28,6 +27,7 @@ export class TimeZoomToolDirective implements ng.IDirective {
 		attributes: ng.IAttributes,
 		ctrl: any,
 	) => {
+		const vm = this;
 
 		scope.element = element[0];
 
@@ -232,14 +232,14 @@ export class TimeZoomToolDirective implements ng.IDirective {
 			// console.log('setStartZoomElementTransformTranslate');
 			getStartZoomElement().attr('transform', 'translate(' + x + ', ' + y + ')');
 			getStartZoomTextElement().attr('transform', 'translate(' + x + ', ' + y + ')');
-			getStartZoomTextElement().text(this.$filter('date')(scope.timeScale.invert(x), 'short'));
+			getStartZoomTextElement().text(vm.$filter('date')(scope.timeScale.invert(x), 'short'));
 		}
 
 		function setEndZoomElementTransformTranslate(x, y) {
 			// console.log('setEndZoomElementTransformTranslate');
 			getEndZoomElement().attr('transform', 'translate(' + x + ', ' + y + ')');
 			getEndZoomTextElement().attr('transform', 'translate(' + x + ', ' + y + ')');
-			getEndZoomTextElement().text(this.$filter('date')(scope.timeScale.invert(x), 'short'));
+			getEndZoomTextElement().text(vm.$filter('date')(scope.timeScale.invert(x), 'short'));
 		}
 
 		function getEndZoomElementTransform() {
@@ -402,6 +402,31 @@ export class TimeZoomToolDirective implements ng.IDirective {
 			} catch (e) {
 				console.error(e);
 			}
+		}
+
+		// Edit 2016-10-07: For a more general approach see addendum below.
+		// According to the changelog it is gone. There is a function in transform/decompose.js, though, which does the calculations for internal use. Sadly, it is not exposed for external use.
+		// That said, this is easily done even without putting any D3 to use:
+		function parseSvg(transform) {
+			// Create a dummy g for calculation purposes only. This will never
+			// be appended to the DOM and will be discarded once this function
+			// returns.
+			const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+
+			// Set the transform attribute to the provided string value.
+			g.setAttributeNS(null, 'transform', transform);
+
+			// consolidate the SVGTransformList containing all transformations
+			// to a single SVGTransform of type SVG_TRANSFORM_MATRIX and get
+			// its SVGMatrix.
+			const matrix = g.transform.baseVal.consolidate().matrix;
+
+			// As per definition values e and f are the ones for the translation.
+
+			return {
+				translate: [matrix.e, matrix.f],
+			};
+
 		}
 
 	}
