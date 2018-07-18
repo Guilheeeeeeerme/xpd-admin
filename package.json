@@ -13,7 +13,7 @@
     "electron-winstaller": "node installer.js",
     "pack": "npm run build && npm run electron-packager && npm run electron-winstaller",
 
-    "try": "npm run build && electron dist"
+    "electron": "npm run build && electron dist"
   },
   "dependencies": {
     "angular": "1.5.9",

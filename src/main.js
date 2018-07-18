@@ -24,7 +24,7 @@ function createWindow() {
 	win.show();
 
     // Open the DevTools.
-    win.webContents.openDevTools()
+    // win.webContents.openDevTools()
 
     // Emitido quando a janela é fechada.
     win.on('closed', () => {
