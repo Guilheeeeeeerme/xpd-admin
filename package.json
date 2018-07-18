@@ -4,10 +4,16 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "webpack-dev-server --https --cert=./keys/XPD-Server.crt --key=./keys/XPD-Server.key",
-    "build": "webpack --display-error-detail",
     "transpile": "tsc -p tsconfig.json --watch",
-    "lint": "tslint src/**/*.ts --fix"
+
+    "start": "webpack-dev-server --watch --https --cert=./keys/XPD-Server.crt --key=./keys/XPD-Server.key",
+    "lint": "tslint src/**/*.ts --fix",
+    "build": "webpack --display-error-detail",
+    "electron-packager": "electron-packager dist Admin --platform win32 --arch x64 --out build --overwrite --icon src/assets/img/logo.ico",
+    "electron-winstaller": "node installer.js",
+    "pack": "npm run build && npm run electron-packager && npm run electron-winstaller",
+
+    "try": "npm run build && electron dist"
   },
   "dependencies": {
     "angular": "1.5.9",
@@ -39,6 +45,9 @@
     "babel-loader": "^7.1.5",
     "copy-webpack-plugin": "^4.5.2",
     "css-loader": "^1.0.0",
+    "electron": "^2.0.5",
+    "electron-packager": "^12.1.0",
+    "electron-winstaller": "^2.6.4",
     "file-loader": "^1.1.11",
     "html-loader": "^0.5.5",
     "html-webpack-plugin": "^3.2.0",
