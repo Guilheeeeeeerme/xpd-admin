@@ -2,8 +2,6 @@
 
 // 	'use strict',
 
-// 	angular.module('xpd.modal-failure').controller('modalFailureController', modalFailureController);
-
 // 	modalFailureController.$inject = ['$scope', '$uibModalInstance', 'categorySetupAPIService', 'failureSetupAPIService', 'selectedFailure', 'dialogService', 'operationDataService'];
 
 //
@@ -25,32 +23,30 @@ export class ModalFailureController {
 		'dialogService',
 		'operationDataService',
 	];
-	public modalActionButtonSave: () => void;
-	public modalActionButtonClose: () => void;
-	public actionOnGoingCheckboxClick: (value: any) => void;
-	public actionClickSelectItem: (node: any) => void;
+
 	public operationDataFactory: any;
+	public roleList: {};
 
 	constructor(
-		$scope: any,
-		$uibModalInstance: IModalServiceInstance,
-		categorySetupAPIService: CategorySetupAPIService,
-		failureSetupAPIService: FailureSetupAPIService,
-		selectedFailure: any,
-		dialogService: DialogService,
-		operationDataService: OperationDataService) {
+		private $scope: any,
+		private $uibModalInstance: IModalServiceInstance,
+		private categorySetupAPIService: CategorySetupAPIService,
+		private failureSetupAPIService: FailureSetupAPIService,
+		private selectedFailure: any,
+		private dialogService: DialogService,
+		private operationDataService: OperationDataService) {
 
 		const vm = this;
 
-		let roleList = {};
+		this.roleList = {};
 
 		$scope.selectedFailure = angular.copy(selectedFailure);
 
-		$scope.toMilli = toMilli;
-		$scope.now = now;
-		$scope.keepTimeBeforeNow = keepTimeBeforeNow;
+		$scope.toMilli = (arg) => { vm.toMilli(arg); };
+		$scope.now = () => { vm.now(); };
+		$scope.keepTimeBeforeNow = () => { vm.keepTimeBeforeNow(); };
 
-		operationDataService.openConnection([]).then(function () {
+		operationDataService.openConnection([]).then(() => {
 			vm.operationDataFactory = operationDataService.operationDataFactory;
 		});
 
@@ -60,186 +56,181 @@ export class ModalFailureController {
 			breadcrumbs: 'Failure / Delay categories',
 		};
 
-		vm.modalActionButtonSave = modalActionButtonSave;
-		vm.modalActionButtonClose = modalActionButtonClose;
-		vm.actionOnGoingCheckboxClick = actionOnGoingCheckboxClick;
-		vm.actionClickSelectItem = actionClickSelectItem;
-
-		getCategoryList();
-
-		getFailuresOnGoing();
-
-		function getCategoryList() {
-			categorySetupAPIService.getList(
-				getCategoryListSuccessCallback,
-				getCategoryListErrorCallback,
-			);
-		}
-
-		function getCategoryListSuccessCallback(result) {
-			roleList = result;
-			makeTreeStructure(roleList);
-		}
-
-		function getCategoryListErrorCallback(error) {
-			console.log(error);
-		}
-
-		function toMilli(param) {
-			const date = new Date(param);
-			return date.getTime();
-		}
-
-		function now() {
-			// tslint:disable-next-line:no-shadowed-variable
-			const now = new Date();
-			now.setSeconds(0);
-			now.setMilliseconds(0);
-			return now;
-		}
-
-		function keepTimeBeforeNow() {
-			const currentTime = now();
-
-			if ($scope.selectedFailure.endTime && toMilli($scope.selectedFailure.endTime) > currentTime.getTime()) {
-				$scope.selectedFailure.endTime = currentTime;
-			}
-		}
-
-		function getFailuresOnGoing() {
-
-			failureSetupAPIService.listFailuresOnGoing(function (response) {
-				if (response.length === 0) {
-					$scope.selectedFailure.onGoingFlag = true;
-				} else {
-					$scope.selectedFailure.onGoingFlag = false;
-				}
-			});
-		}
-
-		function modalActionButtonSave() {
-			const failure = $scope.selectedFailure;
-
-			if (!failure.id) {
-				registerFailure(failure);
-			} else {
-				updateFailure(failure);
-			}
-		}
-
-		function registerFailure(failure) {
-			vm.operationDataFactory.emitInsertFailure(failure);
-			upsertListenerCallback();
-		}
-
-		function updateFailure(failure) {
-			vm.operationDataFactory.emitUpdateFailure(failure);
-			upsertListenerCallback();
-		}
-
-		function upsertListenerCallback() {
-			operationDataService.on('setOnFailureChangeListener', failureSuccessCallback);
-			operationDataService.on('setOnErrorUpsertFailureListener', failureErrorCallback);
-			operationDataService.on('setOnNptAlreadyExistsListener', nptAlreadyExists);
-		}
-
-		function failureSuccessCallback() {
-			$uibModalInstance.close();
-		}
-
-		function failureErrorCallback() {
-			dialogService.showConfirmDialog('Error on inserting failure, please try again!', function() {
-				// faça nada
-			});
-		}
-
-		function nptAlreadyExists() {
-			dialogService.showConfirmDialog('NPT already exists in this time interval!', function() {
-				// faça nada
-			});
-		}
-
-		function modalActionButtonClose() {
-			$uibModalInstance.close();
-		}
-
-		function actionOnGoingCheckboxClick(value) {
-			$scope.selectedFailure.onGoing = value;
-
-			if (value) {
-				$scope.selectedFailure.endTime = null;
-			}
-		}
-
-		function makeTreeStructure(data) {
-
-			const objList = data;
-			const categoryData = [];
-
-			for (const i in objList) {
-				if ($scope.selectedFailure.category) {
-
-					if ($scope.selectedFailure.category.id != null) {
-						if ($scope.selectedFailure.category.id === objList[i].id) {
-							objList[i].selected = true;
-							$scope.category.lastSelected = objList[i];
-						} else {
-							objList[i].selected = false;
-						}
-					}
-				} else {
-					objList[i].selected = false;
-				}
-
-				objList[i].children = [];
-
-				const currentObj = objList[i];
-
-				// child to parent
-				if (currentObj.parentId == null || currentObj.parentId === undefined) {
-					categoryData.push(objList[i]);
-				} else {
-					objList[currentObj.parentId].children.push(currentObj);
-				}
-			}
-
-			$scope.category.roleList = categoryData;
-		}
-
-		function actionClickSelectItem(node) {
-			makeBreadCrumbs(node);
-
-			if ($scope.category.lastSelected != null) {
-				$scope.category.lastSelected.selected = false;
-			}
-
-			$scope.category.lastSelected = node;
-
-			// reset
-			$scope.selectedFailure.category = {};
-
-			$scope.selectedFailure.category.id = node.id;
-
-			node.selected = true;
-		}
-
-		function makeBreadCrumbs(node) {
-			$scope.category.breadcrumbs = 'Failure / Delay categories';
-
-			const objList = roleList;
-			let parentNode = node.parentId;
-			let breadcrumbs = node.initial + ' - ' + node.name;
-
-			for (const i in objList) {
-				if (parentNode > 1) {
-					breadcrumbs = objList[parentNode].initial + ' - ' + objList[parentNode].name + ' > ' + breadcrumbs;
-				} else {
-					$scope.category.breadcrumbs += ' > ' + breadcrumbs;
-					return;
-				}
-				parentNode = objList[parentNode].parentId;
-			}
-		}
+		this.getCategoryList();
+		this.getFailuresOnGoing();
 
 	}
+	private getCategoryList() {
+		this.categorySetupAPIService.getList().then(
+			(arg) => { this.getCategoryListSuccessCallback(arg); },
+			(arg) => { this.getCategoryListErrorCallback(arg); },
+		);
+	}
+
+	private getCategoryListSuccessCallback(result) {
+		this.roleList = result;
+		this.makeTreeStructure(this.roleList);
+	}
+
+	private getCategoryListErrorCallback(error) {
+		console.log(error);
+	}
+
+	private toMilli(param) {
+		const date = new Date(param);
+		return date.getTime();
+	}
+
+	private now() {
+		// tslint:disable-next-line:no-shadowed-variable
+		const now = new Date();
+		now.setSeconds(0);
+		now.setMilliseconds(0);
+		return now;
+	}
+
+	private keepTimeBeforeNow() {
+		const currentTime = this.now();
+
+		if (this.$scope.selectedFailure.endTime && this.toMilli(this.$scope.selectedFailure.endTime) > currentTime.getTime()) {
+			this.$scope.selectedFailure.endTime = currentTime;
+		}
+	}
+
+	private getFailuresOnGoing() {
+
+		this.failureSetupAPIService.listFailuresOnGoing().then(
+			(response: any) => {
+				if (response.length === 0) {
+					this.$scope.selectedFailure.onGoingFlag = true;
+				} else {
+					this.$scope.selectedFailure.onGoingFlag = false;
+				}
+			});
+	}
+
+	public modalActionButtonSave() {
+		const failure = this.$scope.selectedFailure;
+
+		if (!failure.id) {
+			this.registerFailure(failure);
+		} else {
+			this.updateFailure(failure);
+		}
+	}
+
+	private registerFailure(failure) {
+		this.operationDataFactory.emitInsertFailure(failure);
+		this.upsertListenerCallback();
+	}
+
+	private updateFailure(failure) {
+		this.operationDataFactory.emitUpdateFailure(failure);
+		this.upsertListenerCallback();
+	}
+
+	private upsertListenerCallback() {
+		this.operationDataService.on('setOnFailureChangeListener', () => { this.failureSuccessCallback(); });
+		this.operationDataService.on('setOnErrorUpsertFailureListener', () => { this.failureErrorCallback(); });
+		this.operationDataService.on('setOnNptAlreadyExistsListener', () => { this.nptAlreadyExists(); });
+	}
+
+	private failureSuccessCallback() {
+		this.$uibModalInstance.close();
+	}
+
+	private failureErrorCallback() {
+		this.dialogService.showConfirmDialog('Error on inserting failure, please try again!', () => {
+			// faça nada
+		});
+	}
+
+	private nptAlreadyExists() {
+		this.dialogService.showConfirmDialog('NPT already exists in this time interval!', () => {
+			// faça nada
+		});
+	}
+
+	public modalActionButtonClose() {
+		this.$uibModalInstance.close();
+	}
+
+	public actionOnGoingCheckboxClick(value) {
+		this.$scope.selectedFailure.onGoing = value;
+
+		if (value) {
+			this.$scope.selectedFailure.endTime = null;
+		}
+	}
+
+	private makeTreeStructure(data) {
+
+		const objList = data;
+		const categoryData = [];
+
+		for (const i in objList) {
+			if (this.$scope.selectedFailure.category) {
+
+				if (this.$scope.selectedFailure.category.id != null) {
+					if (this.$scope.selectedFailure.category.id === objList[i].id) {
+						objList[i].selected = true;
+						this.$scope.category.lastSelected = objList[i];
+					} else {
+						objList[i].selected = false;
+					}
+				}
+			} else {
+				objList[i].selected = false;
+			}
+
+			objList[i].children = [];
+
+			const currentObj = objList[i];
+
+			// child to parent
+			if (currentObj.parentId == null || currentObj.parentId === undefined) {
+				categoryData.push(objList[i]);
+			} else {
+				objList[currentObj.parentId].children.push(currentObj);
+			}
+		}
+
+		this.$scope.category.roleList = categoryData;
+	}
+
+	public actionClickSelectItem(node) {
+		this.makeBreadCrumbs(node);
+
+		if (this.$scope.category.lastSelected != null) {
+			this.$scope.category.lastSelected.selected = false;
+		}
+
+		this.$scope.category.lastSelected = node;
+
+		// reset
+		this.$scope.selectedFailure.category = {};
+
+		this.$scope.selectedFailure.category.id = node.id;
+
+		node.selected = true;
+	}
+
+	private makeBreadCrumbs(node) {
+		this.$scope.category.breadcrumbs = 'Failure / Delay categories';
+
+		const objList = this.roleList;
+		let parentNode = node.parentId;
+		let breadcrumbs = node.initial + ' - ' + node.name;
+
+		for (const i in objList) {
+			if (parentNode > 1) {
+				breadcrumbs = objList[parentNode].initial + ' - ' + objList[parentNode].name + ' > ' + breadcrumbs;
+			} else {
+				this.$scope.category.breadcrumbs += ' > ' + breadcrumbs;
+				return;
+			}
+			parentNode = objList[parentNode].parentId;
+		}
+	}
+
 }

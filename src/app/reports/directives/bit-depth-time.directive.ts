@@ -1,8 +1,6 @@
 // (function() {
 // 	'use strict';
 
-// 	angular.module('xpd.reports').directive('bitDepthTime', bitDepthTime);
-
 import * as d3 from 'd3';
 import { HighchartsService } from '../../shared/highcharts/highcharts.service';
 

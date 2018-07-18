@@ -3,12 +3,15 @@ import { EventLogSetupAPIService } from '../../shared/xpd.setupapi/eventlog-setu
 export class SlipsToSlipsController {
 	// 'use strict';
 
-	// angular.module('xpd.reports').controller('SlipsToSlipsController', SlipsToSlipsController);
-
 	public static $inject = ['$scope', '$routeParams', 'eventlogSetupAPIService'];
-	public onChangePeriod: (fromDate: any, toDate: any) => void;
+	public operationId: any;
+	public eventType: any;
 
-	constructor($scope, $routeParams, eventlogSetupAPIService: EventLogSetupAPIService) {
+	constructor(
+		private $scope,
+		private $routeParams,
+		private eventlogSetupAPIService: EventLogSetupAPIService) {
+
 		const vm = this;
 
 		$scope.slipsToSlipsData = {
@@ -18,60 +21,60 @@ export class SlipsToSlipsController {
 			type: null,
 		};
 
-		const operationId = $routeParams.operationId;
-		const eventType = $routeParams.type;
+		this.operationId = $routeParams.operationId;
+		this.eventType = $routeParams.type;
 
-		getEventTimes();
-		vm.onChangePeriod = onChangePeriod;
+		this.getEventTimes();
 
-		function getEventTimes() {
+	}
 
-			if (operationId != null) {
+	private getEventTimes() {
 
-				((eventType === 'connections') ? $scope.slipsToSlipsData.type = 'CONN' : $scope.slipsToSlipsData.type = 'TRIP');
+		if (this.operationId != null) {
 
-				eventlogSetupAPIService.listByFilters($scope.slipsToSlipsData.type, operationId, null, null, null,
-					   getEventTimesSuccessCallback,
-					   getEventTimesErrorCallback,
-				);
-			}
+			((this.eventType === 'connections') ? this.$scope.slipsToSlipsData.type = 'CONN' : this.$scope.slipsToSlipsData.type = 'TRIP');
+
+			this.eventlogSetupAPIService.listByFilters(this.$scope.slipsToSlipsData.type, this.operationId, null, null, null).then(
+				(arg) => { this.getEventTimesSuccessCallback(arg); },
+				(arg) => { this.getEventTimesErrorCallback(arg); },
+			);
 		}
+	}
 
-		function getEventTimesSuccessCallback(times) {
-			if (times == null || times.length === 0) { return; }
+	private getEventTimesSuccessCallback(times) {
+		if (times == null || times.length === 0) { return; }
 
-   times.reverse();
+		times.reverse();
 
-			$scope.slipsToSlipsData.fromDate = new Date(times[0].startTime);
-			$scope.slipsToSlipsData.toDate = new Date(times[times.length - 1].startTime);
+		this.$scope.slipsToSlipsData.fromDate = new Date(times[0].startTime);
+		this.$scope.slipsToSlipsData.toDate = new Date(times[times.length - 1].startTime);
 
-			$scope.slipsToSlipsData.minDate = new Date(times[0].startTime);
-			$scope.slipsToSlipsData.maxDate = new Date(times[times.length - 1].startTime);
+		this.$scope.slipsToSlipsData.minDate = new Date(times[0].startTime);
+		this.$scope.slipsToSlipsData.maxDate = new Date(times[times.length - 1].startTime);
 
-   $scope.slipsToSlipsData.connectionTimes = times;
-		}
+		this.$scope.slipsToSlipsData.connectionTimes = times;
+	}
 
-		function getEventTimesErrorCallback(error) {
-			console.log(error);
-		}
+	private getEventTimesErrorCallback(error) {
+		console.log(error);
+	}
 
-		function onChangePeriod(fromDate , toDate) {
+	private onChangePeriodSuccessCallback(times) {
+		times.reverse();
+		this.$scope.slipsToSlipsData.connectionTimes = times;
+	}
 
-			if (operationId != null) {
-			    eventlogSetupAPIService.listByFilters('CONN', operationId, null, $scope.slipsToSlipsData.fromDate, $scope.slipsToSlipsData.toDate,
-			    		onChangePeriodSuccessCallback,
-			    		onChangePeriodErrorCallback,
-		    		);
-			}
-		}
+	private onChangePeriodErrorCallback(error) {
+		console.log(error);
+	}
 
-		function onChangePeriodSuccessCallback(times) {
-			times.reverse();
-			$scope.slipsToSlipsData.connectionTimes = times;
-		}
+	public onChangePeriod(fromDate, toDate) {
 
-		function onChangePeriodErrorCallback(error) {
-			console.log(error);
+		if (this.operationId != null) {
+			this.eventlogSetupAPIService.listByFilters('CONN', this.operationId, null, this.$scope.slipsToSlipsData.fromDate, this.$scope.slipsToSlipsData.toDate).then(
+				(arg) => { this.onChangePeriodSuccessCallback(arg); },
+				(arg) => { this.onChangePeriodErrorCallback(arg); },
+			);
 		}
 	}
 }

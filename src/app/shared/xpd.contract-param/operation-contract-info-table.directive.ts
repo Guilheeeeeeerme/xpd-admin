@@ -2,9 +2,6 @@
 // (function() {
 // 	'use strict';
 
-// 	angular.module('xpd.contract-param')
-// 		.directive('operationContractInfoTable', operationContractInfoTable);
-
 // 	operationContractInfoTable.$inject = ['vCruisingCalculator'];
 
 import { VCruisingCalculatorService } from '../xpd.calculation/calculation.service';

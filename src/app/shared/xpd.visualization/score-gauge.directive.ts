@@ -1,5 +1,4 @@
-// angular.module('xpd.visualization')
-// 	.directive('scoreGauge', scoreGauge);
+
 // scoreGauge.$inject = ['d3Service'];
 
 import * as d3 from 'd3';

@@ -1,8 +1,6 @@
 // (function() {
 // 	'use strict';
 
-// 	angular.module('xpd.switch', [])
-// 		.directive('xpdSwitch', xpdSwitch);
 import template from './xpd.switch.template.html';
 
 export class XPDSwitchDirective implements ng.IDirective {

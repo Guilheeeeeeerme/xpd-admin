@@ -1,10 +1,6 @@
 // (function() {
 // 	'use strict';
 
-// 	angular.module('xpd.accessfactory')
-// 		.directive('accessFactoryDirective', accessFactoryDirective);
-
-// 	accessFactoryDirective.$inject = ['$uibModal', 'dialogService'];
 import { IWindowService } from 'angular';
 import { IModalService } from 'angular-ui-bootstrap';
 import template from '../xpd.access/accessfactory.template.html';

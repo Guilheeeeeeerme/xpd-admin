@@ -1,8 +1,6 @@
 // (function() {
 // 	'use strict';
 
-// 	const app = angular.module('xpd.accessfactory', []);
-
 // })();
 
 import * as angular from 'angular';
@@ -16,6 +14,9 @@ const XPDAccessModule: angular.IModule = angular.module('xpd.accessfactory', [])
 export { XPDAccessModule };
 
 XPDAccessModule.factory('securityInteceptor', SecurityInteceptorFactory);
+
 XPDAccessModule.config(SecurityInterceptorConfig);
+
 XPDAccessModule.service('xpdAccessService', XPDAccessService);
+
 XPDAccessModule.directive('xpdAccessFactoryDirective', AccessFactoryDirective.Factory());

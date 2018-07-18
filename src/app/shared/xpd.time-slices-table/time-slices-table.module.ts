@@ -1,7 +1,6 @@
 // (function() {
 // 	'use strict';
 
-// 	angular.module('xpd.time-slices-table', []);
 // })();
 
 import * as angular from 'angular';

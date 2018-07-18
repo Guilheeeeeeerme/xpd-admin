@@ -2,8 +2,6 @@
 
 // 	'use strict',
 
-// 	angular.module('xpd.modal-lessonlearned').controller('modalLessonLearnedController', modalLessonLearnedController);
-
 // 	modalLessonLearnedController.$inject = ['$scope', '$uibModalInstance', 'lessonLearnedSetupAPIService', 'selectedLessonLearned', 'modalSuccessCallback', 'modalErrorCallback'];
 
 // 	function modalLessonLearnedController($scope, $uibModalInstance, lessonLearnedSetupAPIService, selectedLessonLearned, modalSuccessCallback, modalErrorCallback) {
@@ -21,21 +19,19 @@ export class ModalLessonLearnedController {
 		'modalSuccessCallback',
 		'modalErrorCallback'];
 
-	public modalActionButtonSave: () => void;
-	public modalActionButtonClose: () => void;
-	public actionClickSelectItem: (node: any) => void;
+	public roleList: any;
 
 	constructor(
-		$scope: any,
-		$uibModalInstance: IModalServiceInstance,
-		lessonLearnedSetupAPIService: LessonLearnedSetupAPIService,
-		selectedLessonLearned: any,
-		modalSuccessCallback: any,
-		modalErrorCallback: any) {
+		private $scope: any,
+		private $uibModalInstance: IModalServiceInstance,
+		private lessonLearnedSetupAPIService: LessonLearnedSetupAPIService,
+		private selectedLessonLearned: any,
+		private modalSuccessCallback: any,
+		private modalErrorCallback: any) {
 
 		const vm = this;
 
-		let roleList = {};
+		this.roleList = {};
 
 		$scope.selectedLessonLearned = angular.copy(selectedLessonLearned);
 
@@ -45,135 +41,132 @@ export class ModalLessonLearnedController {
 			breadcrumbs: 'Lessons Learned Categories',
 		};
 
-		vm.modalActionButtonSave = modalActionButtonSave;
-		vm.modalActionButtonClose = modalActionButtonClose;
-		vm.actionClickSelectItem = actionClickSelectItem;
+		this.getLessonLearnedCategoryList();
 
-		getLessonLearnedCategoryList();
+	}
 
-		function getLessonLearnedCategoryList() {
-			lessonLearnedSetupAPIService.getListCategory(
-				getLessonLearnedCategoryListSuccessCallback,
-				getLessonLearnedCategoryListErrorCallback,
-			);
+	private getLessonLearnedCategoryList() {
+		this.lessonLearnedSetupAPIService.getListCategory().then(
+			(arg) => { this.getLessonLearnedCategoryListSuccessCallback(arg); },
+			(arg) => { this.getLessonLearnedCategoryListErrorCallback(arg); },
+		);
+	}
+
+	private getLessonLearnedCategoryListSuccessCallback(result) {
+		this.roleList = result;
+		this.makeTreeStructure(this.roleList);
+	}
+
+	private getLessonLearnedCategoryListErrorCallback(error) {
+		console.log(error);
+	}
+
+	public modalActionButtonSave() {
+		const lessonLearned = this.$scope.selectedLessonLearned;
+
+		if (!lessonLearned.id) {
+			this.registerLessonLearned(lessonLearned);
+		} else {
+			this.updateLessonLearned(lessonLearned);
 		}
 
-		function getLessonLearnedCategoryListSuccessCallback(result) {
-			roleList = result;
-			makeTreeStructure(roleList);
-		}
+	}
 
-		function getLessonLearnedCategoryListErrorCallback(error) {
-			console.log(error);
-		}
+	private registerLessonLearned(lessonLearned) {
+		this.lessonLearnedSetupAPIService.insertObject(
+			lessonLearned).then(
+				(arg) => { this.lessonLearnedSuccessCallback(arg); },
+				(arg) => { this.lessonLearnedErrorCallback(arg); },
+		);
+	}
 
-		function modalActionButtonSave() {
-			const lessonLearned = $scope.selectedLessonLearned;
+	private updateLessonLearned(lessonLearned) {
+		this.lessonLearnedSetupAPIService.updateObject(
+			lessonLearned).then(
+				(arg) => { this.lessonLearnedSuccessCallback(arg); },
+				(arg) => { this.lessonLearnedErrorCallback(arg); },
+		);
+	}
 
-			if (!lessonLearned.id) {
-				registerLessonLearned(lessonLearned);
-			} else {
-				updateLessonLearned(lessonLearned);
-			}
+	private lessonLearnedSuccessCallback(result) {
+		this.$uibModalInstance.close();
+		this.modalSuccessCallback(result);
+	}
 
-		}
+	private lessonLearnedErrorCallback(error) {
+		this.modalErrorCallback();
+	}
 
-		function registerLessonLearned(lessonLearned) {
-			lessonLearnedSetupAPIService.insertObject(
-				lessonLearned,
-				lessonLearnedSuccessCallback,
-				lessonLearnedErrorCallback,
-			);
-		}
+	public modalActionButtonClose() {
+		this.$uibModalInstance.close();
+	}
 
-		function updateLessonLearned(lessonLearned) {
-			lessonLearnedSetupAPIService.updateObject(
-				lessonLearned,
-				lessonLearnedSuccessCallback,
-				lessonLearnedErrorCallback,
-			);
-		}
+	private makeTreeStructure(data) {
 
-		function lessonLearnedSuccessCallback(result) {
-			$uibModalInstance.close();
-			modalSuccessCallback(result);
-		}
+		const objList = data;
+		const lessonLearnedCategoryData = [];
 
-		function lessonLearnedErrorCallback(error) {
-			modalErrorCallback();
-		}
-
-		function modalActionButtonClose() {
-			$uibModalInstance.close();
-		}
-
-		function makeTreeStructure(data) {
-
-			const objList = data;
-			const lessonLearnedCategoryData = [];
-
-			for (const i in objList) {
-				if ($scope.selectedLessonLearned.lessonLearnedCategory) {
-					if ($scope.selectedLessonLearned.lessonLearnedCategory.id != null) {
-						if ($scope.selectedLessonLearned.lessonLearnedCategory.id === objList[i].id) {
-							objList[i].selected = true;
-							$scope.lessonLearned.lastSelected = objList[i];
-						} else {
-							objList[i].selected = false;
-						}
+		for (const i in objList) {
+			if (this.$scope.selectedLessonLearned.lessonLearnedCategory) {
+				if (this.$scope.selectedLessonLearned.lessonLearnedCategory.id != null) {
+					if (this.$scope.selectedLessonLearned.lessonLearnedCategory.id === objList[i].id) {
+						objList[i].selected = true;
+						this.$scope.lessonLearned.lastSelected = objList[i];
+					} else {
+						objList[i].selected = false;
 					}
-				} else {
-					objList[i].selected = false;
 				}
-
-				objList[i].children = [];
-
-				const currentObj = objList[i];
-
-				// child to parent
-				if (currentObj.parentId == null || currentObj.parentId === undefined) {
-					lessonLearnedCategoryData.push(objList[i]);
-				} else {
-					objList[currentObj.parentId].children.push(currentObj);
-				}
+			} else {
+				objList[i].selected = false;
 			}
 
-			$scope.selectedLessonLearned.roleList = lessonLearnedCategoryData;
+			objList[i].children = [];
+
+			const currentObj = objList[i];
+
+			// child to parent
+			if (currentObj.parentId == null || currentObj.parentId === undefined) {
+				lessonLearnedCategoryData.push(objList[i]);
+			} else {
+				objList[currentObj.parentId].children.push(currentObj);
+			}
 		}
 
-		function actionClickSelectItem(node) {
-			makeBreadCrumbs(node);
+		this.$scope.selectedLessonLearned.roleList = lessonLearnedCategoryData;
+	}
 
-			if ($scope.lessonLearned.lastSelected != null) {
-				$scope.lessonLearned.lastSelected.selected = false;
-			}
+	public actionClickSelectItem(node) {
+		this.makeBreadCrumbs(node);
 
-			$scope.lessonLearned.lastSelected = node;
-
-			// reset
-			$scope.selectedLessonLearned.lessonLearnedCategory = {};
-
-			$scope.selectedLessonLearned.lessonLearnedCategory.id = node.id;
-
-			node.selected = true;
+		if (this.$scope.lessonLearned.lastSelected != null) {
+			this.$scope.lessonLearned.lastSelected.selected = false;
 		}
 
-		function makeBreadCrumbs(node) {
-			$scope.lessonLearned.breadcrumbs = 'Lessons Learned Categories';
+		this.$scope.lessonLearned.lastSelected = node;
 
-			const objList = roleList;
-			let parentNode = node.parentId;
-			let breadcrumbs = node.initial + ' - ' + node.name;
+		// reset
+		this.$scope.selectedLessonLearned.lessonLearnedCategory = {};
 
-			for (const i in objList) {
-				if (parentNode > 1) {
-					breadcrumbs = objList[parentNode].initial + ' - ' + objList[parentNode].name + ' > ' + breadcrumbs;
-				} else {
-					$scope.lessonLearned.breadcrumbs += ' > ' + breadcrumbs;
-					return;
-				}
-				parentNode = objList[parentNode].parentId;
+		this.$scope.selectedLessonLearned.lessonLearnedCategory.id = node.id;
+
+		node.selected = true;
+	}
+
+	private makeBreadCrumbs(node) {
+		this.$scope.lessonLearned.breadcrumbs = 'Lessons Learned Categories';
+
+		const objList = this.roleList;
+		let parentNode = node.parentId;
+		let breadcrumbs = node.initial + ' - ' + node.name;
+
+		for (const i in objList) {
+			if (parentNode > 1) {
+				breadcrumbs = objList[parentNode].initial + ' - ' + objList[parentNode].name + ' > ' + breadcrumbs;
+			} else {
+				this.$scope.lessonLearned.breadcrumbs += ' > ' + breadcrumbs;
+				return;
 			}
+			parentNode = objList[parentNode].parentId;
 		}
 	}
 

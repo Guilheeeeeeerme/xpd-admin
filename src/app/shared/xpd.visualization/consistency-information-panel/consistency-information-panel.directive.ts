@@ -1,9 +1,6 @@
 // (function() {
 // 	'use strict';
 
-// 	angular.module('xpd.visualization')
-// 		.directive('consistencyInformationPanel', consistencyInformationPanel);
-
 // 	consistencyInformationPanel.$inject = [];
 import template from './consistency-information-panel.template.html';
 

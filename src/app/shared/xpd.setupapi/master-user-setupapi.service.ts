@@ -4,8 +4,6 @@ import { SetupAPIService } from './setupapi.service';
 // (function() {
 // 	'use strict';
 
-// 	angular.module('xpd.setupapi').service('masterUserSetupAPIService', masterUserSetupAPIService);
-
 // 	masterUserSetupAPIService.$inject = ['xpdAccessService', 'setupAPIService'];
 
 export class MasterUserSetupAPIService {
@@ -17,7 +15,7 @@ export class MasterUserSetupAPIService {
 		this.MASTER_USERNAME = 'admin';
 	}
 
-	public authenticate(object, successCallback, errorCallback) {
+	public authenticate(object) {
 
 		object.username = this.MASTER_USERNAME;
 
@@ -31,7 +29,7 @@ export class MasterUserSetupAPIService {
 			data: object,
 		};
 
-		this.setupAPIService.doRequest(req, successCallback, errorCallback);
+		return this.setupAPIService.doRequest(req);
 	}
 
 }

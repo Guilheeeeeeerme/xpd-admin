@@ -41,9 +41,9 @@
                 <td id="setup-section-list-label-mdBottom-{{index}}">{{ section.mdBottom }}</td>
 
                 <td>
-                    <button ng-click="swapSection(lastSection, section)" class='btn btn-sm btn-default glyphicon glyphicon-chevron-up' id="setup-section-list-move-section-up-{{index}}" ng-disabled="!section.currentable"></button>
+                    <button ng-click="swapSection({ section1: lastSection, section2: section })" class='btn btn-sm btn-default glyphicon glyphicon-chevron-up' id="setup-section-list-move-section-up-{{index}}" ng-disabled="!section.currentable"></button>
                     
-                    <button ng-click="swapSection(nextSection, section)" class='btn btn-sm btn-default glyphicon glyphicon-chevron-down' id="setup-section-list-move-section-down-{{index}}" ng-disabled="!section.currentable"></button>
+                    <button ng-click="swapSection({ section1: nextSection, section2: section })" class='btn btn-sm btn-default glyphicon glyphicon-chevron-down' id="setup-section-list-move-section-down-{{index}}" ng-disabled="!section.currentable"></button>
 
                     <button 
                         id="setup-section-list-{{openedSection?'hide':'show'}}-section-operations-{{index}}"
@@ -54,14 +54,14 @@
                     <button 
                         id="setup-section-list-edit-section-{{index}}"
                         class="btn btn-sm btn-default button-edit" 
-                        ng-click="actionButtonEditSection(section)" 
+                        ng-click="actionButtonEditSection({ section })" 
                         ng-disabled="!section.currentable">EDIT
                     </button>
 
                     <button
                         id="setup-section-list-remove-section-{{index}}" 
                         class="btn btn-sm btn-danger" 
-                        ng-click="actionButtonRemoveSection(section)" 
+                        ng-click="actionButtonRemoveSection({ section })" 
                         ng-disabled="!section.currentable">REMOVE
                     </button>
 
@@ -97,16 +97,16 @@
                                         </button>
                                         <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="section-list-section-{{index}}-add-operation">
                                             <li role="menuitem">
-                                                <a ng-click="actionButtonAddOperation('bha', section)" id="section-list-section-{{index}}-add-operation-bha" >BHA</a>
+                                                <a ng-click="actionButtonAddOperation({ type: 'bha', section: section })" id="section-list-section-{{index}}-add-operation-bha" >BHA</a>
                                             </li>
                                             <li role="menuitem">
-                                                <a ng-click="actionButtonAddOperation('casing', section)" id="section-list-section-{{index}}-add-operation-casing" >Casing</a>
+                                                <a ng-click="actionButtonAddOperation({ type: 'casing', section: section })" id="section-list-section-{{index}}-add-operation-casing" >Casing</a>
                                             </li>
                                             <li role="menuitem">
-                                                <a ng-click="actionButtonAddOperation('riser', section)" id="section-list-section-{{index}}-add-operation-riser" >Riser</a>
+                                                <a ng-click="actionButtonAddOperation({ type: 'riser', section: section })" id="section-list-section-{{index}}-add-operation-riser" >Riser</a>
                                             </li>
                                             <li role="menuitem">
-                                                <a ng-click="actionButtonAddOperation('time', section)" id="section-list-section-{{index}}-add-operation-time" >Time</a>
+                                                <a ng-click="actionButtonAddOperation({ type: 'time', section: section })" id="section-list-section-{{index}}-add-operation-time" >Time</a>
                                             </li>
                                         </ul>
                                     </div>
@@ -142,9 +142,15 @@
                                 <td id="section-list-{{index}}-operation-label-type-{{$index + 1}}">{{operation.type}}</td>
 
                                 <td>
-                                    <button ng-click="swapOperation(operations[operationKey - 1], operations[operationKey], operations)" class='btn btn-sm btn-default glyphicon glyphicon-chevron-up' id="section-list-{{index}}-move-operation-up-{{$index + 1}}" ng-disabled="!section.currentable"></button>
+                                    <button ng-click="swapOperation({
+                                        operation1: operations[operationKey - 1], 
+                                        operation2: operations[operationKey]
+                                    })" class='btn btn-sm btn-default glyphicon glyphicon-chevron-up' id="section-list-{{index}}-move-operation-up-{{$index + 1}}" ng-disabled="!section.currentable"></button>
 
-                                    <button ng-click="swapOperation(operations[operationKey], operations[operationKey + 1], operations)" class='btn btn-sm btn-default glyphicon glyphicon-chevron-down' id="section-list-{{index}}-move-operation-down-{{$index + 1}}" ng-disabled="!section.currentable"></button>
+                                    <button ng-click="swapOperation({
+                                        operation1: operations[operationKey], 
+                                        operation2: operations[operationKey + 1]
+                                    })" class='btn btn-sm btn-default glyphicon glyphicon-chevron-down' id="section-list-{{index}}-move-operation-down-{{$index + 1}}" ng-disabled="!section.currentable"></button>
 
                                     <button ng-show='operation.current && operation.running' class='btn btn-sm btn-success button-current' disabled>
                                         <i>RUNNING</i>
@@ -158,7 +164,7 @@
                                         id="section-list-{{index}}-button-make-current-operation-{{$index + 1}}"
                                         ng-show='operation.currentable && !operation.current && !operation.running' 
                                         class='btn btn-sm btn-primary button-current' 
-                                        ng-click="actionButtonMakeCurrent(operation)" 
+                                        ng-click="actionButtonMakeCurrent({ operation })" 
                                         ng-disabled="!section.currentable || (well.id != currentWell.id)">
                                         <i>MAKE CURRENT</i>
                                     </button>
@@ -172,7 +178,7 @@
                                     <button 
                                         ng-disabled="operation.endDate || !section.currentable" 
                                         id="section-list-{{index}}-button-edit-operation-{{$index + 1}}" 
-                                        ng-click='actionButtonEditOperation(section, operation)' 
+                                        ng-click='actionButtonEditOperation({ section, operation })' 
                                         class='btn btn-sm btn-default button-edit'>EDIT
                                     </button>
 
@@ -185,7 +191,7 @@
                                     <button 
                                         id="section-list-{{index}}-buttonremove-operation-{{$index + 1}}" 
                                         ng-disabled="!operation.currentable || !section.currentable" 
-                                        ng-click='actionButtonRemoveOperation(operation)' 
+                                        ng-click='actionButtonRemoveOperation({ operation })' 
                                         class='btn btn-sm btn-danger'>
                                         REMOVE
                                     </button>

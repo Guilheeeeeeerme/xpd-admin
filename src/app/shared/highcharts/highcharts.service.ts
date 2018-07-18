@@ -7,7 +7,7 @@
 //      *        para manter o namespace limpo
 //      * @source http://www.ng-newsletter.com/posts/d3-on-angular.html
 //      */
-// 	angular.module('highcharts')
+
 // 		.factory('highchartsService', highchartsService);
 
 // 	highchartsService.$inject = ['$document', '$q', '$rootScope'];

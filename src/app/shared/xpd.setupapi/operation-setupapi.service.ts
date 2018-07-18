@@ -4,8 +4,6 @@ import { SetupAPIService } from './setupapi.service';
 // (function() {
 // 	'use strict';
 
-// 	angular.module('xpd.setupapi').service('operationSetupAPIService', operationSetupAPIService);
-
 // 	operationSetupAPIService.$inject = ['xpdAccessService', 'setupAPIService'];
 
 export class OperationSetupAPIService {
@@ -17,37 +15,37 @@ export class OperationSetupAPIService {
 		this.BASE_URL = xpdAccessService.getSetupURL() + 'setup/operation';
 	}
 
-	public getOperationAlarms(operationId, successCallback, errorCallback?) {
+	public getOperationAlarms(operationId) {
 
 		const req = {
 			method: 'GET',
 			url: this.BASE_URL + '/' + operationId + '/alarms',
 		};
 
-		this.setupAPIService.doRequest(req, successCallback, errorCallback);
+		return this.setupAPIService.doRequest(req);
 	}
 
-	public getObjectById(id, successCallback, errorCallback?) {
+	public getObjectById(id) {
 
 		const req = {
 			method: 'GET',
 			url: this.BASE_URL + '/' + id,
 		};
 
-		this.setupAPIService.doRequest(req, successCallback, errorCallback);
+		return this.setupAPIService.doRequest(req);
 	}
 
-	public getList(successCallback, errorCallback?) {
+	public getList() {
 
 		const req = {
 			method: 'GET',
 			url: this.BASE_URL + '/list',
 		};
 
-		this.setupAPIService.doRequest(req, successCallback, errorCallback);
+		return this.setupAPIService.doRequest(req);
 	}
 
-	public insertObject(object, successCallback, errorCallback?) {
+	public insertObject(object) {
 
 		const req = {
 			method: 'POST',
@@ -58,11 +56,11 @@ export class OperationSetupAPIService {
 			data: object,
 		};
 
-		this.setupAPIService.doRequest(req, successCallback, errorCallback);
+		return this.setupAPIService.doRequest(req);
 
 	}
 
-	public updateObject(object, successCallback, errorCallback?) {
+	public updateObject(object) {
 
 		const req = {
 			method: 'PUT',
@@ -73,10 +71,10 @@ export class OperationSetupAPIService {
 			data: object,
 		};
 
-		this.setupAPIService.doRequest(req, successCallback, errorCallback);
+		return this.setupAPIService.doRequest(req);
 	}
 
-	public getDefaultFields(type, successCallback, errorCallback?) {
+	public getDefaultFields(type) {
 		const req = {
 			method: 'GET',
 			url: this.BASE_URL + '/default?type=' + type,
@@ -85,7 +83,7 @@ export class OperationSetupAPIService {
 			},
 		};
 
-		this.setupAPIService.doRequest(req, successCallback, errorCallback);
+		return this.setupAPIService.doRequest(req);
 	}
 
 	// function getOperationReadings(operationId, successCallback, errorCallback) {
@@ -102,14 +100,14 @@ export class OperationSetupAPIService {
 	// 		);
 	// }
 
-	public getOperationQueue(wellId, successCallback, errorCallback?) {
+	public getOperationQueue(wellId) {
 
 		const req = {
 			method: 'GET',
 			url: this.xpdAccessService.getSetupURL() + 'operation-resources/operations-queue/' + wellId,
 		};
 
-		this.setupAPIService.doRequest(req, successCallback, errorCallback);
+		return this.setupAPIService.doRequest(req);
 	}
 }
 

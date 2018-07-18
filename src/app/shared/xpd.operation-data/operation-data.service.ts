@@ -1,13 +1,12 @@
 
+import { IPromise, IQService, IRootScopeService } from 'angular';
 import { EventEmitter } from 'events';
 import * as io from 'socket.io-client';
-import { IPromise, IQService, IRootScopeService } from '../../../../node_modules/@types/angular';
 import { XPDAccessService } from '../xpd.access/access.service';
 
 // (function() {
 // 	'use strict';
 
-// 		angular.module('xpd.communication')
 // 			.factory('operationDataFactory', operationDataFactory);
 
 // operationDataFactory.$inject = ['$q', 'socketService', 'xpdAccessService'];

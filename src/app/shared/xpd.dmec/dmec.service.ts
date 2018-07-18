@@ -3,7 +3,6 @@ import { ReadingSetupAPIService } from '../xpd.setupapi/reading-setupapi.service
 import { XPDIntervalService, XPDTimeoutService } from '../xpd.timers/xpd-timers.service';
 
 // (function() {
-// 	angular.module('xpd.dmec', []).service('dmecService', dmecService);
 
 // 	dmecService.$inject = ['$xpdTimeout', '$xpdInterval', '$location', '$routeParams', '$q', 'readingSetupAPIService'];
 // $xpdTimeout, $xpdInterval, $location, $routeParams, $q, readingSetupAPIService
@@ -38,15 +37,10 @@ export class DMECService {
 		let getTickInterval;
 		let resetPageTimeout;
 
-		scope.actionButtonUseOperationStartDate = actionButtonUseOperationStartDate;
-		scope.actionButtonSubmitDmecRange = actionButtonSubmitDmecRange;
-		scope.initializeComponent = initializeComponent;
-		scope.setZoom = setZoom;
-
 		/**
 		 * Função que inicializa o serviço e as buscas
 		 */
-		function initializeComponent() {
+		const initializeComponent = () => {
 
 			let startAtMillis;
 			const endAtMillis = new Date().getTime();
@@ -70,24 +64,24 @@ export class DMECService {
 			);
 
 			// tslint:disable-next-line:no-empty
-			scope.initializeComponent = function () { };
+			scope.initializeComponent = () => { };
 
-		}
+		};
 
 		/**
 		 * Auxilias da Configuração de busca
 		 * @param {Date} startDate
 		 */
-		function actionButtonUseOperationStartDate(startDate) {
+		const actionButtonUseOperationStartDate = (startDate) => {
 			scope.inputRangeForm.startTime = new Date(startDate);
 			scope.inputRangeForm.startTime.setMilliseconds(0);
 			scope.inputRangeForm.startTime.setSeconds(0);
-		}
+		};
 
 		/**
 		 * Salvando as configurações de busca
 		*/
-		function actionButtonSubmitDmecRange() {
+		const actionButtonSubmitDmecRange = () => {
 			// localStorage.setItem(localStoragePath, JSON.stringify(scope.inputRangeForm));
 
 			const param = {};
@@ -96,45 +90,45 @@ export class DMECService {
 			vm.$location.path(vm.$location.path()).search(param);
 
 			reload();
-		}
+		};
 
 		/**
 		 * Recarregar a página
 		 */
-		function reload() {
+		const reload = () => {
 			vm.$window.location.reload();
-		}
+		};
 
 		/**
 		 * Quando sair do controller
 		 */
-		function destroy() {
+		const destroy = () => {
 			if (resetPageTimeout) {
 				vm.$xpdTimeout.cancel(resetPageTimeout);
 			}
 			if (getTickInterval) {
 				vm.$xpdInterval.cancel(getTickInterval);
 			}
-		}
+		};
 		/**
 		 * Por onde as directive alteram o zoom
 		 * @param {Date} zoomStartAt
 		 * @param {Date} zoomEndAt
 		 */
-		function setZoom(zoomStartAt, zoomEndAt) {
+		const setZoom = (zoomStartAt, zoomEndAt) => {
 			scope.zoomStartAt = new Date(zoomStartAt);
 			scope.zoomEndAt = new Date(zoomEndAt);
-		}
+		};
 
 		/**
 		 * Get Reading. Se tiver no ela em tempo real vindo operation, pega do opertion.
 		 * Se não, vai no banco
 		 */
-		function getTick() {
+		const getTick = () => {
 
 			const now = new Date().getTime();
 
-			scope.onReading = vm.$q(function (resolve, reject) {
+			scope.onReading = vm.$q((resolve, reject) => {
 				if (getCurrentReading) {
 
 					const currentReading = getCurrentReading();
@@ -145,11 +139,11 @@ export class DMECService {
 					}
 
 				} else {
-					vm.readingSetupAPIService.getTick((now - getTickFrequency), resolve, reject);
+					vm.readingSetupAPIService.getTick((now - getTickFrequency)).then((arg) => { resolve(arg); }, (arg) => { reject(arg); });
 				}
 			});
 
-			scope.onReading.then(function (reading) {
+			scope.onReading.then((reading) => {
 
 				scope.maxDepth = Math.max(scope.maxDepth, reading.bitDepth);
 
@@ -173,14 +167,14 @@ export class DMECService {
 
 			}
 
-		}
+		};
 
 		/**
 		 * Vai no banco buscar o historico de leituras
 		 * Se tiver um operação como base, limita a busca ao start date de operação
 		 * @param {Date} startTime
 		 */
-		function getAllReadingSince(startTime) {
+		const getAllReadingSince = (startTime) => {
 
 			startTime = new Date(startTime);
 
@@ -218,13 +212,13 @@ export class DMECService {
 					loopEndTimestamp = null;
 				}
 
-				promises.push(vm.$q(function (resolve, reject) {
+				promises.push(vm.$q((resolve, reject) => {
 
 					vm.readingSetupAPIService.getAllReadingByStartEndTime(
 						loopStartTime.getTime(),
-						loopEndTimestamp ? loopEndTimestamp : new Date().getTime(),
-						resolve,
-						reject,
+						loopEndTimestamp ? loopEndTimestamp : new Date().getTime()).then(
+							(arg) => { resolve(arg); },
+							(arg) => { reject(arg); },
 					);
 
 				}));
@@ -232,9 +226,9 @@ export class DMECService {
 				loopStartTime = new Date(loopEndTime);
 			}
 
-			const onReadingSince = vm.$q(function (resolve, reject) {
+			const onReadingSince = vm.$q((resolve, reject) => {
 
-				vm.$q.all(promises).then(function (readingsList) {
+				vm.$q.all(promises).then((readingsList) => {
 
 					const parsedReadings = {};
 
@@ -266,7 +260,7 @@ export class DMECService {
 			scope.bitDepthPoints = null;
 			scope.maxDepth = null;
 
-			onReadingSince.then(function (readings: any) {
+			onReadingSince.then((readings: any) => {
 				if (readings && readings.bitDepth) {
 					scope.bitDepthPoints = generateBitDepthPoints(readings.bitDepth);
 				} else {
@@ -274,21 +268,21 @@ export class DMECService {
 				}
 			});
 
-			onReadingSince.then(function () {
+			onReadingSince.then(() => {
 				destroy();
-				resetPageTimeout = vm.$xpdTimeout.run(reload, (ONE_HOUR / 2), scope);
-				getTickInterval = vm.$xpdInterval.run(getTick, getTickFrequency, scope);
+				resetPageTimeout = vm.$xpdTimeout.run(() => { reload(); }, (ONE_HOUR / 2), scope);
+				getTickInterval = vm.$xpdInterval.run(() => { getTick(); }, getTickFrequency, scope);
 			});
 
 			scope.onReadingSince = onReadingSince;
 
 			return startTime;
-		}
+		};
 
 		/**
 		 * Pega as confições salvas em localstorage
 		 */
-		function getInputRangeForm() {
+		const getInputRangeForm = () => {
 
 			let inputRangeForm;
 
@@ -314,16 +308,16 @@ export class DMECService {
 			}
 
 			return inputRangeForm;
-		}
+		};
 
 		/**
 		 * Algoritmo para colocar a linha de bitdepth no zoom
 		 * @param {Lista de bitdepths} bitDepthList
 		 */
-		function generateBitDepthPoints(bitDepthList) {
+		const generateBitDepthPoints = (bitDepthList) => {
 			const points = [];
 
-			bitDepthList.map(function (bitDepthPoint) {
+			bitDepthList.map((bitDepthPoint) => {
 
 				if (bitDepthPoint.actual) {
 					if (scope.maxDepth == null) {
@@ -341,7 +335,12 @@ export class DMECService {
 			});
 
 			return points;
-		}
+		};
+
+		scope.actionButtonUseOperationStartDate = (arg) => { actionButtonUseOperationStartDate(arg); };
+		scope.actionButtonSubmitDmecRange = () => { actionButtonSubmitDmecRange(); };
+		scope.initializeComponent = () => { initializeComponent(); };
+		scope.setZoom = (arg1, arg2) => { setZoom(arg1, arg2); };
 
 	}
 

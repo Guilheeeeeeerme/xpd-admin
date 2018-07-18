@@ -1,8 +1,6 @@
 // (function() {
 // 'use strict';
 
-// angular.module('xpd.reports').config(reportConfig);
-
 import OperationViewOnlyTemplate from './components/operation-view-only/operation-view-only.template.html';
 
 OperationConfig.$inject = ['$routeProvider'];

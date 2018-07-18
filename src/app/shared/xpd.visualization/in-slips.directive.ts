@@ -1,7 +1,4 @@
 
-// angular.module('xpd.visualization')
-// 	.directive('inSlips', inSlips);
-
 // inSlips.$inject = [];
 
 import template from './in-slips.template.html';

@@ -4,12 +4,13 @@ import { WellSetupAPIService } from '../../shared/xpd.setupapi/well-setupapi.ser
 export class VREReportController {
 	// 'use strict';
 
-	// angular.module('xpd.reports').controller('VREReportController', VREReportController);
-
 	public static $inject = ['$scope', 'wellSetupAPIService', 'reportsSetupAPIService'];
-	public onClickFilterButton: (fromDate: any, toDate: any) => void;
 
-	constructor($scope, wellSetupAPIService: WellSetupAPIService, reportsSetupAPIService: ReportsSetupAPIService) {
+	constructor(
+		private $scope: any,
+		private wellSetupAPIService: WellSetupAPIService,
+		private reportsSetupAPIService: ReportsSetupAPIService) {
+
 		const vm = this;
 
 		$scope.vreData = {
@@ -20,82 +21,83 @@ export class VREReportController {
 			period: null,
 		};
 
-		vm.onClickFilterButton = onClickFilterButton;
-
 		// --actions--
-		getWellList();
+		this.getWellList();
 
-		// --implements--
-		function getWellList() {
-			wellSetupAPIService.getList( function(wellList) {
-				getWellSuccessCallback(wellList);
-			}, getWellErrorCallback);
+	}
+	// --implements--
+	private getWellList() {
+		this.wellSetupAPIService.getList().then(
+			(wellList) => {
+				this.getWellSuccessCallback(wellList);
+			},
+			(arg) => {
+				this.getWellErrorCallback(arg);
+			});
+	}
+
+	private getWellSuccessCallback(result) {
+
+		const currentWell = result[0];
+
+		const parentData = this.$scope.reportsData;
+
+		this.$scope.vreData.period = {
+			fromDate: parentData.fromDate,
+			toDate: parentData.toDate,
+		};
+
+		this.reportsSetupAPIService.getVreList(
+			parentData.fromDate,
+			parentData.toDate).then(
+				(arg) => { this.vreListSuccessCallback(arg); },
+				(arg) => { this.vreListErrorCallback(arg); },
+		);
+	}
+
+	private getWellErrorCallback(error) {
+		console.log(error);
+	}
+
+	private vreListSuccessCallback(result) {
+		this.$scope.vreData.vreList = result;
+		this.vreDaily(result);
+	}
+
+	private vreListErrorCallback(error) {
+		console.log(error);
+	}
+
+	private vreDaily(vreList) {
+		const day = (this.$scope.reportsData.toDate / 1000) - (this.$scope.reportsData.fromDate / 1000);
+		let runningTime = 0;
+		let vreTotal = 0;
+		let remainingTime = 0;
+
+		for (let i = vreList.length - 1; i >= 0; i--) {
+			vreTotal += (vreList[i].time * vreList[i].vre);
+			runningTime += vreList[i].time;
 		}
+		vreTotal /= day;
+		remainingTime = Math.abs(day - runningTime);
 
-		function getWellSuccessCallback(result) {
+		this.$scope.vreData.vreDaily = { totalTime: runningTime, vreTotal, remainingTime };
 
-			const currentWell = result[0];
+	}
 
-			const parentData = $scope.reportsData;
+	public onClickFilterButton(fromDate, toDate) {
 
-			$scope.vreData.period = {
-				fromDate: parentData.fromDate,
-				toDate: parentData.toDate,
-			};
+		this.$scope.vreData.period = {
+			fromDate,
+			toDate,
+		};
 
-			reportsSetupAPIService.getVreList(
-				parentData.fromDate,
-				parentData.toDate,
-				vreListSuccessCallback,
-				vreListErrorCallback,
-			);
-		}
-
-		function getWellErrorCallback(error) {
-			console.log(error);
-		}
-
-		function vreListSuccessCallback(result) {
-			$scope.vreData.vreList = result;
-			vreDaily(result);
-		}
-
-		function vreListErrorCallback(error) {
-			console.log(error);
-		}
-
-		function vreDaily(vreList) {
-			const day = ($scope.reportsData.toDate / 1000) - ($scope.reportsData.fromDate / 1000);
-			let runningTime = 0;
-			let vreTotal = 0;
-			let remainingTime = 0;
-
-			for (let i = vreList.length - 1; i >= 0; i--) {
-				vreTotal += (vreList[i].time * vreList[i].vre);
-				runningTime += vreList[i].time;
-			}
-			vreTotal /= day;
-			remainingTime = Math.abs(day - runningTime);
-
-			$scope.vreData.vreDaily = {totalTime: runningTime, vreTotal, remainingTime};
-
-		}
-
-		function onClickFilterButton(fromDate, toDate) {
-			$scope.$parent.rController.getFailuresOnInterval(fromDate, toDate);
-
-			$scope.vreData.period = {
-				fromDate,
-				toDate,
-			};
-
-			reportsSetupAPIService.getVreList(
-				fromDate,
-				toDate,
-				vreListSuccessCallback,
-				vreListErrorCallback,
-			);
-		}
+		this.reportsSetupAPIService.getVreList(
+			fromDate,
+			toDate).then(
+				(arg) => { this.vreListSuccessCallback(arg); },
+				(arg) => { this.vreListErrorCallback(arg); },
+		);
 	}
 }
 // })();

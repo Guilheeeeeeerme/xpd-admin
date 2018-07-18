@@ -4,7 +4,6 @@ import { SetupAPIService } from './setupapi.service';
 // (function() {
 // 	'use strict';
 
-// 	angular.module('xpd.setupapi')
 // 		.service('alarmSetupAPIService', alarmSetupAPIService);
 
 // 	alarmSetupAPIService.$inject = ['xpdAccessService', 'setupAPIService'];
@@ -18,7 +17,7 @@ export class AlarmSetupAPIService {
 		this.BASE_URL = xpdAccessService.getSetupURL() + 'setup/alarm';
 	}
 
-	public insertAlarm(alarm, successCallback, errorCallback) {
+	public insertAlarm(alarm) {
 
 		const req = {
 			method: 'POST',
@@ -29,10 +28,10 @@ export class AlarmSetupAPIService {
 			data: alarm,
 		};
 
-		this.setupAPIService.doRequest(req, successCallback, errorCallback);
+		return this.setupAPIService.doRequest(req);
 	}
 
-	public removeAlarm(alarm, successCallback, errorCallback?) {
+	public removeAlarm(alarm) {
 
 		const req = {
 			method: 'DELETE',
@@ -42,10 +41,10 @@ export class AlarmSetupAPIService {
 			},
 		};
 
-		this.setupAPIService.doRequest(req, successCallback, errorCallback);
+		return this.setupAPIService.doRequest(req);
 	}
 
-	public updateAlarm(alarm, successCallback, errorCallback) {
+	public updateAlarm(alarm) {
 
 		const req = {
 			method: 'PUT',
@@ -56,26 +55,26 @@ export class AlarmSetupAPIService {
 			data: alarm,
 		};
 
-		this.setupAPIService.doRequest(req, successCallback, errorCallback);
+		return this.setupAPIService.doRequest(req);
 	}
 
-	public updateArchive(id, archived, successCallback, errorCallback?) {
+	public updateArchive(id, archived) {
 		const req = {
 			method: 'GET',
 			url: this.BASE_URL + '/' + id + '/archive/' + archived,
 		};
 
-		this.setupAPIService.doRequest(req, successCallback, errorCallback);
+		return this.setupAPIService.doRequest(req);
 	}
 
-	public getByOperationType(type, butNot, successCallback, errorCallback?) {
+	public getByOperationType(type, butNot) {
 
 		const req = {
 			method: 'GET',
 			url: this.BASE_URL + '/of-operations/' + type + '/but-not-id/' + (butNot || 0),
 		};
 
-		this.setupAPIService.doRequest(req, successCallback, errorCallback);
+		return this.setupAPIService.doRequest(req);
 	}
 }
 

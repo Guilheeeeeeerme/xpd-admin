@@ -1,6 +1,4 @@
 
-// angular.module('xpd.visualization').directive('timeZoomTool', timeZoomTool);
-
 // timeZoomTool.$inject = ['$filter', 'd3Service'];
 import * as angular from 'angular';
 import * as d3 from 'd3';

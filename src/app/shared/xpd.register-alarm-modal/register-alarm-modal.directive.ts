@@ -1,9 +1,6 @@
 // (function() {
 // 	'use strict';
 
-// 	angular.module('xpd.register-alarm-modal', [])
-// 		.directive('registerAlarmModal', registerAlarmModal);
-
 // 	registerAlarmModal.$inject = [];
 import template from './register-alarm-modal.template.html';
 
@@ -15,8 +12,8 @@ export class RegisterAlarmModalDirective implements ng.IDirective {
 		alarmType: '@',
 		modalTitle: '@',
 		alarmForm: '=',
-		actionSaveAlarm: '=',
-		actionCancelAlarm: '=',
+		actionSaveAlarm: '&',
+		actionCancelAlarm: '&',
 	};
 	public template = template;
 

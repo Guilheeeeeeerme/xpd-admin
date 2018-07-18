@@ -1,10 +1,6 @@
 // (function() {
 // 	'use strict',
 
-// 	angular.module('xpd.setupapi').directive('photoApiDirective', photoApiDirective);
-
-	// photoApiDirective.$inject = ['photoAPIService'];
-
 import { PhotoAPIService } from './photo-setupapi.service';
 
 export class PhotoApiDirective implements ng.IDirective {
@@ -25,14 +21,12 @@ export class PhotoApiDirective implements ng.IDirective {
 
 		const vm = this;
 
-		scope.$watch('photoApiDirectivePhotoName', setPhoto);
-
-		function setPhoto(photoApiDirectivePhotoName) {
+		scope.$watch('photoApiDirectivePhotoName', (photoApiDirectivePhotoName) => {
 
 			const photoName = scope.photoApiDirectivePhotoName || 'default';
 			const photoPath = attrs.photoApiDirectiveServerPath;
 
-			vm.photoAPIService.loadPhoto(photoPath, photoName, function(baseStr64) {
+			vm.photoAPIService.loadPhoto(photoPath, photoName).then( (baseStr64) => {
 
 				const image = 'data:image/jpeg;base64,' + baseStr64;
 
@@ -42,7 +36,7 @@ export class PhotoApiDirective implements ng.IDirective {
 					element[0].setAttribute('src', image);
 				}
 			});
-		}
+		});
 	}
 
 	public static Factory(): ng.IDirectiveFactory {

@@ -4,8 +4,6 @@ import modalTemplate from './xpd-modal-failure.template.html';
 // (function() {
 // 	'use strict';
 
-// 	angular.module('xpd.modal-failure').factory('failureModal', failureModal);
-
 // 	failureModal.$inject = ['$uibModal'];
 
 export class FailureModalFactory {

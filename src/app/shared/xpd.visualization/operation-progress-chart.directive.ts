@@ -1,6 +1,4 @@
 
-// angular.module('xpd.visualization')
-// 	.directive('operationProgressChart', operationProgressChart);
 // operationProgressChart.$inject = ['d3Service'];
 import * as d3 from 'd3';
 import template from './operation-progress-chart.template.html';

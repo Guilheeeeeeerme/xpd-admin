@@ -1,8 +1,6 @@
 // (function () {
 // 	'use strict';
 
-// 	angular.module('xpd.visualization').directive('channelsInformationPanel', channelsInformationPanel);
-
 // 	channelsInformationPanel.$inject = [];
 import template from './channels-information-panel.template.html';
 

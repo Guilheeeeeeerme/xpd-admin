@@ -4,7 +4,6 @@ import { SetupAPIService } from './setupapi.service';
 // (function() {
 // 	'use strict';
 
-// 	angular.module('xpd.setupapi')
 // 		.service('sectionSetupAPIService', sectionSetupAPIService);
 
 // sectionSetupAPIService.$inject = ['xpdAccessService', 'setupAPIService'];
@@ -17,17 +16,17 @@ export class SectionSetupAPIService {
 		this.BASE_URL = xpdAccessService.getSetupURL() + 'setup/section';
 	}
 
-	public getObjectById(id, successCallback, errorCallback?) {
+	public getObjectById(id) {
 
 		const req = {
 			method: 'GET',
 			url: this.BASE_URL + '/' + id,
 		};
 
-		this.setupAPIService.doRequest(req, successCallback, errorCallback);
+		return this.setupAPIService.doRequest(req);
 	}
 
-	public insertObject(object, successCallback, errorCallback?) {
+	public insertObject(object) {
 
 		const req = {
 			method: 'POST',
@@ -38,11 +37,11 @@ export class SectionSetupAPIService {
 			data: object,
 		};
 
-		this.setupAPIService.doRequest(req, successCallback, errorCallback);
+		return this.setupAPIService.doRequest(req);
 
 	}
 
-	public updateObject(object, successCallback, errorCallback?) {
+	public updateObject(object) {
 
 		const req = {
 			method: 'PUT',
@@ -53,10 +52,10 @@ export class SectionSetupAPIService {
 			data: object,
 		};
 
-		this.setupAPIService.doRequest(req, successCallback, errorCallback);
+		return this.setupAPIService.doRequest(req);
 	}
 
-	public getListOfSectionsByWell(wellId, successCallback, errorCallback?) {
+	public getListOfSectionsByWell(wellId) {
 
 		const url = this.BASE_URL + '/list-sections-by-well?wellId=' + wellId;
 
@@ -65,11 +64,11 @@ export class SectionSetupAPIService {
 			url,
 		};
 
-		this.setupAPIService.doRequest(req, successCallback, errorCallback);
+		return this.setupAPIService.doRequest(req);
 
 	}
 
-	public getListOfOperationsBySection(sectionId, successCallback, errorCallback?) {
+	public getListOfOperationsBySection(sectionId) {
 
 		const url = this.BASE_URL + '/' + sectionId + '/operation';
 
@@ -78,7 +77,7 @@ export class SectionSetupAPIService {
 			url,
 		};
 
-		this.setupAPIService.doRequest(req, successCallback, errorCallback);
+		return this.setupAPIService.doRequest(req);
 	}
 
 }

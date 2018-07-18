@@ -4,7 +4,6 @@ import { SetupAPIService } from './setupapi.service';
 // (function() {
 // 	'use strict';
 
-// 	angular.module('xpd.setupapi')
 // 		.service('scheduleSetupAPIService', scheduleSetupAPIService);
 
 // 	scheduleSetupAPIService.$inject = ['xpdAccessService', 'setupAPIService'];
@@ -28,18 +27,18 @@ export class ScheduleSetupAPIService {
 	 * Function
 	 * setup/function
 	 */
-	public getFunctionById(id, successCallback, errorCallback) {
+	public getFunctionById(id) {
 
 		const req = {
 			method: 'GET',
 			url: this.FUNCTION_URL + '/' + id,
 		};
 
-		this.setupAPIService.doRequest(req, successCallback, errorCallback);
+		return this.setupAPIService.doRequest(req);
 
 	}
 
-	public insertFunction(object, successCallback, errorCallback?) {
+	public insertFunction(object) {
 
 		const req = {
 			method: 'POST',
@@ -50,10 +49,10 @@ export class ScheduleSetupAPIService {
 			data: object,
 		};
 
-		this.setupAPIService.doRequest(req, successCallback, errorCallback);
+		return this.setupAPIService.doRequest(req);
 	}
 
-	public updateFunction(object, successCallback, errorCallback?) {
+	public updateFunction(object) {
 
 		const req = {
 			method: 'PUT',
@@ -64,10 +63,10 @@ export class ScheduleSetupAPIService {
 			data: object,
 		};
 
-		this.setupAPIService.doRequest(req, successCallback, errorCallback);
+		return this.setupAPIService.doRequest(req);
 	}
 
-	public removeFunction(object, successCallback, errorCallback?) {
+	public removeFunction(object) {
 
 		const req = {
 			method: 'DELETE',
@@ -78,14 +77,14 @@ export class ScheduleSetupAPIService {
 			data: { id: object.id },
 		};
 
-		this.setupAPIService.doRequest(req, successCallback, errorCallback);
+		return this.setupAPIService.doRequest(req);
 	}
 
 	/**
 	 * Member
 	 * setup/member
 	 */
-	public updateMember(object, successCallback, errorCallback?) {
+	public updateMember(object) {
 
 		const req = {
 			method: 'PUT',
@@ -96,21 +95,21 @@ export class ScheduleSetupAPIService {
 			data: object,
 		};
 
-		this.setupAPIService.doRequest(req, successCallback, errorCallback);
+		return this.setupAPIService.doRequest(req);
 	}
 
-	public getMemberById(id, successCallback, errorCallback) {
+	public getMemberById(id) {
 
 		const req = {
 			method: 'GET',
 			url: this.MEMBER_URL + '/' + id,
 		};
 
-		this.setupAPIService.doRequest(req, successCallback, errorCallback);
+		return this.setupAPIService.doRequest(req);
 
 	}
 
-	public indentificationExists(id, identification, successCallback, errorCallback?) {
+	public indentificationExists(id, identification) {
 
 		const req = {
 			method: 'GET',
@@ -121,11 +120,11 @@ export class ScheduleSetupAPIService {
 			req.url += '/exclude-member/' + id;
 		}
 
-		this.setupAPIService.doRequest(req, successCallback, errorCallback);
+		return this.setupAPIService.doRequest(req);
 
 	}
 
-	public insertMember(object, successCallback, errorCallback?) {
+	public insertMember(object) {
 
 		const req = {
 			method: 'POST',
@@ -136,10 +135,10 @@ export class ScheduleSetupAPIService {
 			data: object,
 		};
 
-		this.setupAPIService.doRequest(req, successCallback, errorCallback);
+		return this.setupAPIService.doRequest(req);
 	}
 
-	public removeMember(object, successCallback, errorCallback?) {
+	public removeMember(object) {
 
 		const req = {
 			method: 'DELETE',
@@ -150,10 +149,10 @@ export class ScheduleSetupAPIService {
 			data: { id: object.id },
 		};
 
-		this.setupAPIService.doRequest(req, successCallback, errorCallback);
+		return this.setupAPIService.doRequest(req);
 	}
 
-	public getMemberScore(successCallback, errorCallback?) {
+	public getMemberScore() {
 
 		const req = {
 			method: 'GET',
@@ -163,24 +162,24 @@ export class ScheduleSetupAPIService {
 			},
 		};
 
-		this.setupAPIService.doRequest(req, successCallback, errorCallback);
+		return this.setupAPIService.doRequest(req);
 	}
 
 	/**
 	 * Schedule
 	 * setup/schedule
 	 */
-	public getScheduleById(id, successCallback, errorCallback) {
+	public getScheduleById(id) {
 
 		const req = {
 			method: 'GET',
 			url: this.SCHEDULE_URL + '/' + id,
 		};
 
-		this.setupAPIService.doRequest(req, successCallback, errorCallback);
+		return this.setupAPIService.doRequest(req);
 	}
 
-	public removeSchedule(object, successCallback, errorCallback?) {
+	public removeSchedule(object) {
 
 		const req = {
 			method: 'DELETE',
@@ -191,10 +190,10 @@ export class ScheduleSetupAPIService {
 			data: { id: object.id },
 		};
 
-		this.setupAPIService.doRequest(req, successCallback, errorCallback);
+		return this.setupAPIService.doRequest(req);
 	}
 
-	public insertSchedule(object, successCallback, errorCallback?) {
+	public insertSchedule(object) {
 
 		const req = {
 			method: 'POST',
@@ -205,10 +204,10 @@ export class ScheduleSetupAPIService {
 			data: object,
 		};
 
-		this.setupAPIService.doRequest(req, successCallback, errorCallback);
+		return this.setupAPIService.doRequest(req);
 	}
 
-	public updateSchedule(object, successCallback, errorCallback?) {
+	public updateSchedule(object) {
 
 		const req = {
 			method: 'PUT',
@@ -219,7 +218,7 @@ export class ScheduleSetupAPIService {
 			data: object,
 		};
 
-		this.setupAPIService.doRequest(req, successCallback, errorCallback);
+		return this.setupAPIService.doRequest(req);
 	}
 
 	/**
@@ -229,7 +228,7 @@ export class ScheduleSetupAPIService {
 	 * @param {callback} successCallback
 	 * @param {errorCallback} errorCallback
 	 */
-	public getOnlyScheduled(fromDate, toDate, successCallback, errorCallback) {
+	public getOnlyScheduled(fromDate, toDate) {
 
 		let url = this.SCHEDULE_URL + '/schedule-by-range-date?';
 		url += 'fromDate=' + fromDate + '&';
@@ -240,7 +239,7 @@ export class ScheduleSetupAPIService {
 			url,
 		};
 
-		this.setupAPIService.doRequest(req, successCallback, errorCallback);
+		return this.setupAPIService.doRequest(req);
 	}
 
 	/**
@@ -250,7 +249,7 @@ export class ScheduleSetupAPIService {
 	 * @param {callback} successCallback
 	 * @param {errorCallback} errorCallback
 	 */
-	public fullScheduleByRangeDate(fromDate, toDate, successCallback, errorCallback) {
+	public fullScheduleByRangeDate(fromDate, toDate) {
 
 		let url = this.SCHEDULE_URL + '/full-schedule-by-range-date?';
 		url += 'fromDate=' + fromDate + '&';
@@ -261,7 +260,7 @@ export class ScheduleSetupAPIService {
 			url,
 		};
 
-		this.setupAPIService.doRequest(req, successCallback, errorCallback);
+		return this.setupAPIService.doRequest(req);
 	}
 
 	/**
@@ -271,7 +270,7 @@ export class ScheduleSetupAPIService {
 	 * @param {*} successCallback
 	 * @param {*} errorCallback
 	 */
-	public getCleanListBySchedule(schedule, successCallback, errorCallback?) {
+	public getCleanListBySchedule(schedule) {
 
 		const req = {
 			method: 'POST',
@@ -282,7 +281,7 @@ export class ScheduleSetupAPIService {
 			data: schedule,
 		};
 
-		this.setupAPIService.doRequest(req, successCallback, errorCallback);
+		return this.setupAPIService.doRequest(req);
 
 	}
 

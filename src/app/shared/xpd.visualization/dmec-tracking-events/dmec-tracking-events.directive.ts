@@ -1,7 +1,6 @@
 // (function() {
 // 	'use strict';
-// 	angular.module('xpd.visualization')
-// 		.directive('dmecTrackingEvents', dmecTrackingEvents);
+
 // 	dmecTrackingEvents.$inject = ['$uibModal', 'd3Service', 'eventDetailsModalService', 'failureModal', 'lessonLearnedModal'];
 import * as d3 from 'd3';
 import { EventDetailsModalService } from '../../xpd.modal.event-details/xpd-modal-event-details.factory';

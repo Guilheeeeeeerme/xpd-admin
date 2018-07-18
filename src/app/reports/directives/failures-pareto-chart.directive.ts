@@ -3,8 +3,6 @@ import { HighchartsService } from '../../shared/highcharts/highcharts.service';
 // (function() {
 // 	'use stric';
 
-// 	angular.module('xpd.reports').directive('failuresParetoChart', failuresParetoChart);
-
 export class FailuresParetoChart {
 
 	public static $inject: string[] = ['highchartsService'];

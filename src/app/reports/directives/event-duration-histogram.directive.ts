@@ -1,8 +1,6 @@
 // (function() {
 // 	'use strict';
 
-// 	angular.module('xpd.reports').directive('eventDurationHistogram', eventDurationHistogram);
-
 import { HighchartsService } from '../../shared/highcharts/highcharts.service';
 import template from './event-duration-histogram.template.html';
 

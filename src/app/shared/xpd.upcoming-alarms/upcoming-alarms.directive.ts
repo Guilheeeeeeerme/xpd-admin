@@ -1,9 +1,6 @@
 // (function() {
 // 	'use strict';
 
-// 	angular.module('xpd.upcoming-alarms', [])
-// 		.directive('upcomingAlarms', upcomingAlarms);
-
 // 	upcomingAlarms.$inject = [];
 import template from './upcoming-alarms.template.html';
 

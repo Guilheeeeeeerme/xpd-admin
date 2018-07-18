@@ -1,7 +1,4 @@
 
-// angular.module('xpd.visualization')
-// 	.directive('nextActivitiesInformationPanel', nextActivitiesInformationPanel);
-
 // nextActivitiesInformationPanel.$inject = [];
 
 import template from './next-activities-information-panel.template.html';

@@ -10,9 +10,6 @@ XPDSwitchModule.directive('xpdSwitch', XPDSwitchDirective.Factory());
 // (function() {
 // 	'use strict';
 
-// 	angular.module('xpd.switch', [])
-// 		.directive('xpdSwitch', xpdSwitch);
-
 // 	function xpdSwitch() {
 
 // 		return {

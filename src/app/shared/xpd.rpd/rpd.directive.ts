@@ -1,9 +1,5 @@
 // (function() {
 
-// 	angular.module('xpd.admin')
-// 		.directive('rpdForm', rpdFormDirective);
-
-// 	rpdFormDirective.$inject = ['$filter', '$xpdTimeout'];
 import { TableExport } from 'tableexport';
 import { XPDTimeoutService } from '../xpd.timers/xpd-timers.service';
 import template from './rpd.template.html';

@@ -4,7 +4,6 @@ import { SetupAPIService } from './setupapi.service';
 // (function() {
 // 	'use strict';
 
-// 	angular.module('xpd.setupapi')
 // 		.service('wellSetupAPIService', wellSetupAPIService);
 
 // 	wellSetupAPIService.$inject = ['xpdAccessService', 'setupAPIService'];
@@ -20,7 +19,7 @@ export class WellSetupAPIService {
 		this.BASE_URL = xpdAccessService.getSetupURL() + 'setup/well';
 	}
 
-	public insertObject(object, successCallback, errorCallback?) {
+	public insertObject(object) {
 
 		const req = {
 			method: 'POST',
@@ -31,11 +30,11 @@ export class WellSetupAPIService {
 			data: object,
 		};
 
-		this.setupAPIService.doRequest(req, successCallback, errorCallback);
+		return this.setupAPIService.doRequest(req);
 
 	}
 
-	public removeObject(object, successCallback, errorCallback?) {
+	public removeObject(object) {
 
 		const req = {
 			method: 'DELETE',
@@ -46,10 +45,10 @@ export class WellSetupAPIService {
 			data: object,
 		};
 
-		this.setupAPIService.doRequest(req, successCallback, errorCallback);
+		return this.setupAPIService.doRequest(req);
 	}
 
-	public updateObject(object, successCallback, errorCallback?) {
+	public updateObject(object) {
 
 		const req = {
 			method: 'PUT',
@@ -60,27 +59,27 @@ export class WellSetupAPIService {
 			data: object,
 		};
 
-		this.setupAPIService.doRequest(req, successCallback, errorCallback);
+		return this.setupAPIService.doRequest(req);
 	}
 
-	public getList(successCallback, errorCallback?) {
+	public getList() {
 
 		const req = {
 			method: 'GET',
 			url: this.BASE_URL + '/list',
 		};
 
-		this.setupAPIService.doRequest(req, successCallback, errorCallback);
+		return this.setupAPIService.doRequest(req);
 	}
 
-	public getObjectById(id, successCallback, errorCallback?) {
+	public getObjectById(id) {
 
 		const req = {
 			method: 'GET',
 			url: this.BASE_URL + '/' + id,
 		};
 
-		this.setupAPIService.doRequest(req, successCallback, errorCallback);
+		return this.setupAPIService.doRequest(req);
 	}
 
 }

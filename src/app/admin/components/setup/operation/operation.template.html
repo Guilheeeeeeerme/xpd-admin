@@ -1,0 +1,124 @@
+<div class="panel panel-default xpd-setup-panel">
+
+    <div class="row panel-heading">
+
+        <div class="col-md-9">
+            <h3 class="panel-title">
+
+                <strong> {{well.name}} </strong>/
+                <strong> {{section.name}} </strong>/
+
+                <!-- <strong> {{ dados.operation.id != null?'Edit':'New' }} </strong> -->
+
+                <strong> {{dados.operation.name}} </strong>
+                <span ng-if="dados.operation.type =='bha'">[BHA]</span>
+                <span ng-if="dados.operation.type =='casing'">[Casing]</span>
+                <span ng-if="dados.operation.type =='riser'">[Riser]</span>
+                <span ng-if="dados.operation.type =='time'">[Time]</span>
+
+            </h3>
+        </div>
+
+        <div class="col-md-3">
+            <div ng-class="{ 'dropdown': !open, 'dropdown open': open }" ng-init="open = false">
+
+                <a class="btn btn-sm fa fa-calculator" ng-click="open = !open"></a>
+
+                <ul class="dropdown-menu col-md-12">
+                    <div class="form-group col-md-12">
+                        <label>Unit:</label>
+                        <select class="form-control" ng-model="unit">
+                            <option value="min">min. to m/h</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group col-md-12">
+                        <label>Value:</label>
+                        <input type="number" class="form-control" ng-model="value" ng-change="operationController.calcContractParamsConverter(value, unit)">
+                    </div>
+
+                    <div class="form-group col-md-11">
+                        <label>Result:
+                            <input id="result" type="text" value="{{dados.result}}">
+                            <a class="btn fa fa-copy" ng-click="operationController.myFunction()"></a>
+                        </label>
+                    </div>
+
+                </ul>
+
+            </div>
+        </div>
+
+
+
+        <!-- <div class="col-md-3 form-group-sm">
+            <label for="sort" class="col-sm-2 control-label">Import:</label>
+            <div class="col-sm-10">
+                <select class="form-control"
+                    ng-if="dados.operationQueue"
+                    ng-model="dados.selectedOperation"
+                    ng-change="operationController.changeImportedOperation(dados.selectedOperation.id)"
+                    ng-options="operation.name for operation in dados.operationQueue">
+                </select>
+            </div>
+            
+        </div> -->
+
+    </div>
+
+    <div class="panel-body">
+
+        <uib-tabset justified="true" active="dados.tabIndex" ng-init="dados.tabIndex = 0">
+
+            <uib-tab index="$index" ng-repeat="tab in tabs" heading="{{tab.title}}" select="operationController.markTabAsVisited($index)">
+                <br/>
+                <div class="container-fluid padding-bottom-container" ng-include="tab.url"></div>
+            </uib-tab>
+
+        </uib-tabset>
+    </div>
+
+    <div class="panel-footer xpd-setup-footer">
+
+        <div class="container">
+
+            <div class="pull-left">
+                <button class="btn btn-default" ng-click="operationController.confirmLeaving()">
+                    <span class="glyphicon glyphicon-chevron-left"></span> Back to Section List
+                </button>
+            </div>
+
+            <div class="pull-right">
+
+                <button class="btn btn-warning" ng-click="operationController.validateGeneralInfo()" ng-show="dados.operation.type != 'time'
+                    && ( dados.allTabsWereVisited == true && operationController.info.$invalid )">
+                    <span class="glyphicon glyphicon-warning-sign"></span>
+                    General Info Issue</button>
+
+                <button class="btn btn-warning" ng-click="operationController.validateGeneralInfo()" ng-show="dados.operation.type == 'time'
+                    && ( dados.allTabsWereVisited == true
+                    && ( operationController.info.$invalid || operationController.contract.$invalid ) )">
+                    <span class="glyphicon glyphicon-warning-sign"></span>
+                    General Info Issue</button>
+
+                <button class="btn btn-warning" ng-click="operationController.validateContractParams()" ng-show="dados.operation.type != 'time'
+                    && ( dados.allTabsWereVisited == true && operationController.contract.$invalid )">
+                    <span class="glyphicon glyphicon-warning-sign"></span>
+                    Contract Issue</button>
+
+                <button class="btn btn-info" ng-click="dados.tabIndex = dados.tabIndex + 1" ng-show="(dados.allTabsWereVisited != true && dados.tabIndex < 2) && !dados.operation.id">
+                    NEXT
+                    <span class="glyphicon glyphicon-menu-right"></span>
+                </button>
+
+                <button class="btn btn-default" ng-click="operationController.actionButtonSave()" ng-show="(dados.allTabsWereVisited == true || dados.operation.id)
+                    && !operationController.contract.$invalid && !operationController.info.$invalid">
+                    Save & Close
+                    <span class="glyphicon glyphicon-floppy-disk"></span>
+                </button>
+            </div>
+        </div>
+
+    </div>
+
+</div>

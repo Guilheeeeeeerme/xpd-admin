@@ -1,15 +1,19 @@
+import { IQService, route } from 'angular';
 import { ReportsSetupAPIService } from '../../shared/xpd.setupapi/reports-setupapi.service';
 
 export class BitDepthTimeController {
 	// 'use strict';
 
-	// angular.module('xpd.reports').controller('BitDepthTimeController', BitDepthTimeController);
-
-	public static $inject = ['$scope', '$routeParams', 'reportsSetupAPIService'];
+	public static $inject = [
+		'$scope',
+		'$q',
+		'$routeParams',
+		'reportsSetupAPIService'];
 
 	constructor(
-		private $scope,
-		private $routeParams,
+		private $scope: any,
+		private $q: IQService,
+		private $routeParams: route.IRouteService,
 		private reportsSetupAPIService: ReportsSetupAPIService) {
 
 		const vm = this;
@@ -20,7 +24,7 @@ export class BitDepthTimeController {
 			dateTimeEvent: {},
 		};
 
-		$scope.wellId = $routeParams.wellId;
+		$scope.wellId = ($routeParams as any).wellId;
 
 		if ($scope.wellId !== undefined) {
 			this.getOperationQueue();
@@ -29,10 +33,11 @@ export class BitDepthTimeController {
 	}
 
 	private getOperationQueue() {
-		this.reportsSetupAPIService.getOperationQueue(
-			this.$scope.wellId,
-			(results) => { this.getOperationQueueCallback(results); },
-			(error) => { this.error(error); });
+		this.reportsSetupAPIService.getOperationQueue(this.$scope.wellId)
+			.then(
+				(results) => { this.getOperationQueueCallback(results); },
+				(error) => { this.error(error); },
+		);
 	}
 
 	private getOperationQueueCallback(operations) {
@@ -46,16 +51,13 @@ export class BitDepthTimeController {
 
 		this.$scope.planned = [];
 
-		return new Promise((resolve, reject) => {
+		return this.$q((resolve, reject) => {
 
 			const promises = operations.map((operation) => {
-				return new Promise((resolve1, reject1) => {
-					this.reportsSetupAPIService.getBitDepthChartForOperation(
-						this.$scope.wellId, operation.id, resolve1, reject1);
-				});
+				return this.reportsSetupAPIService.getBitDepthChartForOperation(this.$scope.wellId, operation.id);
 			});
 
-			Promise.all(promises).then((plannedOperations) => {
+			this.$q.all(promises).then((plannedOperations) => {
 				this.$scope.planned = plannedOperations;
 				this.drawPlanned();
 				resolve();
@@ -68,15 +70,13 @@ export class BitDepthTimeController {
 
 		this.$scope.executed = [];
 
-		return new Promise((resolve, reject) => {
+		return this.$q((resolve, reject) => {
 
 			const promises = operations.map((operation) => {
-				return new Promise((resolve1, reject1) => {
-					this.reportsSetupAPIService.getOperationExecuted(operation.id, resolve1, reject1);
-				});
+				return this.reportsSetupAPIService.getOperationExecuted(operation.id);
 			});
 
-			Promise.all(promises).then((executedOperation) => {
+			this.$q.all(promises).then((executedOperation) => {
 				this.$scope.executed = executedOperation;
 				this.drawExecuted();
 				resolve();

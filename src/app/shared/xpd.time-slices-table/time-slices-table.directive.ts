@@ -1,9 +1,6 @@
 // (function() {
 // 	'use strict';
 
-// 	angular.module('xpd.time-slices-table', [])
-// 		.directive('timeSlicesTable', timeSlicesTable);
-
 // 	timeSlicesTable.$inject = [];
 import * as angular from 'angular';
 import template from './time-slices-table.template.html';

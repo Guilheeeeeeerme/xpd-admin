@@ -1,7 +1,5 @@
 // (function() {
 
-// 	angular.module('xpd.planner')
-// 		.directive('xpdConnectionPlanner', xpdConnectionPlanner);
 import * as angular from 'angular';
 import template from './connection-planner.template.html';
 

@@ -4,8 +4,6 @@ import { XPDTimeoutService } from '../../shared/xpd.timers/xpd-timers.service';
 // (function() {
 // 	'use strict';
 
-// angular.module('xpd.reports').directive('depthLineChart', depthLineChart);
-
 export class DepthLineChartDirective implements ng.IDirective {
 	public static $inject: string[] = ['$xpdTimeout', 'highchartsService'];
 
