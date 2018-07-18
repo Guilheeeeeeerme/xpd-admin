@@ -10,7 +10,7 @@
 		return {
 			templateUrl: '../xpd-resources/ng/xpd.visualization/forecast-line.template.html',
 			scope: {
-				vTargetLine: '=',
+				targetLine: '=',
 				actualLine: '=',
 				isTripin: '=',
 				settings: '=',
@@ -43,7 +43,7 @@
 						buildActualLine();
 					});
 
-					scope.$watch('vTargetLine', function () {
+					scope.$watch('targetLine', function () {
 						buildvTargetLine();
 					}, true);
 
@@ -116,7 +116,7 @@
 						if (!scope.settings || !scope.type || !scope.state || !getVtargetLine(scope.state, scope.type))
 							return;
 
-						var vTargetLine = getVtargetLine(scope.state, scope.type);
+						var targetLine = getVtargetLine(scope.state, scope.type);
 						var actualLine = null;
 
 						try {
@@ -126,11 +126,11 @@
 						}
 
 
-						var actualFinalTime = (actualLine != null) ? actualLine.finalTime : vTargetLine.startTime;
-						var actualFinalJoint = (actualLine != null) ? actualLine.finalJoint : vTargetLine.initialJoint;
+						var actualFinalTime = (actualLine != null) ? actualLine.finalTime : targetLine.startTime;
+						var actualFinalJoint = (actualLine != null) ? actualLine.finalJoint : targetLine.initialJoint;
 
-						var optimumFinalTime = vTargetLine.finalTime;
-						var optimumFinalJoint = vTargetLine.finalJoint;
+						var optimumFinalTime = targetLine.finalTime;
+						var optimumFinalJoint = targetLine.finalJoint;
 
 						var points = [];
 
@@ -186,13 +186,13 @@
 					function getVtargetLine(state, type) {
 						var isTripin = scope.isTripin == false ? false : true;
 
-						for (var i in scope.vTargetLine) {
-							var vTargetLine = scope.vTargetLine[i];
+						for (var i in scope.targetLine) {
+							var targetLine = scope.targetLine[i];
 
-							if (vTargetLine[state] &&
-								vTargetLine[state].isTripin == isTripin &&
-								vTargetLine[state][type]) {
-								return vTargetLine[state][type];
+							if (targetLine[state] &&
+								targetLine[state].isTripin == isTripin &&
+								targetLine[state][type]) {
+								return targetLine[state][type];
 							}
 
 						}

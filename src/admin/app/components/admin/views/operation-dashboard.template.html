@@ -61,6 +61,9 @@
                 on-init="odController.getPanelStartState"
                 on-click-collapse="odController.changePanelState"
                 collapse = "statusPanel['panelNextActivityIsCollapsed']"
+                current-activity-elapsed-time="operationData.chronometerContext.stateTick"
+                initial-planning="operationData.suboperationContext.currentSuboperation.jointIntervals"
+                operation="operationData.operationContext.currentOperation" 
                 activities="expectations.nextActivities">
             </next-activities-information-panel>
 
@@ -85,15 +88,15 @@
 
                 <div class="panel-body" uib-collapse="statusPanel['panelOperationIsCollapsed']">
 
-                    <button class="btn btn-default" ng-click="odController.actionButtonBuildForecast( 'vOptimumLine', 'BOTH' )">
+                    <button class="btn btn-default" ng-click="odController.actionButtonBuildForecast( 'vOptimumEstimative', 'BOTH' )">
                         Optimum
                     </button>
 
-                    <button class="btn btn-default" ng-click="odController.actionButtonBuildForecast( 'vStandardLine', 'BOTH' )">
+                    <button class="btn btn-default" ng-click="odController.actionButtonBuildForecast( 'vStandardEstimative', 'BOTH' )">
                         Standard
                     </button>
 
-                    <button class="btn btn-default" ng-click="odController.actionButtonBuildForecast( 'vPoorLine', 'BOTH' )">
+                    <button class="btn btn-default" ng-click="odController.actionButtonBuildForecast( 'vPoorEstimative', 'BOTH' )">
                         Poor
                     </button>
 
