@@ -9,7 +9,7 @@ import template from './slips-to-slips-bar-chart.template.html';
 export class SlipsToSlipsBarChart {
 
 	public template = template;
-	public scope: {
+	public scope = {
 		slipsData: '=',
 	};
 

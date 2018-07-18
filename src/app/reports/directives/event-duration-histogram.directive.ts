@@ -11,7 +11,7 @@ export class EventDurationHistogram {
 	public static $inject: string[] = ['highchartsService'];
 	public template = template;
 	public restrict = 'EA';
-	public scope: {
+	public scope = {
 		chartData: '=',
 	};
 

@@ -4,7 +4,7 @@ import template from './modal/lessons-learned-report.modal.html';
 export class LessonsLearnedController {
 	// 'use strict';
 
-	// angular.module('xpd.reports').controller('LessonsLearnedController', lessonsLearnedController);
+	// angular.module('xpd.reports').controller('LessonsLearnedController', LessonsLearnedController);
 
 	public static $inject = ['$scope', '$uibModal', 'reportsSetupAPIService'];
 	public totalTime: any;

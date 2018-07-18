@@ -3,7 +3,7 @@ import { ReportsSetupAPIService } from '../../shared/xpd.setupapi/reports-setupa
 export class NeedleReportController {
 	// 'use strict';
 
-	// angular.module('xpd.reports').controller('ReportNeedleController', reportNeedleController);
+	// angular.module('xpd.reports').controller('NeedleReportController', NeedleReportController);
 
 	public static $inject = ['$scope', 'reportsSetupAPIService'];
 	public onClickFilterButton: (fromDate: any, toDate: any) => void;

@@ -113,7 +113,7 @@ export class XPDAdminNavBarDirective implements ng.IDirective {
 					if (path === 'dmeclog.html#/') {
 						window.open('https://' + self.$location.host() + ':' + self.$location.port() + '/admin/dmeclog.html#');
 					} else if (path === 'reports.html#/') {
-						window.location.href = 'https://' + self.$location.host() + ':' + self.$location.port() + '/admin/' + path;
+						window.location.href = 'https://' + self.$location.host() + ':' + self.$location.port() + '/' + path;
 					} else {
 						if (!window.location.href.endsWith(path)) {
 							if (newTab) {

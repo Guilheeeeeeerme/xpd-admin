@@ -9,7 +9,7 @@ import { XPDTimeoutService } from '../../shared/xpd.timers/xpd-timers.service';
 export class DepthLineChartDirective implements ng.IDirective {
 	public static $inject: string[] = ['$xpdTimeout', 'highchartsService'];
 
-	public scope: {
+	public scope = {
 		chartPlannedData: '=',
 		chartRealizedData: '=',
 		plotBandsPlannedData: '=',

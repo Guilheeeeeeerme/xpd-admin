@@ -4,7 +4,7 @@ export class UpcomingAlarmsPanelDirective implements ng.IDirective {
 
 	public retrict = 'EA';
 	public template = template;
-	public scope: {
+	public scope = {
 		tripinAlarms: '=',
 		tripoutAlarms: '=',
 		currentDirection: '=',

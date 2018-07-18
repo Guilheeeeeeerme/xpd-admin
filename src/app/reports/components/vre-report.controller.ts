@@ -1,10 +1,10 @@
 import { ReportsSetupAPIService } from '../../shared/xpd.setupapi/reports-setupapi.service';
 import { WellSetupAPIService } from '../../shared/xpd.setupapi/well-setupapi.service';
 
-export class VreReportController {
+export class VREReportController {
 	// 'use strict';
 
-	// angular.module('xpd.reports').controller('VreReportController', vreReportController);
+	// angular.module('xpd.reports').controller('VREReportController', VREReportController);
 
 	public static $inject = ['$scope', 'wellSetupAPIService', 'reportsSetupAPIService'];
 	public onClickFilterButton: (fromDate: any, toDate: any) => void;

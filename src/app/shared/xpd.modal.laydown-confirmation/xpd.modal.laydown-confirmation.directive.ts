@@ -18,7 +18,7 @@ export class LayDownConfirmationDirective implements ng.IDirective {
 	public layDownDetectedModal: any;
 	constructor(private $uibModal: IModalService, private operationDataService: OperationDataService) { }
 
-	public scope: {
+	public scope = {
 		dismissable: '<',
 	};
 

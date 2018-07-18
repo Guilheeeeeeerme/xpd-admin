@@ -5,11 +5,11 @@
 
 import template from './table-period.template.html';
 
-export class TablePeriod {
+export class TablePeriod implements ng.IDirective {
 
 	public restrict: 'EA';
 	public template = template;
-	public scope: {
+	public scope = {
 		initialDate: '=',
 		finalDate: '=',
 		minDate: '=',

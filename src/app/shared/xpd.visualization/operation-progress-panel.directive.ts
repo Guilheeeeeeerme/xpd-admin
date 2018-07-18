@@ -9,7 +9,7 @@ import template from './operation-progress-panel.template.html';
 export class OperationProgressPanelDirective implements ng.IDirective {
 	public restrict = 'EA';
 	public template = template;
-	public scope: {
+	public scope = {
 		onInit: '=',
 		onClickCollapse: '=',
 		collapse: '=',

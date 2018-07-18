@@ -19,17 +19,17 @@ export class ReportConfig {
 		$routeProvider
 			.when('/', {
 				template: VreReportTemplate,
-				controller: 'VreReportController as vController',
+				controller: 'VREReportController as vController',
 			})
 
 			.when('/vre/', {
 				template: VreReportTemplate,
-				controller: 'VreReportController as vController',
+				controller: 'VREReportController as vController',
 			})
 
 			.when('/vre-score/', {
 				template: VreScoreReportTemplate,
-				controller: 'VreScoreController as vsController',
+				controller: 'VREScoreController as vsController',
 			})
 
 			.when('/histogram/', {
@@ -39,7 +39,7 @@ export class ReportConfig {
 
 			.when('/needle-report/', {
 				template: ReportNeedleTemplate,
-				controller: 'ReportNeedleController as rnController',
+				controller: 'NeedleReportController as rnController',
 			})
 
 			.when('/failures-npt/', {
@@ -59,7 +59,7 @@ export class ReportConfig {
 
 		// .when('/operation/:operationId', {
 		// 	templateUrl: './app/components/reports/views/vre.template.html',
-		// 	controller: 'VreReportController as vController'
+		// 	controller: 'VREReportController as vController'
 		// })
 
 		// .when('/operation/:operationId/connections', {

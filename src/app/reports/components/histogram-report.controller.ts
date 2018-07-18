@@ -3,7 +3,7 @@ import { ReportsSetupAPIService } from '../../shared/xpd.setupapi/reports-setupa
 export class HistogramReportController {
 	// 'use strict';
 
-	// angular.module('xpd.reports').controller('HistogramReportController', histogramReportController);
+	// angular.module('xpd.reports').controller('HistogramReportController', HistogramReportController);
 
 	public static $inject = ['$scope', 'reportsSetupAPIService'];
 	public getColSize: () => number;
