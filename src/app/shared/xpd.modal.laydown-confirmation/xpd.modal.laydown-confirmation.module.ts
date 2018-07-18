@@ -4,4 +4,4 @@ import { LayDownConfirmationDirective } from './xpd.modal.laydown-confirmation.d
 const XPDLayDownConfirmationModule: angular.IModule = angular.module('xpd.modal.laydown-confirmation', []);
 export  { XPDLayDownConfirmationModule };
 
-XPDLayDownConfirmationModule.directive('xpdZeroTimeZone', LayDownConfirmationDirective.Factory());
+XPDLayDownConfirmationModule.directive('xpdLaydownConfirmation', LayDownConfirmationDirective.Factory());

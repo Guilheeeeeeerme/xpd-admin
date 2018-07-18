@@ -38,97 +38,66 @@ export class XPDAdminNavBarDirective implements ng.IDirective {
 		ctrl: any,
 	) => {
 
-		const self = this;
+		const onclickItemMenuAdmin = (path, newTab) => {
+			const blockMenu = this.menuConfirmationService.getBlockMenu();
+
+			if (!blockMenu) {
+				redirectToPath(path, newTab);
+			} else {
+				const message = 'Your changes will be lost. Proceed?';
+
+				this.dialogService.showCriticalDialog(message, () => {
+					this.menuConfirmationService.setBlockMenu(false);
+					redirectToPath(path, newTab);
+				});
+			}
+		};
+
+		const redirectToPath = (path, newTab) => {
+
+			if (this.$location.port()) {
+				path = 'https://' + this.$location.host() + ':' + this.$location.port() + path;
+			} else {
+				for (const page of ['admin.html', 'dmec-log.html', 'reports.html']) {
+					if (window.location.href.indexOf(page) >= 0) {
+						path = window.location.href.slice(0, (window.location.href.indexOf(page) - 1) ) + path;
+						break;
+					}
+				}
+			}
+
+			if (newTab === true) {
+				window.open(path);
+			} else {
+				window.location.href = path;
+			}
+
+		};
+
+		const checkIfHasRunningOperation = () => {
+			const context = this.operationDataFactory.operationData.operationContext;
+			if (context && context.currentOperation && context.currentOperation.running && context.currentOperation.type !== 'time') {
+				scope.hasRunningOperation = true;
+			} else {
+				scope.hasRunningOperation = false;
+			}
+		};
+
+		if (attrs.navOrigin === 'report') {
+			scope.onclickItemMenu = redirectToPath;
+		} else {
+			scope.onclickItemMenu = onclickItemMenuAdmin;
+		}
 
 		this.operationDataService.openConnection([]).then(() => {
 
-			self.operationDataFactory = self.operationDataService.operationDataFactory;
-
-			const onclickItemMenuAdmin = (path, newTab) => {
-				const blockMenu = self.menuConfirmationService.getBlockMenu();
-
-				if (!blockMenu) {
-					redirectToPath(path, newTab);
-				} else {
-					const message = 'Your changes will be lost. Proceed?';
-
-					self.dialogService.showCriticalDialog(message, () => {
-						self.menuConfirmationService.setBlockMenu(false);
-						redirectToPath(path, newTab);
-					});
-				}
-			};
-
-			const redirectToPath = (path, newTab) => {
-
-				if (self.$location.port()) {
-					path = 'https://' + self.$location.host() + ':' + self.$location.port() + path;
-				}
-
-				if (newTab === true) {
-					window.open(path);
-				} else {
-					window.location.href = path;
-				}
-
-				// this.$location.path( path );
-
-				// console.log(path, newTab);
-
-				// if (self.$location.port()) {
-
-				// 	if (path === 'dmeclog.html#/') {
-				// 		window.open('https://' + self.$location.host() + ':' + self.$location.port() + '/admin/dmeclog.html#');
-				// 	} else if (path === 'reports.html#/') {
-				// 		window.location.href = 'https://' + self.$location.host() + ':' + self.$location.port() + '/' + path;
-				// 	} else {
-				// 		if (!window.location.href.endsWith(path)) {
-				// 			if (newTab) {
-				// 				window.open('admin.html#' + path);
-				// 			} else {
-				// 				self.$location.url(path);
-				// 			}
-				// 		}
-				// 	}
-
-				// } else {
-
-				// 	const url = window.location.href.split('pages')[0];
-
-				// 	if (path === 'dmeclog.html#/') {
-				// 		window.open(url + '/pages/' + path);
-				// 	} else if (path === 'reports.html#/') {
-				// 		window.location.href = url + '/pages/' + path;
-				// 	} else {
-				// 		if (!window.location.href.endsWith(path)) {
-				// 			self.$location.url(path);
-				// 		}
-				// 	}
-
-				// }
-
-			};
-
-			const checkIfHasRunningOperation = () => {
-				const context = self.operationDataFactory.operationData.operationContext;
-				if (context && context.currentOperation && context.currentOperation.running && context.currentOperation.type !== 'time') {
-					scope.hasRunningOperation = true;
-				} else {
-					scope.hasRunningOperation = false;
-				}
-			};
-
-			if (attrs.navOrigin === 'report') {
-				scope.onclickItemMenu = redirectToPath;
-			} else {
-				scope.onclickItemMenu = onclickItemMenuAdmin;
-			}
+			this.operationDataFactory = this.operationDataService.operationDataFactory;
 
 			checkIfHasRunningOperation();
 
-			self.operationDataService.on('setOnRunningOperationListener', () => { checkIfHasRunningOperation(); });
-			self.operationDataService.on('setOnOperationChangeListener', () => { checkIfHasRunningOperation(); });
-			self.operationDataService.on('setOnNoCurrentOperationListener', () => { checkIfHasRunningOperation(); });
+			this.operationDataService.on('setOnRunningOperationListener', () => { checkIfHasRunningOperation(); });
+			this.operationDataService.on('setOnOperationChangeListener', () => { checkIfHasRunningOperation(); });
+			this.operationDataService.on('setOnNoCurrentOperationListener', () => { checkIfHasRunningOperation(); });
 
 		});
 
@@ -147,5 +116,41 @@ export class XPDAdminNavBarDirective implements ng.IDirective {
 			);
 	}
 }
+
+// this.$location.path( path );
+
+// console.log(path, newTab);
+
+// if (self.$location.port()) {
+
+// 	if (path === 'dmeclog.html#/') {
+// 		window.open('https://' + self.$location.host() + ':' + self.$location.port() + '/admin/dmeclog.html#');
+// 	} else if (path === 'reports.html#/') {
+// 		window.location.href = 'https://' + self.$location.host() + ':' + self.$location.port() + '/' + path;
+// 	} else {
+// 		if (!window.location.href.endsWith(path)) {
+// 			if (newTab) {
+// 				window.open('admin.html#' + path);
+// 			} else {
+// 				self.$location.url(path);
+// 			}
+// 		}
+// 	}
+
+// } else {
+
+// 	const url = window.location.href.split('pages')[0];
+
+// 	if (path === 'dmeclog.html#/') {
+// 		window.open(url + '/pages/' + path);
+// 	} else if (path === 'reports.html#/') {
+// 		window.location.href = url + '/pages/' + path;
+// 	} else {
+// 		if (!window.location.href.endsWith(path)) {
+// 			self.$location.url(path);
+// 		}
+// 	}
+
+// }
 
 // })();
