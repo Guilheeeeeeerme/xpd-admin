@@ -56,39 +56,26 @@ ng-if="dados.plannedEvent && dados.executedEvent" -->
 
 	<table class="table table-condensed equilibrium-time-table" ng-if="!!dados[LINETYPE]">
 	    <thead>
-	        <tr ng-if="LINETYPE == 'plannedEvent'">
+
+			<tr>
 				<th colspan="1" class="equilibrium-time-table-title">
-					Planned event details: 
+					{{ (LINETYPE == 'executedEvent') ? "Executed event details:" : "Planned event details:" }}
 				</th>
 				<th colspan="3" class="equilibrium-time-table-text">
 					{{ dados[LINETYPE].operation.name }}
 					<span class="glyphicon glyphicon-arrow-down" ng-if="dados[LINETYPE].tripin"></span>
 					<span class="glyphicon glyphicon-arrow-up" ng-if="!dados[LINETYPE].tripin"></span>
-					<span ng-if="dados[LINETYPE].eventType=='CONN'">Connection</span>
-					<span ng-if="dados[LINETYPE].eventType=='TRIP'">Trip</span>
-					<span ng-if="dados[LINETYPE].eventType=='TIME'">Time Event</span>
-					{{ dados[LINETYPE].state}}
+					{{ dados[LINETYPE].state | xpdStateLabelFilter}}
+					<span ng-if="dados[LINETYPE].state != 'drilling' || dados[LINETYPE].eventType == 'CONN'">
+						| {{dados[LINETYPE].eventType | xpdEventLabelFilter}}
+					</span>
 				</th>
-	        </tr>
-
-	        <tr ng-if="LINETYPE == 'executedEvent'">
-	        	<th colspan="1" class="equilibrium-time-table-title"  >
-	        		Executed event details:
-	        	</th>
-	        	<th colspan="3" class="equilibrium-time-table-text">
-	        		{{ dados[LINETYPE].operation.name }}
-	        		<span class="glyphicon glyphicon-arrow-down" ng-if="dados[LINETYPE].tripin"></span>
-	        		<span class="glyphicon glyphicon-arrow-up" ng-if="!dados[LINETYPE].tripin"></span>
-	        		<span ng-if="dados[LINETYPE].eventType=='CONN'">Connection</span>
-	        		<span ng-if="dados[LINETYPE].eventType=='TRIP'">Trip</span>
-	        		<span ng-if="dados[LINETYPE].eventType=='TIME'">Time Event</span>
-	        		{{ dados[LINETYPE].state}}
-	        	</th>
-	        </tr>
+			</tr>
 
 	        <tr>
-            	<th class="equilibrium-time-table-label" ng-if="LINETYPE == 'plannedEvent'" >Optimum Time/Speed</th>
-            	<th class="equilibrium-time-table-label" ng-if="LINETYPE == 'executedEvent'" >Duration/Performance</th>
+            	<th class="equilibrium-time-table-label">
+					 {{ (LINETYPE == 'executedEvent') ? "Duration/Performance" : "Optimum Time/Speed" }}
+				</th>
             	<th class="equilibrium-time-table-label">Start/End Bit Depth</th>
             	<th colspan="2" class="equilibrium-time-table-label">Start/End Date</th>
 	        </tr>
@@ -121,8 +108,6 @@ ng-if="dados.plannedEvent && dados.executedEvent" -->
 	            </td>
 
 	            <td colspan="2" class="equilibrium-time-table-text">
-	            <!-- {{dados[LINETYPE].startDate}} -->
-	            <!-- {{dados[LINETYPE].endDate}} -->
 	            	{{dados[LINETYPE].startDate | date:'M/d/yy h:mm a' }} -
 	            	{{dados[LINETYPE].endDate | date:'M/d/yy h:mm a' }}
             	</td>
@@ -140,8 +125,9 @@ ng-if="dados.plannedEvent && dados.executedEvent" -->
 		    <thead>
 
 		        <tr>
-					<th colspan="2" class="equilibrium-time-table-label" ng-if="LINETYPE == 'plannedEvent'" >Planned Alarm</th>
-					<th colspan="2" class="equilibrium-time-table-label" ng-if="LINETYPE == 'executedEvent'" >Executed Alarm</th>
+					<th colspan="2" class="equilibrium-time-table-label">
+						{{ (LINETYPE == 'executedEvent') ? "Executed Alarm" : "Planned Alarm" }}
+					</th>
 		        <tr>
 	            	<th class="equilibrium-time-table-label">Name</th>
 	            	<th class="equilibrium-time-table-label">Description</th>

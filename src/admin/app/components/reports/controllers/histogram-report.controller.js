@@ -78,7 +78,6 @@
 
 			groupOperationByState(data);
 
-			console.log(operationTypes);
 			$scope.histoData.histograms = operationTypes;
 		}
 

@@ -40,7 +40,7 @@
 		vm.selectedPoint = selectedPoint;
 		vm.removeReadingFromList = removeReadingFromList;
 
-		operationDataFactory.addEventListener('operationDashboardController', 'setOnOptimumLineListener', main);
+		operationDataFactory.addEventListener('operationDashboardController', 'setOnvOptimumEstimativeListener', main);
 		operationDataFactory.addEventListener('operationDashboardController', 'setOnActualLineListener', main);
 		operationDataFactory.addEventListener('operationDashboardController', 'setOnForecastChangeListener', main);
 
@@ -60,19 +60,19 @@
 					var estimatives = $scope.operationData.forecastContext.estimatives;
 					var estimatedAt = new Date(estimatives.estimatedAt).getTime();
 
-					var vTargetStateJointInterval = estimatives.vTargetLine.filter(function (line) {
+					var vTargetStateJointInterval = estimatives.vTargetEstimative.filter(function (line) {
 						return line[currentState] != null;
 					})[0][currentState];
 
-					var vOptimumStateJointInterval = estimatives.vOptimumLine.filter(function (line) {
+					var vOptimumStateJointInterval = estimatives.vOptimumEstimative.filter(function (line) {
 						return line[currentState] != null;
 					})[0][currentState];
 
-					var vStandardStateJointInterval = estimatives.vStandardLine.filter(function (line) {
+					var vStandardStateJointInterval = estimatives.vStandardEstimative.filter(function (line) {
 						return line[currentState] != null;
 					})[0][currentState];
 
-					var vPoorStateJointInterval = estimatives.vPoorLine.filter(function (line) {
+					var vPoorStateJointInterval = estimatives.vPoorEstimative.filter(function (line) {
 						return line[currentState] != null;
 					})[0][currentState];
 
@@ -102,16 +102,16 @@
 					var nextActivities = [];
 
 					for (var index = 0;
-						index < estimatives.vTargetLine.length;
+						index < estimatives.vTargetEstimative.length;
 						index++) {
 
 						try {
 
-							var vTargetLine = estimatives.vTargetLine[index];
+							var vTargetEstimative = estimatives.vTargetEstimative[index];
 
-							var state = Object.keys(vTargetLine)[0];
+							var state = Object.keys(vTargetEstimative)[0];
 							var startTime = estimatedAt;
-							var duration = (vTargetLine[state].BOTH.finalTime * 1000);
+							var duration = (vTargetEstimative[state].BOTH.finalTime * 1000);
 
 							if (nextActivities.length > 0) {
 								startTime = nextActivities[nextActivities.length - 1].finalTime;
@@ -122,7 +122,7 @@
 								duration: duration,
 								startTime: startTime,
 								finalTime: (startTime + duration),
-								isTripin: vTargetLine[state].BOTH.isTripin,
+								isTripin: vTargetEstimative[state].BOTH.isTripin,
 							};
 
 							nextActivities.push(activity);
@@ -159,7 +159,7 @@
 				generateEstimatives();
 
 				if (!selectedBaseLine) {
-					selectedBaseLine = 'vOptimumLine';
+					selectedBaseLine = 'vOptimumEstimative';
 				}
 
 				if (!selectedEventType) {
@@ -176,7 +176,7 @@
 		}
 
 		/**
-		 * @param {string} selectedLineName: vOptimumLine | vStandardLine | vPoorLine
+		 * @param {string} selectedLineName: vOptimumEstimative | vStandardEstimative | vPoorEstimative
 		 * @param {string} eventType : CONN | TRIP | BOTH
 		 */
 		function actionButtonBuildForecast(selectedLineName, eventType) {
@@ -192,9 +192,9 @@
 			/**
 			 * Os tres parametros para definir cores
 			 */
-			var vOptimumLine = $scope.operationData.forecastContext.vOptimumLine;
-			var standardLine = $scope.operationData.forecastContext.vStandardLine;
-			var poorLine = $scope.operationData.forecastContext.vPoorLine;
+			var vOptimumEstimative = $scope.operationData.forecastContext.vOptimumEstimative;
+			var vStandardEstimative = $scope.operationData.forecastContext.vStandardEstimative;
+			var vPoorEstimative = $scope.operationData.forecastContext.vPoorEstimative;
 
 			/**
 			 * O que realmente aconteceu
@@ -247,9 +247,9 @@
 
 				var directionLabel = isTripin === false ? 'TRIPOUT' : 'TRIPIN';
 
-				var optimumTimeSpent = calcTimeSpent(vOptimumLine, state, eventType, isTripin);
-				var standardTimeSpent = calcTimeSpent(standardLine, state, eventType, isTripin);
-				var poorTimeSpent = calcTimeSpent(poorLine, state, eventType, isTripin);
+				var optimumTimeSpent = calcTimeSpent(vOptimumEstimative, state, eventType, isTripin);
+				var standardTimeSpent = calcTimeSpent(vStandardEstimative, state, eventType, isTripin);
+				var poorTimeSpent = calcTimeSpent(vPoorEstimative, state, eventType, isTripin);
 
 				if (actualLine[state] && actualLine[state][directionLabel] && actualLine[state][directionLabel][eventType]) {
 

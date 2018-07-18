@@ -14,8 +14,37 @@
 				onInit: '=',
 				onClickCollapse: '=',
 				collapse: '=',
-				activities: '='
-			}
+				activities: '=',
+				operation: '=',
+				currentActivityElapsedTime: '=',
+				initialPlanning: '=',
+			},
+			link: link,
 		};
+
+		function link(scope) {
+
+			// scope.$watch('collapse', function (collapse) {
+			// 	console.log('collapse', collapse);
+			// });
+
+			// scope.$watch('activities', function (activities) {
+			// 	console.log('activities', activities);
+			// });
+
+			// scope.$watch('operation', function (operation) {
+			// 	console.log('operation', operation);
+			// });
+
+			// scope.$watch('currentActivityElapsedTime', function (currentActivityElapsedTime) {
+			// 	console.log('currentActivityElapsedTime', currentActivityElapsedTime);
+			// });
+
+			// scope.$watch('initialPlanning', function (initialPlanning) {
+			// 	console.log('initialPlanning', initialPlanning);
+			// });
+
+
+		}
 	}
 })();

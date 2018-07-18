@@ -71,7 +71,6 @@
 					resolve(operationDataFactory);
 				} else {
 					communicationChannel = {};
-
 					socket = socketFactory(xpdAccessFactory.getOperationServerURL(), '/operation-socket', threads);
 
 					socket.on('subjects', function (response) {
@@ -743,7 +742,7 @@
 	//  * FORECAST
 	//  */
 	// communicationChannel.setOnForecastChangeListener && communicationChannel.setOnForecastChangeListener(setOnForecastChangeListener);
-	// communicationChannel.setOnvTargetLineListener && communicationChannel.setOnvTargetLineListener(setOnvTargetLineListener);
+	// communicationChannel.setOnvTargetEstimativeListener && communicationChannel.setOnvTargetEstimativeListener(setOnvTargetEstimativeListener);
 	// communicationChannel.setOnActualLineListener && communicationChannel.setOnActualLineListener(setOnActualLineListener);
 
 	// function setOnForecastChangeListener(forecastContext) {
@@ -751,9 +750,9 @@
 	// 	loadEventListenersCallback('setOnForecastChangeListener', forecastContext);
 	// }
 
-	// function setOnvTargetLineListener(forecastContext) {
+	// function setOnvTargetEstimativeListener(forecastContext) {
 	// 	loadContext('forecastContext', forecastContext);
-	// 	loadEventListenersCallback('setOnvTargetLineListener', forecastContext);
+	// 	loadEventListenersCallback('setOnvTargetEstimativeListener', forecastContext);
 	// }
 
 	// function setOnActualLineListener(forecastContext) {
