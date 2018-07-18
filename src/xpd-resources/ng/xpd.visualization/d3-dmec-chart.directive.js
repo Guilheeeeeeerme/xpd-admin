@@ -16,7 +16,10 @@
 				zoomStartAt: '=',
 				zoomEndAt: '=',
 				onReading: '=',
-				onReadingSince: '='
+				onReadingSince: '=',
+				setSelectedPoint: '=',
+				lastSelectedPoint: '=',
+				removeMarker: '='
 			},
 			link: link
 		};
@@ -39,7 +42,6 @@
 			 * Readings history 
 			 */
 			scope.$watch('onReadingSince', onReadingSinceChange);
-
 
 			/**
 			 * Real History
@@ -98,6 +100,26 @@
 						0,
 						isHorizontal ? (scope.svg.viewWidth) : (scope.svg.viewHeight)
 					]);
+
+				/**
+				 * selected Points
+				 */
+				scope.$watch('lastSelectedPoint', function (point) {
+
+					if (!point) return;
+
+					findPoint(point.timestamp, point.xPosition, null);
+					
+				}, true);
+
+				scope.$watch('removeMarker', function (timestamp) {
+
+					if (!timestamp) return;
+
+					d3.select(element[0]).selectAll('.marker-' + timestamp).remove();
+					d3.select(element[0]).selectAll('.line-' + timestamp).remove();
+
+				}, true);
 
 				/** 
 				 * Atemporal 
@@ -341,53 +363,63 @@
 					d3.select(element[0]).selectAll('.overlay')
 						.on('click', function () {
 							moveCrosshair(d3.mouse(this)[0], d3.mouse(this)[1]);
-							highligthPoints(d3.mouse(this)[0], d3.mouse(this)[1]);
+							// highligthPoints(d3.mouse(this)[0], d3.mouse(this)[1]);
+							var selectedPoint = wrapSelectedPoint(d3.mouse(this)[0], d3.mouse(this)[1]);
+							scope.setSelectedPoint(selectedPoint);
 						}).on('mousemove', function () {
 							moveCrosshair(d3.mouse(this)[0], d3.mouse(this)[1]);
 						});
 
 				}
 
-				function highligthPoints(mouseXPosition, mouseYPosition) {
-
-					var timeAxisPosition = null;
-					var timestamp = null;
-					var avgPoint;
-					var avgSize;
-
-					if (!isHorizontal) {
-						timeAxisPosition = mouseYPosition;
-						timestamp = scope.zoomScale.invert(mouseYPosition);
-					} else {
-						timeAxisPosition = mouseXPosition;
-						timestamp = scope.zoomScale.invert(mouseXPosition);
-					}
-
-					if (isHorizontal) {
-						avgSize = scope.svg.viewWidth / 3;
-
-						if (timeAxisPosition > scope.svg.viewWidth / 2)
-							avgPoint = (0 + timeAxisPosition) / 2;
-						else
-							avgPoint = (scope.svg.viewWidth + timeAxisPosition) / 2;
-
-					} else {
-						avgSize = scope.svg.viewHeight / 3;
-
-						if (timeAxisPosition > scope.svg.viewHeight / 2)
-							avgPoint = (0 + timeAxisPosition) / 2;
-						else
-							avgPoint = (scope.svg.viewHeight + timeAxisPosition) / 2;
-					}
-
-					d3.select(element[0]).selectAll('#crosshair1')
-						.attr('stroke-width', avgSize)
-						.attr(((!isHorizontal) ? 'y1' : 'x1'), avgPoint)
-						.attr(((!isHorizontal) ? 'y2' : 'x2'), avgPoint);
-
-					findPoint(timestamp, timeAxisPosition, avgPoint);
-
+				function wrapSelectedPoint(xPosition, yPosition) {
+					return {
+						xPosition: xPosition,
+						yPosition: yPosition,
+						timestamp: scope.zoomScale.invert(xPosition)
+					};
 				}
+
+				// function highligthPoints(mouseXPosition, mouseYPosition) {
+
+				// 	var timeAxisPosition = null;
+				// 	var timestamp = null;
+				// 	var avgPoint;
+				// 	var avgSize;
+
+				// 	if (!isHorizontal) {
+				// 		timeAxisPosition = mouseYPosition;
+				// 		timestamp = scope.zoomScale.invert(mouseYPosition);
+				// 	} else {
+				// 		timeAxisPosition = mouseXPosition;
+				// 		timestamp = scope.zoomScale.invert(mouseXPosition);
+				// 	}
+
+				// 	if (isHorizontal) {
+				// 		avgSize = scope.svg.viewWidth / 3;
+
+				// 		if (timeAxisPosition > scope.svg.viewWidth / 2)
+				// 			avgPoint = (0 + timeAxisPosition) / 2;
+				// 		else
+				// 			avgPoint = (scope.svg.viewWidth + timeAxisPosition) / 2;
+
+				// 	} else {
+				// 		avgSize = scope.svg.viewHeight / 3;
+
+				// 		if (timeAxisPosition > scope.svg.viewHeight / 2)
+				// 			avgPoint = (0 + timeAxisPosition) / 2;
+				// 		else
+				// 			avgPoint = (scope.svg.viewHeight + timeAxisPosition) / 2;
+				// 	}
+
+				// 	// d3.select(element[0]).selectAll('#crosshair1')
+				// 	// 	.attr('stroke-width', avgSize)
+				// 	// 	.attr(((!isHorizontal) ? 'y1' : 'x1'), avgPoint)
+				// 	// 	.attr(((!isHorizontal) ? 'y2' : 'x2'), avgPoint);
+
+				// 	findPoint(timestamp, timeAxisPosition, avgPoint);
+
+				// }
 
 				function moveCrosshair(mouseXPosition, mouseYPosition) {
 
@@ -406,6 +438,8 @@
 				}
 
 				function findPoint(timestamp, position, avgPoint) {
+
+					tracks.map(findPointAVL);
 
 					function findPointAVL(t) {
 
@@ -430,54 +464,83 @@
 								}
 							}
 
-							var bubble = d3.select(element[0]).selectAll('#bubble-' + param);
-							var tooltip = d3.select(element[0]).selectAll('#text-' + param);
-							var tooltiplabel = d3.select(element[0]).selectAll('#text-label-' + param);
-
-							bubble.attr('style', 'display: none');
-							tooltip.attr('style', 'display: none');
-
 							if (point && point.y != null) {
-
-								var distance = Math.abs(track.max - track.min);
-
-								while (point.y < track.min) {
-									point.y += distance;
-								}
-
-								while (point.y > track.max) {
-									point.y -= distance;
-								}
-
-								bubble.attr('style', null);
-								tooltip.attr('style', null);
-
-								if (!isHorizontal) {
-									bubble.attr('transform', 'translate(' + track.trackScale(point.y) + ', ' + position + ')');
-									// tooltip.attr('x', track.trackScale(point.y) );
-									tooltip.attr('y', avgPoint);
-									tooltiplabel.attr('y', avgPoint);
-								} else {
-									bubble.attr('transform', 'translate(' + position + ', ' + track.trackScale(point.y) + ')');
-									tooltip.attr('x', avgPoint);
-									tooltiplabel.attr('x', avgPoint);
-									// tooltip.attr('y', track.trackScale(point.y) );
-								}
-
-								if (point.actual != null) {
-									tooltip.text(format(point.actual) + ' (' + track.unitMeasure + ')');
-								}
-
-							} else {
-								bubble.attr('style', 'display: none');
+								drawBubbles();
 							}
+
+							function drawBubbles() {
+
+								var bubbleContent = d3.select(element[0]).selectAll('.bubbles');
+								var line = d3.select(element[0]).selectAll('.line-' + scope.lastSelectedPoint.timestamp);
+
+								var groupBublle = bubbleContent.append('g')
+									.attr('class', 'marker-' + scope.lastSelectedPoint.timestamp)
+									.attr('transform', 'translate(' + position + ', ' + track.trackScale(point.y) + ')');
+
+								groupBublle.append('circle')
+									.attr('r', '5')
+									.attr('fill', 'none')
+									.attr('stroke-width', '2')
+									.attr('stroke', track.color);
+
+								// Garante que apenas uma linha de um ponto seja desenhada
+								if (line[0].length == 0) {
+
+									bubbleContent.append('line')
+										.attr('class', 'line-' + scope.lastSelectedPoint.timestamp)
+										.attr('x1', position)
+										.attr('x2', position)
+										.attr('y1', 0)
+										.attr('y2', scope.svg.viewHeight)
+										.attr('stroke', scope.lastSelectedPoint.color);
+								}
+							}
+
+							// var bubble = d3.select(element[0]).selectAll('#bubble-' + param);
+							// var tooltip = d3.select(element[0]).selectAll('#text-' + param);
+							// var tooltiplabel = d3.select(element[0]).selectAll('#text-label-' + param);
+
+							// bubble.attr('style', 'display: none');
+							// tooltip.attr('style', 'display: none');
+
+							// if (point && point.y != null) {
+
+							// 	var distance = Math.abs(track.max - track.min);
+
+							// 	while (point.y < track.min) {
+							// 		point.y += distance;
+							// 	}
+
+							// 	while (point.y > track.max) {
+							// 		point.y -= distance;
+							// 	}
+
+							// 	bubble.attr('style', null);
+							// 	tooltip.attr('style', null);
+
+							// 	if (!isHorizontal) {
+							// 		bubble.attr('transform', 'translate(' + track.trackScale(point.y) + ', ' + position + ')');
+							// 		// tooltip.attr('x', track.trackScale(point.y) );
+							// 		tooltip.attr('y', avgPoint);
+							// 		tooltiplabel.attr('y', avgPoint);
+							// 	} else {
+							// 		bubble.attr('transform', 'translate(' + position + ', ' + track.trackScale(point.y) + ')');
+							// 		tooltip.attr('x', avgPoint);
+							// 		tooltiplabel.attr('x', avgPoint);
+							// 		// tooltip.attr('y', track.trackScale(point.y) );
+							// 	}
+
+							// 	if (point.actual != null) {
+							// 		tooltip.text(format(point.actual) + ' (' + track.unitMeasure + ')');
+							// 	}
+
+							// } else {
+							// 	bubble.attr('style', 'display: none');
+							// }
 
 						}, false);
 
 					}
-
-					tracks.map(findPointAVL);
-
 				}
 
 				function findPointOld(timestamp, position, avgPoint) {
@@ -575,6 +638,7 @@
 						}
 					});
 				}
+
 			}
 
 		}

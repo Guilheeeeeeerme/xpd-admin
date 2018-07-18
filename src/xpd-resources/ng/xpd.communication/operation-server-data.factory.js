@@ -71,7 +71,6 @@
 					resolve(operationDataFactory);
 				} else {
 					communicationChannel = {};
-					console.log('top');
 					socket = socketFactory(xpdAccessFactory.getOperationServerURL(), '/operation-socket', threads);
 
 					socket.on('subjects', function (response) {

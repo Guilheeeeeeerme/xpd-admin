@@ -15,7 +15,10 @@
 				currentEvent: '=',
 				currentTick: '=',
 				currentBlockPosition: '=',
-				currentReading: '='
+				currentReading: '=',
+				selectedPoint: '=',
+				lastSelectedPoint: '=',
+				removeMarker: '='
 			},
 			restrict: 'AE',
 			templateUrl: '../xpd-resources/ng/xpd.visualization/dmec-tracking.template.html',
@@ -23,6 +26,9 @@
 		};
 
 		function link(scope) {
+
+			scope.setSelectedPoint = setSelectedPoint;
+
 			dmecService.dmec(scope, 
 				'xpd.admin.dmec.dmecInputRangeForm',
 				function () {
@@ -32,6 +38,10 @@
 					return scope.currentReading;
 				}
 			);
+
+			function setSelectedPoint(position) {
+				scope.selectedPoint(position);
+			}
 		}
 
 	}
