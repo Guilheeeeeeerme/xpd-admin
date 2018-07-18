@@ -8,12 +8,12 @@ namespace worker.time {
 		switch (data.cmd) {
 
 			case 'interval':
-				setInterval(function () {
+				setInterval( () => {
 					ctx.postMessage('interval');
 				}, data.timeout);
 				break;
 			case 'timeout':
-				setTimeout(function () {
+				setTimeout( () => {
 					ctx.postMessage('timeout');
 				}, data.timeout);
 				break;

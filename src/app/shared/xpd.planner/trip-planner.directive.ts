@@ -1,8 +1,5 @@
 // (function() {
 
-// 	angular.module('xpd.planner')
-// 		.directive('xpdTripPlanner', xpdTripPlanner);
-
 // 	xpdTripPlanner.$inject = ['vCruisingCalculator'];
 import { VCruisingCalculatorService } from '../xpd.calculation/calculation.service';
 import template from './trip-planner.template.html';

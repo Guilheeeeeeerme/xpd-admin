@@ -7,4 +7,4 @@ import './../../../node_modules/angular-toastr/dist/angular-toastr.css';
 
 import './../../assets/css/dmec-log.css';
 
-import { XPDDMECLogModule } from './dmec-log.module';
+import './dmec-log.module';

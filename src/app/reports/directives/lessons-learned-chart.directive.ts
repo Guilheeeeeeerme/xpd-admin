@@ -3,8 +3,6 @@ import { HighchartsService } from '../../shared/highcharts/highcharts.service';
 // (function() {
 // 	'use strict';
 
-// 	angular.module('xpd.reports').directive('lessonsLearnedChart', lessonsLearnedChart);
-
 export class LessonsLearnedChart {
 
 	public static $inject: string[] = ['highchartsService', '$filter'];

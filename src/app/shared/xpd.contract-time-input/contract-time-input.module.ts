@@ -17,8 +17,6 @@ XPDContractTimeInputModule.directive('xpdContractTimeInput', ContractTimeInputDi
 //      * Entrada: Velocidade (VOptimum / VStandard / Vpoor)
 //      * Saída: Tempo (HH:mm:ss)
 //      */
-// 	angular.module('xpd.contractTimeInput', [])
-// 		.directive('contractTimeInput', contractTimeInput);
 
 // 	contractTimeInput.$inject = [];
 

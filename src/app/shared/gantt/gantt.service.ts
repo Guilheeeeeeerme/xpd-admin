@@ -7,7 +7,7 @@
 //      *        manter o namespace limpo
 //      * @source http://www.ng-newsletter.com/posts/d3-on-angular.html
 //      */
-// 	angular.module('gantt')
+
 // 		.factory('ganttService', ganttService);
 
 // ganttService.$inject = ['$document', '$q', '$rootScope'];

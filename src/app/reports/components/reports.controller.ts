@@ -27,22 +27,24 @@ export class ReportsController {
 
 		operationDataService.openConnection([]).then(() => {
 			vm.operationDataFactory = operationDataService.operationDataFactory;
-		});
 
-		if (!localStorage.getItem('xpd.admin.reports.reportsData.toDate') || !localStorage.getItem('xpd.admin.reports.reportsData.fromDate')) {
-			this.setCurrentDate();
-		} else {
-			$scope.reportsData.toDate = new Date(localStorage.getItem('xpd.admin.reports.reportsData.toDate'));
-			$scope.reportsData.fromDate = new Date(localStorage.getItem('xpd.admin.reports.reportsData.fromDate'));
-		}
+			if (!localStorage.getItem('xpd.admin.reports.reportsData.toDate') ||
+				!localStorage.getItem('xpd.admin.reports.reportsData.fromDate')) {
+				this.setCurrentDate();
+			} else {
+				$scope.reportsData.toDate = new Date(localStorage.getItem('xpd.admin.reports.reportsData.toDate'));
+				$scope.reportsData.fromDate = new Date(localStorage.getItem('xpd.admin.reports.reportsData.fromDate'));
+			}
 
-		this.getWellList();
-		operationDataService.on('setOnFailureChangeListener', () => {
-			this.onFailureChange();
-		});
+			this.getWellList();
 
-		operationSetupAPIService.getList((operationList) => {
-			this.currentOperationSuccessCallback(operationList);
+			operationDataService.on('setOnFailureChangeListener', () => {
+				this.onFailureChange();
+			});
+
+			operationSetupAPIService.getList().then((operationList) => {
+				this.currentOperationSuccessCallback(operationList);
+			});
 		});
 
 	}
@@ -88,7 +90,7 @@ export class ReportsController {
 	}
 
 	private getWellList() {
-		this.wellSetupAPIService.getList((wells) => {
+		this.wellSetupAPIService.getList().then((wells) => {
 			this.getWellSuccessCallback(wells);
 		});
 	}
@@ -125,14 +127,6 @@ export class ReportsController {
 			{ type: 'Needle Report', url: '#/needle-report' },
 			{ type: 'Failures/NPT', url: '#/failures-npt' },
 			{ type: 'Lessons Learned', url: '#/lessons-learned' },
-			// {type:'VRE', url:'#/operation/'+operationId},
-			// {type:"Daily", url:"#/operation/"+operationId+"/daily"},
-			// {type:'Connections', url:'#/operation/'+operationId+'/connections'},
-			// {type:'Trips', url:'#/operation/'+operationId+'/trips'},
-			// {type:'Time vs Depth', url:'#/time-vs-depth'},
-			// {type:'Time vs Depth', url:'#/operation/'+operationId+'/time-vs-depth'},
-			// {type:"Failures", url:"#/operation/"+operationId+"/failures"},
-			// {type:"Improvements", url:"#/operation/"+operationId+"/improvements"},
 		];
 
 		if (currentWell) {

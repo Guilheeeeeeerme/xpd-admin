@@ -1,8 +1,6 @@
 // (function() {
 // 	'use strict';
 
-// 	angular.module('xpd.visualization')
-// 		.directive('displacementArea', displacementArea);
 // 	displacementArea.$inject = ['d3Service'];
 import * as d3 from 'd3';
 import template from './displacement-area.template.html';

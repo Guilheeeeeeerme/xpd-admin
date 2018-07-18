@@ -8,9 +8,6 @@
 // (function() {
 // 	'use strict';
 
-// 	angular.module('xpd.setup-form-input')
-// 		.directive('xpdSetupFormInput', xpdSetupFormInput);
-
 // 	xpdSetupFormInput.$inject = [];
 import template from './setup-form-input.template.html';
 
@@ -25,7 +22,7 @@ export class XPDSetupFormInputDirective implements ng.IDirective {
 		label: '@',
 		name: '@',
 		model: '=',
-		change: '=',
+		change: '&',
 
 		xpdPopover: '@',
 		xpdPopoverHtml: '=',

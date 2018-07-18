@@ -1,7 +1,6 @@
 // (function() {
 // 	'use strict';
 
-// 	angular.module('xpd.calculation')
 // 		.service('vCruisingCalculator', vCruisingCalculator);
 
 export class VCruisingCalculatorService {

@@ -1,9 +1,6 @@
 // (function() {
 // 	'use strict';
 
-// 	angular.module('xpd.visualization')
-// 		.directive('connRuler', connRuler);
-
 import * as angular from 'angular';
 import * as d3 from 'd3';
 import template from './conn-ruler.template.html';

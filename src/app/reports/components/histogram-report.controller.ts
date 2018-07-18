@@ -3,13 +3,12 @@ import { ReportsSetupAPIService } from '../../shared/xpd.setupapi/reports-setupa
 export class HistogramReportController {
 	// 'use strict';
 
-	// angular.module('xpd.reports').controller('HistogramReportController', HistogramReportController);
-
 	public static $inject = ['$scope', 'reportsSetupAPIService'];
-	public getColSize: () => number;
-	public actionFilterButton: (fromDate: any, toDate: any) => void;
+	public operationTypes: { none: { label: string; activities: any[]; }; bha: { label: string; activities: any[]; }; casing: { label: string; activities: any[]; }; riser: { label: string; activities: any[]; }; time: { label: string; activities: any[]; }; };
 
-	constructor($scope, reportsSetupAPIService: ReportsSetupAPIService) {
+	constructor(
+		private $scope: any,
+		private reportsSetupAPIService: ReportsSetupAPIService) {
 		const vm = this;
 
 		const parentData = $scope.reportsData;
@@ -21,7 +20,7 @@ export class HistogramReportController {
 
 		$scope.inputIntevals = {};
 
-		const operationTypes = {
+		this.operationTypes = {
 			none: {
 				label: '',
 				activities: [],
@@ -44,61 +43,58 @@ export class HistogramReportController {
 			},
 		};
 
-		vm.getColSize = getColSize;
-		vm.actionFilterButton = actionFilterButton;
-
 		reportsSetupAPIService.getHistogramData(
 			parentData.fromDate,
-			parentData.toDate,
-			loadHistogramData,
-			loadHistogramDataError,
+			parentData.toDate).then(
+				(arg) => { this.loadHistogramData(arg); },
+				(arg) => { this.loadHistogramDataError(arg); },
 		);
+	}
 
-		function actionFilterButton(fromDate, toDate) {
+	public getColSize() {
+		return Math.floor(12 / this.$scope.histoData.columns);
+	}
 
-			reportsSetupAPIService.getHistogramData(
-				fromDate,
-				toDate,
-				loadHistogramData,
-				loadHistogramDataError,
-			);
-		}
+	public actionFilterButton(fromDate, toDate) {
 
-		function loadHistogramData(data) {
-			operationTypes.none.activities = [];
-			operationTypes.bha.activities = [];
-			operationTypes.casing.activities = [];
-			operationTypes.riser.activities = [];
-			operationTypes.time.activities = [];
+		this.reportsSetupAPIService.getHistogramData(
+			fromDate,
+			toDate).then(
+				(arg) => { this.loadHistogramData(arg); },
+				(arg) => { this.loadHistogramDataError(arg); },
+		);
+	}
 
-			groupOperationByState(data);
+	private loadHistogramData(data) {
+		this.operationTypes.none.activities = [];
+		this.operationTypes.bha.activities = [];
+		this.operationTypes.casing.activities = [];
+		this.operationTypes.riser.activities = [];
+		this.operationTypes.time.activities = [];
 
-			$scope.histoData.histograms = operationTypes;
-		}
+		this.groupOperationByState(data);
 
-		function loadHistogramDataError(error) {
-			console.log('Histogram request data error!');
-			console.log(error);
-		}
+		this.$scope.histoData.histograms = this.operationTypes;
+	}
 
-		function getColSize() {
-			return Math.floor(12 / $scope.histoData.columns);
-		}
+	private loadHistogramDataError(error) {
+		console.log('Histogram request data error!');
+		console.log(error);
+	}
 
-		function groupOperationByState(activities) {
+	private groupOperationByState(activities) {
 
-			for (const i in activities) {
-				if (activities[i].operationType === 'bha') {
-					operationTypes.bha.activities.push(activities[i]);
-				} else if (activities[i].operationType === 'casing') {
-					operationTypes.casing.activities.push(activities[i]);
-				} else if (activities[i].operationType === 'riser') {
-					operationTypes.riser.activities.push(activities[i]);
-				} else if (activities[i].operationType === 'time') {
-					operationTypes.time.activities.push(activities[i]);
-				} else {
-					operationTypes.none.activities.push(activities[i]);
-				}
+		for (const i in activities) {
+			if (activities[i].operationType === 'bha') {
+				this.operationTypes.bha.activities.push(activities[i]);
+			} else if (activities[i].operationType === 'casing') {
+				this.operationTypes.casing.activities.push(activities[i]);
+			} else if (activities[i].operationType === 'riser') {
+				this.operationTypes.riser.activities.push(activities[i]);
+			} else if (activities[i].operationType === 'time') {
+				this.operationTypes.time.activities.push(activities[i]);
+			} else {
+				this.operationTypes.none.activities.push(activities[i]);
 			}
 		}
 	}

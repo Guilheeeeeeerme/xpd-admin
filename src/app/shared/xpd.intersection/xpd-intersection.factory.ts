@@ -1,7 +1,6 @@
 // (function() {
 // 	'use strict';
 
-// 	let app = angular.module('ngIntersection', []);
 // 	app.factory('intersectionFactory', load);
 // 	load.$inject = [];
 

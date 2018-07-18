@@ -3,8 +3,6 @@ import { HighchartsService } from '../../shared/highcharts/highcharts.service';
 // (function() {
 // 	'use strict';
 
-// 	angular.module('xpd.reports').directive('failuresNptChart', failuresNptChart);
-
 export class FailuresNptChartDirective {
 
 	public static $inject: string[] = ['highchartsService', '$filter'];

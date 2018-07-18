@@ -28,7 +28,7 @@
                     min = "0"
                     max = "dados.operation.upperStop"
                     model = "dados.operation"
-                    change="operationController.validateOperationLimit"
+                    change="operationController.validateOperationLimit(param)"
                     name = "stickUp"
                     required = "true"
                     unit = "m">
@@ -41,7 +41,7 @@
                     min = "dados.operation.stickUp"
                     max= "20000"
                     model = "dados.operation"
-                    change="operationController.validateOperationLimit"
+                    change="operationController.validateOperationLimit(param)"
                     name = "upperStop"
                     required = "true"
                     unit = "m">
@@ -130,7 +130,7 @@
                     min = "0"
                     max= "20000"
                     model = "dados.operation"
-                    change="operationController.casingFormCalcs"
+                    change="operationController.casingFormCalcs(param)"
                     name = "averageJointLength"
                     required = "true"
                     unit = "m">
@@ -201,7 +201,7 @@
                     min = "0"
                     max= "20000"
                     model = "dados.operation"
-                    change="operationController.casingFormCalcs"
+                    change="operationController.casingFormCalcs(param)"
                     name = "numberOfCasingSections"
                     required = "true">
                 </xpd-setup-form-input>
@@ -215,7 +215,7 @@
                     min = "0"
                     max= "dados.operation.endBitDepth"
                     model = "dados.operation"
-                    change="operationController.casingFormCalcs"
+                    change="operationController.casingFormCalcs(param)"
                     name = "length"
                     required = "true"
                     unit = "m">
@@ -228,7 +228,7 @@
                     min = "well.waterDepth + well.airGap"
                     max= "20000"
                     model = "dados.operation"
-                    change="operationController.casingFormCalcs"
+                    change="operationController.casingFormCalcs(param)"
                     name = "holeDepth"
                     required = "true"
                     unit = "m">
@@ -241,7 +241,7 @@
                     min = "0"
                     max= "20000"
                     model = "dados.operation"
-                    change="operationController.casingFormCalcs"
+                    change="operationController.casingFormCalcs(param)"
                     name = "ratHole"
                     required = "true"
                     unit = "m">
@@ -292,7 +292,7 @@
                     min = "1"
                     max= "20000"
                     model = "dados.operation"
-                    change="operationController.casingFormCalcs"
+                    change="operationController.casingFormCalcs(param)"
                     name = "averageDPLength"
                     required="true"
                     unit = "m">

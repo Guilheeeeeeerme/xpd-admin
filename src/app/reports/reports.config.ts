@@ -1,8 +1,6 @@
 // (function() {
 // 'use strict';
 
-// angular.module('xpd.reports').config(reportConfig);
-
 import BitDepthTimeTemplate from './components/bit-depth-time.template.html';
 import FailuresNptTemplate from './components/failures-npt.template.html';
 import HistogramReportTemplate from './components/histogram-report.template.html';

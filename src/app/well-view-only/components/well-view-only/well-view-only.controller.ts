@@ -13,8 +13,6 @@ export class WellViewOnlyController {
 
 		const vm = this;
 
-		console.log($routeParams.wellId);
-
 		$routeParams.wellId = +$routeParams.wellId;
 		const wellId = $routeParams.wellId;
 
@@ -23,13 +21,13 @@ export class WellViewOnlyController {
 			sectionList: [],
 		};
 
-		wellSetupAPIService.getObjectById(wellId, (well: any) => {
+		wellSetupAPIService.getObjectById(wellId).then((well: any) => {
 			vm.loadWellCallback(well);
 		}, () => {
 			vm.loadWellErrorCallback();
 		});
 
-		sectionSetupAPIService.getListOfSectionsByWell(wellId, (sectionList) => {
+		sectionSetupAPIService.getListOfSectionsByWell(wellId).then((sectionList) => {
 			vm.loadSectionListCallback(sectionList);
 		});
 	}

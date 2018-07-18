@@ -1,7 +1,4 @@
 
-// angular.module('xpd.visualization')
-// 	.directive('memberPerformance', memberPerformance);
-
 // memberPerformance.$inject = [];
 
 import template from './member-performance.template.html';

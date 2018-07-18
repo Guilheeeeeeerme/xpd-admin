@@ -44,8 +44,6 @@ export class SpinnerConfig {
 
 // 	'use strict';
 
-// 	let app = angular.module('xpd-spinner', ['angularSpinner']);
-
 // 	app.config(spinnerConfig);
 
 // 	spinnerConfig.$inject = ['usSpinnerConfigProvider'];

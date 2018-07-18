@@ -39,6 +39,15 @@ module.exports = {
 		// new UglifyJsPlugin(),
 
 		new HtmlWebpackPlugin({
+			title: 'Drilling Mechanics',
+			chunks: ['dmec-log'],
+			template: './src/app/dmec-log/dmec-log.view.html',
+			filename: 'dmec-log.html',
+			meta: metaInfo,
+			favicon: './src/assets/img/favicon.ico'
+		}),
+
+		new HtmlWebpackPlugin({
 			title: 'XPD Admin',
 			chunks: ['admin'],
 			template: './src/app/admin/admin.view.html',

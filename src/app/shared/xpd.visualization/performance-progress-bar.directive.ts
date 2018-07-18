@@ -1,7 +1,4 @@
 
-// angular.module('xpd.visualization')
-// 	.directive('performanceProgressBar', performanceProgressBar);
-
 // performanceProgressBar.$inject = [];
 import template from './performance-progress-bar.template.html';
 

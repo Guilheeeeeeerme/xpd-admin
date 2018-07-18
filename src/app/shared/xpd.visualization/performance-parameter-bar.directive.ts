@@ -1,7 +1,4 @@
 
-// angular.module('xpd.visualization')
-// 	.directive('performanceParameterBar', performanceParameterBar);
-
 // performanceParameterBar.$inject = [];
 
 import template from './performance-parameter-bar.template.html';

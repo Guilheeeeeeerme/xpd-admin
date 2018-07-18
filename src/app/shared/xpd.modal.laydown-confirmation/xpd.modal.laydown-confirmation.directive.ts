@@ -2,10 +2,6 @@
 
 // 	'use strict';
 
-// 	let app = angular.module('xpd.modal.laydown-confirmation', []);
-
-// 	app.directive('laydownConfirmation', laydownConfirmation);
-
 // 	laydownConfirmation.$inject = ['$uibModal', 'operationDataService'];
 
 import { IModalService } from 'angular-ui-bootstrap';

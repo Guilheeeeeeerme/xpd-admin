@@ -7,9 +7,6 @@
 // (function() {
 // 	'use strict';
 
-// 	angular.module('xpd.admin-nav-bar', [])
-// 		.directive('xpdAdminNavBar', xpdAdminNavBar);
-
 // 	xpdAdminNavBar.$inject = ['$location', 'menuConfirmationService', 'operationDataService', 'dialogService'];
 import { DialogService } from '../xpd.dialog/xpd.dialog.factory';
 import { MenuConfirmationService } from '../xpd.menu-confirmation/menu-confirmation.factory';
@@ -43,116 +40,96 @@ export class XPDAdminNavBarDirective implements ng.IDirective {
 
 		const self = this;
 
-		this.operationDataService.openConnection([]).then(function () {
+		this.operationDataService.openConnection([]).then(() => {
+
 			self.operationDataFactory = self.operationDataService.operationDataFactory;
 
-			if (attrs.navOrigin === 'report') {
-				scope.onclickItemMenu = onclickItemMenuReport;
-			} else {
-				scope.onclickItemMenu = onclickItemMenuAdmin;
-			}
-
-			checkIfHasRunningOperation();
-
-			self.operationDataService.on('setOnRunningOperationListener', checkIfHasRunningOperation);
-			self.operationDataService.on('setOnOperationChangeListener', checkIfHasRunningOperation);
-			self.operationDataService.on('setOnNoCurrentOperationListener', checkIfHasRunningOperation);
-
-			function onclickItemMenuAdmin(path, newTab) {
+			const onclickItemMenuAdmin = (path, newTab) => {
 				const blockMenu = self.menuConfirmationService.getBlockMenu();
 
 				if (!blockMenu) {
-
-					redirectToPath(path, !!newTab);
-
+					redirectToPath(path, newTab);
 				} else {
 					const message = 'Your changes will be lost. Proceed?';
 
-					self.dialogService.showCriticalDialog(message, function () {
+					self.dialogService.showCriticalDialog(message, () => {
 						self.menuConfirmationService.setBlockMenu(false);
-						redirectToPath(path, !!newTab);
+						redirectToPath(path, newTab);
 					});
 				}
-			}
+			};
 
-			function onclickItemMenuReport(path, newTab) {
-
-				if (self.$location.port()) {
-
-					if (path === 'dmeclog.html#/') {
-						window.open('https://' + self.$location.host() + ':' + self.$location.port() + '/admin/dmeclog.html#');
-					} else {
-						if (newTab) {
-							window.open('https://' + self.$location.host() + ':' + self.$location.port() + '/admin/admin.html#' + path);
-						} else {
-							window.location.href = 'https://' + self.$location.host() + ':' + self.$location.port() + '/admin/admin.html#' + path;
-						}
-					}
-
-				} else {
-
-					const url = window.location.href.split('/pages')[0];
-
-					if (path === 'dmeclog.html#/') {
-						window.open(url + 'pages/dmeclog.html#');
-					} else {
-						if (newTab) {
-							window.open('https://' + url + 'pages/admin.html#' + path);
-						} else {
-							window.location.href = url + 'pages/admin.html#' + path;
-						}
-					}
-
-				}
-			}
-
-			function redirectToPath(path, newTab) {
+			const redirectToPath = (path, newTab) => {
 
 				if (self.$location.port()) {
-
-					if (path === 'dmeclog.html#/') {
-						window.open('https://' + self.$location.host() + ':' + self.$location.port() + '/admin/dmeclog.html#');
-					} else if (path === 'reports.html#/') {
-						window.location.href = 'https://' + self.$location.host() + ':' + self.$location.port() + '/' + path;
-					} else {
-						if (!window.location.href.endsWith(path)) {
-							if (newTab) {
-								window.open('admin.html#' + path);
-							} else {
-								self.$location.url(path);
-							}
-						}
-					}
-
-				} else {
-
-					const url = window.location.href.split('pages')[0];
-
-					if (path === 'dmeclog.html#/') {
-						window.open(url + '/pages/' + path);
-					} else if (path === 'reports.html#/') {
-						window.location.href = url + '/pages/' + path;
-					} else {
-						if (!window.location.href.endsWith(path)) {
-							if (newTab) {
-								window.open('admin.html#' + path);
-							} else {
-								self.$location.url(path);
-							}
-						}
-					}
-
+					path = 'https://' + self.$location.host() + ':' + self.$location.port() + path;
 				}
-			}
 
-			function checkIfHasRunningOperation() {
+				if (newTab === true) {
+					window.open(path);
+				} else {
+					window.location.href = path;
+				}
+
+				// this.$location.path( path );
+
+				// console.log(path, newTab);
+
+				// if (self.$location.port()) {
+
+				// 	if (path === 'dmeclog.html#/') {
+				// 		window.open('https://' + self.$location.host() + ':' + self.$location.port() + '/admin/dmeclog.html#');
+				// 	} else if (path === 'reports.html#/') {
+				// 		window.location.href = 'https://' + self.$location.host() + ':' + self.$location.port() + '/' + path;
+				// 	} else {
+				// 		if (!window.location.href.endsWith(path)) {
+				// 			if (newTab) {
+				// 				window.open('admin.html#' + path);
+				// 			} else {
+				// 				self.$location.url(path);
+				// 			}
+				// 		}
+				// 	}
+
+				// } else {
+
+				// 	const url = window.location.href.split('pages')[0];
+
+				// 	if (path === 'dmeclog.html#/') {
+				// 		window.open(url + '/pages/' + path);
+				// 	} else if (path === 'reports.html#/') {
+				// 		window.location.href = url + '/pages/' + path;
+				// 	} else {
+				// 		if (!window.location.href.endsWith(path)) {
+				// 			self.$location.url(path);
+				// 		}
+				// 	}
+
+				// }
+
+			};
+
+			const checkIfHasRunningOperation = () => {
 				const context = self.operationDataFactory.operationData.operationContext;
 				if (context && context.currentOperation && context.currentOperation.running && context.currentOperation.type !== 'time') {
 					scope.hasRunningOperation = true;
 				} else {
 					scope.hasRunningOperation = false;
 				}
+			};
+
+			if (attrs.navOrigin === 'report') {
+				scope.onclickItemMenu = redirectToPath;
+			} else {
+				scope.onclickItemMenu = onclickItemMenuAdmin;
 			}
+
+			checkIfHasRunningOperation();
+
+			self.operationDataService.on('setOnRunningOperationListener', () => { checkIfHasRunningOperation(); });
+			self.operationDataService.on('setOnOperationChangeListener', () => { checkIfHasRunningOperation(); });
+			self.operationDataService.on('setOnNoCurrentOperationListener', () => { checkIfHasRunningOperation(); });
+
 		});
 
 	}

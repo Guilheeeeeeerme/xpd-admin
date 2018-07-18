@@ -1,38 +1,37 @@
 import * as angular from 'angular';
 
-import { AdminTrackingController } from '../../components/admin/controllers/admin-tracking.controller';
-import { AlarmModalUpsertController } from '../../components/admin/controllers/alarm/alarm-modal-upsert.controller';
-import { AlarmController } from '../../components/admin/controllers/alarm/alarm.controller';
-import { AlarmCRUDService } from '../../components/admin/controllers/alarm/alarm.service';
-import { DataAcquisitionController } from '../../components/admin/controllers/data-acquisition.controller';
-import { FailureDelayCategoryController } from '../../components/admin/controllers/failure-delay-category.controller';
-import { LessonLearnedCategoryController } from '../../components/admin/controllers/lesson-learned-category.controller';
-import { MemberSchedulerController } from '../../components/admin/controllers/member-scheduler/member-scheduler.controller';
-import { MemberSchedulerDirective } from '../../components/admin/controllers/member-scheduler/member-scheduler.directive';
-import { SchedulerActionsService } from '../../components/admin/controllers/member-scheduler/scheduler-actions.service';
-import { UpsertFunctionController } from '../../components/admin/controllers/member-scheduler/upsert-function.controller';
-import { UpsertMemberController } from '../../components/admin/controllers/member-scheduler/upsert-member.controller';
-import { UpsertScheduleController } from '../../components/admin/controllers/member-scheduler/upsert-schedule.controller';
-import { MenuController } from '../../components/admin/controllers/menu.controller';
-import { OperationDashboardController } from '../../components/admin/controllers/operation-dashboard/operation-dashboard.controller';
-import { AlarmInfoController } from '../../components/admin/controllers/operation/alarm-info.controller';
-import { OperationConfigurationService } from '../../components/admin/controllers/operation/operation-configuration.service';
-import { OperationCopyOptionsModalController } from '../../components/admin/controllers/operation/operation-copy-options-modal.controller';
-import { OperationController } from '../../components/admin/controllers/operation/operation.controller';
-import { PlannerController } from '../../components/admin/controllers/planner.controller';
-import { SectionUpsertController } from '../../components/admin/controllers/section/section-upsert.controller';
-import { SectionController } from '../../components/admin/controllers/section/section.controller';
-import { RPDController } from '../../components/admin/controllers/shift-report.controller';
-import { TeamController } from '../../components/admin/controllers/team.controller';
-import { TrackingUpdateTimesController } from '../../components/admin/controllers/tracking-update-times-modal.controller';
-import { WellUpsertController } from '../../components/admin/controllers/well/well-upsert.controller';
-import { WellController } from '../../components/admin/controllers/well/well.controller';
-import { SavedAlarmsListDirectives } from '../../components/admin/directives/saved-alarms-list.directive';
-import { VREListTableDirective } from '../../components/admin/directives/vre-list-table.directive';
 import { XPDSharedModule } from '../shared/shared.module';
 import { AdminConfig } from './admin.config';
 import { AdminRunScope } from './admin.run';
-import { TrackingController } from './tracking/tracking.controller';
+import { AlarmModalUpsertController } from './components/alarm/alarm-modal-upsert.controller';
+import { AlarmController } from './components/alarm/alarm.controller';
+import { AlarmCRUDService } from './components/alarm/alarm.service';
+import { DataAcquisitionController } from './components/data-acquisition/data-acquisition.controller';
+import { FailureDelayCategoryController } from './components/failure-lesson/failure-delay-category.controller';
+import { LessonLearnedCategoryController } from './components/failure-lesson/lesson-learned-category.controller';
+import { MenuController } from './components/menu/menu.controller';
+import { OperationDashboardController } from './components/operation-dashboard/operation-dashboard.controller';
+import { AdminTrackingController } from './components/other/admin-tracking.controller';
+import { SavedAlarmsListDirectives } from './components/other/saved-alarms-list/saved-alarms-list.directive';
+import { VREListTableDirective } from './components/other/vre-list-table/vre-list-table.directive';
+import { PlannerController } from './components/planner/planner.controller';
+import { RPDController } from './components/rpd/shift-report.controller';
+import { AlarmInfoController } from './components/setup/operation/alarm-info.controller';
+import { OperationConfigurationService } from './components/setup/operation/operation-configuration.service';
+import { OperationCopyOptionsModalController } from './components/setup/operation/operation-copy-options-modal.controller';
+import { OperationController } from './components/setup/operation/operation.controller';
+import { SectionUpsertController } from './components/setup/section/section-upsert.controller';
+import { SectionController } from './components/setup/section/section.controller';
+import { WellUpsertController } from './components/setup/well/well-upsert.controller';
+import { WellController } from './components/setup/well/well.controller';
+import { MemberSchedulerController } from './components/team/member-scheduler/member-scheduler.controller';
+import { MemberSchedulerDirective } from './components/team/member-scheduler/member-scheduler.directive';
+import { SchedulerActionsService } from './components/team/member-scheduler/scheduler-actions.service';
+import { UpsertFunctionController } from './components/team/member-scheduler/upsert-function.controller';
+import { UpsertMemberController } from './components/team/member-scheduler/upsert-member.controller';
+import { UpsertScheduleController } from './components/team/member-scheduler/upsert-schedule.controller';
+import { TeamController } from './components/team/team.controller';
+import { TrackingController } from './components/tracking/tracking.controller';
 
 const XPDAdminModule: angular.IModule = angular.module('xpd.admin', [
 	XPDSharedModule.name,
@@ -40,21 +39,21 @@ const XPDAdminModule: angular.IModule = angular.module('xpd.admin', [
 
 export { XPDAdminModule };
 
+/**
+ * Reviewed
+ */
+
+XPDAdminModule.config(AdminConfig);
+
 XPDAdminModule.controller('OperationDashboardController', OperationDashboardController);
 XPDAdminModule.controller('TrackingController', TrackingController);
 XPDAdminModule.controller('AlarmModalUpsertController', AlarmModalUpsertController);
 XPDAdminModule.controller('AlarmController', AlarmController);
-XPDAdminModule.service('alarmCRUDService', AlarmCRUDService);
 XPDAdminModule.controller('MemberSchedulerController', MemberSchedulerController);
-XPDAdminModule.directive('xpdMemberScheduler', MemberSchedulerDirective.Factory());
-XPDAdminModule.service('schedulerActionsService', SchedulerActionsService);
 XPDAdminModule.controller('UpsertFunctionController', UpsertFunctionController);
 XPDAdminModule.controller('UpsertMemberController', UpsertMemberController);
 XPDAdminModule.controller('UpsertScheduleController', UpsertScheduleController);
 XPDAdminModule.controller('AlarmInfoController', AlarmInfoController);
-XPDAdminModule.run(AdminRunScope);
-XPDAdminModule.config(AdminConfig);
-XPDAdminModule.service('OperationConfigurationService', OperationConfigurationService);
 XPDAdminModule.controller('OperationCopyOptionsModalController', OperationCopyOptionsModalController);
 XPDAdminModule.controller('OperationController', OperationController);
 XPDAdminModule.controller('SectionUpsertController', SectionUpsertController);
@@ -69,6 +68,13 @@ XPDAdminModule.controller('MenuController', MenuController);
 XPDAdminModule.controller('PlannerController', PlannerController);
 XPDAdminModule.controller('RPDController', RPDController);
 XPDAdminModule.controller('TeamController', TeamController);
-XPDAdminModule.controller('TrackingUpdateTimesController', TrackingUpdateTimesController);
+
+XPDAdminModule.directive('xpdMemberScheduler', MemberSchedulerDirective.Factory());
 XPDAdminModule.directive('xpdSavedAlarmsList', SavedAlarmsListDirectives.Factory());
 XPDAdminModule.directive('xpdVreListTable', VREListTableDirective.Factory());
+
+XPDAdminModule.run(AdminRunScope);
+
+XPDAdminModule.service('alarmCRUDService', AlarmCRUDService);
+XPDAdminModule.service('schedulerActionsService', SchedulerActionsService);
+XPDAdminModule.service('OperationConfigurationService', OperationConfigurationService);

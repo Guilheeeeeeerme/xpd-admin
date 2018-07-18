@@ -1,8 +1,6 @@
 // (function() {
 // 	'use strict';
 
-// angular.module('xpd.accessfactory').config(secureConfig);
-
 // secureConfig.$inject = ['$httpProvider'];
 
 export class SecurityInterceptorConfig {

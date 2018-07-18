@@ -1,18 +1,15 @@
 import { OperationSetupAPIService } from '../../../shared/xpd.setupapi/operation-setupapi.service';
 
 export class OperationViewOnlyController {
-	// 'use strict';
-
-	// angular.module('xpd.operationviewonly').controller('OperationViewOnlyController', OperationViewOnlyController);
 
 	public static $inject = ['$scope', '$routeParams', '$filter', '$sce', 'operationSetupAPIService'];
 
 	constructor(
 		private $scope: any,
-		$routeParams: angular.route.IRouteParamsService,
+		private $routeParams: angular.route.IRouteParamsService,
 		private $filter,
 		private $sce: ng.ISCEService,
-		operationSetupAPIService: OperationSetupAPIService) {
+		private operationSetupAPIService: OperationSetupAPIService) {
 
 		const vm = this;
 
@@ -57,7 +54,7 @@ export class OperationViewOnlyController {
 
 		$scope.htmlPopover = this.getHtmlPopOver();
 
-		operationSetupAPIService.getObjectById(operationId,
+		operationSetupAPIService.getObjectById(operationId).then(
 			(operation: any) => {
 				vm.loadOperationCallback(operation);
 			},

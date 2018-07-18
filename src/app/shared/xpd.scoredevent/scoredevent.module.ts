@@ -9,8 +9,6 @@ XPDScoredEventModule.directive('xpdScoredEvents', XPDScoredEventsDirective.Facto
 // (function() {
 // 	'use strict';
 
-// 	angular.module('xpd.scoredevent', ['xpd.setupapi']).directive('xpdScoredEvents', xpdScoredEvents);
-
 // 	function xpdScoredEvents() {
 // 		// Runs during compile
 // 		return {

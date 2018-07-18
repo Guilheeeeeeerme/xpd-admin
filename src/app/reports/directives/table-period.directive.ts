@@ -1,8 +1,6 @@
 // (function() {
 // 	'use strict';
 
-// 	angular.module('xpd.reports').directive('tablePeriod', tablePeriod);
-
 import template from './table-period.template.html';
 
 export class TablePeriod implements ng.IDirective {
