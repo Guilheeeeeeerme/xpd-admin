@@ -1,7 +1,4 @@
 
-// angular.module('xpd.visualization')
-// 	.directive('operationProgressPanel', operationProgressPanel);
-
 // operationProgressPanel.$inject = [];
 
 import template from './operation-progress-panel.template.html';

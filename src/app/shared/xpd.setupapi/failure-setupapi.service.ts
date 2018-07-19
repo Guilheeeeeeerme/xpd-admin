@@ -4,7 +4,6 @@ import { SetupAPIService } from './setupapi.service';
 // (function() {
 // 	'use strict';
 
-// 	angular.module('xpd.setupapi')
 // 		.service('failureSetupAPIService', failureSetupAPIService);
 
 // 	failureSetupAPIService.$inject = ['xpdAccessService', 'setupAPIService'];
@@ -18,7 +17,7 @@ export class FailureSetupAPIService {
 		this.BASE_URL = xpdAccessService.getSetupURL() + 'setup/failure';
 	}
 
-	public updateObject(failure, successCallback?, errorCallback?) {
+	public updateObject(failure) {
 
 		const req = {
 			method: 'PUT',
@@ -29,11 +28,11 @@ export class FailureSetupAPIService {
 			data: failure,
 		};
 
-		this.setupAPIService.doRequest(req, successCallback, errorCallback);
+		return this.setupAPIService.doRequest(req);
 
 	}
 
-	public removeObject(object, successCallback, errorCallback) {
+	public removeObject(object) {
 
 		const req = {
 			method: 'DELETE',
@@ -44,10 +43,10 @@ export class FailureSetupAPIService {
 			data: object,
 		};
 
-		this.setupAPIService.doRequest(req, successCallback, errorCallback);
+		return this.setupAPIService.doRequest(req);
 	}
 
-	public insertObject(object, successCallback, errorCallback) {
+	public insertObject(object) {
 
 		const req = {
 			method: 'POST',
@@ -58,11 +57,11 @@ export class FailureSetupAPIService {
 			data: object,
 		};
 
-		this.setupAPIService.doRequest(req, successCallback, errorCallback);
+		return this.setupAPIService.doRequest(req);
 
 	}
 
-	public getFailuresOnInterval(from, to, successCallback, errorCallback) {
+	public getFailuresOnInterval(from, to) {
 		const url = this.BASE_URL + '/get-by-interval?from=' + from + '&to=' + to;
 
 		const req = {
@@ -70,7 +69,7 @@ export class FailureSetupAPIService {
 			url,
 		};
 
-		this.setupAPIService.doRequest(req, successCallback, errorCallback);
+		return this.setupAPIService.doRequest(req);
 	}
 
 	// function listByOperation(id, successCallback, errorCallback) {
@@ -89,7 +88,7 @@ export class FailureSetupAPIService {
 	// 		);
 	// }
 
-	public listFailuresOnGoing(successCallback, errorCallback?) {
+	public listFailuresOnGoing() {
 		const url = this.BASE_URL + '/list-on-going';
 
 		const req = {
@@ -97,10 +96,10 @@ export class FailureSetupAPIService {
 			url,
 		};
 
-		this.setupAPIService.doRequest(req, successCallback, errorCallback);
+		return this.setupAPIService.doRequest(req);
 	}
 
-	public listFailures(successCallback, errorCallback) {
+	public listFailures() {
 		const url = this.BASE_URL + '/list';
 
 		const req = {
@@ -108,7 +107,7 @@ export class FailureSetupAPIService {
 			url,
 		};
 
-		this.setupAPIService.doRequest(req, successCallback, errorCallback);
+		return this.setupAPIService.doRequest(req);
 	}
 }
 

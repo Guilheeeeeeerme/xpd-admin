@@ -15,7 +15,6 @@ const metaInfo = {
 module.exports = {
 
 	mode: 'development',
-	watch: true,
 	target: 'web',
 
 	entry: {
@@ -36,7 +35,18 @@ module.exports = {
 
 	plugins: [
 
-		// new UglifyJsPlugin(),
+		// new UglifyJsPlugin({
+		// 	exclude: /node_modules/,
+		// }),
+
+		new HtmlWebpackPlugin({
+			title: 'Drilling Mechanics',
+			chunks: ['dmec-log'],
+			template: './src/app/dmec-log/dmec-log.view.html',
+			filename: 'dmec-log.html',
+			meta: metaInfo,
+			favicon: './src/assets/img/favicon.ico'
+		}),
 
 		new HtmlWebpackPlugin({
 			title: 'XPD Admin',
@@ -78,6 +88,46 @@ module.exports = {
 			[{
 				from: './src/assets/js/dhtmlxgantt.js',
 				to: './assets/js/',
+			}],
+			{
+				debug: true
+			}
+		),
+
+		new CopyWebpackPlugin(
+			[{
+				from: './src/package.json',
+				to: './',
+			}],
+			{
+				debug: true
+			}
+		),
+
+		new CopyWebpackPlugin(
+			[{
+				from: './src/main.js',
+				to: './',
+			}],
+			{
+				debug: true
+			}
+		),
+
+		new CopyWebpackPlugin(
+			[{
+				from: './keys/XPD-Client.crt',
+				to: './keys/',
+			}],
+			{
+				debug: true
+			}
+		),
+
+		new CopyWebpackPlugin(
+			[{
+				from: './src/assets/img/logo.ico',
+				to: './',
 			}],
 			{
 				debug: true

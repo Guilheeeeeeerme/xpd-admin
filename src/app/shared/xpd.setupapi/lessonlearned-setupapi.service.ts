@@ -4,7 +4,6 @@ import { SetupAPIService } from './setupapi.service';
 // (function() {
 // 	'use strict';
 
-// 	angular.module('xpd.setupapi')
 // 		.service('lessonLearnedSetupAPIService', lessonLearnedSetupAPIService);
 
 // 	lessonLearnedSetupAPIService.$inject = ['xpdAccessService', 'setupAPIService'];
@@ -18,7 +17,7 @@ export class LessonLearnedSetupAPIService {
 		this.BASE_URL = xpdAccessService.getSetupURL() + 'setup/lessonlearned';
 	}
 
-	public getList(successCallback, errorCallback) {
+	public getList() {
 
 		const url = this.BASE_URL + '/list';
 
@@ -27,10 +26,10 @@ export class LessonLearnedSetupAPIService {
 			url,
 		};
 
-		this.setupAPIService.doRequest(req, successCallback, errorCallback);
+		return this.setupAPIService.doRequest(req);
 	}
 
-	public updateObject(object, successCallback?, errorCallback?) {
+	public updateObject(object) {
 
 		const req = {
 			method: 'PUT',
@@ -41,10 +40,10 @@ export class LessonLearnedSetupAPIService {
 			data: object,
 		};
 
-		this.setupAPIService.doRequest(req, successCallback, errorCallback);
+		return this.setupAPIService.doRequest(req);
 	}
 
-	public public ?; public insertObject(object, successCallback?, errorCallback?) {
+	public insertObject(object) {
 
 		const req = {
 			method: 'POST',
@@ -55,11 +54,11 @@ export class LessonLearnedSetupAPIService {
 			data: object,
 		};
 
-		this.setupAPIService.doRequest(req, successCallback, errorCallback);
+		return this.setupAPIService.doRequest(req);
 
 	}
 
-	public removeObject(object, successCallback, errorCallback) {
+	public removeObject(object) {
 
 		const req = {
 			method: 'DELETE',
@@ -70,7 +69,7 @@ export class LessonLearnedSetupAPIService {
 			data: object,
 		};
 
-		this.setupAPIService.doRequest(req, successCallback, errorCallback);
+		return this.setupAPIService.doRequest(req);
 	}
 
 	// function listByOperation(id, successCallback, errorCallback) {
@@ -89,7 +88,7 @@ export class LessonLearnedSetupAPIService {
 	// 		);
 	// }
 
-	public getListCategory(successCallback, errorCallback) {
+	public getListCategory() {
 		// lessonlearned_category
 
 		const req = {
@@ -97,10 +96,10 @@ export class LessonLearnedSetupAPIService {
 			url: this.BASE_URL + '_category/list',
 		};
 
-		this.setupAPIService.doRequest(req, successCallback, errorCallback);
+		return this.setupAPIService.doRequest(req);
 	}
 
-	public removeCategory(object, successCallback, errorCallback) {
+	public removeCategory(object) {
 		// lessonlearned_category
 
 		const req = {
@@ -112,11 +111,11 @@ export class LessonLearnedSetupAPIService {
 			data: object,
 		};
 
-		this.setupAPIService.doRequest(req, successCallback, errorCallback);
+		return this.setupAPIService.doRequest(req);
 
 	}
 
-	public insertCategory(object, successCallback, errorCallback) {
+	public insertCategory(object) {
 		// lessonlearned_category
 
 		const req = {
@@ -128,11 +127,11 @@ export class LessonLearnedSetupAPIService {
 			data: object,
 		};
 
-		this.setupAPIService.doRequest(req, successCallback, errorCallback);
+		return this.setupAPIService.doRequest(req);
 
 	}
 
-	public updateCategory(object, successCallback, errorCallback) {
+	public updateCategory(object) {
 		// lessonlearned_category
 
 		const req = {
@@ -144,7 +143,7 @@ export class LessonLearnedSetupAPIService {
 			data: object,
 		};
 
-		this.setupAPIService.doRequest(req, successCallback, errorCallback);
+		return this.setupAPIService.doRequest(req);
 
 	}
 }

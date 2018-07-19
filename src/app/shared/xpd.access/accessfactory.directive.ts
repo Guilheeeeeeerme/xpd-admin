@@ -1,10 +1,6 @@
 // (function() {
 // 	'use strict';
 
-// 	angular.module('xpd.accessfactory')
-// 		.directive('accessFactoryDirective', accessFactoryDirective);
-
-// 	accessFactoryDirective.$inject = ['$uibModal', 'dialogService'];
 import { IWindowService } from 'angular';
 import { IModalService } from 'angular-ui-bootstrap';
 import template from '../xpd.access/accessfactory.template.html';
@@ -15,7 +11,7 @@ export class AccessFactoryDirective implements ng.IDirective {
 	public static $inject: string[] = ['$uibModal', '$window', 'dialogService'];
 
 	public restrict = 'E';
-	public scope: {
+	public scope = {
 		hideReports: '@',
 		hideSetup: '@',
 	};

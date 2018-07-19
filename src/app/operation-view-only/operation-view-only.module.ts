@@ -11,4 +11,5 @@ const XPDOperationViewOnlyModule: angular.IModule = angular.module('xpd.operatio
 export { XPDOperationViewOnlyModule };
 
 XPDOperationViewOnlyModule.config(OperationConfig);
+
 XPDOperationViewOnlyModule.controller('OperationViewOnlyController', OperationViewOnlyController);

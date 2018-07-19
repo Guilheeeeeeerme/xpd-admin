@@ -651,7 +651,7 @@ export class D3DMECChartDirective implements ng.IDirective {
 							return tracks;
 						},
 						onTracksChange() {
-							return function () {
+							return () => {
 								vm.$window.location.reload();
 							};
 						},

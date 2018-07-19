@@ -28,7 +28,7 @@
             class="form-control input-sm" 
             id="operation-general-info-data-{{name}}"
             ng-model="model[name]"
-            ng-change="change(name)"
+            ng-change="change({ param: name })"
             name="{{name}}" 
             ng-required={{required}} 
             ng-disabled="{{disabled}}"
@@ -46,7 +46,7 @@
         class="form-control input-sm" 
         id="operation-general-info-data-{{name}}"
         ng-model="model[name]"
-        ng-change="change(name)"
+        ng-change="change({ param: name })"
         name="{{name}}" 
         ng-required={{required}} 
         ng-disabled="{{disabled}}"

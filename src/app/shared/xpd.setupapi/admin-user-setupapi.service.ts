@@ -4,8 +4,6 @@ import { SetupAPIService } from './setupapi.service';
 // (function() {
 // 	'use strict';
 
-// 	angular.module('xpd.setupapi').service('adminUserSetupAPIService', adminUserSetupAPIService);
-
 // 	adminUserSetupAPIService.$inject = ['xpdAccessService', 'setupAPIService'];
 
 export class AdminUserSetupAPIService {
@@ -17,7 +15,7 @@ export class AdminUserSetupAPIService {
 		this.BASE_URL = xpdAccessService.getSetupURL() + 'setup/admin-user';
 	}
 
-	public authenticate(loginInfo, successCallback, errorCallback) {
+	public authenticate(loginInfo) {
 
 		const req = {
 			method: 'POST',
@@ -28,7 +26,7 @@ export class AdminUserSetupAPIService {
 			data: loginInfo,
 		};
 
-		this.setupAPIService.doRequest(req, successCallback, errorCallback);
+		return this.setupAPIService.doRequest(req);
 	}
 
 }

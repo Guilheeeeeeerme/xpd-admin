@@ -2,10 +2,6 @@
 
 // 	'use strict';
 
-// 	let app = angular.module('xpd.modal.laydown-confirmation', []);
-
-// 	app.directive('laydownConfirmation', laydownConfirmation);
-
 // 	laydownConfirmation.$inject = ['$uibModal', 'operationDataService'];
 
 import { IModalService } from 'angular-ui-bootstrap';
@@ -18,7 +14,7 @@ export class LayDownConfirmationDirective implements ng.IDirective {
 	public layDownDetectedModal: any;
 	constructor(private $uibModal: IModalService, private operationDataService: OperationDataService) { }
 
-	public scope: {
+	public scope = {
 		dismissable: '<',
 	};
 

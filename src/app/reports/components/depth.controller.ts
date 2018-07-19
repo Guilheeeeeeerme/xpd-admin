@@ -1,13 +1,15 @@
+import { route } from 'angular';
 import { ReportsSetupAPIService } from '../../shared/xpd.setupapi/reports-setupapi.service';
 
 export class DepthController {
 	// 'use strict';
 
-	// angular.module('xpd.reports').controller('DepthController', depthController);
-
 	public static $inject = ['$scope', '$routeParams', 'reportSetupAPIService'];
 
-	constructor($scope, $routeParams, reportSetupAPIService: ReportsSetupAPIService) {
+	constructor(
+		private $scope: any,
+		private $routeParams: route.IRouteService,
+		private reportSetupAPIService: ReportsSetupAPIService) {
 
 		const vm = this;
 
@@ -21,68 +23,70 @@ export class DepthController {
 			plotBandsPlannedData: [],
 		};
 
-		const operationId = $routeParams.operationId;
+		const operationId = ($routeParams as any).operationId;
 
-		getEventsDataChart(operationId);
+		this.getEventsDataChart(operationId);
+	}
 
-		function getEventsDataChart(operationId) {
+	private getEventsDataChart(operationId) {
 
-			reportSetupAPIService.getPlannedGraphicDataOperation(
-				operationId,
-				getPlannedGraphicDataOperationSuccessCallback,
-				getPlannedGraphicDataOperationErrorCallback,
-			);
+		this.reportSetupAPIService.getPlannedGraphicDataOperation(
+			operationId).then(
+				(arg) => { this.getPlannedGraphicDataOperationSuccessCallback(arg); },
+				(arg) => { this.getPlannedGraphicDataOperationErrorCallback(arg); },
+		);
 
-			reportSetupAPIService.getRealizedGraphicDataOperation(
-				operationId,
-				getRealizedGraphicDataOperationSuccessCallback,
-				getRealizedGraphicDataOperationErrorCallback,
-			);
-		}
+		this.reportSetupAPIService.getRealizedGraphicDataOperation(
+			operationId).then(
+				(arg) => { this.getRealizedGraphicDataOperationSuccessCallback(arg); },
+				(arg) => { this.getRealizedGraphicDataOperationErrorCallback(arg); },
+		);
+	}
 
-		function getPlannedGraphicDataOperationSuccessCallback(result) {
+	private getPlannedGraphicDataOperationSuccessCallback(result) {
 
-			$scope.depthData.plannedDataChart.vOptimum = result.points_voptimum;
-			$scope.depthData.plannedDataChart.vPoor = result.points_vpoor;
-			$scope.depthData.plannedDataChart.vStandard = result.points_vstandard;
+		const rgbToHex = (red, green, blue) => {
+			// tslint:disable-next-line:no-bitwise
+			const rgb = blue | (green << 8) | (red << 16);
+			return '#' + (0x1000000 + rgb).toString(16).slice(1);
+		};
 
-			const black = '#000';
-			let rgbValue = 154;
-			for (let i = 1, len = result.depthLimits.length; i < len; i++) {
+		this.$scope.depthData.plannedDataChart.vOptimum = result.points_voptimum;
+		this.$scope.depthData.plannedDataChart.vPoor = result.points_vpoor;
+		this.$scope.depthData.plannedDataChart.vStandard = result.points_vstandard;
 
-				const plotBand: any = new Object();
+		const black = '#000';
+		let rgbValue = 154;
+		for (let i = 1, len = result.depthLimits.length; i < len; i++) {
 
-				plotBand.from = result.depthLimits[i - 1].endDepth;
-				plotBand.to = result.depthLimits[i].endDepth;
-				plotBand.text = result.depthLimits[i].title;
+			const plotBand: any = new Object();
 
-				rgbValue -= 30;
-				plotBand.backgroundColor = rgbToHex(200, rgbValue, rgbValue);
+			plotBand.from = result.depthLimits[i - 1].endDepth;
+			plotBand.to = result.depthLimits[i].endDepth;
+			plotBand.text = result.depthLimits[i].title;
 
-				plotBand.textColor = black;
+			rgbValue -= 30;
+			plotBand.backgroundColor = rgbToHex(200, rgbValue, rgbValue);
 
-				$scope.depthData.plotBandsPlannedData.push(plotBand);
-			}
+			plotBand.textColor = black;
 
-			function rgbToHex(red, green, blue) {
-				const rgb = blue | (green << 8) | (red << 16);
-				return '#' + (0x1000000 + rgb).toString(16).slice(1);
-  			}
-		}
-
-		function getPlannedGraphicDataOperationErrorCallback(error) {
-			console.log(error);
-		}
-
-		function getRealizedGraphicDataOperationSuccessCallback(result) {
-			console.log('realizado', result);
-
-			$scope.depthData.realizedDataChart = result.points;
-		}
-
-		function getRealizedGraphicDataOperationErrorCallback(error) {
-			console.log(error);
+			this.$scope.depthData.plotBandsPlannedData.push(plotBand);
 		}
 	}
+
+	private getPlannedGraphicDataOperationErrorCallback(error) {
+		console.log(error);
+	}
+
+	private getRealizedGraphicDataOperationSuccessCallback(result) {
+		console.log('realizado', result);
+
+		this.$scope.depthData.realizedDataChart = result.points;
+	}
+
+	private getRealizedGraphicDataOperationErrorCallback(error) {
+		console.log(error);
+	}
+
 }
 // })();

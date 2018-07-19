@@ -1,7 +1,5 @@
 // (function() {
 // 	'use strict';
-// 	angular.module('xpd.visualization').directive('dmecTracking', dmecTrackingDirective);
-// 	dmecTrackingDirective.$inject = ['dmecService'];
 
 import { DMECService } from '../xpd.dmec/dmec.service';
 import template from './dmec-tracking.template.html';

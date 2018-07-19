@@ -12,7 +12,7 @@
 
             <rect 
                 ng-attr-id="{{ key }}"
-                ng-attr-y="{{ getBarPosition(event) }}"
+                ng-attr-y="{{ getBarYPosition(event) }}"
                 ng-attr-width="{{ getBarWidth(event.duration) }}"
                 ng-attr-height="{{ getBarHeight(event) }}"
                 ng-attr-fill="{{ event.performanceColor }}"
@@ -25,12 +25,12 @@
             <g 
                 class="rect-bar" 
                 ng-if="event && event.startTime" 
-                ng-repeat="(key, event) in selectedEvents | orderBy: 'startTime' track by $index"
+                ng-repeat="(key, event) in filteredEvents | orderBy: 'startTime' track by $index"
                 ng-attr-transform="{{'translate('+ getBarXPosition(event.startTime)+ ', 0)'}}">
     
                 <rect 
                     ng-attr-id="{{ key }}"
-                    ng-attr-y="{{ getBarPosition(event) }}"
+                    ng-attr-y="{{ getBarYPosition(event) }}"
                     ng-attr-width="{{ getBarWidth(event.duration) }}"
                     ng-attr-height="{{ getBarHeight(event) }}"
                     ng-attr-fill="{{ event.performanceColor }}"

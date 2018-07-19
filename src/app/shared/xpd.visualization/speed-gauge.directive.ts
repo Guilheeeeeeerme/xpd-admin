@@ -1,9 +1,6 @@
 import * as d3 from 'd3';
 import template from './speed-gauge.template.html';
 
-// angular.module('xpd.visualization')
-// 	.directive('speedGauge', speedGauge);
-
 export class SpeedGaugeDirective implements ng.IDirective {
 	public template = template;
 	public scope = {

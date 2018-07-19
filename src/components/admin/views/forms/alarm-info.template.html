@@ -33,8 +33,8 @@
                             show-archived="showArchived != true"
                             buttom-icon="glyphicon-inbox"
                             alarms-to-import="alarms.alarmToImport"
-                            action-click-button="alarmInfoController.actionButtonArchive"
-                            action-import-button="alarmInfoController.actionButtonImport">
+                            action-click-button="alarmInfoController.actionButtonArchive(alarm)"
+                            action-import-button="alarmInfoController.actionButtonImport(alarm)">
                         </div>
 
                         <div xpd-saved-alarms-list
@@ -44,8 +44,8 @@
                             show-archived= "showArchived != true"
                             buttom-icon="glyphicon-inbox"
                             alarms-to-import="alarms.alarmToImport"
-                            action-click-button="alarmInfoController.actionButtonArchive"
-                            action-import-button="alarmInfoController.actionButtonImport">
+                            action-click-button="alarmInfoController.actionButtonArchive(alarm)"
+                            action-import-button="alarmInfoController.actionButtonImport(alarm)">
                         </div>
 
                         <div xpd-saved-alarms-list
@@ -54,7 +54,7 @@
                             alarms-list="alarms.archivedAlarms"
                             show-archived= "showArchived == true"
                             buttom-icon="glyphicon-transfer"
-                            action-click-button="alarmInfoController.actionButtonUnarchive">
+                            action-click-button="alarmInfoController.actionButtonUnarchive(alarm)">
                         </div>
 
                     </div>

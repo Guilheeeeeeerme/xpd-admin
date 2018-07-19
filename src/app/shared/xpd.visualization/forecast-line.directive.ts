@@ -1,6 +1,4 @@
 
-// angular.module('xpd.visualization')
-// 	.directive('forecastLine', forecastLine);
 // forecastLine.$inject = ['d3Service', 'intersectionFactory', '$filter'];
 import * as d3 from 'd3';
 import { IntersectionFactory } from '../xpd.intersection/xpd-intersection.factory';
@@ -11,7 +9,7 @@ export class ForecastLineDirective implements ng.IDirective {
 	constructor(private $filter: ng.IFilterFilter, private intersectionFactory) { }
 
 	public template = template;
-	public scope: {
+	public scope = {
 		targetLine: '=',
 		actualLine: '=',
 		isTripin: '=',

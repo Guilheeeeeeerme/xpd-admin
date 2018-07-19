@@ -4,8 +4,6 @@ import modalTemplate from './xpd-modal-lessonlearned.template.html';
 // (function() {
 // 	'use strict';
 
-// 	angular.module('xpd.modal-lessonlearned').factory('lessonLearnedModal', lessonLearnedModal);
-
 // 	lessonLearnedModal.$inject = ['$uibModal'];
 
 export class LessonLearnedModalService {

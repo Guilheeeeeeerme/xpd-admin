@@ -1,9 +1,6 @@
 // (function() {
 // 	'use strict';
 
-// 	angular.module('xpd.forecast-waterfall', [])
-// 		.directive('forecastWaterfall', forecastWaterfall);
-
 // 	forecastWaterfall.$inject = ['$filter', 'highchartsService'];
 
 import { HighchartsService } from '../highcharts/highcharts.service';

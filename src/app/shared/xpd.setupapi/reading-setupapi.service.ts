@@ -4,8 +4,6 @@ import { SetupAPIService } from './setupapi.service';
 // (function() {
 // 	'use strict';
 
-// 	angular.module('xpd.setupapi').service('readingSetupAPIService', readingSetupAPIService);
-
 // 	readingSetupAPIService.$inject = ['xpdAccessService', 'setupAPIService'];
 
 export class ReadingSetupAPIService {
@@ -17,7 +15,7 @@ export class ReadingSetupAPIService {
 		this.BASE_URL = xpdAccessService.getSetupURL() + 'setup/reading';
 	}
 
-	public getAllReadingSince(from, successCallback, errorCallback) {
+	public getAllReadingSince(from) {
 		const req = {
 			method: 'GET',
 			url: this.BASE_URL + '/from/' + from,
@@ -26,10 +24,10 @@ export class ReadingSetupAPIService {
 			},
 		};
 
-		this.setupAPIService.doRequest(req, successCallback, errorCallback);
+		return this.setupAPIService.doRequest(req);
 	}
 
-	public getTick(tick, successCallback, errorCallback?) {
+	public getTick(tick) {
 		const req = {
 			method: 'GET',
 			url: this.BASE_URL + '/tick/' + tick,
@@ -38,10 +36,10 @@ export class ReadingSetupAPIService {
 			},
 		};
 
-		this.setupAPIService.doRequest(req, successCallback, errorCallback);
+		return this.setupAPIService.doRequest(req);
 	}
 
-	public getAllReadingByStartEndTime(from, to, successCallback, errorCallback) {
+	public getAllReadingByStartEndTime(from, to) {
 		const req = {
 			method: 'GET',
 			url: this.BASE_URL + '/from/' + from + ((to) ? ('/to/' + to) : ''),
@@ -51,7 +49,7 @@ export class ReadingSetupAPIService {
 			},
 		};
 
-		this.setupAPIService.doRequest(req, successCallback, errorCallback);
+		return this.setupAPIService.doRequest(req);
 	}
 }
 

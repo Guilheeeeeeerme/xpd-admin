@@ -3,7 +3,7 @@ export class XPDFormValidationDirective implements ng.IDirective {
 	public restrict = 'A';
 	public require = '^ngModel';
 	public priority = 1;
-	public scope: {
+	public scope = {
 		ngModel: '=',
 		xpdFormValidation: '=',
 	};

@@ -1,15 +1,13 @@
 // (function() {
 // 	'use strict';
 
-// 	angular.module('xpd.reports').directive('slipsToSlipsBarChart', slipsToSlipsBarChart);
-
 import * as d3 from 'd3';
 import template from './slips-to-slips-bar-chart.template.html';
 
 export class SlipsToSlipsBarChart {
 
 	public template = template;
-	public scope: {
+	public scope = {
 		slipsData: '=',
 	};
 

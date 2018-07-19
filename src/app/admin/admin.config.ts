@@ -1,22 +1,19 @@
-import AlarmTemplate from './../../components/admin/views/alarm.template.html';
-import DataAcquisitionTemplate from './../../components/admin/views/data-acquisition.template.html';
-import DevTemplate from './../../components/admin/views/dev.template.html';
-import FailureDelayCategoryTemplate from './../../components/admin/views/failure-delay-category.template.html';
-import LessonLearnedCategoryTemplate from './../../components/admin/views/lesson-learned-category.template.html';
-import MemberSchedulerTemplate from './../../components/admin/views/member-scheduler.template.html';
-import MenuTemplate from './../../components/admin/views/menu.template.html';
-import OperationDashboardTemplate from './../../components/admin/views/operation-dashboard.template.html';
-import OperationTemplate from './../../components/admin/views/operation.template.html';
-import PlannerTemplate from './../../components/admin/views/planner.template.html';
-import SectionTemplate from './../../components/admin/views/section.template.html';
-import rpdTemplate from './../../components/admin/views/shift-report.template.html';
-import TeamTemplate from './../../components/admin/views/team.template.html';
-import TrackingTemplate from './../../components/admin/views/tracking.template.html';
-import WellTemplate from './../../components/admin/views/well.template.html';
+import AlarmTemplate from './components/alarm/alarm.template.html';
+import DataAcquisitionTemplate from './components/data-acquisition/data-acquisition.template.html';
+import FailureDelayCategoryTemplate from './components/failure-lesson/failure-delay-category.template.html';
+import LessonLearnedCategoryTemplate from './components/failure-lesson/lesson-learned-category.template.html';
+import MenuTemplate from './components/menu/menu.template.html';
+import OperationDashboardTemplate from './components/operation-dashboard/operation-dashboard.template.html';
+import PlannerTemplate from './components/planner/planner.template.html';
+import rpdTemplate from './components/rpd/shift-report.template.html';
+import OperationTemplate from './components/setup/operation/operation.template.html';
+import SectionTemplate from './components/setup/section/section.template.html';
+import WellTemplate from './components/setup/well/well.template.html';
+import MemberSchedulerTemplate from './components/team/member-scheduler.template.html';
+import TeamTemplate from './components/team/team.template.html';
+import TrackingTemplate from './components/tracking/tracking.template.html';
 
-AdminConfig.$inject = ['$routeProvider'];
-
-function AdminConfig($routeProvider) {
+const AdminConfig = ($routeProvider) => {
 
 	$routeProvider.when('/', {
 		template: TrackingTemplate,
@@ -89,11 +86,9 @@ function AdminConfig($routeProvider) {
 		template: AlarmTemplate,
 		controller: 'AlarmController as aController',
 	});
-	$routeProvider.when('/dev', {
-		template: DevTemplate,
-		controller: 'PlannerController as pController',
-	});
 
-}
+};
+
+AdminConfig.$inject = ['$routeProvider'];
 
 export { AdminConfig };

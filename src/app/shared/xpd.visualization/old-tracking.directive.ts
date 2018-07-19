@@ -1,4 +1,4 @@
-// angular.module('xpd.visualization').directive('oldTracking', oldTracking);
+
 import template from './old-tracking.template.html';
 
 export class OldTrackingDirective implements ng.IDirective {

@@ -3,7 +3,6 @@ import { IModalService } from 'angular-ui-bootstrap';
 // (function() {
 // 	'use strict';
 
-// 	angular.module('xpd.dialog')
 // 		.factory('dialogService', dialogService);
 
 // 	dialogService.$inject = ['$uibModal'];

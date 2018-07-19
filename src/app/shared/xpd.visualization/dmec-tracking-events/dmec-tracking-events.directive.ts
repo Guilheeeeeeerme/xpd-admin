@@ -1,7 +1,6 @@
 // (function() {
 // 	'use strict';
-// 	angular.module('xpd.visualization')
-// 		.directive('dmecTrackingEvents', dmecTrackingEvents);
+
 // 	dmecTrackingEvents.$inject = ['$uibModal', 'd3Service', 'eventDetailsModalService', 'failureModal', 'lessonLearnedModal'];
 import * as d3 from 'd3';
 import { EventDetailsModalService } from '../../xpd.modal.event-details/xpd-modal-event-details.factory';
@@ -44,7 +43,7 @@ export class DMECTrackingEventsDirective implements ng.IDirective {
 		let lastEventType = null;
 		let lastBarColor;
 		let lastElement;
-		scope.selectedEvents = [];
+		scope.filteredEvents = [];
 		scope.element = element[0];
 		scope.mindate = null;
 		scope.maxdate = null;
@@ -57,7 +56,7 @@ export class DMECTrackingEventsDirective implements ng.IDirective {
 		setViewMode();
 		scope.getBarWidth = getBarWidth;
 		scope.getBarHeight = getBarHeight;
-		scope.getBarPosition = getBarPosition;
+		scope.getBarYPosition = getBarYPosition;
 		scope.getBarXPosition = getBarXPosition;
 		scope.actionOpenDetailsModal = actionOpenDetailsModal;
 		scope.actionOpenFailuresModal = actionOpenFailuresModal;
@@ -65,7 +64,7 @@ export class DMECTrackingEventsDirective implements ng.IDirective {
 
 		scope.$watch('events', function (events) {
 			if (events) {
-				selectEventToDraw();
+				filterEventsToDraw();
 			}
 		});
 
@@ -73,6 +72,7 @@ export class DMECTrackingEventsDirective implements ng.IDirective {
 			if (startAt) {
 				scope.mindate = new Date(startAt).getTime();
 				defineScaleChart();
+				filterEventsToDraw();
 			}
 		});
 
@@ -80,6 +80,7 @@ export class DMECTrackingEventsDirective implements ng.IDirective {
 			if (endAt) {
 				scope.maxdate = new Date(endAt).getTime();
 				defineScaleChart();
+				filterEventsToDraw();
 			}
 		});
 
@@ -111,7 +112,6 @@ export class DMECTrackingEventsDirective implements ng.IDirective {
 		getEventZoomElement().on('mouseout', mouseOut);
 
 		function setViewMode() {
-			console.log('setViewMode')
 
 			scope.svg = {
 				height: element[0].offsetHeight,
@@ -130,18 +130,15 @@ export class DMECTrackingEventsDirective implements ng.IDirective {
 		}
 
 		function defineScaleChart() {
-			console.log('defineScaleChart');
-			selectEventToDraw();
 			scope.xScale = d3.scaleLinear().domain([scope.mindate, scope.maxdate]).range([0, 100]);
 			scope.xTicks = scope.xScale.ticks();
 		}
 
-		function selectEventToDraw() {
-			console.log(scope.events.length)
+		function filterEventsToDraw() {
 
 			if (scope.events.length === 0) { return; }
 
-			scope.selectedEvents = [];
+			scope.filteredEvents = [];
 
 			for (let i = 0; i <= scope.events.length; i++) {
 				const event = scope.events[i];
@@ -149,11 +146,10 @@ export class DMECTrackingEventsDirective implements ng.IDirective {
 				if (!event) { break; }
 
 				if ((new Date(event.endTime).getTime() >= scope.mindate) && (new Date(event.startTime).getTime() <= scope.maxdate)) {
-					scope.selectedEvents.push(event);
+					scope.filteredEvents.push(event);
 				}
 			}
 
-			console.log(scope.selectedEvents)
 		}
 
 		function getBarWidth(eventDuration) {
@@ -181,12 +177,12 @@ export class DMECTrackingEventsDirective implements ng.IDirective {
 			}
 		}
 
-		function getBarPosition(event) {
+		function getBarYPosition(event) {
 			return scope.svgViewHeight - getBarHeight(event);
 		}
 
 		function getBarXPosition(startTime) {
-			return scope.xScale(new Date(startTime).getTime());
+			return scope.xScale(new Date(startTime));
 		}
 
 		function buildCurrentEventBar(event, eventDuration) {

@@ -1,19 +1,23 @@
+import { IQService } from 'angular';
 import 'angular-spinner';
 import { IToastrService } from 'angular-toastr';
 
 // (function() {
 // 	'use strict',
 
-// 	angular.module('xpd.setupapi')
 // 		.service('setupAPIService', setupAPIService)});
 
 export class SetupAPIService {
 
-	public static $inject: string[] = ['$http', 'toastr', 'usSpinnerService'];
+	public static $inject: string[] = ['$http', '$q', 'toastr', 'usSpinnerService'];
 	private runningRequests: number = 0;
 	private hasRunningRequests: boolean = false;
 
-	constructor(private $http: ng.IHttpService, private toastr: IToastrService, private usSpinnerService: any) {
+	constructor(
+		private $http: ng.IHttpService,
+		private $q: IQService,
+		private toastr: IToastrService,
+		private usSpinnerService: any) {
 
 	}
 
@@ -39,7 +43,7 @@ export class SetupAPIService {
 		return result;
 	}
 
-	public doRequest(req, successCallback, errorCallback) {
+	public doRequest(req) {
 		const self = this;
 
 		const request = this.$http(req);
@@ -55,27 +59,25 @@ export class SetupAPIService {
 
 		}
 
-		request.then(
-			(response: any) => {
-				if (response && response.data && (response.data.isWrappedResponse || response.data.timestamp)) {
-					if (successCallback) {
+		return this.$q((successCallback, errorCallback) => {
+
+			request.then(
+				(response: any) => {
+					if (response && response.data && (response.data.isWrappedResponse || response.data.timestamp)) {
 						successCallback(response.data.data);
-					}
-				} else {
-					if (successCallback) {
+					} else {
 						successCallback(response.data);
 					}
-				}
 
-			},
-			(error) => {
-				this.generateToast(error);
-				if (errorCallback) {
+				},
+				(error) => {
+					this.generateToast(error);
 					errorCallback(error);
-				}
-			},
-		).finally(() => {
-			self.finallySpinner();
+				},
+			).finally(() => {
+				self.finallySpinner();
+			});
+
 		});
 
 	}

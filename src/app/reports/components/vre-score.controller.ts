@@ -1,14 +1,14 @@
 import { ReportsSetupAPIService } from '../../shared/xpd.setupapi/reports-setupapi.service';
 
-export class VreScoreController {
+export class VREScoreController {
 	// 'use-strict';
 
-	// angular.module('xpd.reports').controller('VreScoreController', vreScoreController);
-
 	public static $inject = ['$scope', 'reportsSetupAPIService'];
-	public onClickFilterButton: (fromDate: any, toDate: any) => boolean;
+	public operationTypes: { none: { label: string; activities: any[]; }; bha: { label: string; activities: any[]; }; casing: { label: string; activities: any[]; }; riser: { label: string; activities: any[]; }; time: { label: string; activities: any[]; }; };
 
-	constructor($scope, reportsSetupAPIService: ReportsSetupAPIService) {
+	constructor(
+		private $scope,
+		private reportsSetupAPIService: ReportsSetupAPIService) {
 
 		const vm = this;
 
@@ -18,7 +18,7 @@ export class VreScoreController {
 			chartData: {},
 		};
 
-		const operationTypes = {
+		this.operationTypes = {
 			none: {
 				label: '',
 				activities: [],
@@ -41,153 +41,148 @@ export class VreScoreController {
 			},
 		};
 
-		vm.onClickFilterButton = onClickFilterButton;
+		this.getVreScoreList();
+	}
 
-		getVreScoreList();
+	private getVreScoreList() {
 
-		function getVreScoreList() {
+		const parentData = this.$scope.reportsData;
 
-			const parentData = $scope.reportsData;
+		this.reportsSetupAPIService.getVreScoreList(
+			parentData.fromDate,
+			parentData.toDate).then(
+				(arg) => { this.getVreScoreListSuccess(arg); },
+				(arg) => { this.getVreScoreListError(arg); },
+		);
+	}
 
-			reportsSetupAPIService.getVreScoreList(
-				parentData.fromDate,
-				parentData.toDate,
-				getVreScoreListSuccess,
-				getVreScoreListError,
+	private getVreScoreListSuccess(result) {
+
+		this.operationTypes.none.activities = [];
+		this.operationTypes.bha.activities = [];
+		this.operationTypes.casing.activities = [];
+		this.operationTypes.riser.activities = [];
+		this.operationTypes.time.activities = [];
+
+		// setColorToLastIndexVre(result);
+		this.groupOperationByState(result.activities);
+
+		this.$scope.vreScoredata.chartData.scale = result.scale;
+		this.$scope.vreScoredata.chartData.categories = result.categories;
+		this.$scope.vreScoredata.chartData.operationTypes = this.operationTypes;
+	}
+
+	private getVreScoreListError(error) {
+		console.log(error);
+	}
+
+	public onClickFilterButton(fromDate, toDate) {
+
+		if (toDate === undefined) { return false; }
+
+		if (toDate >= fromDate) {
+			this.reportsSetupAPIService.getVreScoreList(fromDate, toDate).then(
+				(arg) => { this.getVreScoreListSuccess(arg); },
+				(arg) => { this.getVreScoreListError(arg); },
 			);
+		} else {
+			return false;
 		}
+	}
 
-		function getVreScoreListSuccess(result) {
-			operationTypes.none.activities = [];
-			operationTypes.bha.activities = [];
-			operationTypes.casing.activities = [];
-			operationTypes.riser.activities = [];
-			operationTypes.time.activities = [];
+	// function setColorToLastIndexVre(dataChart) {
+	// 	var lastIndexVre;
+	// 	var lastValueVre;
 
-			// setColorToLastIndexVre(result);
-			groupOperationByState(result.activities);
+	// 	for (var i = dataChart.activities.length - 1; i >= 0; i--) {
+	// 		lastIndexVre = dataChart.activities[i].vre.length -1;
+	// 		lastValueVre = dataChart.activities[i].vre[lastIndexVre];
 
-			$scope.vreScoredata.chartData.scale = result.scale;
-			$scope.vreScoredata.chartData.categories = result.categories;
-			$scope.vreScoredata.chartData.operationTypes = operationTypes;
-		}
+	// 		dataChart.activities[i].vre[lastIndexVre] = {y: lastValueVre, color:'rgba(157, 195, 231,1)'};
+	// 	}
+	// }
 
-		function getVreScoreListError(error) {
-			console.log(error);
-		}
+	private groupOperationByState(activities) {
 
-		function onClickFilterButton(fromDate, toDate) {
+		const bhaStates = [
+			{ 0: /makeup/i, 1: /make up/i },
+			{ 0: /laydown/i, 1: /lay down/i },
+			{ 0: /cased/i, 1: /cased well/i },
+			{ 0: /opensea/i, 1: /open sea/i },
+			{ 0: /drilling/i, 1: /drilling run/i },
+			{ 0: /openhole/i, 1: /open hole/i },
+			// {0:/inBreakDPInterval/i, 1:/In Break DP Interval/i}
+		];
 
-			if (toDate === undefined) { return false; }
+		const casingStates = [
+			{ 0: /casing/i, 1: /casing/i },
+			{ 0: /settlementstring/i, 1: /settlement string/i },
+			{ 0: /belowshoedepth/i, 1: /below shoe depth/i },
+			{ 0: /cementing/i, 1: /cementing/i },
+			// {0:/inBreakDPInterval/i, 1:/In Break DP Interval/i}
+		];
 
-			$scope.$parent.rController.getFailuresOnInterval(fromDate, toDate);
+		const riserStates = [
+			{ 0: /ascentriser/i, 1: /ascent riser/i },
+			{ 0: /descentriser/i, 1: /descent riser/i },
+		];
 
-			if (toDate >= fromDate) {
-				reportsSetupAPIService.getVreScoreList(
-					fromDate,
-					toDate,
-					getVreScoreListSuccess,
-					getVreScoreListError,
-				);
-			} else {
-				return false;
-			}
-		}
+		const timeState = [
+			{ 0: /time/i, 1: /time/i },
+		];
 
-		// function setColorToLastIndexVre(dataChart) {
-		// 	var lastIndexVre;
-		// 	var lastValueVre;
-
-		// 	for (var i = dataChart.activities.length - 1; i >= 0; i--) {
-		// 		lastIndexVre = dataChart.activities[i].vre.length -1;
-		// 		lastValueVre = dataChart.activities[i].vre[lastIndexVre];
-
-		// 		dataChart.activities[i].vre[lastIndexVre] = {y: lastValueVre, color:'rgba(157, 195, 231,1)'};
-		// 	}
-		// }
-
-		function groupOperationByState(activities) {
-
-			const bhaStates = [
-				{0: /makeup/i, 1: /make up/i},
-				{0: /laydown/i, 1: /lay down/i},
-				{0: /cased/i, 1: /cased well/i},
-				{0: /opensea/i, 1: /open sea/i},
-				{0: /drilling/i, 1: /drilling run/i},
-				{0: /openhole/i, 1: /open hole/i},
-				// {0:/inBreakDPInterval/i, 1:/In Break DP Interval/i}
-			];
-
-			const casingStates = [
-				{0: /casing/i, 1: /casing/i},
-				{0: /settlementstring/i, 1: /settlement string/i},
-				{0: /belowshoedepth/i, 1: /below shoe depth/i},
-				{0: /cementing/i, 1: /cementing/i},
-				// {0:/inBreakDPInterval/i, 1:/In Break DP Interval/i}
-			];
-
-			const riserStates = [
-				{0: /ascentriser/i, 1: /ascent riser/i},
-				{0: /descentriser/i, 1: /descent riser/i},
-			];
-
-			const timeState = [
-				{0: /time/i, 1: /time/i},
-			];
-
-			activities = activities.map(function(activity) {
-
-				if (activity.$$operationType) {
-					return activity;
-				}
-
-				if (activity.label) {
-					activity = setOperationType(activity, bhaStates, 'bha');
-					activity = setOperationType(activity, casingStates, 'casing');
-					activity = setOperationType(activity, riserStates, 'riser');
-					activity = setOperationType(activity, timeState, 'time');
-				}
-
-				return activity;
-			});
-
-			for (const i in activities) {
-				if (activities[i].$$operationType === 'bha') {
-					operationTypes.bha.activities.push(activities[i]);
-				} else if (activities[i].$$operationType === 'casing') {
-					operationTypes.casing.activities.push(activities[i]);
-				} else if (activities[i].$$operationType === 'riser') {
-					operationTypes.riser.activities.push(activities[i]);
-				} else if (activities[i].$$operationType === 'time') {
-					operationTypes.time.activities.push(activities[i]);
-				} else {
-					operationTypes.none.activities.push(activities[i]);
-				}
-			}
-		}
-
-		function setOperationType(activity, states, type) {
+		activities = activities.map((activity) => {
 
 			if (activity.$$operationType) {
 				return activity;
 			}
 
-			const attr = activity.label;
-
-			for (const i in states) {
-				if (attr.match(states[i][0]) || attr.match(states[i][1])) {
-					activity.$$operationType = type;
-					break;
-				}
-			}
-
-			if (!activity.$$operationType) {
-				activity.$$operationType = '';
+			if (activity.label) {
+				activity = this.setOperationType(activity, bhaStates, 'bha');
+				activity = this.setOperationType(activity, casingStates, 'casing');
+				activity = this.setOperationType(activity, riserStates, 'riser');
+				activity = this.setOperationType(activity, timeState, 'time');
 			}
 
 			return activity;
+		});
+
+		for (const i in activities) {
+			if (activities[i].$$operationType === 'bha') {
+				this.operationTypes.bha.activities.push(activities[i]);
+			} else if (activities[i].$$operationType === 'casing') {
+				this.operationTypes.casing.activities.push(activities[i]);
+			} else if (activities[i].$$operationType === 'riser') {
+				this.operationTypes.riser.activities.push(activities[i]);
+			} else if (activities[i].$$operationType === 'time') {
+				this.operationTypes.time.activities.push(activities[i]);
+			} else {
+				this.operationTypes.none.activities.push(activities[i]);
+			}
+		}
+	}
+
+	private setOperationType(activity, states, type) {
+
+		if (activity.$$operationType) {
+			return activity;
 		}
 
+		const attr = activity.label;
+
+		for (const i in states) {
+			if (attr.match(states[i][0]) || attr.match(states[i][1])) {
+				activity.$$operationType = type;
+				break;
+			}
+		}
+
+		if (!activity.$$operationType) {
+			activity.$$operationType = '';
+		}
+
+		return activity;
 	}
+
 }
 // })();

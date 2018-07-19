@@ -1,7 +1,7 @@
 
 export class XPDScoredEventsDirective implements ng.IDirective {
 	// Runs during compile
-	public scope: {
+	public scope = {
 		eventList: '=',
 		name: '@name',
 	};

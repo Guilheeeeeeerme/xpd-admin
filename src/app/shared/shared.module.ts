@@ -84,26 +84,6 @@ const XPDSharedModule: angular.IModule = angular.module('xpd.shared', [
 
 export { XPDSharedModule };
 
-// import alarmInfoTemplate from './../../components/admin/views/forms/alarm-info.template.html';
-// import bhaContractTemplate from './../../components/admin/views/forms/bha-contract-info.template.html';
-// import bhaGeneralTemplate from './../../components/admin/views/forms/bha-general-info.template.html';
-// import casingContractTemplate from './../../components/admin/views/forms/casing-contract-info.template.html';
-// import casingGeneralTemplate from './../../components/admin/views/forms/casing-general-info.template.html';
-// import riserContractTemplate from './../../components/admin/views/forms/riser-contract-info.template.html';
-// import riserGeneralTemplate from './../../components/admin/views/forms/riser-general-info.template.html';
-// import timeContractTemplate from './../../components/admin/views/forms/time-contract-info.template.html';
-// import timeGeneralTemplate from './../../components/admin/views/forms/time-general-info.template.html';
-
-// XPDSharedModule.component('alarmInfoTemplate', { template: alarmInfoTemplate });
-// XPDSharedModule.component('bhaContractTemplate', { template: bhaContractTemplate });
-// XPDSharedModule.component('bhaGeneralTemplate', { template: bhaGeneralTemplate });
-// XPDSharedModule.component('casingContractTemplate', { template: casingContractTemplate });
-// XPDSharedModule.component('casingGeneralTemplate', { template: casingGeneralTemplate });
-// XPDSharedModule.component('riserContractTemplate', { template: riserContractTemplate });
-// XPDSharedModule.component('riserGeneralTemplate', { template: riserGeneralTemplate });
-// XPDSharedModule.component('timeContractTemplate', { template: timeContractTemplate });
-// XPDSharedModule.component('timeGeneralTemplate', { template: timeGeneralTemplate });
-
 import alarmInfoTemplate from './../../components/admin/views/forms/alarm-info.template.html';
 import bhaContractTemplate from './../../components/admin/views/forms/bha-contract-info.template.html';
 import bhaGeneralTemplate from './../../components/admin/views/forms/bha-general-info.template.html';

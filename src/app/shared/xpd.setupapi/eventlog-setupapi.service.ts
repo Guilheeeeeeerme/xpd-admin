@@ -5,8 +5,6 @@ import { SetupAPIService } from './setupapi.service';
 // (function() {
 // 	'use strict';
 
-// 	angular.module('xpd.setupapi').service('eventlogSetupAPIService', eventlogSetupAPIService);
-
 // 	eventlogSetupAPIService.$inject = ['xpdAccessService', 'setupAPIService', '$rootScope'];
 
 export class EventLogSetupAPIService {
@@ -18,7 +16,7 @@ export class EventLogSetupAPIService {
 		this.BASE_URL = xpdAccessService.getSetupURL() + 'setup/event';
 	}
 
-	public listTrackingEventByOperation(operationId, successCallback, errorCallback) {
+	public listTrackingEventByOperation(operationId) {
 		const url = this.BASE_URL + '/operation/' + operationId + '/tracking-events';
 
 		const req = {
@@ -26,10 +24,10 @@ export class EventLogSetupAPIService {
 			url,
 		};
 
-		this.setupAPIService.doRequest(req, successCallback, errorCallback);
+		return this.setupAPIService.doRequest(req);
 	}
 
-	public listByFilters(eventType, operationId, limit, fromDate, toDate, successCallback, errorCallback) {
+	public listByFilters(eventType, operationId, limit, fromDate, toDate) {
 		let url = this.BASE_URL + '/list-by-type';
 
 		let params = 0;
@@ -90,10 +88,10 @@ export class EventLogSetupAPIService {
 			url,
 		};
 
-		this.setupAPIService.doRequest(req, successCallback, errorCallback);
+		return this.setupAPIService.doRequest(req);
 	}
 
-	public getWithDetails(eventId, successCallback, errorCallback?) {
+	public getWithDetails(eventId) {
 		let url = this.BASE_URL;
 		url += '/' + eventId + '/details';
 
@@ -102,7 +100,7 @@ export class EventLogSetupAPIService {
 			url,
 		};
 
-		this.setupAPIService.doRequest(req, successCallback, errorCallback);
+		return this.setupAPIService.doRequest(req);
 	}
 
 }

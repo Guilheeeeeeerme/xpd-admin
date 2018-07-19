@@ -1,7 +1,4 @@
 
-// angular.module('xpd.visualization')
-// 	.directive('operationInformationPanel', operationInformationPanel);
-
 // operationInformationPanel.$inject = [];
 
 import template from './operation-information-panel.template.html';

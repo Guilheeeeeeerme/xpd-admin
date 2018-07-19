@@ -1,10 +1,6 @@
 import { DMECService } from '../../../shared/xpd.dmec/dmec.service';
 
 export class DMECLogController {
-	// 'use strict';
-
-	// angular.module('xpd.dmeclog')
-	// 	.controller('DMecLogController', DMecLogController);
 
 	public static $inject = ['$scope', 'dmecService'];
 

@@ -3,13 +3,11 @@ import { HighchartsService } from '../../shared/highcharts/highcharts.service';
 // (function() {
 	// 	'use stric';
 
-	// 	angular.module('xpd.reports').directive('lessonsParetoChart', lessonsParetoChart);
-
 export class LessonsParetoChart {
 
 	public static $inject: string[] = ['highchartsService'];
 	public restrict: 'EA';
-	public scope: {
+	public scope = {
 		chartData: '=',
 		chartTitle: '=',
 	};
