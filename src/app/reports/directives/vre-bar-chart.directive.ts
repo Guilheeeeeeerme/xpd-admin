@@ -8,7 +8,7 @@ import template from './vre-bar-chart.template.html';
 
 export class VreBarChart {
 
-	public static $inject = ['$filter', '$xpdTimeout'];
+	public static $inject = ['$xpdTimeout'];
 	public restrict: 'EA';
 	public template = template;
 	public scope = {
@@ -18,7 +18,6 @@ export class VreBarChart {
 	};
 
 	constructor(
-		private $filter: ng.IFilterFilter,
 		private $xpdTimeout: XPDTimeoutService) {
 	}
 
@@ -47,8 +46,8 @@ export class VreBarChart {
 
 			const padding = 3;
 			const table = d3.select(element[0]);
-			const svgSelection = table.select('svg').node();
-			widthSvg = svgSelection[0][0].width.animVal.value;
+			const svgSelection: any = table.select('svg').node();
+			widthSvg = svgSelection.width.animVal.value;
 			// tslint:disable-next-line:radix
 			heightSvg = parseInt(window.getComputedStyle(document.querySelector('td.vre-svg-container')).height);
 
@@ -91,12 +90,10 @@ export class VreBarChart {
 
 	public static Factory(): ng.IDirectiveFactory {
 		const directive = (
-			$filter: ng.IFilterFilter,
 			$xpdTimeout: XPDTimeoutService,
 		) => new VreBarChart(
-			$filter,
 			$xpdTimeout,
-			);
+		);
 
 		return directive;
 	}
