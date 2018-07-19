@@ -490,7 +490,7 @@ export class D3DMECChartDirective implements ng.IDirective {
 						function drawBubbles() {
 
 							const bubbleContent = d3.select(element[0]).selectAll('.bubbles');
-							const line = d3.select(element[0]).selectAll('.line-' + scope.lastSelectedPoint.timestamp);
+							const line = d3.select(element[0]).selectAll('.line-' + scope.lastSelectedPoint.timestamp).nodes();
 
 							const groupBublle = bubbleContent.append('g')
 								.attr('class', 'marker-' + scope.lastSelectedPoint.timestamp)
@@ -503,7 +503,7 @@ export class D3DMECChartDirective implements ng.IDirective {
 								.attr('stroke', track.color);
 
 							// Garante que apenas uma linha de um ponto seja desenhada
-							if (line[0].length === 0) {
+							if (line.length === 0) {
 
 								bubbleContent.append('line')
 									.attr('class', 'line-' + scope.lastSelectedPoint.timestamp)

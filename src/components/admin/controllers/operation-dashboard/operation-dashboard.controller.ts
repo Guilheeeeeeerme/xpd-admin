@@ -1,5 +1,5 @@
 import { OperationDataService } from '../../../../app/shared/xpd.operation-data/operation-data.service';
-import { ReadingSetupAPIService } from '../../../../app/shared/xpd.setupapi/reading-setupapi.service';
+import { ReadingSetupAPIService } from './../../../../app/shared/xpd.setupapi/reading-setupapi.service';
 
 export class OperationDashboardController {
 
@@ -7,7 +7,7 @@ export class OperationDashboardController {
 
 	// angular.module('xpd.operation-dashboard').controller('OperationDashboardController', operationDashboardController);
 
-	public static $inject = ['$scope', '$filter', 'operationDataService'];
+	public static $inject = ['$scope', '$filter', 'operationDataService', 'readingSetupAPIService'];
 	public operationDataFactory: any;
 	public selectedBaseLine: any;
 	public selectedEventType: any;
@@ -176,6 +176,9 @@ export class OperationDashboardController {
 	}
 
 	public selectedPoint(point) {
+		this.$scope.statusPanel.panelChanelsIsCollapsed = false;
+		localStorage.setItem('panelChanelsIsCollapsed', JSON.stringify(false));
+
 		this.getReading(point);
 	}
 

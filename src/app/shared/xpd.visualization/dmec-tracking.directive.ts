@@ -16,7 +16,7 @@ export class DMECTrackingDirective implements ng.IDirective {
 		currentTick: '=',
 		currentBlockPosition: '=',
 		currentReading: '=',
-		selectedPoint: '=',
+		selectedPoint: '&',
 		lastSelectedPoint: '=',
 		removeMarker: '=',
 	};
@@ -44,7 +44,7 @@ export class DMECTrackingDirective implements ng.IDirective {
 		);
 
 		function setSelectedPoint(position) {
-			scope.selectedPoint(position);
+			scope.selectedPoint({point: position});
 		}
 	}
 

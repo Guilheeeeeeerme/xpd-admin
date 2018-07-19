@@ -10,8 +10,8 @@ export class NextActivitiesInformationPanelDirective implements ng.IDirective {
 	public restrict = 'EA';
 	public template = template;
 	public scope = {
-		onInit: '=',
-		onClickCollapse: '=',
+		onInit: '&',
+		onClickCollapse: '&',
 		collapse: '=',
 		activities: '=',
 		operation: '=',

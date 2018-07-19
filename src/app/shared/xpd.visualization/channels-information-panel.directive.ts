@@ -10,11 +10,11 @@ export class ChannelsInformationPanel implements ng.IDirective {
 	public restrict = 'EA';
 	public template = template;
 	public scope = {
-		onInit: '=',
-		onClickCollapse: '=',
+		onInit: '&',
+		onClickCollapse: '&',
 		collapse: '=',
 		readings: '=',
-		removeReading: '=',
+		removeReading: '&',
 	};
 
 	public static Factory(): ng.IDirectiveFactory {

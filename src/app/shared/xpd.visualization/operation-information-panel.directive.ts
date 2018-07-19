@@ -9,9 +9,9 @@ import template from './operation-information-panel.template.html';
 export class OperationInformationPanelDirective implements ng.IDirective {
 	public restrict = 'EA';
 	public template = template;
-	public scope: {
-		onInit: '=',
-		onClickCollapse: '=',
+	public scope = {
+		onInit: '&',
+		onClickCollapse: '&',
 		collapse: '=',
 		numberJoints: '=',
 		jointNumber: '=',

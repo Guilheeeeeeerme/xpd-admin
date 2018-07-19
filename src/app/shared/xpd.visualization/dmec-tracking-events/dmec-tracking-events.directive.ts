@@ -10,6 +10,8 @@ import { LessonLearnedModalService } from '../../xpd.modal.lessonlearned/xpd-mod
 import template from './dmec-tracking-events.template.html';
 
 export class DMECTrackingEventsDirective implements ng.IDirective {
+
+	public static $inject: string[] = ['eventDetailsModalService', 'failureModal', 'lessonLearnedModal'];
 	public template = template;
 	public scope = {
 		tick: '=',
@@ -42,6 +44,7 @@ export class DMECTrackingEventsDirective implements ng.IDirective {
 		let lastEventType = null;
 		let lastBarColor;
 		let lastElement;
+		scope.selectedEvents = [];
 		scope.element = element[0];
 		scope.mindate = null;
 		scope.maxdate = null;
@@ -59,6 +62,12 @@ export class DMECTrackingEventsDirective implements ng.IDirective {
 		scope.actionOpenDetailsModal = actionOpenDetailsModal;
 		scope.actionOpenFailuresModal = actionOpenFailuresModal;
 		scope.actionOpenLessonsLearnedModal = actionOpenLessonsLearnedModal;
+
+		scope.$watch('events', function (events) {
+			if (events) {
+				selectEventToDraw();
+			}
+		});
 
 		scope.$watch('zoomStartAt', function (startAt) {
 			if (startAt) {
@@ -81,15 +90,17 @@ export class DMECTrackingEventsDirective implements ng.IDirective {
 		});
 
 		scope.$watch('currentEvent', function (currentEvent) {
+			if (!currentEvent) { return; }
+
 			if (!lastEventType) {
-				lastEventType = scope.currentEvent.eventType;
+				lastEventType = currentEvent.eventType;
 			}
 
 			if (lastEventType !== currentEvent.eventType) {
 				d3.selectAll('#current-event-bar-' + lastEventType).remove();
 				d3.selectAll('#current-event-' + lastEventType).append('rect').attr('id', 'current-event-bar-' + lastEventType);
 
-				lastEventType = scope.currentEvent.eventType;
+				lastEventType = currentEvent.eventType;
 			}
 
 		});
@@ -100,6 +111,7 @@ export class DMECTrackingEventsDirective implements ng.IDirective {
 		getEventZoomElement().on('mouseout', mouseOut);
 
 		function setViewMode() {
+			console.log('setViewMode')
 
 			scope.svg = {
 				height: element[0].offsetHeight,
@@ -118,8 +130,30 @@ export class DMECTrackingEventsDirective implements ng.IDirective {
 		}
 
 		function defineScaleChart() {
+			console.log('defineScaleChart');
+			selectEventToDraw();
 			scope.xScale = d3.scaleLinear().domain([scope.mindate, scope.maxdate]).range([0, 100]);
 			scope.xTicks = scope.xScale.ticks();
+		}
+
+		function selectEventToDraw() {
+			console.log(scope.events.length)
+
+			if (scope.events.length === 0) { return; }
+
+			scope.selectedEvents = [];
+
+			for (let i = 0; i <= scope.events.length; i++) {
+				const event = scope.events[i];
+
+				if (!event) { break; }
+
+				if ((new Date(event.endTime).getTime() >= scope.mindate) && (new Date(event.startTime).getTime() <= scope.maxdate)) {
+					scope.selectedEvents.push(event);
+				}
+			}
+
+			console.log(scope.selectedEvents)
 		}
 
 		function getBarWidth(eventDuration) {
@@ -152,7 +186,7 @@ export class DMECTrackingEventsDirective implements ng.IDirective {
 		}
 
 		function getBarXPosition(startTime) {
-			return scope.xScale(new Date(startTime));
+			return scope.xScale(new Date(startTime).getTime());
 		}
 
 		function buildCurrentEventBar(event, eventDuration) {
@@ -330,7 +364,6 @@ export class DMECTrackingEventsDirective implements ng.IDirective {
 			lessonLearnedModal,
 			);
 
-		directive.$inject = ['eventDetailsModalService', 'failureModal', 'lessonLearnedModal'];
 		return directive;
 	}
 }
