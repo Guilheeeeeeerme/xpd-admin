@@ -12,7 +12,7 @@ export class TablePeriod implements ng.IDirective {
 		finalDate: '=',
 		minDate: '=',
 		maxDate: '=',
-		functionChangePeriod: '=',
+		functionChangePeriod: '&',
 		dateTime: '=',
 	};
 
