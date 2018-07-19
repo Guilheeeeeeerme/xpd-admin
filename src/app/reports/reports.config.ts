@@ -6,8 +6,8 @@ import FailuresNptTemplate from './components/failures-npt.template.html';
 import HistogramReportTemplate from './components/histogram-report.template.html';
 import LessonsLearnedTemplate from './components/lessons-learned.template.html';
 import ReportNeedleTemplate from './components/needle-report.template.html';
+import VreReportTemplate from './components/vre-report.template.html';
 import VreScoreReportTemplate from './components/vre-score.template.html';
-import VreReportTemplate from './components/vre.template.html';
 
 export class ReportConfig {
 	public static $inject = ['$routeProvider'];
