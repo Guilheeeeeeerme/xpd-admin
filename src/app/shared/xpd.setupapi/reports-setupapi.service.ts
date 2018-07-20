@@ -24,6 +24,7 @@ export class ReportsSetupAPIService {
 		url += '&to=' + toDate.getTime();
 
 		const req = {
+			cache: true,
 			method: 'GET',
 			url,
 		};
@@ -37,6 +38,7 @@ export class ReportsSetupAPIService {
 		url += '&to=' + toDate.getTime();
 
 		const req = {
+			cache: true,
 			method: 'GET',
 			url,
 		};
@@ -46,6 +48,7 @@ export class ReportsSetupAPIService {
 
 	public getPlannedGraphicDataOperation(operationId) {
 		const req = {
+			cache: true,
 			method: 'GET',
 			url: this.BASE_URL + '/planned-operation-graphic-data?'
 				+ 'operation-id=' + operationId,
@@ -55,6 +58,7 @@ export class ReportsSetupAPIService {
 
 	public getRealizedGraphicDataOperation(operationId) {
 		const req = {
+			cache: true,
 			method: 'GET',
 			url: this.BASE_URL + '/realized-operation-graphic-data?' +
 				'operation-id=' + operationId,
@@ -69,6 +73,7 @@ export class ReportsSetupAPIService {
 		url += '&to=' + toDate.getTime();
 
 		const req = {
+			cache: true,
 			method: 'GET',
 			url,
 		};
@@ -82,6 +87,7 @@ export class ReportsSetupAPIService {
 		url += '&to=' + toDate.getTime();
 
 		const req = {
+			cache: true,
 			method: 'GET',
 			url,
 		};
@@ -95,6 +101,7 @@ export class ReportsSetupAPIService {
 		url += '&to=' + toDate.getTime();
 
 		const req = {
+			cache: true,
 			method: 'GET',
 			url,
 		};
@@ -108,6 +115,7 @@ export class ReportsSetupAPIService {
 		url += '&to=' + toDate.getTime();
 
 		const req = {
+			cache: true,
 			method: 'GET',
 			url,
 		};
@@ -118,6 +126,7 @@ export class ReportsSetupAPIService {
 	public getOperationQueue(wellId) {
 
 		const req = {
+			cache: true,
 			method: 'GET',
 			url: this.xpdAccessService.getReportsAPIURL() + 'planning/well/' + wellId,
 		};
@@ -129,6 +138,7 @@ export class ReportsSetupAPIService {
 	public getBitDepthChartForOperation(wellId, operationId) {
 
 		const req = {
+			cache: true,
 			method: 'GET',
 			url: this.xpdAccessService.getReportsAPIURL() + 'planning/well/' + wellId + '/operation/' + operationId,
 		};
@@ -140,6 +150,7 @@ export class ReportsSetupAPIService {
 	public getOperationExecuted(operationId) {
 
 		const req = {
+			cache: true,
 			method: 'GET',
 			url: this.xpdAccessService.getReportsAPIURL() + 'executed/operation/' + operationId,
 		};

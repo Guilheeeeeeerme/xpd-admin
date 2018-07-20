@@ -5,9 +5,16 @@
 	No current well
 </div>
 
-<div xpd-bit-depth-time chart-data='dados.data' chart-title='dados.title' set-current-planned-event="bdtController.setCurrentPlannedEvent(event)"
- set-current-executed-event="bdtController.setCurrentExecutedEvent(event)" set-hole-depth="bdtController.setHoleDepth(event)"
- , set-current-point="bdtController.setCurrentPoint(event)">
+<div 
+	xpd-bit-depth-time 
+	planned-points="dados.plannedPoints"
+	executed-points="dados.executedPoints"
+	chart-data='dados.data' 
+	chart-title='dados.title' 
+	set-current-planned-event="bdtController.setCurrentPlannedEvent(event)"
+ 	set-current-executed-event="bdtController.setCurrentExecutedEvent(event)" 
+ 	set-hole-depth="bdtController.setHoleDepth(event)"
+ 	set-current-point="bdtController.setCurrentPoint(event)">
 </div>
 
 
@@ -34,10 +41,10 @@ ng-if="dados.plannedEvent && dados.executedEvent" -->
 				<th class="equilibrium-time-table-label">
 					Time Diff.
 				</th>
-				<td class="equilibrium-time-table-text" ng-if="dados['plannedEvent'] && dados['executedEvent']">
-					{{ (dados['plannedEvent'].startDate - dados['executedEvent'].startDate)/1000 | secondsToHourMinutesSeconds }}
+				<td class="equilibrium-time-table-text" ng-if="dados.plannedEvent && dados.executedEvent">
+					{{ (dados.plannedEvent.startDate - dados.executedEvent.startDate)/1000 | secondsToHourMinutesSeconds }}
 				</td>
-				<td class="equilibrium-time-table-text" ng-if="!(dados['plannedEvent'] && dados['executedEvent'])">
+				<td class="equilibrium-time-table-text" ng-if="!(dados.plannedEvent && dados.executedEvent)">
 					Please check two points
 				</td>
 			</tr>
@@ -59,7 +66,9 @@ ng-if="dados.plannedEvent && dados.executedEvent" -->
 					{{ dados[LINETYPE].operation.name }}
 					<span class="glyphicon glyphicon-arrow-down" ng-if="dados[LINETYPE].tripin"></span>
 					<span class="glyphicon glyphicon-arrow-up" ng-if="!dados[LINETYPE].tripin"></span>
-					{{ dados[LINETYPE].state | xpdStateLabelFilter}}
+					LINETYPE
+					<pre>{{ dados[LINETYPE] | json }}</pre>
+					<!-- {{ dados[LINETYPE].state | xpdStateLabelFilter}} -->
 					<span ng-if="dados[LINETYPE].state != 'drilling' || dados[LINETYPE].eventType == 'CONN'">
 						| {{dados[LINETYPE].eventType | xpdEventLabelFilter}}
 					</span>
