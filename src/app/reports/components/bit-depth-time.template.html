@@ -7,13 +7,13 @@
 
 <div 
 	xpd-bit-depth-time 
-	planned-points="dados.plannedPoints"
-	executed-points="dados.executedPoints"
+	planned-points="bitDepthReportData.plannedPoints"
+	executed-points="bitDepthReportData.executedPoints"
+	hole-depth-points="bitDepthReportData.holeDepthPoints"
+	start-chart-at="bitDepthReportData.startChartAt"
+	bit-depth-report-data-ready="bitDepthReportDataReady"
 	chart-data='dados.data' 
 	chart-title='dados.title' 
-	set-current-planned-event="bdtController.setCurrentPlannedEvent(event)"
- 	set-current-executed-event="bdtController.setCurrentExecutedEvent(event)" 
- 	set-hole-depth="bdtController.setHoleDepth(event)"
  	set-current-point="bdtController.setCurrentPoint(event)">
 </div>
 

@@ -1,3 +1,4 @@
+import * as angular from 'angular';
 import { IQService, route } from 'angular';
 import { ReportsSetupAPIService } from '../../shared/xpd.setupapi/reports-setupapi.service';
 
@@ -9,6 +10,7 @@ export class BitDepthTimeController {
 		'$q',
 		'$routeParams',
 		'reportsSetupAPIService'];
+	private bitDepthReportData: any;
 
 	constructor(
 		private $scope: any,
@@ -31,32 +33,74 @@ export class BitDepthTimeController {
 			);
 		}
 	}
+
 	private setOperationQueue(operationQueue) {
 
-		this.getPlannedPoints(operationQueue).then((plannedPoints) => {
-			this.$scope.dados.plannedPoints = plannedPoints;
-		});
+		const bitDepthReportData: any = {};
+		const plannedPromise = this.getPlannedPoints(operationQueue);
+		const executedPromise = this.getExecutedPoints(operationQueue);
+		const bitDepthReportDataReady = this.$q.defer();
 
-		this.getExecutedPoints(operationQueue).then((executedPoints) => {
-			// console.log(executedPoints);
+		this.$q.all([plannedPromise, executedPromise]).then((results) => {
+
+			const plannedPoints = results[0];
+			const executedPoints = results[1];
+			const holeDepthPoints = [];
+			let startTime = new Date().getTime();
+
+			for (let executedPoint of executedPoints) {
+				executedPoint = executedPoint.map((point) => {
+					startTime = Math.min(startTime, point.x);
+
+					if (point.x) {
+						if (holeDepthPoints.length === 0 ||
+							holeDepthPoints.length > 0 && holeDepthPoints[holeDepthPoints.length - 1][1] < point.holeDepth) {
+							holeDepthPoints.push([point.x, point.holeDepth]);
+							holeDepthPoints.push([point.x, point.holeDepth]);
+						} else {
+							holeDepthPoints[holeDepthPoints.length - 1][0] = point.x;
+						}
+					}
+
+					delete point.holeDepth;
+					return point;
+				});
+			}
+
+			bitDepthReportData.startChartAt = angular.copy(startTime);
+
+			for (let plannedPoint of plannedPoints) {
+				let endTime = 0;
+
+				plannedPoint = plannedPoint.map((point) => {
+					point.x += startTime;
+					endTime = Math.max(endTime, point.x);
+					return point;
+				});
+
+				startTime = Math.max(endTime, startTime);
+			}
+
+			bitDepthReportData.plannedPoints = plannedPoints;
+			bitDepthReportData.holeDepthPoints = holeDepthPoints;
+			bitDepthReportData.executedPoints = executedPoints;
+
+			this.bitDepthReportData = bitDepthReportData;
+
+			this.$scope.bitDepthReportDataReady = bitDepthReportDataReady.promise;
+
+			bitDepthReportDataReady.resolve(bitDepthReportData);
+
 		});
 
 	}
 
 	private getExecutedPoints(operationQueue) {
 
-		this.$scope.dados.executedPoints = [];
-
 		const executedPromises = [];
 
 		for (const operation of operationQueue) {
-			const promise = this.reportsSetupAPIService.getOperationExecuted(operation.id);
-
-			promise.then((points) => {
-				this.$scope.dados.executedPoints.push(points);
-			});
-
-			executedPromises.push(promise);
+			executedPromises.push(this.reportsSetupAPIService.getOperationExecuted(operation.id));
 		}
 
 		return this.$q.all(executedPromises);
@@ -64,42 +108,13 @@ export class BitDepthTimeController {
 
 	private getPlannedPoints(operationQueue) {
 
-		return new Promise((resolve, reject) => {
+		const planningPromises = [];
 
-			const planningPromises = [];
+		for (const operation of operationQueue) {
+			planningPromises.push(this.reportsSetupAPIService.getBitDepthChartForOperation(this.$scope.wellId, operation.id));
+		}
 
-			for (const operation of operationQueue) {
-				planningPromises.push(this.reportsSetupAPIService.getBitDepthChartForOperation(this.$scope.wellId, operation.id));
-			}
-
-			this.$q.all(planningPromises).then((plannedPoints) => {
-				const points = [];
-				let startTime = 0;
-
-				for (const plannedPoint of plannedPoints) {
-					let endTime = 0;
-
-					plannedPoint.map((point) => {
-
-						point.x += startTime;
-						endTime = Math.max(endTime, point.x);
-
-						points.push(point);
-
-					});
-
-					startTime = Math.max(endTime, startTime);
-				}
-
-				resolve(points);
-
-			}, reject);
-
-		});
-
-		// this.getOperationPlanned(operationQueue).then(() => {
-		// 	this.getOperationExecuted(operationQueue);
-		// });
+		return this.$q.all(planningPromises);
 	}
 
 	public setCurrentPlannedEvent(event) {
@@ -118,8 +133,9 @@ export class BitDepthTimeController {
 	}
 
 	public setCurrentPoint(event) {
-		this.$scope.dados.currentPoint = event;
-		this.$scope.$apply();
+		console.log(event);
+		// this.$scope.dados.currentPoint = event;
+		// this.$scope.$apply();
 	}
 
 	// public getAlarmsFromEvent(event) {
