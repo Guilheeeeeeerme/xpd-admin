@@ -115,11 +115,17 @@ export class BitDepthTimeDirective implements ng.IDirective {
 						title: {
 							text: 'Depth',
 						},
+						plotBands: [],
+					},
+
+					legend: {
+						enabled: false,
 					},
 
 					tooltip: {
 						enabled: false,
 					},
+
 					plotOptions: {
 						series: {
 							turboThreshold: 0,
@@ -142,6 +148,7 @@ export class BitDepthTimeDirective implements ng.IDirective {
 					};
 
 					if (bitDepthPlannedPointsSerie) {
+						bitDepthPlannedPointsSerie.color = '#2b908f';
 						bitDepthPlannedPointsSerie.zIndex = 2;
 						bitDepthPlannedPointsSerie.step = true;
 						bitDepthVsTimeChart.addSeries(bitDepthPlannedPointsSerie);
@@ -261,10 +268,9 @@ export class BitDepthTimeDirective implements ng.IDirective {
 			function onChartHover() {
 
 				currentPoint = this;
+
 				scope.setCurrentPoint({
-					event: {
-						point: currentPoint,
-					},
+					event: currentPoint,
 				});
 
 			}

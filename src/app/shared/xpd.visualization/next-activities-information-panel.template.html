@@ -32,6 +32,8 @@
 				<tr ng-repeat-start="activity in activities track by $index" ng-class="{ 'success': ($index == 0) }">
 
 					<th rowspan="2">
+						<i ng-if="activity.isTripin == true" class="fa fa-arrow-down" aria-hidden="true"></i>
+						<i ng-if="activity.isTripin == false" class="fa fa-arrow-up" aria-hidden="true"></i>
 						{{ activity.name | xpdStateLabelFilter }}
 					</th>
 

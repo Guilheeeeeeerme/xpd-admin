@@ -13,6 +13,8 @@
 }
 
 
+@import './scrollbar.css';
+
 /**
  * TYPE SCALE CODE (Major Third Scale)
  */
@@ -580,36 +582,6 @@ a.view-only-link {
 
 .operation-time-label-miliseconds {
     font-size: 0.7em;
-}
-
-
-/* Let's get this party started */
-
-::-webkit-scrollbar {
-    width: 5px;
-}
-
-
-/* Track */
-
-::-webkit-scrollbar-track {
-    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
-    -webkit-border-radius: 10px;
-    border-radius: 10px;
-}
-
-
-/* Handle */
-
-::-webkit-scrollbar-thumb {
-    -webkit-border-radius: 10px;
-    border-radius: 10px;
-    background: #517f89;
-    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.5);
-}
-
-::-webkit-scrollbar-thumb:window-inactive {
-    background: #517f89;
 }
 
 .xpd-chart-placeholder {

@@ -258,7 +258,7 @@ export class OperationDashboardController {
 							duration,
 							startTime,
 							finalTime: (startTime + duration),
-							isTripin: vTargetEstimative[state].BOTH.isTripin,
+							isTripin: vTargetEstimative[state].isTripin,
 						};
 
 						nextActivities.push(activity);
@@ -274,6 +274,8 @@ export class OperationDashboardController {
 			} catch (error) {
 				console.error(error);
 			}
+
+			console.log(expectations);
 
 			this.$scope.expectations = expectations;
 		}

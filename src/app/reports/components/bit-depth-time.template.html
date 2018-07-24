@@ -19,8 +19,7 @@
 
 
 <!-- HOLE DEPTH -->
-
-<div class="col-md-6" ng-class="{ 'highligth-details-bdt-table': dados.currentPoint.index == 2 }">
+<div class="col-md-6" ng-class="{ 'highligth-details-bdt-table': dados.selectedLineType == 'holeDepth' }">
 	<table class="table table-condensed equilibrium-time-table">
 		<thead>
 			<tr>
@@ -32,8 +31,6 @@
 	</table>
 </div>
 
-<!-- ng-if="dados.plannedEvent && dados.executedEvent"
-ng-if="dados.plannedEvent && dados.executedEvent" -->
 <div class="col-md-6">
 	<table class="table table-condesed equilibrium-time-table">
 		<tbody>
@@ -52,8 +49,10 @@ ng-if="dados.plannedEvent && dados.executedEvent" -->
 	</table>
 </div>
 
-<div class="col-md-6 col-lg-6 bitdepthvstime-details-container" ng-class="{ '{{ LINETYPE | lowercase }}': true, 'highligth-details-bdt-table': dados.currentPoint.index == key }"
- ng-repeat="(key, LINETYPE) in ['plannedEvent', 'executedEvent']">
+<div 
+	class="col-md-6 col-lg-6 bitdepthvstime-details-container" 
+	ng-class="{ '{{ LINETYPE | lowercase }}': true, 'highligth-details-bdt-table': dados.selectedLineType == LINETYPE }"
+ 	ng-repeat="LINETYPE in ['plannedEvent', 'executedEvent']">
 
 	<table class="table table-condensed equilibrium-time-table" ng-if="!!dados[LINETYPE]">
 		<thead>
@@ -66,9 +65,7 @@ ng-if="dados.plannedEvent && dados.executedEvent" -->
 					{{ dados[LINETYPE].operation.name }}
 					<span class="glyphicon glyphicon-arrow-down" ng-if="dados[LINETYPE].tripin"></span>
 					<span class="glyphicon glyphicon-arrow-up" ng-if="!dados[LINETYPE].tripin"></span>
-					LINETYPE
-					<pre>{{ dados[LINETYPE] | json }}</pre>
-					<!-- {{ dados[LINETYPE].state | xpdStateLabelFilter}} -->
+					{{ dados[LINETYPE].state | xpdStateLabelFilter}}
 					<span ng-if="dados[LINETYPE].state != 'drilling' || dados[LINETYPE].eventType == 'CONN'">
 						| {{dados[LINETYPE].eventType | xpdEventLabelFilter}}
 					</span>
@@ -119,8 +116,7 @@ ng-if="dados.plannedEvent && dados.executedEvent" -->
 	</table>
 
 	<!-- ALARMS -->
-
-	<div class="col-md-10 col-md-offset-1" ng-if="!!dados[LINETYPE] && bdtController.getAlarmsFromEvent(dados[LINETYPE]).length > 0">
+	<div class="col-md-10 col-md-offset-1">
 
 		<table class="table table-condensed equilibrium-time-table">
 
