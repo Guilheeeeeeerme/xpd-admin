@@ -7,8 +7,8 @@ export class OperationInformationPanelDirective implements ng.IDirective {
 	public restrict = 'EA';
 	public template = template;
 	public scope = {
-		onInit: '=',
-		onClickCollapse: '=',
+		onInit: '&',
+		onClickCollapse: '&',
 		collapse: '=',
 		numberJoints: '=',
 		jointNumber: '=',

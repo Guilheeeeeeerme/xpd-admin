@@ -9,6 +9,8 @@ import { LessonLearnedModalService } from '../../xpd.modal.lessonlearned/xpd-mod
 import template from './dmec-tracking-events.template.html';
 
 export class DMECTrackingEventsDirective implements ng.IDirective {
+
+	public static $inject: string[] = ['eventDetailsModalService', 'failureModal', 'lessonLearnedModal'];
 	public template = template;
 	public scope = {
 		tick: '=',
@@ -41,6 +43,7 @@ export class DMECTrackingEventsDirective implements ng.IDirective {
 		let lastEventType = null;
 		let lastBarColor;
 		let lastElement;
+		scope.filteredEvents = [];
 		scope.element = element[0];
 		scope.mindate = null;
 		scope.maxdate = null;
@@ -53,16 +56,23 @@ export class DMECTrackingEventsDirective implements ng.IDirective {
 		setViewMode();
 		scope.getBarWidth = getBarWidth;
 		scope.getBarHeight = getBarHeight;
-		scope.getBarPosition = getBarPosition;
+		scope.getBarYPosition = getBarYPosition;
 		scope.getBarXPosition = getBarXPosition;
 		scope.actionOpenDetailsModal = actionOpenDetailsModal;
 		scope.actionOpenFailuresModal = actionOpenFailuresModal;
 		scope.actionOpenLessonsLearnedModal = actionOpenLessonsLearnedModal;
 
+		scope.$watch('events', function (events) {
+			if (events) {
+				filterEventsToDraw();
+			}
+		});
+
 		scope.$watch('zoomStartAt', function (startAt) {
 			if (startAt) {
 				scope.mindate = new Date(startAt).getTime();
 				defineScaleChart();
+				filterEventsToDraw();
 			}
 		});
 
@@ -70,6 +80,7 @@ export class DMECTrackingEventsDirective implements ng.IDirective {
 			if (endAt) {
 				scope.maxdate = new Date(endAt).getTime();
 				defineScaleChart();
+				filterEventsToDraw();
 			}
 		});
 
@@ -80,15 +91,17 @@ export class DMECTrackingEventsDirective implements ng.IDirective {
 		});
 
 		scope.$watch('currentEvent', function (currentEvent) {
+			if (!currentEvent) { return; }
+
 			if (!lastEventType) {
-				lastEventType = scope.currentEvent.eventType;
+				lastEventType = currentEvent.eventType;
 			}
 
 			if (lastEventType !== currentEvent.eventType) {
 				d3.selectAll('#current-event-bar-' + lastEventType).remove();
 				d3.selectAll('#current-event-' + lastEventType).append('rect').attr('id', 'current-event-bar-' + lastEventType);
 
-				lastEventType = scope.currentEvent.eventType;
+				lastEventType = currentEvent.eventType;
 			}
 
 		});
@@ -121,6 +134,24 @@ export class DMECTrackingEventsDirective implements ng.IDirective {
 			scope.xTicks = scope.xScale.ticks();
 		}
 
+		function filterEventsToDraw() {
+
+			if (scope.events.length === 0) { return; }
+
+			scope.filteredEvents = [];
+
+			for (let i = 0; i <= scope.events.length; i++) {
+				const event = scope.events[i];
+
+				if (!event) { break; }
+
+				if ((new Date(event.endTime).getTime() >= scope.mindate) && (new Date(event.startTime).getTime() <= scope.maxdate)) {
+					scope.filteredEvents.push(event);
+				}
+			}
+
+		}
+
 		function getBarWidth(eventDuration) {
 			const width = scope.xScale(eventDuration) - scope.xScale(0);
 			if (!isNaN(width)) {
@@ -146,7 +177,7 @@ export class DMECTrackingEventsDirective implements ng.IDirective {
 			}
 		}
 
-		function getBarPosition(event) {
+		function getBarYPosition(event) {
 			return scope.svgViewHeight - getBarHeight(event);
 		}
 
@@ -329,7 +360,6 @@ export class DMECTrackingEventsDirective implements ng.IDirective {
 			lessonLearnedModal,
 			);
 
-		directive.$inject = ['eventDetailsModalService', 'failureModal', 'lessonLearnedModal'];
 		return directive;
 	}
 }

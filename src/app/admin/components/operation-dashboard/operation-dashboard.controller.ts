@@ -5,7 +5,7 @@ export class OperationDashboardController {
 
 	// 'use strict';
 
-	public static $inject = ['$scope', '$filter', 'operationDataService'];
+	public static $inject = ['$scope', '$filter', 'operationDataService', 'readingSetupAPIService'];
 	public operationDataFactory: any;
 	public selectedBaseLine: any;
 	public selectedEventType: any;

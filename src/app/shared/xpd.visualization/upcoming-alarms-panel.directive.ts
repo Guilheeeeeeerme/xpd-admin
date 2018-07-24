@@ -5,6 +5,9 @@ export class UpcomingAlarmsPanelDirective implements ng.IDirective {
 	public retrict = 'EA';
 	public template = template;
 	public scope = {
+		onInit: '&',
+		onClickCollapse: '&',
+		collapse: '=',
 		tripinAlarms: '=',
 		tripoutAlarms: '=',
 		currentDirection: '=',

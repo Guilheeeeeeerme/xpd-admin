@@ -1,15 +1,15 @@
 <div class="panel panel-default">
 
-	<div class="panel-heading clearfix" ng-click="panelNextAlarmsIsCollapsed = !panelNextAlarmsIsCollapsed">
+	<div class="panel-heading clearfix" ng-init="onInit()" ng-click="onClickCollapse()">
 		<h4 class="panel-title pull-left">Next Alarms</h4>
 		<div class="btn-group pull-right">
 			<i type="button" class="pull-right glyphicon pointer"
-				ng-class="{'glyphicon-chevron-down': panelNextAlarmsIsCollapsed, 'glyphicon-chevron-up': !panelNextAlarmsIsCollapsed}">
+				 ng-class="{'glyphicon-chevron-down': collapse, 'glyphicon-chevron-up': !collapse}">
 			</i>
 		</div>
 	</div>
 
-	<div class="panel-body" uib-collapse="panelNextAlarmsIsCollapsed">
+	<div class="panel-body" uib-collapse="collapse">
 
 		<div ng-if="nextAlarms.length != 0">
 

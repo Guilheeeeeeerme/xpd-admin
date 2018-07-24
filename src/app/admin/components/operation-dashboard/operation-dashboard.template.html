@@ -6,32 +6,32 @@
             <xpd-dmec-tracking current-operation="operationData.operationContext.currentOperation" current-event="operationData.eventContext.currentEvent"
                 current-tick="operationData.chronometerContext.tick" current-block-position="operationData.readingContext.currentReading.blockPosition"
                 current-reading="operationData.readingContext.currentReading" connection-events="dados.connectionEvents" trip-events="dados.tripEvents"
-                time-events="dados.timeEvents" selected-point="odController.selectedPoint" last-selected-point="lastSelectedPoint" remove-marker="removeMarker">
+                time-events="dados.timeEvents" selected-point="odController.selectedPoint(point)" last-selected-point="lastSelectedPoint" remove-marker="removeMarker">
             </xpd-dmec-tracking>
         </div>
 
         <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4 scrollable-content">
 
             <xpd-channels-information-panel
-                on-init="odController.getPanelStartState" 
-                on-click-collapse="odController.changePanelState"
+                on-init="odController.getPanelStartState('panelChanelsIsCollapsed')" 
+                on-click-collapse="odController.changePanelState('panelChanelsIsCollapsed')"
                 collapse = "statusPanel['panelChanelsIsCollapsed']"
                 readings="selectedReadings"
-                remove-reading= "odController.removeReadingFromList">
+                remove-reading= "odController.removeReadingFromList(index)">
             </xpd-channels-information-panel>
 
             <!-- Well Information -->
             <xpd-well-information-panel
-                on-init="odController.getPanelStartState" 
-                on-click-collapse="odController.changePanelState"
+                on-init="odController.getPanelStartState('panelWellIsCollapsed')" 
+                on-click-collapse="odController.changePanelState('panelWellIsCollapsed')"
                 collapse = "statusPanel['panelWellIsCollapsed']"
                 well="operationData.wellContext.currentWell">
             </xpd-well-information-panel>
 
             <!-- Operation Information -->
             <xpd-operation-information-panel
-                on-init="odController.getPanelStartState"
-                on-click-collapse="odController.changePanelState"
+                on-init="odController.getPanelStartState('panelOperationInfoIsCollapsed')"
+                on-click-collapse="odController.changePanelState('panelOperationInfoIsCollapsed')"
                 collapse = "statusPanel['panelOperationInfoIsCollapsed']"
                 number-joints="operationData.jointContext.numberJoints"
                 joint-number="operationData.jointContext.currentJoint.jointNumber" 
@@ -49,8 +49,8 @@
 
             <!-- Consistency Information -->
             <xpd-consistency-information-panel
-                on-init="odController.getPanelStartState"
-                on-click-collapse="odController.changePanelState"
+                on-init="odController.getPanelStartState('panelConsistencyInfoIsCollapsed')"
+                on-click-collapse="odController.changePanelState('panelConsistencyInfoIsCollapsed')"
                 collapse= "statusPanel['panelConsistencyInfoIsCollapsed']"
                 state="operationData.stateContext.currentState" 
                 event="operationData.eventContext.currentEvent"
@@ -66,8 +66,8 @@
 
             <!-- Next Activities Information -->
             <xpd-next-activities-information-panel
-                on-init="odController.getPanelStartState"
-                on-click-collapse="odController.changePanelState"
+                on-init="odController.getPanelStartState('panelNextActivityIsCollapsed')"
+                on-click-collapse="odController.changePanelState('panelNextActivityIsCollapsed')"
                 collapse = "statusPanel['panelNextActivityIsCollapsed']"
                 current-activity-elapsed-time="operationData.chronometerContext.stateTick"
                 initial-planning="operationData.suboperationContext.currentSuboperation.jointIntervals"
@@ -76,8 +76,8 @@
             </xpd-next-activities-information-panel>
 
             <xpd-operation-progress-panel
-                on-init="odController.getPanelStartState"
-                on-click-collapse="odController.changePanelState"
+                on-init="odController.getPanelStartState('panelOperationProgressIsCollapsed')"
+                on-click-collapse="odController.changePanelState('panelOperationProgressIsCollapsed')"
                 collapse = "statusPanel['panelOperationProgressIsCollapsed']"
                 current-score="operationData.scoreContext.currentScore" 
                 progress-data="operationData.operationProgressContext.operationProgressData[operationData.stateContext.currentState]">
@@ -110,7 +110,9 @@
                         Poor
                     </button>
 
-                    <xpd-forecast-waterfall horizontal="false" data-data-chart="forecast">
+                    <xpd-forecast-waterfall
+                        horizontal="false"
+                        data-data-chart="forecast">
                     </xpd-forecast-waterfall>
 
                 </div>
@@ -167,8 +169,14 @@
 
             </div>
 
-            <xpd-upcoming-alarms-panel tripin-alarms="operationData.alarmContext.tripin" tripout-alarms="operationData.alarmContext.tripout"
-                current-direction="operationData.directionContext" current-bit-depth="operationData.bitDepthContext.bitDepth">
+            <xpd-upcoming-alarms-panel
+                on-init="odController.getPanelStartState('panelNextAlarmsIsCollapsed')"
+                on-click-collapse="odController.changePanelState('panelNextAlarmsIsCollapsed')"
+                collapse = "statusPanel['panelNextAlarmsIsCollapsed']"
+                tripin-alarms="operationData.alarmContext.tripin"
+                tripout-alarms="operationData.alarmContext.tripout"
+                current-direction="operationData.directionContext"
+                current-bit-depth="operationData.bitDepthContext.bitDepth">
             </xpd-upcoming-alarms-panel>
 
             <!-- Failures -->
