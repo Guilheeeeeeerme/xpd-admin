@@ -32,8 +32,6 @@ export class VREReportController {
 
 	private getWellSuccessCallback(result) {
 
-		const currentWell = result[0];
-
 		const parentData = this.$scope.reportsData;
 
 		this.$scope.vreData.period = {
