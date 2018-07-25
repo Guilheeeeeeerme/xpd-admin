@@ -5,6 +5,9 @@ import 'angular-route';
 import 'angular-spinner';
 import 'angular-toastr';
 import 'angular-ui-bootstrap';
+import 'bootstrap';
+import 'jquery';
+
 import { AngularTreeviewModule } from './angular.treeview/angular-treeview.module';
 import { XPDGanttModule } from './gantt/gantt.module';
 import { XPDHighchartsModule } from './highcharts/highcharts.module';

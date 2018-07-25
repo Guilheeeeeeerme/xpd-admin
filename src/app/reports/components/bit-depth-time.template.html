@@ -39,7 +39,7 @@
 					Time Diff.
 				</th>
 				<td class="equilibrium-time-table-text" ng-if="dados.plannedEvent && dados.executedEvent">
-					{{ (dados.plannedEvent.startDate - dados.executedEvent.startDate)/1000 | secondsToHourMinutesSeconds }}
+					{{ (dados.plannedEvent.startTime - dados.executedEvent.startTime)/1000 | secondsToHourMinutesSeconds }}
 				</td>
 				<td class="equilibrium-time-table-text" ng-if="!(dados.plannedEvent && dados.executedEvent)">
 					Please check two points
@@ -108,7 +108,7 @@
 				</td>
 
 				<td colspan="2" class="equilibrium-time-table-text">
-					{{dados[LINETYPE].startDate | date:'M/d/yy h:mm a' }} - {{dados[LINETYPE].endDate | date:'M/d/yy h:mm a' }}
+					{{dados[LINETYPE].startTime | date:'M/d/yy h:mm a' }} - {{dados[LINETYPE].endTime | date:'M/d/yy h:mm a' }}
 				</td>
 			</tr>
 
@@ -133,7 +133,7 @@
 			</thead>
 
 			<tbody>
-				<tr ng-repeat="ITEM_ALARM in bdtController.getAlarmsFromEvent(dados[LINETYPE])">
+				<tr ng-repeat="ITEM_ALARM in dados[LINETYPE].alarms">
 					<td class="equilibrium-time-table-text">{{ ITEM_ALARM.name }}</td>
 
 					<td class="equilibrium-time-table-text">
@@ -146,11 +146,11 @@
 
 
 						<span class="equilibrium-time-table-text" ng-if="!ITEM_ALARM.isDurationAlarm">
-							From {{ ITEM_ALARM.startDepth | number: 2 }}(m) to {{ ITEM_ALARM.endDepth | number: 2}}(m) {{ ITEM_ALARM.speedRestriction
+							From {{ ITEM_ALARM.startDepth | number: 2 }}(m) to {{ ITEM_ALARM.endDepth | number: 2}}(m) {{ ITEM_ALARM.speedRestriction | number: 2
 							}} m/h
 						</span>
 						<span class="equilibrium-time-table-text" ng-if="ITEM_ALARM.isDurationAlarm">
-							Stop at {{ ITEM_ALARM.startDepth | number: 2 }}(m) for {{ 3600/ITEM_ALARM.optimumSpeed | secondsToHourMinutesSeconds }}
+							Stop at {{ ITEM_ALARM.startDepth | number: 2 }}(m) for {{ 3600 / ITEM_ALARM.optimumSpeed | secondsToHourMinutesSeconds }}
 						</span>
 
 					</td>

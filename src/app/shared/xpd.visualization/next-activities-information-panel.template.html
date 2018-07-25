@@ -16,7 +16,7 @@
 
 	<div class="panel-body" uib-collapse="collapse">
 
-		<table class="table table-sm table-hover table-condensed table-bordered">
+		<table class="table table-sm table-hover table-condensed table-striped">
 
 			<thead>
 				<tr>
@@ -29,42 +29,50 @@
 
 			<tbody>
 
-				<tr ng-repeat-start="activity in activities track by $index" ng-class="{ 'success': ($index == 0) }">
+				<tr data-toggle="collapse" 
+					data-target="#accordion-{{ $index }}" 
+					class="clickable"
+					ng-repeat-start="activity in activities track by $index" 
+					ng-class="{ 'success': ($index == 0) }">
 
-					<th rowspan="2">
+					<th>
 						<i ng-if="activity.isTripin == true" class="fa fa-arrow-down" aria-hidden="true"></i>
 						<i ng-if="activity.isTripin == false" class="fa fa-arrow-up" aria-hidden="true"></i>
 						{{ activity.name | xpdStateLabelFilter }}
 					</th>
 
 					<th ng-if="$index > 0">
-						{{ activity.startTime | date: 'mediumTime' }}
+						{{ activity.startTime | date: 'mediumTime' }}<br/>
+						{{ activity.startTime | date: 'mediumDate' }}
 					</th>
 
-					<th ng-if="$index == 0" rowspan="2">
+					<th ng-if="$index == 0">
 						Going on
 					</th>
 
 					<th>
-						{{ activity.finalTime | date: 'mediumTime' }}
+						{{ activity.finalTime | date: 'mediumTime' }}<br/>
+						{{ activity.finalTime | date: 'mediumDate' }}
 					</th>
 
-					<th rowspan="2">
+					<th>
 						{{ ( activity.duration / 1000 ) | secondsToHourMinutes }}
 					</th>
-				</tr>
-
-				<tr ng-repeat-end ng-class="{ 'success': ($index == 0) }">
-
-					<td ng-if="$index > 0">
-						{{ activity.startTime | date: 'mediumDate' }}
-					</td>
-
-					<td>
-						{{ activity.finalTime | date: 'mediumDate' }}
-					</td>
 
 				</tr>
+
+				<tr ng-repeat-end>
+					<td colspan="4">
+						<div id="accordion-{{ $index }}" class="collapse">
+							<xpd-upcoming-alarms-panel
+								tripin-alarms="activity.alarms"
+								tripout-alarms="activity.alarms"
+								current-direction="activity.isTripin">
+							</xpd-upcoming-alarms-panel>
+						</div>
+					</td>
+				</tr>
+
 			</tbody>
 
 		</table>

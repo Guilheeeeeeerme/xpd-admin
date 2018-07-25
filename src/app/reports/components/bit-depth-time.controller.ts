@@ -69,9 +69,9 @@ export class BitDepthTimeController {
 
 					startTime = Math.min(startTime, point.x);
 
-					if (point.x) {
+					if (point.x && point.holeDepth) {
 						if (holeDepthPoints.length === 0 ||
-							holeDepthPoints.length > 0 && holeDepthPoints[holeDepthPoints.length - 1][1] < point.holeDepth) {
+							holeDepthPoints.length > 0 && holeDepthPoints[holeDepthPoints.length - 1].y < point.holeDepth) {
 							holeDepthPoints.push({ x: point.x, y: point.holeDepth, selectedLineType: 'holeDepth' });
 							holeDepthPoints.push({ x: point.x, y: point.holeDepth, selectedLineType: 'holeDepth' });
 						} else {
@@ -145,67 +145,128 @@ export class BitDepthTimeController {
 		// console.log(this.bitDepthReportData.executedPoints);
 
 		this.$scope.dados.selectedLineType = event.selectedLineType;
-		this.$scope.$apply();
+
+		const plannedLocked = event.plannedLocked;
+		const executedLocked = event.executedLocked;
 
 		if (this.$scope.dados.selectedLineType === 'executedEvent') {
-			this.eventLogSetupAPIService.getWithDetails(event.id).then((eventDetails: any) => {
-				this.setCurrentExecutedEvent(eventDetails);
-			});
-			this.findPlannedEvent(event.x);
+			if (!executedLocked) {
+				this.eventLogSetupAPIService.getWithDetails(event.id).then((eventDetails: any) => {
+					this.setCurrentExecutedEvent(eventDetails);
+				});
+			}
 			this.setHoleDepth({ depth: event.holeDepth });
 		} else if (this.$scope.dados.selectedLineType === 'plannedEvent') {
-			this.findExecutedEvent(event.x);
-			this.findPlannedEvent(event.x);
+			if (!executedLocked) {
+				this.findExecutedEvent(event.x);
+			}
 			this.findHoleDepth(event.x);
 		} else {
-			this.findExecutedEvent(event.x);
-			this.findPlannedEvent(event.x);
+			if (!executedLocked) {
+				this.findExecutedEvent(event.x);
+			}
 			this.setHoleDepth({ depth: event.y });
+		}
+
+		if (!plannedLocked) {
+			this.findPlannedEvent(event.x);
 		}
 
 	}
 
 	private setCurrentPlannedEvent(event) {
+		if (event) {
+			event.alarms = this.getAlarmsFromEvent(event);
+		}
 		this.$scope.dados.plannedEvent = event;
-		this.$scope.$apply();
-	}
-
-	private setHoleDepth(event) {
-		this.$scope.dados.holeDepth = event;
-		this.$scope.$apply();
 	}
 
 	private setCurrentExecutedEvent(event) {
 		this.$scope.dados.executedEvent = event;
-		this.$scope.$apply();
+	}
+
+	private setHoleDepth(event) {
+		this.$scope.dados.holeDepth = event;
 	}
 
 	private findExecutedEvent(timestamp) {
-		// console.log('executedPoints', this.bitDepthReportData.executedPoints);
+		for (const executedPoint of this.bitDepthReportData.executedPoints) {
+			let lastEvent = null;
 
+			for (const event of executedPoint) {
+
+				if (lastEvent && lastEvent.id && timestamp >= lastEvent.x && event.x >= timestamp) {
+
+					this.eventLogSetupAPIService.getWithDetails(event.id).then((eventDetails: any) => {
+						this.setCurrentExecutedEvent(eventDetails);
+					});
+
+					return;
+				}
+
+				lastEvent = event;
+			}
+		}
+
+		this.setCurrentExecutedEvent(null);
 	}
 
 	private findPlannedEvent(timestamp) {
-		// console.log('plannedPoints', this.bitDepthReportData.plannedPoints);
+		for (const plannedPointsData of this.bitDepthReportData.plannedPoints) {
+			let lastEvent = null;
+
+			for (const event of plannedPointsData) {
+
+				if (lastEvent && timestamp >= lastEvent.x && event.x >= timestamp) {
+					lastEvent.duration = (event.x - lastEvent.x);
+
+					lastEvent.startBitDepth = lastEvent.y;
+					lastEvent.endBitDepth = event.y;
+
+					lastEvent.startTime = lastEvent.x;
+					lastEvent.endTime = event.x;
+
+					this.setCurrentPlannedEvent(lastEvent);
+					return;
+				}
+
+				lastEvent = event;
+			}
+		}
+
+		this.setCurrentPlannedEvent(null);
 
 	}
 
 	private findHoleDepth(timestamp) {
-		// console.log('holeDepthPoints', this.bitDepthReportData.holeDepthPoints);
+		for (const holeDepthPointsData of this.bitDepthReportData.holeDepthPoints) {
+			let lastEvent = null;
+
+			for (const event of holeDepthPointsData) {
+
+				if (lastEvent && lastEvent.id && timestamp >= lastEvent.x && event.x >= timestamp) {
+					this.setHoleDepth({ depth: event.y });
+					return;
+				}
+
+				lastEvent = event;
+			}
+		}
+		this.setHoleDepth(null);
 	}
 
-	public getAlarmsFromEvent(event) {
-		// if (event.alarm) {
-		// 	return [event.alarm];
-		// }
+	private getAlarmsFromEvent(event) {
+		if (event.alarm) {
+			return [event.alarm];
+		}
 
-		// if (event.durationAlarm) {
-		// 	return [event.durationAlarm];
-		// }
+		if (event.durationAlarm) {
+			return [event.durationAlarm];
+		}
 
-		// if (event.alarms) {
-		// 	return event.alarms;
-		// }
+		if (event.alarms) {
+			return event.alarms;
+		}
 
 		return [];
 	}

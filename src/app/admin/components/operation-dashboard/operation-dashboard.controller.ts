@@ -36,15 +36,15 @@ export class OperationDashboardController {
 			vm.operationDataFactory = operationDataService.operationDataFactory;
 			$scope.operationData = vm.operationDataFactory.operationData;
 			vm.main();
+
+			operationDataService.on('setOnvOptimumEstimativeListener', (data) => { vm.main(); });
+			operationDataService.on('setOnActualLineListener', (data) => { vm.main(); });
+			operationDataService.on('setOnForecastChangeListener', (data) => { vm.main(); });
+
+			operationDataService.on('setOnJointChangeListener', (data) => { vm.generateEstimatives(); });
+			operationDataService.on('setOnCurrentJointListener', (data) => { vm.generateEstimatives(); });
+			operationDataService.on('setOnNoCurrentJointListener', (data) => { vm.generateEstimatives(); });
 		});
-
-		operationDataService.on('setOnvOptimumEstimativeListener', (data) => { vm.main(); });
-		operationDataService.on('setOnActualLineListener', (data) => { vm.main(); });
-		operationDataService.on('setOnForecastChangeListener', (data) => { vm.main(); });
-
-		operationDataService.on('setOnJointChangeListener', (data) => { vm.generateEstimatives(); });
-		operationDataService.on('setOnCurrentJointListener', (data) => { vm.generateEstimatives(); });
-		operationDataService.on('setOnNoCurrentJointListener', (data) => { vm.generateEstimatives(); });
 	}
 
 	/**
@@ -255,6 +255,7 @@ export class OperationDashboardController {
 
 						const activity = {
 							name: state,
+							alarms: vTargetEstimative[state].alarms,
 							duration,
 							startTime,
 							finalTime: (startTime + duration),
@@ -274,8 +275,6 @@ export class OperationDashboardController {
 			} catch (error) {
 				console.error(error);
 			}
-
-			console.log(expectations);
 
 			this.$scope.expectations = expectations;
 		}

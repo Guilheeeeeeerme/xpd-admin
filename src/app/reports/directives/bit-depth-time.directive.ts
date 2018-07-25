@@ -36,7 +36,6 @@ export class BitDepthTimeDirective implements ng.IDirective {
 			const colorPallete = d3.scaleOrdinal(d3.schemeCategory10);
 			let plannedLocked = false;
 			let executedLocked = false;
-			let indexSelectedPoint = null;
 
 			let lastPoint = null;
 			let lastPointBackup = null;
@@ -248,7 +247,6 @@ export class BitDepthTimeDirective implements ng.IDirective {
 				if (plannedLocked || executedLocked) {
 					plannedLocked = false;
 					executedLocked = false;
-					indexSelectedPoint = null;
 					return;
 				}
 
@@ -256,18 +254,20 @@ export class BitDepthTimeDirective implements ng.IDirective {
 				 * Caso nenhum ponto esteja fixo
 				 * verifico sua linha e fixo o ponto clicado
 				 */
-				if (currentPoint.lineType === 'planned') {
+
+				if (currentPoint.selectedLineType === 'plannedEvent') {
 					plannedLocked = !plannedLocked;
-					indexSelectedPoint = currentPoint.series.index;
-				} else {
+				} else if (currentPoint.selectedLineType === 'executedEvent') {
 					executedLocked = !executedLocked;
-					indexSelectedPoint = currentPoint.series.index;
 				}
+
 			};
 
 			function onChartHover() {
 
 				currentPoint = this;
+				currentPoint.plannedLocked = plannedLocked;
+				currentPoint.executedLocked = executedLocked;
 
 				scope.setCurrentPoint({
 					event: currentPoint,

@@ -27,8 +27,12 @@ export class ReportsController {
 		};
 
 		operationDataService.openConnection([]).then(() => {
+
 			vm.operationDataFactory = operationDataService.operationDataFactory;
 			$scope.operationData = vm.operationDataFactory.operationData;
+
+			operationDataService.on('setOnFailureChangeListener', () => { this.onFailureChange(); });
+
 		});
 
 		// --actions--
@@ -40,7 +44,6 @@ export class ReportsController {
 		}
 
 		this.getWellList();
-		operationDataService.on('setOnFailureChangeListener', () => { this.onFailureChange(); });
 
 		operationSetupAPIService.getList().then(
 			(arg) => { this.currentOperationSuccessCallback(arg); },

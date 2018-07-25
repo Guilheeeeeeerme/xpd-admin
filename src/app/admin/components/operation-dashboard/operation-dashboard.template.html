@@ -173,9 +173,10 @@
                 on-init="odController.getPanelStartState('panelNextAlarmsIsCollapsed')"
                 on-click-collapse="odController.changePanelState('panelNextAlarmsIsCollapsed')"
                 collapse = "statusPanel['panelNextAlarmsIsCollapsed']"
+                limit="3"
                 tripin-alarms="operationData.alarmContext.tripin"
                 tripout-alarms="operationData.alarmContext.tripout"
-                current-direction="operationData.directionContext"
+                current-direction="operationData.directionContext.tripin"
                 current-bit-depth="operationData.bitDepthContext.bitDepth">
             </xpd-upcoming-alarms-panel>
 
