@@ -159,5 +159,17 @@ export class ReportsSetupAPIService {
 
 	}
 
+	public getSuboperationExecuted(suboperationId) {
+
+		const req = {
+			cache: true,
+			method: 'GET',
+			url: this.xpdAccessService.getReportsAPIURL() + 'executed/suboperation/' + suboperationId,
+		};
+
+		return this.setupAPIService.doRequest(req);
+
+	}
+
 }
 // })();

@@ -1,21 +1,23 @@
-
-// forecastLine.$inject = ['d3Service', 'intersectionFactory', '$filter'];
-import * as d3 from 'd3';
-import { IntersectionFactory } from '../xpd.intersection/xpd-intersection.factory';
-import template from './forecast-line.template.html';
+import * as angular from 'angular';
+import { HighchartsService } from '../highcharts/highcharts.service';
+import { OperationDataService } from '../xpd.operation-data/operation-data.service';
+import { ReportsSetupAPIService } from '../xpd.setupapi/reports-setupapi.service';
 
 export class ForecastLineDirective implements ng.IDirective {
+	private forecastLineChart: any;
+	private drawChartTimeout: any;
+	private loadEventTimeout: any;
 
-	constructor(private $filter: ng.IFilterFilter, private intersectionFactory) { }
+	constructor(
+		private reportsSetupAPIService: ReportsSetupAPIService,
+		private operationDataService: OperationDataService,
+		private highchartsService: HighchartsService) { }
 
-	public template = template;
+	public static $inject = ['highchartsService', 'reportsSetupAPIService', 'operationDataService'];
+	public restrict = 'E';
 	public scope = {
-		targetLine: '=',
-		actualLine: '=',
-		isTripin: '=',
+		tripin: '=',
 		settings: '=',
-		state: '@',
-		type: '@',
 	};
 
 	public link: ng.IDirectiveLinkFn = (
@@ -25,260 +27,309 @@ export class ForecastLineDirective implements ng.IDirective {
 		ctrl: any,
 	) => {
 
-		const self = this;
+		const drawChart = (events, plannedPoints, estimativePoints, settings, tripin) => {
 
-		scope.svg = {
-			height: element[0].offsetHeight,
-			width: element[0].clientWidth,
-		};
+			const scopeEvents = angular.copy(events);
+			let scopeOptimumPoints = angular.copy(plannedPoints);
+			let scopeEstimativePoints = angular.copy(estimativePoints);
+			const scopeSettings = angular.copy(settings);
 
-		scope.chart = {
-			height: ((scope.svg.height * 100) / scope.svg.width),
-			width: 100,
-		};
+			scopeOptimumPoints = scopeOptimumPoints.filter((estimative) => {
+				const state = Object.keys(estimative)[0];
+				estimative = estimative[state];
+				estimative.state = state;
+				return estimative.isTripin === tripin;
+			});
 
-		scope.svg.viewBox = '0 0 100 ' + scope.chart.height;
+			scopeEstimativePoints = scopeEstimativePoints.filter((estimative) => {
+				const state = Object.keys(estimative)[0];
+				estimative = estimative[state];
+				estimative.state = state;
+				return estimative.isTripin === tripin;
+			});
 
-		const buildActualLine = () => {
+			const executedPoints = [];
+			let optimumPoints = [];
+			let estimatedPoints = [];
 
-			delete scope.actualPath;
+			let firstExecutedEventStartTime = new Date().getTime();
+			let lastExecutedEventStartTime = new Date().getTime();
 
-			if (!scope.actualLine || !scope.state || !scope.type) {
-				return;
+			/**
+			 * Montando a linha de executados
+			 */
+			if (scopeEvents) {
+
+				for (const event of scopeEvents) {
+					firstExecutedEventStartTime = Math.min(firstExecutedEventStartTime, event.x);
+					lastExecutedEventStartTime = Math.max(lastExecutedEventStartTime, event.x);
+					event.y = event.joint;
+					executedPoints.push([event.x, event.y]);
+				}
+
 			}
 
-			if (getActualLine(scope.state, scope.type)) {
-				scope.actualPath = pathGenerator(getActualLine(scope.state, scope.type).points);
+			/**
+			 * Montando a linha do parametro optimum
+			 */
+			if (scopeOptimumPoints) {
+
+				for (let estimative of scopeOptimumPoints) {
+					let endTime = 0;
+
+					const state = Object.keys(estimative)[0];
+					estimative = estimative[state];
+					estimative.state = state;
+
+					optimumPoints = [...optimumPoints, ...estimative.BOTH.points.map((point) => {
+
+						point.accumulated *= 1000;
+
+						point.accumulated += firstExecutedEventStartTime;
+						point.x = point.accumulated;
+
+						endTime = Math.max(endTime, point.accumulated);
+						return [point.x, point.y];
+
+					})];
+
+					firstExecutedEventStartTime = Math.max(endTime, firstExecutedEventStartTime);
+				}
+
 			}
 
-			buildExpectedLine();
+			/**
+			 * Montando a linha a partir do ultimo evento seguindo o vtarget
+			 */
+			if (scopeEstimativePoints) {
+
+				for (let estimative of scopeEstimativePoints) {
+					let endTime = 0;
+
+					const state = Object.keys(estimative)[0];
+					estimative = estimative[state];
+					estimative.state = state;
+
+					let lastEventEndTime = null;
+
+					estimatedPoints = [...estimatedPoints, ...estimative.BOTH.points.map((point) => {
+
+						let percentage = 1;
+
+						try {
+							const targetSpeed = scopeSettings[estimative.state][point.eventType].targetSpeed;
+							const optimumSpeed = scopeSettings[estimative.state][point.eventType].optimumSpeed;
+							percentage = targetSpeed / optimumSpeed;
+						} catch (error) {
+							percentage = 1;
+						}
+
+						let currentEventEndTime = point.accumulated * 1000;
+
+						if (lastEventEndTime &&
+							(point.eventType === 'TRIP' && (!point.alarm || point.alarm && point.minDuration != null)) ||
+							(point.eventType === 'CONN')
+						) {
+
+							const regularDuration = (currentEventEndTime - lastEventEndTime);
+							let targetDuration = (currentEventEndTime - lastEventEndTime) / percentage;
+
+							if (point.minDuration != null && targetDuration < (point.minDuration * 1000)) {
+								targetDuration = (point.minDuration * 1000);
+							}
+
+							const diff = targetDuration - regularDuration;
+							currentEventEndTime += diff;
+						}
+
+						lastEventEndTime = angular.copy(currentEventEndTime);
+						currentEventEndTime += lastExecutedEventStartTime;
+
+						point.x = angular.copy(currentEventEndTime);
+						endTime = Math.max(endTime, currentEventEndTime);
+
+						point.accumulated += currentEventEndTime;
+
+						return [point.x, point.y];
+
+					})];
+
+					lastExecutedEventStartTime = Math.max(endTime, lastExecutedEventStartTime);
+				}
+			}
+
+			this.forecastLineChart.series[0].update({
+				data: optimumPoints,
+			}, true); // true / false to redraw
+
+			this.forecastLineChart.series[1].update({
+				data: estimatedPoints,
+			}, true); // true / false to redraw
+
+			this.forecastLineChart.series[2].update({
+				data: executedPoints,
+			}, true); // true / false to redraw
+
 		};
 
-		const buildvTargetLine = () => {
+		const tryDrawChart = () => {
 
-			delete scope.optimumPath;
-
-			if (!getVtargetLine(scope.state, scope.type) || !scope.state || !scope.type) {
-				return;
+			if (this.drawChartTimeout) {
+				clearTimeout(this.drawChartTimeout);
 			}
-
-			scope.yScale = d3.scaleLinear()
-				.domain([getVtargetLine(scope.state, scope.type).initialJoint, getVtargetLine(scope.state, scope.type).finalJoint])
-				.range([scope.chart.height - 2, 2]);
-			scope.yScaleTicks = scope.yScale.ticks();
-
-			scope.xScale = d3.scaleLinear()
-				.domain([getVtargetLine(scope.state, scope.type).startTime, getVtargetLine(scope.state, scope.type).finalTime])
-				.range([2, scope.chart.width - 2]);
-			scope.xScaleTicks = scope.xScale.ticks();
-
-			scope.optimumPath = pathGenerator(getVtargetLine(scope.state, scope.type).points);
-		};
-
-		const buildExpectedLine = () => {
-
-			delete scope.expectedPath;
-
-			let duration = 0;
-
-			scope.expectedLine = {
-				points: [],
-			};
-
-			if (!scope.settings || !scope.type || !scope.state || !getVtargetLine(scope.state, scope.type)) {
-				return;
-			}
-
-			const targetLine = getVtargetLine(scope.state, scope.type);
-			let actualLine = null;
 
 			try {
-				actualLine = getActualLine(scope.state, scope.type);
-			} catch (e) {
-				console.log(e);
+				this.drawChartTimeout = setTimeout(() => {
+					drawChart(scope.events, scope.optimumPoints, scope.estimativePoints, scope.settings, scope.tripin);
+				}, 1000);
+			} catch (error) {
+				// console.log(error);
 			}
-
-			let actualFinalTime = (actualLine != null) ? actualLine.finalTime : targetLine.startTime;
-			const actualFinalJoint = (actualLine != null) ? actualLine.finalJoint : targetLine.initialJoint;
-
-			const optimumFinalTime = targetLine.finalTime;
-			const optimumFinalJoint = targetLine.finalJoint;
-
-			const points = [];
-
-			if (scope.type === 'BOTH') {
-				duration = scope.settings[scope.state].TRIP.targetTime + scope.settings[scope.state].CONN.targetTime;
-			} else {
-				duration = scope.settings[scope.state][scope.type].targetTime;
-			}
-
-			if (actualFinalJoint <= optimumFinalJoint) {
-
-				for (let i = actualFinalJoint; i <= optimumFinalJoint; i++) {
-					points.push({
-						x: actualFinalTime,
-						y: i,
-					});
-					actualFinalTime += duration;
-				}
-
-			} else {
-				for (let i = actualFinalJoint; i >= optimumFinalJoint; i--) {
-					points.push({
-						x: actualFinalTime,
-						y: i,
-					});
-					actualFinalTime += duration;
-				}
-			}
-
-			scope.expectedLine = {
-				points,
-			};
-
-			scope.expectedPath = pathGenerator(points);
 		};
 
-		const getActualLine = (state, type) => {
-			const isTripin = scope.isTripin === false ? false : true;
-			const directionLabel = isTripin === false ? 'TRIPOUT' : 'TRIPIN';
-
-			if (scope.actualLine &&
-				scope.actualLine[state] &&
-				scope.actualLine[state][directionLabel] &&
-				scope.actualLine[state][directionLabel][type]) {
-				return scope.actualLine[state][directionLabel][type];
-			} else {
-				return null;
-			}
-
-		};
-
-		const getVtargetLine = (state, type) => {
-			const isTripin = scope.isTripin === false ? false : true;
-
-			for (const i in scope.targetLine) {
-				const targetLine = scope.targetLine[i];
-
-				if (targetLine[state] &&
-					targetLine[state].isTripin === isTripin &&
-					targetLine[state][type]) {
-					return targetLine[state][type];
-				}
-
-			}
-
-			return null;
-
-		};
-
-		const intersect = (expectedLine) => {
-
-			const optimum = {
-				start: null,
-				end: null,
-			};
-			const actual = {
-				start: null,
-				end: null,
-			};
-
-			const expected = {
-				start: null,
-				end: null,
-			};
-
-			if (getVtargetLine(scope.state, scope.type) &&
-				getVtargetLine(scope.state, scope.type).points &&
-				getVtargetLine(scope.state, scope.type).points.length >= 0) {
-
-				optimum.start = (getVtargetLine(scope.state, scope.type).points[0]);
-				optimum.end = (getVtargetLine(scope.state, scope.type).points[getVtargetLine(scope.state, scope.type).points.length - 1]);
-			}
-
-			if (getActualLine(scope.state, scope.type) &&
-				getActualLine(scope.state, scope.type).points &&
-				getActualLine(scope.state, scope.type).points.length >= 0) {
-
-				actual.start = (getActualLine(scope.state, scope.type).points[0]);
-				actual.end = (getActualLine(scope.state, scope.type).points[getActualLine(scope.state, scope.type).points.length - 1]);
-			}
-
-			if (expectedLine &&
-				expectedLine.points &&
-				expectedLine.points.length >= 0) {
-
-				expected.start = (expectedLine.points[0]);
-				expected.end = (expectedLine.points[expectedLine.points.length - 1]);
-			}
-
-			scope.intersect = null;
-			scope.equilibrium = null;
+		const loadEstimatives = () => {
 
 			try {
-				const where = self.intersectionFactory.intersect(optimum, expected);
+				scope.optimumPoints = scope.operationData.forecastContext.vOptimumEstimative;
+				scope.estimativePoints = scope.operationData.forecastContext.estimatives.vOptimumEstimative;
 
-				if (where.y <= expected.end.y && where.y >= expected.start.y) {
-					scope.intersect = where.y - expected.start.y;
-					scope.equilibrium = where.x - expected.start.x;
-				} else if (where.y <= expected.start.y && where.y >= expected.end.y) {
-					scope.intersect = where.y - expected.end.y;
-					scope.equilibrium = where.x - expected.end.x;
+				tryDrawChart();
+			} catch (error) {
+				// topper
+			}
+		};
+
+		const loadEvents = () => {
+
+			if (scope.operationData &&
+				scope.operationData.suboperationContext &&
+				scope.operationData.suboperationContext.currentSuboperation &&
+				scope.operationData.suboperationContext.currentSuboperation.id) {
+
+				if (this.loadEventTimeout) {
+					clearTimeout(this.loadEventTimeout);
 				}
 
-			} catch (e) {
-				console.error(e);
-			}
+				this.loadEventTimeout = setTimeout(() => {
 
-			if (expected.end && expected.end.x) {
-				scope.balance = expected.end.x - optimum.end.x;
-			} else {
-				scope.balance = null;
+					this.reportsSetupAPIService.getSuboperationExecuted(scope.operationData.suboperationContext.currentSuboperation.id).then((events) => {
+						scope.events = events;
+						tryDrawChart();
+					});
+
+				}, 1000);
+
 			}
 
 		};
 
-		const pathGenerator = d3.line()
-			.x((d: any) => scope.xScale(d.x))
-			.y((d: any) => scope.yScale(d.y))
-			.curve(d3.curveStepAfter);
+		const createChart = (Highcharts) => {
 
-		scope.$watch('isTripin', () => {
-			buildvTargetLine();
-			buildActualLine();
+			return Highcharts.chart(element[0], {
+
+				chart: {
+					marginTop: 0,
+					marginBottom: 0,
+					spacingTop: 0,
+					spacingBottom: 0,
+					zoomType: 'x',
+				},
+
+				title: {
+					text: null,
+				},
+
+				xAxis: {
+					visible: false,
+				},
+
+				yAxis: {
+					reversed: true,
+					visible: false,
+				},
+
+				tooltip: {
+					enabled: false,
+				},
+
+				plotOptions: {
+					series: {
+						animation: false,
+						turboThreshold: 0,
+						pointStart: 2010,
+						connectNulls: true,
+					},
+					line: {
+						animation: false,
+						dataLabels: {
+							enabled: true,
+						},
+						enableMouseTracking: false,
+					},
+				},
+
+				legend: {
+					layout: 'vertical',
+					align: 'right',
+					verticalAlign: 'middle',
+				},
+
+				series: [{
+					name: 'Optimum',
+					data: [],
+				}, {
+					name: 'Estimative',
+					data: [],
+				}, {
+					name: 'Actual',
+					data: [],
+				}],
+
+			});
+		};
+
+		this.highchartsService.highcharts().then((Highcharts) => {
+
+			this.forecastLineChart = createChart(Highcharts);
+
+			this.operationDataService.openConnection([]).then(() => {
+
+				scope.operationData = this.operationDataService.operationDataFactory.operationData;
+
+				this.operationDataService.on('setOnEventChangeListener', () => { loadEvents(); });
+				this.operationDataService.on('setOnParallelEventChangeListener', () => { loadEvents(); });
+				this.operationDataService.on('setOnCurrentSuboperationListener', () => { loadEvents(); });
+				this.operationDataService.on('setOnNoCurrentSuboperationListener', () => { loadEvents(); });
+				this.operationDataService.on('setOnSuboperationDetectedListener', () => { loadEvents(); });
+				this.operationDataService.on('setOnSuboperationSavedListener', () => { loadEvents(); });
+
+				this.operationDataService.on('setOn OPTIMUM_LINE Listener', () => { loadEstimatives(); });
+				this.operationDataService.on('setOn FORECAST_CHANGE Listener', () => { loadEstimatives(); });
+				this.operationDataService.on('setOn ESTIMATIVES_CHANGE Listener', () => { loadEstimatives(); });
+
+				scope.$watch('settings', (settings) => { if (settings) { tryDrawChart(); } }, true);
+				scope.$watch('tripin', (tripin) => { if (tripin) { tryDrawChart(); } });
+
+				scope.$watch('operationData.forecastContext.vOptimumEstimative', () => { loadEstimatives(); });
+				scope.$watch('operationData.forecastContext.estimatives.vOptimumEstimative', () => { loadEstimatives(); });
+				scope.$watch('operationData.suboperationContext.currentSuboperation.id', () => { loadEvents(); });
+
+				loadEvents();
+				loadEstimatives();
+
+			});
+
 		});
-
-		scope.$watch('targetLine', () => {
-			buildvTargetLine();
-		}, true);
-
-		scope.$watch('actualLine', () => {
-			buildActualLine();
-		}, true);
-
-		scope.$watch('settings', () => {
-			buildExpectedLine();
-		}, true);
-
-		scope.$watch('expectedLine', intersect, true);
-
-		scope.$watch('state', () => {
-			buildvTargetLine();
-			buildActualLine();
-			buildExpectedLine();
-		}, true);
-
-		scope.$watch('type', () => {
-			buildvTargetLine();
-			buildActualLine();
-			buildExpectedLine();
-		}, true);
 
 	}
 
 	public static Factory(): ng.IDirectiveFactory {
-		const directive = ($filter: ng.IFilterFilter, intersectionFactory) => new ForecastLineDirective($filter, intersectionFactory);
-		directive.$inject = ['$filter', 'intersectionFactory'];
-		return directive;
+		return (
+			reportsSetupAPIService: ReportsSetupAPIService,
+			operationDataService: OperationDataService,
+			highchartsService: HighchartsService) => new ForecastLineDirective(
+				reportsSetupAPIService,
+				operationDataService,
+				highchartsService);
 	}
 }

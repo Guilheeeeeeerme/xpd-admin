@@ -17,13 +17,13 @@
             </li>
 
             <li class=" planner-sum-trip-conn">
-                1 TRIP + 1 CONN = {{ pController.sumTripConnduration(dados.settings[state.state]) | date: 'HH:mm:ss': '+0000' }}
+                1 TRIP + 1 CONN = {{ ( ( dados.settings[state.state].TRIP.targetTime * 1000 ) + ( dados.settings[state.state].CONN.targetTime * 1000 ) ) | date: 'HH:mm:ss': '+0000' }}
                 
             </li>
 
 
             <li role="presentation" class="planner-list-item" ng-class="{'active': dados.selectedEventType == 'CONN' && state.state == dados.selectedState}"
-                ng-click="pController.actionSelectActivityToPlan(state.state, 'CONN')" ng-init="pController.selectActivityOnInit($index, state.state, 'CONN')">
+                ng-click="pController.actionSelectActivityToPlan(state.state, 'CONN')">
                 <a>Connection</a>
             </li>
 
@@ -122,34 +122,46 @@
         </div>
 
         <div class="planner-forecast-row">
+            <div class="planner-forecast-grid">
+                <div class="planner-forecast-cell planner-forecast-cell-full">
+                    <xpd-forecast-line 
+                        tripin="operationData.directionContext.tripin"
+                        settings="dados.settings"
+                    ></xpd-forecast-line>
+                </div>
+            </div>
+        </div>
+
+        <!-- <div class="planner-forecast-row">
 
             <div class="planner-forecast-grid">
 
                 <div class="planner-forecast-cell planner-forecast-cell-full">
                     <div 
                         class="xpd-chart" 
-                        is-tripin = "operationData.suboperationContext.currentSuboperation.tripin"
+                        is-tripin = "operationData.directionContext.tripin"
                         xpd-forecast-line settings='dados.settings' 
                         state="{{dados.selectedState}}" 
                         type="{{dados.selectedEventType}}"
                         v-target-line="operationData.forecastContext.vTargetEstimative" 
-                        actual-line="operationData.forecastContext.actualLine"></div>
+                        actual-line="plannerAsyncData.actualLine"></div>
                 </div>
 
                 <div class="planner-forecast-cell planner-forecast-cell-full">
                     <div 
                         class="xpd-chart" 
-                        is-tripin = "operationData.suboperationContext.currentSuboperation.tripin"
+                        is-tripin = "operationData.directionContext.tripin"
                         xpd-forecast-line settings='dados.settings' 
                         state="{{dados.selectedState}}" 
                         type="{{ 'BOTH' }}" 
                         v-target-line="operationData.forecastContext.vTargetEstimative"
-                        actual-line="operationData.forecastContext.actualLine"></div>
+                        actual-line="plannerAsyncData.actualLine"></div>
                 </div>
 
             </div>
 
-        </div>
+        </div> -->
+
     </div>
 
 </div>

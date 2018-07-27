@@ -795,7 +795,10 @@ input:checked + .slider:before {
 *   forecast line
 **/
 
-.xpd-forecast-line-container {
+xpd-forecast-line {
+    display: block;
+    height: 100%;
+    width: 100%;
 }
 
 .xpd-forecast-line-axis-label {

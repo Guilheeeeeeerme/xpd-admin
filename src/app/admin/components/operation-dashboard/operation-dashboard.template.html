@@ -96,27 +96,6 @@
                     </div>
                 </div>
 
-                <div class="panel-body" uib-collapse="statusPanel['panelOperationIsCollapsed']">
-
-                    <button class="btn btn-default" ng-click="odController.actionButtonBuildForecast( 'vOptimumEstimative', 'BOTH' )">
-                        Optimum
-                    </button>
-
-                    <button class="btn btn-default" ng-click="odController.actionButtonBuildForecast( 'vStandardEstimative', 'BOTH' )">
-                        Standard
-                    </button>
-
-                    <button class="btn btn-default" ng-click="odController.actionButtonBuildForecast( 'vPoorEstimative', 'BOTH' )">
-                        Poor
-                    </button>
-
-                    <xpd-forecast-waterfall
-                        horizontal="false"
-                        data-data-chart="forecast">
-                    </xpd-forecast-waterfall>
-
-                </div>
-
             </div>
 
             <div class="panel panel-default">
@@ -229,9 +208,5 @@
         </div>
 
     </div>
-
-    <!-- <pre ng-repeat="(key, value) in operationData.forecastContext">{{ key }}</pre> -->
-    <!-- <pre>{{ operationData.forecastContext.actualLine | json }}</pre> -->
-    <!-- <pre >{{ operationData.suboperationContext.currentSuboperation.tripin | json }}</pre> -->
 
 </div>

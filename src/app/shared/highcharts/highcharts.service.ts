@@ -37,13 +37,13 @@ export class HighchartsService {
 		// this.$rootScope.$apply(function () {
 
 		(Highcharts as any).theme = self.getHighchartsTheme();
-		Highcharts.setOptions((Highcharts as any).theme);
+		const options: any = (Highcharts as any).theme;
 
-		Highcharts.setOptions({
-			global: {
-				timezoneOffset: new Date().getTimezoneOffset(),
-			},
-		});
+		options.global = {
+			timezoneOffset: new Date().getTimezoneOffset(),
+		};
+
+		Highcharts.setOptions(options);
 
 		self.highchartDefer.resolve(Highcharts);
 		// });
