@@ -1,0 +1,88 @@
+<svg xmlns='http://www.w3.org/2000/svg' version='1.1' width='100%' ng-attr-height='{{svg.height}}'
+     xpd-view-box="svg.viewBox">
+    <g ng-repeat="progressDataItem in directiveData track by $index"
+       ng-attr-transform="translate(15, {{10 + $index * (90 + 15)}})">
+        <text x="0" y="45" class="operation-progress-time-difference-label"
+              ng-attr-fill="{{getActualBarColor(progressDataItem)}}" dy="0.3em">
+            {{(progressDataItem.expectedTime - progressDataItem.actualTime)>0?"+":"-"}}
+            {{ Math.abs(progressDataItem.actualTime - progressDataItem.expectedTime) | secondsToHourMinutes}}
+        </text>
+
+        <line x1="75" y1="45" x2="120" y2="45" stroke="#517f89"></line>
+
+        <g transform="translate(120, 0)">
+            <polygon points="0,45 15,0 35,0 35,90 15,90" fill="#517f89"></polygon>
+        </g>
+        <g class="operation-progress-bar-group" transform="translate(160, 0)">
+            <defs>
+                <clipPath id="barTotalLabelClip{{$index}}">
+                    <rect x="0" y="0" height="30"
+                          ng-attr-width="{{barScale(progressDataItem.totalTime)}}"></rect>
+                </clipPath>
+
+                <clipPath id="barExpectedLabelClip{{$index}}">
+                    <rect x="0" y="34" height="26"
+                          ng-attr-width="{{barScale(progressDataItem.expectedTime)}}"></rect>
+                </clipPath>
+
+                <clipPath id="barActualLabelClip{{$index}}">
+                    <rect x="0" y="64" height="26"
+                          ng-attr-width="{{barScale(progressDataItem.actualTime)}}"></rect>
+                </clipPath>
+            </defs>
+
+            <!-- TOTAL TIME BAR -->
+            <rect x="0" y="0" height="30" fill="#517f89"
+                  ng-attr-width="{{barScale(progressDataItem.totalTime)}}"></rect>
+            <rect ng-attr-x="{{barScale(progressDataItem.totalTime)}}" y="0" height="29"
+                  fill="transparent" ng-attr-width="{{timeLabelRectWidth}}"></rect>
+            <line ng-attr-x1="{{barScale(progressDataItem.totalTime)}}" y1="30" y2="30"
+                  ng-attr-x2="{{barScale(progressDataItem.totalTime) + timeLabelRectWidth}}"
+                  stroke="#517f89"></line>
+            <text ng-attr-x="{{barScale(progressDataItem.totalTime) + 5}}"
+                  class="operation-progress-time-label" y="21" fill="white">{{progressDataItem.totalTime |
+                secondsToHourMinutes}}
+            </text>
+            <text x="5" y="20" clip-path="url(#barTotalLabelClip{{$index}})" fill="black"
+                  class="operation-progress-rect-total-label">
+                {{progressDataItem.label}} Total Time
+            </text>
+
+
+            <!-- TOTAL EXPECTED BAR -->
+            <rect x="0" y="34" height="26" fill="#acd7ca"
+                  ng-attr-width="{{barScale(progressDataItem.expectedTime)}}"></rect>
+            <rect ng-attr-x="{{barScale(progressDataItem.expectedTime)}}" y="34" height="29"
+                  fill="transparent" ng-attr-width="{{timeLabelRectWidth}}"></rect>
+            <line ng-attr-x1="{{barScale(progressDataItem.expectedTime)}}" y1="60" y2="60"
+                  ng-attr-x2="{{barScale(progressDataItem.expectedTime) + timeLabelRectWidth}}"
+                  stroke="#acd7ca"></line>
+            <text ng-attr-x="{{barScale(progressDataItem.expectedTime) + 5}}"
+                  class="operation-progress-time-label" y="54" fill="white">{{progressDataItem.expectedTime |
+                secondsToHourMinutes}}
+            </text>
+            <text x="5" y="52" clip-path="url(#barExpectedLabelClip{{$index}})" fill="black"
+                  class="operation-progress-rect-label">
+                {{progressDataItem.label}} Expected Time
+            </text>
+
+
+            <!-- TOTAL ACTUAL BAR -->
+            <rect x="0" y="64" height="26" ng-attr-fill="{{getActualBarColor(progressDataItem)}}"
+                  ng-attr-width="{{barScale(progressDataItem.actualTime)}}"></rect>
+            <rect ng-attr-x="{{barScale(progressDataItem.actualTime)}}" y="64" height="29"
+                  fill="transparent" ng-attr-width="{{timeLabelRectWidth}}"></rect>
+            <line ng-attr-x1="{{barScale(progressDataItem.actualTime)}}" y1="90" y2="90"
+                  ng-attr-x2="{{barScale(progressDataItem.actualTime) + timeLabelRectWidth}}"
+                  ng-attr-stroke="{{getActualBarColor(progressDataItem)}}"></line>
+            <text ng-attr-x="{{barScale(progressDataItem.actualTime) + 5}}"
+                  class="operation-progress-time-label" y="84" fill="white">{{progressDataItem.actualTime |
+                secondsToHourMinutes}}
+            </text>
+            <text x="5" y="82" clip-path="url(#barActualLabelClip{{$index}})" fill="black"
+                  class="operation-progress-rect-label">
+                {{progressDataItem.label}} Actual Time
+            </text>
+        </g>
+    </g>
+</svg>

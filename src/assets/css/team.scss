@@ -1,0 +1,25 @@
+
+
+.member-form-photo{
+    max-height: 256px;
+    max-width: 256px;
+}
+.gantt_remove{
+    /*glyphicon*/
+    position: relative;
+    top: 1px;
+    display: inline-block;
+    font-family: 'Glyphicons Halflings';
+    font-style: normal;
+    font-weight: normal;
+    line-height: 1;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+
+    color:#a94442;
+    cursor: pointer;
+}
+
+.gantt_remove:before {
+    content: "\e221";
+}

@@ -1,0 +1,24 @@
+
+
+.vre-log-list {
+    width: 100%;
+}
+
+.vre-log-list tr th,
+.vre-log-list tr td {
+    width: 25%;
+}
+
+.vre-log-list tr th:first-child,
+.vre-log-list tr td:first-child {
+    width: 50%;
+}
+
+.vre-log-list.table-bordered {
+    border: 0;
+}
+
+.vre-log-list.table-bordered > tbody > tr > td,
+.vre-log-list.table-bordered > thead > tr > th {
+    border-color: #578893;
+}

@@ -1,6 +1,7 @@
 // (function() {
 // 	'use strict';
 
+import './table-period.style.scss';
 import template from './table-period.template.html';
 
 export class TablePeriod implements ng.IDirective {

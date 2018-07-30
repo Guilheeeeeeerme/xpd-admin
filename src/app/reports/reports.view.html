@@ -1,16 +1,21 @@
-<body ng-app="xpd.reports" >
+<body ng-app="xpd.reports">
 
 	<xpd-admin-nav-bar nav-origin="report"> </xpd-admin-nav-bar>
 
-	<section class="xpd-admin-section" ng-controller="ReportsController as rController">
+	<!-- ng-controller="ReportsController as rController" -->
+	<section class="xpd-section-with-navbar">
 
-		<div class="container-fluid">
+		<xpd-reports-component>
+
+		</xpd-reports-component>
+
+		<!-- <div class="container-fluid">
 			<div class="row">
 				<div class="col-md-2">
 
-					<div class="vre-nav-bar">
+					<div class="xpd-green-list-container">
 
-						<h1 class="xpd-member-box-title">Operation Reports</h1>
+						<h1 class="xpd-box-title">Operation Reports</h1>
 
 						<ul class="nav nav-pills nav-stacked">Select Report
 							<li ng-repeat="report in reportsData.reportList">
@@ -29,7 +34,7 @@
 				<div class="col-md-10" ng-view></div>
 
 			</div>
-		</div>
+		</div> -->
 
 	</section>
 

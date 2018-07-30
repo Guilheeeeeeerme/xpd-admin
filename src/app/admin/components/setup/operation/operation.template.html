@@ -72,7 +72,7 @@
 
             <uib-tab index="$index" ng-repeat="tab in tabs" heading="{{tab.title}}" select="operationController.markTabAsVisited($index)">
                 <br/>
-                <div class="container-fluid padding-bottom-container" ng-include="tab.url"></div>
+                <div class="container-fluid padding-bottom-30" ng-include="tab.url"></div>
             </uib-tab>
 
         </uib-tabset>

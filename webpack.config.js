@@ -1,5 +1,6 @@
 
 var path = require('path');
+const webpack = require('webpack');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
@@ -11,6 +12,83 @@ const metaInfo = {
 	'name': "viewport",
 	'content': "width=device-width, initial-scale=1",
 }
+
+const uglify = [
+	new UglifyJsPlugin({
+		exclude: /node_modules/,
+	})
+]
+
+const copyFiles = [
+
+	new CopyWebpackPlugin(
+		[{
+			from: './src/assets/js/dhtmlxgantt.js',
+			to: './assets/js/',
+		}],
+		{
+			debug: true
+		}
+	),
+
+	new CopyWebpackPlugin(
+		[{
+			from: './src/package.json',
+			to: './',
+		}],
+		{
+			debug: true
+		}
+	),
+
+	new CopyWebpackPlugin(
+		[{
+			from: './src/main.js',
+			to: './',
+		}],
+		{
+			debug: true
+		}
+	),
+
+	new CopyWebpackPlugin(
+		[{
+			from: './keys/XPD-Client.crt',
+			to: './keys/',
+		}],
+		{
+			debug: true
+		}
+	),
+
+	new CopyWebpackPlugin(
+		[{
+			from: './src/assets/img/logo.ico',
+			to: './',
+		}],
+		{
+			debug: true
+		}
+	)
+];
+
+const bundleModules = [
+	'dmec-log',
+	'admin',
+	'reports',
+	'well-view-only',
+	'operation-view-only'].map((chunk) => {
+
+		return new HtmlWebpackPlugin({
+			title: 'Drilling Mechanics',
+			chunks: [chunk],
+			template: './src/app/' + chunk + '/' + chunk + '.view.html',
+			filename: '' + chunk + '.html',
+			meta: metaInfo,
+			favicon: './src/assets/img/favicon.ico'
+		})
+
+	});
 
 module.exports = {
 
@@ -35,108 +113,30 @@ module.exports = {
 
 	plugins: [
 
-		// new UglifyJsPlugin({
-		// 	exclude: /node_modules/,
-		// }),
+		// ...uglify,
 
-		new HtmlWebpackPlugin({
-			title: 'Drilling Mechanics',
-			chunks: ['dmec-log'],
-			template: './src/app/dmec-log/dmec-log.view.html',
-			filename: 'dmec-log.html',
-			meta: metaInfo,
-			favicon: './src/assets/img/favicon.ico'
-		}),
+		...bundleModules,
 
-		new HtmlWebpackPlugin({
-			title: 'XPD Admin',
-			chunks: ['admin'],
-			template: './src/app/admin/admin.view.html',
-			filename: 'admin.html',
-			meta: metaInfo,
-			favicon: './src/assets/img/favicon.ico'
-		}),
+		...copyFiles,
 
-		new HtmlWebpackPlugin({
-			title: 'XPD Reports',
-			chunks: ['reports'],
-			template: './src/app/reports/reports.view.html',
-			filename: 'reports.html',
-			meta: metaInfo,
-			favicon: './src/assets/img/favicon.ico'
-		}),
+		...[new webpack.ProvidePlugin({
+			$: "jquery",
+			jQuery: "jquery"
+		})],
 
-		new HtmlWebpackPlugin({
-			title: 'Well Settings Overview',
-			chunks: ['well-view-only'],
-			template: './src/app/well-view-only/well-view-only.view.html',
-			filename: 'well-view-only.html',
-			meta: metaInfo,
-			favicon: './src/assets/img/favicon.ico'
-		}),
-
-		new HtmlWebpackPlugin({
-			title: 'Operation Settings Overview',
-			chunks: ['operation-view-only'],
-			template: './src/app/operation-view-only/operation-view-only.view.html',
-			filename: 'operation-view-only.html',
-			meta: metaInfo,
-			favicon: './src/assets/img/favicon.ico'
-		}),
-
-		new CopyWebpackPlugin(
-			[{
-				from: './src/assets/js/dhtmlxgantt.js',
-				to: './assets/js/',
-			}],
-			{
-				debug: true
-			}
-		),
-
-		new CopyWebpackPlugin(
-			[{
-				from: './src/package.json',
-				to: './',
-			}],
-			{
-				debug: true
-			}
-		),
-
-		new CopyWebpackPlugin(
-			[{
-				from: './src/main.js',
-				to: './',
-			}],
-			{
-				debug: true
-			}
-		),
-
-		new CopyWebpackPlugin(
-			[{
-				from: './keys/XPD-Client.crt',
-				to: './keys/',
-			}],
-			{
-				debug: true
-			}
-		),
-
-		new CopyWebpackPlugin(
-			[{
-				from: './src/assets/img/logo.ico',
-				to: './',
-			}],
-			{
-				debug: true
-			}
-		)
 	],
 
 	module: {
 		rules: [
+
+			{
+				test: /\.scss$/,
+				use: [
+					"style-loader", // creates style nodes from JS strings
+					"css-loader", // translates CSS into CommonJS
+					"sass-loader" // compiles Sass to CSS
+				]
+			},
 
 			{
 				test: /\.tsx?$/,

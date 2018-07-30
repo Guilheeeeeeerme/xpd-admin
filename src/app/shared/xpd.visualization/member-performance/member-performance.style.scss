@@ -1,0 +1,54 @@
+/**
+ * MEMBER PERFORMANCE DIRECTIVE
+ */
+xpd-member-performance {
+
+    display: block;
+
+    .member-perfomance-container {
+        padding: 8px 2px;
+        /*max-width: 192px;*/
+        font-family: AgencyFB;
+        height: 100%;
+    }
+
+    .member-perfomance-container .member-header-function-rect {
+        fill: #54838d;
+    }
+
+    .member-perfomance-container .member-header-text {
+        text-anchor: middle;
+        font-size: 1.1em;
+    }
+
+    .member-perfomance-container .member-header-text.member-header-function-text {
+        fill: white;
+        font-weight: bold;
+    }
+
+    .member-perfomance-container .member-header-text.member-header-name-text {
+        fill: #75b6e5;
+    }
+
+    .member-perfomance-container .member-header-name-rect {
+        fill: transparent;
+        stroke: #578893;
+        stroke-width: 2px;
+    }
+
+    .member-perfomance-container .member-content-rect {
+        stroke: #578893;
+        stroke-width: 4px;
+    }
+
+    .member-perfomance-container .performance-bar-text {
+        fill: #75b6e5;
+        font-size: 1.1em;
+        font-weight: bold;
+    }
+
+    .member-perfomance-container .performance-bar-text.performance-bar-safety-text {
+        fill: #da7070;
+    }
+
+}

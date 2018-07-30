@@ -2,6 +2,7 @@ import * as angular from 'angular';
 import { VCruisingCalculatorService } from '../../../shared/xpd.calculation/calculation.service';
 import { DialogService } from '../../../shared/xpd.dialog/xpd.dialog.factory';
 import { OperationDataService } from '../../../shared/xpd.operation-data/operation-data.service';
+import { ReportsSetupAPIService } from '../../../shared/xpd.setupapi/reports-setupapi.service';
 
 /*
 * @Author:
@@ -13,16 +14,13 @@ export class PlannerController {
 
 	public static $inject = ['$scope', '$filter', 'operationDataService', 'dialogService', 'vCruisingCalculator'];
 	public operationDataFactory: any;
-	public timeSlicesContext: any;
-	public stateContext: any;
-	public vtargetContext: any;
 
 	constructor(
-		public $scope,
-		public $filter,
-		public operationDataService: OperationDataService,
-		public dialogService: DialogService,
-		public vCruisingCalculator: VCruisingCalculatorService) {
+		private $scope,
+		private $filter,
+		private operationDataService: OperationDataService,
+		private dialogService: DialogService,
+		private vCruisingCalculator: VCruisingCalculatorService) {
 
 		$scope.dados = {
 			settings: null,
@@ -31,60 +29,103 @@ export class PlannerController {
 
 		operationDataService.openConnection([]).then(() => {
 
-			console.log('oi');
-
 			this.operationDataFactory = operationDataService.operationDataFactory;
 			$scope.operationData = this.operationDataFactory.operationData;
 
-			this.startWatching();
+			const allReady = Promise.all([
 
-			this.loadOperationStates();
-			this.loadTimeSlice();
+				new Promise((resolve, reject) => {
+					const watcher = this.$scope.$watch('operationData.timeSlicesContext.timeSlices', (data) => {
+						if (data) {
+							watcher();
+							resolve();
+						}
+					}, true);
+				}),
+
+				new Promise((resolve, reject) => {
+					const watcher = this.$scope.$watch('operationData.stateContext.operationStates', (data) => {
+						if (data) {
+							watcher();
+							resolve();
+						}
+					}, true);
+				}),
+
+				new Promise((resolve, reject) => {
+					const watcher = this.$scope.$watch('operationData.vtargetContext.vTargetPercentages', (data) => {
+						if (data) {
+							watcher();
+							resolve();
+						}
+					}, true);
+				}),
+
+			]);
+			allReady.then(() => {
+				this.buildSettingObject();
+			});
+
 		});
 
 	}
 
-	private startWatching() {
-		this.timeSlicesContext = this.$scope.$watch('operationData.timeSlicesContext', (data) => { this.loadTimeSlice(); }, true);
-		this.stateContext = this.$scope.$watch('operationData.stateContext', (data) => { this.loadOperationStates(); }, true);
-		this.vtargetContext = this.$scope.$watch('operationData.vtargetContext', (data) => { this.loadOperationStates(); }, true);
+	public actionSelectActivityToPlan(stateName, eventType) {
+
+		this.$scope.dados.selectedEventType = null;
+
+		this.$scope.dados.leftPercentage = 0;
+
+		this.$scope.dados.selectedState = stateName;
+		this.$scope.dados.selectedEventType = eventType;
+
 	}
 
-	private stopWatching() {
-		if (this.timeSlicesContext) { this.timeSlicesContext(); }
-		if (this.stateContext) { this.stateContext(); }
-		if (this.vtargetContext) { this.vtargetContext(); }
+	public actionButtonApplyConn() {
+		this.dialogService.showConfirmDialog('Are you sure you want to apply this change?', () => {
+
+			try {
+
+				this.$scope.dados.timeSlices.tripin = this.prepareTimeSlices(this.$scope.dados.timeSlices.tripin);
+				// .map(addOperationInfo);
+				this.$scope.dados.timeSlices.tripout = this.prepareTimeSlices(this.$scope.dados.timeSlices.tripout);
+				// .map(addOperationInfo);
+				this.operationDataFactory.emitUpdateTimeSlices(this.$scope.dados.timeSlices);
+
+				this.$scope.dados.timeSlices.tripin = this.$filter('filter')(this.$scope.dados.timeSlices.tripin, this.returnValidTimeSlices);
+				this.$scope.dados.timeSlices.tripout = this.$filter('filter')(this.$scope.dados.timeSlices.tripout, this.returnValidTimeSlices);
+
+			} catch (e) {
+				//
+			}
+
+			this.actionButtonApply();
+
+		});
+
 	}
 
-	private loadTimeSlice() {
+	public actionButtonApplyTrip() {
 
-		if (!this.$scope.operationData.timeSlicesContext || !this.$scope.operationData.timeSlicesContext.timeSlices) {
-			this.$scope.dados.timeSlices = null;
-			return;
-		}
+		this.dialogService.showConfirmDialog('Are you sure you want to apply this change?', () => {
 
+			this.operationDataFactory.emitUpdateInSlips(this.$scope.operationData.operationContext.currentOperation.inSlips);
+			this.actionButtonApply();
+
+		});
+
+	}
+
+	private buildSettingObject() {
+
+		this.$scope.dados.settings = {};
 		this.$scope.dados.timeSlices = angular.copy(this.$scope.operationData.timeSlicesContext.timeSlices);
 
-	}
+		for (const stateName in this.$scope.operationData.stateContext.operationStates) {
+			const state = this.$scope.operationData.stateContext.operationStates[stateName];
 
-	private loadOperationStates() {
-
-		if (!this.$scope.operationData.vtargetContext ||
-			!this.$scope.operationData.stateContext ||
-			!this.$scope.operationData.vtargetContext.vTargetPercentages ||
-			!this.$scope.operationData.stateContext.operationStates) {
-
-			this.$scope.dados.settings = null;
-			return;
-		}
-
-		for (const i in this.$scope.operationData.stateContext.operationStates) {
-			const stateName = i;
-			const state = this.$scope.operationData.stateContext.operationStates[i];
-
-			for (const j in state.calcVREParams) {
-				const eventType = j;
-				const param = state.calcVREParams[j];
+			for (const eventType in state.calcVREParams) {
+				const param = state.calcVREParams[eventType];
 
 				if (eventType !== 'TIME') {
 					this.setAllActivitiesParams(stateName, state, eventType, param, state.stateType);
@@ -96,10 +137,6 @@ export class PlannerController {
 	}
 
 	private setAllActivitiesParams(stateName, state, eventType, params, stateType) {
-
-		if (this.$scope.dados.settings == null) {
-			this.$scope.dados.settings = {};
-		}
 
 		if (this.$scope.dados.settings[stateName] == null) {
 			this.$scope.dados.settings[stateName] = {};
@@ -159,25 +196,10 @@ export class PlannerController {
 			this.$scope.dados.settings[stateName][eventType].optimumTime = 1 / this.$scope.dados.settings[stateName][eventType].optimumSpeed;
 		}
 
-	}
-
-	public actionSelectActivityToPlan(stateName, eventType) {
-
-		this.stopWatching();
-
-		this.$scope.dados.selectedEventType = null;
-
-		this.$scope.dados.leftPercentage = 0;
-
-		this.$scope.dados.selectedState = stateName;
-		this.$scope.dados.selectedEventType = eventType;
-
-	}
-
-	public selectActivityOnInit(index, stateName, eventType) {
-		if (index === 0) {
+		if (!this.$scope.dados.selectedState || !this.$scope.dados.selectedEventType) {
 			this.actionSelectActivityToPlan(stateName, eventType);
 		}
+
 	}
 
 	private actionButtonApply() {
@@ -221,49 +243,6 @@ export class PlannerController {
 
 		return timeSlices;
 
-	}
-
-	public actionButtonApplyConn() {
-		this.dialogService.showConfirmDialog('Are you sure you want to apply this change?', () => {
-
-			try {
-
-				this.$scope.dados.timeSlices.tripin = this.prepareTimeSlices(this.$scope.dados.timeSlices.tripin);
-				// .map(addOperationInfo);
-				this.$scope.dados.timeSlices.tripout = this.prepareTimeSlices(this.$scope.dados.timeSlices.tripout);
-				// .map(addOperationInfo);
-				this.operationDataFactory.emitUpdateTimeSlices(this.$scope.dados.timeSlices);
-
-				this.$scope.dados.timeSlices.tripin = this.$filter('filter')(this.$scope.dados.timeSlices.tripin, this.returnValidTimeSlices);
-				this.$scope.dados.timeSlices.tripout = this.$filter('filter')(this.$scope.dados.timeSlices.tripout, this.returnValidTimeSlices);
-
-			} catch (e) {
-				//
-			}
-
-			this.actionButtonApply();
-
-		});
-
-	}
-
-	public actionButtonApplyTrip() {
-
-		this.dialogService.showConfirmDialog('Are you sure you want to apply this change?', () => {
-
-			this.operationDataFactory.emitUpdateInSlips(this.$scope.operationData.operationContext.currentOperation.inSlips);
-			this.actionButtonApply();
-
-		});
-
-	}
-
-	public sumTripConnduration(stateSettings) {
-
-		const tripDuration = stateSettings.TRIP.targetTime * 1000;
-		const connDuration = stateSettings.CONN.targetTime * 1000;
-
-		return tripDuration + connDuration;
 	}
 
 	private returnValidTimeSlices(timeSlice) {

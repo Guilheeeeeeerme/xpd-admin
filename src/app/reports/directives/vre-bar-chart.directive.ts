@@ -4,6 +4,7 @@
 
 import * as d3 from 'd3';
 import { XPDTimeoutService } from '../../shared/xpd.timers/xpd-timers.service';
+import './vre-bar-chart.style.scss';
 import template from './vre-bar-chart.template.html';
 
 export class VreBarChart {

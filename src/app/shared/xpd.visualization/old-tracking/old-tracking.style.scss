@@ -1,0 +1,121 @@
+
+
+.times-event-dialog .selected-arrow {
+    position: absolute;
+    left: -30px;
+    top: -3px;
+    font-size: 30px;
+    color: white;
+}
+
+.times-event-dialog {
+    position: fixed;
+    color: #517f89;
+    font-family: AgencyFB;
+    /*top: 0;
+    left: 0;*/
+    background-color: black;
+    border: 2px solid #517f89;
+    z-index: 2000;
+    width: 500px;
+}
+
+.times-event-dialog .event-status-list {
+    list-style: none;
+    padding-left: 0;
+}
+
+.times-event-dialog .event-status-list,
+.times-event-dialog .comments-header {
+    font-weight: bold;
+    font-size: 1.3em;
+}
+
+.times-event-dialog .times-event-comments-col {
+    border-left: 2px solid #517f89;
+    padding: 0;
+}
+
+.times-event-dialog .times-event-status-col {
+    padding: 10px;
+}
+
+.times-event-dialog .comments-content {
+}
+
+.times-event-dialog .comments-content textarea {
+    border-radius: 0;
+    background-color: #c8e5dc;
+    color: black;
+    font-weight: bold;
+    font-size: 1.2em;
+}
+
+.times-event-dialog .comments-header {
+    border-bottom: 2px solid #517f89;
+    padding: 0 5px;
+}
+
+.times-event-dialog .times-event-footer {
+    border-top: 2px solid #517f89;
+    padding: 5px;
+    text-align: right;
+    text-transform: uppercase;
+}
+
+.times-event-dialog .times-event-header {
+    border-bottom: 1px solid #517f89;
+    font-size: 1.3em;
+    font-weight: bold;
+}
+
+.times-event-dialog .times-event-radio {
+    position: relative;
+}
+
+.times-event-dialog .times-event-radio input[type="radio"] {
+    display: none;
+}
+
+.times-event-dialog .times-event-radio label {
+    display: inline-block;
+    cursor: pointer;
+    position: relative;
+    padding-left: 24px;
+    margin-right: 15px;
+    font-weight: bold;
+    font-size: 1.2em;
+}
+
+.times-event-dialog .times-event-radio label:before {
+    content: "";
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    margin-right: 8px;
+    position: absolute;
+    left: 0;
+    bottom: 2px;
+    background-color: #000;
+    border: 3px solid #517f89;
+}
+
+.times-event-dialog .times-event-radio label:before {
+    border-radius: 10px;
+}
+
+.times-event-dialog .times-event-radio input[type=radio]:checked + label:before {
+    background-color: #517f89;
+}
+
+.xpd-conn-chronometers {
+    font-size: 2.7em;
+}
+
+.event-trip-container.xpd-chart-container-content {
+    height: 90%;
+}
+
+.in-slips-chart .progress {
+    height: 10px;
+}

@@ -1,4 +1,6 @@
+import * as angular from 'angular';
 import { IQService, route } from 'angular';
+import { EventLogSetupAPIService } from '../../shared/xpd.setupapi/eventlog-setupapi.service';
 import { ReportsSetupAPIService } from '../../shared/xpd.setupapi/reports-setupapi.service';
 
 export class BitDepthTimeController {
@@ -8,15 +10,16 @@ export class BitDepthTimeController {
 		'$scope',
 		'$q',
 		'$routeParams',
+		'eventlogSetupAPIService',
 		'reportsSetupAPIService'];
+	private bitDepthReportData: any;
 
 	constructor(
 		private $scope: any,
 		private $q: IQService,
 		private $routeParams: route.IRouteService,
+		private eventLogSetupAPIService: EventLogSetupAPIService,
 		private reportsSetupAPIService: ReportsSetupAPIService) {
-
-		const vm = this;
 
 		$scope.dados = {
 			data: [],
@@ -27,246 +30,232 @@ export class BitDepthTimeController {
 		$scope.wellId = ($routeParams as any).wellId;
 
 		if ($scope.wellId !== undefined) {
-			this.getOperationQueue();
+			this.reportsSetupAPIService.getOperationQueue(this.$scope.wellId).then(
+				(operationQueue) => { this.setOperationQueue(operationQueue); },
+				(arg) => { this.error(arg); },
+			);
 		}
-
 	}
 
-	private getOperationQueue() {
-		this.reportsSetupAPIService.getOperationQueue(this.$scope.wellId)
-			.then(
-				(results) => { this.getOperationQueueCallback(results); },
-				(error) => { this.error(error); },
-		);
-	}
+	private setOperationQueue(operationQueue) {
 
-	private getOperationQueueCallback(operations) {
+		const bitDepthReportData: any = {};
+		const plannedPromise = this.getPlannedPoints(operationQueue);
+		const executedPromise = this.getExecutedPoints(operationQueue);
+		const bitDepthReportDataReady = this.$q.defer();
 
-		this.getOperationPlanned(operations).then(() => {
-			this.getOperationExecuted(operations);
-		});
-	}
+		this.$q.all([plannedPromise, executedPromise]).then((results) => {
 
-	private getOperationPlanned(operations) {
-
-		this.$scope.planned = [];
-
-		return this.$q((resolve, reject) => {
-
-			const promises = operations.map((operation) => {
-				return this.reportsSetupAPIService.getBitDepthChartForOperation(this.$scope.wellId, operation.id);
-			});
-
-			this.$q.all(promises).then((plannedOperations) => {
-				this.$scope.planned = plannedOperations;
-				this.drawPlanned();
-				resolve();
-			});
-
-		});
-	}
-
-	private getOperationExecuted(operations) {
-
-		this.$scope.executed = [];
-
-		return this.$q((resolve, reject) => {
-
-			const promises = operations.map((operation) => {
-				return this.reportsSetupAPIService.getOperationExecuted(operation.id);
-			});
-
-			this.$q.all(promises).then((executedOperation) => {
-				this.$scope.executed = executedOperation;
-				this.drawExecuted();
-				resolve();
-			});
-
-		});
-
-	}
-
-	private drawPlanned() {
-
-		const mergedData = {
-			bitDepthPlannedPoints: null,
-			sectionsBands: null,
-			startChartAt: new Date().getTime(),
-		};
-
-		let startPointAt;
-
-		this.$scope.planned.map((chartData) => {
-			mergedData.startChartAt = Math.min(mergedData.startChartAt, chartData.startChartAt);
-		});
-
-		startPointAt = mergedData.startChartAt;
-
-		this.$scope.planned.map((chartData) => {
-
-			chartData.bitDepthPlannedPoints.data = chartData.bitDepthPlannedPoints.events.map((event) => {
-				const point = [
-					startPointAt,
-					event.startBitDepth,
-				];
-
-				startPointAt += (event.duration * 1000);
-
-				return point;
-			});
-		});
-
-		this.$scope.planned.map((chartData) => {
-
-			if (!mergedData.sectionsBands) {
-				mergedData.sectionsBands = chartData.sectionsBands;
-			}
-		});
-
-		this.$scope.planned.map((result) => {
-
-			if (!mergedData.bitDepthPlannedPoints) {
-				mergedData.bitDepthPlannedPoints = result.bitDepthPlannedPoints;
-			} else if (result.bitDepthPlannedPoints.data.length && result.bitDepthPlannedPoints.events.length) {
-				mergedData.bitDepthPlannedPoints.data = [...mergedData.bitDepthPlannedPoints.data, ...result.bitDepthPlannedPoints.data];
-				mergedData.bitDepthPlannedPoints.events = [...mergedData.bitDepthPlannedPoints.events, ...result.bitDepthPlannedPoints.events];
-			}
-
-		});
-
-		this.$scope.dados.data = mergedData;
-
-	}
-
-	private drawExecuted() {
-
-		const mergedData = {
-			bitDepthPlannedPoints: this.$scope.dados.data.bitDepthPlannedPoints,
-			sectionsBands: this.$scope.dados.data.sectionsBands,
-			startChartAt: this.$scope.dados.data.startChartAt,
-			bitDepthExecutedPoints: null,
-			holeDepthPoints: null,
-		};
-
-		this.$scope.executed.map((incomingChartData) => {
-
-			if (!mergedData.bitDepthExecutedPoints) {
-
-				mergedData.bitDepthExecutedPoints = incomingChartData.bitDepthExecutedPoints;
-
-			} else if (incomingChartData.bitDepthExecutedPoints.data.length &&
-				incomingChartData.bitDepthExecutedPoints.events.length) {
-
-				mergedData.bitDepthExecutedPoints.data = [
-					...mergedData.bitDepthExecutedPoints.data,
-					...incomingChartData.bitDepthExecutedPoints.data];
-
-				mergedData.bitDepthExecutedPoints.events = [
-					...mergedData.bitDepthExecutedPoints.events,
-					...incomingChartData.bitDepthExecutedPoints.events];
-			}
-
-			if (!mergedData.holeDepthPoints && incomingChartData.holeDepthPoints) {
-				mergedData.holeDepthPoints = incomingChartData.holeDepthPoints;
-			} else if (
-				mergedData.holeDepthPoints &&
-				incomingChartData.holeDepthPoints &&
-				mergedData.holeDepthPoints.data &&
-				incomingChartData.holeDepthPoints.data) {
-				mergedData.holeDepthPoints.data = [
-					...mergedData.holeDepthPoints.data,
-					...incomingChartData.holeDepthPoints.data];
-			}
-
-			// if (!mergedData.holeDepthPoints) {
-			// 	mergedData.holeDepthPoints = chartData.holeDepthPoints;
-			// } else if (chartData.holeDepthPoints.data.length) {
-
-			// 	if (!holeDepth) {
-			// 		holeDepth = mergedData.holeDepthPoints.data[mergedData.holeDepthPoints.data.length - 1][1];
-			// 	}
-
-			// 	chartData.holeDepthPoints.data = chartData.holeDepthPoints.data.map((data) => {
-			// 		holeDepth = Math.max(holeDepth, data[1]);
-			// 		data[1] = holeDepth;
-
-			// 		return data;
-			// 	});
-
-			// 	mergedData.holeDepthPoints.data = [...mergedData.holeDepthPoints.data, ...chartData.holeDepthPoints.data];
-			// }
-
-			// if (!mergedData.sectionsBands) {
-			// 	mergedData.sectionsBands = chartData.sectionsBands;
-			// }
-
-		});
-
-		/**
-		 * Garantindo que as coisas estão em ordem
-		 */
-
-		try {
-			mergedData.bitDepthExecutedPoints.data = mergedData.bitDepthExecutedPoints.data.sort((a, b) => a.x - b.x);
-		} catch (error) {
-			console.error(error);
-		}
-
-		try {
+			const plannedPoints = results[0];
+			const executedPoints = results[1];
 			const holeDepthPoints = [];
 
-			mergedData.holeDepthPoints.data = mergedData.holeDepthPoints.data.sort((a, b) => a[0] - b[0]);
+			let startTime = new Date().getTime();
 
-			mergedData.holeDepthPoints.data.filter((d) => {
+			for (let executedPoint of executedPoints) {
+				executedPoint = executedPoint.map((point) => {
 
-				if (d[1]) {
+					point.selectedLineType = 'executedEvent';
 
-					if (holeDepthPoints.length === 0 || holeDepthPoints[holeDepthPoints.length - 1][1] < d[1]) {
-						holeDepthPoints.push(d);
-						holeDepthPoints.push(d);
+					if (point.performance === 0) {
+						point.segmentColor = point.color = '#1565C0';
+					} else if (point.performance === 1) {
+						point.segmentColor = point.color = '#0FA419';
+					} else if (point.performance === 2) {
+						point.segmentColor = point.color = '#FFDD68';
+					} else {
+						point.segmentColor = point.color = '#EA3F3B';
 					}
 
-					holeDepthPoints[holeDepthPoints.length - 1][0] = d[0];
+					startTime = Math.min(startTime, point.x);
 
-				}
+					if (point.x && point.holeDepth) {
+						if (holeDepthPoints.length === 0 ||
+							holeDepthPoints.length > 0 && holeDepthPoints[holeDepthPoints.length - 1].y < point.holeDepth) {
+							holeDepthPoints.push({ x: point.x, y: point.holeDepth, selectedLineType: 'holeDepth' });
+							holeDepthPoints.push({ x: point.x, y: point.holeDepth, selectedLineType: 'holeDepth' });
+						} else {
+							holeDepthPoints[holeDepthPoints.length - 1].x = point.x;
+						}
 
-			});
+					}
 
-			mergedData.holeDepthPoints.data = holeDepthPoints;
+					return point;
+				});
+			}
 
-		} catch (error) {
-			console.error(error);
+			bitDepthReportData.startChartAt = angular.copy(startTime);
+
+			for (let plannedPoint of plannedPoints) {
+				let endTime = 0;
+
+				plannedPoint = plannedPoint.map((point) => {
+					point.x *= 1000;
+					point.x += startTime;
+					point.selectedLineType = 'plannedEvent';
+					endTime = Math.max(endTime, point.x);
+					return point;
+				});
+
+				startTime = Math.max(endTime, startTime);
+			}
+
+			bitDepthReportData.plannedPoints = plannedPoints;
+			bitDepthReportData.holeDepthPoints = holeDepthPoints;
+			bitDepthReportData.executedPoints = executedPoints;
+
+			this.bitDepthReportData = bitDepthReportData;
+
+			this.$scope.bitDepthReportDataReady = bitDepthReportDataReady.promise;
+
+			bitDepthReportDataReady.resolve(bitDepthReportData);
+
+		});
+
+	}
+
+	private getExecutedPoints(operationQueue) {
+
+		const executedPromises = [];
+
+		for (const operation of operationQueue) {
+			executedPromises.push(this.reportsSetupAPIService.getOperationExecuted(operation.id));
 		}
 
-		this.$scope.dados.data = mergedData;
-
+		return this.$q.all(executedPromises);
 	}
 
-	/**
-	 *
-	 * @param event
-	 */
-	public setCurrentPlannedEvent(event) {
-		this.$scope.dados.plannedEvent = event;
-		this.$scope.$apply();
-	}
+	private getPlannedPoints(operationQueue) {
 
-	public setHoleDepth(event) {
-		this.$scope.dados.holeDepth = event;
-		this.$scope.$apply();
-	}
+		const planningPromises = [];
 
-	public setCurrentExecutedEvent(event) {
-		this.$scope.dados.executedEvent = event;
-		this.$scope.$apply();
+		for (const operation of operationQueue) {
+			planningPromises.push(this.reportsSetupAPIService.getBitDepthChartForOperation(this.$scope.wellId, operation.id));
+		}
+
+		return this.$q.all(planningPromises);
 	}
 
 	public setCurrentPoint(event) {
-		this.$scope.dados.currentPoint = event;
-		this.$scope.$apply();
+
+		// XPDSearchMapSingleton.getInstance().flush(injectName);
+
+		// console.log(this.bitDepthReportData.plannedPoints);
+		// console.log(this.bitDepthReportData.holeDepthPoints);
+		// console.log(this.bitDepthReportData.executedPoints);
+
+		this.$scope.dados.selectedLineType = event.selectedLineType;
+
+		const plannedLocked = event.plannedLocked;
+		const executedLocked = event.executedLocked;
+
+		if (this.$scope.dados.selectedLineType === 'executedEvent') {
+			if (!executedLocked) {
+				this.eventLogSetupAPIService.getWithDetails(event.id).then((eventDetails: any) => {
+					this.setCurrentExecutedEvent(eventDetails);
+				});
+			}
+			this.setHoleDepth({ depth: event.holeDepth });
+		} else if (this.$scope.dados.selectedLineType === 'plannedEvent') {
+			if (!executedLocked) {
+				this.findExecutedEvent(event.x);
+			}
+			this.findHoleDepth(event.x);
+		} else {
+			if (!executedLocked) {
+				this.findExecutedEvent(event.x);
+			}
+			this.setHoleDepth({ depth: event.y });
+		}
+
+		if (!plannedLocked) {
+			this.findPlannedEvent(event.x);
+		}
+
 	}
 
-	public getAlarmsFromEvent(event) {
+	private setCurrentPlannedEvent(event) {
+		if (event) {
+			event.alarms = this.getAlarmsFromEvent(event);
+		}
+		this.$scope.dados.plannedEvent = event;
+	}
+
+	private setCurrentExecutedEvent(event) {
+		this.$scope.dados.executedEvent = event;
+	}
+
+	private setHoleDepth(event) {
+		this.$scope.dados.holeDepth = event;
+	}
+
+	private findExecutedEvent(timestamp) {
+		for (const executedPoint of this.bitDepthReportData.executedPoints) {
+			let lastEvent = null;
+
+			for (const event of executedPoint) {
+
+				if (lastEvent && lastEvent.id && timestamp >= lastEvent.x && event.x >= timestamp) {
+
+					this.eventLogSetupAPIService.getWithDetails(event.id).then((eventDetails: any) => {
+						this.setCurrentExecutedEvent(eventDetails);
+					});
+
+					return;
+				}
+
+				lastEvent = event;
+			}
+		}
+
+		this.setCurrentExecutedEvent(null);
+	}
+
+	private findPlannedEvent(timestamp) {
+		for (const plannedPointsData of this.bitDepthReportData.plannedPoints) {
+			let lastEvent = null;
+
+			for (const event of plannedPointsData) {
+
+				if (lastEvent && timestamp >= lastEvent.x && event.x >= timestamp) {
+					lastEvent.duration = (event.x - lastEvent.x);
+
+					lastEvent.startBitDepth = lastEvent.y;
+					lastEvent.endBitDepth = event.y;
+
+					lastEvent.startTime = lastEvent.x;
+					lastEvent.endTime = event.x;
+
+					this.setCurrentPlannedEvent(lastEvent);
+					return;
+				}
+
+				lastEvent = event;
+			}
+		}
+
+		this.setCurrentPlannedEvent(null);
+
+	}
+
+	private findHoleDepth(timestamp) {
+		for (const holeDepthPointsData of this.bitDepthReportData.holeDepthPoints) {
+			let lastEvent = null;
+
+			for (const event of holeDepthPointsData) {
+
+				if (lastEvent && lastEvent.id && timestamp >= lastEvent.x && event.x >= timestamp) {
+					this.setHoleDepth({ depth: event.y });
+					return;
+				}
+
+				lastEvent = event;
+			}
+		}
+		this.setHoleDepth(null);
+	}
+
+	private getAlarmsFromEvent(event) {
 		if (event.alarm) {
 			return [event.alarm];
 		}
@@ -285,6 +274,7 @@ export class BitDepthTimeController {
 	private error(error) {
 		console.log('error', error);
 	}
+
 }
 
 // })();
