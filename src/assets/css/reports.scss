@@ -1,0 +1,132 @@
+body {
+	font-family: AgencyFB;
+}
+
+xpd-access-factory-directive {
+    padding: 1px;
+}
+
+.child-element-spacing {
+    overflow: auto;
+    max-height: 85%;
+}
+
+.child-element-spacing > div:nth-child(2){
+    margin-top: 25px;
+}
+
+
+.vre-report-table-text-remaining-time-row{
+    background-color: #F5F5F5;
+}
+
+.vre-score-bar-chart-total-plotband{
+    opacity: 0.1;
+}
+
+.vre-score-any-bar{
+    opacity: 0.8;
+}
+
+.vre-score-any-bar:hover{
+    opacity: 1;
+}
+
+/**
+ * HISTOGRAM
+ */
+.histogram-report-col{
+	margin-bottom: 10px;
+}
+
+.interval-selection{
+	background-color: black;
+	padding: 3px;
+	color: white;
+}
+
+.interval-selection .form-control{
+    max-width: 50px;
+}
+
+.interval-selection .btn-sm{
+    padding: 8px 10px;
+}
+
+.empty-value-report-message{
+	color: white;
+    text-align: center;
+    padding: 20px;
+    background-color: #333;
+    max-width: 600px;
+    margin: 0 auto;
+    text-transform: uppercase;
+    font-size: 14px;
+}
+
+.empty-value-report-message.has-error{
+    margin-top: 10px;
+    background-color: rgb(243, 66, 66);
+}
+
+.histogram-diff-message-container{
+    display: block;
+    position: absolute;
+    background-color: rgba(0,0,0, 0.65);
+    height: 100%;
+    top: 0;
+    width: 100%;
+}
+
+.histogram-diff-message-container .panel{
+    width: 350px;
+    /* position: absolute; */
+    /* top: 15%; */
+    margin: 0 auto;
+    display: block;
+    margin-top: 75px;
+    text-align: center;
+    font-size: 16px;
+}
+
+.needle-highcharts-plot-band{
+    fill-opacity: 0.05;
+}
+
+.needle-highcharts-plot-band-label {
+    fill: white;
+    font-size: 1.3em;
+}
+
+.bit-depth-time-highcharts-plot-band{
+    fill-opacity: 0.2;
+}
+
+.bit-depth-time-highcharts-plot-band-label {
+    fill: white;
+    font-size: 1.3em;
+}
+
+.executedevent .equilibrium-time-table-text{
+    color: #e89313;
+}
+
+.plannedevent .equilibrium-time-table-text{
+    color: #f0f0f0;
+}
+
+.highligth-details-bdt-table > table{
+    border: medium #00FFFF solid;
+}
+
+.vre-score-label {
+    color: #00807f;
+    text-align: left;
+    fill: #00807f;
+    text-anchor: middle;
+    font-weight: bold;
+    margin-top: 5px;
+    margin-bottom: 0;
+    padding-left: 20px;
+}
+

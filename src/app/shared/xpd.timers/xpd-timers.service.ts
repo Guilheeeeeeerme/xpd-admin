@@ -14,7 +14,6 @@ class XPDAsync {
 	}
 
 	public doAsync(type, callback, timeout, scope) {
-		const self = this;
 
 		const worker = new Worker('./xpd-timers.worker/xpd-timers.worker.js');
 
@@ -23,11 +22,11 @@ class XPDAsync {
 			timeout,
 		});
 
-		scope.$on('$destroy', function () {
-			self.cancel(worker);
+		scope.$on('$destroy', () => {
+			this.cancel(worker);
 		});
 
-		worker.addEventListener('message', function () {
+		worker.addEventListener('message', () => {
 			if (callback) { callback(); }
 			try {
 				scope.$apply();

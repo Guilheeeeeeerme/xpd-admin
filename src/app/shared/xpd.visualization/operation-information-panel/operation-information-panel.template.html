@@ -1,0 +1,53 @@
+<div class="panel panel-default">
+
+	<div class="panel-heading clearfix" ng-init="onInit()" ng-click="onClickCollapse()">
+		<h4 class="panel-title pull-left">Operation Information</h4>
+		<div class="btn-group pull-right">
+			<i type="button" 
+				class="pull-right glyphicon pointer" 
+				ng-class="{'glyphicon-chevron-down': collapse, 'glyphicon-chevron-up': !collapse}">
+			</i>
+		</div>
+	</div>
+
+	<div class="panel-body" uib-collapse="collapse">
+
+		<table class="table table-sm table-condensed">
+			<tr>
+				<td colspan="3">{{ operation.name }}</td>
+			</tr>
+			<tr>
+				<td>{{ operation.section.name }}</td>
+				<td colspan="2">{{ state | xpdStateLabelFilter }}</td>
+			</tr>
+			<tr>
+				<th>Forecast: </th>
+				<td colspan="3">{{ targetParamExpectedEndTime | date:'medium' }}</td>
+			</tr>
+		</table>
+
+			<xpd-performance-progress-bar
+				current-value="stateDuration / 1000"
+				high-value= "optimumExpectedDuration / 1000",
+				medium-value= "standardExpectedDuration / 1000",
+				low-value= "poorExpectedDuration / 1000"
+				is-real-time="true">
+			</xpd-performance-progress-bar>
+
+		<table class="table table-sm table-condensed">
+			<tr>
+				<th>Bit Depth</th>
+				<td>{{ reading.bitDepth | number : '2' }} m</td>
+				<td>Joint
+					<strong>{{ jointNumber }}</strong> / {{ numberJoints | json}}
+				</td>
+			</tr>
+			<tr>
+				<th>Hole Depth</th>
+				<td colspan="3">{{ well.holeDepth | number : '2' }} m</td>
+			</tr>
+		</table>
+
+	</div>
+
+</div>

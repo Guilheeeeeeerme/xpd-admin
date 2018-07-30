@@ -2,6 +2,7 @@
 // 	'use strict';
 
 import * as d3 from 'd3';
+import './slips-to-slips-bar-chart.style.scss';
 import template from './slips-to-slips-bar-chart.template.html';
 
 export class SlipsToSlipsBarChart {

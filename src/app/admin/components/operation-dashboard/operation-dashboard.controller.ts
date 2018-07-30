@@ -5,10 +5,8 @@ export class OperationDashboardController {
 
 	// 'use strict';
 
-	public static $inject = ['$scope', '$filter', 'operationDataService'];
+	public static $inject = ['$scope', '$filter', 'operationDataService', 'readingSetupAPIService'];
 	public operationDataFactory: any;
-	public selectedBaseLine: any;
-	public selectedEventType: any;
 
 	constructor(
 		private $scope: any,
@@ -35,120 +33,15 @@ export class OperationDashboardController {
 		operationDataService.openConnection([]).then(() => {
 			vm.operationDataFactory = operationDataService.operationDataFactory;
 			$scope.operationData = vm.operationDataFactory.operationData;
-			vm.main();
+			vm.generateEstimatives();
+
+			operationDataService.on('setOnvOptimumEstimativeListener', () => { vm.generateEstimatives(); });
+			operationDataService.on('setOnForecastChangeListener', () => { vm.generateEstimatives(); });
+
+			operationDataService.on('setOnJointChangeListener', () => { vm.generateEstimatives(); });
+			operationDataService.on('setOnCurrentJointListener', () => { vm.generateEstimatives(); });
+			operationDataService.on('setOnNoCurrentJointListener', () => { vm.generateEstimatives(); });
 		});
-
-		operationDataService.on('setOnvOptimumEstimativeListener', (data) => { vm.main(); });
-		operationDataService.on('setOnActualLineListener', (data) => { vm.main(); });
-		operationDataService.on('setOnForecastChangeListener', (data) => { vm.main(); });
-
-		operationDataService.on('setOnJointChangeListener', (data) => { vm.generateEstimatives(); });
-		operationDataService.on('setOnCurrentJointListener', (data) => { vm.generateEstimatives(); });
-		operationDataService.on('setOnNoCurrentJointListener', (data) => { vm.generateEstimatives(); });
-	}
-
-	/**
-	 * @param {string} selectedLineName: vOptimumEstimative | vStandardEstimative | vPoorEstimative
-	 * @param {string} eventType : CONN | TRIP | BOTH
-	 */
-	public actionButtonBuildForecast(selectedLineName, eventType) {
-
-		this.selectedBaseLine = selectedLineName;
-		this.selectedEventType = eventType;
-
-		/**
-		 * Linha que o usuário escolheu
-		 */
-		const selectedLine = this.$scope.operationData.forecastContext[selectedLineName];
-
-		/**
-		 * Os tres parametros para definir cores
-		 */
-		const vOptimumEstimative = this.$scope.operationData.forecastContext.vOptimumEstimative;
-		const vStandardEstimative = this.$scope.operationData.forecastContext.vStandardEstimative;
-		const vPoorEstimative = this.$scope.operationData.forecastContext.vPoorEstimative;
-
-		/**
-		 * O que realmente aconteceu
-		 */
-		const actualLine = this.$scope.operationData.forecastContext.actualLine;
-
-		this.$scope.forecast = [];
-
-		let statesHash;
-		let state;
-		let isTripin;
-		const splitColor = '#90ed7d';
-
-		/**
-		 * Expected
-		 */
-		for (const i in selectedLine) {
-
-			statesHash = selectedLine[i];
-			state = Object.keys(statesHash)[0];
-			isTripin = statesHash[state].isTripin;
-
-			const selectedParamExpectedTime = this.calcTimeSpent(selectedLine, state, eventType, isTripin);
-
-			this.$scope.forecast.push({
-				name: 'Expected ' + this.$filter('xpdStateLabelFilter')(state) + (isTripin ? ' Trip In' : ' Trip Out'),
-				y: selectedParamExpectedTime,
-				color: splitColor,
-			});
-
-		}
-
-		/**
-		 * Total Expected
-		 */
-		this.$scope.forecast.push({
-			name: 'Total Expected Time',
-			isIntermediateSum: true,
-			color: '#434348',
-		});
-
-		/**
-		 * Actual
-		 */
-		for (const j in selectedLine) {
-
-			statesHash = selectedLine[j];
-			state = Object.keys(statesHash)[0];
-			isTripin = statesHash[state].isTripin;
-
-			const directionLabel = isTripin === false ? 'TRIPOUT' : 'TRIPIN';
-
-			const optimumTimeSpent = this.calcTimeSpent(vOptimumEstimative, state, eventType, isTripin);
-			const standardTimeSpent = this.calcTimeSpent(vStandardEstimative, state, eventType, isTripin);
-			const poorTimeSpent = this.calcTimeSpent(vPoorEstimative, state, eventType, isTripin);
-
-			if (actualLine[state] && actualLine[state][directionLabel] && actualLine[state][directionLabel][eventType]) {
-
-				const actualTimeSpent = Math.abs(
-					actualLine[state][directionLabel][eventType].finalTime -
-					actualLine[state][directionLabel][eventType].startTime,
-				);
-
-				this.$scope.forecast.push({
-					name: 'Time Spent on ' + this.$filter('xpdStateLabelFilter')(state) + (isTripin ? ' Trip In' : ' Trip Out'),
-					y: -1 * actualTimeSpent,
-					color: this.color(actualTimeSpent, optimumTimeSpent, standardTimeSpent, poorTimeSpent),
-				});
-
-			}
-
-		}
-
-		/**
-		 * Remaining Time
-		 */
-		this.$scope.forecast.push({
-			name: 'Remaining Time',
-			isSum: true,
-			color: '#434348',
-		});
-
 	}
 
 	public getTotalFailureTime(startTime, endTime) {
@@ -255,10 +148,11 @@ export class OperationDashboardController {
 
 						const activity = {
 							name: state,
+							alarms: vTargetEstimative[state].alarms,
 							duration,
 							startTime,
 							finalTime: (startTime + duration),
-							isTripin: vTargetEstimative[state].BOTH.isTripin,
+							isTripin: vTargetEstimative[state].isTripin,
 						};
 
 						nextActivities.push(activity);
@@ -278,6 +172,13 @@ export class OperationDashboardController {
 			this.$scope.expectations = expectations;
 		}
 
+		try {
+			this.calcAccScore();
+			this.getLastTwoEventsDuration(this.$scope.operationData.eventContext.lastEvents);
+		} catch (error) {
+			// faça nada
+		}
+
 	}
 
 	private getEventProperty(eventType, vTargetStateJointInterval, vOptimumStateJointInterval, vStandardStateJointInterval, vPoorStateJointInterval) {
@@ -289,57 +190,13 @@ export class OperationDashboardController {
 		};
 	}
 
-	private main() {
-		try {
-
-			this.generateEstimatives();
-
-			if (!this.selectedBaseLine) {
-				this.selectedBaseLine = 'vOptimumEstimative';
-			}
-
-			if (!this.selectedEventType) {
-				this.selectedEventType = 'BOTH';
-			}
-
-			this.actionButtonBuildForecast(this.selectedBaseLine, this.selectedEventType);
-			this.calcAccScore();
-			this.getLastTwoEventsDuration(this.$scope.operationData.eventContext);
-		} catch (error) {
-			// setTimeout(onReadyToStart, 5000);
-		}
-
-	}
-
-	private calcTimeSpent(line, state, eventType, isTripin) {
-		for (const i in line) {
-			if (line[i] && line[i][state] && line[i][state].isTripin === isTripin && line[i][state][eventType]) {
-				return Math.abs(line[i][state][eventType].finalTime - line[i][state][eventType].startTime);
-			}
-		}
-	}
-
-	private color(actualDuration, optimumDuration, standardDuration, poorDuration) {
-		if (actualDuration <= optimumDuration) {
-			return '#73b9c6';
-		} else if (actualDuration > optimumDuration && actualDuration <= standardDuration) {
-			return '#0FA419';
-		} else if (actualDuration > standardDuration && actualDuration <= poorDuration) {
-			return '#ffe699';
-		} else {
-			return '#860000';
-		}
-	}
-
 	private calcAccScore() {
 		this.$scope.scoreData = {
 			accScore: this.$scope.operationData.shiftContext.accScore.totalScore / this.$scope.operationData.shiftContext.accScore.eventScoreQty,
 		};
 	}
 
-	private getLastTwoEventsDuration(eventContext) {
-
-		const lastEvents = eventContext.lastEvents;
+	private getLastTwoEventsDuration(lastEvents) {
 
 		let conn = false;
 		let trip = false;

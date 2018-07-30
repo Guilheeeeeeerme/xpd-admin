@@ -8,14 +8,10 @@ export class BitDepthTimeDirective implements ng.IDirective {
 	public static $inject: string[] = ['$filter', 'highchartsService'];
 
 	public scope = {
-		chartData: '=',
-		setCurrentPlannedEvent: '&',
-		setCurrentExecutedEvent: '&',
-		setHoleDepth: '&',
+		bitDepthReportDataReady: '=',
 		setCurrentPoint: '&',
 	};
 	public restrict: 'EA';
-	public currentPoint: any;
 
 	constructor(
 		private $filter: ng.IFilterFilter,
@@ -24,32 +20,41 @@ export class BitDepthTimeDirective implements ng.IDirective {
 
 	public link: ng.IDirectiveLinkFn = (
 		scope: any,
-		element: ng.IAugmentedJQuery,
+		elem: ng.IAugmentedJQuery,
 		attrs: ng.IAttributes,
 		ctrl: any,
 	) => {
 
-		const vm = this;
-
 		this.highchartsService.highcharts().then((Highcharts) => {
+
+			onDependenciesReady(Highcharts);
+
+		});
+
+		const onDependenciesReady = (Highcharts) => {
 
 			const colorPallete = d3.scaleOrdinal(d3.schemeCategory10);
 			let plannedLocked = false;
 			let executedLocked = false;
-			let indexSelectedPoint = null;
 
 			let lastPoint = null;
 			let lastPointBackup = null;
 
+			let currentPoint;
+
 			let bitDepthVsTimeChart;
 
-			scope.$watch('chartData', (chartData) => {
-				if (chartData) {
-					createChart(chartData.bitDepthPlannedPoints,
-						chartData.bitDepthExecutedPoints,
-						chartData.holeDepthPoints,
-						chartData.sectionsBands,
-						chartData.startChartAt);
+			scope.$watch('bitDepthReportDataReady', (bitDepthReportDataReady) => {
+
+				if (bitDepthReportDataReady) {
+					bitDepthReportDataReady.then((data) => {
+						createChart(
+							data.plannedPoints,
+							data.executedPoints,
+							data.holeDepthPoints,
+							data.startChartAt,
+						);
+					});
 				}
 			});
 
@@ -62,12 +67,12 @@ export class BitDepthTimeDirective implements ng.IDirective {
 				};
 			};
 
-			const setSectionColors = (section) => {
+			const setSectionColors = (section: any) => {
 
 				if (section.id === 0) {	// water depth
 					section.color = '#40a4df';
 				} else {
-					section.color = colorPallete((((section.id + 2) % 10) as any));
+					section.color = colorPallete(((section.id + 2) % 10) as any);
 				}
 
 				section.className = 'bit-depth-time-highcharts-plot-band';
@@ -76,11 +81,9 @@ export class BitDepthTimeDirective implements ng.IDirective {
 				return section;
 			};
 
-			const createChart = (bitDepthPlannedPoints, bitDepthExecutedPoints, holeDepthPoints, sectionsBands, startChartAt) => {
+			const createChart = (bitDepthPlannedPoints, bitDepthExecutedPoints, holeDepthPoints, startChartAt) => {
 
-				const plotBands = (!sectionsBands) ? [] : sectionsBands.map(setSectionColors);
-
-				bitDepthVsTimeChart = Highcharts.chart(element[0], {
+				bitDepthVsTimeChart = Highcharts.chart(elem[0], {
 
 					chart: {
 						type: 'coloredline',
@@ -97,9 +100,9 @@ export class BitDepthTimeDirective implements ng.IDirective {
 					},
 
 					xAxis: {
+						min: startChartAt,
 						crosshair: true,
 						shared: true,
-						min: startChartAt,
 						title: {
 							text: 'Day(s)',
 						},
@@ -111,12 +114,17 @@ export class BitDepthTimeDirective implements ng.IDirective {
 						title: {
 							text: 'Depth',
 						},
-						plotBands,
+						plotBands: [],
+					},
+
+					legend: {
+						enabled: false,
 					},
 
 					tooltip: {
 						enabled: false,
 					},
+
 					plotOptions: {
 						series: {
 							turboThreshold: 0,
@@ -124,7 +132,7 @@ export class BitDepthTimeDirective implements ng.IDirective {
 							connectNulls: false,
 							point: {
 								events: {
-									mouseOver: () => { onChartHover(this); },
+									mouseOver: onChartHover,
 									click: onChartClick,
 								},
 							},
@@ -132,21 +140,42 @@ export class BitDepthTimeDirective implements ng.IDirective {
 					},
 				});
 
-				if (bitDepthPlannedPoints) {
-					bitDepthPlannedPoints.zIndex = 2;
-					bitDepthPlannedPoints.step = true;
-					bitDepthVsTimeChart.addSeries(bitDepthPlannedPoints);
+				for (const bitDepthPlannedPoint of bitDepthPlannedPoints || []) {
+
+					const bitDepthPlannedPointsSerie: any = {
+						data: bitDepthPlannedPoint || [],
+					};
+
+					if (bitDepthPlannedPointsSerie) {
+						bitDepthPlannedPointsSerie.color = '#2b908f';
+						bitDepthPlannedPointsSerie.zIndex = 2;
+						bitDepthPlannedPointsSerie.step = true;
+						bitDepthVsTimeChart.addSeries(bitDepthPlannedPointsSerie);
+					}
+
 				}
 
-				if (bitDepthExecutedPoints) {
-					bitDepthExecutedPoints.zIndex = 3;
-					bitDepthVsTimeChart.addSeries(bitDepthExecutedPoints);
+				for (const bitDepthExecutedPoint of bitDepthExecutedPoints || []) {
+
+					const bitDepthExecutedPointsSerie: any = {
+						data: bitDepthExecutedPoint || [],
+					};
+
+					if (bitDepthExecutedPointsSerie) {
+						bitDepthExecutedPointsSerie.zIndex = 3;
+						bitDepthVsTimeChart.addSeries(bitDepthExecutedPointsSerie);
+					}
+
 				}
 
-				if (holeDepthPoints) {
-					holeDepthPoints.color = 'rgba(180, 180, 180, 0.75)';
-					holeDepthPoints.lineWidth = 10;
-					bitDepthVsTimeChart.addSeries(holeDepthPoints);
+				const holeDepthPointsSerie: any = {
+					data: holeDepthPoints || [],
+				};
+
+				if (holeDepthPointsSerie) {
+					holeDepthPointsSerie.color = 'rgba(180, 180, 180, 0.75)';
+					holeDepthPointsSerie.lineWidth = 10;
+					bitDepthVsTimeChart.addSeries(holeDepthPointsSerie);
 				}
 
 				return bitDepthVsTimeChart;
@@ -169,25 +198,25 @@ export class BitDepthTimeDirective implements ng.IDirective {
 
 			const markCurrentPoint = () => {
 
-				if (!vm.currentPoint) {
+				if (!currentPoint) {
 					return;
 				}
 
-				lastPoint = vm.currentPoint;
+				lastPoint = currentPoint;
 
 				lastPointBackup = {
-					x: vm.currentPoint.x,
-					y: vm.currentPoint.y,
-					color: vm.currentPoint.color || null,
-					segmentColor: vm.currentPoint.segmentColor || null,
-					marker: vm.currentPoint.marker || null,
+					x: currentPoint.x,
+					y: currentPoint.y,
+					color: currentPoint.color || null,
+					segmentColor: currentPoint.segmentColor || null,
+					marker: currentPoint.marker || null,
 				};
 
-				vm.currentPoint.update({
-					y: vm.currentPoint.y,
-					x: vm.currentPoint.x,
-					color: vm.currentPoint.color || null,
-					segmentColor: vm.currentPoint.segmentColor || null,
+				currentPoint.update({
+					y: currentPoint.y,
+					x: currentPoint.x,
+					color: currentPoint.color || null,
+					segmentColor: currentPoint.segmentColor || null,
 					marker: markerWhenObjectIsSelected(),
 				});
 
@@ -218,7 +247,6 @@ export class BitDepthTimeDirective implements ng.IDirective {
 				if (plannedLocked || executedLocked) {
 					plannedLocked = false;
 					executedLocked = false;
-					indexSelectedPoint = null;
 					return;
 				}
 
@@ -226,159 +254,28 @@ export class BitDepthTimeDirective implements ng.IDirective {
 				 * Caso nenhum ponto esteja fixo
 				 * verifico sua linha e fixo o ponto clicado
 				 */
-				if (vm.currentPoint.lineType === 'planned') {
+
+				if (currentPoint.selectedLineType === 'plannedEvent') {
 					plannedLocked = !plannedLocked;
-					indexSelectedPoint = vm.currentPoint.series.index;
-				} else {
+				} else if (currentPoint.selectedLineType === 'executedEvent') {
 					executedLocked = !executedLocked;
-					indexSelectedPoint = vm.currentPoint.series.index;
 				}
+
 			};
 
-			const setEndEventDate = (event, index, data) => {
+			function onChartHover() {
 
-				if (!event || !data[index]) {
-					return;
-				}
+				currentPoint = this;
+				currentPoint.plannedLocked = plannedLocked;
+				currentPoint.executedLocked = executedLocked;
 
-				event.startDate = ((index !== 0) ? data[index - 1].x : data[index].x);
-				event.endDate = data[index].x;
-
-				return event;
-			};
-
-			const onChartHover = (currentPoint) => {
-
-				vm.currentPoint = currentPoint;
-
-				let plannedEvent = null;
-				let executedEvent = null;
-
-				const plannedOfPoint = getPointFromSerieByX(bitDepthVsTimeChart.series[0], currentPoint.x);
-				const executedOfPoint = getPointFromSerieByX(bitDepthVsTimeChart.series[1], currentPoint.x);
-				const holeDepthOfPoint = getPointFromSerieByX(bitDepthVsTimeChart.series[2], currentPoint.x);
-
-				/** Marca no ponto qual linha ele pertence */
-				if (currentPoint === plannedOfPoint) {
-					currentPoint.lineType = 'planned';
-				} else {
-					currentPoint.lineType = 'executed';
-				}
-
-				if (plannedOfPoint) {
-					plannedEvent = getEventFromPointOfASerie(plannedOfPoint, bitDepthVsTimeChart.series[0]);
-					plannedEvent = setEndEventDate(
-						plannedEvent,
-						plannedOfPoint.index,
-						bitDepthVsTimeChart.series[0].points,
-					);
-				}
-
-				if (executedOfPoint) {
-
-					let pointIndex = null;
-
-					for (const index in bitDepthVsTimeChart.series[1].hcEvents) {
-						const tempEvent = bitDepthVsTimeChart.series[1].hcEvents[index][0];
-						if (tempEvent.id === executedOfPoint.id) {
-							executedEvent = tempEvent;
-							pointIndex = index;
-						}
-					}
-
-					// var executedEvent = getEventFromPointOfASerie(executedOfPoint, bitDepthVsTimeChart.series[1]);
-					executedEvent = setEndEventDate(
-						executedEvent,
-						pointIndex,
-						bitDepthVsTimeChart.series[1].points,
-					);
-				}
-
-				const holeDepth = getDepthFromPointOfASerie(holeDepthOfPoint, bitDepthVsTimeChart.series[2]);
-				const plannedDepth = getDepthFromPointOfASerie(plannedOfPoint, bitDepthVsTimeChart.series[0]);
-				const executedDepth = getDepthFromPointOfASerie(executedOfPoint, bitDepthVsTimeChart.series[1]);
-
-				try {
-					let highLigth;
-
-					if (indexSelectedPoint != null) {
-						highLigth = indexSelectedPoint;
-					} else {
-						highLigth = currentPoint.series.index;
-					}
-
-					// highLigth
-					scope.setCurrentPoint({
-						event: {
-							index: highLigth,
-						},
-					});
-
-				} catch (e) {
-					// faça nada
-				}
-
-				if (!plannedLocked) {
-					scope.setCurrentPlannedEvent({
-						event: plannedEvent,
-					});
-				}
-
-				if (!executedLocked) {
-					scope.setCurrentExecutedEvent({
-						event: executedEvent,
-					});
-				}
-
-				scope.setHoleDepth({
-					event: holeDepth,
+				scope.setCurrentPoint({
+					event: currentPoint,
 				});
 
-				return null;
+			}
 
-			};
-
-			const getDepthFromPointOfASerie = (point, series) => {
-				return {
-					depth: (point) ? point.y : null,
-				};
-			};
-
-			const getEventFromPointOfASerie = (point, series) => {
-				try {
-					return series.hcEvents[point.index][0];
-				} catch (e) {
-					return null;
-				}
-			};
-
-			const getPointFromSerieByX = (serie, x) => {
-				const point = null;
-
-				if (serie) {
-					for (let i = 1; i < serie.points.length; i++) {
-
-						const pontoAnterior = serie.points[i - 1];
-						const proximoPonto = serie.points[i];
-
-						if (x >= pontoAnterior.x && x <= proximoPonto.x) {
-
-							const distanciaParaAnterior = Math.abs(x - pontoAnterior.x);
-							const distanciaParaProximo = Math.abs(x - proximoPonto.x);
-
-							if (distanciaParaAnterior <= distanciaParaProximo) {
-								return pontoAnterior;
-							} else {
-								return proximoPonto;
-							}
-						}
-					}
-				}
-
-				return point;
-			};
-
-		});
+		};
 
 	}
 

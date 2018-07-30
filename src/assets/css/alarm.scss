@@ -1,0 +1,81 @@
+
+.alarm-panel, .alarm-panel .panel-body{
+    padding: 0px;
+    margin: 0px;
+    border-radius: 0;
+}
+
+.alarm-panel .panel-heading, .alarm-panel .panel-tile{
+    overflow: auto;
+    padding: 2px 10px;
+    margin: 0px;
+    border-radius: 0;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.alarm-panel > tbody > tr > td{
+    white-space: nowrap;
+}
+
+.alarm-list-group {
+    padding: 0px;
+    margin: 0px;
+    border-radius: 0;
+}
+
+.alarm-list-group .list-group-item-heading{
+    font-size: 13px;
+    font-weight: bold;
+}
+
+.alarm-list-group .list-group-item{
+    padding: 5px 5px;
+    border-radius: 0;
+}
+
+.alarm-list-table{
+    width: 100%
+}
+
+.alarm-list-table > thead > tr > th{
+    font-size: 12px;
+}
+
+.alarm-list-table > tbody > tr > td{
+    font-size: 12px;
+    padding: 5px;
+    vertical-align: middle;
+}
+
+.alarm-list-table > tbody > tr.active > td{
+    background-color: #d9edf7;
+}
+
+.alarm-list-table > tbody > tr > td{
+    white-space: nowrap;
+}
+
+.alarm-list-table > tbody > tr > td:last-child > .btn{
+     float: right;
+     margin-right: 7px;
+}
+
+.alarm-list-table > thead > tr > th:last-child{
+     float: right; 
+     margin-right: 20px;  
+}
+
+.scroll-alarm-panel{
+    background: #fff;
+    overflow-x: auto;
+    max-height: 530px;
+}
+
+.alarm-not-triggered{
+    color: #31708f;
+}
+
+.alarm-triggered{
+    color: #777
+}

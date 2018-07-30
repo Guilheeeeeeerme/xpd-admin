@@ -35,14 +35,15 @@ export class HighchartsService {
 		const self = this;
 		// Load client in the browser
 		// this.$rootScope.$apply(function () {
-		Highcharts.theme = self.getHighchartsTheme();
-		Highcharts.setOptions(self.getHighchartsTheme());
 
-		Highcharts.setOptions({
-			global: {
-				timezoneOffset: new Date().getTimezoneOffset(),
-			},
-		});
+		(Highcharts as any).theme = self.getHighchartsTheme();
+		const options: any = (Highcharts as any).theme;
+
+		options.global = {
+			timezoneOffset: new Date().getTimezoneOffset(),
+		};
+
+		Highcharts.setOptions(options);
 
 		self.highchartDefer.resolve(Highcharts);
 		// });
@@ -65,6 +66,12 @@ export class HighchartsService {
 				},
 				plotBorderColor: '#606063',
 			},
+
+			boost: {
+				useGPUTranslations: true,
+				usePreAllocated: true,
+			},
+
 			title: {
 				style: {
 					color: '#E0E0E3',

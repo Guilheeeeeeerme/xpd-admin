@@ -11,8 +11,6 @@ export class VREReportController {
 		private wellSetupAPIService: WellSetupAPIService,
 		private reportsSetupAPIService: ReportsSetupAPIService) {
 
-		const vm = this;
-
 		$scope.vreData = {
 			vreList: null,
 			vreDaily: null,
@@ -23,22 +21,16 @@ export class VREReportController {
 
 		// --actions--
 		this.getWellList();
-
 	}
+
 	// --implements--
 	private getWellList() {
 		this.wellSetupAPIService.getList().then(
-			(wellList) => {
-				this.getWellSuccessCallback(wellList);
-			},
-			(arg) => {
-				this.getWellErrorCallback(arg);
-			});
+			(wellList) => { this.getWellSuccessCallback(wellList); },
+			(arg) => { this.getWellErrorCallback(arg); });
 	}
 
 	private getWellSuccessCallback(result) {
-
-		const currentWell = result[0];
 
 		const parentData = this.$scope.reportsData;
 
@@ -81,22 +73,21 @@ export class VREReportController {
 		vreTotal /= day;
 		remainingTime = Math.abs(day - runningTime);
 
-		this.$scope.vreData.vreDaily = { totalTime: runningTime, vreTotal, remainingTime };
+		this.$scope.vreData.vreDaily = { totalTime: runningTime, vreTotal: vreTotal, remainingTime: remainingTime };
 
 	}
 
 	public onClickFilterButton(fromDate, toDate) {
+		this.$scope.$parent.rController.getFailuresOnInterval(fromDate, toDate);
 
 		this.$scope.vreData.period = {
-			fromDate,
-			toDate,
+			fromDate: fromDate,
+			toDate: toDate,
 		};
 
-		this.reportsSetupAPIService.getVreList(
-			fromDate,
-			toDate).then(
-				(arg) => { this.vreListSuccessCallback(arg); },
-				(arg) => { this.vreListErrorCallback(arg); },
+		this.reportsSetupAPIService.getVreList(fromDate, toDate).then(
+			(arg) => { this.vreListSuccessCallback(arg); },
+			(arg) => { this.vreListErrorCallback(arg); },
 		);
 	}
 }

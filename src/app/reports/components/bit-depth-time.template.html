@@ -1,19 +1,25 @@
-<h1 class="xpd-member-box-title">Bit Depth x Time</h1>
+<h1 class="xpd-box-title">Bit Depth x Time</h1>
 
 
 <div ng-if="wellId == undefined || wellId == null" class="empty-value-report-message">
 	No current well
 </div>
 
-<div xpd-bit-depth-time chart-data='dados.data' chart-title='dados.title' set-current-planned-event="bdtController.setCurrentPlannedEvent(event)"
- set-current-executed-event="bdtController.setCurrentExecutedEvent(event)" set-hole-depth="bdtController.setHoleDepth(event)"
- , set-current-point="bdtController.setCurrentPoint(event)">
+<div 
+	xpd-bit-depth-time 
+	planned-points="bitDepthReportData.plannedPoints"
+	executed-points="bitDepthReportData.executedPoints"
+	hole-depth-points="bitDepthReportData.holeDepthPoints"
+	start-chart-at="bitDepthReportData.startChartAt"
+	bit-depth-report-data-ready="bitDepthReportDataReady"
+	chart-data='dados.data' 
+	chart-title='dados.title' 
+ 	set-current-point="bdtController.setCurrentPoint(event)">
 </div>
 
 
 <!-- HOLE DEPTH -->
-
-<div class="col-md-6" ng-class="{ 'highligth-details-bdt-table': dados.currentPoint.index == 2 }">
+<div class="col-md-6" ng-class="{ 'highligth-details-bdt-table': dados.selectedLineType == 'holeDepth' }">
 	<table class="table table-condensed equilibrium-time-table">
 		<thead>
 			<tr>
@@ -25,8 +31,6 @@
 	</table>
 </div>
 
-<!-- ng-if="dados.plannedEvent && dados.executedEvent"
-ng-if="dados.plannedEvent && dados.executedEvent" -->
 <div class="col-md-6">
 	<table class="table table-condesed equilibrium-time-table">
 		<tbody>
@@ -34,10 +38,10 @@ ng-if="dados.plannedEvent && dados.executedEvent" -->
 				<th class="equilibrium-time-table-label">
 					Time Diff.
 				</th>
-				<td class="equilibrium-time-table-text" ng-if="dados['plannedEvent'] && dados['executedEvent']">
-					{{ (dados['plannedEvent'].startDate - dados['executedEvent'].startDate)/1000 | secondsToHourMinutesSeconds }}
+				<td class="equilibrium-time-table-text" ng-if="dados.plannedEvent && dados.executedEvent">
+					{{ (dados.plannedEvent.startTime - dados.executedEvent.startTime)/1000 | secondsToHourMinutesSeconds }}
 				</td>
-				<td class="equilibrium-time-table-text" ng-if="!(dados['plannedEvent'] && dados['executedEvent'])">
+				<td class="equilibrium-time-table-text" ng-if="!(dados.plannedEvent && dados.executedEvent)">
 					Please check two points
 				</td>
 			</tr>
@@ -45,8 +49,10 @@ ng-if="dados.plannedEvent && dados.executedEvent" -->
 	</table>
 </div>
 
-<div class="col-md-6 col-lg-6 bitdepthvstime-details-container" ng-class="{ '{{ LINETYPE | lowercase }}': true, 'highligth-details-bdt-table': dados.currentPoint.index == key }"
- ng-repeat="(key, LINETYPE) in ['plannedEvent', 'executedEvent']">
+<div 
+	class="col-md-6 col-lg-6 bitdepthvstime-details-container" 
+	ng-class="{ '{{ LINETYPE | lowercase }}': true, 'highligth-details-bdt-table': dados.selectedLineType == LINETYPE }"
+ 	ng-repeat="LINETYPE in ['plannedEvent', 'executedEvent']">
 
 	<table class="table table-condensed equilibrium-time-table" ng-if="!!dados[LINETYPE]">
 		<thead>
@@ -102,7 +108,7 @@ ng-if="dados.plannedEvent && dados.executedEvent" -->
 				</td>
 
 				<td colspan="2" class="equilibrium-time-table-text">
-					{{dados[LINETYPE].startDate | date:'M/d/yy h:mm a' }} - {{dados[LINETYPE].endDate | date:'M/d/yy h:mm a' }}
+					{{dados[LINETYPE].startTime | date:'M/d/yy h:mm a' }} - {{dados[LINETYPE].endTime | date:'M/d/yy h:mm a' }}
 				</td>
 			</tr>
 
@@ -110,8 +116,7 @@ ng-if="dados.plannedEvent && dados.executedEvent" -->
 	</table>
 
 	<!-- ALARMS -->
-
-	<div class="col-md-10 col-md-offset-1" ng-if="!!dados[LINETYPE] && bdtController.getAlarmsFromEvent(dados[LINETYPE]).length > 0">
+	<div class="col-md-10 col-md-offset-1">
 
 		<table class="table table-condensed equilibrium-time-table">
 
@@ -128,7 +133,7 @@ ng-if="dados.plannedEvent && dados.executedEvent" -->
 			</thead>
 
 			<tbody>
-				<tr ng-repeat="ITEM_ALARM in bdtController.getAlarmsFromEvent(dados[LINETYPE])">
+				<tr ng-repeat="ITEM_ALARM in dados[LINETYPE].alarms">
 					<td class="equilibrium-time-table-text">{{ ITEM_ALARM.name }}</td>
 
 					<td class="equilibrium-time-table-text">
@@ -141,11 +146,11 @@ ng-if="dados.plannedEvent && dados.executedEvent" -->
 
 
 						<span class="equilibrium-time-table-text" ng-if="!ITEM_ALARM.isDurationAlarm">
-							From {{ ITEM_ALARM.startDepth | number: 2 }}(m) to {{ ITEM_ALARM.endDepth | number: 2}}(m) {{ ITEM_ALARM.speedRestriction
+							From {{ ITEM_ALARM.startDepth | number: 2 }}(m) to {{ ITEM_ALARM.endDepth | number: 2}}(m) {{ ITEM_ALARM.speedRestriction | number: 2
 							}} m/h
 						</span>
 						<span class="equilibrium-time-table-text" ng-if="ITEM_ALARM.isDurationAlarm">
-							Stop at {{ ITEM_ALARM.startDepth | number: 2 }}(m) for {{ 3600/ITEM_ALARM.optimumSpeed | secondsToHourMinutesSeconds }}
+							Stop at {{ ITEM_ALARM.startDepth | number: 2 }}(m) for {{ 3600 / ITEM_ALARM.optimumSpeed | secondsToHourMinutesSeconds }}
 						</span>
 
 					</td>

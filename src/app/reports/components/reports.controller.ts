@@ -13,6 +13,7 @@ export class ReportsController {
 		public wellSetupAPIService: WellSetupAPIService,
 		public operationDataService: OperationDataService) {
 
+		// --declarations--
 		const vm = this;
 
 		$scope.reportsData = {
@@ -26,42 +27,27 @@ export class ReportsController {
 		};
 
 		operationDataService.openConnection([]).then(() => {
+
 			vm.operationDataFactory = operationDataService.operationDataFactory;
+			$scope.operationData = vm.operationDataFactory.operationData;
 
-			if (!localStorage.getItem('xpd.admin.reports.reportsData.toDate') ||
-				!localStorage.getItem('xpd.admin.reports.reportsData.fromDate')) {
-				this.setCurrentDate();
-			} else {
-				$scope.reportsData.toDate = new Date(localStorage.getItem('xpd.admin.reports.reportsData.toDate'));
-				$scope.reportsData.fromDate = new Date(localStorage.getItem('xpd.admin.reports.reportsData.fromDate'));
-			}
+			operationDataService.on('setOnFailureChangeListener', () => { this.onFailureChange(); });
 
-			this.getWellList();
-
-			operationDataService.on('setOnFailureChangeListener', () => {
-				this.onFailureChange();
-			});
-
-			operationSetupAPIService.getList().then((operationList) => {
-				this.currentOperationSuccessCallback(operationList);
-			});
 		});
 
-	}
-
-	public getFailuresOnInterval(startTime, endTime) {
-
-		this.$scope.reportsData.failuresOnInterval = null;
-
-		const startInterval = new Date(startTime).getTime();
-		const endInterval = new Date(endTime).getTime();
-
-		if (startTime && endTime) {
-			this.$scope.reportsData.failuresOnInterval = this.checkNptOnInterval(startInterval, endInterval);
+		// --actions--
+		if (!localStorage.getItem('xpd.admin.reports.reportsData.toDate') || !localStorage.getItem('xpd.admin.reports.reportsData.fromDate')) {
+			this.setCurrentDate();
+		} else {
+			$scope.reportsData.toDate = new Date(localStorage.getItem('xpd.admin.reports.reportsData.toDate'));
+			$scope.reportsData.fromDate = new Date(localStorage.getItem('xpd.admin.reports.reportsData.fromDate'));
 		}
 
-		this.setCurrentDate();
+		this.getWellList();
 
+		operationSetupAPIService.getList().then(
+			(arg) => { this.currentOperationSuccessCallback(arg); },
+			(arg) => { this.currentOperationErrorCallback(arg); });
 	}
 
 	private onFailureChange() {
@@ -89,10 +75,11 @@ export class ReportsController {
 
 	}
 
+	// --implements--
 	private getWellList() {
-		this.wellSetupAPIService.getList().then((wells) => {
-			this.getWellSuccessCallback(wells);
-		});
+		this.wellSetupAPIService.getList().then(
+			(wells) => { this.getWellSuccessCallback(wells); },
+			(arg) => { this.getWellErrorCallback(arg); });
 	}
 
 	private getWellSuccessCallback(result) {
@@ -107,6 +94,10 @@ export class ReportsController {
 		this.makeReportList(this.$scope.reportsData.currentWell);
 	}
 
+	private getWellErrorCallback(error) {
+		console.log(error);
+	}
+
 	private currentOperationSuccessCallback(operationList) {
 		this.$scope.reportsData.operationList = operationList;
 
@@ -118,6 +109,10 @@ export class ReportsController {
 
 	}
 
+	private currentOperationErrorCallback(error) {
+		console.log(error);
+	}
+
 	private makeReportList(currentWell) {
 
 		this.$scope.reportsData.reportList = [
@@ -127,6 +122,14 @@ export class ReportsController {
 			{ type: 'Needle Report', url: '#/needle-report' },
 			{ type: 'Failures/NPT', url: '#/failures-npt' },
 			{ type: 'Lessons Learned', url: '#/lessons-learned' },
+			// {type:'VRE', url:'#/operation/'+operationId},
+			// {type:"Daily", url:"#/operation/"+operationId+"/daily"},
+			// {type:'Connections', url:'#/operation/'+operationId+'/connections'},
+			// {type:'Trips', url:'#/operation/'+operationId+'/trips'},
+			// {type:'Time vs Depth', url:'#/time-vs-depth'},
+			// {type:'Time vs Depth', url:'#/operation/'+operationId+'/time-vs-depth'},
+			// {type:"Failures", url:"#/operation/"+operationId+"/failures"},
+			// {type:"Improvements", url:"#/operation/"+operationId+"/improvements"},
 		];
 
 		if (currentWell) {
@@ -134,10 +137,24 @@ export class ReportsController {
 		}
 	}
 
-	private checkNptOnInterval(startInterval, endInterval) {
-		const vm = this;
+	public getFailuresOnInterval(startTime, endTime) {
 
-		const failureList = vm.operationDataFactory.operationData.failureContext.failureList;
+		this.$scope.reportsData.failuresOnInterval = null;
+
+		const startInterval = new Date(startTime).getTime();
+		const endInterval = new Date(endTime).getTime();
+
+		if (startTime && endTime) {
+			this.$scope.reportsData.failuresOnInterval = this.checkNptOnInterval(startInterval, endInterval);
+		}
+
+		this.setCurrentDate();
+
+	}
+
+	private checkNptOnInterval(startInterval, endInterval) {
+
+		const failureList = this.operationDataFactory.operationData.failureContext.failureList;
 		const failuresOnInterval = [];
 
 		for (const i in failureList) {
@@ -157,4 +174,5 @@ export class ReportsController {
 
 		return failuresOnInterval;
 	}
+
 }

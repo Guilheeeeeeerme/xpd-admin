@@ -1,11 +1,11 @@
-<div class="col-md-2 col-sm-4 col-xs-4 xpd-admin-col">
+<div class="col-md-2 col-sm-4 col-xs-4">
 
-    <div class="xpd-admin-col-header">
+    <div class="xpd-panel-header">
         Current: {{operationData.suboperationContext.currentSuboperation.type}}
     </div>
 
 
-    <div class="xpd-admin-col-content">
+    <div class="xpd-panel-body">
 
         <ul class="nav xpd-green-styled-box stacked" role="tablist" ng-repeat="state in operationData.suboperationContext.currentSuboperation.jointIntervals">
 
@@ -17,13 +17,13 @@
             </li>
 
             <li class=" planner-sum-trip-conn">
-                1 TRIP + 1 CONN = {{ pController.sumTripConnduration(dados.settings[state.state]) | date: 'HH:mm:ss': '+0000' }}
+                1 TRIP + 1 CONN = {{ ( ( dados.settings[state.state].TRIP.targetTime * 1000 ) + ( dados.settings[state.state].CONN.targetTime * 1000 ) ) | date: 'HH:mm:ss': '+0000' }}
                 
             </li>
 
 
             <li role="presentation" class="planner-list-item" ng-class="{'active': dados.selectedEventType == 'CONN' && state.state == dados.selectedState}"
-                ng-click="pController.actionSelectActivityToPlan(state.state, 'CONN')" ng-init="pController.selectActivityOnInit($index, state.state, 'CONN')">
+                ng-click="pController.actionSelectActivityToPlan(state.state, 'CONN')">
                 <a>Connection</a>
             </li>
 
@@ -38,14 +38,14 @@
     </div>
 </div>
 
-<div class="col-md-6 col-sm-8 col-xs-8 xpd-admin-col has-footer" ng-if="( dados.settings[dados.selectedState][dados.selectedEventType].eventType != 'CONN' && dados.settings[dados.selectedState][dados.selectedEventType].eventType != 'TRIP' )">
+<div class="col-md-6 col-sm-8 col-xs-8 xpd-panel has-footer" ng-if="( dados.settings[dados.selectedState][dados.selectedEventType].eventType != 'CONN' && dados.settings[dados.selectedState][dados.selectedEventType].eventType != 'TRIP' )">
     <div class="xpd-chart-placeholder">
         <span class="xpd-chart-placeholder-text" ng-if="dados.settings[dados.selectedState][dados.selectedEventType].eventType == null">Select a State/Event</span>
         <span class="xpd-chart-placeholder-text" ng-if="dados.settings[dados.selectedState][dados.selectedEventType].eventType != null">Operation not supported due to missing parameters or state not subjected to planning</span>
     </div>
 </div>
 
-<div class="col-md-6 col-sm-8 col-xs-8 xpd-admin-col has-footer" ng-if="dados.settings[dados.selectedState][dados.selectedEventType].eventType == 'CONN'">
+<div class="col-md-6 col-sm-8 col-xs-8 xpd-panel has-footer" ng-if="dados.settings[dados.selectedState][dados.selectedEventType].eventType == 'CONN'">
     <xpd-connection-planner 
         label="{{ dados.settings[dados.selectedState][dados.selectedEventType].label }} " 
         target-speed="dados.settings[dados.selectedState][dados.selectedEventType].targetSpeed"
@@ -55,7 +55,7 @@
         action-button-apply="pController.actionButtonApplyConn()" />
 </div>
 
-<div class="col-md-6 col-sm-8 col-xs-8 xpd-admin-col has-footer" ng-if="dados.settings[dados.selectedState][dados.selectedEventType].eventType == 'TRIP'">
+<div class="col-md-6 col-sm-8 col-xs-8 xpd-panel has-footer" ng-if="dados.settings[dados.selectedState][dados.selectedEventType].eventType == 'TRIP'">
     <xpd-trip-planner 
         label="{{ dados.settings[dados.selectedState][dados.selectedEventType].label }}" 
         target-speed="dados.settings[dados.selectedState][dados.selectedEventType].targetSpeed"
@@ -78,9 +78,9 @@
     />
 </div>
 
-<div class="col-md-4 col-sm-12 col-xs-12 xpd-admin-col">
+<div class="col-md-4 col-sm-12 col-xs-12 xpd-panel">
 
-    <div class="xpd-admin-col-content">
+    <div class="xpd-panel-body">
 
         <div class="planner-forecast-row">
 
@@ -101,7 +101,7 @@
                         </span>
                     </div>
                 </div>
-                <div class="xpd-chart-container-footer operation-progress-delay-container">
+                <div class="xpd-chart-container-footer padding-5">
                     <div class="operation-progress-delay">
                         <div class="operation-progress-delay-title">
                             Progress Delay
@@ -122,34 +122,46 @@
         </div>
 
         <div class="planner-forecast-row">
+            <div class="planner-forecast-grid">
+                <div class="planner-forecast-cell planner-forecast-cell-full">
+                    <xpd-forecast-line 
+                        tripin="operationData.directionContext.tripin"
+                        settings="dados.settings"
+                    ></xpd-forecast-line>
+                </div>
+            </div>
+        </div>
+
+        <!-- <div class="planner-forecast-row">
 
             <div class="planner-forecast-grid">
 
                 <div class="planner-forecast-cell planner-forecast-cell-full">
                     <div 
                         class="xpd-chart" 
-                        is-tripin = "operationData.suboperationContext.currentSuboperation.tripin"
+                        is-tripin = "operationData.directionContext.tripin"
                         xpd-forecast-line settings='dados.settings' 
                         state="{{dados.selectedState}}" 
                         type="{{dados.selectedEventType}}"
                         v-target-line="operationData.forecastContext.vTargetEstimative" 
-                        actual-line="operationData.forecastContext.actualLine"></div>
+                        actual-line="plannerAsyncData.actualLine"></div>
                 </div>
 
                 <div class="planner-forecast-cell planner-forecast-cell-full">
                     <div 
                         class="xpd-chart" 
-                        is-tripin = "operationData.suboperationContext.currentSuboperation.tripin"
+                        is-tripin = "operationData.directionContext.tripin"
                         xpd-forecast-line settings='dados.settings' 
                         state="{{dados.selectedState}}" 
                         type="{{ 'BOTH' }}" 
                         v-target-line="operationData.forecastContext.vTargetEstimative"
-                        actual-line="operationData.forecastContext.actualLine"></div>
+                        actual-line="plannerAsyncData.actualLine"></div>
                 </div>
 
             </div>
 
-        </div>
+        </div> -->
+
     </div>
 
 </div>

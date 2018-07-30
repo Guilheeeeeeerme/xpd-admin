@@ -1,5 +1,7 @@
 import * as angular from 'angular';
 
+import reportsTemplate from './reports.template.html';
+
 import { XPDSharedModule } from '../shared/shared.module';
 import { BitDepthTimeController } from './components/bit-depth-time.controller';
 import { DepthController } from './components/depth.controller';
@@ -56,3 +58,8 @@ XPDReportsModule.directive('xpdSlipsToSlipsBarChart', SlipsToSlipsBarChart.Facto
 XPDReportsModule.directive('xpdTablePeriod', TablePeriod.Factory());
 XPDReportsModule.directive('xpdVreBarChart', VreBarChart.Factory());
 XPDReportsModule.directive('xpdVreScoreBarChart', VreScoreBarChart.Factory());
+
+XPDReportsModule.component('xpdReportsComponent', {
+	template: reportsTemplate,
+	controller: 'ReportsController as rController',
+});

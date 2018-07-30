@@ -46,10 +46,10 @@
 
     </div>
 
-    <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4 xpd-admin-col">
+    <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4 xpd-panel">
 
          <!-- ng-if="flags.showDMEC == false" -->
-        <div class="xpd-admin-col-content">
+        <div class="xpd-panel-body">
 
             <div class="row tracking-performance-row xpd-chart-container">
 
@@ -98,7 +98,7 @@
 
                     </div>
 
-                    <div ng-if="operationData.shiftContext.onShift[0] != null" xpd-member-performance member="operationData.shiftContext.onShift[0].member"></div>
+                    <xpd-member-performance ng-if="operationData.shiftContext.onShift[0] != null"  member="operationData.shiftContext.onShift[0].member"></xpd-member-performance>
 
                 </div>
 
@@ -120,7 +120,7 @@
                         progress-data-delay="operationData.operationProgressContext.progressDataDelay"></div>
 
                 </div>
-                <div class="xpd-chart-container-footer operation-progress-delay-container">
+                <div class="xpd-chart-container-footer padding-5">
                     <div class="operation-progress-delay">
                         <div class="operation-progress-delay-title">
                             Progress Delay

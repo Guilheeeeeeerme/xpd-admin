@@ -11,6 +11,7 @@
 import { DialogService } from '../xpd.dialog/xpd.dialog.factory';
 import { MenuConfirmationService } from '../xpd.menu-confirmation/menu-confirmation.factory';
 import { OperationDataService } from '../xpd.operation-data/operation-data.service';
+import './admin-nav-bar.style.scss';
 import template from './admin-nav-bar.template.html';
 
 export class XPDAdminNavBarDirective implements ng.IDirective {
