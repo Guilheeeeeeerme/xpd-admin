@@ -61,7 +61,7 @@ export class ModalFailureController {
 
 	}
 	private getCategoryList() {
-		this.categorySetupAPIService.getList().then(
+		this.categorySetupAPIService.getListCategory().then(
 			(arg) => { this.getCategoryListSuccessCallback(arg); },
 			(arg) => { this.getCategoryListErrorCallback(arg); },
 		);
@@ -70,7 +70,7 @@ export class ModalFailureController {
 	private getCategoryListSuccessCallback(result) {
 		this.roleList = result;
 		this.makeTreeStructure(this.roleList);
-	}
+	}getListCategory
 
 	private getCategoryListErrorCallback(error) {
 		console.log(error);

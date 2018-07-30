@@ -3,13 +3,18 @@ import { HighchartsService } from '../../shared/highcharts/highcharts.service';
 // (function() {
 	// 	'use stric';
 
-export class LessonsParetoChart {
+export class ParetoChartDirective {
 
 	public static $inject: string[] = ['highchartsService'];
 	public restrict: 'EA';
 	public scope = {
-		chartData: '=',
 		chartTitle: '=',
+		primaryDataTitle: '=',
+		primaryData: '=',
+		secondaryDataTitle: '=',
+		secondaryData: '=',
+		categories: '=',
+		percentage: '=',
 	};
 
 	constructor(
@@ -24,13 +29,20 @@ export class LessonsParetoChart {
 	) => {
 		this.highchartsService.highcharts().then(function (Highcharts) {
 
-			scope.$watchGroup(['chartData', 'chartTitle'], function (newValue) {
+			scope.$watchGroup([
+				'chartTitle',
+				'primaryData',
+				'primaryDataTitle',
+				'secondaryData',
+				'secondaryDataTiel',
+				'percentageData',
+			], function (newValue) {
 				if (newValue) {
-					createChart(newValue[0], newValue[1]);
+					createChart();
 				}
 			});
 
-			function createChart(chartData, chartTitle) {
+			function createChart() {
 
 				return Highcharts.chart(elem[0], {
 					chart: {
@@ -43,13 +55,13 @@ export class LessonsParetoChart {
 						},
 					},
 					title: {
-						text: chartTitle,
+						text: scope.chartTitle,
 						style: {
 							color: '#00807f',
 						},
 					},
 					xAxis: [{
-						categories: chartData.categories,
+						categories: scope.categories,
 						crosshair: true,
 						labels: {
 							style: {
@@ -71,7 +83,7 @@ export class LessonsParetoChart {
 						max: 100,
 						min: 0,
 						labels: {
-							format: '{value}°%',
+							format: '{value}%',
 							style: {
 								color: '#ffe80e',
 								fontSize: '20px',
@@ -99,22 +111,23 @@ export class LessonsParetoChart {
 					},
 					series: [
 						{
-							name: 'Failures',
+							name: scope.primaryDataTitle,
 							type: 'column',
-							data: chartData.lessons,
+							data: scope.primaryData,
 							showInLegend: false,
 						}, {
-							name: '"BEST PRACTICE"',
+							name: scope.secondaryDataTitle,
 							type: 'column',
 							color: Highcharts.getOptions().colors[2],
-							data: chartData.bestPractices,
+							data: scope.secondaryData,
 							showInLegend: false,
 						}, {
 							name: 'Accumulated %',
 							type: 'spline',
 							yAxis: 1,
 							color: '#ffe80e',
-							data: chartData.percentage,
+							data: scope.percentage,
+							showInLegend: true,
 							tooltip: {
 								pointFormat: 'Value: {point.y:.2f} %',
 							},
@@ -127,7 +140,7 @@ export class LessonsParetoChart {
 	public static Factory(): ng.IDirectiveFactory {
 		const directive = (
 			highchartsService: HighchartsService,
-		) => new LessonsParetoChart(
+		) => new ParetoChartDirective(
 			highchartsService,
 			);
 

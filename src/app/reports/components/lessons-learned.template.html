@@ -15,24 +15,22 @@
 		<div class="row failure-report-chart">
 
 			<div class="col-md-5"
-				xpd-lessons-learned-chart
-				chart-data="llController.chartDonut.data"
-				chart-title="llController.chartDonut.title">
+				xpd-pie-chart chart-title="llController.chartDonut.title"
+				internal-percentages="llController.chartDonut.data.pie"
+				external-percentages="llController.chartDonut.data.donut">
 			</div>
 
 			<div class="col-md-7"
-				xpd-lessons-pareto-chart
-				chart-data="llController.chartPareto.data"
-				chart-title="llController.chartDonut.title">
+				xpd-pareto-chart
+				chart-title="llController.chartDonut.title"
+				primary-data-title= "'Lessons'"
+				primary-data= "llController.chartPareto.data.lessons"
+				secondary-data-title= "'BEST PRACTICE'"
+				secondary-data= "llController.chartPareto.data.bestPractices"
+				categories= "llController.chartPareto.data.categories"
+				percentage= "llController.chartPareto.data.percentage">
 			</div>
 		</div>
-
-		<!-- <pre>{{ failuresData.categories | json }}</pre> -->
-		<!-- <pre>{{ llController.totalFailuresLength | json }}</pre> -->
-		<!-- <pre>{{ llController.nodeList | json }}</pre> -->
-		<!-- <pre>{{ llController.totalFailures | json }}</pre> -->
-		<!--pre>{{ llController.totalTime | json }}</pre-->
-
 
 		<div class="col-md-10 col-md-offset-1">
 			<ol class="breadcrumb failures-breadcrumb">

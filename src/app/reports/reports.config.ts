@@ -2,6 +2,7 @@
 // 'use strict';
 
 import BitDepthTimeTemplate from './components/bit-depth-time.template.html';
+import FailuresLessonsTemplate from './components/failures-lessons.template.html';
 import FailuresNptTemplate from './components/failures-npt.template.html';
 import HistogramReportTemplate from './components/histogram-report.template.html';
 import LessonsLearnedTemplate from './components/lessons-learned.template.html';
@@ -41,13 +42,13 @@ export class ReportConfig {
 			})
 
 			.when('/failures-npt/', {
-				template: FailuresNptTemplate,
-				controller: 'FailuresNptController as fnController',
+				template: FailuresLessonsTemplate, // FailuresNptTemplate,
+				controller: 'FailuresNptController as flController', // fnController',
 			})
 
 			.when('/lessons-learned/', {
-				template: LessonsLearnedTemplate,
-				controller: 'LessonsLearnedController as llController',
+				template: FailuresLessonsTemplate, // LessonsLearnedTemplate,
+				controller: 'LessonsLearnedController as flController', // llController',
 			})
 
 			.when('/bit-depth-time/:wellId?', {

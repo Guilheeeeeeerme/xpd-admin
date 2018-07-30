@@ -1,0 +1,40 @@
+<form name="form">
+	<div class="modal-header">
+		<span class="btn glyphicon glyphicon-remove pull-right" ng-click="flController.modalActionButtonClose()">
+		</span>
+		<h4 class="modal-title">{{modalTitle}}</h4>
+	</div>
+
+	<div class="modal-body">
+		<table class="table table-bordered xpd-operation-table table-fixed-header">
+			<thead>
+				<tr>
+					<th class="col-md-1">{{(modalType == 'failures') ? 'NPT' : 'B. Pract.'}}</th>
+					<th class="col-md-2">Category</th>
+					<th class="col-md-1">Duration</th>
+					<th class="col-md-3">Start</th>
+					<th class="col-md-3">End</th>
+					<th class="col-md-2">Description</th>
+				</tr>
+			</thead>
+		</table>
+
+		<div class="div-table-fixed">
+			<table class="table table-bordered xpd-operation-table">
+				<tbody>
+					<tr class="center-align-list" ng-repeat="failureLesson in modalData.category.failuresLessons" ng-class="{ 'in-npt': failureLesson.npt, 'in-best-practices': failureLesson.bestPractices }">
+						<td class="col-md-1">
+							<span ng-if="failureLesson.npt" ng-class="{'glyphicon glyphicon-ok':(failureLesson.npt), '':(!failureLesson.npt)}"></span>
+							<span ng-if="failureLesson.bestPractices" ng-class="{'glyphicon glyphicon-star':(failureLesson.bestPractices), '':(!failureLesson.bestPractices)}"></span>
+						</td>
+						<td class="col-md-2">{{modalData.category.initial +' - '+ modalData.category.name}}</td>
+						<td class="col-md-1">{{failureLesson.time | secondsToHourMinutes}}</td>
+						<td class="col-md-3">{{failureLesson.startTime | date:'MM/dd/yyyy HH:mm:ss'}}</td>
+						<td class="col-md-3">{{failureLesson.endTime | date:'MM/dd/yyyy HH:mm:ss'}}</td>
+						<td class="col-md-2">{{failureLesson.description}}</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+</form>
