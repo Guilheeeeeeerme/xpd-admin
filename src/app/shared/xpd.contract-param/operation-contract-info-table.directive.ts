@@ -5,6 +5,7 @@
 // 	operationContractInfoTable.$inject = ['vCruisingCalculator'];
 
 import { VCruisingCalculatorService } from '../xpd.calculation/calculation.service';
+import './operation-contract-info-table.style.scss';
 import template from './operation-contract-info-table.template.html';
 
 export class OperationContractInfoTableDirective {

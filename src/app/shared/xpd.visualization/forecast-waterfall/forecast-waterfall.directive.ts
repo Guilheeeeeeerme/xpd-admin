@@ -3,8 +3,7 @@
 
 // 	forecastWaterfall.$inject = ['$filter', 'highchartsService'];
 
-import { HighchartsService } from '../highcharts/highcharts.service';
-import template from './forecast-waterfall.template.html';
+import { HighchartsService } from '../../highcharts/highcharts.service';
 
 export class ForecastWaterfallDirective implements ng.IDirective {
 	public static $inject: string[] = ['$filter', 'highchartsService'];
@@ -13,7 +12,6 @@ export class ForecastWaterfallDirective implements ng.IDirective {
 		dataChart: '=',
 	};
 	public restrict = 'E';
-	public template = template;
 
 	constructor(
 		private $filter: any,
@@ -42,7 +40,7 @@ export class ForecastWaterfallDirective implements ng.IDirective {
 					return self.$filter('secondsToHourMinutes')(Math.abs(this.y));
 				}
 
-				Highcharts.chart('container', {
+				Highcharts.chart(element[0], {
 
 					chart: {
 						type: 'waterfall',

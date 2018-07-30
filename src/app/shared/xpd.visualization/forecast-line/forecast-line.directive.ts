@@ -1,7 +1,7 @@
 import * as angular from 'angular';
-import { HighchartsService } from '../highcharts/highcharts.service';
-import { OperationDataService } from '../xpd.operation-data/operation-data.service';
-import { ReportsSetupAPIService } from '../xpd.setupapi/reports-setupapi.service';
+import { HighchartsService } from '../../highcharts/highcharts.service';
+import { OperationDataService } from '../../xpd.operation-data/operation-data.service';
+import { ReportsSetupAPIService } from '../../xpd.setupapi/reports-setupapi.service';
 
 export class ForecastLineDirective implements ng.IDirective {
 	private forecastLineChart: any;

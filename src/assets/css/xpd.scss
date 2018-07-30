@@ -7,13 +7,11 @@
     src: url("../fonts/agency-fb.ttf");
 }
 
-.scrollable-content {
-    overflow: auto;
-    height: 100%;
-}
+@import './height.scss';
+@import './scrollbar.scss';
+@import './xpd-panel.scss';
+@import './xpd-chart-container.scss';
 
-
-@import './scrollbar.css';
 
 /**
  * TYPE SCALE CODE (Major Third Scale)
@@ -24,16 +22,16 @@ html {
 }
 
 body {
-    padding-top: 60px;
-    padding-bottom: 60px;
+    background: url('./../img/bg.png');
+    padding: 0;
+    margin: 0;
     height: 100vh;
     max-height: 100vh;
     min-height: 100vh;
-    background-color: white;
     font-family: 'Arial', serif;
     font-weight: 400;
     line-height: 1.45;
-    color: #333;
+    // color: #333;
 }
 
 p {
@@ -71,14 +69,56 @@ small, .font_small {
 /**
  * PAGE STRUCTURE
  **/
+ 
+.toast-bottom-center {
+    bottom: 0;
+    right: 0;
+    width: 100%;
+    margin-bottom: 50px;
+}
 
-.xpd-content-container {}
+.padding-bottom-30 {
+    padding-bottom: 30px;
+}
 
-.xpd-section {
-    height: 100%;
-    max-height: 100%;
-    min-height: 100%;
+.padding-5 {
+    padding: 5px;
+}
+
+.scrollable-content {
     overflow: auto;
+    height: 100%;
+}
+
+.xpd-section-with-navbar {
+    // overflow: hidden;
+    padding-top: 70px;
+    min-height: 100vh;
+    height: 100vh;
+    margin: 0;
+}
+
+.xpd-green-list-container ul {
+    border: 2px solid #456c75;
+    font-family: AgencyFB;
+    font-size: 1.3em;
+    font-weight: bolder;
+    color: #456c75;
+    margin-top: 5px;
+}
+
+.xpd-green-list-container li {
+    background-color: #acd7ca;
+    color: black;
+    text-align: left;
+    font-weight: normal;
+    font-style: italic;
+}
+
+.xpd-green-list-container li > a {
+    color: #000;
+    padding: 0 5px;
+    list-style-type: disc;
 }
 
 
@@ -86,14 +126,9 @@ small, .font_small {
  *  FORM COMPONENTS
  **/
 
-.form-checkbox {
-    margin: 0;
-}
-
 .table.borderless>tbody>tr>td, .table.borderless>tbody>tr>th, .table.borderless>tfoot>tr>td, .table.borderless>tfoot>tr>th, .table.borderless>thead>tr>td, .table.borderless>thead>tr>th {
     border: none;
 }
-
 
 /**
  * XPD HEADER
@@ -101,40 +136,6 @@ small, .font_small {
 
 .xpd-header-logo {
     width: 45px;
-}
-
-
-/**
- *  LOGIN STRUCTURE
- **/
-
-.xpd-login-body {
-    background-color: #eee;
-}
-
-
-/**
- * SIGIN FORM
- **/
-
-.xpd-login-form {
-    max-width: 330px;
-    padding: 15px;
-    margin: 0 auto;
-}
-
-.xpd-login-form-title {
-    margin-bottom: 10px;
-}
-
-.xpd-login-form .form-control {
-    position: relative;
-    height: auto;
-    -webkit-box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    box-sizing: border-box;
-    padding: 10px;
-    font-size: 16px;
 }
 
 
@@ -291,19 +292,6 @@ small, .font_small {
  * ALARMS LISTS
  **/
 
-.default-alarm-list-row {
-    color: #337ab7;
-    font-style: italic;
-}
-
-.operation-alarm-form {
-    padding: 10px;
-}
-
-.form-group.operation-alarm-form-button-container {
-    margin-bottom: 0;
-}
-
 a.view-only-link {
     text-decoration: blink;
 }
@@ -354,10 +342,6 @@ a.view-only-link {
     font-weight: bold;
     font-size: 12px;
 }*/
-
-.actions-column-label{
-    padding-top: 13px;
-}
 
 
 
@@ -804,11 +788,6 @@ a.view-only-link {
  }
 
 
-
-/**
-* Componente: xpd-admin-nav-bar and operation manager
-**/
-
 xpd-operation-manager {
     position: absolute;
     top: 0;
@@ -816,20 +795,12 @@ xpd-operation-manager {
     z-index: 1030;
 }
 
-xpd-admin-nav-bar .navbar {
-    border: 0;
-}
-
 xpd-operation-manager,
-xpd-operation-manager .xpd-nav-button,
-xpd-admin-nav-bar,
-xpd-admin-nav-bar .navbar,
-xpd-admin-nav-bar .xpd-nav-button {
+xpd-operation-manager .xpd-nav-button {
     background-color: transparent;
 }
 
-xpd-operation-manager .xpd-nav-button,
-xpd-admin-nav-bar .xpd-nav-button {
+xpd-operation-manager .xpd-nav-button {
     border: 2px solid #456c75;
     padding: 15px;
     font-family: AgencyFB;
@@ -838,15 +809,12 @@ xpd-admin-nav-bar .xpd-nav-button {
     color: #456c75;
 }
 
-xpd-operation-manager .xpd-nav-button,
-xpd-admin-nav-bar .xpd-nav-button {
+xpd-operation-manager .xpd-nav-button {
     color: #456c75;
 }
 
 xpd-operation-manager .xpd-nav-button:focus,
-xpd-operation-manager .xpd-nav-button:hover,
-xpd-admin-nav-bar .xpd-nav-button:focus,
-xpd-admin-nav-bar .xpd-nav-button:hover {
+xpd-operation-manager .xpd-nav-button:hover,{
     background-color: #456c75;
     color: white;
 }

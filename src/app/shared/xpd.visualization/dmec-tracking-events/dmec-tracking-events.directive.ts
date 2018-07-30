@@ -6,6 +6,7 @@ import * as d3 from 'd3';
 import { EventDetailsModalService } from '../../xpd.modal.event-details/xpd-modal-event-details.factory';
 import { FailureModalFactory } from '../../xpd.modal.failure/xpd-modal-failure.factory';
 import { LessonLearnedModalService } from '../../xpd.modal.lessonlearned/xpd-modal-lessonlearned.service';
+import './dmec-tracking-events.style.scss';
 import template from './dmec-tracking-events.template.html';
 
 export class DMECTrackingEventsDirective implements ng.IDirective {

@@ -1,6 +1,6 @@
 // (function() {
 // 	'use strict';
-
+import './vre-list-table.style.scss';
 import template from './vre-list-table.template.html';
 
 export class VREListTableDirective implements ng.IDirective {

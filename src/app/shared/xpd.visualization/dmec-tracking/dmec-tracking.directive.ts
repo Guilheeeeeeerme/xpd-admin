@@ -1,7 +1,8 @@
 // (function() {
 // 	'use strict';
 
-import { DMECService } from '../xpd.dmec/dmec.service';
+import { DMECService } from '../../xpd.dmec/dmec.service';
+import './dmec-tracking.style.scss';
 import template from './dmec-tracking.template.html';
 
 export class DMECTrackingDirective implements ng.IDirective {

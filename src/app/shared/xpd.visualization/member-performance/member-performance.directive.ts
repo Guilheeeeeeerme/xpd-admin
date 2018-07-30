@@ -1,11 +1,10 @@
 
-// memberPerformance.$inject = [];
-
+import './member-performance.style.scss';
 import template from './member-performance.template.html';
 
 export class MemberPerformanceDirective implements ng.IDirective {
 	public template = template;
-	public restrict = 'A';
+	public restrict = 'E';
 	public scope = {
 		member: '=',
 	};

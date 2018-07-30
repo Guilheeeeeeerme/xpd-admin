@@ -1,4 +1,5 @@
 
+import './old-tracking.style.scss';
 import template from './old-tracking.template.html';
 
 export class OldTrackingDirective implements ng.IDirective {

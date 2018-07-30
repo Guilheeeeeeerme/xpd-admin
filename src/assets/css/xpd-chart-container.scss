@@ -1,0 +1,66 @@
+
+
+.xpd-chart-container-header {
+    font-family: AgencyFB;
+    font-size: 1em;
+    text-align: center;
+    -webkit-text-stroke: 1px #517f89;
+    -webkit-text-fill-color: transparent;
+    white-space: nowrap;
+}
+
+.xpd-chart-container-header {
+    display: none;
+}
+
+.xpd-chart-container-footer {
+    display: none;
+}
+
+.xpd-chart-container > .xpd-chart-container-header {
+    display: block;
+    height: 5%;
+}
+
+.xpd-chart-container > .xpd-chart-container-header + .xpd-chart-container-content {
+    height: 95%;
+}
+
+.xpd-chart-container.has-footer > .xpd-chart-container-header + .xpd-chart-container-content {
+    height: 74%;
+}
+
+.xpd-chart-container.has-footer > .xpd-chart-container-header + .xpd-chart-container-content + .xpd-chart-container-footer {
+    display: block;
+    height: 20%;
+}
+
+.xpd-chart-container-content {
+    height: 100%;
+    padding-top: 10px;
+}
+
+.xpd-chart-container {
+    height: 100%;
+    overflow-y: auto;
+    border-left: solid 1px #436a72;
+}
+
+.xpd-chart {
+    height: 100%;
+}
+
+.xpd-chart > svg {
+    height: 99%;
+}
+
+.xpd-chart > .trip-ruler-container {
+    padding-top: 40px;
+    padding-bottom: 40px;
+}
+
+.xpd-chart > .xpd-block-speed-container {
+    padding-top: 20px;
+    padding-bottom: 0px;
+    background-color: rgba(48, 48, 48, 0.6);
+}

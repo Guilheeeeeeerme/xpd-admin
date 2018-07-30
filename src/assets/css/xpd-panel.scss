@@ -1,0 +1,60 @@
+
+
+.xpd-panel-header {
+    font-family: AgencyFB;
+    font-size: 2em;
+    -webkit-text-stroke: 1.5px #517f89;
+    -webkit-text-fill-color: transparent;
+}
+
+.xpd-panel-header,
+.xpd-panel-footer {
+    display: none;
+}
+
+.xpd-panel > .xpd-panel-header {
+    display: block;
+    height: 5%;
+}
+
+.xpd-panel > .xpd-panel-header + .xpd-panel-body {
+    height: 95%;
+}
+
+/*.xpd-panel.has-footer > .xpd-panel-header+.xpd-panel-body {
+    height: 75%;
+}
+
+.xpd-panel.has-footer > .xpd-panel-header+.xpd-panel-body+.xpd-panel-footer {
+    display: block;
+    height: 20%;
+}*/
+
+.xpd-panel.has-footer .xpd-panel-header {
+    display: block;
+    height: 5%;
+}
+
+.xpd-panel-header > button {
+    font-family: AgencyFB;
+    font-size: 0.8em;
+}
+
+.xpd-panel-body {
+    height: 100%;
+}
+
+.xpd-panel.has-footer .xpd-panel-body {
+    display: block;
+    height: 70%;
+}
+
+.xpd-panel.has-footer .xpd-panel-footer {
+    display: block;
+    height: 25%;
+}
+
+.xpd-panel {
+    height: 100%;
+    overflow-y: auto;
+}

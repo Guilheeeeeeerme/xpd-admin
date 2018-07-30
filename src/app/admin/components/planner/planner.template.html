@@ -1,11 +1,11 @@
 <div class="col-md-2 col-sm-4 col-xs-4">
 
-    <div class="xpd-admin-col-header">
+    <div class="xpd-panel-header">
         Current: {{operationData.suboperationContext.currentSuboperation.type}}
     </div>
 
 
-    <div class="xpd-admin-col-content">
+    <div class="xpd-panel-body">
 
         <ul class="nav xpd-green-styled-box stacked" role="tablist" ng-repeat="state in operationData.suboperationContext.currentSuboperation.jointIntervals">
 
@@ -38,14 +38,14 @@
     </div>
 </div>
 
-<div class="col-md-6 col-sm-8 col-xs-8 xpd-admin-col has-footer" ng-if="( dados.settings[dados.selectedState][dados.selectedEventType].eventType != 'CONN' && dados.settings[dados.selectedState][dados.selectedEventType].eventType != 'TRIP' )">
+<div class="col-md-6 col-sm-8 col-xs-8 xpd-panel has-footer" ng-if="( dados.settings[dados.selectedState][dados.selectedEventType].eventType != 'CONN' && dados.settings[dados.selectedState][dados.selectedEventType].eventType != 'TRIP' )">
     <div class="xpd-chart-placeholder">
         <span class="xpd-chart-placeholder-text" ng-if="dados.settings[dados.selectedState][dados.selectedEventType].eventType == null">Select a State/Event</span>
         <span class="xpd-chart-placeholder-text" ng-if="dados.settings[dados.selectedState][dados.selectedEventType].eventType != null">Operation not supported due to missing parameters or state not subjected to planning</span>
     </div>
 </div>
 
-<div class="col-md-6 col-sm-8 col-xs-8 xpd-admin-col has-footer" ng-if="dados.settings[dados.selectedState][dados.selectedEventType].eventType == 'CONN'">
+<div class="col-md-6 col-sm-8 col-xs-8 xpd-panel has-footer" ng-if="dados.settings[dados.selectedState][dados.selectedEventType].eventType == 'CONN'">
     <xpd-connection-planner 
         label="{{ dados.settings[dados.selectedState][dados.selectedEventType].label }} " 
         target-speed="dados.settings[dados.selectedState][dados.selectedEventType].targetSpeed"
@@ -55,7 +55,7 @@
         action-button-apply="pController.actionButtonApplyConn()" />
 </div>
 
-<div class="col-md-6 col-sm-8 col-xs-8 xpd-admin-col has-footer" ng-if="dados.settings[dados.selectedState][dados.selectedEventType].eventType == 'TRIP'">
+<div class="col-md-6 col-sm-8 col-xs-8 xpd-panel has-footer" ng-if="dados.settings[dados.selectedState][dados.selectedEventType].eventType == 'TRIP'">
     <xpd-trip-planner 
         label="{{ dados.settings[dados.selectedState][dados.selectedEventType].label }}" 
         target-speed="dados.settings[dados.selectedState][dados.selectedEventType].targetSpeed"
@@ -78,9 +78,9 @@
     />
 </div>
 
-<div class="col-md-4 col-sm-12 col-xs-12 xpd-admin-col">
+<div class="col-md-4 col-sm-12 col-xs-12 xpd-panel">
 
-    <div class="xpd-admin-col-content">
+    <div class="xpd-panel-body">
 
         <div class="planner-forecast-row">
 
@@ -101,7 +101,7 @@
                         </span>
                     </div>
                 </div>
-                <div class="xpd-chart-container-footer operation-progress-delay-container">
+                <div class="xpd-chart-container-footer padding-5">
                     <div class="operation-progress-delay">
                         <div class="operation-progress-delay-title">
                             Progress Delay
