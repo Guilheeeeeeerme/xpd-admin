@@ -27,7 +27,7 @@ export class CategorySetupAPIService {
 		return this.setupAPIService.doRequest(req);
 	}
 
-	public getList() {
+	public getListCategory() {
 
 		const req = {
 			method: 'GET',
@@ -37,7 +37,7 @@ export class CategorySetupAPIService {
 		return this.setupAPIService.doRequest(req);
 	}
 
-	public insertObject(object) {
+	public insertCategory(object) {
 
 		const req = {
 			method: 'POST',
@@ -51,7 +51,7 @@ export class CategorySetupAPIService {
 		return this.setupAPIService.doRequest(req);
 	}
 
-	public removeObject(object) {
+	public removeCategory(object) {
 
 		const req = {
 			method: 'DELETE',
@@ -66,7 +66,7 @@ export class CategorySetupAPIService {
 
 	}
 
-	public updateObject(object) {
+	public updateCategory(object) {
 
 		const req = {
 			method: 'PUT',

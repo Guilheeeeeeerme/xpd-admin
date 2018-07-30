@@ -13,24 +13,23 @@
 
 		<div class="row failure-report-chart">
 			<div class="col-md-5"
-				xpd-failures-npt-chart
-				chart-data="fnController.chartDonut.data"
-				chart-title="fnController.chartDonut.title">
+				xpd-pie-chart chart-title="fnController.chartDonut.title"
+				internal-percentages="fnController.chartDonut.data.pie"
+				external-percentages="fnController.chartDonut.data.donut">
 			</div>
 
 			<div class="col-md-7"
-				xpd-failures-pareto-chart
-				chart-data="fnController.chartPareto.data"
-				chart-title="fnController.chartDonut.title">
+				xpd-pareto-chart
+				chart-title="fnController.chartDonut.title"
+				primary-data-title= "'Failures'"
+				primary-data= "fnController.chartPareto.data.failures"
+				secondary-data-title= "'NPT'"
+				secondary-data= "fnController.chartPareto.data.npts"
+				categories= "fnController.chartPareto.data.categories"
+				percentage= "fnController.chartPareto.data.percentage">
 			</div>
+
 		</div>
-
-		<!-- <pre>{{ failuresData.categories | json }}</pre> -->
-		<!-- <pre>{{ fnController.totalFailuresLength | json }}</pre> -->
-		<!-- <pre>{{ fnController.nodeList | json }}</pre> -->
-		<!-- <pre>{{ fnController.totalFailures | json }}</pre> -->
-		<!--pre>{{ fnController.totalTime | json }}</pre-->
-
 
 		<div class="col-md-10 col-md-offset-1">
 			<ol class="breadcrumb failures-breadcrumb">

@@ -3,17 +3,18 @@ import { HighchartsService } from '../../shared/highcharts/highcharts.service';
 // (function() {
 // 	'use strict';
 
-export class LessonsLearnedChart {
+export class PieChartDirective {
 
-	public static $inject: string[] = ['highchartsService', '$filter'];
+	public static $inject: string[] = ['$filter', 'highchartsService'];
 	public restrict: 'EA';
 	public scope = {
-		chartData: '=',
+		internalPercentages: '=',
+		externalPercentages: '=',
 		chartTitle: '=',
 	};
 
 	constructor(
-		private $filter: ng.IFilterFilter,
+		private $filter: any,
 		private highchartsService: HighchartsService) {
 	}
 
@@ -24,15 +25,21 @@ export class LessonsLearnedChart {
 		ctrl: any,
 	) => {
 
-		this.highchartsService.highcharts().then(function (Highcharts) {
+		const self = this;
 
-			scope.$watchGroup(['chartData', 'chartTitle'], function (newValue) {
+		self.highchartsService.highcharts().then((Highcharts) => {
+
+			scope.$watchGroup([
+				'internalPercentages',
+				'externalPercentages',
+				'chartTitle',
+			], (newValue) => {
 				if (newValue) {
-					createChart(newValue[0], newValue[1]);
+					createChart();
 				}
 			});
 
-			function createChart(chartData, chartTitle) {
+			const createChart = () => {
 
 				return Highcharts.chart(elem[0], {
 
@@ -48,7 +55,7 @@ export class LessonsLearnedChart {
 						},
 					},
 					title: {
-						text: chartTitle,
+						text: scope.chartTitle,
 						style: {
 							color: '#00807f',
 						},
@@ -76,7 +83,7 @@ export class LessonsLearnedChart {
 					},
 					series: [{
 						name: 'Percentage',
-						data: chartData.pie,
+						data: scope.internalPercentages,
 						allowPointSelect: false,
 						size: '50%',
 						dataLabels: {
@@ -87,27 +94,36 @@ export class LessonsLearnedChart {
 						},
 					}, {
 						name: 'Percentage',
-						data: chartData.donut,
+						data: scope.externalPercentages,
 						size: '80%',
 						innerSize: '70%',
+						dataLabels: {
+							formatter() {
+								// display only if larger than 1
+								return this.y > 1 ? '<b>' + this.point.name + ':</b> ' + this.y + '%' : null;
+							},
+						},
 						tooltip: {
 							pointFormatter() {
-								return '' + this.name + ': ' + this.$filter('secondsToHourMinutes')(this.y);
+								return '' + this.name + ': ' + self.$filter('secondsToHourMinutes')(this.y);
 							},
 						},
 					}],
 				});
-			}
+
+			};
+
 		});
+
 	}
 
 	public static Factory(): ng.IDirectiveFactory {
 		const directive = (
-			$filter: ng.IFilterFilter,
+			$filter: any,
 			highchartsService: HighchartsService,
-		) => new LessonsLearnedChart(
-			$filter,
-			highchartsService,
+		) => new PieChartDirective(
+				$filter,
+				highchartsService,
 			);
 
 		return directive;

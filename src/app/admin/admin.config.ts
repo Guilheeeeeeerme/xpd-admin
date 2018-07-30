@@ -1,7 +1,6 @@
 import AlarmTemplate from './components/alarm/alarm.template.html';
 import DataAcquisitionTemplate from './components/data-acquisition/data-acquisition.template.html';
-import FailureDelayCategoryTemplate from './components/failure-lesson/failure-delay-category.template.html';
-import LessonLearnedCategoryTemplate from './components/failure-lesson/lesson-learned-category.template.html';
+import CategoryTemplate from './components/failure-lesson/category.template.html';
 import MenuTemplate from './components/menu/menu.template.html';
 import OperationDashboardTemplate from './components/operation-dashboard/operation-dashboard.template.html';
 import PlannerTemplate from './components/planner/planner.template.html';
@@ -35,11 +34,11 @@ const AdminConfig = ($routeProvider) => {
 		controller: 'DataAcquisitionController as daController',
 	});
 	$routeProvider.when('/menu/failure-delay-category', {
-		template: FailureDelayCategoryTemplate,
+		template: CategoryTemplate,
 		controller: 'FailureDelayCategoryController as fdcController',
 	});
 	$routeProvider.when('/menu/lesson-learned-category', {
-		template: LessonLearnedCategoryTemplate,
+		template: CategoryTemplate,
 		controller: 'LessonLearnedCategoryController as llcController',
 	});
 
