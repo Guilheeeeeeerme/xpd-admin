@@ -1,7 +1,3 @@
-// (function() {
-// 	'use strict';
-
-// 	consistencyInformationPanel.$inject = [];
 import template from './consistency-information-panel.template.html';
 
 export class ConsistencyInformationPanelDirective implements ng.IDirective {
@@ -10,9 +6,6 @@ export class ConsistencyInformationPanelDirective implements ng.IDirective {
 	public restrict = 'EA';
 	public template = template;
 	public scope = {
-		onInit: '&',
-		onClickCollapse: '&',
-		collapse: '=',
 		state: '=',
 		event: '=',
 		isTripin: '=',
@@ -31,6 +24,9 @@ export class ConsistencyInformationPanelDirective implements ng.IDirective {
 		attrs: ng.IAttributes,
 		ctrl: any,
 	) => {
+
+		const keyName = 'panelConsistencyInfoIsCollapsed';
+		scope.collapse = getPanelState();
 
 		scope.duration = [];
 		scope.percentageDuration = [];
@@ -51,6 +47,20 @@ export class ConsistencyInformationPanelDirective implements ng.IDirective {
 			const connDuration = (scope.lastConnDuration) ? scope.lastConnDuration : 0;
 			return tripDuration + connDuration;
 		}
+
+		function getPanelState() {
+			try {
+				return JSON.parse(localStorage.getItem(keyName));
+			} catch (error) {
+				return true;
+			}
+		}
+
+		scope.changePanelState = () => {
+			const newState = !getPanelState();
+			scope.collapse = newState;
+			localStorage.setItem(keyName, JSON.stringify(newState));
+		};
 	}
 
 	public static Factory(): ng.IDirectiveFactory {

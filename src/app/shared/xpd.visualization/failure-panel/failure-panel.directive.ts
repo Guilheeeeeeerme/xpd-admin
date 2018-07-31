@@ -1,21 +1,11 @@
-import template from './operation-information-panel.template.html';
+import template from './failure-panel.template.html';
 
-export class OperationInformationPanelDirective implements ng.IDirective {
+export class FailurePanelDirective implements ng.IDirective {
+
 	public restrict = 'EA';
 	public template = template;
 	public scope = {
-		numberJoints: '=',
-		jointNumber: '=',
-		operation: '=',
-		state: '=',
-		reading: '=',
-		accScore: '=',
-		stateDuration: '=',
-		targetParamExpectedEndTime: '=',
-		optimumExpectedDuration: '=',
-		standardExpectedDuration: '=',
-		poorExpectedDuration: '=',
-		well: '=',
+		failureList: '=',
 	};
 
 	public link: ng.IDirectiveLinkFn = (
@@ -25,7 +15,7 @@ export class OperationInformationPanelDirective implements ng.IDirective {
 		ctrl: any,
 	) => {
 
-		const keyName = 'panelOperationInfoIsCollapsed';
+		const keyName = 'panelFailuresIsCollapsed';
 		scope.collapse = getPanelState();
 
 		function getPanelState() {
@@ -42,9 +32,17 @@ export class OperationInformationPanelDirective implements ng.IDirective {
 			localStorage.setItem(keyName, JSON.stringify(newState));
 		};
 
+		scope.getTotalFailureTime = (startTime, endTime) => {
+			if (!endTime) { return 0; }
+
+			const diffTime = new Date(endTime).getTime() - new Date(startTime).getTime();
+			return new Date(diffTime);
+		};
+
 	}
 
 	public static Factory(): ng.IDirectiveFactory {
-		return () => new OperationInformationPanelDirective();
+		return () => new FailurePanelDirective();
 	}
+
 }

@@ -5,9 +5,6 @@ export class UpcomingAlarmsPanelDirective implements ng.IDirective {
 	public retrict = 'EA';
 	public template = template;
 	public scope = {
-		onInit: '&',
-		onClickCollapse: '&',
-		collapse: '=',
 		tripinAlarms: '=',
 		tripoutAlarms: '=',
 		currentDirection: '=',
@@ -20,6 +17,23 @@ export class UpcomingAlarmsPanelDirective implements ng.IDirective {
 		attributes: ng.IAttributes,
 		ctrl: any,
 	) => {
+
+		const keyName = 'panelNextAlarmsIsCollapsed';
+		scope.collapse = getPanelState();
+
+		function getPanelState() {
+			try {
+				return JSON.parse(localStorage.getItem(keyName));
+			} catch (error) {
+				return true;
+			}
+		}
+
+		scope.changePanelState = () => {
+			const newState = !getPanelState();
+			scope.collapse = newState;
+			localStorage.setItem(keyName, JSON.stringify(newState));
+		};
 
 		const listNextAlarms = () => {
 
