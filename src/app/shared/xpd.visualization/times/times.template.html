@@ -2,7 +2,7 @@
  class="xpd-times-container">
 
 	<g class="overlay">
-		<rect class="xpd-times-bar" ng-repeat="(key, event) in xpdTimes | orderBy: 'startTime'" x="10"
+		<rect class="xpd-times-bar" ng-repeat="(key, event) in times | orderBy: 'startTime'" x="10"
 			ng-attr-id="{{key}}" ng-attr-y="{{ yScale(key) }}"
 			ng-attr-width="{{ getBarSize(event) }}" ng-attr-height="{{ bar.height }}"
 			ng-attr-fill="{{ getFillColor(event) }}" stroke="none" 

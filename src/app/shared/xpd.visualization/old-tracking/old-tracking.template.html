@@ -6,10 +6,10 @@
                 Slips to Slips (Conn)
             </div>
             <div class="xpd-chart-container-content">
-                <div ng-if="currentOperation && currentOperation.running && currentEvent != null"
-                    class="xpd-chart" xpd-times='connectionTimes' max-seconds="175" max-bars="200" selected-event="selectedEvent"
-                    action-open-dropdown-menu="actionOpenDropdownMenu">
-                </div>
+                <xpd-times ng-if="currentOperation && currentOperation.running && currentEvent != null"
+                    times='connectionTimes' max-seconds="175" max-bars="200" selected-event="selectedEvent"
+                    action-open-dropdown-menu="openDropdownMenu">
+                </xpd-times>
 
                 <div class="xpd-chart-placeholder" ng-if="!currentOperation.running">
                     <span class="xpd-chart-placeholder-text">No running operation</span>
@@ -24,11 +24,10 @@
             </div>
 
             <div class="xpd-chart-container-content">
-                <div ng-if="currentOperation && currentOperation.running && currentEvent != null"
-                    class="xpd-chart" xpd-times='tripTimes' max-seconds="100" max-bars="200" action-open-dropdown-menu="actionOpenDropdownMenu"
+                <xpd-times ng-if="currentOperation && currentOperation.running && currentEvent != null"
+                    times='tripTimes' max-seconds="100" max-bars="200" action-open-dropdown-menu="openDropdownMenu"
                     selected-event="selectedEvent">
-
-                </div>
+                </xpd-times>
 
                 <div class="xpd-chart-placeholder" ng-if="!currentOperation.running">
                     <span class="xpd-chart-placeholder-text">No running operation</span>
@@ -40,13 +39,13 @@
         <div class="btn-group slips-to-slips-dropdown-menu" uib-dropdown is-open="flags.openDropdownMenu">
             <ul uib-dropdown-menu role="menu">
                 <li role="menuitem">
-                    <a ng-click="actionClickEventDetailsButton()" id="times-bar-click-details">Details</a>
+                    <a ng-click="onClickEventDetails()" id="times-bar-click-details">Details</a>
                 </li>
                 <li role="menuitem">
-                    <a ng-click="actionClickFailuresButton()" id="times-bar-click-failures">Failures</a>
+                    <a ng-click="onClickFailures()" id="times-bar-click-failures">Failures</a>
                 </li>
                 <li role="menuitem">
-                    <a ng-click="actionClickLessonsLearnedButton()" id="times-bar-click-lessons">Lessons Learned</a>
+                    <a ng-click="onClickLessonsLearned()" id="times-bar-click-lessons">Lessons Learned</a>
                 </li>
             </ul>
         </div>

@@ -1,5 +1,5 @@
-
 import * as d3 from 'd3';
+import './times.style.scss';
 import template from './times.template.html';
 
 export class EventTimesDirective implements ng.IDirective {
@@ -7,7 +7,7 @@ export class EventTimesDirective implements ng.IDirective {
 	public template = template;
 	public restrict = 'AE';
 	public scope = {
-		xpdTimes: '=',
+		times: '=',
 		maxBars: '=',
 		actionOpenDropdownMenu: '=',
 		selectedEvent: '=',
@@ -72,8 +72,9 @@ export class EventTimesDirective implements ng.IDirective {
 		}
 
 		function rightClick() {
+
 			if (d3.event.button === 2) {
-				const event = scope.xpdTimes[d3.event.toElement.id];
+				const event = scope.times[d3.event.toElement.id];
 				scope.actionOpenDropdownMenu(d3.event, event);
 			}
 		}

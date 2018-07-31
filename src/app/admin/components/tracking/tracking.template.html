@@ -26,8 +26,8 @@
     <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8 scrollable-content">
 
         <xpd-old-tracking action-event-modal-button-close="atController.actionEventModalButtonClose" action-event-modal-button-save="atController.actionEventModalButtonSave"
-            action-open-dropdown-menu="atController.actionOpenDropdownMenu" action-click-event-details-button="atController.actionClickEventDetailsButton"
-            action-click-failures-button="atController.actionClickFailuresButton" action-click-lessons-learned-button="atController.actionClickLessonsLearnedButton"
+            action-open-dropdown-menu="atController.actionOpenDropdownMenu(mouseEvent, eventLog)" action-click-event-details="atController.actionClickEventDetailsButton()"
+            action-click-failures="atController.actionClickFailuresButton()" action-click-lessons-learned="atController.actionClickLessonsLearnedButton()"
             task-expected-duration="operationData.chronometerContext.expected" current-tick="operationData.chronometerContext.tick"
             current-operation="operationData.operationContext.currentOperation" current-event="operationData.eventContext.currentEvent"
             current-reading="operationData.readingContext.currentReading" current-calculated="operationData.elevatorTargetContext.currentCalculated"

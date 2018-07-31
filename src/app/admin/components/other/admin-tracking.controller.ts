@@ -71,12 +71,11 @@ export class AdminTrackingController {
 
 	}
 
-	public actionOpenDropdownMenu($event, eventLog) {
-
+	public actionOpenDropdownMenu(mouseEvent, eventLog) {
 		const modalOption: any = document.querySelector('.slips-to-slips-dropdown-menu');
 
-		modalOption.style.top = ($event.clientY) + 'px';
-		modalOption.style.left = ($event.clientX) + 'px';
+		modalOption.style.top = (mouseEvent.clientY) + 'px';
+		modalOption.style.left = (mouseEvent.clientX) + 'px';
 
 		if (!this.$scope.flags.openDropdownMenu) {
 			this.$scope.flags.openDropdownMenu = !this.$scope.flags.openDropdownMenu;
