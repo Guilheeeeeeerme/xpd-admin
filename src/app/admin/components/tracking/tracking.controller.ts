@@ -302,9 +302,13 @@ export class TrackingController {
 
 		this.$scope.flags.showSlowDown = true;
 
-		this.$xpdTimeout.run(function () {
+		setTimeout(() => {
 			vm.$scope.flags.showSlowDown = false;
-		}, 1500, this.$scope);
+		}, 1500);
+
+		// this.$xpdTimeout.run(function () {
+		// 	vm.$scope.flags.showSlowDown = false;
+		// }, 1500, this.$scope);
 	}
 
 	private onUnreachableTarget() {
