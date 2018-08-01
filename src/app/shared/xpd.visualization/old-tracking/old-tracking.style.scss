@@ -1,4 +1,4 @@
-
+@import '~assets/css/font.scss';
 
 .times-event-dialog .selected-arrow {
     position: absolute;
@@ -11,7 +11,7 @@
 .times-event-dialog {
     position: fixed;
     color: #517f89;
-    font-family: AgencyFB;
+    font-family: $font-family-1;
     /*top: 0;
     left: 0;*/
     background-color: black;

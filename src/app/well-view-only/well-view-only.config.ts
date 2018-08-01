@@ -1,8 +1,6 @@
 import WellViewOnlyTemplate from './components/well-view-only/well-view-only.template.html';
 
-WellConfig.$inject = ['$routeProvider'];
-
-function WellConfig($routeProvider) {
+const WellConfig = ($routeProvider) => {
 
 	$routeProvider.when('/', {
 		template: WellViewOnlyTemplate,
@@ -14,6 +12,8 @@ function WellConfig($routeProvider) {
 		controller: 'WellViewOnlyController as wvoController',
 	});
 
-}
+};
+
+WellConfig.$inject = ['$routeProvider'];
 
 export { WellConfig };

@@ -1,3 +1,5 @@
+@import '~assets/css/font.scss';
+
 /**
  * MEMBER PERFORMANCE DIRECTIVE
  */
@@ -8,7 +10,7 @@ xpd-member-performance {
     .member-perfomance-container {
         padding: 8px 2px;
         /*max-width: 192px;*/
-        font-family: AgencyFB;
+        font-family: $font-family-1;
         height: 100%;
     }
 

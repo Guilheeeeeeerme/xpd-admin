@@ -1,3 +1,5 @@
+@import '~assets/css/font.scss';
+
 xpd-admin-nav-bar {
 
 	background: url('./../../../assets/img/bg.png');
@@ -25,7 +27,7 @@ xpd-admin-nav-bar {
 	 .xpd-nav-button {
 		border: 2px solid #456c75;
 		padding: 15px;
-		font-family: AgencyFB;
+		font-family: $font-family-1;
 		font-size: 1.3em;
 		font-weight: bolder;
 		color: #456c75;

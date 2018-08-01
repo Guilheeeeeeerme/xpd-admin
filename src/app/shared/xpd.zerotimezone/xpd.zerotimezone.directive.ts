@@ -1,8 +1,13 @@
 export class XPDZeroTimeZoneDirective implements ng.IDirective {
+
+	public static $inject: string[] = [];
+	public static Factory(): ng.IDirectiveFactory {
+		return () => new XPDZeroTimeZoneDirective();
+	}
+
 	public restrict = 'A';
 	public priority = 1;
 	public require = 'ngModel';
-	public static $inject: string[] = [];
 
 	public link: ng.IDirectiveLinkFn = (
 		scope: ng.IScope,
@@ -27,10 +32,6 @@ export class XPDZeroTimeZoneDirective implements ng.IDirective {
 
 			return date;
 		});
-	}
-
-	public static Factory(): ng.IDirectiveFactory {
-	  return () => new XPDZeroTimeZoneDirective();
 	}
 
 }

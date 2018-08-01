@@ -1,0 +1,73 @@
+
+
+xpd-trip-planner {
+
+	.trip-parameters {
+
+		height: 100%;
+
+		&.trip-movement-parameters-container {
+			overflow: auto;
+		}
+
+		// .block-speed-representation-container {
+
+		// }
+
+		// .block-speed-representation-container {
+
+		// }
+
+	}
+
+	.panel {
+        background-color: transparent;
+
+        // * {
+        //     padding-top: 2px;
+        //     padding-bottom: 2px;
+        // }
+
+        .panel-heading {
+            padding: 2px 5px 2px 5px;
+            text-align: center;
+            font-weight: bolder;
+            color: black;
+            background-color: #517f89;
+        }
+
+        .panel-body {
+
+            padding: 0;
+
+            .row {
+
+                margin: 0;
+
+                div {
+                    text-align: center; 
+                    padding: 0;
+                    font-weight: bolder;
+                }
+
+                div:nth-child(even) {
+                    color: #517f89;
+                }
+
+                div:nth-child(odd) {
+                    background-color: #517f89;
+                    color: black;
+                }
+
+            }
+
+        }
+        
+        .panel-footer {
+            padding: 2px 5px 2px 5px;
+            background-color: transparent;
+            color: #517f89;
+        }
+
+    }
+}

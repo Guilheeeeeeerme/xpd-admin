@@ -70,7 +70,7 @@ export class ModalFailureController {
 	private getCategoryListSuccessCallback(result) {
 		this.roleList = result;
 		this.makeTreeStructure(this.roleList);
-	}getListCategory
+	}public getListCategory;
 
 	private getCategoryListErrorCallback(error) {
 		console.log(error);

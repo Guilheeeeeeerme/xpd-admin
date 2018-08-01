@@ -1,7 +1,7 @@
 
 
 .xpd-chart-container-header {
-    font-family: AgencyFB;
+    font-family: $font-family-1;
     font-size: 1em;
     text-align: center;
     -webkit-text-stroke: 1px #517f89;
@@ -52,11 +52,6 @@
 
 .xpd-chart > svg {
     height: 99%;
-}
-
-.xpd-chart > .trip-ruler-container {
-    padding-top: 40px;
-    padding-bottom: 40px;
 }
 
 .xpd-chart > .xpd-block-speed-container {
