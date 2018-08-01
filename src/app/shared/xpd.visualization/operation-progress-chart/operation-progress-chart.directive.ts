@@ -1,10 +1,12 @@
 
 // operationProgressChart.$inject = ['d3Service'];
 import * as d3 from 'd3';
+import './operation-progress-chart.style.scss';
 import template from './operation-progress-chart.template.html';
 
 export class OperationProgressChartDirective implements ng.IDirective {
 	public template = template;
+	public restrict = 'E';
 	public scope = {
 		progressData: '=',
 		progressDataDelay: '=',
@@ -16,8 +18,6 @@ export class OperationProgressChartDirective implements ng.IDirective {
 		attributes: ng.IAttributes,
 		ctrl: any,
 	) => {
-
-		element[0].className = element[0].className + ' operation-progress-chart';
 
 		scope.svg = {
 			height: element[0].offsetHeight,

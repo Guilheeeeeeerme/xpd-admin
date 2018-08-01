@@ -187,6 +187,9 @@ module.exports = {
 	},
 
 	resolve: {
+		alias: {
+			assets: path.resolve(__dirname, 'src/assets'),
+		},
 		extensions: ['.ts', '.tsx', '.js', '.json', '.html', '.css']
 	},
 

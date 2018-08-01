@@ -1,23 +1,11 @@
-<xpd-operation-manager 
-    display="inline" 
-    popover-placement="bottom-right" 
-    current-event="operationData.eventContext.currentEvent"
-    operation-queue='operationData.operationQueueContext.operationQueue' 
-    current-operation='operationData.operationContext.currentOperation'
-    last-section='operationData.operationQueueContext.lastSection' 
-    current-state="operationData.stateContext.currentState" 
-    current-direction="operationData.directionContext"
-    bit-depth-context='operationData.bitDepthContext' 
-    current-alarm="operationData.alarmContext.currentAlarm" 
-    action-button-start-operation='tController.actionButtonStartOperation(operation)'
-    action-button-finish-operation='tController.actionButtonFinishOperation()' 
-    action-button-start-cementation="tController.actionButtonStartCementation()"
-    action-button-stop-cementation="tController.actionButtonStopCementation()" 
-    action-button-start-make-up="tController.actionButtonStartMakeUp()"
-    action-button-start-lay-down="tController.actionButtonStartLayDown()" 
-    action-button-finish-make-up="tController.actionButtonFinishMakeUp()"
-    action-button-finish-lay-down="tController.actionButtonFinishLayDown()" 
-    action-button-finish-duration-alarm="tController.finishDurationAlarm()">
+<xpd-operation-manager display="inline" popover-placement="bottom-right" current-event="operationData.eventContext.currentEvent"
+    operation-queue='operationData.operationQueueContext.operationQueue' current-operation='operationData.operationContext.currentOperation'
+    last-section='operationData.operationQueueContext.lastSection' current-state="operationData.stateContext.currentState" current-direction="operationData.directionContext"
+    bit-depth-context='operationData.bitDepthContext' current-alarm="operationData.alarmContext.currentAlarm" action-button-start-operation='tController.actionButtonStartOperation(operation)'
+    action-button-finish-operation='tController.actionButtonFinishOperation()' action-button-start-cementation="tController.actionButtonStartCementation()"
+    action-button-stop-cementation="tController.actionButtonStopCementation()" action-button-start-make-up="tController.actionButtonStartMakeUp()"
+    action-button-start-lay-down="tController.actionButtonStartLayDown()" action-button-finish-make-up="tController.actionButtonFinishMakeUp()"
+    action-button-finish-lay-down="tController.actionButtonFinishLayDown()" action-button-finish-duration-alarm="tController.finishDurationAlarm()">
 
 </xpd-operation-manager>
 
@@ -48,15 +36,16 @@
 
     <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4 xpd-panel">
 
-         <!-- ng-if="flags.showDMEC == false" -->
+        <!-- ng-if="flags.showDMEC == false" -->
         <div class="xpd-panel-body">
 
             <div class="row tracking-performance-row xpd-chart-container">
 
                 <div class="col-md-4 xpd-chart-container-content">
 
-                    <xpd-score-gauge class="xpd-chart" joint-data="operationData.jointContext" direction-data="operationData.directionContext" number-joints="operationData.jointContext.numberJoints"
-                        current-score="operationData.scoreContext.currentScore" acc-score="operationData.shiftContext.accScore">
+                    <xpd-score-gauge class="xpd-chart" joint-data="operationData.jointContext" direction-data="operationData.directionContext"
+                        number-joints="operationData.jointContext.numberJoints" current-score="operationData.scoreContext.currentScore"
+                        acc-score="operationData.shiftContext.accScore">
                     </xpd-score-gauge>
 
                 </div>
@@ -98,7 +87,7 @@
 
                     </div>
 
-                    <xpd-member-performance ng-if="operationData.shiftContext.onShift[0] != null"  member="operationData.shiftContext.onShift[0].member"></xpd-member-performance>
+                    <xpd-member-performance ng-if="operationData.shiftContext.onShift[0] != null" member="operationData.shiftContext.onShift[0].member"></xpd-member-performance>
 
                 </div>
 
@@ -108,16 +97,18 @@
 
             </div>
 
-            <div class="row tracking-operation-progress-row xpd-chart-container has-footer">
+            <div class="row tracking-operation-progress-row xpd-chart-container">
                 <div class="xpd-chart-container-header">
                     Operation Progress
                 </div>
 
                 <div class="xpd-chart-container-content">
 
-                    <div ng-if="operationData.stateContext.currentState && operationData.operationProgressContext.operationProgressData && operationData.operationProgressContext.operationProgressData[operationData.stateContext.currentState]"
-                        class="xpd-chart" xpd-operation-progress-chart progress-data="operationData.operationProgressContext.operationProgressData[operationData.stateContext.currentState]"
-                        progress-data-delay="operationData.operationProgressContext.progressDataDelay"></div>
+                    <xpd-operation-progress-chart 
+                        ng-if="operationData.stateContext.currentState && operationData.operationProgressContext.operationProgressData && operationData.operationProgressContext.operationProgressData[operationData.stateContext.currentState]"
+                        progress-data="operationData.operationProgressContext.operationProgressData[operationData.stateContext.currentState]"
+                        progress-data-delay="operationData.operationProgressContext.progressDataDelay">
+                    </xpd-operation-progress-chart>
 
                 </div>
                 <div class="xpd-chart-container-footer padding-5">

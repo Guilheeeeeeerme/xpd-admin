@@ -1,6 +1,7 @@
 // (function() {
 
 import * as angular from 'angular';
+import './connection-planner.style.scss';
 import template from './connection-planner.template.html';
 
 export class XPDConnectionPlannerDirective implements ng.IDirective {

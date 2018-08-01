@@ -1,9 +1,11 @@
+@import '~assets/css/font.scss';
+
 /**
  * SCORE GAUGE
  */
 
 .score-gauge-svg {
-    font-family: AgencyFB;
+    font-family: $font-family-1;
 }
 
 .score-bg-arc {
@@ -44,7 +46,7 @@
     fill: #f3e897;
     font-weight: bold;
     font-size: 1.3em;
-    font-family: AgencyFB;
+    font-family: $font-family-1;
 }
 
 .score-bg-arc {
@@ -77,8 +79,7 @@
     padding: 0px;
 }
 
-.event-trip-container > .speed-gauge-chart-container,
-.event-trip-container > .trip-ruler-chart-container {
+.event-trip-container > .speed-gauge-chart-container {
     height: 95%;
     padding: 0;
 }
@@ -88,8 +89,7 @@
     padding: 0;
 }
 
-.event-trip-container > .speed-gauge-chart-container > .speed-gauge-chart,
-.event-trip-container > .trip-ruler-chart-container > .trip-ruler-chart {
+.event-trip-container > .speed-gauge-chart-container > .speed-gauge-chart {
     height: 100%;
     padding: 0;
 }
@@ -99,8 +99,7 @@
     padding: 0;
 }
 
-.event-trip-container > .speed-gauge-chart-container > .speed-gauge-chart > svg,
-.event-trip-container > .trip-ruler-chart-container > .trip-ruler-chart > svg {
+.event-trip-container > .speed-gauge-chart-container > .speed-gauge-chart > svg {
     padding: 0 4%;
 }
 
@@ -116,33 +115,12 @@
     margin-bottom: 5%;
 }
 
-.event-conn-container > .conn-ruler-chart-container,
-.event-conn-container > .trip-ruler-chart-container {
-    height: 100%;
-    padding: 0;
-}
-
-.event-conn-container > .conn-ruler-chart-container > .conn-ruler-chart,
-.event-conn-container > .trip-ruler-chart-container > .trip-ruler-chart {
-    height: 100%;
-    padding: 0;
-}
-
-.event-conn-container > .conn-ruler-chart-container > .conn-ruler-chart > svg {
-    padding: 5% 0%;
-}
-
-.event-conn-container > .trip-ruler-chart-container > .trip-ruler-chart > svg {
-    padding: 5%;
-    height: 100%;
-}
-
 .xpd-conn-chronometers {
     /* height: 10%; */
     color: #93c2cc;
     text-align: center;
     font-weight: bolder;
-    font-family: AgencyFB;
+    font-family: $font-family-1;
     width: 100%;
     font-size: 4.2em;
 }
@@ -155,10 +133,7 @@
 
 /*************************/
 
-.xpd-trip-ruler-reading-container,
-.xpd-trip-ruler-calculated-container,
-.xpd-speed-gauge-container,
-.xpd-trip-ruler-middle-bar {
+.xpd-speed-gauge-container {
     /*-webkit-transition-duration: 0.5s;*/
     /* Safari */
     /*transition-duration: 0.5s;*/
@@ -168,113 +143,7 @@
     color: #cf1111;
 }
 
-.xpd-trip-ruler-center-bar {
-    fill-opacity: 0;
-    stroke: #767171;
-}
 
-.xpd-trip-ruler-middle-bar {
-    stroke-width: 10;
-    stroke-opacity: 0.4;
-    stroke: red;
-}
-
-.xpd-trip-ruler-tick {
-    stroke: #4b7f88;
-    stroke-width: 0.5;
-}
-
-.xpd-trip-ruler-tick-main {
-    stroke-width: 1;
-}
-
-.xpd-trip-ruler-tick-sub {
-    stroke-width: 0.8;
-}
-
-.xpd-trip-ruler-tick-fancy {
-    stroke-width: 7;
-    stroke-dasharray: 0.5, 3;
-}
-
-.xpd-trip-ruler-target-tick {
-    stroke: red;
-    stroke-width: 0.5;
-}
-
-.xpd-trip-ruler-target-box {
-    stroke: red;
-    stroke-width: 1;
-}
-
-.xpd-trip-ruler-target {
-    fill-opacity: 0;
-    stroke: red;
-    stroke-width: 1;
-}
-
-.xpd-trip-ruler-target-filled {
-    fill: red;
-}
-
-.xpd-trip-ruler-reading-tick {
-    stroke: #75d59e;
-    stroke-width: 1;
-}
-
-.xpd-trip-ruler-reading {
-    fill-opacity: 0;
-    stroke: #75d59e;
-    stroke-width: 1;
-}
-
-.xpd-trip-ruler-reading-stick {
-    stroke: #75d59e;
-    stroke-width: 2;
-}
-
-.xpd-trip-ruler-tick-text {
-    font-size: 0.6em;
-    font-family: AgencyFB;
-    fill: #bff0ef;
-}
-
-.xpd-trip-ruler-target-text {
-    font-size: 0.8em;
-    fill: red;
-    stroke: red;
-}
-
-.xpd-trip-ruler-target-text-empty {
-    stroke-width: 1;
-    font-family: AgencyFB;
-    fill-opacity: 0;
-}
-
-.xpd-trip-ruler-expected-alarm-text{
-    font-size: 0.7em;
-    font-weight: bold;
-    line-height: normal;
-}
-
-.xpd-trip-ruler-slowdown-text {
-    text-anchor: middle;
-    animation: blinker 1s linear infinite;
-}
-
-.xpd-trip-ruler-mark-text {
-    stroke: #e89313;
-    font-size: 0.8em;
-}
-
-.xpd-trip-ruler-expected-text {
-    stroke: #E85654;
-    font-size: 0.8em;
-}
-
-.xpd-trip-ruler-expected-text{
-	font-size: 0.8em;
-}
 
 .blockspeed-ruler-go {
     background-color: #9ed09e;
@@ -291,7 +160,7 @@
     top: 50%;
     left: 50%;
     font-size: 10em;
-    font-family: AgencyFB;
+    font-family: $font-family-1;
     font-weight: bold;
     color: #333;
     margin-top: -1em;
@@ -312,7 +181,7 @@
 
 .blockspeed-ruler-slow-down-text {
     font-size: 5em;
-    font-family: AgencyFB;
+    font-family: $font-family-1;
     font-weight: bold;
     color: white;
     display: table-cell;
@@ -335,7 +204,7 @@
 **/
 
 .xpd-displacement-area-container * {
-    font-family: AgencyFB;
+    font-family: $font-family-1;
 }
 
 /***********************/
@@ -365,21 +234,21 @@
 
 .xpd-speed-gauge-readings-text {
     font-size: 1.5em;
-    font-family: AgencyFB;
+    font-family: $font-family-1;
     fill: #bff0ef;
     font-weight: bolder;
 }
 
 .xpd-speed-gauge-ruler-tick-text {
     font-size: 0.65em;
-    font-family: AgencyFB;
+    font-family: $font-family-1;
     fill: #bff0ef;
     text-anchor: end;
 }
 
 .xpd-speed-gauge-text {
     font-size: 1.2em;
-    font-family: AgencyFB;
+    font-family: $font-family-1;
     stroke-width: 1.2;
     fill-opacity: 0;
 }
@@ -394,7 +263,7 @@
 
 .xpd-speed-gauge-text-vre{
     font-size: 0.80em;
-    font-family: AgencyFB;
+    font-family: $font-family-1;
     fill: #bff0ef;
     text-anchor: end;
 }
@@ -446,7 +315,7 @@
 
 .xpd-speed-gauge-arc-ticks {
     fill: #bff0ef;
-    font-family: AgencyFB;
+    font-family: $font-family-1;
 }
 
 .xpd-speed-gauge-arc-ticks-lg {
@@ -613,94 +482,7 @@ input:checked + .slider:before {
 
 /* CONN RULER */
 
-.conn-ruler-container {
-    border-left: solid 2 #517f89;
-}
 
-.xpd-conn-ruler-tick {
-    stroke: #83b2bc;
-    stroke-width: 0.5;
-}
-
-.xpd-conn-ruler-tick-main {
-    stroke-width: 1;
-}
-
-.xpd-conn-ruler-tick-sub {
-    stroke-width: 1;
-}
-
-.xpd-conn-ruler-tick-fancy {
-    stroke-width: 6;
-    stroke-dasharray: 0.5, 3;
-}
-
-.xpd-conn-ruler-tick-line {
-    stroke-width: 2;
-    fill: #517f89;
-}
-
-.xpd-conn-ruler-tick-text {
-    font-size: 0.5em;
-    font-family: AgencyFB;
-    fill: #83b2bc;
-    font-weight: bolder;
-    text-anchor: end;
-}
-
-.xpd-conn-ruler-tick-text-past {
-    fill: #83b2bc;
-}
-
-.xpd-conn-ruler-duration-tick-text {
-    font-size: 0.5em;
-    font-family: AgencyFB;
-    fill: #517f89;
-    font-weight: bolder;
-    text-anchor: end;
-}
-
-.xpd-conn-ruler-duration-tick-text-past {
-    fill: #000000;
-}
-
-.xpd-conn-ruler-event-block {
-    fill: none;
-    stroke-width: 1;
-    stroke: #517f89;
-}
-
-.xpd-conn-ruler-event-block-past {
-    fill: #517f89;
-}
-
-.xpd-conn-ruler-event-block-overtime {
-    fill: #b45c5c;
-    stroke: #b45c5c;
-    fill-opacity: 0.8;
-}
-
-.xpd-conn-ruler-event-name-container {
-    display: table;
-    padding: 5px;
-    width: 100%;
-    height: 100%;
-}
-
-.xpd-conn-ruler-event-name {
-    display: table-cell;
-    vertical-align: middle;
-    font-size: 0.6em;
-    font-family: AgencyFB;
-    text-align: center;
-    color: #517f89;
-    font-weight: bolder;
-    white-space: normal;
-}
-
-.xpd-conn-ruler-event-name-past {
-    color: #000000;
-}
 
 /* IN SLIPS */
 
@@ -725,7 +507,7 @@ input:checked + .slider:before {
 .xpd-in-slips-bar-text {
     font-size: 0.4em;
     fill: #bff0ef;
-    font-family: AgencyFB;
+    font-family: $font-family-1;
     font-style: italic;
 }
 
@@ -754,43 +536,6 @@ input:checked + .slider:before {
     height: 100%;
 }
 
-.operation-progress-chart {
-    font-family: AgencyFB;
-    height: 100%;
-}
-
-.operation-progress-chart .operation-progress-time-label {
-    font-weight: bold;
-    font-size: 1.3em;
-}
-
-.operation-progress-chart .operation-progress-time-difference-label {
-    font-weight: bold;
-    font-size: 1.4em;
-}
-
-.operation-progress-chart .operation-progress-rect-total-label {
-    font-size: 1.4em;
-    font-weight: bold;
-}
-
-.operation-progress-chart .operation-progress-rect-label {
-    font-size: 1.3em;
-    font-weight: bold;
-}
-
-.operation-progress-chart .operation-progress-delay-text {
-    font-size: 1.3em;
-    font-weight: bold;
-    fill: white;
-}
-
-.operation-progress-chart .operation-progress-delay-title {
-    font-size: 1.5em;
-    font-weight: bold;
-    fill: white;
-}
-
 /**
 *   forecast line
 **/
@@ -803,12 +548,12 @@ xpd-forecast-line {
 
 .xpd-forecast-line-axis-label {
     fill: #476f78;
-    font-family: AgencyFB;
+    font-family: $font-family-1;
     font-size: 0.5em;
 }
 
 .xpd-forecast-line-axis-text {
-    font-family: AgencyFB;
+    font-family: $font-family-1;
     font-size: 0.5em;
     text-anchor: end;
 }
