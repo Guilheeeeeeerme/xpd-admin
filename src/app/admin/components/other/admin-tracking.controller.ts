@@ -41,9 +41,8 @@ export class AdminTrackingController {
 		operationDataService.openConnection([]).then(() => {
 			vm.operationDataFactory = operationDataService.operationDataFactory;
 			$scope.operationData = vm.operationDataFactory.operationData;
+			this.loadEvents();
 		});
-
-		this.loadEvents();
 
 		operationDataService.on('setOnEventChangeListener', () => { this.loadEvents(); });
 		operationDataService.on('setOnParallelEventChangeListener', () => { this.loadEvents(); });
