@@ -1,3 +1,4 @@
+@import '~assets/css/font.scss';
 
 .period-form-input-content {
     /*background-color: #acd7ca;*/
@@ -17,5 +18,5 @@
 }
 
 .period-form {
-    font-family: AgencyFB;
+    font-family: $font-family-1;
 }

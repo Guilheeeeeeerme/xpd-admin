@@ -1,12 +1,4 @@
-/**
-* CUSTOM FONTS
-*/
-
-@font-face {
-    font-family: AgencyFB;
-    src: url("../fonts/agency-fb.ttf");
-}
-
+@import './font.scss';
 @import './height.scss';
 @import './scrollbar.scss';
 @import './xpd-panel.scss';
@@ -100,7 +92,7 @@ small, .font_small {
 
 .xpd-green-list-container ul {
     border: 2px solid #456c75;
-    font-family: AgencyFB;
+    font-family: $font-family-1;
     font-size: 1.3em;
     font-weight: bolder;
     color: #456c75;
@@ -374,13 +366,13 @@ a.view-only-link {
 /* OPERATION MANAGER */
 
 .xpd-green-styled-box {
-    font-family: AgencyFB;
+    font-family: $font-family-1;
     font-size: 1.3em;
     font-weight: bolder;
 }
 
 .xpd-green-styled-box-popover {
-    font-family: AgencyFB;
+    font-family: $font-family-1;
     font-size: 1em;
     font-weight: bolder;
     z-index: 100000;
@@ -454,7 +446,7 @@ a.view-only-link {
  **/
 
 .equilibrium-time-table {
-    font-family: AgencyFB;
+    font-family: $font-family-1;
     border: solid thin #517f89;
 }
 
@@ -575,7 +567,7 @@ a.view-only-link {
 }
 
 .xpd-chart-placeholder-text {
-    font-family: AgencyFB;
+    font-family: $font-family-1;
     font-size: 1.5em;
     -webkit-text-stroke: 1.5px #517f89;
     -webkit-text-fill-color: transparent;
@@ -614,7 +606,7 @@ a.view-only-link {
 }
 
 .xpd-operation-status div {
-    font-family: AgencyFB;
+    font-family: $font-family-1;
     font-size: 1.5em;
     color: #f3e897;
     text-align: center;
@@ -648,7 +640,7 @@ a.view-only-link {
 }
 
 .laydown-confirmation-modal{
-    font-family: AgencyFB;
+    font-family: $font-family-1;
 }
 
 
@@ -690,13 +682,13 @@ a.view-only-link {
 }
 
 .data-bit-depth-title{
-    font-family: AgencyFB;
+    font-family: $font-family-1;
     color: #fff;
     font-size: medium;
 }
 
 .data-bit-depth-value{
-    font-family: AgencyFB;
+    font-family: $font-family-1;
     color: #fff;
     font-size: large;
     font-weight: 600;
@@ -717,7 +709,7 @@ a.view-only-link {
     background-color: #e89313;
     text-align: center;
     font-weight: 800;
-    font-family: AgencyFB;
+    font-family: $font-family-1;
     color: #000;
     font-size: 1em;
 }
@@ -803,7 +795,7 @@ xpd-operation-manager .xpd-nav-button {
 xpd-operation-manager .xpd-nav-button {
     border: 2px solid #456c75;
     padding: 15px;
-    font-family: AgencyFB;
+    font-family: $font-family-1;
     font-size: 1.3em;
     font-weight: bolder;
     color: #456c75;

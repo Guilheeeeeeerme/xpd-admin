@@ -158,13 +158,17 @@
 
         </div>
 
-        <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 trip-ruler-chart-container">
+        <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 ">
 
-            <div xpd-trip-ruler show-slow-down="flags.showSlowDown" class="trip-ruler-chart" readings='currentReading'
-                calculated='currentCalculated' current-event="{{currentEvent}}"
-                operation='currentOperation' expected-changing="changingStatesList"
+            <xpd-trip-ruler 
+                show-slow-down="flags.showSlowDown"
+                readings='currentReading'
+                calculated='currentCalculated' 
+                current-event="{{currentEvent}}"
+                operation='currentOperation' 
+                expected-changing="changingStatesList"
                 expected-alarm-changing="changingAlarmsList" unreachable="unreachable">
-            </div>
+            </xpd-trip-ruler>
 
         </div>
 
@@ -180,19 +184,22 @@
     <div ng-if="currentEvent != null && (currentEvent.eventType == 'CONN' || currentEvent.eventType == 'TIME')"
         class="event-conn-container">
 
-        <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8 conn-ruler-chart-container">
-            <div xpd-conn-ruler class=" conn-ruler-chart" chronometer="( currentTick / 1000 )" vtarget-duration='taskExpectedDuration' time-blocks="timeBlocks"
+        <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8 ">
+            <xpd-conn-ruler chronometer="( currentTick / 1000 )" vtarget-duration='taskExpectedDuration' time-blocks="timeBlocks"
                 flash-go-div="dController.flashGoDiv">
-            </div>
+            </xpd-conn-ruler>
 
         </div>
 
-        <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 trip-ruler-chart-container">
+        <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 ">
 
-            <div xpd-trip-ruler show-slow-down="flags.showSlowDown" class=" trip-ruler-chart" readings='currentReading'
-                calculated='currentCalculated' current-event="{{currentEvent}}"
+            <xpd-trip-ruler 
+                show-slow-down="flags.showSlowDown" 
+                readings='currentReading'
+                calculated='currentCalculated' 
+                current-event="{{currentEvent}}"
                 operation='currentOperation'>
-            </div>
+            </xpd-trip-ruler>
 
         </div>
 
@@ -202,19 +209,20 @@
     <div ng-if="currentOperation != null && currentOperation.running && currentEvent != null && currentEvent.eventType == 'WAIT'"
         class="event-conn-container">
 
-        <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8 conn-ruler-chart-container">
-            <div xpd-conn-ruler class=" conn-ruler-chart" chronometer="( currentTick / 1000 )" vtarget-duration='taskExpectedDuration' time-blocks="timeBlocks"
+        <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8 ">
+            <xpd-conn-ruler chronometer="( currentTick / 1000 )" vtarget-duration='taskExpectedDuration' time-blocks="timeBlocks"
                 flash-go-div="dController.flashGoDiv">
-            </div>
+            </xpd-conn-ruler>
 
         </div>
 
-        <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 trip-ruler-chart-container">
+        <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 ">
 
-            <div xpd-trip-ruler show-slow-down="flags.showSlowDown" class=" trip-ruler-chart" readings='currentReading'
+            <xpd-trip-ruler 
+                show-slow-down="flags.showSlowDown" readings='currentReading'
                 calculated='currentCalculated' current-event="{{currentEvent}}"
                 operation='currentOperation'>
-            </div>
+            </xpd-trip-ruler>
 
         </div>
 

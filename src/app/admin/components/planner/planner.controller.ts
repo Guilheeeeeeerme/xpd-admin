@@ -70,6 +70,12 @@ export class PlannerController {
 
 	}
 
+	public initActionSelectActivityToPlan(stateName, eventType) {
+		if (!this.$scope.dados.selectedState || !this.$scope.dados.selectedEventType) {
+			this.actionSelectActivityToPlan(stateName, eventType);
+		}
+	}
+
 	public actionSelectActivityToPlan(stateName, eventType) {
 
 		this.$scope.dados.selectedEventType = null;
@@ -194,10 +200,6 @@ export class PlannerController {
 
 			this.$scope.dados.settings[stateName][eventType].targetTime = 1 / this.$scope.dados.settings[stateName][eventType].targetSpeed;
 			this.$scope.dados.settings[stateName][eventType].optimumTime = 1 / this.$scope.dados.settings[stateName][eventType].optimumSpeed;
-		}
-
-		if (!this.$scope.dados.selectedState || !this.$scope.dados.selectedEventType) {
-			this.actionSelectActivityToPlan(stateName, eventType);
 		}
 
 	}

@@ -1,5 +1,4 @@
-
-
+@import '~assets/css/font.scss';
 @import './tracking.scss';
 @import './planner.scss';
 @import './team.scss';
@@ -7,7 +6,7 @@
 
 .operation-progress-delay {
     color: white;
-    font-family: AgencyFB;
+    font-family: $font-family-1;
     height: 100%;
     padding: 5px;
     padding-top: 0;
@@ -135,14 +134,14 @@ rect.negative-vre {
 
 .tree-content-title{
     color: #517f89;
-    font-family: AgencyFB;
+    font-family: $font-family-1;
     font-weight: bold;
     font-size: 25px;
 }
 
 .tree-ul{
     color: black;
-    font-family: AgencyFB;
+    font-family: $font-family-1;
     text-align: left;
     text-anchor: middle;
     font-size: 15px;
@@ -187,7 +186,7 @@ rect.negative-vre {
 **/
 
 .xpd-operation-modal{
-    font-family: AgencyFB;
+    font-family: $font-family-1;
 }
 
 /**
@@ -587,7 +586,7 @@ input:checked + .slider{
     width: 250px;
     height: 50px;
     border: 2px solid #456c75;
-    font-family: AgencyFB;
+    font-family: $font-family-1;
     font-size: 1.3em;
     font-weight: bolder;
     display: flex;

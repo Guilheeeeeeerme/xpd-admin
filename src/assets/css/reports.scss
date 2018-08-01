@@ -1,5 +1,7 @@
+@import '~assets/css/font.scss';
+
 body {
-	font-family: AgencyFB;
+	font-family: $font-family-1;
 }
 
 xpd-access-factory-directive {

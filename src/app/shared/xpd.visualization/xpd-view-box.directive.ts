@@ -1,4 +1,9 @@
 export class XPDViewBoxDirective implements ng.IDirective {
+
+	public static Factory(): ng.IDirectiveFactory {
+		return () => new XPDViewBoxDirective();
+	}
+
 	public scope = {
 		xpdViewBox: '=',
 	};
@@ -14,10 +19,6 @@ export class XPDViewBoxDirective implements ng.IDirective {
 			}
 
 		});
-	}
-
-	public static Factory(): ng.IDirectiveFactory {
-		return () => new XPDViewBoxDirective();
 	}
 
 }
