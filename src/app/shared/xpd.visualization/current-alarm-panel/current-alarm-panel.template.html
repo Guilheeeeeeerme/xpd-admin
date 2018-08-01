@@ -1,0 +1,49 @@
+<div class="panel panel-default">
+
+	<div 
+		class="panel-heading clearfix" ng-click="changePanelState()">
+		<h4 class="panel-title pull-left">Current Alarm</h4>
+		<div class="btn-group pull-right">
+			<i type="button"
+			class="pull-right glyphicon pointer"
+			ng-class="{'glyphicon-chevron-down': collapse, 'glyphicon-chevron-up': !collapse}">
+			</i>
+		</div>
+	</div>
+
+	<div class="panel-body" uib-collapse="collapse">
+
+		<div ng-if="currentAlarm">
+			<table class="table table-sm table-hover table-condensed">
+				<thead>
+					<tr>
+						<th>{{currentAlarm.name}}</th>
+					</tr>
+					<tr>
+						<th>Start</th>
+						<th>End</th>
+						<th ng-if="currentAlarm.isDurationAlarm">Duration</th>
+						<th ng-if="!currentAlarm.isDurationAlarm">Restriction</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>{{currentAlarm.startDepth | number: 2}}(m)</td>
+						<td>{{currentAlarm.endDepth | number: 2}}(m)</td>
+						<td ng-if="currentAlarm.isDurationAlarm">{{ 3600/currentAlarm.optimumSpeed | secondsToHourMinutesSeconds}}</td>
+						<td ng-if="!currentAlarm.isDurationAlarm">{{currentAlarm.speedRestriction | number: 2}}(m/s)</td>
+					</tr>
+					<tr>
+						<td colspan="3">{{currentAlarm.message}}</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+
+		<div ng-if="!currentAlarm">
+			No Current Alarm
+		</div>
+
+	</div>
+
+</div>

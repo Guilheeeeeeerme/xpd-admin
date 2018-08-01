@@ -1,21 +1,11 @@
-import template from './operation-information-panel.template.html';
+import template from './current-alarm-panel.template.html';
 
-export class OperationInformationPanelDirective implements ng.IDirective {
+export class CurrentAlarmPanelDirective implements ng.IDirective {
+
 	public restrict = 'EA';
 	public template = template;
 	public scope = {
-		numberJoints: '=',
-		jointNumber: '=',
-		operation: '=',
-		state: '=',
-		reading: '=',
-		accScore: '=',
-		stateDuration: '=',
-		targetParamExpectedEndTime: '=',
-		optimumExpectedDuration: '=',
-		standardExpectedDuration: '=',
-		poorExpectedDuration: '=',
-		well: '=',
+		currentAlarm: '=',
 	};
 
 	public link: ng.IDirectiveLinkFn = (
@@ -25,7 +15,7 @@ export class OperationInformationPanelDirective implements ng.IDirective {
 		ctrl: any,
 	) => {
 
-		const keyName = 'panelOperationInfoIsCollapsed';
+		const keyName = 'panelCurrentAlarmIsCollapsed';
 		scope.collapse = getPanelState();
 
 		function getPanelState() {
@@ -45,6 +35,7 @@ export class OperationInformationPanelDirective implements ng.IDirective {
 	}
 
 	public static Factory(): ng.IDirectiveFactory {
-		return () => new OperationInformationPanelDirective();
+		return () => new CurrentAlarmPanelDirective();
 	}
+
 }

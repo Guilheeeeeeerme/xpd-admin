@@ -44,28 +44,6 @@ export class OperationDashboardController {
 		});
 	}
 
-	public getTotalFailureTime(startTime, endTime) {
-		if (!endTime) { return 0; }
-
-		const diffTime = new Date(endTime).getTime() - new Date(startTime).getTime();
-		return new Date(diffTime);
-	}
-
-	public getPanelStartState(keyName) {
-		try {
-			this.$scope.statusPanel[keyName] = JSON.parse(localStorage.getItem(keyName));
-			return this.$scope.statusPanel[keyName];
-		} catch (error) {
-			return true;
-		}
-	}
-
-	public changePanelState(keyName) {
-		const newState = !this.getPanelStartState(keyName);
-		this.$scope.statusPanel[keyName] = newState;
-		localStorage.setItem(keyName, JSON.stringify(newState));
-	}
-
 	public selectedPoint(point) {
 		this.getReading(point);
 	}

@@ -152,7 +152,7 @@ export class TimeSlicesTableDirective implements ng.IDirective {
 			lastDuration = +scope.duration;
 
 			scope.timeSlices = scope.timeSlices.filter(function (ts) {
-				return !(!ts.id && !ts.enabled);
+				return !(!ts.id || !ts.enabled);
 			});
 
 			scope.timeSlices = self.$filter('orderBy')(scope.timeSlices, 'timeOrder', null) || [];

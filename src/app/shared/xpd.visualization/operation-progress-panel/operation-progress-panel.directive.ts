@@ -1,15 +1,9 @@
-
-// operationProgressPanel.$inject = [];
-
 import template from './operation-progress-panel.template.html';
 
 export class OperationProgressPanelDirective implements ng.IDirective {
 	public restrict = 'EA';
 	public template = template;
 	public scope = {
-		onInit: '&',
-		onClickCollapse: '&',
-		collapse: '=',
 		currentScore: '=',
 		progressData: '=',
 	};
@@ -20,6 +14,9 @@ export class OperationProgressPanelDirective implements ng.IDirective {
 		attributes: ng.IAttributes,
 		ctrl: any,
 	) => {
+
+		const keyName = 'panelOperationProgressIsCollapsed';
+		scope.collapse = getPanelState();
 
 		scope.getProgressPercentage = getProgressPercentage;
 
@@ -53,6 +50,20 @@ export class OperationProgressPanelDirective implements ng.IDirective {
 		function getProgressPercentage(totalTime, currentTime) {
 			return (currentTime * 100) / totalTime + '%';
 		}
+
+		function getPanelState() {
+			try {
+				return JSON.parse(localStorage.getItem(keyName));
+			} catch (error) {
+				return true;
+			}
+		}
+
+		scope.changePanelState = () => {
+			const newState = !getPanelState();
+			scope.collapse = newState;
+			localStorage.setItem(keyName, JSON.stringify(newState));
+		};
 	}
 
 	public static Factory(): ng.IDirectiveFactory {

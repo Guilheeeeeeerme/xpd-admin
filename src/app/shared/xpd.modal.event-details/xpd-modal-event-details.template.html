@@ -34,7 +34,7 @@
 					<th>Start Time:</th>
 					<td>
 						<div class="form-inline">
-							{{eventDetails.startTime | date:'MM/dd/yyyy HH:mm'}}
+							{{eventDetails.startTime | date:'MM/dd/yyyy HH:mm:ss'}}
 						</div>
 					</td>
 				</tr>
@@ -42,7 +42,7 @@
 					<th>End Time:</th>
 					<td>
 						<div class="form-inline">
-							{{eventDetails.endTime| date:'MM/dd/yyyy HH:mm'}} ({{ (eventDetails.duration/1000) | secondsToHourMinutesSeconds}})
+							{{eventDetails.endTime| date:'MM/dd/yyyy HH:mm:ss'}} ({{ (eventDetails.duration/1000) | secondsToHourMinutesSeconds}})
 						</div>
 					</td>
 				</tr>

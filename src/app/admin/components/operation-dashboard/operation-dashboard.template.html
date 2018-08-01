@@ -12,27 +12,18 @@
 
         <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4 scrollable-content">
 
-            <xpd-channels-information-panel
-                on-init="odController.getPanelStartState('panelChanelsIsCollapsed')" 
-                on-click-collapse="odController.changePanelState('panelChanelsIsCollapsed')"
-                collapse = "statusPanel['panelChanelsIsCollapsed']"
+            <xpd-channels-information-panel 
                 readings="selectedReadings"
                 remove-reading= "odController.removeReadingFromList(index)">
             </xpd-channels-information-panel>
 
             <!-- Well Information -->
             <xpd-well-information-panel
-                on-init="odController.getPanelStartState('panelWellIsCollapsed')" 
-                on-click-collapse="odController.changePanelState('panelWellIsCollapsed')"
-                collapse = "statusPanel['panelWellIsCollapsed']"
                 well="operationData.wellContext.currentWell">
             </xpd-well-information-panel>
 
             <!-- Operation Information -->
             <xpd-operation-information-panel
-                on-init="odController.getPanelStartState('panelOperationInfoIsCollapsed')"
-                on-click-collapse="odController.changePanelState('panelOperationInfoIsCollapsed')"
-                collapse = "statusPanel['panelOperationInfoIsCollapsed']"
                 number-joints="operationData.jointContext.numberJoints"
                 joint-number="operationData.jointContext.currentJoint.jointNumber" 
                 operation="operationData.operationContext.currentOperation"
@@ -49,9 +40,6 @@
 
             <!-- Consistency Information -->
             <xpd-consistency-information-panel
-                on-init="odController.getPanelStartState('panelConsistencyInfoIsCollapsed')"
-                on-click-collapse="odController.changePanelState('panelConsistencyInfoIsCollapsed')"
-                collapse= "statusPanel['panelConsistencyInfoIsCollapsed']"
                 state="operationData.stateContext.currentState" 
                 event="operationData.eventContext.currentEvent"
                 is-tripin="operationData.directionContext.tripin" 
@@ -66,92 +54,25 @@
 
             <!-- Next Activities Information -->
             <xpd-next-activities-information-panel
-                on-init="odController.getPanelStartState('panelNextActivityIsCollapsed')"
-                on-click-collapse="odController.changePanelState('panelNextActivityIsCollapsed')"
-                collapse = "statusPanel['panelNextActivityIsCollapsed']"
                 current-activity-elapsed-time="operationData.chronometerContext.stateTick"
                 initial-planning="operationData.suboperationContext.currentSuboperation.jointIntervals"
                 operation="operationData.operationContext.currentOperation"
                 activities="expectations.nextActivities">
             </xpd-next-activities-information-panel>
 
+            <!-- Operation Progress -->
             <xpd-operation-progress-panel
-                on-init="odController.getPanelStartState('panelOperationProgressIsCollapsed')"
-                on-click-collapse="odController.changePanelState('panelOperationProgressIsCollapsed')"
-                collapse = "statusPanel['panelOperationProgressIsCollapsed']"
                 current-score="operationData.scoreContext.currentScore" 
                 progress-data="operationData.operationProgressContext.operationProgressData[operationData.stateContext.currentState]">
             </xpd-operation-progress-panel>
 
-            <div class="panel panel-default">
+            <!-- Current Alarm -->
+            <xpd-current-alarm-panel
+                current-alarm="operationData.alarmContext.currentAlarm">
+            </xpd-current-alarm-panel>
 
-                <div class="panel-heading clearfix" 
-                    ng-init="odController.getPanelStartState('panelOperationIsCollapsed')" 
-                    ng-click="odController.changePanelState('panelOperationIsCollapsed')">
-                    <h4 class="panel-title pull-left">
-                        Trip {{ operationData.directionContext.tripin?'In': 'Out' }} Sub Operation Forecast</h4>
-                    <div class="btn-group pull-right">
-                        <i type="button" class="pull-right glyphicon pointer" ng-class="{'glyphicon-chevron-down': statusPanel['panelOperationIsCollapsed'], 'glyphicon-chevron-up': !statusPanel['panelOperationIsCollapsed']}">
-                        </i>
-                    </div>
-                </div>
-
-            </div>
-
-            <div class="panel panel-default">
-
-                <div 
-                    class="panel-heading clearfix" 
-                    ng-init="odController.getPanelStartState('panelCurrentAlarmIsCollapsed')" 
-                    ng-click="odController.changePanelState('panelCurrentAlarmIsCollapsed')">
-                    <h4 class="panel-title pull-left">Current Alarm</h4>
-                    <div class="btn-group pull-right">
-                        <i type="button" class="pull-right glyphicon pointer" ng-class="{'glyphicon-chevron-down': statusPanel['panelCurrentAlarmIsCollapsed'], 'glyphicon-chevron-up': !statusPanel['panelCurrentAlarmIsCollapsed']}">
-                        </i>
-                    </div>
-                </div>
-
-                <div class="panel-body" uib-collapse="statusPanel['panelCurrentAlarmIsCollapsed']">
-
-                    <div ng-if="operationData.alarmContext.currentAlarm">
-                        <table class="table table-sm table-hover table-condensed">
-                            <thead>
-                                <tr>
-                                    <th>{{operationData.alarmContext.currentAlarm.name}}</th>
-                                </tr>
-                                <tr>
-                                    <th>Start</th>
-                                    <th>End</th>
-                                    <th ng-if="operationData.alarmContext.currentAlarm.isDurationAlarm">Duration</th>
-                                    <th ng-if="!operationData.alarmContext.currentAlarm.isDurationAlarm">Restriction</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>{{operationData.alarmContext.currentAlarm.startDepth | number: 2}}(m)</td>
-                                    <td>{{operationData.alarmContext.currentAlarm.endDepth | number: 2}}(m)</td>
-                                    <td ng-if="operationData.alarmContext.currentAlarm.isDurationAlarm">{{ 3600/operationData.alarmContext.currentAlarm.optimumSpeed | secondsToHourMinutesSeconds}}</td>
-                                    <td ng-if="!operationData.alarmContext.currentAlarm.isDurationAlarm">{{operationData.alarmContext.currentAlarm.speedRestriction | number: 2}}(m/s)</td>
-                                </tr>
-                                <tr>
-                                    <td colspan="3">{{operationData.alarmContext.currentAlarm.message}}</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-
-                    <div ng-if="!operationData.alarmContext.currentAlarm">
-                        No Current Alarm
-                    </div>
-
-                </div>
-
-            </div>
-
+            <!-- Upcoming Alarm -->
             <xpd-upcoming-alarms-panel
-                on-init="odController.getPanelStartState('panelNextAlarmsIsCollapsed')"
-                on-click-collapse="odController.changePanelState('panelNextAlarmsIsCollapsed')"
-                collapse = "statusPanel['panelNextAlarmsIsCollapsed']"
                 limit="3"
                 tripin-alarms="operationData.alarmContext.tripin"
                 tripout-alarms="operationData.alarmContext.tripout"
@@ -160,50 +81,9 @@
             </xpd-upcoming-alarms-panel>
 
             <!-- Failures -->
-            <div class="panel panel-default">
-
-                <div 
-                    class="panel-heading clearfix" 
-                    ng-init="odController.getPanelStartState('panelFailuresIsCollapsed')" 
-                    ng-click="odController.changePanelState('panelFailuresIsCollapsed')">
-                    <h4 class="panel-title pull-left">Failures</h4>
-                    <div class="btn-group pull-right">
-                        <i type="button" class="pull-right glyphicon pointer" ng-class="{'glyphicon-chevron-down': statusPanel['panelFailuresIsCollapsed'], 'glyphicon-chevron-up': !statusPanel['panelFailuresIsCollapsed']}">
-                        </i>
-                    </div>
-                </div>
-
-                <div class="panel-body" uib-collapse="statusPanel['panelFailuresIsCollapsed']">
-
-                    <div ng-if="operationData.failureContext.failureList.length != 0">
-
-                        <table class="table table-sm table-hover table-condensed">
-                            <thead>
-                                <tr>
-                                    <th>NPT</th>
-                                    <th>Category</th>
-                                    <th>Start</th>
-                                    <th>End</th>
-                                    <th>Total</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr ng-repeat="(key, failure) in operationData.failureContext.failureList" ng-class="{'danger':failure.npt, 'warning':failure.onGoing}">
-                                    <td>
-                                        <span ng-class="{'glyphicon glyphicon-ok':(failure.npt), '':(!failure.npt)}"></span>
-                                    </td>
-                                    <td>{{failure.category.name}}</td>
-                                    <td>{{failure.startTime | date:'MM/dd/yyyy HH:mm:ss'}}</td>
-                                    <td>{{failure.endTime | date:'MM/dd/yyyy HH:mm:ss'}}</td>
-                                    <td>{{odController.getTotalFailureTime(failure.startTime, failure.endTime) / 1000 | secondsToHourMinutesSeconds}}</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-
-                </div>
-
-            </div>
+            <xpd-failure-panel
+                failure-list="operationData.failureContext.failureList">
+            </xpd-failure-panel>
 
         </div>
 

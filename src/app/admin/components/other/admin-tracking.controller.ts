@@ -41,9 +41,8 @@ export class AdminTrackingController {
 		operationDataService.openConnection([]).then(() => {
 			vm.operationDataFactory = operationDataService.operationDataFactory;
 			$scope.operationData = vm.operationDataFactory.operationData;
+			this.loadEvents();
 		});
-
-		this.loadEvents();
 
 		operationDataService.on('setOnEventChangeListener', () => { this.loadEvents(); });
 		operationDataService.on('setOnParallelEventChangeListener', () => { this.loadEvents(); });
@@ -71,12 +70,11 @@ export class AdminTrackingController {
 
 	}
 
-	public actionOpenDropdownMenu($event, eventLog) {
-
+	public actionOpenDropdownMenu(mouseEvent, eventLog) {
 		const modalOption: any = document.querySelector('.slips-to-slips-dropdown-menu');
 
-		modalOption.style.top = ($event.clientY) + 'px';
-		modalOption.style.left = ($event.clientX) + 'px';
+		modalOption.style.top = (mouseEvent.clientY) + 'px';
+		modalOption.style.left = (mouseEvent.clientX) + 'px';
 
 		if (!this.$scope.flags.openDropdownMenu) {
 			this.$scope.flags.openDropdownMenu = !this.$scope.flags.openDropdownMenu;

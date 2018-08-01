@@ -21,6 +21,8 @@ export class InSlipsDirective implements ng.IDirective {
 		scope.$watch('calculated', updateProgress, true);
 
 		function updateProgress() {
+			if (!scope.calculated) { return; }
+
 			const width = (100 * (scope.target - scope.calculated.time) / scope.target);
 
 			if ((!scope.myStyle || !scope.myStyle.width)) {

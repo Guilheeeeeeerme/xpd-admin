@@ -6,10 +6,10 @@ export class OldTrackingDirective implements ng.IDirective {
 	public scope = {
 		actionEventModalButtonClose: '=',
 		actionEventModalButtonSave: '=',
-		actionOpenDropdownMenu: '=',
-		actionClickEventDetailsButton: '=',
-		actionClickFailuresButton: '=',
-		actionClickLessonsLearnedButton: '=',
+		actionOpenDropdownMenu: '&',
+		actionClickEventDetails: '&',
+		actionClickFailures: '&',
+		actionClickLessonsLearned: '&',
 		taskExpectedDuration: '=',
 		currentTick: '=',
 		currentOperation: '=',
@@ -30,6 +30,32 @@ export class OldTrackingDirective implements ng.IDirective {
 	};
 	public restrict = 'AE';
 	public template = template;
+
+	public link: ng.IDirectiveLinkFn = (
+		scope: any,
+		element: ng.IAugmentedJQuery,
+		attrs: ng.IAttributes,
+		ctrl: any,
+	) => {
+		scope.openDropdownMenu = (mouseEvent, eventLog) => {
+			scope.actionOpenDropdownMenu({
+				mouseEvent: mouseEvent,
+				eventLog: eventLog,
+			});
+		};
+
+		scope.onClickEventDetails = () => {
+			scope.actionClickEventDetails();
+		};
+
+		scope.onClickFailures = () => {
+			scope.actionClickFailures();
+		};
+
+		scope.onClickLessonsLearned = () => {
+			scope.actionClickLessonsLearned();
+		};
+	}
 
 	public static Factory(): ng.IDirectiveFactory {
 		return () => new OldTrackingDirective();
