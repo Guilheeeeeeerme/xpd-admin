@@ -32,24 +32,24 @@
                 acc-score="scoreData.accScore"
                 state-duration="operationData.chronometerContext.stateTick"
                 target-param-expected-end-time="expectations.stateExpectedEndTime"
-                optimum-expected-duration="expectations.vOptimumStateExpectedDuration"
-                standard-expected-duration="expectations.vStandardStateExpectedDuration"
-                poor-expected-duration="expectations.vPoorStateExpectedDuration"
+                optimum-expected-duration="rawExpectations.vOptimumStateExpectedDuration"
+                standard-expected-duration="rawExpectations.vStandardStateExpectedDuration"
+                poor-expected-duration="rawExpectations.vPoorStateExpectedDuration"
                 well="operationData.wellContext.currentWell">
             </xpd-operation-information-panel>
 
             <!-- Consistency Information -->
             <xpd-consistency-information-panel
                 state="operationData.stateContext.currentState" 
-                event="operationData.eventContext.currentEvent"
+                current-event-type="operationData.eventContext.currentEvent.eventType"
                 is-tripin="operationData.directionContext.tripin" 
                 score="operationData.scoreContext.currentScore"
                 current-event-duration="operationData.chronometerContext.tick"
                 last-event-type="operationData.eventContext.lastEvent.eventType"
-                joint-duration="operationData.chronometerContext.jointTick"
+                current-joint-duration="operationData.chronometerContext.jointTick"
                 last-trip-duration="lastTripDuration"
                 last-conn-duration="lastConnDuration"
-                event-property="eventProperty">
+                contract-time-performance="contractTimePerformance">
             </xpd-consistency-information-panel>
 
             <!-- Next Activities Information -->

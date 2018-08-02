@@ -36,9 +36,10 @@ export class OperationDashboardController {
 
 		const vm = this;
 
-		$scope.eventProperty = [];
-		$scope.eventProperty.TRIP = {};
-		$scope.eventProperty.CONN = {};
+		$scope.contractTimePerformance = [];
+		$scope.contractTimePerformance.TRIP = {};
+		$scope.contractTimePerformance.CONN = {};
+		$scope.contractTimePerformance.BOTH = {};
 		$scope.statusPanel = {};
 		$scope.jointInfo = {};
 		$scope.removeMarker = null;
@@ -76,59 +77,20 @@ export class OperationDashboardController {
 
 	private generateEstimatives() {
 
-		if (
-			this.$scope.operationData.stateContext &&
-			this.$scope.operationData.stateContext.currentState &&
-			this.$scope.operationData.forecastContext &&
-			this.$scope.operationData.forecastContext.estimatives) {
+		if (this.$scope.operationData.stateContext && this.$scope.operationData.forecastContext) {
 
-			const currentState = this.$scope.operationData.stateContext.currentState;
-			const estimatives = this.$scope.operationData.forecastContext.estimatives;
-			const estimatedAt = new Date(estimatives.estimatedAt).getTime();
+			try {
 
-			const vTargetStateJointInterval = estimatives.vTargetEstimative.filter((estimative) => {
-				return estimative[currentState] != null;
-			})[0][currentState];
+				const currentState = this.$scope.operationData.stateContext.currentState;
+				const estimatives = this.$scope.operationData.forecastContext.estimatives;
+				const rawEstimatives = this.$scope.operationData.forecastContext.rawEstimatives;
 
-			const vOptimumStateJointInterval = estimatives.vOptimumEstimative.filter((estimative) => {
-				return estimative[currentState] != null;
-			})[0][currentState];
+				this.$scope.expectations = this.generateExpectation(currentState, estimatives);
+				this.$scope.rawExpectations = this.generateRawExpectation(currentState, rawEstimatives);
 
-			const vStandardStateJointInterval = estimatives.vStandardEstimative.filter((estimative) => {
-				return estimative[currentState] != null;
-			})[0][currentState];
-
-			const vPoorStateJointInterval = estimatives.vPoorEstimative.filter((estimative) => {
-				return estimative[currentState] != null;
-			})[0][currentState];
-
-			const stateExpectedDuration = (1000 * vTargetStateJointInterval.BOTH.finalTime);
-			const vOptimumStateExpectedDuration = (1000 * vOptimumStateJointInterval.BOTH.finalTime);
-			const vStandardStateExpectedDuration = (1000 * vStandardStateJointInterval.BOTH.finalTime);
-			const vPoorStateExpectedDuration = (1000 * vPoorStateJointInterval.BOTH.finalTime);
-
-			// EXPECTED TRIP/CONN
-			this.$scope.eventProperty.CONN = this.getEventProperty('CONN', vTargetStateJointInterval, vOptimumStateJointInterval, vStandardStateJointInterval, vPoorStateJointInterval);
-			this.$scope.eventProperty.TRIP = this.getEventProperty('TRIP', vTargetStateJointInterval, vOptimumStateJointInterval, vStandardStateJointInterval, vPoorStateJointInterval);
-			this.$scope.eventProperty.BOTH = this.getEventProperty('BOTH', vTargetStateJointInterval, vOptimumStateJointInterval, vStandardStateJointInterval, vPoorStateJointInterval);
-
-			this.$scope.expectations = {
-				stateExpectedEndTime: estimatedAt + stateExpectedDuration,
-				vOptimumStateExpectedDuration,
-				vStandardStateExpectedDuration,
-				vPoorStateExpectedDuration,
-			};
-
-			const nextActivitiesEstimatives = this.operationActivitiesEstimatorService.estimateNextActivities(estimatedAt, estimatives.vTargetEstimative);
-
-			let operationFinalTimeEstimative = angular.copy(estimatedAt);
-
-			for (const activity of nextActivitiesEstimatives) {
-				operationFinalTimeEstimative = Math.max(activity.finalTime, operationFinalTimeEstimative);
+			} catch (error) {
+				console.error(error);
 			}
-
-			this.$scope.operationFinalTimeEstimative = operationFinalTimeEstimative;
-			this.$scope.nextActivitiesEstimatives = nextActivitiesEstimatives;
 		}
 
 		try {
@@ -140,9 +102,89 @@ export class OperationDashboardController {
 
 	}
 
-	private getEventProperty(eventType, vTargetStateJointInterval, vOptimumStateJointInterval, vStandardStateJointInterval, vPoorStateJointInterval) {
+	private generateExpectation(currentState, estimatives) {
+
+		const estimatedAt = new Date(estimatives.estimatedAt).getTime();
+		let expectations: any = {};
+
+		const vTargetStateJointInterval = estimatives.vTargetEstimative.filter((line) => {
+			return line[currentState] != null;
+		})[0][currentState];
+
+		// const vOptimumStateJointInterval = estimatives.vOptimumEstimative.filter((line) => {
+		// 	return line[currentState] != null;
+		// })[0][currentState];
+
+		// const vStandardStateJointInterval = estimatives.vStandardEstimative.filter((line) => {
+		// 	return line[currentState] != null;
+		// })[0][currentState];
+
+		// const vPoorStateJointInterval = estimatives.vPoorEstimative.filter((line) => {
+		// 	return line[currentState] != null;
+		// })[0][currentState];
+
+		const stateExpectedDuration = (1000 * vTargetStateJointInterval.BOTH.finalTime);
+		// const vOptimumStateExpectedDuration = (1000 * vOptimumStateJointInterval.BOTH.finalTime);
+		// const vStandardStateExpectedDuration = (1000 * vStandardStateJointInterval.BOTH.finalTime);
+		// const vPoorStateExpectedDuration = (1000 * vPoorStateJointInterval.BOTH.finalTime);
+
+		// EXPECTED TRIP/CONN
+		// this.$scope.contractTimePerformance.CONN = this.getContractTimePerformance('CONN', vTargetStateJointInterval, vOptimumStateJointInterval, vStandardStateJointInterval, vPoorStateJointInterval);
+		// this.$scope.contractTimePerformance.TRIP = this.getContractTimePerformance('TRIP', vTargetStateJointInterval, vOptimumStateJointInterval, vStandardStateJointInterval, vPoorStateJointInterval);
+		// this.$scope.contractTimePerformance.BOTH = this.getContractTimePerformance('BOTH', vTargetStateJointInterval, vOptimumStateJointInterval, vStandardStateJointInterval, vPoorStateJointInterval);
+		expectations = {
+			stateExpectedEndTime: estimatedAt + stateExpectedDuration,
+		};
+
+		const nextActivitiesEstimatives = this.operationActivitiesEstimatorService.estimateNextActivities(estimatedAt, estimatives.vTargetEstimative);
+
+		let operationFinalTimeEstimative = angular.copy(estimatedAt);
+
+		for (const activity of nextActivitiesEstimatives) {
+			operationFinalTimeEstimative = Math.max(activity.finalTime, operationFinalTimeEstimative);
+		}
+
+		this.$scope.operationFinalTimeEstimative = operationFinalTimeEstimative;
+		this.$scope.nextActivitiesEstimatives = nextActivitiesEstimatives;
+
+		return expectations;
+	}
+
+	private generateRawExpectation(currentState, rawEstimatives) {
+		let rawExpectations: any = {};
+
+		const vOptimumStateJointInterval = rawEstimatives.vOptimumEstimative.filter((line) => {
+			return line[currentState] != null;
+		})[0][currentState];
+
+		const vStandardStateJointInterval = rawEstimatives.vStandardEstimative.filter((line) => {
+			return line[currentState] != null;
+		})[0][currentState];
+
+		const vPoorStateJointInterval = rawEstimatives.vPoorEstimative.filter((line) => {
+			return line[currentState] != null;
+		})[0][currentState];
+
+		const vOptimumStateExpectedDuration = (1000 * vOptimumStateJointInterval.BOTH.finalTime);
+		const vStandardStateExpectedDuration = (1000 * vStandardStateJointInterval.BOTH.finalTime);
+		const vPoorStateExpectedDuration = (1000 * vPoorStateJointInterval.BOTH.finalTime);
+
+		// EXPECTED TRIP/CONN
+		this.$scope.contractTimePerformance.CONN = this.getContractTimePerformance('CONN', vOptimumStateJointInterval, vStandardStateJointInterval, vPoorStateJointInterval);
+		this.$scope.contractTimePerformance.TRIP = this.getContractTimePerformance('TRIP', vOptimumStateJointInterval, vStandardStateJointInterval, vPoorStateJointInterval);
+		this.$scope.contractTimePerformance.BOTH = this.getContractTimePerformance('BOTH', vOptimumStateJointInterval, vStandardStateJointInterval, vPoorStateJointInterval);
+
+		rawExpectations = {
+			vOptimumStateExpectedDuration,
+			vStandardStateExpectedDuration,
+			vPoorStateExpectedDuration,
+		};
+
+		return rawExpectations;
+	}
+
+	private getContractTimePerformance(eventType, vOptimumStateJointInterval, vStandardStateJointInterval, vPoorStateJointInterval) {
 		return {
-			vtargetTime: (vTargetStateJointInterval[eventType].finalTime / vTargetStateJointInterval[eventType].points.length),
 			voptimumTime: (vOptimumStateJointInterval[eventType].finalTime / vOptimumStateJointInterval[eventType].points.length),
 			vstandardTime: (vStandardStateJointInterval[eventType].finalTime / vStandardStateJointInterval[eventType].points.length),
 			vpoorTime: (vPoorStateJointInterval[eventType].finalTime / vPoorStateJointInterval[eventType].points.length),
