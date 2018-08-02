@@ -1,0 +1,66 @@
+
+
+.planner-error-text {
+    font-size: 0.8em;
+    -webkit-text-stroke: 1px red;
+    -webkit-text-fill-color: red;
+}
+
+.planner-list-item {
+    display: table;
+    height: 50px;
+    max-height: 50px;
+    border: 2px solid #456c75;
+    padding: 0px;
+    white-space: nowrap;
+    position: relative;
+}
+
+.planner-list-item:hover {
+    background-color: #456c75;
+    border: 2px solid black;
+}
+
+.planner-list-item a:hover {
+    background-color: #456c75;
+    color: black;
+}
+
+.planner-list-item a {
+    cursor: pointer;
+    display: table-cell;
+    text-align: center;
+    vertical-align: middle;
+    width: 100%;
+    white-space: nowrap;
+    padding-left: 0;
+    padding-right: 0;
+}
+
+.planner-list-item .button-bellow-label {
+    position: absolute;
+    bottom: -52px;
+    border-top: 0;
+    right: 0;
+    background-color: #456c75;
+    color: white;
+    padding: 1px 3px;
+    font-size: 1em;
+    z-index: 1049;
+}
+
+.planner-list-item.active {
+    background-color: #456c75;
+}
+
+.planner-list-item.active a {
+    color: black;
+}
+
+.planner-sum-trip-conn {
+    height: 20px;
+    font-size: 0.8em;
+    text-align: center;
+    color: #fff;
+    background-color: #337ab7;
+}

@@ -1,0 +1,25 @@
+<form class="form-inline period-form pull-right">
+	<div class="form-group period-form-input-content">
+		<label class="period-form-label" for="fromDate">From</label>
+		
+		<input name="fromDate" 
+			type="{{(dateTime) ? 'datetime-local' : 'date'}}" 
+			ng-change="onDataRangeChange()"
+			class="form-control table-period-date-limit input-sm"
+			ng-model="initialDate">
+	</div>
+	
+	<div class="form-group period-form-input-content">
+		<label class="period-form-label" for="exampleInputEmail2">To</label>
+		
+		<input name="toDate" 
+			type="{{ (dateTime) ? 'datetime-local' : 'date'}}" 
+			id="toDateTime" ng-change="onDataRangeChange()"
+			class="form-control table-period-date-limit input-sm"
+			ng-model="finalDate">
+	</div>
+
+	<button type="button" class="btn btn-primary form-control glyphicon glyphicon-search period-button btn-sm"
+			ng-click="functionChangePeriod({ fromDate: initialDate , toDate: finalDate })">
+	</button>
+</form>

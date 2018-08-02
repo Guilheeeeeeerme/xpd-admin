@@ -1,0 +1,106 @@
+<div class="panel panel-default">
+
+	<div class="panel-heading clearfix" ng-click="changePanelState()">
+		<h4 class="panel-title pull-left">Operation Progress</h4>
+		<div class="btn-group pull-right">
+			<i type="button" class="pull-right glyphicon pointer"
+				ng-class="{'glyphicon-chevron-down': collapse, 'glyphicon-chevron-up': !collapse}">
+			</i>
+		</div>
+	</div>
+            
+	<div class="panel-body" uib-collapse="collapse">
+
+		<!-- <table class="table table-sm table-hover table-condensed">
+			<tr>
+				<th>Consistency</th>
+				<td colspan="2"></td>
+			</tr>
+			<tr>
+				<td colspan="2" class="borderless-top">
+					<div class="progress">
+						<div class="progress-bar progress-bar-striped active progress-bar-success"
+							role="progressbar" aria-valuemin="0" aria-valuemax="100"
+							ng-style="{width: currentScore + '%'}">
+							<span class="show">{{ currentScore | number:0 }}</span>
+						</div>
+					</div>
+				</td>
+			</tr>
+			
+		</table> -->
+
+		<div class="col-lg-{{ $index == 0?12:6 }} col-md-{{ $index == 0?12:6 }}" ng-repeat="progressDataItem in directiveData track by $index">
+
+			<table class="table table-sm table-hover table-condensed" >
+			
+				<tr>                    
+					<th>{{progressDataItem.label}}</th>
+					<td colspan="2"></td>
+				</tr>
+				<tr>
+					<td colspan="2" class="borderless-top">
+						<div class="progress">
+							<div class="progress-bar progress-bar-total" role="progressbar"
+								aria-valuemin="0" aria-valuemax="progressDataItem.totalTime"
+								ng-style="{ 'width' : getProgressPercentage(progressDataItem.totalTime, progressDataItem.totalTime) }">
+								<span class="show">{{progressDataItem.totalTime | secondsToHourMinutes}}</span>
+							</div>
+						</div>
+					</td>
+				</tr>
+
+				<!-- <tr>
+					<th>{{progressDataItem.label}} Expected Time</th>
+					<td colspan="2"></td>
+				</tr>
+				<tr>
+					<td colspan="2" class="borderless-top">
+						<div class="progress">
+							<div class="progress-bar" role="progressbar"
+								aria-valuemin="0" aria-valuemax="100"
+								ng-style="{ 'width' : getProgressPercentage(progressDataItem.totalTime, progressDataItem.expectedTime) }">
+								<span class="show">{{progressDataItem.expectedTime | secondsToHourMinutes}}</span>
+							</div>
+						</div>
+					</td>
+				</tr> -->
+
+				<tr>
+					<th>Progress</th>
+					<td colspan="2"></td>
+				</tr>
+				<tr>
+					<td colspan="2" class="borderless-top">
+						<div ng-if="progressDataItem.actualTime > progressDataItem.expectedTime" class="progress">
+							<div class="progress-bar"
+								ng-style="{ 'width' : getProgressPercentage(progressDataItem.totalTime + (progressDataItem.actualTime - progressDataItem.expectedTime), progressDataItem.expectedTime) }">
+								<span class="show"> <strong> Delay {{ progressDataItem.actualTime  - progressDataItem.expectedTime | secondsToHourMinutes }}</strong> </span>
+							</div>
+							<div class="progress-bar progress-bar-striped active progress-bar-danger"
+								ng-style="{ 'width' : getProgressPercentage(progressDataItem.totalTime + (progressDataItem.actualTime - progressDataItem.expectedTime), (progressDataItem.actualTime - progressDataItem.expectedTime)) }">
+							</div>
+						</div>
+
+						<div ng-if="progressDataItem.actualTime <= progressDataItem.expectedTime" class="progress">
+							<div class="progress-bar progress-bar-striped active progress-bar-info"
+								ng-style="{ 'width' : getProgressPercentage(progressDataItem.totalTime, progressDataItem.actualTime) }">
+								<span class="show">
+									<strong ng-if="progressDataItem.actualTime != 0"> Advance {{ progressDataItem.expectedTime - progressDataItem.actualTime | secondsToHourMinutes }}</strong>
+									<strong ng-if="progressDataItem.actualTime == 0"> Advance {{ progressDataItem.actualTime | secondsToHourMinutes }}</strong>
+								</span>
+							</div>
+							<div class="progress-bar"
+								ng-style="{ 'width' : getProgressPercentage(progressDataItem.totalTime, (progressDataItem.expectedTime - progressDataItem.actualTime)) }">
+							</div>
+						</div>
+					</td>
+				</tr>
+			
+			</table>
+
+		</div>
+
+	</div>
+
+</div>

@@ -1,0 +1,24 @@
+<h1 class="xpd-box-title">VRE Report</h1>
+
+<div class="row">
+	<div 
+		class="col-md-6 col-md-offset-6"
+		xpd-table-period
+		function-change-period="vController.onClickFilterButton(fromDate, toDate)"
+		initial-date="reportsData.fromDate"
+		final-date="reportsData.toDate">
+	</div>
+</div>
+
+<div ng-if="vreData.vreList && vreData.vreList.length>0"
+	class="col-md-12"
+	xpd-vre-bar-chart
+	period="vreData.period"
+	vre-list-data="vreData.vreList"
+	vre-daily-data="vreData.vreDaily">
+</div>
+
+<div ng-if="vreData.vreList && vreData.vreList.length<=0"
+	class="empty-value-report-message">
+		No activities in this data range
+</div>

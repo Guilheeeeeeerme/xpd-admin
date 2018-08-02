@@ -1,0 +1,19 @@
+<form name="form">
+	<div class="modal-header">
+        <span 
+            class="btn glyphicon glyphicon-remove pull-right"
+            ng-click="tbsController.modalActionButtonClose()">
+        </span>
+        <h4 class="modal-title">Failures and Lessons Learned</h4>
+    </div>
+    <div class="modal-body">
+    	<uib-tabset active="active" class="modal-title">
+		    <uib-tab heading="Failure">
+		        <div  ng-include src="'failures.modal.html'"></div>
+		    </uib-tab>
+		    <uib-tab heading="Lesson Learned">
+		        <div ng-include src="'lesson-learned.modal.html'"></div>
+		    </uib-tab>
+		</uib-tabset>
+    </div>
+</form>

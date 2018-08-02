@@ -1,0 +1,98 @@
+<form name="modal">
+	<div class="modal-header splitted-header">
+		<div class="splitted-modal-col">
+			Failure / Delay
+
+			<div class="npt-switch">
+	            <label class="switch">
+	                <input type="checkbox" ng-model="selectedFailure.npt" ng-init="selectedFailure.npt = !!selectedFailure.npt">
+	                <div class="slider round"></div>
+	            </label>
+	            <label class="npt-switch-label">NPT</label>
+	        </div>
+		</div>
+		<div class="splitted-modal-col">
+			Description
+		</div>
+	</div>
+
+	<div class="modal-body splitted-body">
+		<div class="container-fluid">
+			<div class="splitted-modal-col">
+				<table class="table table-bordered xpd-operation-table">
+					<thead>
+						<tr>
+							<th colspan="2">
+								Period
+
+								<span class="badge pull-right" ng-if="!selectedFailure.onGoing && selectedFailure.endTime && selectedFailure.startTime"> Expected Duration 
+									<strong>{{ (toMilli(selectedFailure.endTime) - toMilli(selectedFailure.startTime))/86400000 | number: 0 }} day(s) and {{ (toMilli(selectedFailure.endTime) - toMilli(selectedFailure.startTime)) | date: 'HH:mm:ss': '+0000' }} </strong>
+								</span>
+							</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<th>Start:</td>
+							<td>
+								<div  ng-init="selectedFailure.startTime = (!selectedFailure.startTime)?now():selectedFailure.startTime" class="form-inline" ng-class="{ 'has-error': modal.startTime.$dirty && modal.startTime.$invalid }">
+									<input class="form-control" type="datetime-local" name="startTime" ng-model="selectedFailure.startTime" required max="{{ selectedFailure.endTime }}"></input>
+								</div>
+							</td>
+						</tr>
+						<tr>
+							<th>End:</td>
+							<td>
+								<div class="form-inline" ng-class="{ 'has-error': modal.endTime.$dirty && modal.endTime.$invalid }">
+									<input class="form-control" type="datetime-local" ng-model="selectedFailure.endTime" name="endTime" ng-disabled="selectedFailure.onGoing" ng-required="!selectedFailure.onGoing" min="{{ selectedFailure.startTime }}", ng-change="keepTimeBeforeNow()"></input>
+									<fieldset class="checkbox" ng-disabled="!selectedFailure.onGoingFlag">
+										<div>
+											<label>
+												<input 
+													type="checkbox"
+													ng-model="selectedFailure.onGoing"''
+													ng-init="selectedFailure.onGoing = !!selectedFailure.onGoing"
+													ng-click="mfController.actionOnGoingCheckboxClick(selectedFailure.onGoing)"> On going
+											</label>
+										</div>
+									</fieldset>
+								</div>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div class="splitted-modal-col">
+				<textarea class="form-control" rows="6" ng-model="selectedFailure.description"></textarea>
+			</div>
+
+			<div class="xpd-operation-content-category">
+				<p>{{ category.breadcrumbs }}</p>
+				<div class="tree-content xpd-operation-modal-category-list">
+					<div
+						data-angular-treeview="true"
+					  	data-tree-id="mytree"
+					  	data-tree-model="category.roleList"
+					  	data-node-selected="category.selected"
+					  	data-controller="mfController"
+					  	data-category-controller="fdcController"
+					  	data-select-template="tracking">
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="modal-footer">
+		<div class="container-fluid">
+			<div class="text-right">
+				<button class="btn btn-primary" ng-disabled="modal.$invalid || !selectedFailure.category.id" ng-click="mfController.modalActionButtonSave();">
+					Save
+				</button>
+				<button class="btn btn-default" ng-click="mfController.modalActionButtonClose();">
+					Cancel
+				</button>
+			</div>
+		</div>
+	</div>
+</form>

@@ -1,0 +1,123 @@
+<form name="operationController.contract">
+
+    <div class="col-md-12 panel panel-default">
+        <xpd-operation-contract-info-table operation="dados.operation"  class="table table-condensed" state="Casing" state-id="casing"
+          contract-params="dados.operation.contractParams" trip-unit="m/h" trip-required conn-unit="Conn/h"
+          conn-required contract-form="operationController.contract"
+          ui-popover="htmlPopover"/>
+    </div>
+
+    <div class="col-md-12 panel panel-default">
+        <xpd-operation-contract-info-table operation="dados.operation"  class="table table-condensed" state="Settlement String Trip"
+          state-id="settlementString" contract-params="dados.operation.contractParams" trip-unit="m/h"
+          trip-required conn-unit="Conn/h" conn-required contract-form="operationController.contract"
+          ui-popover="htmlPopover"/>
+    </div>
+
+    <div class="col-md-12 panel panel-default">
+        <xpd-operation-contract-info-table operation="dados.operation"  class="table table-condensed" state="Below Shoe Depth Trip"
+          state-id="belowShoeDepth" contract-params="dados.operation.contractParams" trip-unit="m/h"
+          trip-required conn-unit="Conn/h" conn-required contract-form="operationController.contract"
+          ui-popover="htmlPopover"/>
+    </div>
+
+    <!-- <div class="col-md-12 panel panel-default">
+        <xpd-operation-contract-info-table operation="dados.operation"  class="table table-condensed" state="Break DP Per Unit"
+          state-id="inBreakDPInterval" contract-params="dados.operation.contractParams" trip-unit="m/h"
+          trip-required conn-unit="Jt/h" conn-required contract-form="operationController.contract"
+          ui-popover="htmlPopover"/>
+    </div> -->
+
+    <div class="col-md-12 panel panel-default">
+        <table class="table table-condensed table-contract-info">
+            <caption>Cementing</caption>
+            <thead>
+            <tr>
+                <th>Indicator</th>
+                <th>Optimum Duration</th>
+                <th>Standard Duration</th>
+                <th>Poor Duration</th>
+                <th></th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>Cementing</td>
+
+                <td ng-class="{ 'has-error': operationController.contract.cementationSpeedVoptimum.$invalid }">
+                    <xpd-contract-time-input
+                        required="true" 
+                        min="{{dados.operation.contractParams.cementationSpeed.vstandard}}"
+                        ng-model="dados.operation.contractParams.cementationSpeed.voptimum"
+                        name="cementationSpeedVoptimum" 
+                        id="cementationSpeed.voptimum"/>
+                    
+                </td>
+
+                <td ng-class="{ 'has-error': operationController.contract.cementationSpeedVstandard.$invalid }">
+                    <xpd-contract-time-input
+                        required="true" 
+                        max="{{dados.operation.contractParams.cementationSpeed.voptimum}}"
+                        min="{{dados.operation.contractParams.cementationSpeed.vpoor}}"
+                        ng-model="dados.operation.contractParams.cementationSpeed.vstandard"
+                        name="cementationSpeedVstandard" 
+                        id="cementationSpeed.vstandard"/>
+                    
+                </td>
+
+                <td ng-class="{ 'has-error': operationController.contract.cementationSpeedVpoor.$invalid }">
+                    <xpd-contract-time-input
+                        required="true" 
+                        max="{{dados.operation.contractParams.cementationSpeed.vstandard}}"
+                        min="0"
+                        ng-model="dados.operation.contractParams.cementationSpeed.vpoor"
+                        name="cementationSpeedVpoor" 
+                        id="cementationSpeed.vpoor"/>
+                    
+                </td>
+
+                <td>
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox"
+                                   ng-model="dados.operation.contractParams.cementationSpeed.contractIndicator"> Contract
+                        </label>
+                    </div>
+                </td>
+
+                <td>
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox"
+                                   ng-model="dados.operation.contractParams.cementationSpeed.ssoIndicator"> SSO
+                        </label>
+                    </div>
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                </td>
+                <td>
+                        <span class="form-error-message"
+                              ng-show="operationController.contract.cementationSpeedVoptimum.$error.valid">
+                       Optimum Time must be lesser Standard Time
+                        </span>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <span class="form-error-message"
+                              ng-show="operationController.contract.cementationSpeedVpoor.$error.valid">
+                        Poor Time must be greater Standard Time
+                        </span>
+                </td>
+            </tr>
+        
+          </tbody>
+        </table>
+    </div>
+
+</form>
+

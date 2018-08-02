@@ -1,0 +1,73 @@
+
+<form name="operationController.contract">
+
+    <div class="col-md-12">
+        <table class="table table-condensed table-contract-info">
+            <caption>Time Operation</caption>
+            <thead>
+            <tr>
+                <th>Indicator</th>
+                <th>V. Optimum</th>
+                <th>V. Standard</th>
+                <th>V. Poor</th>
+                <th></th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>Time limits</td>
+
+                <td ng-class="{ 'has-error': operationController.contract.timeSpeed.voptimum.$invalid  && !operationController.contract.timeSpeed.voptimum.$pristine }">
+                    <xpd-contract-time-input 
+                        ng-model="dados.operation.contractParams.timeSpeed.voptimum"
+                        name="timeSpeed.voptimum" 
+                        id="timeSpeed.voptimum"
+                        disabled="true" 
+                        required="true"/>
+                    
+                </td>
+
+                <td ng-class="{ 'has-error': operationController.contract.timeSpeed.vstandard.$invalid  && !operationController.contract.timeSpeed.vstandard.$pristine }">
+                    <xpd-contract-time-input 
+                        ng-model="dados.operation.contractParams.timeSpeed.vstandard"
+                        name="timeSpeed.vstandard" 
+                        id="timeSpeed.vstandard"
+                        disabled="true" 
+                        required="true"/>
+                    
+                </td>
+
+                <td ng-class="{ 'has-error': operationController.contract.timeSpeed.vpoor.$invalid  && !operationController.contract.timeSpeed.vpoor.$pristine }">
+                    <xpd-contract-time-input 
+                        ng-model="dados.operation.contractParams.timeSpeed.vpoor" 
+                        name="timeSpeed.vpoor"
+                        id="timeSpeed.vpoor"
+                        disabled="true" 
+                        required="true"/>
+                    
+                </td>
+
+                <td>
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox"
+                                   ng-model="dados.operation.contractParams.timeSpeed.contractIndicator"> Contract
+                        </label>
+                    </div>
+                </td>
+
+                <td>
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox"
+                                   ng-model="dados.operation.contractParams.timeSpeed.ssoIndicator"> SSO
+                        </label>
+                    </div>
+                </td>
+            </tr>
+
+            </tbody>
+        </table>
+    </div>
+</form>

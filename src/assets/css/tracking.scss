@@ -1,0 +1,46 @@
+
+
+
+.tracking-performance-row {
+    height: 30%;
+}
+
+.tracking-performance-row .ship-placeholder-container {
+    margin-top: 35px;
+    height: 50%;
+    text-align: center;
+}
+
+.tracking-performance-row > div.col-md-4 {
+    height: 100%;
+}
+
+.tracking-performance-row {
+    height: 30%;
+}
+
+.tracking-performance-row .xpd-chart-container-content{
+    padding: 5px;
+    padding-left: 15px;
+}
+
+.tracking-operation-progress-row {
+    height: 40%;
+}
+
+.tracking-message-row,
+.tracking-alarm-row  {
+    height: 15%;
+    font-family: $font-family-1;
+    color: #4b7f88;
+}
+
+.ship-placeholder {
+    max-width: 60%;
+    max-height: 60%;
+}
+
+.tracking-vre-container{
+    padding: 10px;
+    padding-left: 0;
+}

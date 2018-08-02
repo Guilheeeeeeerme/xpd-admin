@@ -1,0 +1,47 @@
+<svg xmlns='http://www.w3.org/2000/svg' version='1.1' ng-attr-width='{{svg.width}}' ng-attr-height='100%'
+     xpd-view-box="svg.viewBox">
+
+    <rect width="80" x="0" y="0" ng-attr-height="{{svg.viewBoxHeight * 0.15}}" class="member-header-function-rect">
+    </rect>
+    <text class="member-header-text member-header-function-text" x="40" y="0" dy="1em">{{member.function.name}}</text>
+
+    <g transform="translate(87, 0)">
+        <rect width="105" x="0" y="0" fill="transparent" ng-attr-height="{{svg.viewBoxHeight * 0.15}}"
+              class="member-header-name-rect">
+        </rect>
+        <text class="member-header-text member-header-name-text" x="51" y="0" dy="1em">{{member.name}}</text>
+    </g>
+    <g ng-attr-transform="translate(0, {{svg.viewBoxHeight * 0.18}})">
+        <rect x=0 y=0 width="192" ng-attr-height="{{svg.viewBoxHeight * 0.81}}"
+              class="member-content-rect"
+              ng-attr-stroke-dasharray="0 192 {{svg.viewBoxHeight * 0.98}} {{192 - (svg.viewBoxHeight * 0.35)}} {{svg.viewBoxHeight * 0.98}}">
+        </rect>
+        <image xpd-photo-api-directive photo-api-directive-photo-name="member.photoPath"
+               photo-api-directive-server-path="tripin/member-pictures" x="2" y="0" preserveAspectRatio="none"
+               ng-attr-height="{{svg.viewBoxHeight * 0.77}}" width="80"/>
+
+        <g transform="translate(87, 2)">
+            <g>
+                <text x="0" y="0" dy="0.75em" class="performance-bar-text">Performance</text>
+                <rect x="0" ng-attr-y="{{svg.viewBoxHeight * 0.13}}" ng-attr-height="{{svg.viewBoxHeight * 0.10}}"
+                      width="101" fill="#253848"></rect>
+                <rect x="0" ng-attr-y="{{svg.viewBoxHeight * 0.13}}" ng-attr-height="{{svg.viewBoxHeight * 0.10}}"
+                      ng-attr-width="{{ (member.sumScore/member.eventCount)  | number: 2}}" fill="#75b6e5"></rect>
+            </g>
+            <g ng-attr-transform="translate(0, {{svg.viewBoxHeight * 0.26}})">
+                <text x="0" y="0" dy="0.75em" class="performance-bar-text performance-bar-safety-text">Safety</text>
+                <rect x="0" ng-attr-y="{{svg.viewBoxHeight * 0.13}}" ng-attr-height="{{svg.viewBoxHeight * 0.10}}"
+                      width="101" fill="#253848"></rect>
+                <rect x="0" ng-attr-y="{{svg.viewBoxHeight * 0.13}}" ng-attr-height="{{svg.viewBoxHeight * 0.10}}"
+                      width="55" fill="#da7070"></rect>
+            </g>
+            <g ng-attr-transform="translate(0, {{svg.viewBoxHeight * 0.52}})">
+                <text x="0" y="0" dy="0.75em" class="performance-bar-text">Training</text>
+                <rect x="0" ng-attr-y="{{svg.viewBoxHeight * 0.13}}" ng-attr-height="{{svg.viewBoxHeight * 0.10}}"
+                      width="101" fill="#253848"></rect>
+                <rect x="0" ng-attr-y="{{svg.viewBoxHeight * 0.13}}" ng-attr-height="{{svg.viewBoxHeight * 0.10}}"
+                      width="55" fill="#75b6e5"></rect>
+            </g>
+        </g>
+    </g>
+</svg>

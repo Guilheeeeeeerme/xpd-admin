@@ -1,0 +1,82 @@
+<div class="panel panel-default">
+
+	<div class="panel-heading clearfix" ng-click="changePanelState()">
+		<h4 class="panel-title pull-left">Next Activities
+			<span ng-if="operation">
+				for
+				<strong>{{ operation.name }}</strong> at
+				<strong>{{ operation.section.name }}</strong>
+			</span>
+		</h4>
+		<div class="btn-group pull-right">
+			<i type="button" class="pull-right glyphicon pointer" ng-class="{'glyphicon-chevron-down': collapse, 'glyphicon-chevron-up': !collapse}">
+			</i>
+		</div>
+	</div>
+
+	<div class="panel-body" uib-collapse="collapse">
+
+		<table class="table table-sm table-hover table-condensed table-striped">
+
+			<thead>
+				<tr>
+					<th>Name</th>
+					<th>Start Time</th>
+					<th>End Time</th>
+					<th>Duration</th>
+				</tr>
+			</thead>
+
+			<tbody>
+
+				<tr data-toggle="collapse" 
+					data-target="#accordion-{{ $index }}" 
+					class="clickable"
+					ng-repeat-start="activity in activities track by $index" 
+					ng-class="{ 'success': ($index == 0) }">
+
+					<th>
+						<i ng-if="activity.isTripin == true" class="fa fa-arrow-down" aria-hidden="true"></i>
+						<i ng-if="activity.isTripin == false" class="fa fa-arrow-up" aria-hidden="true"></i>
+						{{ activity.name | xpdStateLabelFilter }}
+					</th>
+
+					<th ng-if="$index > 0">
+						{{ activity.startTime | date: 'mediumTime' }}<br/>
+						{{ activity.startTime | date: 'mediumDate' }}
+					</th>
+
+					<th ng-if="$index == 0">
+						Going on
+					</th>
+
+					<th>
+						{{ activity.finalTime | date: 'mediumTime' }}<br/>
+						{{ activity.finalTime | date: 'mediumDate' }}
+					</th>
+
+					<th>
+						{{ ( activity.duration / 1000 ) | secondsToHourMinutes }}
+					</th>
+
+				</tr>
+
+				<tr ng-repeat-end>
+					<td colspan="4">
+						<div id="accordion-{{ $index }}" class="collapse">
+							<xpd-upcoming-alarms-panel
+								tripin-alarms="activity.alarms"
+								tripout-alarms="activity.alarms"
+								current-direction="activity.isTripin">
+							</xpd-upcoming-alarms-panel>
+						</div>
+					</td>
+				</tr>
+
+			</tbody>
+
+		</table>
+
+	</div>
+
+</div>

@@ -1,0 +1,161 @@
+<div class="panel panel-default xpd-setup-panel">
+        
+            <div class="panel-heading">
+                <h3 class="panel-title"><strong> Well </strong>/</h3>
+            </div>
+        
+            <div class="panel-body">
+        
+        
+                <ul class="list-group">
+        
+                    <li class="list-group-item">
+                        
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <th>Well Name</th>
+                                <th>Air Gap (m)</th>
+                                <th>Water Depth (m)</th>
+                                <th>Actions</th>
+                                <th>
+                                    <button class="btn btn-sm btn-success pull-right" ng-click="wellController.actionButtonAddWell()" id="setup-well-add-well">
+                                        <span class="glyphicon glyphicon-plus"></span> Well
+                                    </button>
+                                </th>
+                                
+                            </tr>
+                            </thead>
+                            <tbody>
+        
+                                <tr ng-show="dados.wellList == null || dados.wellList.length == 0">
+                                    <td colspan="5">
+                                        <li class="list-group-item">
+                                            No wells registered
+                                        </li>
+                                    </td>
+                                </tr>
+                                <tr ng-repeat="(key, well) in dados.wellList | orderBy : 'name' " ng-class="{'well well-sm current-well-well': well.current }">
+        
+                                    <td id="setup-well-label-name-{{$index + 1}}">
+                                        <span ng-if="well.current"> Selected Well:
+                                            <strong class="current-well-name">{{well.name}}
+                                                <span class="glyphicon glyphicon-ok"></span>
+                                            </strong>
+                                        </span>
+        
+                                        <span ng-if="!well.current">{{well.name}}</span>
+                                    </td>
+        
+        
+                                    <td id="setup-well-label-airGap-{{$index + 1}}">{{well.airGap}}</td>
+        
+                                    <td id="setup-well-label-onshore-{{$index + 1}}">
+                                        <span ng-if="!well.onshore">
+                                            {{well.waterDepth}}
+                                        </span>
+        
+                                        <span ng-if="well.onshore">
+                                            <i>Onshore</i>
+                                        </span>
+                                    </td>
+        
+                                    <td id="setup-well-label-actions-{{$index + 1}}">
+        
+                                        <button ng-if="well.current != true" ng-click="wellController.actionButtonMakeCurrent(well)"
+                                                class="btn btn-sm btn-primary button-current-well"
+                                                id="setup-well-make-current-well-{{$index + 1}}"
+                                                ng-disabled="operationData.wellContext.currentWell != null">
+                                            <!-- <span class="glyphicon glyphicon-play"></span>  -->
+                                            MAKE CURRENT
+                                        </button>
+        
+                                        <button ng-if="well.current == true"
+                                                ng-click="wellController.actionButtonMakeNotCurrent(well)"
+                                                id="setup-well-interrupt-well-{{$index + 1}}"
+                                                class="btn btn-sm btn-danger button-current-well">
+                                            <!-- <span class="glyphicon glyphicon-stop"></span> --> INTERRUPT
+                                        </button>
+        
+                                        <a class="btn btn-sm btn-info" 
+                                            id="setup-well-{{$index + 1}}-got-to-sections"
+                                            href="#/setup/well/{{well.id}}/section">
+                                             SECTIONS
+                                            <span class="glyphicon glyphicon-menu-right"></span>
+                                            <!-- <span class="glyphicon glyphicon-chevron-right"></span> -->
+                                        </a> 
+        
+                                        <a href="./well-view-only.html#/{{well.id}}" 
+                                            id="setup-well-view-only-well-{{$index + 1}}" 
+                                            class="view-only-link button-edit" target="_blank">
+                                            <button class="btn btn-sm btn-default">VIEW</button>
+                                        </a>
+        
+                                        <button class="btn btn-sm btn-default" 
+                                            id="setup-well-edit-well-{{$index + 1}}" 
+                                            ng-click="wellController.actionButtonEditWell(well)"
+                                            ng-disabled="well.current">EDIT
+                                        </button>
+        
+                                        <button class="btn btn-sm btn-danger" 
+                                            id="setup-well-remove-well-{{$index + 1}}" 
+                                            ng-click="wellController.actionButtonRemoveWell(well)"
+                                            ng-disabled="well.current">REMOVE
+                                        </button>
+                                    </td>
+                                    <td></td>
+        
+                                </tr>
+                            </tbody>
+        
+                        </table>
+                    </li>
+        
+                </ul>
+        
+            </div>
+            <!-- <div class="panel-footer xpd-setup-footer">
+                <div class="container">
+        
+                    <div class="pull-left">
+                        <h4>
+                            <span class="label label-warning" ng-show="!operationData.wellContext.currentWell">
+                                <i>No selected well</i>
+                            </span>
+                        </h4>
+                    </div>
+        
+                    <div class="pull-right">
+                        <a class="btn btn-primary" ng-show="operationData.wellContext.currentWell" >Go to
+                            sections
+                            <span class="glyphicon glyphicon-chevron-right"></span>
+                        </a>
+                    </div>
+        
+                </div>
+            </div> -->
+        </div>
+        
+        <!--footer class="xpd-footer">
+        
+            <div class="container">
+        
+                <div class="pull-left">
+                    <h4>
+                            <span class="label label-warning" ng-show="!operationData.wellContext.currentWell">
+                                <i>No selected well</i>
+                            </span>
+                    </h4>
+                </div>
+        
+                <div class="pull-right">
+                    <a class="btn btn-primary" ng-show="operationData.wellContext.currentWell" href="#/setup/section">Go to
+                        sections
+                        <span class="glyphicon glyphicon-chevron-right"></span>
+                    </a>
+                </div>
+        
+            </div>
+        
+        </footer-->
+        

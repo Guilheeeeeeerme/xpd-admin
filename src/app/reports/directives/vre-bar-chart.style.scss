@@ -1,0 +1,37 @@
+@import '~styles/font.scss';
+
+.vre-svg-line {
+    stroke: #517f89;
+    stroke-width: 1;
+}
+
+.vre-report-table-title {
+    color: black;
+    background-color: #00807f;
+    text-align: center;
+    fill: black;
+    text-anchor: middle;
+}
+
+.vre-report-table-text {
+    background-color: black;
+    color: #00807f;
+    text-align: left;
+    height: 100%;
+    fill: #00807f;
+    text-anchor: middle;
+    font-weight: bold;
+}
+
+.vre-report-table {
+    font-family: $font-family-1;
+    border: 0;
+}
+
+.vre-report-table > tbody > tr:nth-child(odd) > td {
+    background-color: rgba(21, 21, 21, 0.85);
+}
+
+.vre-report-table > tbody > tr:nth-child(even) > td {
+    background-color: rgba(33, 30, 30, 0.85);
+}

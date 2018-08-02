@@ -1,0 +1,46 @@
+<div class="panel panel-default">
+
+	<div class="panel-heading clearfix" ng-click="changePanelState(collapse)">
+		<h4 class="panel-title pull-left">Channels Information</h4>
+		<div class="btn-group pull-right">
+			<i type="button" class="pull-right glyphicon pointer" ng-class="{
+				'glyphicon-minus': readings.length == 0,
+				'glyphicon-chevron-down': (collapse && readings.length != 0),
+				'glyphicon-chevron-up': (!collapse && readings.length != 0)
+			}">
+			</i>
+		</div>
+	</div>
+
+	<div ng-if="readings.length != 0" class="panel-body table-responsive" uib-collapse="(readings.length == 0) ? 'false' : collapse">
+
+		<table class="table table-sm table-hover table-condensed">
+			<thead>
+				<tr>
+					<th>Color</th>
+					<th ng-repeat="(key, value) in readings[0]" ng-if="key != 'color'">
+						{{key | readingAttrFilter}}
+					</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr ng-repeat="(key, reading) in readings">
+					<td>
+						<span class="glyphicon glyphicon-certificate" ng-style="{ 'color': reading.color }">
+						</span>
+					</td>
+					<td ng-repeat="(key, value) in reading" ng-if="key != 'color'">
+						{{ (key != 'timestamp') ? (value | number: 2) : (value | date:'MM/dd/yyyy HH:mm:ss') }}
+					</td>
+					<td>
+						<button id="depth-alarm-remove-0" type="button" class="btn btn-sm btn-warning" ng-click="removeReading({index: key})">
+							<span class="glyphicon glyphicon-trash"></span>
+						</button>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+
+	</div>
+
+</div>

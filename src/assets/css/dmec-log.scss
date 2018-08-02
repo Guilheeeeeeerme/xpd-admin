@@ -1,0 +1,28 @@
+body {
+	margin: 0;
+	padding-top: 0;
+}
+
+.dmec-navbar {
+	height: 5vh;
+	margin: 0;
+}
+
+xpd-d3-dmec-chart {
+	display: block;
+	z-index: 8;
+	height: 90vh;
+	margin-top: 5vh;
+	margin-bottom: 5vh;
+	width: 100vw;
+	background: black;
+}
+
+xpd-time-zoom-tool {
+	z-index: 10;
+	position: absolute;
+	bottom: 0;
+	height: 5vh;
+	width: 100vw;
+	display: block;
+}

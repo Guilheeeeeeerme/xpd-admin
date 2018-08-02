@@ -1,0 +1,120 @@
+@import '~styles/font.scss';
+
+xpd-trip-ruler {
+
+    display: block;
+    height: 100%;
+    
+    .trip-ruler-container {
+        padding-top: 40px;
+        padding-bottom: 40px;
+    }
+
+    .xpd-trip-ruler-center-bar {
+        fill-opacity: 0;
+        stroke: #767171;
+    }
+    
+    .xpd-trip-ruler-middle-bar {
+        stroke-width: 10;
+        stroke-opacity: 0.4;
+        stroke: red;
+    }
+    
+    .xpd-trip-ruler-tick {
+        stroke: #4b7f88;
+        stroke-width: 0.5;
+    }
+    
+    .xpd-trip-ruler-tick-main {
+        stroke-width: 1;
+    }
+    
+    .xpd-trip-ruler-tick-sub {
+        stroke-width: 0.8;
+    }
+    
+    .xpd-trip-ruler-tick-fancy {
+        stroke-width: 7;
+        stroke-dasharray: 0.5, 3;
+    }
+    
+    .xpd-trip-ruler-target-tick {
+        stroke: red;
+        stroke-width: 0.5;
+    }
+    
+    .xpd-trip-ruler-target-box {
+        stroke: red;
+        stroke-width: 1;
+    }
+    
+    .xpd-trip-ruler-target {
+        fill-opacity: 0;
+        stroke: red;
+        stroke-width: 1;
+    }
+    
+    .xpd-trip-ruler-target-filled {
+        fill: red;
+    }
+    
+    .xpd-trip-ruler-reading-tick {
+        stroke: #75d59e;
+        stroke-width: 1;
+    }
+    
+    .xpd-trip-ruler-reading {
+        fill-opacity: 0;
+        stroke: #75d59e;
+        stroke-width: 1;
+    }
+    
+    .xpd-trip-ruler-reading-stick {
+        stroke: #75d59e;
+        stroke-width: 2;
+    }
+    
+    .xpd-trip-ruler-tick-text {
+        font-size: 0.6em;
+        font-family: $font-family-1;
+        fill: #bff0ef;
+    }
+    
+    .xpd-trip-ruler-target-text {
+        font-size: 0.8em;
+        fill: red;
+        stroke: red;
+    }
+    
+    .xpd-trip-ruler-target-text-empty {
+        stroke-width: 1;
+        font-family: $font-family-1;
+        fill-opacity: 0;
+    }
+    
+    .xpd-trip-ruler-expected-alarm-text{
+        font-size: 0.7em;
+        font-weight: bold;
+        line-height: normal;
+    }
+    
+    .xpd-trip-ruler-slowdown-text {
+        text-anchor: middle;
+        animation: blinker 1s linear infinite;
+    }
+    
+    .xpd-trip-ruler-mark-text {
+        stroke: #e89313;
+        font-size: 0.8em;
+    }
+    
+    .xpd-trip-ruler-expected-text {
+        stroke: #E85654;
+        font-size: 0.8em;
+    }
+    
+    .xpd-trip-ruler-expected-text{
+        font-size: 0.8em;
+    }
+}

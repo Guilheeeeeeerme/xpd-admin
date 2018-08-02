@@ -1,0 +1,46 @@
+<div class="panel panel-default">
+
+	<div class="panel-heading clearfix" ng-click="changePanelState()">
+		<h4 class="panel-title pull-left">Well Information</h4>
+		<div class="btn-group pull-right">
+			<i type="button" 
+			class="pull-right glyphicon pointer" 
+			ng-class="{'glyphicon-chevron-down': collapse, 'glyphicon-chevron-up': !collapse}">
+			</i>
+		</div>
+	</div>
+
+	<div class="panel-body" uib-collapse="collapse">
+
+		<table class="table table-sm table-hover table-condensed">
+			<tr>
+				<th>Well</th>
+				<td>{{ well.name }}</td>
+				<td>Plataforma 1</td>
+			</tr>
+			<tr>
+				<th>Water Depth</th>
+				<td ng-if="!well.onshore" colspan="2">{{ well.waterDepth }}</td>
+				<td ng-if="well.onshore" colspan="2">On Shore</td>
+			</tr>
+			<tr>
+				<th>Seabed</th>
+				<td colspan="2"></td>
+			</tr>
+			<tr>
+				<th>BOP TOP</th>
+				<td colspan="2"></td>
+			</tr>
+			<tr>
+				<th>Well Head</th>
+				<td colspan="2"></td>
+			</tr>
+			<tr>
+				<th>Last Shoe Depth</th>
+				<td colspan="2">{{ well.shoeDepth }}</td>
+			</tr>
+		</table>
+
+	</div>
+
+</div>

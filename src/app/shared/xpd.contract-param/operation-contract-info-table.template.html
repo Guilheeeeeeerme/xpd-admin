@@ -1,0 +1,278 @@
+<div>
+    <table class="table table-condensed">
+
+        <caption>{{state}}
+            Parameters
+            <span ng-show="displacement" class="label label-primary">Expected Displacement: {{ displacement }}m</span>
+            <span ng-show="displacement && contractParams[stateId+'TripSpeed'].voptimum" class="label label-primary">Trip Expected Duration: {{ ( ( 3600000 * displacement) / contractParams[stateId+'TripSpeed'].voptimum ) | date: 'HH:mm:ss': '+0000' }}</span>
+            <span ng-show="!displacement" class="label label-danger">{{label}}</span>
+            <span ng-show="operation.inSlips" class="label label-primary">Put Slips Time: {{operation.inSlips}}s</span>
+            <span ng-show="!operation.inSlips" class="label label-danger">Missing Put Slips Time</span>
+
+            <span ng-show="operation.inSlips && contractParams[stateId+'ConnectionSpeed'].voptimum && contractParams[stateId+'TripSpeed'].voptimum" class="label label-primary float-right">1 TRIP + 1 CONN = {{ ( ( 3600000 * displacement) / contractParams[stateId+'TripSpeed'].voptimum ) + (3600000/contractParams[stateId+'ConnectionSpeed'].voptimum) | date: 'HH:mm:ss': '+0000' }}</span>
+        </caption>
+
+        <caption ng-show="scope.safetyBased">
+            <p class="text-info">
+                <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                These parameters are based on safety limit. Please set the safety limit
+            </p>
+        </caption>
+
+        <thead>
+            <tr>
+                <th>Indicator</th>
+                <th>V. Optimum</th>
+                <th>V. Standard</th>
+                <th>V. Poor</th>
+                <th></th>
+                <th>Safety Limit</th>
+                <th>Acceleration</th>
+                <th>Deceleration</th>
+                <th>
+                    V Cruising
+                    <span 
+                        class="glyphicon glyphicon-question-sign"
+                        uib-popover-html="uiPopover"
+                        popover-trigger="mouseenter"
+                        popover-placement="left">
+                    </span>
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td ng-if="stateId !== 'drilling'" nowrap>Trip-in/out
+                    {{tripRequired==="true"?"*":""}}</td>
+                <td ng-if="stateId === 'drilling'" nowrap>ROP</td>
+
+                <!-- <td>{{tripUnit}}</td> -->
+
+                <td ng-class="{ 'has-error': contractForm[stateId+'TripSpeedVOptimum'].$invalid}">
+                    <div class="col-lg-9 trip-unit">
+                        <div class="input-group">
+                            <input
+                                id="{{stateId}}-contract-info-voptimun"
+                                type="number" min="{{contractParams[stateId+'TripSpeed'].vstandard}}"
+                                class="form-control input-sm"
+                                name="{{stateId}}TripSpeedVOptimum"
+                                ng-model="contractParams[stateId+'TripSpeed'].voptimum"
+                                required="{{tripRequired}}"
+                                ng-disabled="viewOnly || safetyBased"
+                                xpd-form-validation="contractForm">
+
+                            <span class="input-group-addon unit-addon">{{tripUnit}}</span>
+
+                        </div>
+                    </div>
+                </td>
+
+                <td ng-class="{ 'has-error': contractForm[stateId+'TripSpeedVStandard'].$invalid}">
+                    <div class="col-lg-9 trip-unit">
+                        <div class="input-group">
+                            <input
+                                id="{{stateId}}-contract-info-vstandard"
+                                type="number" min="{{contractParams[stateId+'TripSpeed'].vpoor}}"
+                                max="{{contractParams[stateId+'TripSpeed'].voptimum}}"
+                                class="form-control input-sm"
+                                name="{{stateId}}TripSpeedVStandard"
+                                ng-model="contractParams[stateId+'TripSpeed'].vstandard"
+                                required="{{tripRequired}}"
+                                ng-disabled="viewOnly || safetyBased"
+                                xpd-form-validation="contractForm">
+
+                            <span class="input-group-addon unit-addon">{{tripUnit}}</span>
+
+                        </div>
+                    </div>
+                </td>
+
+                <td ng-class="{ 'has-error': contractForm[stateId+'TripSpeedVPoor'].$invalid}">
+                    <div class="col-lg-9 trip-unit">
+                        <div class="input-group">
+                            <input
+                                id="{{stateId}}-contract-info-vpoor"
+                                type="number" min="0"
+                                max="{{contractParams[stateId+'TripSpeed'].vstandard}}"
+                                class="form-control input-sm"
+                                name="{{stateId}}TripSpeedVPoor"
+                                ng-model="contractParams[stateId+'TripSpeed'].vpoor"
+                                required="{{tripRequired}}"
+                                ng-disabled="viewOnly || safetyBased"
+                                xpd-form-validation="contractForm">
+
+                            <span class="input-group-addon unit-addon">{{tripUnit}}</span>
+
+                        </div>
+                    </div>
+                </td>
+
+                <td>:</td>
+
+                <td ng-class="{ 'has-error': contractForm[stateId+'SafetySpeedLimit'].$invalid}">
+                    <div class="col-lg-9 trip-unit">
+                        <div class="input-group">
+                            <input
+                                id="{{stateId}}-contract-info-safetySpeedLimit"
+                                type="number" min="{{contractParams[stateId+'TripSpeed'].vcruising}}"
+                                class="form-control input-sm"
+                                name="{{stateId}}SafetySpeedLimit"
+                                ng-model="contractParams[stateId+'TripSpeed'].safetySpeedLimit"
+                                ng-init="ensureTripSpeedLimit()"
+                                ng-change="ensureTripSpeedLimit()"
+                                required="{{tripRequired}}"
+                                ng-disabled="viewOnly"
+                                xpd-form-validation="contractForm">
+
+                            <span class="input-group-addon unit-addon">{{tripUnit}}</span>
+
+                        </div>
+                    </div>
+                </td>
+
+                <td ng-class="{ 'has-error': contractForm[stateId+'AccelerationTimeLimit'].$invalid }">
+                    <div class="col-lg-9 trip-unit">
+                        <div class="input-group">
+                            <input
+                                id="{{stateId}}-contract-info-accelerationTimeLimit"
+                                type="number" min="0"
+                                class="form-control input-sm"
+                                name="{{stateId}}AccelerationTimeLimit"
+                                ng-model="contractParams[stateId+'TripSpeed'].accelerationTimeLimit"
+                                required="{{tripRequired}}"
+                                ng-disabled="viewOnly"
+                                xpd-form-validation="contractForm">
+
+                            <span class="input-group-addon unit-addon">sec</span>
+
+                        </div>
+                    </div>
+                </td>
+
+                <td ng-class="{ 'has-error': contractForm[stateId+'DecelerationTimeLimit'].$invalid }">
+                    <div class="col-lg-9 trip-unit">
+                        <div class="input-group">
+                            <input
+                                id="{{stateId}}-contract-info-decelerationTimeLimit"
+                                type="number" min="0"
+                                class="form-control input-sm"
+                                name="{{stateId}}DecelerationTimeLimit"
+                                ng-model="contractParams[stateId+'TripSpeed'].decelerationTimeLimit"
+                                required="{{tripRequired}}"
+                                ng-disabled="viewOnly"
+                                xpd-form-validation="contractForm">
+
+                        <span class="input-group-addon unit-addon">sec</span>
+
+                        </div>
+                    </div>
+                </td>
+
+                <td ng-class="{ 'has-error': contractForm[stateId+'TripSpeedVCruising'].$invalid }">
+
+                    <span ng-show="false">{{ calculateVCruising() }}</span>
+                        <div class="col-lg-9 trip-unit">
+                            <div class="input-group">
+                                <input
+                                    id="{{stateId}}-contract-info-vcruising"
+                                    type="number" min="0"
+                                    class="form-control input-sm"
+                                    name="{{stateId}}TripSpeedVCruising"
+                                    ng-model="contractParams[stateId+'TripSpeed'].vcruising"
+                                    required="{{tripRequired}}"
+                                    readonly
+                                    xpd-form-validation="contractForm">
+
+                                <span class="input-group-addon unit-addon">{{tripUnit}}</span>
+
+                            </div>
+                        </div>
+                </td>
+
+                <td>
+                    <div class="checkbox">
+                        <label>
+                            <input id="{{stateId}}-contract-info-contractIndicator"
+                                type="checkbox" ng-disabled="viewOnly"
+                                ng-model="contractParams[stateId+'TripSpeed'].contractIndicator">
+                            Contract
+                        </label>
+                    </div>
+                </td>
+
+            </tr>
+
+        </tbody>
+
+    </table>
+
+    <!-- CONNECTION -->
+    <table class="table table-condensed">
+        <thead>
+            <tr>
+                <th>Indicator</th>
+                <th>Optimum Duration</th>
+                <th>Standard Duration</th>
+                <th>Poor Duration</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td nowrap>Connection
+                    {{connRequired==="true"?"*":""}}</td>
+
+                <td ng-class="{ 'has-error': contractForm[stateId+'ConnectionSpeedVOptimum'].$invalid }">
+                   <xpd-contract-time-input
+                        id="{{stateId}}-contract-info-voptimum"
+                        name="{{stateId}}ConnectionSpeedVOptimum"
+                        ng-model="contractParams[stateId+'ConnectionSpeed'].voptimum"
+                        min="{{contractParams[stateId+'ConnectionSpeed'].vstandard}}"
+                        required="{{connRequired}}"
+                        disabled="{{viewOnly}}"/>
+                    
+                </td>
+                
+                <td ng-class="{ 'has-error': contractForm[stateId+'ConnectionSpeedVStandard'].$invalid }">
+                    <xpd-contract-time-input
+                        id="{{stateId}}-contract-info-vstandard"
+                        name="{{stateId}}ConnectionSpeedVStandard"
+                        max="{{contractParams[stateId+'ConnectionSpeed'].voptimum}}"
+                        min="{{contractParams[stateId+'ConnectionSpeed'].vpoor}}"
+                        ng-model="contractParams[stateId+'ConnectionSpeed'].vstandard"
+                        required="{{connRequired}}"
+                        disabled="{{viewOnly}}"/>
+                    
+                </td>
+
+                <td ng-class="{ 'has-error': contractForm[stateId+'ConnectionSpeedVPoor'].$invalid }">
+                    
+                    <xpd-contract-time-input
+                        id="{{stateId}}-contract-info-vpoor"
+                        name="{{stateId}}ConnectionSpeedVPoor"
+                        max="{{contractParams[stateId+'ConnectionSpeed'].vstandard}}"
+                        min="0"
+                        ng-model="contractParams[stateId+'ConnectionSpeed'].vpoor"
+                        required="{{connRequired}}"
+                        disabled="{{viewOnly}}"/>
+                    
+
+                </td>
+
+                <td>
+                    <div class="checkbox">
+                        <label>
+                            <input id="{{stateId}}-contract-info-contractIndicator"
+                                type="checkbox" ng-disabled="viewOnly"
+                                ng-model="contractParams[stateId+'ConnectionSpeed'].contractIndicator">
+                            Contract
+                        </label>
+                    </div>
+                </td>
+
+            </tr>
+        
+        </tbody>
+
+    </table>
+</div>

@@ -1,0 +1,92 @@
+<div>
+	<h1 class="xpd-box-title">Failures NPT</h1>
+
+	<div class="row">
+		<div class="col-md-6 col-md-offset-6"
+			xpd-table-period initial-date="reportsData.fromDate"
+			final-date="reportsData.toDate"
+			function-change-period="fnController.onClickFilterButton(fromDate, toDate)">
+		</div>
+	</div>
+
+	<div ng-if="fnController.nodeList && fnController.nodeList.length>0">
+
+		<div class="row failure-report-chart">
+			<div class="col-md-5"
+				xpd-pie-chart chart-title="fnController.chartDonut.title"
+				internal-percentages="fnController.chartDonut.data.pie"
+				external-percentages="fnController.chartDonut.data.donut">
+			</div>
+
+			<div class="col-md-7"
+				xpd-pareto-chart
+				chart-title="fnController.chartDonut.title"
+				primary-data-title= "'Failures'"
+				primary-data= "fnController.chartPareto.data.failures"
+				secondary-data-title= "'NPT'"
+				secondary-data= "fnController.chartPareto.data.npts"
+				categories= "fnController.chartPareto.data.categories"
+				percentage= "fnController.chartPareto.data.percentage">
+			</div>
+
+		</div>
+
+		<div class="col-md-10 col-md-offset-1">
+			<ol class="breadcrumb failures-breadcrumb">
+				<li ng-repeat="(key, obj) in failuresData.breadcrumbs"
+					class="breadcrumb-item">
+					<a ng-if="!$last" ng-click="fnController.actionClickBreadcrumbs(key, obj)">{{ obj.name }}</a>
+					<span ng-if="$last && key == 0">{{ obj.name }}</span>
+					<span ng-if="$last && key != 0">{{ obj.name }}</span>
+				</li>
+			</ol>
+		</div>
+
+		<div class="col-md-10 col-md-offset-1">
+			<table class="table failures-report-table">
+	    		<thead>
+	    			<tr>
+	    				<th></th>
+		            	<th>Category</th>
+	    				<th>Qty.</th>
+	    				<th>Time</th>
+		            	<th>Time %</th>
+	    			</tr>
+	    		</thead>
+	    		<tbody class="failures-report-tbody">
+	    			<tr ng-repeat="node in fnController.nodeList"
+	    				ng-click="fnController.actionButtonSelectCategory(node)"
+	    				ng-if="node.isParent == true">
+
+	    				<td>
+	    					<div class="pull-left legend-category" style="background-color: {{node.color.light}}"></div>
+	    					<div class="pull-left legend-category" style="background-color: {{node.color.dark}}"></div>
+	    				</td>
+	    				<td>{{ node.initial }} - {{ node.name }}</td>
+	    				<td>{{ node.failuresLength }} (NPT: {{ node.failuresNptLength }})</td>
+	                    <td>{{ node.time | secondsToHourMinutes }} (NPT: {{ node.nptTime | secondsToHourMinutes }})</td>
+	                    <td>{{ (node.time/fnController.totalTime) | percentage:2 }} (NPT: {{ (node.nptTime/fnController.totalTime) | percentage:2 }})</td>
+	    			</tr>
+	    			<tr ng-repeat="node in fnController.nodeList"
+	    				ng-click="fnController.actionButtonClickCategory(node)"
+	    				ng-if="!node.isParent">
+
+	               		<td>
+	               			<div class="pull-left legend-category" style="background-color: {{node.color.light}}"></div>
+	               			<div class="pull-left legend-category" style="background-color: {{node.color.dark}}"></div>
+	               		</td>
+	    				<td>{{ node.initial }} - {{ node.name }}</td>
+	    				<td>{{ node.failuresLength }} (NPT: {{ node.failuresNptLength }})</td>
+	               		<td>{{ node.time | secondsToHourMinutes }} (NPT: {{ node.nptTime | secondsToHourMinutes }})</td>
+	               		<td>{{ (node.time/fnController.totalTime) | percentage:2 }} (NPT: {{ (node.nptTime/fnController.totalTime) | percentage:2 }})</td>
+	    			</tr>
+	    		</tbody>
+	    	</table>
+		</div>
+	</div>
+
+	<div ng-if="fnController.nodeList && fnController.nodeList.length<=0"
+		class="empty-value-report-message">
+		No activities in this data range
+	</div>
+</div>

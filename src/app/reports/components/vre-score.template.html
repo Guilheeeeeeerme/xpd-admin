@@ -1,0 +1,56 @@
+<div>
+	<div class="row">
+		<h1 class="xpd-box-title">VRE x Consistence</h1>
+	</div>
+
+	<div class="row">
+		<div class="col-md-6 col-md-offset-6"
+			xpd-table-period initial-date="reportsData.fromDate"
+			final-date="reportsData.toDate"
+			function-change-period="vsController.onClickFilterButton(fromDate, toDate)">
+		</div>
+		
+		<div class="child-element-spacing col-md-12">
+			<div ng-repeat="type in vreScoredata.chartData.operationTypes"
+				ng-if="type.activities.length>0">
+
+				<h1	class="xpd-box-title" ng-if="type.label">
+					{{ type.label | uppercase}} Operation
+				</h1>
+
+				<h1	class="xpd-box-title" ng-if="!type.label">
+					All Operations
+				</h1>
+
+				<table  ng-if="type.activities && type.activities.length>0"
+						class="table vtr-report-table vre-score-table">
+
+					<tbody ng-repeat="activity in type.activities">
+						<tr>
+							<td colspan="2">
+								<h4 class="vre-score-label">{{activity.label}}</h4>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<div 
+									xpd-vre-score-bar-chart
+									chart-categories="vreScoredata.chartData.categories"
+									chart-scale="vreScoredata.chartData.scale"
+									chart-data="activity">
+								</div>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			
+			</div>
+		</div>
+	</div>
+
+
+	<div ng-if="vreScoredata.chartData.activities && vreScoredata.chartData.activities.length<=0"
+		class="empty-value-report-message">
+		No activities in this data range
+	</div>
+</div>

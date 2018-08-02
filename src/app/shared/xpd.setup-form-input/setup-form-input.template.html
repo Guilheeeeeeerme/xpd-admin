@@ -1,0 +1,55 @@
+<div class="form-group" ng-class="{ 'has-error': formName[name].$invalid  && !formName[name].$pristine }">
+
+    <label for="{{name}}">{{label}} {{required ? '*' : ''}}
+
+        <span 
+            ng-show="xpdPopoverHtml"
+            class="glyphicon glyphicon-question-sign" 
+            uib-popover-html="xpdPopoverHtml" 
+            popover-trigger="'{{xpdPopoverTrigger}}'" 
+            popover-placement="{{xpdPopoverPlacement}}">
+        </span>
+
+        <span 
+            ng-show="xpdPopover"
+            class="glyphicon glyphicon-question-sign"
+            uib-popover="{{xpdPopover}}"
+            popover-trigger="'{{xpdPopoverTrigger}}'" >
+        </span>
+
+    </label>
+
+    <div ng-if="unit" class="input-group">
+
+        <input 
+            type="{{type}}" 
+            min="{{min}}"
+            max="{{max}}"
+            class="form-control input-sm" 
+            id="operation-general-info-data-{{name}}"
+            ng-model="model[name]"
+            ng-change="change({ param: name })"
+            name="{{name}}" 
+            ng-required={{required}} 
+            ng-disabled="{{disabled}}"
+            xpd-form-validation="formName">
+
+        <span class="input-group-addon unit-addon">{{unit}}</span>
+
+    </div>
+
+    <input
+        ng-if="!unit"
+        type="{{type}}" 
+        min="{{min}}"
+        max="{{max}}"
+        class="form-control input-sm" 
+        id="operation-general-info-data-{{name}}"
+        ng-model="model[name]"
+        ng-change="change({ param: name })"
+        name="{{name}}" 
+        ng-required={{required}} 
+        ng-disabled="{{disabled}}"
+        xpd-form-validation="formName">
+
+</div>

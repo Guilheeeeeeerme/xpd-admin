@@ -1,0 +1,22 @@
+@import '~styles/font.scss';
+
+.period-form-input-content {
+    /*background-color: #acd7ca;*/
+    color: white;
+    text-align: center;
+    fill: black;
+    text-anchor: middle;
+}
+
+.period-form-label{
+    margin: 0 4px;
+}
+
+.period-button{
+    height: 30px;
+    margin-bottom: 1px;
+}
+
+.period-form {
+    font-family: $font-family-1;
+}

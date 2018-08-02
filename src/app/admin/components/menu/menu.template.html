@@ -1,0 +1,272 @@
+<!-- <div class="container-fluid"> -->
+<div class="xpd-panel">
+    <div class="xpd-panel-body">
+        <div class="col-md-7 out-of-slips-indicators-container">
+            <table class="table table-condensed equilibrium-time-table">
+                <thead>
+                    <tr class="current-elevator-bit-depth-cicle-row">
+                        <th class="equilibrium-time-table-title" colspan="8">Current Elevator Status</th>
+                    </tr>
+                    <tr>
+                        <th class="equilibrium-time-table-label">Status</th>
+                        <th class="equilibrium-time-table-label">Provider</th>
+                        <th class="equilibrium-time-table-label">Start Time</th>
+                        <th class="equilibrium-time-table-label">Initial Bit Depth</th>
+                        <th class="equilibrium-time-table-label">Current Block Position (m)</th>
+                        <th class="equilibrium-time-table-label">XPD Bit Depth (m)</th>
+                        <th class="equilibrium-time-table-label">Rig Bit Depth (m)</th>
+                        <th class="equilibrium-time-table-label"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="current-elevator-bit-depth-cicle-row" ng-if="operationData.bitDepthContext.cycle">
+                        <td class="equilibrium-time-table-text">{{ operationData.bitDepthContext.cycle.inSlips?'In Slips':'Out of Slips'}}</td>
+                        <td class="equilibrium-time-table-text">{{ operationData.bitDepthContext.cycle.usingXpd?'XPD':'RIG'}}</td>
+                        <!-- Start Time -->
+                        <td class="equilibrium-time-table-text">{{ operationData.bitDepthContext.cycle.startTime | date: 'shortTime'}}</td>
+                        <!-- Initial Bit Depth -->
+                        <td ng-if="operationData.bitDepthContext.cycle.usingXpd == true" class="equilibrium-time-table-text">
+                            {{ operationData.bitDepthContext.cycle.xpd.startBitDepth | number: 2 }}
+                        </td>
+                        <td ng-if="operationData.bitDepthContext.cycle.usingXpd == false" class="equilibrium-time-table-text">
+                            {{ operationData.bitDepthContext.cycle.rig.startBitDepth | number: 2 }}
+                        </td>
+                        <!-- Current Block Position -->
+                        <td class="equilibrium-time-table-text">{{ operationData.bitDepthContext.cycle.blockPosition | number: 2 }}</td>
+                        <!-- Block Position-based Bit Depth -->
+                        <td ng-if="operationData.bitDepthContext.cycle.usingXpd == true" class="equilibrium-time-table-text active">
+                            {{ operationData.bitDepthContext.xpdBitDepth | number: 2 }}
+                        </td>
+                        <td ng-if="operationData.bitDepthContext.cycle.usingXpd == false" class="equilibrium-time-table-text active">
+                            {{ operationData.bitDepthContext.rigBitDepth | number: 2 }}
+                        </td>
+                        <!-- Incoming Rig Bit Dept -->
+                        <td class="equilibrium-time-table-text">{{ operationData.bitDepthContext.rawBitDepth | number: 2 }}</td>
+                        <!-- Validation -->
+                        <td class="equilibrium-time-table-text" ng-if="operationData.bitDepthContext.cycle.usingXpd == true">
+                            <span ng-if="operationData.bitDepthContext.xpdBitDepth == operationData.bitDepthContext.rawBitDepth" class="above-optimum-text glyphicon glyphicon-ok"></span>
+                            <span ng-if="operationData.bitDepthContext.xpdBitDepth != operationData.bitDepthContext.rawBitDepth" class="bellow-poor-text glyphicon glyphicon-exclamation-sign"></span>
+                        </td>
+                        <td class="equilibrium-time-table-text" ng-if="operationData.bitDepthContext.cycle.usingXpd == false">
+                            <span ng-if="operationData.bitDepthContext.rigBitDepth  == operationData.bitDepthContext.rawBitDepth" class="above-optimum-text glyphicon glyphicon-ok"></span>
+                            <span ng-if="operationData.bitDepthContext.rigBitDepth  != operationData.bitDepthContext.rawBitDepth" class="bellow-poor-text glyphicon glyphicon-exclamation-sign"></span>
+                        </td>
+                    </tr>
+                    <!-- <tr class="current-elevator-bit-depth-cicle-row" ng-if="!operationData.bitDepthContext.cycle">
+                        <td colspan="6" class="equilibrium-time-table-text">In Slips</td>
+                        </tr> -->
+                </tbody>
+            </table>
+            <table class="table table-condensed equilibrium-time-table">
+                <thead>
+                    <tr>
+                        <th class="equilibrium-time-table-title" colspan="8">Out of Slips History</th>
+                    </tr>
+                    <tr>
+                        <th class="equilibrium-time-table-label">Status</th>
+                        <th class="equilibrium-time-table-label">Provider</th>
+                        <th class="equilibrium-time-table-label">Start Time</th>
+                        <th class="equilibrium-time-table-label">Initial Bit Depth</th>
+                        <th class="equilibrium-time-table-label">Last Block Position</th>
+                        <th class="equilibrium-time-table-label">Block Position-based Bit Depth</th>
+                        <th class="equilibrium-time-table-label">Incoming Bit Depth</th>
+                        <th class="equilibrium-time-table-label">Validation</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="cycle in operationData.bitDepthContext.cycle_logs | orderBy : '-startTime' ">
+                        <td class="equilibrium-time-table-text">{{ cycle.inSlips?'In Slips':'Out of Slips'}}</td>
+                        <td class="equilibrium-time-table-text">{{ cycle.usingXpd?'XPD':'RIG'}}</td>
+                        <!-- Start Time -->
+                        <td class="equilibrium-time-table-text">{{ cycle.startTime | date: 'shortTime'}}</td>
+                        <!-- Initial Bit Depth -->
+                        <td ng-if="cycle.usingXpd == true" class="equilibrium-time-table-text">
+                            {{ cycle.xpd.startBitDepth | number: 2 }}
+                        </td>
+                        <td ng-if="cycle.usingXpd == false" class="equilibrium-time-table-text">
+                            {{ cycle.rig.startBitDepth | number: 2 }}
+                        </td>
+                        <!-- Current Block Position -->
+                        <td class="equilibrium-time-table-text">{{ cycle.blockPosition | number: 2 }}</td>
+                        <!-- Block Position-based Bit Depth -->
+                        <td ng-if="cycle.usingXpd == true" class="equilibrium-time-table-text">
+                            {{ cycle.xpd.bitDepth | number: 2 }}
+                        </td>
+                        <td ng-if="cycle.usingXpd == false" class="equilibrium-time-table-text">
+                            {{ cycle.rig.bitDepth | number: 2 }}
+                        </td>
+                        <!-- Incoming Rig Bit Dept -->
+                        <td class="equilibrium-time-table-text">{{ cycle.raw.bitDepth | number: 2 }}</td>
+                        <!-- Validation -->
+                        <td class="equilibrium-time-table-text" ng-if="cycle.usingXpd == true">
+                            <span ng-if="cycle.xpd.bitDepth == cycle.raw.bitDepth" class="above-optimum-text glyphicon glyphicon-ok"></span>
+                            <span ng-if="cycle.xpd.bitDepth != cycle.raw.bitDepth" class="bellow-poor-text glyphicon glyphicon-exclamation-sign"></span>
+                        </td>
+                        <td class="equilibrium-time-table-text" ng-if="cycle.usingXpd == false">
+                            <span ng-if="cycle.rig.bitDepth == cycle.raw.bitDepth" class="above-optimum-text glyphicon glyphicon-ok"></span>
+                            <span ng-if="cycle.rig.bitDepth != cycle.raw.bitDepth" class="bellow-poor-text glyphicon glyphicon-exclamation-sign"></span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="col-md-5">
+            <table class="table table-condensed equilibrium-time-table">
+                <thead>
+                    <tr>
+                        <th class="equilibrium-time-table-title" colspan="9">Last Reading</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <th class="equilibrium-time-table-label">Torque</th>
+                        <th class="equilibrium-time-table-label">RPM</th>
+                        <th class="equilibrium-time-table-label">SPPA</th>
+                        <th class="equilibrium-time-table-label">Hookload</th>
+                        <th class="equilibrium-time-table-label">WOB</th>
+                        <th class="equilibrium-time-table-label">Block Position</th>
+                        <th class="equilibrium-time-table-label">Bit Depth</th>
+                        <th class="equilibrium-time-table-label">Depth</th>
+                        <th class="equilibrium-time-table-label">Block Speed</th>
+                    </tr>
+                    <tr>
+                        <td class="equilibrium-time-table-text">{{ operationData.readingContext.currentReading.torque }}
+                        </td>
+                        <td class="equilibrium-time-table-text">{{ operationData.readingContext.currentReading.rpm }}</td>
+                        <td class="equilibrium-time-table-text">{{ operationData.readingContext.currentReading.sppa }}</td>
+                        <td class="equilibrium-time-table-text">{{ operationData.readingContext.currentReading.hookload }}
+                        </td>
+                        <td class="equilibrium-time-table-text">{{ operationData.readingContext.currentReading.wob }}</td>
+                        <td class="equilibrium-time-table-text">{{ operationData.readingContext.currentReading.blockPosition | number : 2 }}
+                        </td>
+                        <td class="equilibrium-time-table-text">{{ operationData.readingContext.currentReading.bitDepth | number : 2 }}
+                        </td>
+                        <td class="equilibrium-time-table-text">{{ operationData.readingContext.currentReading.depth }}</td>
+                        <td class="equilibrium-time-table-text">{{ operationData.readingContext.currentReading.blockSpeed * 3600 | number : 2 }}
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <table class="table table-condensed equilibrium-time-table">
+                <thead>
+                    <tr>
+                        <th class="equilibrium-time-table-title" colspan="3">Bit Depth Provider</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <th class="equilibrium-time-table-label">Using</th>
+                        <th class="equilibrium-time-table-label">Value</th>
+                    </tr>
+                    <tr>
+                        <td class="equilibrium-time-table-text">
+                            <span ng-if="operationData.bitDepthContext.usingXpd == false">Using RIG</span>
+                            <button ng-disabled="!operationData.readingContext.isAcquiring || !operationData.bitDepthContext.rigBitDepth" ng-if="operationData.bitDepthContext.usingXpd == true"
+                                class="btn btn-default" ng-click="mController.actionButtonSetBitDepthMode(false)">Use RIG
+                            </button>
+                        </td>
+                        <td class="equilibrium-time-table-text">{{ operationData.bitDepthContext.rigBitDepth | number: 2 }}</td>
+                    </tr>
+                    <tr>
+                        <td class="equilibrium-time-table-text">
+                            <span ng-if="operationData.bitDepthContext.usingXpd == true">Using XPD</span>
+                            <button ng-disabled="operationData.bitDepthContext.xpdBitDepth  == null" ng-if="operationData.bitDepthContext.usingXpd == false"
+                                class="btn btn-default" ng-click="mController.actionButtonSetBitDepthMode(true)">Use XPD
+                            </button>
+                        </td>
+                        <td class="equilibrium-time-table-text">{{ operationData.bitDepthContext.xpdBitDepth | number: 2 }}</td>
+                    </tr>
+                    <tr>
+                        <th class="equilibrium-time-table-label"></th>
+                        <th class="equilibrium-time-table-label">
+                            <fieldset ng-disabled="operationData.alarmContext.currentAlarm.isDurationAlarm">
+                                <div class="input-group">
+                                    <input type="number" class="form-control" ng-model="dados.bitDepth" placeholder="bit depth">
+                                    <span class="input-group-btn">
+                                        <button class="btn btn-default" ng-disabled="!dados.bitDepth || dados.bitDepth < 0" type="button" ng-click="mController.actionButtonSetBitDepth(dados.bitDepth)">Update</button>
+                                    </span>
+                                </div>
+                            </fieldset>
+                        </th>
+                    </tr>
+                </tbody>
+            </table>
+            <table class="table table-condensed equilibrium-time-table">
+                <thead>
+                    <tr>
+                        <th class="equilibrium-time-table-title" colspan="3">Runtime Parameters</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    <tr>
+                        <td class="equilibrium-time-table-label">Stick Up</td>
+                        <td class="equilibrium-time-table-label">{{ operationData.operationContext.currentOperation.stickUp }}m</td>
+                        <td class="equilibrium-time-table-label">
+                            <div class="input-group">
+                                <input type="number" class="form-control" ng-model="dados.stickUp" placeholder="Stick Up">
+                                <span class="input-group-btn">
+                                    <button class="btn btn-default" type="button" ng-disabled="!dados.stickUp" ng-click="mController.actionButtonSetStickUp(dados.stickUp)">Update</button>
+                                </span>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td class="equilibrium-time-table-label">Block Weight</td>
+                        <td class="equilibrium-time-table-label">{{ operationData.operationContext.currentOperation.blockWeight }}klb</td>
+                        <td class="equilibrium-time-table-label">
+                            <div class="input-group">
+                                <input type="number" class="form-control" ng-model="dados.blockWeight" placeholder="Block Weight">
+                                <span class="input-group-btn">
+                                    <button class="btn btn-default" type="button" ng-disabled="!dados.blockWeight" ng-click="mController.actionButtonSetBlockWeight(dados.blockWeight)">Update</button>
+                                </span>
+                            </div>
+                        </td>
+
+                        <tr>
+                            <td class="equilibrium-time-table-label">Slips Threshold</td>
+                            <td class="equilibrium-time-table-label">{{ operationData.operationContext.currentOperation.slipsThreshold }}klb</td>
+                            <td class="equilibrium-time-table-label">
+                                <div class="input-group">
+                                    <input type="number" class="form-control" ng-model="dados.slipsThreshold" placeholder="Slips Threshold">
+                                    <span class="input-group-btn">
+                                        <button class="btn btn-default" type="button" ng-disabled="!dados.slipsThreshold" ng-click="mController.actionButtonSetSlipsThreshold(dados.slipsThreshold)">Update</button>
+                                    </span>
+                                </div>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td class="equilibrium-time-table-label">Check Unreachable Target Every</td>
+                            <td class="equilibrium-time-table-label">{{ operationData.securityContext.secondsDelay }}s</td>
+                            <td class="equilibrium-time-table-label">
+                                <div class="input-group">
+                                    <input type="number" class="form-control" ng-model="dados.unreachableDelay" placeholder="Delay Unreachable Target">
+                                    <span class="input-group-btn">
+                                        <button class="btn btn-default" type="button" ng-disabled="!dados.unreachableDelay" ng-click="mController.actionButtonSetDelayOnUnreachable(dados.unreachableDelay)">Update</button>
+                                    </span>
+                                </div>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td class="equilibrium-time-table-label">Calculate Block Speed Every</td>
+                            <td class="equilibrium-time-table-label">{{ operationData.dataAcquisitionContext.blockSpeedInterval }}s</td>
+                            <td class="equilibrium-time-table-label">
+                                <div class="col-md-12 input-group">
+                                    <input type="number" class="form-control" ng-model="dados.blockSpeedInterval" placeholder="Block Speed Calculation Interval">
+                                    <span class="input-group-btn">
+                                        <button class="btn btn-default" type="button" ng-disabled="!dados.blockSpeedInterval" ng-click="mController.actionButtonSetBlockSpeedInterval(dados.blockSpeedInterval)">Update</button>
+                                    </span>
+                                </div>
+                            </td>
+                        </tr>
+
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+
+</div>

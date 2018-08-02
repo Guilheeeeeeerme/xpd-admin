@@ -1,0 +1,196 @@
+<div class="xpd-panel has-footer">
+
+    <div class="xpd-panel-header">
+        <span class="xpd-panel-title">Settings for {{ label }}</span>
+
+        <button ng-show="targetSpeed != 0 && vcruising <= targetSafetySpeedLimit" class="btn btn-default pull-right" ng-click="actionButtonApply()">Apply
+        </button>
+
+        <span ng-show="targetSpeed == 0" class="planner-error-text pull-right">You must set a speed</span>
+
+        <span ng-show="vcruising > targetSafetySpeedLimit" class="planner-error-text pull-right">V cruising must be lower than maximum speed</span>
+
+    </div>
+
+    <div class="xpd-panel-body">
+
+        <div class="col-md-4 col-sm-4 col-xs-5 trip-parameters trip-movement-parameters-container">
+
+            <div class="panel panel-default">
+
+                <div class="panel-heading">Acceleration Time</div>
+
+                <div class="panel-body">
+
+                    <div class="row">
+                        <div class="col-md-6">Optimum Time</div>
+                        <div class="col-md-6">{{ optimumAccelerationTimeLimit * 1000 | date : 'HH:mm:ss' : '+0000'}}
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">Target Time</div>
+                        <div class="col-md-6">{{ targetAccelerationTimeLimit * 1000 | date : 'HH:mm:ss' : '+0000' }}
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="panel-footer">
+                    <input type="range" ng-model="targetAccelerationTimeLimit" class="form-control" min="0" step="1" max="{{  optimumAccelerationTimeLimit * 4  }}">
+                </div>
+
+            </div>
+
+            <div class="panel panel-default">
+
+                <div class="panel-heading">Deceleration Time</div>
+
+                <div class="panel-body">
+
+                    <div class="row">
+                        <div class="col-md-6">Optimum Time</div>
+                        <div class="col-md-6">{{ optimumDecelerationTimeLimit * 1000 | date : 'HH:mm:ss' : '+0000' }}
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">Target Time</div>
+                        <div class="col-md-6">{{ targetDecelerationTimeLimit * 1000 | date : 'HH:mm:ss' : '+0000' }}
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="panel-footer">
+                    <input type="range" class="form-control" ng-model="targetDecelerationTimeLimit" min="0" step="1" max="{{  optimumDecelerationTimeLimit * 4  }}">
+                </div>
+
+            </div>
+
+            <div class="panel panel-default">
+
+                <div class="panel-heading">Position</div>
+
+                <div class="panel-body">
+
+                    <div class="row">
+                        <div class="col-md-6">Stick Up (m)</div>
+                        <div class="col-md-6">{{ stickUp | number: 2 }}
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">Upper Stop (m)</div>
+                        <div class="col-md-6">{{ upperStop | number: 2 }}
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="panel panel-default">
+
+                <div class="panel-heading">Max Block Speed</div>
+
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-md-8">Maximum Speed (m/h)</div>
+                        <div class="col-md-4">{{ targetSafetySpeedLimit * 3600 | number: 2 }}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-8">V Cruising (m/h)</div>
+                        <div class="col-md-4">{{ vcruising * 3600 | number: 2 }}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="panel-footer">
+                    <input type="range" class="form-control" ng-model="targetSafetySpeedLimit" step="0.000027777777" min="{{  optimumSafetySpeedLimit * 0.25  }}"
+                        max="{{  optimumSafetySpeedLimit * 4  }}">
+                </div>
+
+            </div>
+
+            <div class="panel panel-default">
+
+                <div class="panel-heading">In Slips time</div>
+
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-md-6">Optimum Time</div>
+                        <div class="col-md-6">{{ inSlipsDefault * 1000 | date : 'HH:mm:ss' : '+0000' }}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">Target Time</div>
+                        <div class="col-md-6">{{ slipsTime * 1000 | date : 'HH:mm:ss' : '+0000' }}
+                        </div>
+                    </div>
+                </div>
+                <div class="panel-footer">
+                    <input type="range" step="0.001" ng-model="slipsTime" class="form-control" min="0" step="1" max="{{   inSlipsDefault * 4   }}">
+                </div>
+            </div>
+
+        </div>
+
+        <div class="col-md-4 col-sm-4 col-xs-3 trip-parameters block-speed-representation-container">
+            <xpd-trip-ruler 
+                ng-if="currentOperation"  
+                operation='currentOperation'>
+            </xpd-trip-ruler>
+        </div>
+
+        <div class="col-md-4 col-sm-4 col-xs-4 trip-parameters block-speed-representation-container">
+
+            <div class="xpd-chart" xpd-displacement-area displacement='displacement' target-speed='targetSpeed' safety-limit="targetSafetySpeedLimit"
+                vcruising='vcruising' deceleration-time-limit='targetDecelerationTimeLimit' acceleration-time-limit='targetAccelerationTimeLimit'
+                slips-time='slipsTime'>
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+    <div class="xpd-panel-footer">
+
+        <table class="table table-condensed equilibrium-time-table">
+            <thead>
+                <tr>
+                    <th class="equilibrium-time-table-title" colspan="3">Trip Time</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <th class="equilibrium-time-table-label">Optimum Speed (m/h)</th>
+                    <th class="equilibrium-time-table-label">Time</th>
+                    <th class="equilibrium-time-table-label">Target Speed (m/h)</th>
+                </tr>
+                <tr>
+                    <td class="equilibrium-time-table-text">{{ optimumSpeed * 3600 | number: 2 }}
+                    </td>
+                    <td class="equilibrium-time-table-text">{{ targetTime * 1000 | date : 'HH:mm:ss' : '+0000' }}
+                    </td>
+                    <td class="equilibrium-time-table-text">{{ targetSpeed * 3600 | number: 2 }}
+                    </td>
+                </tr>
+
+            </tbody>
+
+            <tfoot>
+                <tr>
+                    <td colspan="3">
+                        <input type="range" step="0.000027777777" class="form-control" ng-model="targetSpeed" min="0" max="{{ 4 *  optimumSpeed   }}">
+                    </td>
+                </tr>
+            </tfoot>
+
+        </table>
+
+    </div>
+</div>

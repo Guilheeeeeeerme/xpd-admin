@@ -1,0 +1,26 @@
+<div class='container-fluid shift-report'>
+
+    <div class='row'>
+        <div class='col-sm-12'>
+            <div class="btn-group" data-toggle="buttons">
+                <label class="btn btn-default" ng-repeat='well in dados.wellList' ng-class="{ 'active': dados.wellId == well.id }">
+                  <input name='wellId' id='select-well' value="{{ well.id }}" ng-model='dados.wellId' ng-change='reloadReport()' type="radio" >{{ well.name }}
+                </label>
+              </div>
+        </div>
+    </div>
+
+    <div class='row'>
+        <div style="margin-top: 10px;" xpd-rpd-form ng-if="dados.groupedEvents" ng-repeat="(day, rpd) in dados.groupedEvents" class='col-sm-12'
+            rig='NS33' well='{{ dados.well.name }}' day-driller='Bruno' night-driller='Miguel' adp-number='' date='{{ day }}'
+            time='18:00' tasks="rpd">
+        </div>
+    </div>
+
+    <!-- <div class='row'>
+        <div class='col-sm-12'>
+            <pre>{{ dados.groupedEvents | json }}</pre>
+        </div>
+    </div> -->
+
+</div>

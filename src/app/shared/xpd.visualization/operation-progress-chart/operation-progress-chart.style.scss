@@ -1,0 +1,39 @@
+@import '~styles/font.scss';
+
+xpd-operation-progress-chart {
+    display: block;
+    height: 100%;
+    font-family: $font-family-1;
+
+    .operation-progress-time-label {
+        font-weight: bold;
+        font-size: 1.3em;
+    }
+
+    .operation-progress-time-difference-label {
+        font-weight: bold;
+        font-size: 1.4em;
+    }
+
+    .operation-progress-rect-total-label {
+        font-size: 1.4em;
+        font-weight: bold;
+    }
+
+    .operation-progress-rect-label {
+        font-size: 1.3em;
+        font-weight: bold;
+    }
+
+    .operation-progress-delay-text {
+        font-size: 1.3em;
+        font-weight: bold;
+        fill: white;
+    }
+
+    .operation-progress-delay-title {
+        font-size: 1.5em;
+        font-weight: bold;
+        fill: white;
+    }
+}

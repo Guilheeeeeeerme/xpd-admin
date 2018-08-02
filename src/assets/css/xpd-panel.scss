@@ -1,0 +1,60 @@
+@import '~styles/font.scss';
+
+.xpd-panel {
+
+    display: block;
+    height: 100%;
+    max-height: 100%;
+    overflow-y: auto;
+    font-family: $font-family-1;
+
+    .xpd-panel-header .xpd-panel-title {
+        font-family: $font-family-1;
+        font-size: 2em;
+        -webkit-text-stroke: 1.5px #517f89;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .xpd-panel-body {
+        height: 100%;
+        max-height: 100%;
+    }
+
+    &:not(.has-footer) {
+
+        .xpd-panel-header {
+            display: block;
+            height: 5%;
+            max-height: 5%;
+        }
+        
+        .xpd-panel-header + .xpd-panel-body {
+            height: 95%;
+            max-height: 95%;
+        }
+
+    }
+
+    &.has-footer {
+
+        .xpd-panel-header {
+            display: block;
+            height: 5%;
+            max-height: 5%;
+        }
+
+        .xpd-panel-body {
+            display: block;
+            height: 70%;
+            max-height: 70%;
+        }
+
+        .xpd-panel-footer {
+            display: block;
+            height: 25%;
+            max-height: 25%;
+        }
+
+    }
+
+}

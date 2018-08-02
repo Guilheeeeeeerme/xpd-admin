@@ -1,0 +1,196 @@
+<form name="operationController.contract">
+
+    <div class="col-md-12 panel panel-default">
+        <xpd-operation-contract-info-table operation="dados.operation" 
+                class="table table-condensed"
+                state="Ascent Riser"
+                state-id="ascentRiser"
+                contract-params="dados.operation.contractParams"
+                trip-unit="m/h"
+                trip-required
+                conn-unit="Conn/h"
+                conn-required
+                contract-form="operationController.contract"
+                ui-popover="htmlPopover"/>
+    </div>
+
+    <div class="col-md-12 panel panel-default">
+        <xpd-operation-contract-info-table operation="dados.operation" 
+                class="table table-condensed"
+                state="Descent Riser"
+                state-id="descendRiser"
+                contract-params="dados.operation.contractParams"
+                trip-unit="m/h"
+                trip-required
+                conn-unit="Conn/h"
+                conn-required
+                contract-form="operationController.contract"
+                ui-popover="htmlPopover"/>
+    </div>
+
+
+    <div class="col-md-12">
+        <table class="table table-condensed table-contract-info">
+            <caption>BOP Assembly</caption>
+            <thead>
+            <tr>
+                <th>Indicator</th>
+                <th>V. Optimum</th>
+                <th>V. Standard</th>
+                <th>V. Poor</th>
+                <th></th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>Make Up</td>
+
+                <td ng-class="{ 'has-error': operationController.contract.makeUpSpeedVoptimum.$invalid }">
+                    <xpd-contract-time-input 
+                        required="true" 
+                        ng-model="dados.operation.contractParams.makeUpSpeed.voptimum"
+                        min="{{dados.operation.contractParams.makeUpSpeed.vstandard}}"
+                        name="makeUpSpeedVoptimum" 
+                        id="makeUpSpeed.voptimum"/>
+                    
+                </td>
+
+                <td ng-class="{ 'has-error': operationController.contract.makeUpSpeedVstandard.$invalid }">
+                    <xpd-contract-time-input 
+                        required="true" 
+                        ng-model="dados.operation.contractParams.makeUpSpeed.vstandard"
+                        min="{{dados.operation.contractParams.makeUpSpeed.vpoor}}"
+                        max="{{dados.operation.contractParams.makeUpSpeed.voptimum}}"
+                        name="makeUpSpeedVstandard" 
+                        id="makeUpSpeed.vstandard"/>
+                    
+                </td>
+
+                <td ng-class="{ 'has-error': operationController.contract.makeUpSpeedVpoor.$invalid }">
+                    <xpd-contract-time-input 
+                        required="true" 
+                        ng-model="dados.operation.contractParams.makeUpSpeed.vpoor"
+                        max="{{dados.operation.contractParams.makeUpSpeed.vstandard}}"
+                        min="0"
+                        name="makeUpSpeedVpoor" 
+                        id="makeUpSpeed.vpoor"/>
+                    
+                </td>
+
+                <td>
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox"
+                                   ng-model="dados.operation.contractParams.makeUpSpeed.contractIndicator"> Contract
+                        </label>
+                    </div>
+                </td>
+
+                <td>
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox"
+                                   ng-model="dados.operation.contractParams.makeUpSpeed.ssoIndicator"> SSO
+                        </label>
+                    </div>
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                </td>
+                <td>
+                        <span class="form-error-message"
+                              ng-show="operationController.contract.makeUpSpeedVoptimum.$error.valid">
+                       Optimum Time must be lesser Standard Time
+                        </span>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <span class="form-error-message"
+                              ng-show="operationController.contract.makeUpSpeedVpoor.$error.valid">
+                        Poor Time must be greater Standard Time
+                        </span>
+                </td>
+            </tr>
+
+            <tr>
+                <td>Lay Down</td>
+
+                <td ng-class="{ 'has-error': operationController.contract.layDownSpeedVoptimum.$invalid }">
+                    <xpd-contract-time-input 
+                        required="true" 
+                        ng-model="dados.operation.contractParams.layDownSpeed.voptimum"
+                        min="{{dados.operation.contractParams.layDownSpeed.vstandard}}"
+                        name="layDownSpeedVoptimum" 
+                        id="layDownSpeed.voptimum"/>
+                    
+                </td>
+
+                <td ng-class="{ 'has-error': operationController.contract.layDownSpeedVstandard.$invalid }">
+                    <xpd-contract-time-input 
+                        required="true" 
+                        ng-model="dados.operation.contractParams.layDownSpeed.vstandard"
+                        max="{{dados.operation.contractParams.layDownSpeed.voptimum}}"
+                        min="{{dados.operation.contractParams.layDownSpeed.vpoor}}"
+                        name="layDownSpeedVstandard" 
+                        id="layDownSpeed.vstandard"/>
+                    
+                </td>
+
+                <td ng-class="{ 'has-error': operationController.contract.layDownSpeedVpoor.$invalid }">
+                    <xpd-contract-time-input 
+                        required="true"
+                        ng-model="dados.operation.contractParams.layDownSpeed.vpoor"
+                        min="0"
+                        max="{{dados.operation.contractParams.layDownSpeed.vstandard}}"
+                        name="layDownSpeedVpoor" 
+                        id="layDownSpeed.vpoor"/>
+                    
+                </td>
+
+                <td>
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox"
+                                   ng-model="dados.operation.contractParams.layDownSpeed.contractIndicator"> Contract
+                        </label>
+                    </div>
+                </td>
+
+                <td>
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox"
+                                   ng-model="dados.operation.contractParams.layDownSpeed.ssoIndicator"> SSO
+                        </label>
+                    </div>
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                </td>
+                <td>
+                        <span class="form-error-message"
+                              ng-show="operationController.contract.layDownSpeedVoptimum.$error.valid">
+                        Optimum Time must be lesser Standard Time
+                        </span>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <span class="form-error-message"
+                              ng-show="operationController.contract.layDownSpeedVpoor.$error.valid">
+                        Poor Time must be greater Standard Time
+                        </span>
+                </td>
+            </tr>
+
+            </tbody>
+        </table>
+    </div>
+
+</form>

@@ -1,0 +1,66 @@
+
+import * as angular from 'angular';
+
+import { ChannelsInformationPanel } from './channels-information-panel/channels-information-panel.directive';
+import { ConnRulerDirective } from './conn-ruler/conn-ruler.directive';
+import { ConsistencyInformationPanelDirective } from './consistency-information-panel/consistency-information-panel.directive';
+import { CurrentAlarmPanelDirective } from './current-alarm-panel/current-alarm-panel.directive';
+import { D3DMECChartModalController } from './d3-dmec-chart/d3-dmec-chart-modal.controller';
+import { D3DMECChartDirective } from './d3-dmec-chart/d3-dmec-chart.directive';
+import { DisplacementAreaFactory } from './displacement-area/displacement-area.directive';
+import { DMECTrackingEventsDirective } from './dmec-tracking-events/dmec-tracking-events.directive';
+import { DMECTrackingDirective } from './dmec-tracking/dmec-tracking.directive';
+import { FailurePanelDirective } from './failure-panel/failure-panel.directive';
+import { ForecastLineDirective } from './forecast-line/forecast-line.directive';
+import { ForecastWaterfallDirective } from './forecast-waterfall/forecast-waterfall.directive';
+import { InSlipsDirective } from './in-slips/in-slips.directive';
+import { MemberPerformanceDirective } from './member-performance/member-performance.directive';
+import { NextActivitiesInformationPanelDirective } from './next-activities-information-panel/next-activities-information-panel.directive';
+import { OldTrackingDirective } from './old-tracking/old-tracking.directive';
+import { OperationInformationPanelDirective } from './operation-information-panel/operation-information-panel.directive';
+import { OperationProgressChartDirective } from './operation-progress-chart/operation-progress-chart.directive';
+import { OperationProgressPanelDirective } from './operation-progress-panel/operation-progress-panel.directive';
+import { PerformanceParameterBarDirective } from './performance-parameter-bar/performance-parameter-bar.directive';
+import { PerformanceProgressBarDirective } from './performance-progress-bar/performance-progress-bar.directive';
+import { ScoreGaugeDirective } from './score-gauge/score-gauge.directive';
+import { SpeedGaugeDirective } from './speed-gauge/speed-gauge.directive';
+import { TimeZoomToolDirective } from './time-zoom-tool/time-zoom-tool.directive';
+import { EventTimesDirective } from './times/times.directive';
+import { TripRulerDirective } from './trip-ruler/trip-ruler.directive';
+import { UpcomingAlarmsPanelDirective } from './upcoming-alarms-panel/upcoming-alarms-panel.directive';
+import { WellInformationPanelDirective } from './well-information-panel/well-information-panel.directive';
+import { XPDViewBoxDirective } from './xpd-view-box.directive';
+
+const XPDVisualizationModule: angular.IModule = angular.module('xpd.visualization', []);
+
+export  { XPDVisualizationModule };
+
+XPDVisualizationModule.directive('xpdTripRuler', TripRulerDirective.Factory());
+XPDVisualizationModule.directive('xpdUpcomingAlarmsPanel', UpcomingAlarmsPanelDirective.Factory());
+XPDVisualizationModule.directive('xpdCurrentAlarmPanel', CurrentAlarmPanelDirective.Factory());
+XPDVisualizationModule.directive('xpdFailurePanel', FailurePanelDirective.Factory());
+XPDVisualizationModule.directive('xpdWellInformationPanel', WellInformationPanelDirective.Factory());
+XPDVisualizationModule.directive('xpdViewBox', XPDViewBoxDirective.Factory());
+XPDVisualizationModule.directive('xpdTimes', EventTimesDirective.Factory());
+XPDVisualizationModule.directive('xpdTimeZoomTool', TimeZoomToolDirective.Factory());
+XPDVisualizationModule.directive('xpdSpeedGauge', SpeedGaugeDirective.Factory());
+XPDVisualizationModule.directive('xpdScoreGauge', ScoreGaugeDirective.Factory());
+XPDVisualizationModule.directive('xpdPerformanceProgressBar', PerformanceProgressBarDirective.Factory());
+XPDVisualizationModule.directive('xpdPerformanceParameterBar', PerformanceParameterBarDirective.Factory());
+XPDVisualizationModule.directive('xpdOperationProgressPanel', OperationProgressPanelDirective.Factory());
+XPDVisualizationModule.directive('xpdOperationProgressChart', OperationProgressChartDirective.Factory());
+XPDVisualizationModule.directive('xpdOperationInformationPanel', OperationInformationPanelDirective.Factory());
+XPDVisualizationModule.directive('xpdOldTracking', OldTrackingDirective.Factory());
+XPDVisualizationModule.directive('xpdNextActivitiesInformationPanel', NextActivitiesInformationPanelDirective.Factory());
+XPDVisualizationModule.directive('xpdMemberPerformance', MemberPerformanceDirective.Factory());
+XPDVisualizationModule.directive('xpdInSlips', InSlipsDirective.Factory());
+XPDVisualizationModule.directive('xpdForecastLine', ForecastLineDirective.Factory());
+XPDVisualizationModule.directive('xpdDmecTracking', DMECTrackingDirective.Factory());
+XPDVisualizationModule.directive('xpdDmecTrackingEvents', DMECTrackingEventsDirective.Factory());
+XPDVisualizationModule.directive('xpdDisplacementArea', DisplacementAreaFactory.Factory());
+XPDVisualizationModule.directive('xpdD3DmecChart', D3DMECChartDirective.Factory());
+XPDVisualizationModule.controller('D3DMECChartModalController', D3DMECChartModalController);
+XPDVisualizationModule.directive('xpdConsistencyInformationPanel', ConsistencyInformationPanelDirective.Factory());
+XPDVisualizationModule.directive('xpdConnRuler', ConnRulerDirective.Factory());
+XPDVisualizationModule.directive('xpdForecastWaterfall', ForecastWaterfallDirective.Factory());
+XPDVisualizationModule.directive('xpdChannelsInformationPanel', ChannelsInformationPanel.Factory());

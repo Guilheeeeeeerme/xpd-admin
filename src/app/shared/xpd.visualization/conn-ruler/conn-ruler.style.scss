@@ -1,0 +1,95 @@
+@import '~styles/font.scss';
+
+xpd-conn-ruler {
+    display: block;
+    height: 100%;
+
+    .conn-ruler-container {
+        border-left: solid 2 #517f89;
+    }
+    
+    .xpd-conn-ruler-tick {
+        stroke: #83b2bc;
+        stroke-width: 0.5;
+    }
+    
+    .xpd-conn-ruler-tick-main {
+        stroke-width: 1;
+    }
+    
+    .xpd-conn-ruler-tick-sub {
+        stroke-width: 1;
+    }
+    
+    .xpd-conn-ruler-tick-fancy {
+        stroke-width: 6;
+        stroke-dasharray: 0.5, 3;
+    }
+    
+    .xpd-conn-ruler-tick-line {
+        stroke-width: 2;
+        fill: #517f89;
+    }
+    
+    .xpd-conn-ruler-tick-text {
+        font-size: 0.5em;
+        font-family: $font-family-1;
+        fill: #83b2bc;
+        font-weight: bolder;
+        text-anchor: end;
+    }
+    
+    .xpd-conn-ruler-tick-text-past {
+        fill: #83b2bc;
+    }
+    
+    .xpd-conn-ruler-duration-tick-text {
+        font-size: 0.5em;
+        font-family: $font-family-1;
+        fill: #517f89;
+        font-weight: bolder;
+        text-anchor: end;
+    }
+    
+    .xpd-conn-ruler-duration-tick-text-past {
+        fill: #000000;
+    }
+    
+    .xpd-conn-ruler-event-block {
+        fill: none;
+        stroke-width: 1;
+        stroke: #517f89;
+    }
+    
+    .xpd-conn-ruler-event-block-past {
+        fill: #517f89;
+    }
+    
+    .xpd-conn-ruler-event-block-overtime {
+        fill: #b45c5c;
+        stroke: #b45c5c;
+        fill-opacity: 0.8;
+    }
+    
+    .xpd-conn-ruler-event-name-container {
+        display: table;
+        padding: 5px;
+        width: 100%;
+        height: 100%;
+    }
+    
+    .xpd-conn-ruler-event-name {
+        display: table-cell;
+        vertical-align: middle;
+        font-size: 0.6em;
+        font-family: $font-family-1;
+        text-align: center;
+        color: #517f89;
+        font-weight: bolder;
+        white-space: normal;
+    }
+    
+    .xpd-conn-ruler-event-name-past {
+        color: #000000;
+    }
+}

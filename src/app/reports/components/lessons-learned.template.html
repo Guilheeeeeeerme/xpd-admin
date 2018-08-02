@@ -1,0 +1,94 @@
+<div>
+	<h1 class="xpd-box-title">Lessons Learned Report</h1>
+
+	<div class="row">
+		<div class="col-md-6 col-md-offset-6"
+			xpd-table-period initial-date="reportsData.fromDate"
+			final-date="reportsData.toDate"
+			function-change-period="llController.onClickFilterButton(fromDate, toDate)">
+		</div>
+	</div>
+
+	<div ng-if="llController.nodeList && llController.nodeList.length>0">
+
+
+		<div class="row failure-report-chart">
+
+			<div class="col-md-5"
+				xpd-pie-chart chart-title="llController.chartDonut.title"
+				internal-percentages="llController.chartDonut.data.pie"
+				external-percentages="llController.chartDonut.data.donut">
+			</div>
+
+			<div class="col-md-7"
+				xpd-pareto-chart
+				chart-title="llController.chartDonut.title"
+				primary-data-title= "'Lessons'"
+				primary-data= "llController.chartPareto.data.lessons"
+				secondary-data-title= "'BEST PRACTICE'"
+				secondary-data= "llController.chartPareto.data.bestPractices"
+				categories= "llController.chartPareto.data.categories"
+				percentage= "llController.chartPareto.data.percentage">
+			</div>
+		</div>
+
+		<div class="col-md-10 col-md-offset-1">
+			<ol class="breadcrumb failures-breadcrumb">
+				<li ng-repeat="(key, obj) in lessonsData.breadcrumbs"
+					class="breadcrumb-item">
+					<a ng-if="!$last" ng-click="llController.actionClickBreadcrumbs(key, obj)">{{ obj.name }}</a>
+					<span ng-if="$last && key == 0">{{ obj.name }}</span>
+					<span ng-if="$last && key != 0">{{ obj.name }}</span>
+				</li>
+			</ol>
+		</div>
+
+		<div class="col-md-10 col-md-offset-1">
+			<table class="table failures-report-table">
+	    		<thead>
+	    			<tr>
+	    				<td></td>
+			            <th>Category</th>
+	    				<th>Qty.</th>
+	    				<th>Time </th>
+			            <th>Time %</th>
+	    			</tr>
+	    		</thead>
+	    		<tbody class="failures-report-tbody">
+	    			<tr ng-repeat="node in llController.nodeList"
+	    				ng-click="llController.actionButtonSelectCategory(node)"
+	    				ng-if="node.isParent == true">
+
+	    				<td>
+	    					<div class="pull-left legend-category" style="background-color: {{node.color.light}}"></div>
+	    					<div class="pull-left legend-category" style="background-color: {{node.color.dark}}"></div>
+	    				</td>
+	    				<td>{{ node.initial }} - {{ node.name }}</td>
+	    				<td>{{ node.lessonsLength }} (B. Pract.: {{ node.bestPracticesLength }})</td>
+	                    <td>{{ node.time | secondsToHourMinutes }}  (B. Pract.: {{ node.bestPracticesTime | secondsToHourMinutes}})</td>
+	                    <td>{{ (node.time/llController.totalTime) | percentage:2 }} (B. Pract.: {{ (node.bestPracticesTime/llController.totalTime) | percentage:2 }})</td>
+	    			</tr>
+	    			<tr ng-repeat="node in llController.nodeList"
+	    				ng-click="llController.actionButtonClickCategory(node)"
+	    				ng-if="!node.isParent">
+
+	    				<td>
+	    					<div class="pull-left legend-category" style="background-color: {{node.color.light}}"></div>
+	    					<div class="pull-left legend-category" style="background-color: {{node.color.dark}}"></div>
+	    				</td>
+	    				<td>{{ node.initial }} - {{ node.name }}</td>
+	    				<td>{{ node.lessonsLength }} (B. Pract.: {{ node.bestPracticesLength }})</td>
+	               		<td>{{ node.time | secondsToHourMinutes }} (B. Pract.: {{ node.bestPracticesTime | secondsToHourMinutes}})</td>
+	               		<td>{{ (node.time/llController.totalTime) | percentage:2 }} (B. Pract.: {{ (node.bestPracticesTime/llController.totalTime) | percentage:2 }})</td>
+	    			</tr>
+	    		</tbody>
+	    	</table>
+		</div>
+	</div>
+
+	<div ng-if="llController.nodeList && llController.nodeList.length<=0"
+		class="empty-value-report-message">
+		No activities in this data range
+	</div>
+</div>
+
