@@ -1,5 +1,6 @@
 
 // performanceProgressBar.$inject = [];
+import './performance-progress-bar.style.scss';
 import template from './performance-progress-bar.template.html';
 
 export class PerformanceProgressBarDirective implements ng.IDirective {
