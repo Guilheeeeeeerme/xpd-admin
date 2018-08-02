@@ -16,9 +16,10 @@ export class OperationDashboardController {
 
 		const vm = this;
 
-		$scope.eventProperty = [];
-		$scope.eventProperty.TRIP = {};
-		$scope.eventProperty.CONN = {};
+		$scope.contractTimePerformance = [];
+		$scope.contractTimePerformance.TRIP = {};
+		$scope.contractTimePerformance.CONN = {};
+		$scope.contractTimePerformance.BOTH = {};
 		$scope.statusPanel = {};
 		$scope.jointInfo = {};
 		$scope.removeMarker = null;
@@ -58,96 +59,18 @@ export class OperationDashboardController {
 
 		if (this.$scope.operationData.stateContext && this.$scope.operationData.forecastContext) {
 
-			let expectations: any = {};
-
 			try {
 
 				const currentState = this.$scope.operationData.stateContext.currentState;
 				const estimatives = this.$scope.operationData.forecastContext.estimatives;
-				const estimatedAt = new Date(estimatives.estimatedAt).getTime();
+				const rawEstimatives = this.$scope.operationData.forecastContext.rawEstimatives;
 
-				const vTargetStateJointInterval = estimatives.vTargetEstimative.filter((line) => {
-					return line[currentState] != null;
-				})[0][currentState];
-
-				const vOptimumStateJointInterval = estimatives.vOptimumEstimative.filter((line) => {
-					return line[currentState] != null;
-				})[0][currentState];
-
-				const vStandardStateJointInterval = estimatives.vStandardEstimative.filter((line) => {
-					return line[currentState] != null;
-				})[0][currentState];
-
-				const vPoorStateJointInterval = estimatives.vPoorEstimative.filter((line) => {
-					return line[currentState] != null;
-				})[0][currentState];
-
-				const stateExpectedDuration = (1000 * vTargetStateJointInterval.BOTH.finalTime);
-				const vOptimumStateExpectedDuration = (1000 * vOptimumStateJointInterval.BOTH.finalTime);
-				const vStandardStateExpectedDuration = (1000 * vStandardStateJointInterval.BOTH.finalTime);
-				const vPoorStateExpectedDuration = (1000 * vPoorStateJointInterval.BOTH.finalTime);
-
-				// EXPECTED TRIP/CONN
-				this.$scope.eventProperty.CONN = this.getEventProperty('CONN', vTargetStateJointInterval, vOptimumStateJointInterval, vStandardStateJointInterval, vPoorStateJointInterval);
-				this.$scope.eventProperty.TRIP = this.getEventProperty('TRIP', vTargetStateJointInterval, vOptimumStateJointInterval, vStandardStateJointInterval, vPoorStateJointInterval);
-				this.$scope.eventProperty.BOTH = this.getEventProperty('BOTH', vTargetStateJointInterval, vOptimumStateJointInterval, vStandardStateJointInterval, vPoorStateJointInterval);
-
-				expectations = {
-					stateExpectedEndTime: estimatedAt + stateExpectedDuration,
-					vPoorStateExpectedEndTime: estimatedAt + vPoorStateExpectedDuration,
-
-					stateExpectedDuration,
-					vOptimumStateExpectedDuration,
-					vStandardStateExpectedDuration,
-					vPoorStateExpectedDuration,
-
-					jointExpectedDuration: (stateExpectedDuration / vTargetStateJointInterval.BOTH.points.length),
-					vPoorJointExpectedDuration: (vPoorStateExpectedDuration / vTargetStateJointInterval.BOTH.points.length),
-				};
-
-				const nextActivities = [];
-
-				// tslint:disable-next-line:prefer-for-of
-				for (let index = 0;
-					index < estimatives.vTargetEstimative.length;
-					index++) {
-
-					try {
-
-						const vTargetEstimative = estimatives.vTargetEstimative[index];
-
-						const state = Object.keys(vTargetEstimative)[0];
-						let startTime = estimatedAt;
-						const duration = (vTargetEstimative[state].BOTH.finalTime * 1000);
-
-						if (nextActivities.length > 0) {
-							startTime = nextActivities[nextActivities.length - 1].finalTime;
-						}
-
-						const activity = {
-							name: state,
-							alarms: vTargetEstimative[state].alarms,
-							duration,
-							startTime,
-							finalTime: (startTime + duration),
-							isTripin: vTargetEstimative[state].isTripin,
-						};
-
-						nextActivities.push(activity);
-
-					} catch (error) {
-						console.error(error);
-					}
-
-				}
-
-				expectations.nextActivities = nextActivities;
+				this.$scope.expectations = this.generateExpectation(currentState, estimatives);
+				this.$scope.rawExpectations = this.generateRawExpectation(currentState, rawEstimatives);
 
 			} catch (error) {
 				console.error(error);
 			}
-
-			this.$scope.expectations = expectations;
 		}
 
 		try {
@@ -159,9 +82,126 @@ export class OperationDashboardController {
 
 	}
 
-	private getEventProperty(eventType, vTargetStateJointInterval, vOptimumStateJointInterval, vStandardStateJointInterval, vPoorStateJointInterval) {
+	private generateExpectation(currentState, estimatives) {
+
+		const estimatedAt = new Date(estimatives.estimatedAt).getTime();
+		let expectations: any = {};
+
+		const vTargetStateJointInterval = estimatives.vTargetEstimative.filter((line) => {
+			return line[currentState] != null;
+		})[0][currentState];
+
+		// const vOptimumStateJointInterval = estimatives.vOptimumEstimative.filter((line) => {
+		// 	return line[currentState] != null;
+		// })[0][currentState];
+
+		// const vStandardStateJointInterval = estimatives.vStandardEstimative.filter((line) => {
+		// 	return line[currentState] != null;
+		// })[0][currentState];
+
+		// const vPoorStateJointInterval = estimatives.vPoorEstimative.filter((line) => {
+		// 	return line[currentState] != null;
+		// })[0][currentState];
+
+		const stateExpectedDuration = (1000 * vTargetStateJointInterval.BOTH.finalTime);
+		// const vOptimumStateExpectedDuration = (1000 * vOptimumStateJointInterval.BOTH.finalTime);
+		// const vStandardStateExpectedDuration = (1000 * vStandardStateJointInterval.BOTH.finalTime);
+		// const vPoorStateExpectedDuration = (1000 * vPoorStateJointInterval.BOTH.finalTime);
+
+		// EXPECTED TRIP/CONN
+		// this.$scope.contractTimePerformance.CONN = this.getContractTimePerformance('CONN', vTargetStateJointInterval, vOptimumStateJointInterval, vStandardStateJointInterval, vPoorStateJointInterval);
+		// this.$scope.contractTimePerformance.TRIP = this.getContractTimePerformance('TRIP', vTargetStateJointInterval, vOptimumStateJointInterval, vStandardStateJointInterval, vPoorStateJointInterval);
+		// this.$scope.contractTimePerformance.BOTH = this.getContractTimePerformance('BOTH', vTargetStateJointInterval, vOptimumStateJointInterval, vStandardStateJointInterval, vPoorStateJointInterval);
+
+		expectations = {
+			stateExpectedEndTime: estimatedAt + stateExpectedDuration,
+			// vPoorStateExpectedEndTime: estimatedAt + vPoorStateExpectedDuration,
+
+			// stateExpectedDuration,
+			// vOptimumStateExpectedDuration,
+			// vStandardStateExpectedDuration,
+			// vPoorStateExpectedDuration,
+
+			// jointExpectedDuration: (stateExpectedDuration / vTargetStateJointInterval.BOTH.points.length),
+			// vPoorJointExpectedDuration: (vPoorStateExpectedDuration / vTargetStateJointInterval.BOTH.points.length),
+		};
+
+		const nextActivities = [];
+
+		// tslint:disable-next-line:prefer-for-of
+		for (let index = 0;
+			index < estimatives.vTargetEstimative.length;
+			index++) {
+
+			try {
+
+				const vTargetEstimative = estimatives.vTargetEstimative[index];
+
+				const state = Object.keys(vTargetEstimative)[0];
+				let startTime = estimatedAt;
+				const duration = (vTargetEstimative[state].BOTH.finalTime * 1000);
+
+				if (nextActivities.length > 0) {
+					startTime = nextActivities[nextActivities.length - 1].finalTime;
+				}
+
+				const activity = {
+					name: state,
+					alarms: vTargetEstimative[state].alarms,
+					duration,
+					startTime,
+					finalTime: (startTime + duration),
+					isTripin: vTargetEstimative[state].isTripin,
+				};
+
+				nextActivities.push(activity);
+
+			} catch (error) {
+				console.error(error);
+			}
+
+		}
+
+		expectations.nextActivities = nextActivities;
+
+		return expectations;
+	}
+
+	private generateRawExpectation(currentState, rawEstimatives) {
+		let rawExpectations: any = {};
+
+		const vOptimumStateJointInterval = rawEstimatives.vOptimumEstimative.filter((line) => {
+			return line[currentState] != null;
+		})[0][currentState];
+
+		const vStandardStateJointInterval = rawEstimatives.vStandardEstimative.filter((line) => {
+			return line[currentState] != null;
+		})[0][currentState];
+
+		const vPoorStateJointInterval = rawEstimatives.vPoorEstimative.filter((line) => {
+			return line[currentState] != null;
+		})[0][currentState];
+
+		const vOptimumStateExpectedDuration = (1000 * vOptimumStateJointInterval.BOTH.finalTime);
+		const vStandardStateExpectedDuration = (1000 * vStandardStateJointInterval.BOTH.finalTime);
+		const vPoorStateExpectedDuration = (1000 * vPoorStateJointInterval.BOTH.finalTime);
+
+		// EXPECTED TRIP/CONN
+		this.$scope.contractTimePerformance.CONN = this.getContractTimePerformance('CONN', vOptimumStateJointInterval, vStandardStateJointInterval, vPoorStateJointInterval);
+		this.$scope.contractTimePerformance.TRIP = this.getContractTimePerformance('TRIP', vOptimumStateJointInterval, vStandardStateJointInterval, vPoorStateJointInterval);
+		this.$scope.contractTimePerformance.BOTH = this.getContractTimePerformance('BOTH', vOptimumStateJointInterval, vStandardStateJointInterval, vPoorStateJointInterval);
+
+		rawExpectations = {
+			vOptimumStateExpectedDuration,
+			vStandardStateExpectedDuration,
+			vPoorStateExpectedDuration,
+		};
+
+		return rawExpectations;
+	}
+
+	private getContractTimePerformance(eventType, vOptimumStateJointInterval, vStandardStateJointInterval, vPoorStateJointInterval) {
 		return {
-			vtargetTime: (vTargetStateJointInterval[eventType].finalTime / vTargetStateJointInterval[eventType].points.length),
 			voptimumTime: (vOptimumStateJointInterval[eventType].finalTime / vOptimumStateJointInterval[eventType].points.length),
 			vstandardTime: (vStandardStateJointInterval[eventType].finalTime / vStandardStateJointInterval[eventType].points.length),
 			vpoorTime: (vPoorStateJointInterval[eventType].finalTime / vPoorStateJointInterval[eventType].points.length),
