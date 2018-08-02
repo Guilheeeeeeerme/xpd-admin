@@ -135,7 +135,19 @@ export class ReportsSetupAPIService {
 
 	}
 
-	public getBitDepthChartForOperation(wellId, operationId) {
+	public getOperationEstimative(wellId, operationId) {
+
+		const req = {
+			cache: true,
+			method: 'GET',
+			url: this.xpdAccessService.getReportsAPIURL() + 'planning/well/' + wellId + '/operation-estimative/' + operationId,
+		};
+
+		return this.setupAPIService.doRequest(req);
+
+	}
+
+	public getOperationPlanning(wellId, operationId) {
 
 		const req = {
 			cache: true,

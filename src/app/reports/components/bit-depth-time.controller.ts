@@ -130,7 +130,7 @@ export class BitDepthTimeController {
 		const planningPromises = [];
 
 		for (const operation of operationQueue) {
-			planningPromises.push(this.reportsSetupAPIService.getBitDepthChartForOperation(this.$scope.wellId, operation.id));
+			planningPromises.push(this.reportsSetupAPIService.getOperationPlanning(this.$scope.wellId, operation.id));
 		}
 
 		return this.$q.all(planningPromises);

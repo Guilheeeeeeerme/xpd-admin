@@ -9,8 +9,6 @@ export class NextActivitiesInformationPanelDirective implements ng.IDirective {
 	public scope = {
 		activities: '=',
 		operation: '=',
-		currentActivityElapsedTime: '=',
-		initialPlanning: '=',
 	};
 
 	public link: ng.IDirectiveLinkFn = (
@@ -19,6 +17,8 @@ export class NextActivitiesInformationPanelDirective implements ng.IDirective {
 		attrs: ng.IAttributes,
 		ctrl: any,
 	) => {
+
+		scope.markFirstAsCurrent = attrs.markFirstAsCurrent === 'true';
 
 		const keyName = 'panelNextActivityIsCollapsed';
 		scope.collapse = getPanelState();

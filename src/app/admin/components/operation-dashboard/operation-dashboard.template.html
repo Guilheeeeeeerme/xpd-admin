@@ -54,11 +54,17 @@
 
             <!-- Next Activities Information -->
             <xpd-next-activities-information-panel
-                current-activity-elapsed-time="operationData.chronometerContext.stateTick"
-                initial-planning="operationData.suboperationContext.currentSuboperation.jointIntervals"
+                mark-first-as-current="true"
                 operation="operationData.operationContext.currentOperation"
-                activities="expectations.nextActivities">
+                activities="nextActivitiesEstimatives">
             </xpd-next-activities-information-panel>
+
+            <xpd-operation-queue-forecast
+                start-time="{{ operationFinalTimeEstimative }}"
+                current-well-id="{{ operationData.wellContext.currentWell.id }}"
+                current-operation-id="{{ operationData.operationContext.currentOperation.id }}"
+                operation-queue="operationData.operationQueueContext.operationQueue">
+            </xpd-operation-queue-forecast>
 
             <!-- Operation Progress -->
             <xpd-operation-progress-panel
