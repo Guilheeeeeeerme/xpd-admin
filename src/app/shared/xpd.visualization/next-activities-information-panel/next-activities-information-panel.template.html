@@ -30,7 +30,7 @@
 			<tbody>
 
 				<tr data-toggle="collapse" 
-					data-target="#accordion-{{ $index }}" 
+					data-target="#accordion-{{ operation.id }}-{{ $index }}" 
 					class="clickable"
 					ng-repeat-start="activity in activities track by $index" 
 					ng-class="{ 'success': ($index == 0 && markFirstAsCurrent ) }">
@@ -63,7 +63,7 @@
 
 				<tr ng-repeat-end>
 					<td colspan="4">
-						<div id="accordion-{{ $index }}" class="collapse">
+						<div id="accordion-{{ operation.id }}-{{ $index }}" class="collapse">
 							<xpd-upcoming-alarms-panel
 								tripin-alarms="activity.alarms"
 								tripout-alarms="activity.alarms"

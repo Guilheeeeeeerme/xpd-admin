@@ -2,10 +2,6 @@ import { IWindowService } from 'angular';
 import { ReadingSetupAPIService } from '../xpd.setupapi/reading-setupapi.service';
 import { XPDIntervalService, XPDTimeoutService } from '../xpd.timers/xpd-timers.service';
 
-// (function() {
-
-// 	dmecService.$inject = ['$xpdTimeout', '$xpdInterval', '$location', '$routeParams', '$q', 'readingSetupAPIService'];
-// $xpdTimeout, $xpdInterval, $location, $routeParams, $q, readingSetupAPIService
 export class DMECService {
 
 	public static $inject: string[] = [

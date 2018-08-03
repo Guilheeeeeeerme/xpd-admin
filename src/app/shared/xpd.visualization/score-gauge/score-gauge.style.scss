@@ -1,0 +1,73 @@
+@import '~styles/font.scss';
+
+xpd-score-gauge {
+
+	display: block;
+	height: 100%;
+
+	.score-gauge-svg {
+		font-family: $font-family-1;
+	}
+	
+	/**
+	* SCORE GAUGE
+	*/
+
+	.score-bg-arc {
+		fill: transparent;
+		stroke-width: 2px;
+		stroke: #79c3d1;
+	}
+
+	.acc-score-text-group {
+		fill: #f3e897;
+		font-weight: bold;
+		font-size: 1.2em;
+	}
+
+	.current-score-value-text {
+		font-weight: bold;
+		font-size: 3em;
+		text-anchor: middle;
+	}
+	
+	.current-score-label {
+		font-size: 1.5em;
+		font-weight: bold;
+		text-anchor: middle;
+	}
+	
+	.current-score-value-text,
+	.current-score-label {
+		fill: #da7070;
+	}
+
+	.acc-score-label-div {
+		fill: #f3e897;
+		font-weight: bold;
+		font-size: 1.3em;
+		font-family: $font-family-1;
+	}
+
+	.score-gauge-joint-text {
+		font-size: 1.5em;
+		font-weight: bold;
+		fill: #79c3d1;
+		text-anchor: middle;
+	}
+
+	.score-axis {
+		fill: #79c3d1;
+		font-size: 1em;
+	}
+
+	.score-gauge-current-score-rect {
+		stroke: #79c3d1;
+		fill: transparent;
+	}
+
+	.score-gauge-bg-line-group {
+		stroke: #79c3d1;
+		stroke-opacity: 0.5;
+	}
+}

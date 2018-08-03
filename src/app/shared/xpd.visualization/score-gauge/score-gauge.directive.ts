@@ -2,6 +2,7 @@
 // scoreGauge.$inject = ['d3Service'];
 
 import * as d3 from 'd3';
+import './score-gauge.style.scss';
 
 export class ScoreGaugeDirective implements ng.IDirective {
 

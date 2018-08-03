@@ -1,6 +1,22 @@
-<xpd-next-activities-information-panel 
-    ng-repeat="nextActivitiesEstimatives in nextActivitiesEstimativesList track by $index"
-    mark-first-as-current="false"
-    operation="validOperations[$index]" 
-    activities="nextActivitiesEstimatives">
-</xpd-next-activities-information-panel>
+<div class="panel panel-default">
+
+	<div class="panel-heading clearfix" ng-click="changePanelState()">
+		<h4 class="panel-title pull-left">Upcoming Operations</h4>
+		<div class="btn-group pull-right">
+			<i type="button" class="pull-right glyphicon pointer" ng-class="{'glyphicon-chevron-down': collapse, 'glyphicon-chevron-up': !collapse}">
+			</i>
+		</div>
+	</div>
+
+	<div class="panel-body" uib-collapse="collapse">
+
+        <xpd-next-activities-information-panel 
+            ng-repeat="nextActivitiesEstimatives in nextActivitiesEstimativesList track by $index"
+            mark-first-as-current="false"
+            operation="validOperations[$index]" 
+            activities="nextActivitiesEstimatives">
+        </xpd-next-activities-information-panel>
+
+    </div>
+
+</div>

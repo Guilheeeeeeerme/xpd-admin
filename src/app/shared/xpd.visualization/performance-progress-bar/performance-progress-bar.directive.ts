@@ -75,7 +75,7 @@ export class PerformanceProgressBarDirective implements ng.IDirective {
 					percentage: afterHighPercentage,
 				},
 			];
-		}
+		};
 
 		const prepareCurrentPerformance = () => {
 			const percentage = calcPercentage(scope.currentValue, scope.afterHighValue);

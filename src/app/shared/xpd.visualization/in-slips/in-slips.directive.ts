@@ -1,11 +1,13 @@
 
 // inSlips.$inject = [];
 
+import './in-slips.style.scss';
 import template from './in-slips.template.html';
 
 export class InSlipsDirective implements ng.IDirective {
 
 	public template = template;
+	public restrict = 'E';
 	public scope = {
 		calculated: '=',
 		target: '=',

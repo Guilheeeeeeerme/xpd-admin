@@ -5,12 +5,13 @@ import { OperationActivitiesEstimatorService } from '../operation-activities-est
 import template from './operation-queue-forecast.template.html';
 
 export class XPDOperationQueueForecastDirective implements ng.IDirective {
-	public static $inject = ['$q', 'reportsSetupAPIService'];
+	public static $inject = ['$q', 'operationActivitiesEstimatorService', 'reportsSetupAPIService'];
 	public static Factory(): ng.IDirectiveFactory {
 		return (
 			$q: IQService,
+			operationActivitiesEstimatorService: OperationActivitiesEstimatorService,
 			reportsSetupAPIService: ReportsSetupAPIService,
-		) => new XPDOperationQueueForecastDirective($q, reportsSetupAPIService);
+		) => new XPDOperationQueueForecastDirective($q, operationActivitiesEstimatorService, reportsSetupAPIService);
 	}
 
 	public template = template;
@@ -23,6 +24,7 @@ export class XPDOperationQueueForecastDirective implements ng.IDirective {
 
 	constructor(
 		private $q: IQService,
+		private operationActivitiesEstimatorService: OperationActivitiesEstimatorService,
 		private reportsSetupAPIService: ReportsSetupAPIService) {
 
 	}
@@ -34,8 +36,6 @@ export class XPDOperationQueueForecastDirective implements ng.IDirective {
 		ctrl: any,
 	) => {
 
-		const operationActivitiesEstimatorService: OperationActivitiesEstimatorService = new OperationActivitiesEstimatorService();
-
 		const processPlanning = (estimativesList: any[]) => {
 
 			const nextActivitiesEstimativesList = [];
@@ -43,7 +43,7 @@ export class XPDOperationQueueForecastDirective implements ng.IDirective {
 			let operationFinalTimeEstimative = angular.copy(+scope.startTime);
 
 			for (const estimatives of estimativesList) {
-				const nextActivitiesEstimatives = operationActivitiesEstimatorService.estimateNextActivities(operationFinalTimeEstimative, estimatives);
+				const nextActivitiesEstimatives = this.operationActivitiesEstimatorService.estimateNextActivities(operationFinalTimeEstimative, estimatives);
 
 				nextActivitiesEstimativesList.push(nextActivitiesEstimatives);
 

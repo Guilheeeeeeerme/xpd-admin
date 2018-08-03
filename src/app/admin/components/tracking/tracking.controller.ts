@@ -6,8 +6,6 @@ import { XPDIntervalService, XPDTimeoutService } from '../../../shared/xpd.timer
 
 export class TrackingController {
 
-	public operationDataFactory: any;
-
 	public static $inject: string[] = [
 		'$scope',
 		'$xpdInterval',
@@ -16,7 +14,7 @@ export class TrackingController {
 		'operationDataService',
 		'dialogService',
 	];
-
+	public operationDataFactory: any;
 	constructor(
 		private $scope: any,
 		private $xpdInterval: XPDIntervalService,

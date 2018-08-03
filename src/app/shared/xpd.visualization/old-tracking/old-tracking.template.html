@@ -1,4 +1,4 @@
-<div class="col-lg-8 col-md-8 col-sm-12 col-xs-12 xpd-panel">
+<div class="col-lg-8 col-md-8 col-sm-12 col-xs-12 nopadding xpd-panel">
     <div class="xpd-panel-body">
 
         <div class="col-md-6 col-sm-6 col-xs-6 xpd-chart-container">
@@ -127,7 +127,7 @@
 
 </div>
 
-<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 xpd-chart-container">
+<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 nopadding xpd-chart-container">
 
     <div class="xpd-chart-placeholder" ng-if="!currentOperation.running && currentEvent == null">
         <span class="xpd-chart-placeholder-text">No running operation</span>
@@ -142,22 +142,24 @@
     </div>
 
     <!-- TRIP -->
-    <div ng-if="currentEvent.eventType == 'TRIP'" class="xpd-chart-container-content event-trip-container">
+    <div 
+        class="row nopadding h-90" 
+        ng-if="currentEvent.eventType == 'TRIP'">
 
-        <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 speed-gauge-chart-container">
+        <div class="h-95 col-xs-6 col-sm-6 col-md-6 col-lg-6 nopadding">
 
-            <div xpd-speed-gauge class="speed-gauge-chart"
+            <xpd-speed-gauge
                 has-alarm="flags.hasAlarm"
                 has-message="flags.hasMessage"
                 readings='currentReading'
                 calculated='currentCalculated'
                 operation='currentOperation'
                 safety-speed-limit="safetySpeedLimit">
-            </div>
+            </xpd-speed-gauge>
 
         </div>
 
-        <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 ">
+        <div class="h-95 col-xs-6 col-sm-6 col-md-6 col-lg-6 nopadding">
 
             <xpd-trip-ruler 
                 show-slow-down="flags.showSlowDown"
@@ -171,26 +173,27 @@
 
         </div>
 
-        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 in-slips-chart-container">
-
-            <div xpd-in-slips class="in-slips-chart" calculated='currentTimeCalculated' target='currentOperation.inSlips'>
-            </div>
+        <div class="h-5 col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <xpd-in-slips  
+                calculated='currentTimeCalculated' 
+                target='currentOperation.inSlips'>
+            </xpd-in-slips>
         </div>
 
     </div>
 
-    <!-- CONN -->
-    <div ng-if="currentEvent != null && (currentEvent.eventType == 'CONN' || currentEvent.eventType == 'TIME')"
-        class="event-conn-container">
+    <!-- CONN and TIME -->
+    <div 
+        class="row nopadding h-90" 
+        ng-if="currentEvent != null && (currentEvent.eventType == 'CONN' || currentEvent.eventType == 'TIME')">
 
-        <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8 ">
+        <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
             <xpd-conn-ruler chronometer="( currentTick / 1000 )" vtarget-duration='taskExpectedDuration' time-blocks="timeBlocks"
                 flash-go-div="dController.flashGoDiv">
             </xpd-conn-ruler>
-
         </div>
 
-        <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 ">
+        <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 nopadding">
 
             <xpd-trip-ruler 
                 show-slow-down="flags.showSlowDown" 
@@ -205,8 +208,9 @@
     </div>
 
     <!--WAIT -->
-    <div ng-if="currentOperation != null && currentOperation.running && currentEvent != null && currentEvent.eventType == 'WAIT'"
-        class="event-conn-container">
+    <div 
+        class="row nopadding h-90" 
+        ng-if="currentOperation != null && currentOperation.running && currentEvent != null && currentEvent.eventType == 'WAIT'">
 
         <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8 ">
             <xpd-conn-ruler chronometer="( currentTick / 1000 )" vtarget-duration='taskExpectedDuration' time-blocks="timeBlocks"
