@@ -7,15 +7,15 @@ export class ConsistencyInformationPanelDirective implements ng.IDirective {
 	public template = template;
 	public scope = {
 		state: '=',
-		event: '=',
+		currentEventType: '=',
 		isTripin: '=',
 		score: '=',
 		currentEventDuration: '=',
-		jointDuration: '=',
+		currentJointDuration: '=',
 		lastEventType: '=',
 		lastTripDuration: '=',
 		lastConnDuration: '=',
-		eventProperty: '=',
+		contractTimePerformance: '=',
 	};
 
 	public link: ng.IDirectiveLinkFn = (

@@ -9,6 +9,7 @@ import 'bootstrap';
 import 'jquery';
 
 import { AngularTreeviewModule } from './angular.treeview/angular-treeview.module';
+import { XPDConnectionStatusModule } from './connection-status/connection-status.module';
 import { XPDGanttModule } from './gantt/gantt.module';
 import { XPDHighchartsModule } from './highcharts/highcharts.module';
 import { XPDAccessModule } from './xpd.access/accessfactory.module';
@@ -83,6 +84,7 @@ const XPDSharedModule: angular.IModule = angular.module('xpd.shared', [
 	XPDVisualizationModule.name,
 	XPDZeroTimeZoneModule.name,
 	XPDSectionListModule.name,
+	XPDConnectionStatusModule.name,
 ]);
 
 export { XPDSharedModule };

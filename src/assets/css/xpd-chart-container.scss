@@ -37,25 +37,11 @@
 
 .xpd-chart-container-content {
     height: 100%;
-    padding-top: 10px;
+    // padding-top: 10px;
 }
 
 .xpd-chart-container {
     height: 100%;
     overflow-y: auto;
     border-left: solid 1px #436a72;
-}
-
-.xpd-chart {
-    height: 100%;
-}
-
-.xpd-chart > svg {
-    height: 99%;
-}
-
-.xpd-chart > .xpd-block-speed-container {
-    padding-top: 20px;
-    padding-bottom: 0px;
-    background-color: rgba(48, 48, 48, 0.6);
 }

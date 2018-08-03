@@ -11,6 +11,7 @@ import { FailureDelayCategoryController } from './components/failure-lesson/fail
 import { LessonLearnedCategoryController } from './components/failure-lesson/lesson-learned-category.controller';
 import { MenuController } from './components/menu/menu.controller';
 import { OperationDashboardController } from './components/operation-dashboard/operation-dashboard.controller';
+import { XPDOperationDashboardModule } from './components/operation-dashboard/operation-dashboard.module';
 import { AdminTrackingController } from './components/other/admin-tracking.controller';
 import { SavedAlarmsListDirectives } from './components/other/saved-alarms-list/saved-alarms-list.directive';
 import { VREListTableDirective } from './components/other/vre-list-table/vre-list-table.directive';
@@ -35,6 +36,7 @@ import { TrackingController } from './components/tracking/tracking.controller';
 
 const XPDAdminModule: angular.IModule = angular.module('xpd.admin', [
 	XPDSharedModule.name,
+	XPDOperationDashboardModule.name,
 ]);
 
 export { XPDAdminModule };

@@ -1,7 +1,9 @@
 @import './font.scss';
 @import './height.scss';
 @import './scrollbar.scss';
+@import './xpd-placeholder.scss';
 @import './xpd-panel.scss';
+@import './xpd-box.scss';
 @import './xpd-chart-container.scss';
 
 
@@ -558,23 +560,6 @@ a.view-only-link {
 
 .operation-time-label-miliseconds {
     font-size: 0.7em;
-}
-
-.xpd-chart-placeholder {
-    height: 100%;
-    border: 1px solid #436a72;
-    position: relative;
-}
-
-.xpd-chart-placeholder-text {
-    font-family: $font-family-1;
-    font-size: 1.5em;
-    -webkit-text-stroke: 1.5px #517f89;
-    -webkit-text-fill-color: transparent;
-    position: absolute;
-    top: 40%;
-    text-align: center;
-    width: 100%;
 }
 
 

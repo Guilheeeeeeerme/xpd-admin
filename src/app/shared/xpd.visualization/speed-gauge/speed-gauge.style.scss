@@ -1,0 +1,111 @@
+@import '~styles/font.scss';
+
+xpd-speed-gauge {
+
+	display: block;
+	height: 100%;
+
+	svg {
+		padding: 10px 0px 10px 10px;
+	}
+
+	.xpd-speed-gauge-readings-text {
+		font-size: 1.5em;
+		font-family: $font-family-1;
+		fill: #bff0ef;
+		font-weight: bolder;
+	}
+
+	.xpd-speed-gauge-ruler-tick-text {
+		font-size: 0.65em;
+		font-family: $font-family-1;
+		fill: #bff0ef;
+		text-anchor: end;
+	}
+
+	.xpd-speed-gauge-text {
+		font-size: 1.2em;
+		font-family: $font-family-1;
+		stroke-width: 1.2;
+		fill-opacity: 0;
+	}
+
+	.xpd-speed-gauge-text-up {
+		stroke: #6fb4c1;
+	}
+
+	.xpd-speed-gauge-text-down {
+		stroke: red;
+	}
+
+	.xpd-speed-gauge-text-vre{
+		font-size: 0.80em;
+		font-family: $font-family-1;
+		fill: #bff0ef;
+		text-anchor: end;
+	}
+
+	.xpd-speed-gauge-reading-tick-ticker {
+		stroke: #75d59e;
+		stroke-width: 3;
+	}
+
+	.xpd-speed-gauge-reading-tick {
+		stroke: #75d59e;
+		stroke-width: 1;
+	}
+
+	.xpd-speed-gauge-depth {
+		stroke: #4b7f88;
+		stroke-width: 20;
+		stroke-dasharray: 10, 2;
+	}
+
+	.xpd-speed-gauge-message {
+		stroke-width: 80;
+		stroke: #bff0ef;
+		fill-opacity: 0;
+	}
+
+	.xpd-speed-gauge-alarm {
+		stroke-width: 20;
+		stroke: #bff0ef;
+		fill-opacity: 0;
+	}
+
+	.xpd-speed-gauge-has-message,
+	.xpd-speed-gauge-has-alarm,
+	.xpd-speed-gauge-no-vre {
+		stroke: red;
+		animation: blinker 1s linear infinite;
+	}
+
+	.xpd-speed-gauge-bg-arc {
+		stroke-width: 1.2;
+		stroke: #6fb4c1;
+		fill-opacity: 0;
+	}
+
+	.xpd-speed-gauge-arc {
+		fill: #c06b50;
+	}
+
+	.xpd-speed-gauge-arc-ticks {
+		fill: #bff0ef;
+		font-family: $font-family-1;
+	}
+
+	.xpd-speed-gauge-arc-ticks-lg {
+		font-size: 0.6em;
+	}
+
+	.xpd-speed-gauge-arc-ticks-sm {
+		font-size: 0.4em;
+	}
+
+	@keyframes blinker {
+		50% {
+			opacity: 0.0;
+		}
+	}
+}

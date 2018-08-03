@@ -46,9 +46,9 @@
 </div>
 
 <div class="col-md-6 col-sm-8 col-xs-8 xpd-panel" ng-if="( dados.settings[dados.selectedState][dados.selectedEventType].eventType != 'CONN' && dados.settings[dados.selectedState][dados.selectedEventType].eventType != 'TRIP' )">
-    <div class="xpd-chart-placeholder">
-        <span class="xpd-chart-placeholder-text" ng-if="dados.settings[dados.selectedState][dados.selectedEventType].eventType == null">Select a State/Event</span>
-        <span class="xpd-chart-placeholder-text" ng-if="dados.settings[dados.selectedState][dados.selectedEventType].eventType != null">Operation not supported due to missing parameters or state not subjected to planning</span>
+    <div class="xpd-placeholder">
+        <span class="xpd-placeholder-text" ng-if="dados.settings[dados.selectedState][dados.selectedEventType].eventType == null">Select a State/Event</span>
+        <span class="xpd-placeholder-text" ng-if="dados.settings[dados.selectedState][dados.selectedEventType].eventType != null">Operation not supported due to missing parameters or state not subjected to planning</span>
     </div>
 </div>
 
@@ -89,8 +89,8 @@
                     </xpd-operation-progress-chart>
                 </div>
                 <div class="xpd-chart-container-content" ng-if="!dados.settings[dados.selectedState][dados.selectedEventType].stateName || !operationData.operationProgressContext.operationProgressData[dados.settings[dados.selectedState][dados.selectedEventType].stateName]">
-                    <div class="xpd-chart-placeholder">
-                        <span class="xpd-chart-placeholder-text">
+                    <div class="xpd-placeholder">
+                        <span class="xpd-placeholder-text">
                             No Operation Progress
                         </span>
                     </div>

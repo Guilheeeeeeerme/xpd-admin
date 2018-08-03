@@ -1,7 +1,7 @@
 <div class="panel panel-default">
 
 	<div class="panel-heading clearfix" ng-click="changePanelState()">
-		<h4 class="panel-title pull-left">Next Activities
+		<h4 class="panel-title pull-left">Next Activities 
 			<span ng-if="operation">
 				for
 				<strong>{{ operation.name }}</strong> at
@@ -30,10 +30,10 @@
 			<tbody>
 
 				<tr data-toggle="collapse" 
-					data-target="#accordion-{{ $index }}" 
+					data-target="#accordion-{{ operation.id }}-{{ $index }}" 
 					class="clickable"
 					ng-repeat-start="activity in activities track by $index" 
-					ng-class="{ 'success': ($index == 0) }">
+					ng-class="{ 'success': ($index == 0 && markFirstAsCurrent ) }">
 
 					<th>
 						<i ng-if="activity.isTripin == true" class="fa fa-arrow-down" aria-hidden="true"></i>
@@ -41,12 +41,12 @@
 						{{ activity.name | xpdStateLabelFilter }}
 					</th>
 
-					<th ng-if="$index > 0">
+					<th ng-if="$index > 0 || !markFirstAsCurrent">
 						{{ activity.startTime | date: 'mediumTime' }}<br/>
 						{{ activity.startTime | date: 'mediumDate' }}
 					</th>
 
-					<th ng-if="$index == 0">
+					<th ng-if="$index == 0 && markFirstAsCurrent">
 						Going on
 					</th>
 
@@ -63,7 +63,7 @@
 
 				<tr ng-repeat-end>
 					<td colspan="4">
-						<div id="accordion-{{ $index }}" class="collapse">
+						<div id="accordion-{{ operation.id }}-{{ $index }}" class="collapse">
 							<xpd-upcoming-alarms-panel
 								tripin-alarms="activity.alarms"
 								tripout-alarms="activity.alarms"

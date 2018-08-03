@@ -1,8 +1,10 @@
 import * as d3 from 'd3';
+import './speed-gauge.style.scss';
 import template from './speed-gauge.template.html';
 
 export class SpeedGaugeDirective implements ng.IDirective {
 	public template = template;
+	public restrict = 'E';
 	public scope = {
 		readings: '=',
 		calculated: '=',

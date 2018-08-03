@@ -1,0 +1,18 @@
+@import '~styles/font.scss';
+
+.xpd-placeholder {
+    height: 100%;
+    border: 1px solid #436a72;
+    position: relative;
+}
+
+.xpd-placeholder-text {
+    font-family: $font-family-1;
+    font-size: 1.5em;
+    -webkit-text-stroke: 1.5px #517f89;
+    -webkit-text-fill-color: transparent;
+    position: absolute;
+    top: 40%;
+    text-align: center;
+    width: 100%;
+}

@@ -2,25 +2,22 @@ import * as angular from 'angular';
 import { IModalService } from 'angular-ui-bootstrap';
 import { DialogService } from '../../../shared/xpd.dialog/xpd.dialog.factory';
 import { OperationDataService } from '../../../shared/xpd.operation-data/operation-data.service';
-import { XPDIntervalService, XPDTimeoutService } from '../../../shared/xpd.timers/xpd-timers.service';
 
 export class TrackingController {
 
-	public operationDataFactory: any;
-
 	public static $inject: string[] = [
 		'$scope',
-		'$xpdInterval',
-		'$xpdTimeout',
+		'$interval',
+		'$timeout',
 		'$uibModal',
 		'operationDataService',
 		'dialogService',
 	];
-
+	public operationDataFactory: any;
 	constructor(
 		private $scope: any,
-		private $xpdInterval: XPDIntervalService,
-		private $xpdTimeout: XPDTimeoutService,
+		private $interval: any,
+		private $timeout: any,
 		private $uibModal: IModalService,
 		private operationDataService: OperationDataService,
 		private dialogService: DialogService) {
@@ -147,7 +144,7 @@ export class TrackingController {
 		const vm = this;
 		vm.$scope.flags.showGo = true;
 
-		vm.$xpdTimeout.run(function () {
+		vm.$timeout(() => {
 			vm.$scope.flags.showGo = false;
 		}, 500, vm.$scope);
 	}
@@ -223,7 +220,7 @@ export class TrackingController {
 	private init() {
 		const vm = this;
 
-		vm.$xpdInterval.run(() => {
+		vm.$interval(() => {
 			vm.circulateShiftList();
 		}, 10000, vm.$scope);
 
@@ -302,13 +299,10 @@ export class TrackingController {
 
 		this.$scope.flags.showSlowDown = true;
 
-		setTimeout(() => {
+		vm.$timeout(() => {
 			vm.$scope.flags.showSlowDown = false;
 		}, 1500);
 
-		// this.$xpdTimeout.run(function () {
-		// 	vm.$scope.flags.showSlowDown = false;
-		// }, 1500, this.$scope);
 	}
 
 	private onUnreachableTarget() {

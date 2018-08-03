@@ -1,5 +1,5 @@
 import { IModalService } from 'angular-ui-bootstrap';
-import { ReportsSetupAPIService } from './../../shared/xpd.setupapi/reports-setupapi.service';
+import { ReportsSetupAPIService } from '../../shared/xpd.setupapi/reports-setupapi.service';
 import template from './../components/modal/failures-lessons-report.modal.html';
 
 export class FailuresLassonsController {

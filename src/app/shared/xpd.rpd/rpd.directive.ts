@@ -1,15 +1,13 @@
-// (function() {
-
 import { TableExport } from 'tableexport';
-import { XPDTimeoutService } from '../xpd.timers/xpd-timers.service';
 import template from './rpd.template.html';
 
 export class XPDRPDFormDirective {
 
-	public static $inject: string[] = ['$filter', '$xpdTimeout'];
-
-	constructor (private $filter: any, private $xpdTimeout: XPDTimeoutService) { }
-
+	public static $inject: string[] = ['$filter', '$timeout'];
+	public static Factory(): ng.IDirectiveFactory {
+		const directive = ($filter: any, $timeout: any) => new XPDRPDFormDirective($filter, $timeout);
+		return directive;
+	}
 	public scope = {
 		rig: '@',
 		well: '@',
@@ -22,6 +20,8 @@ export class XPDRPDFormDirective {
 	};
 	public template = template;
 
+	constructor(private $filter: any, private $timeout: any) { }
+
 	public link: ng.IDirectiveLinkFn = (
 		scope: any,
 		element: ng.IAugmentedJQuery,
@@ -31,13 +31,9 @@ export class XPDRPDFormDirective {
 
 		const self = this;
 
-		scope.toStateArray = toStateArray;
-		scope.getFailures = getFailures;
-		scope.getAlarms = getAlarms;
+		this.$timeout(prepareButtonsToExport, 5000, scope);
 
-		this.$xpdTimeout.run(prepareButtonsToExport, 5000, scope);
-
-		function toStateArray(stateObject) {
+		scope.toStateArray = (stateObject) => {
 
 			const stateArray = [];
 
@@ -46,9 +42,9 @@ export class XPDRPDFormDirective {
 			}
 
 			return self.$filter('orderBy')(stateArray, '[startTime,  endTime]');
-		}
+		};
 
-		function getAlarms(root) {
+		scope.getAlarms = (root) => {
 			const alarmsIndex = {};
 
 			const events = root.values;
@@ -78,9 +74,9 @@ export class XPDRPDFormDirective {
 
 			return list;
 
-		}
+		};
 
-		function getFailures(root) {
+		scope.getFailures = (root) => {
 			const failuresIndex = {};
 
 			const events = root.values;
@@ -105,7 +101,7 @@ export class XPDRPDFormDirective {
 			}
 
 			return list;
-		}
+		};
 
 		function prepareButtonsToExport() {
 			// TODO: uai? como?
@@ -126,12 +122,4 @@ export class XPDRPDFormDirective {
 		}
 
 	}
-
-	public static Factory(): ng.IDirectiveFactory {
-		const directive = ($filter: any, $xpdTimeout: XPDTimeoutService) => new XPDRPDFormDirective($filter, $xpdTimeout);
-		directive.$inject = ['$filter', 'sectionSetupAPIService'];
-		return directive;
-	}
 }
-
-// }());

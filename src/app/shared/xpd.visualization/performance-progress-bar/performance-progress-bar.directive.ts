@@ -1,18 +1,21 @@
-
-// performanceProgressBar.$inject = [];
 import './performance-progress-bar.style.scss';
 import template from './performance-progress-bar.template.html';
 
 export class PerformanceProgressBarDirective implements ng.IDirective {
+
+	public static Factory(): ng.IDirectiveFactory {
+		return () => new PerformanceProgressBarDirective();
+	}
+
 	public template = template;
 	public restrict = 'AE';
 	public scope = {
 		title: '@',
 		expectedValue: '=?',
 		currentValue: '=',
-		highValue: '=',
-		mediumValue: '=',
 		lowValue: '=',
+		mediumValue: '=',
+		highValue: '=',
 		isRealTime: '=?',
 	};
 
@@ -24,20 +27,20 @@ export class PerformanceProgressBarDirective implements ng.IDirective {
 	) => {
 
 		scope.isRealTime = (scope.isRealTime) ? scope.isRealTime : false;
-		scope.afterLowValue = null;
+		scope.afterHighValue = null;
 		scope.legendBar = [];
 
-		scope.$watch('currentValue', function(newValue) {
-			if (newValue && scope.afterLowValue) {
+		scope.$watch('currentValue', (newValue) => {
+			if (newValue && scope.afterHighValue) {
 				prepareCurrentPerformance();
 			}
 		});
 
-		scope.$watchGroup(['highValue', 'mediumValue', 'lowValue'], function(newValues) {
+		scope.$watchGroup(['lowValue', 'mediumValue', 'highValue'], (newValues) => {
 			if (newValues) {
-				scope.highValue = newValues[0];
-				scope.mediumValue = newValues[1];
-				scope.lowValue = newValues[2];
+				scope.lowValue = newValues[0] || 0;
+				scope.mediumValue = newValues[1] || 0;
+				scope.highValue = newValues[2] || 0;
 
 				prepareLegendBar();
 				prepareCurrentPerformance();
@@ -45,19 +48,19 @@ export class PerformanceProgressBarDirective implements ng.IDirective {
 
 		});
 
-		function prepareLegendBar() {
+		const prepareLegendBar = () => {
 
-			scope.afterLowValue = scope.lowValue + (scope.lowValue / 10);
+			scope.afterHighValue = scope.highValue + (scope.highValue / 10);
 
-			const highPercentage = calcPercentage(scope.highValue, scope.afterLowValue);
-			const mediumPercentage = calcPercentage(scope.mediumValue, scope.afterLowValue) - highPercentage;
-			const lowPercentage = calcPercentage(scope.lowValue, scope.afterLowValue) - (highPercentage + mediumPercentage);
-			const afterLowPercentage = 100 - (highPercentage + mediumPercentage + lowPercentage);
+			const lowPercentage = calcPercentage(scope.lowValue, scope.afterHighValue);
+			const mediumPercentage = calcPercentage(scope.mediumValue, scope.afterHighValue) - lowPercentage;
+			const highPercentage = calcPercentage(scope.highValue, scope.afterHighValue) - (lowPercentage + mediumPercentage);
+			const afterHighPercentage = 100 - (lowPercentage + mediumPercentage + highPercentage);
 
 			scope.legendBar = [
 				{
 					color: '',
-					percentage: highPercentage,
+					percentage: lowPercentage,
 				},
 				{
 					color: 'progress-bar-success',
@@ -65,26 +68,26 @@ export class PerformanceProgressBarDirective implements ng.IDirective {
 				},
 				{
 					color: 'progress-bar-warning',
-					percentage: lowPercentage,
+					percentage: highPercentage,
 				},
 				{
 					color: 'progress-bar-danger',
-					percentage: afterLowPercentage,
+					percentage: afterHighPercentage,
 				},
 			];
-		}
+		};
 
-		function prepareCurrentPerformance() {
-			const percentage = calcPercentage(scope.currentValue, scope.afterLowValue);
+		const prepareCurrentPerformance = () => {
+			const percentage = calcPercentage(scope.currentValue, scope.afterHighValue);
 			scope.currentPercentage = (percentage > 100) ? 100 : percentage;
-			scope.currentColor = getColorPerformance(scope.currentValue, scope.highValue, scope.mediumValue, scope.lowValue);
-		}
+			scope.currentColor = getColorPerformance(scope.currentValue, scope.lowValue, scope.mediumValue, scope.highValue);
+		};
 
-		function calcPercentage(partTime, totalTime) {
+		const calcPercentage = (partTime, totalTime) => {
 			return (partTime * 100) / totalTime;
-		}
+		};
 
-		function getColorPerformance(duration, voptimumTime, vstandardTime, vpoorTime) {
+		const getColorPerformance = (duration, voptimumTime, vstandardTime, vpoorTime) => {
 
 			if (duration < voptimumTime) {
 				return '';
@@ -95,10 +98,6 @@ export class PerformanceProgressBarDirective implements ng.IDirective {
 			} else {
 				return 'progress-bar-danger';
 			}
-		}
-	}
-
-	public static Factory(): ng.IDirectiveFactory {
-		return () => new PerformanceProgressBarDirective();
+		};
 	}
 }

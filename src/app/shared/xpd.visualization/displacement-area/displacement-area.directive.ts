@@ -3,11 +3,13 @@
 
 // 	displacementArea.$inject = ['d3Service'];
 import * as d3 from 'd3';
+import './displacement-area.style.scss';
 import template from './displacement-area.template.html';
 
 export class DisplacementAreaFactory implements ng.IDirective {
-	public template = template;
 	public static $inject = [];
+	public template = template;
+	public restrict = 'E';
 	public scope = {
 		slipsTime: '<',
 		accelerationTimeLimit: '<',
