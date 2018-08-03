@@ -31,7 +31,7 @@
                 reading="operationData.readingContext.currentReading"
                 acc-score="scoreData.accScore"
                 state-duration="operationData.chronometerContext.stateTick"
-                target-param-expected-end-time="expectations.stateExpectedEndTime"
+                target-param-expected-end-time="rawExpectations.stateExpectedEndTime"
                 optimum-expected-duration="rawExpectations.vOptimumStateExpectedDuration"
                 standard-expected-duration="rawExpectations.vStandardStateExpectedDuration"
                 poor-expected-duration="rawExpectations.vPoorStateExpectedDuration"
@@ -47,8 +47,8 @@
                 current-event-duration="operationData.chronometerContext.tick"
                 last-event-type="operationData.eventContext.lastEvent.eventType"
                 current-joint-duration="operationData.chronometerContext.jointTick"
-                last-trip-duration="lastTripDuration"
-                last-conn-duration="lastConnDuration"
+                last-trip-duration="dados.lastTripDuration"
+                last-conn-duration="dados.lastConnDuration"
                 contract-time-performance="contractTimePerformance">
             </xpd-consistency-information-panel>
 

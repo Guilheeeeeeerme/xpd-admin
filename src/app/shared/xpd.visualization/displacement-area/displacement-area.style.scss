@@ -1,0 +1,14 @@
+@import '~styles/font.scss';
+
+xpd-displacement-area {
+	display: block;
+	height: 100%;
+
+	/**
+	*   DISPLACEMENT AREA
+	**/
+	.xpd-displacement-area-container * {
+		font-family: $font-family-1;
+	}
+
+}

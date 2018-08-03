@@ -60,26 +60,6 @@ export class ReportConfig {
 		// 	templateUrl: './app/components/reports/views/vre.template.html',
 		// 	controller: 'VREReportController as vController'
 		// })
-
-		// .when('/operation/:operationId/connections', {
-		// 	templateUrl: './app/components/reports/views/slips-to-slips.template.html',
-		// 	controller: 'SlipsToSlipsController as stsController'
-		// })
-
-		// .when('/operation/:operationId/trips', {
-		// 	templateUrl: './app/components/reports/views/slips-to-slips.template.html',
-		// 	controller: 'SlipsToSlipsController as stsController'
-		// })
-
-		// .when('/operation/:operationId/time-vs-depth', {
-		// 	templateUrl: './app/components/reports/views/depth.template.html',
-		// 	controller: 'DepthController as dController'
-		// })
-
-		// .when('/time-vs-depth', {
-		// 	templateUrl: './app/components/reports/views/depth.template.html',
-		// 	controller: 'DepthController as dController'
-		// });
 	}
 }
 

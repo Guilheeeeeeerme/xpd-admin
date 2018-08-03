@@ -7,7 +7,7 @@ export class VREListTableDirective implements ng.IDirective {
 	public scope = {
 		vreData: '=',
 	};
-	public restrict = 'A';
+	public restrict = 'E';
 	public template = template;
 
 	public link: ng.IDirectiveLinkFn = (

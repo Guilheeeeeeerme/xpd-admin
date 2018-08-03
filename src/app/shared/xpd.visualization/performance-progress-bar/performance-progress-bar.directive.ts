@@ -38,9 +38,9 @@ export class PerformanceProgressBarDirective implements ng.IDirective {
 
 		scope.$watchGroup(['lowValue', 'mediumValue', 'highValue'], (newValues) => {
 			if (newValues) {
-				scope.lowValue = newValues[0];
-				scope.mediumValue = newValues[1];
-				scope.highValue = newValues[2];
+				scope.lowValue = newValues[0] || 0;
+				scope.mediumValue = newValues[1] || 0;
+				scope.highValue = newValues[2] || 0;
 
 				prepareLegendBar();
 				prepareCurrentPerformance();

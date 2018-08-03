@@ -1,15 +1,11 @@
+@import '~styles/font.scss';
+
 xpd-times {
+    
+    font-family: $font-family-1;
 
     display: block;
     height: 100%;
-
-    svg {
-        height: 99%;
-    }
-
-    .xpd-times-container {
-        padding: 10px 5px;
-    }
 
     .xpd-times-ticks {
         font-size: 0.2em;
@@ -20,6 +16,11 @@ xpd-times {
     .xpd-times-bar:hover,
     .xpd-times-selected-bar {
         fill: white;
+    }
+
+    .xpd-times-container {
+        padding: 0;
+        // padding: 10px 5px;
     }
 
 }

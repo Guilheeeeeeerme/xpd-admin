@@ -4,13 +4,11 @@ import reportsTemplate from './reports.template.html';
 
 import { XPDSharedModule } from '../shared/shared.module';
 import { BitDepthTimeController } from './components/bit-depth-time.controller';
-import { DepthController } from './components/depth.controller';
 import { FailuresNptController } from './components/failures-npt.controller';
 import { HistogramReportController } from './components/histogram-report.controller';
 import { LessonsLearnedController } from './components/lessons-learned.controller';
 import { NeedleReportController } from './components/needle-report.controller';
 import { ReportsController } from './components/reports.controller';
-import { SlipsToSlipsController } from './components/slips-to-slips.controller';
 import { VREReportController } from './components/vre-report.controller';
 import { VREScoreController } from './components/vre-score.controller';
 import { BitDepthTimeDirective } from './directives/bit-depth-time.directive';
@@ -35,12 +33,10 @@ XPDReportsModule.config(ReportConfig);
 
 XPDReportsModule.controller('ReportsController', ReportsController);
 XPDReportsModule.controller('BitDepthTimeController', BitDepthTimeController);
-XPDReportsModule.controller('depthController', DepthController);
 XPDReportsModule.controller('FailuresNptController', FailuresNptController);
 XPDReportsModule.controller('HistogramReportController', HistogramReportController);
 XPDReportsModule.controller('LessonsLearnedController', LessonsLearnedController);
 XPDReportsModule.controller('NeedleReportController', NeedleReportController);
-XPDReportsModule.controller('SlipsToSlipsController', SlipsToSlipsController);
 XPDReportsModule.controller('VREReportController', VREReportController);
 XPDReportsModule.controller('VREScoreController', VREScoreController);
 

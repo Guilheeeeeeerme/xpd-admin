@@ -30,170 +30,161 @@
 
     <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
 
-        <div class="xpd-panel">
+        <div class="xpd-chart-container row h-30 tracking-performance-row">
 
-            <div class="xpd-panel-body">
+            <div class="col-md-4 xpd-chart-container-content">
 
-                <div class="row tracking-performance-row xpd-chart-container">
+                <xpd-score-gauge joint-data="operationData.jointContext" direction-data="operationData.directionContext" number-joints="operationData.jointContext.numberJoints"
+                    current-score="operationData.scoreContext.currentScore" acc-score="operationData.shiftContext.accScore">
+                </xpd-score-gauge>
 
-                    <div class="col-md-4 xpd-chart-container-content">
+            </div>
 
-                        <xpd-score-gauge 
-                            joint-data="operationData.jointContext" 
-                            direction-data="operationData.directionContext"
-                            number-joints="operationData.jointContext.numberJoints" 
-                            current-score="operationData.scoreContext.currentScore"
-                            acc-score="operationData.shiftContext.accScore">
-                        </xpd-score-gauge>
+            <div class="col-md-4 xpd-chart-container-content">
 
-                    </div>
+                <div class="ship-placeholder-container">
+                    <img class="ship-placeholder" xpd-photo-api-directive photo-api-directive-photo-name="operationData.wellContext.currentWell.rig.photoPath"
+                        photo-api-directive-server-path="tripin/rig-pictures">
 
-                    <div class="col-md-4 xpd-chart-container-content">
+                    <div ng-if="operationData.operationContext.currentOperation.running" class="data-bit-depth-content">
+                        <div class="data-bit-depth-title"> Bit Depth </div>
 
-                        <div class="ship-placeholder-container">
-                            <img class="ship-placeholder" xpd-photo-api-directive photo-api-directive-photo-name="operationData.wellContext.currentWell.rig.photoPath"
-                                photo-api-directive-server-path="tripin/rig-pictures">
-
-                            <div ng-if="operationData.operationContext.currentOperation.running" class="data-bit-depth-content">
-                                <div class="data-bit-depth-title"> Bit Depth </div>
-
-                                <div ng-if="operationData.bitDepthContext.usingXpd">
-                                    <div class="data-bit-depth-value" ng-if="operationData.bitDepthContext.xpdBitDepth != null">
-                                        {{ operationData.bitDepthContext.xpdBitDepth | number : 2 }} m
-                                    </div>
-
-                                    <div class="no-bit-depth" ng-if="operationData.bitDepthContext.xpdBitDepth == null">
-                                        NO XPD BIT DEPTH
-                                    </div>
-                                </div>
-
-                                <div ng-if="!operationData.bitDepthContext.usingXpd">
-                                    <div class="data-bit-depth-value" ng-if="operationData.bitDepthContext.rigBitDepth != null">
-                                        {{ operationData.bitDepthContext.rigBitDepth | number : 2 }} m
-                                    </div>
-
-                                    <div class="no-bit-depth" ng-if="operationData.bitDepthContext.rigBitDepth == null">
-                                        NO RIG BIT DEPTH
-                                    </div>
-                                </div>
-
+                        <div ng-if="operationData.bitDepthContext.usingXpd">
+                            <div class="data-bit-depth-value" ng-if="operationData.bitDepthContext.xpdBitDepth != null">
+                                {{ operationData.bitDepthContext.xpdBitDepth | number : 2 }} m
                             </div>
 
-                            <div ng-if="operationData.eventContext.currentEvent.ssoIndicator" class="data-sso-box">
-                                <div class="data-sso-indicator">SSO SIGNED</div>
+                            <div class="no-bit-depth" ng-if="operationData.bitDepthContext.xpdBitDepth == null">
+                                NO XPD BIT DEPTH
                             </div>
-
                         </div>
 
-                        <xpd-member-performance ng-if="operationData.shiftContext.onShift[0] != null" member="operationData.shiftContext.onShift[0].member"></xpd-member-performance>
-
-                    </div>
-
-                    <div class="col-md-4 xpd-chart-container-content tracking-vre-container">
-                        <div xpd-vre-list-table vre-data="operationData.vreContext.vreData"></div>
-                    </div>
-
-                </div>
-
-                <div class="row tracking-operation-progress-row xpd-chart-container">
-                    <div class="xpd-chart-container-header">
-                        Operation Progress
-                    </div>
-
-                    <div class="xpd-chart-container-content">
-
-                        <xpd-operation-progress-chart ng-if="operationData.stateContext.currentState && operationData.operationProgressContext.operationProgressData && operationData.operationProgressContext.operationProgressData[operationData.stateContext.currentState]"
-                            progress-data="operationData.operationProgressContext.operationProgressData[operationData.stateContext.currentState]"
-                            progress-data-delay="operationData.operationProgressContext.progressDataDelay">
-                        </xpd-operation-progress-chart>
-
-                    </div>
-                    <div class="xpd-chart-container-footer padding-5">
-                        <div class="operation-progress-delay">
-                            <div class="operation-progress-delay-title">
-                                Progress Delay
+                        <div ng-if="!operationData.bitDepthContext.usingXpd">
+                            <div class="data-bit-depth-value" ng-if="operationData.bitDepthContext.rigBitDepth != null">
+                                {{ operationData.bitDepthContext.rigBitDepth | number : 2 }} m
                             </div>
-                            <div class="operation-progress-delay-info">
-                                <table class="table">
-                                    <tr>
-                                        <td ng-repeat="delayLog in operationData.operationProgressContext.progressDataDelay">
-                                            {{delayLog.name}}:
-                                            <span>{{delayLog.time | secondsToHourMinutes}}</span>
-                                        </td>
-                                    </tr>
-                                </table>
+
+                            <div class="no-bit-depth" ng-if="operationData.bitDepthContext.rigBitDepth == null">
+                                NO RIG BIT DEPTH
                             </div>
                         </div>
 
                     </div>
-                </div>
 
-                <div class="row tracking-alarm-row xpd-chart-container">
-                    <div class="xpd-chart-container-header">
-                        Alarms/Tasks
-                    </div>
-
-                    <div class="xpd-chart-container-content">
-                        <ul class="media-list">
-                            <li class="media" ng-if="!acknowledgement.acknowledgeTime" ng-repeat="(index, acknowledgement) in acknowledgement.depthAlarms | orderBy: 'playTime'">
-                                <div class="media-left">
-                                    <span class="glyphicon glyphicon-download-alt"></span>
-                                </div>
-                                <div class="media-body">
-                                    <h4 class="media-heading">{{ acknowledgement.alarm.name }}</h4> {{ acknowledgement.alarm.message }}
-                                    <br/>
-
-                                    <i>Triggered at:
-                                        <strong>{{ acknowledgement.playTime | date: 'short' }}</strong>
-                                    </i>
-                                    <br/>
-
-                                    <i ng-if="acknowledgement.acknowledgeTime != null">Acknowledged at:
-                                        <strong>{{ acknowledgement.acknowledgeTime | date: 'short' }}</strong>
-                                    </i>
-
-                                    <i ng-if="acknowledgement.acknowledgeTime == null">Not read</i>
-                                </div>
-                            </li>
-                        </ul>
+                    <div ng-if="operationData.eventContext.currentEvent.ssoIndicator" class="data-sso-box">
+                        <div class="data-sso-indicator">SSO SIGNED</div>
                     </div>
 
                 </div>
 
-                <div class="row tracking-message-row xpd-chart-container">
-                    <div class="xpd-chart-container-header">
-                        Messages
+                <xpd-member-performance ng-if="operationData.shiftContext.onShift[0] != null" member="operationData.shiftContext.onShift[0].member"></xpd-member-performance>
+
+            </div>
+
+            <div class="col-md-4 xpd-chart-container-content">
+                <xpd-vre-list-table vre-data="operationData.vreContext.vreData"></xpd-vre-list-table>
+            </div>
+
+        </div>
+
+        <div class="xpd-chart-container row h-40 tracking-operation-progress-row">
+            <div class="xpd-chart-container-header">
+                Operation Progress
+            </div>
+
+            <div class="xpd-chart-container-content">
+
+                <xpd-operation-progress-chart ng-if="operationData.stateContext.currentState && operationData.operationProgressContext.operationProgressData && operationData.operationProgressContext.operationProgressData[operationData.stateContext.currentState]"
+                    progress-data="operationData.operationProgressContext.operationProgressData[operationData.stateContext.currentState]"
+                    progress-data-delay="operationData.operationProgressContext.progressDataDelay">
+                </xpd-operation-progress-chart>
+
+            </div>
+            <div class="xpd-chart-container-footer padding-5">
+                <div class="operation-progress-delay">
+                    <div class="operation-progress-delay-title">
+                        Progress Delay
                     </div>
-
-                    <div class="xpd-chart-container-content">
-                        <ul class="media-list">
-                            <li class="media" ng-if="!acknowledgement.acknowledgeTime" ng-repeat="(index, acknowledgement) in acknowledgement.timeAlarms | orderBy: 'playTime'">
-                                <div class="media-left">
-                                    <span class="glyphicon glyphicon-time"></span>
-                                </div>
-                                <div class="media-body">
-                                    <h4 class="media-heading">{{ acknowledgement.alarm.name }}</h4> {{ acknowledgement.alarm.message }}
-                                    <br/>
-
-                                    <i>Triggered at:
-                                        <strong>{{ acknowledgement.playTime | date: 'short' }}</strong>
-                                    </i>
-                                    <br/>
-
-                                    <i ng-if="acknowledgement.acknowledgeTime != null">Acknowledged at:
-                                        <strong>{{ acknowledgement.acknowledgeTime | date: 'short' }}</strong>
-                                    </i>
-
-                                    <i ng-if="acknowledgement.acknowledgeTime == null">Not read</i>
-                                </div>
-                            </li>
-                        </ul>
+                    <div class="operation-progress-delay-info">
+                        <table class="table">
+                            <tr>
+                                <td ng-repeat="delayLog in operationData.operationProgressContext.progressDataDelay">
+                                    {{delayLog.name}}:
+                                    <span>{{delayLog.time | secondsToHourMinutes}}</span>
+                                </td>
+                            </tr>
+                        </table>
                     </div>
                 </div>
 
             </div>
+        </div>
+
+        <div class="xpd-chart-container row h-15 tracking-alarm-row">
+            <div class="xpd-chart-container-header">
+                Alarms/Tasks
+            </div>
+
+            <div class="xpd-chart-container-content">
+                <ul class="media-list">
+                    <li class="media" ng-if="!acknowledgement.acknowledgeTime" ng-repeat="(index, acknowledgement) in acknowledgement.depthAlarms | orderBy: 'playTime'">
+                        <div class="media-left">
+                            <span class="glyphicon glyphicon-download-alt"></span>
+                        </div>
+                        <div class="media-body">
+                            <h4 class="media-heading">{{ acknowledgement.alarm.name }}</h4> {{ acknowledgement.alarm.message }}
+                            <br/>
+
+                            <i>Triggered at:
+                                <strong>{{ acknowledgement.playTime | date: 'short' }}</strong>
+                            </i>
+                            <br/>
+
+                            <i ng-if="acknowledgement.acknowledgeTime != null">Acknowledged at:
+                                <strong>{{ acknowledgement.acknowledgeTime | date: 'short' }}</strong>
+                            </i>
+
+                            <i ng-if="acknowledgement.acknowledgeTime == null">Not read</i>
+                        </div>
+                    </li>
+                </ul>
+            </div>
 
         </div>
+
+        <div class="xpd-chart-container row h-15 tracking-message-row">
+            <div class="xpd-chart-container-header">
+                Messages
+            </div>
+
+            <div class="xpd-chart-container-content">
+                <ul class="media-list">
+                    <li class="media" ng-if="!acknowledgement.acknowledgeTime" ng-repeat="(index, acknowledgement) in acknowledgement.timeAlarms | orderBy: 'playTime'">
+                        <div class="media-left">
+                            <span class="glyphicon glyphicon-time"></span>
+                        </div>
+                        <div class="media-body">
+                            <h4 class="media-heading">{{ acknowledgement.alarm.name }}</h4> {{ acknowledgement.alarm.message }}
+                            <br/>
+
+                            <i>Triggered at:
+                                <strong>{{ acknowledgement.playTime | date: 'short' }}</strong>
+                            </i>
+                            <br/>
+
+                            <i ng-if="acknowledgement.acknowledgeTime != null">Acknowledged at:
+                                <strong>{{ acknowledgement.acknowledgeTime | date: 'short' }}</strong>
+                            </i>
+
+                            <i ng-if="acknowledgement.acknowledgeTime == null">Not read</i>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+
+
 
     </div>
 

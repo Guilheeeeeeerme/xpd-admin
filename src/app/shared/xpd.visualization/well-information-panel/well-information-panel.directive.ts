@@ -19,16 +19,17 @@ export class WellInformationPanelDirective implements ng.IDirective {
 		ctrl: any,
 	) => {
 
-		const keyName = 'panelWellIsCollapsed';
-		scope.collapse = getPanelState();
 
-		function getPanelState() {
+		const keyName = 'panelWellIsCollapsed';
+		const getPanelState = () => {
 			try {
 				return JSON.parse(localStorage.getItem(keyName));
 			} catch (error) {
 				return true;
 			}
-		}
+		};
+
+		scope.collapse = getPanelState();
 
 		scope.changePanelState = () => {
 			const newState = !getPanelState();

@@ -1,0 +1,29 @@
+xpd-connection-status {
+    height: 30px;
+    width: 100%;
+    position: absolute;
+    top: 0;
+    z-index: 3000;
+
+    .xpd-connection-status-label {
+        text-align: center;
+        font-size: 1em;
+        color: white;
+        transition: all 700ms;
+        margin: -30px 0;
+    
+        &.xpd-connection-status-reconnecting {
+            background: red;
+        }
+        
+        &.xpd-connection-status-connected {
+            background: green;
+        }
+        
+        &.open {
+            margin: 0px 0;
+        }
+
+    }
+
+}

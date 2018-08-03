@@ -13,8 +13,6 @@ import { XPDAccessService } from '../xpd.access/access.service';
 
 export class OperationDataService {
 
-	private observer: EventEmitter;
-
 	public static THREADS = [
 		'failure',
 		'well',
@@ -43,6 +41,8 @@ export class OperationDataService {
 		'dataAcquisition',
 	];
 
+	public static $inject = ['$q', '$rootScope', 'xpdAccessService'];
+
 	public operationDataFactory = {
 		operationData: {},
 	};
@@ -50,7 +50,8 @@ export class OperationDataService {
 	public socket: any;
 	private locked: boolean;
 	private operationDataDefer: angular.IDeferred<{}>;
-	public static $inject = ['$q', '$rootScope', 'xpdAccessService'];
+
+	private observer: EventEmitter;
 
 	constructor(
 		$q: IQService,
@@ -90,10 +91,20 @@ export class OperationDataService {
 				timeout: 500,
 			};
 
-			const manager = new io.Manager(self.accessService.getOperationServerURL(), options);
+			const manager: io.Manager = new io.Manager(self.accessService.getOperationServerURL(), options);
 
 			const socket = manager.socket('/operation-socket', options);
 			self.socket = socket;
+
+			self.socket.on('connect_error', (data) => { self.emit('connect_error', data); });
+			self.socket.on('connect_timeout', (data) => { self.emit('connect_timeout', data); });
+			self.socket.on('reconnect', (data) => { self.emit('reconnect', data); });
+			self.socket.on('reconnect_attempt', (data) => { self.emit('reconnect_attempt', data); });
+			self.socket.on('reconnecting', (data) => { self.emit('reconnecting', data); });
+			self.socket.on('reconnect_error', (data) => { self.emit('reconnect_error', data); });
+			self.socket.on('reconnect_failed', (data) => { self.emit('reconnect_failed', data); });
+			self.socket.on('ping', (data) => { self.emit('ping', data); });
+			self.socket.on('pong', (data) => { self.emit('pong', data); });
 
 			socket.on('connect', () => {
 

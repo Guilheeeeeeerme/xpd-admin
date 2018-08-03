@@ -1,15 +1,19 @@
-// (function() {
-
-// 	'use strict',
-
 import * as d3 from 'd3';
-import { XPDTimeoutService } from '../../shared/xpd.timers/xpd-timers.service';
 import './vre-bar-chart.style.scss';
 import template from './vre-bar-chart.template.html';
 
 export class VreBarChart {
 
-	public static $inject = ['$xpdTimeout'];
+	public static $inject = ['$timeout'];
+	public static Factory(): ng.IDirectiveFactory {
+		const directive = (
+			$timeout: any,
+		) => new VreBarChart(
+			$timeout,
+		);
+
+		return directive;
+	}
 	public restrict: 'EA';
 	public template = template;
 	public scope = {
@@ -19,7 +23,7 @@ export class VreBarChart {
 	};
 
 	constructor(
-		private $xpdTimeout: XPDTimeoutService) {
+		private $timeout: any) {
 	}
 
 	public link: ng.IDirectiveLinkFn = (
@@ -36,7 +40,7 @@ export class VreBarChart {
 		scope.drawChartReady = false;
 
 		scope.$watchGroup(['vreListData', 'vreDailyData'], (newValues) => {
-			this.$xpdTimeout.run(() => {
+			this.$timeout(() => {
 				drawVreChart(newValues[0], newValues[1]);
 			}, 500, scope);
 		}, true);
@@ -88,15 +92,4 @@ export class VreBarChart {
 			return (heightSvg - 8) + 'px';
 		};
 	}
-
-	public static Factory(): ng.IDirectiveFactory {
-		const directive = (
-			$xpdTimeout: XPDTimeoutService,
-		) => new VreBarChart(
-			$xpdTimeout,
-		);
-
-		return directive;
-	}
 }
-// }) ();

@@ -1,5 +1,5 @@
 import * as angular from 'angular';
-import { IQService } from '../../../../../../node_modules/@types/angular';
+import { IQService } from 'angular';
 import { ReportsSetupAPIService } from '../../../../shared/xpd.setupapi/reports-setupapi.service';
 import { OperationActivitiesEstimatorService } from '../operation-activities-estimator/operation-activities-estimator.service';
 import template from './operation-queue-forecast.template.html';

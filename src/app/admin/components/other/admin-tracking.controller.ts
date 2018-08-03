@@ -49,27 +49,6 @@ export class AdminTrackingController {
 
 	}
 
-	private loadEvents() {
-
-		if (this.$scope.operationData != null &&
-			this.$scope.operationData.operationContext &&
-			this.$scope.operationData.operationContext.currentOperation &&
-			this.$scope.operationData.operationContext.currentOperation.running) {
-
-			if (!this.listTrackingEventByOperationPromise) {
-
-				this.listTrackingEventByOperationPromise = this.listTrackingEventByOperation(
-					this.$scope.operationData.operationContext.currentOperation.id);
-
-				this.listTrackingEventByOperationPromise.then((trackingEvents) => {
-					this.organizeEventsOnLists(trackingEvents);
-					this.listTrackingEventByOperationPromise = null;
-				});
-			}
-		}
-
-	}
-
 	public actionOpenDropdownMenu(mouseEvent, eventLog) {
 		const modalOption: any = document.querySelector('.slips-to-slips-dropdown-menu');
 
@@ -102,6 +81,28 @@ export class AdminTrackingController {
 			(arg) => { this.insertLessonLearnedCallback(arg); },
 			(arg) => { this.updateLessonLearnedCallback(arg); },
 		);
+	}
+
+	private loadEvents() {
+
+		if (this.$scope.operationData != null &&
+			this.$scope.operationData.operationContext &&
+			this.$scope.operationData.operationContext.currentOperation &&
+			this.$scope.operationData.operationContext.currentOperation.running) {
+
+			if (!this.listTrackingEventByOperationPromise) {
+
+				this.listTrackingEventByOperationPromise = this.listTrackingEventByOperation(
+					this.$scope.operationData.operationContext.currentOperation.id);
+
+				this.listTrackingEventByOperationPromise.then((trackingEvents) => {
+					this.organizeEventsOnLists(trackingEvents);
+					this.listTrackingEventByOperationPromise = null;
+				});
+
+			}
+		}
+
 	}
 
 	private getSelectedEvent() {
@@ -170,6 +171,12 @@ export class AdminTrackingController {
 
 		this.$scope.dados.connectionTimes = this.$scope.dados.connectionEvents.slice(-200);
 		this.$scope.dados.tripTimes = this.$scope.dados.tripEvents.slice(-200);
+
+		const lastConn = this.$scope.dados.connectionEvents[this.$scope.dados.connectionEvents.length - 1];
+		const lastTrip = this.$scope.dados.tripEvents[this.$scope.dados.tripEvents.length - 1];
+
+		this.$scope.dados.lastConnDuration = (lastConn.duration / 1000);
+		this.$scope.dados.lastTripDuration = (lastTrip.duration / 1000);
 
 	}
 
