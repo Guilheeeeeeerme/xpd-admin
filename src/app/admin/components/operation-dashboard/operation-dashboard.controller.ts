@@ -85,8 +85,8 @@ export class OperationDashboardController {
 				const estimatives = this.$scope.operationData.forecastContext.estimatives;
 				const rawEstimatives = this.$scope.operationData.forecastContext.rawEstimatives;
 
-				this.$scope.expectations = this.generateExpectation(currentState, estimatives);
-				this.$scope.rawExpectations = this.generateRawExpectation(currentState, rawEstimatives);
+				this.generateExpectation(estimatives);
+				this.generateRawExpectation(currentState, rawEstimatives);
 
 			} catch (error) {
 				console.error(error);
@@ -95,46 +95,15 @@ export class OperationDashboardController {
 
 		try {
 			this.calcAccScore();
-			this.getLastTwoEventsDuration(this.$scope.operationData.eventContext.lastEvents);
 		} catch (error) {
 			// faça nada
 		}
 
 	}
 
-	private generateExpectation(currentState, estimatives) {
+	private generateExpectation(estimatives) {
 
 		const estimatedAt = new Date(estimatives.estimatedAt).getTime();
-		let expectations: any = {};
-
-		const vTargetStateJointInterval = estimatives.vTargetEstimative.filter((line) => {
-			return line[currentState] != null;
-		})[0][currentState];
-
-		// const vOptimumStateJointInterval = estimatives.vOptimumEstimative.filter((line) => {
-		// 	return line[currentState] != null;
-		// })[0][currentState];
-
-		// const vStandardStateJointInterval = estimatives.vStandardEstimative.filter((line) => {
-		// 	return line[currentState] != null;
-		// })[0][currentState];
-
-		// const vPoorStateJointInterval = estimatives.vPoorEstimative.filter((line) => {
-		// 	return line[currentState] != null;
-		// })[0][currentState];
-
-		const stateExpectedDuration = (1000 * vTargetStateJointInterval.BOTH.finalTime);
-		// const vOptimumStateExpectedDuration = (1000 * vOptimumStateJointInterval.BOTH.finalTime);
-		// const vStandardStateExpectedDuration = (1000 * vStandardStateJointInterval.BOTH.finalTime);
-		// const vPoorStateExpectedDuration = (1000 * vPoorStateJointInterval.BOTH.finalTime);
-
-		// EXPECTED TRIP/CONN
-		// this.$scope.contractTimePerformance.CONN = this.getContractTimePerformance('CONN', vTargetStateJointInterval, vOptimumStateJointInterval, vStandardStateJointInterval, vPoorStateJointInterval);
-		// this.$scope.contractTimePerformance.TRIP = this.getContractTimePerformance('TRIP', vTargetStateJointInterval, vOptimumStateJointInterval, vStandardStateJointInterval, vPoorStateJointInterval);
-		// this.$scope.contractTimePerformance.BOTH = this.getContractTimePerformance('BOTH', vTargetStateJointInterval, vOptimumStateJointInterval, vStandardStateJointInterval, vPoorStateJointInterval);
-		expectations = {
-			stateExpectedEndTime: estimatedAt + stateExpectedDuration,
-		};
 
 		const nextActivitiesEstimatives = this.operationActivitiesEstimatorService.estimateNextActivities(estimatedAt, estimatives.vTargetEstimative);
 
@@ -147,11 +116,11 @@ export class OperationDashboardController {
 		this.$scope.operationFinalTimeEstimative = operationFinalTimeEstimative;
 		this.$scope.nextActivitiesEstimatives = nextActivitiesEstimatives;
 
-		return expectations;
 	}
 
 	private generateRawExpectation(currentState, rawEstimatives) {
 		let rawExpectations: any = {};
+		const estimatedAt = new Date(rawEstimatives.estimatedAt).getTime();
 
 		const vOptimumStateJointInterval = rawEstimatives.vOptimumEstimative.filter((line) => {
 			return line[currentState] != null;
@@ -165,6 +134,7 @@ export class OperationDashboardController {
 			return line[currentState] != null;
 		})[0][currentState];
 
+		const stateExpectedDuration = (1000 * vOptimumStateJointInterval.BOTH.finalTime);
 		const vOptimumStateExpectedDuration = (1000 * vOptimumStateJointInterval.BOTH.finalTime);
 		const vStandardStateExpectedDuration = (1000 * vStandardStateJointInterval.BOTH.finalTime);
 		const vPoorStateExpectedDuration = (1000 * vPoorStateJointInterval.BOTH.finalTime);
@@ -175,19 +145,20 @@ export class OperationDashboardController {
 		this.$scope.contractTimePerformance.BOTH = this.getContractTimePerformance('BOTH', vOptimumStateJointInterval, vStandardStateJointInterval, vPoorStateJointInterval);
 
 		rawExpectations = {
+			stateExpectedEndTime: estimatedAt + stateExpectedDuration,
 			vOptimumStateExpectedDuration,
 			vStandardStateExpectedDuration,
 			vPoorStateExpectedDuration,
 		};
 
-		return rawExpectations;
+		this.$scope.rawExpectations = rawExpectations;
 	}
 
 	private getContractTimePerformance(eventType, vOptimumStateJointInterval, vStandardStateJointInterval, vPoorStateJointInterval) {
 		return {
-			voptimumTime: (vOptimumStateJointInterval[eventType].finalTime / vOptimumStateJointInterval[eventType].points.length),
-			vstandardTime: (vStandardStateJointInterval[eventType].finalTime / vStandardStateJointInterval[eventType].points.length),
-			vpoorTime: (vPoorStateJointInterval[eventType].finalTime / vPoorStateJointInterval[eventType].points.length),
+			voptimumTime: (vOptimumStateJointInterval[eventType].finalTime / (vOptimumStateJointInterval[eventType].finalJoint - vOptimumStateJointInterval[eventType].initialJoint) ),
+			vstandardTime: (vStandardStateJointInterval[eventType].finalTime / (vStandardStateJointInterval[eventType].finalJoint - vStandardStateJointInterval[eventType].initialJoint ) ),
+			vpoorTime: (vPoorStateJointInterval[eventType].finalTime / (vPoorStateJointInterval[eventType].finalJoint - vPoorStateJointInterval[eventType].initialJoint ) ),
 		};
 	}
 
@@ -195,30 +166,6 @@ export class OperationDashboardController {
 		this.$scope.scoreData = {
 			accScore: this.$scope.operationData.shiftContext.accScore.totalScore / this.$scope.operationData.shiftContext.accScore.eventScoreQty,
 		};
-	}
-
-	private getLastTwoEventsDuration(lastEvents) {
-
-		let conn = false;
-		let trip = false;
-
-		for (let index = lastEvents.length - 1; index >= 0; index--) {
-
-			const event = lastEvents[index];
-
-			if (event.eventType === 'CONN') {
-				this.$scope.lastConnDuration = (event.duration / 1000);
-				conn = true;
-			}
-
-			if (event.eventType === 'TRIP') {
-				this.$scope.lastTripDuration = (event.duration / 1000);
-				trip = true;
-			}
-
-			if (conn && trip) { break; }
-
-		}
 	}
 
 	private getReading(point) {

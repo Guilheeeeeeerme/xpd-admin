@@ -11,7 +11,7 @@ export class ConsistencyInformationPanelDirective implements ng.IDirective {
 		isTripin: '=',
 		score: '=',
 		currentEventDuration: '=',
-		curentJointDuration: '=',
+		currentJointDuration: '=',
 		lastEventType: '=',
 		lastTripDuration: '=',
 		lastConnDuration: '=',
