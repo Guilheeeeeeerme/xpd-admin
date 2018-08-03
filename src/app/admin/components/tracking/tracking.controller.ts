@@ -1,7 +1,6 @@
 import * as angular from 'angular';
 import { IModalService } from 'angular-ui-bootstrap';
 import { DialogService } from '../../../shared/xpd.dialog/xpd.dialog.factory';
-import { OperationDataService } from '../../../shared/xpd.operation-data/operation-data.service';
 
 export class TrackingController {
 
