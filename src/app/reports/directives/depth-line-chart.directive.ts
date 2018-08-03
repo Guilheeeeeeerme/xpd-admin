@@ -1,11 +1,19 @@
 import { HighchartsService } from '../../shared/highcharts/highcharts.service';
-import { XPDTimeoutService } from '../../shared/xpd.timers/xpd-timers.service';
-
-// (function() {
-// 	'use strict';
 
 export class DepthLineChartDirective implements ng.IDirective {
-	public static $inject: string[] = ['$xpdTimeout', 'highchartsService'];
+	public static $inject: string[] = ['$timeout', 'highchartsService'];
+
+	public static Factory(): ng.IDirectiveFactory {
+		const directive = (
+			$timeout: any,
+			highchartsService: HighchartsService,
+		) => new DepthLineChartDirective(
+			$timeout,
+			highchartsService,
+			);
+
+		return directive;
+	}
 
 	public scope = {
 		chartPlannedData: '=',
@@ -16,7 +24,7 @@ export class DepthLineChartDirective implements ng.IDirective {
 	public restrict: 'EA';
 
 	constructor(
-		private $xpdTimeout: XPDTimeoutService,
+		private $timeout: any,
 		private highchartsService: HighchartsService) {
 	}
 
@@ -27,16 +35,9 @@ export class DepthLineChartDirective implements ng.IDirective {
 		ctrl: any,
 	) => {
 
-		this.highchartsService.highcharts().then(function (Highcharts) {
-			const objChart = createChart();
+		this.highchartsService.highcharts().then((Highcharts) => {
 
-			scope.$watchGroup(['chartPlannedData', 'chartRealizedData', 'plotBandsPlannedData'], function (newValues) {
-				this.$xpdTimeout(function () {
-					redrawChart(newValues[0], newValues[1], newValues[2]);
-				}, 500, scope);
-			}, true);
-
-			function createChart() {
+			const createChart = () => {
 
 				return Highcharts.chart(attrs.id, {
 					chart: {
@@ -143,9 +144,9 @@ export class DepthLineChartDirective implements ng.IDirective {
 					],
 				});
 
-			}
+			};
 
-			function redrawChart(chartPlannedData, chartRealizedData, plotBandsPlannedData) {
+			const redrawChart = (chartPlannedData, chartRealizedData, plotBandsPlannedData) => {
 
 				objChart.series[0].setData(chartPlannedData.vOptimum, true);
 				objChart.series[1].setData(chartPlannedData.vPoor, true);
@@ -153,6 +154,7 @@ export class DepthLineChartDirective implements ng.IDirective {
 
 				objChart.series[3].setData(chartRealizedData, true);
 
+				// tslint:disable-next-line:prefer-for-of
 				for (let i = 0; i < plotBandsPlannedData.length; i++) {
 					objChart.yAxis[0].addPlotBand({
 						from: plotBandsPlannedData[i].from,
@@ -167,22 +169,16 @@ export class DepthLineChartDirective implements ng.IDirective {
 					});
 				}
 
-			}
+			};
+
+			const objChart = createChart();
+
+			scope.$watchGroup(['chartPlannedData', 'chartRealizedData', 'plotBandsPlannedData'], function (newValues) {
+				this.$timeout(() => {
+					redrawChart(newValues[0], newValues[1], newValues[2]);
+				}, 500, scope);
+			}, true);
 		});
 
 	}
-
-	public static Factory(): ng.IDirectiveFactory {
-		const directive = (
-			$xpdTimeout: XPDTimeoutService,
-			highchartsService: HighchartsService,
-		) => new DepthLineChartDirective(
-			$xpdTimeout,
-			highchartsService,
-			);
-
-		return directive;
-	}
-
 }
-// }) ();
