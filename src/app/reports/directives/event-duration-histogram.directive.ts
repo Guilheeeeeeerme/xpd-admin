@@ -7,6 +7,16 @@ import template from './event-duration-histogram.template.html';
 export class EventDurationHistogram {
 
 	public static $inject: string[] = ['highchartsService'];
+
+	public static Factory(): ng.IDirectiveFactory {
+		const directive = (
+			highchartsService: HighchartsService,
+		) => new EventDurationHistogram(
+			highchartsService,
+		);
+
+		return directive;
+	}
 	public template = template;
 	public restrict = 'EA';
 	public scope = {
@@ -268,15 +278,5 @@ export class EventDurationHistogram {
 				};
 			}
 		});
-	}
-
-	public static Factory(): ng.IDirectiveFactory {
-		const directive = (
-			highchartsService: HighchartsService,
-		) => new EventDurationHistogram(
-			highchartsService,
-		);
-
-		return directive;
 	}
 }

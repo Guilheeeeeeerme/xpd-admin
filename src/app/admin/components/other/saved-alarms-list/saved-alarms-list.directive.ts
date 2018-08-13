@@ -10,6 +10,10 @@
 import template from './saved-alarms-list.template.html';
 
 export class SavedAlarmsListDirectives implements ng.IDirective {
+
+	public static Factory(): ng.IDirectiveFactory {
+		return () => new SavedAlarmsListDirectives();
+	}
 	public scope = {
 		heading: '@',
 		popover: '@',
@@ -22,10 +26,6 @@ export class SavedAlarmsListDirectives implements ng.IDirective {
 	};
 	public restrict = 'AE';
 	public template = template;
-
-	public static Factory(): ng.IDirectiveFactory {
-		return () => new SavedAlarmsListDirectives();
-	}
 }
 
 	// })();

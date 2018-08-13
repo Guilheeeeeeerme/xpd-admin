@@ -27,6 +27,9 @@ const XPDReportsModule: angular.IModule = angular.module('xpd.reports', [
 	XPDSharedModule.name,
 ]);
 
+import './../../assets/css/reports.scss';
+import './../../assets/css/xpd.scss';
+
 export { XPDReportsModule };
 
 XPDReportsModule.config(ReportConfig);

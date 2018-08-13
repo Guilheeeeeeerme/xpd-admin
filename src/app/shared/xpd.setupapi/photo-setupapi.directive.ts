@@ -5,6 +5,12 @@ import { PhotoAPIService } from './photo-setupapi.service';
 
 export class PhotoApiDirective implements ng.IDirective {
 
+	public static Factory(): ng.IDirectiveFactory {
+		const directive = (photoAPIService: PhotoAPIService) => new PhotoApiDirective(photoAPIService);
+		directive.$inject = ['photoAPIService'];
+		return directive;
+	}
+
 	public restrict: 'A';
 	public scope = {
 		photoApiDirectivePhotoName: '=',
@@ -37,12 +43,6 @@ export class PhotoApiDirective implements ng.IDirective {
 				}
 			});
 		});
-	}
-
-	public static Factory(): ng.IDirectiveFactory {
-		const directive = (photoAPIService: PhotoAPIService) => new PhotoApiDirective(photoAPIService);
-		directive.$inject = ['photoAPIService'];
-		return directive;
 	}
 
 }

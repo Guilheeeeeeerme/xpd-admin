@@ -6,6 +6,18 @@ import { HighchartsService } from '../../shared/highcharts/highcharts.service';
 export class PieChartDirective {
 
 	public static $inject: string[] = ['$filter', 'highchartsService'];
+
+	public static Factory(): ng.IDirectiveFactory {
+		const directive = (
+			$filter: any,
+			highchartsService: HighchartsService,
+		) => new PieChartDirective(
+				$filter,
+				highchartsService,
+			);
+
+		return directive;
+	}
 	public restrict: 'EA';
 	public scope = {
 		internalPercentages: '=',
@@ -115,18 +127,6 @@ export class PieChartDirective {
 
 		});
 
-	}
-
-	public static Factory(): ng.IDirectiveFactory {
-		const directive = (
-			$filter: any,
-			highchartsService: HighchartsService,
-		) => new PieChartDirective(
-				$filter,
-				highchartsService,
-			);
-
-		return directive;
 	}
 }
 // }) ();

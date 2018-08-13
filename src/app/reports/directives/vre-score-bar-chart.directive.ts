@@ -6,6 +6,16 @@ import { HighchartsService } from '../../shared/highcharts/highcharts.service';
 export class VreScoreBarChart {
 
 	public static $inject: string[] = ['highchartsService'];
+
+	public static Factory(): ng.IDirectiveFactory {
+		const directive = (
+			highchartsService: HighchartsService,
+		) => new VreScoreBarChart(
+			highchartsService,
+		);
+
+		return directive;
+	}
 	public restrict: 'EA';
 	public scope = {
 		chartCategories: '=',
@@ -189,16 +199,6 @@ export class VreScoreBarChart {
 			}
 		});
 
-	}
-
-	public static Factory(): ng.IDirectiveFactory {
-		const directive = (
-			highchartsService: HighchartsService,
-		) => new VreScoreBarChart(
-			highchartsService,
-		);
-
-		return directive;
 	}
 }
 // })();

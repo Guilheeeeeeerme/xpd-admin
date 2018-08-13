@@ -1,0 +1,72 @@
+
+
+@import './alarm.scss';
+
+.xpd-setup-container{
+
+    margin: 0;
+    height: 100%;
+
+    .xpd-setup-container-heading, 
+    .xpd-setup-container-footer {
+        height: 7%;
+        max-height: 7%;
+    }
+
+    .xpd-setup-container-body {
+        overflow-y: auto;
+        height: 86%;
+        max-height: 86%;
+
+
+    }
+}
+
+.image_acceleration {
+    content:url("../img/imagem_acceleration.png");
+}
+
+.current-well-name {
+    color: #2e8b57;
+    text-transform: uppercase;
+}
+
+.current-well-well {
+    background-color: #e7f3f7;
+}
+
+.button-current-well{
+    width: 140px;
+    margin-left: 5px;
+}
+
+a.view-only-link {
+    text-decoration: blink;
+}
+
+.button-edit{
+    margin-left: 5px;
+}
+
+.button-add-well
+.button-add-section{
+    margin-top: -5px;
+}
+
+.button-current{
+    width: 120px;
+    margin-left: 5px;
+}
+
+.button-show-hide-operation{
+    width: 145px;
+    margin-left: 5px;   
+}
+
+.table-contract-info input.form-control {
+    max-width: 100px;
+}
+
+.table-contract-info .input-group {
+    max-width: 135px;
+}

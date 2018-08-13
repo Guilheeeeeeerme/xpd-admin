@@ -2,11 +2,19 @@
 
     <div class="container-fluid scrollable-content">
 
-        <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8 scrollable-content" ng-controller="AdminTrackingController as atController">
-            <xpd-dmec-tracking current-operation="operationData.operationContext.currentOperation" current-event="operationData.eventContext.currentEvent"
-                current-tick="operationData.chronometerContext.tick" current-block-position="operationData.readingContext.currentReading.blockPosition"
-                current-reading="operationData.readingContext.currentReading" connection-events="dados.connectionEvents" trip-events="dados.tripEvents"
-                time-events="dados.timeEvents" selected-point="odController.selectedPoint(point)" last-selected-point="lastSelectedPoint" remove-marker="removeMarker">
+        <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8 scrollable-content">
+            <xpd-dmec-tracking 
+                current-operation="operationData.operationContext.currentOperation" 
+                current-event="operationData.eventContext.currentEvent"
+                current-tick="operationData.chronometerContext.tick" 
+                current-block-position="operationData.readingContext.currentReading.blockPosition"
+                current-reading="operationData.readingContext.currentReading" 
+                connection-events="dados.connectionEvents" 
+                trip-events="dados.tripEvents"
+                time-events="dados.timeEvents" 
+                selected-point="odController.selectedPoint(point)" 
+                last-selected-point="lastSelectedPoint" 
+                remove-marker="removeMarker">
             </xpd-dmec-tracking>
         </div>
 

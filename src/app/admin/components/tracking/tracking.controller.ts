@@ -1,28 +1,62 @@
 import * as angular from 'angular';
 import { IModalService } from 'angular-ui-bootstrap';
 import { DialogService } from '../../../shared/xpd.dialog/xpd.dialog.factory';
+import { EventDetailsModalService } from '../../../shared/xpd.modal.event-details/xpd-modal-event-details.factory';
+import { FailureModalFactory } from '../../../shared/xpd.modal.failure/xpd-modal-failure.factory';
+import { LessonLearnedModalService } from '../../../shared/xpd.modal.lessonlearned/xpd-modal-lessonlearned.service';
 import { OperationDataService } from '../../../shared/xpd.operation-data/operation-data.service';
+import { EventLogSetupAPIService } from '../../../shared/xpd.setupapi/eventlog-setupapi.service';
+import { FailureSetupAPIService } from '../../../shared/xpd.setupapi/failure-setupapi.service';
+import { LessonLearnedSetupAPIService } from '../../../shared/xpd.setupapi/lessonlearned-setupapi.service';
 
 export class TrackingController {
 
 	public static $inject: string[] = [
 		'$scope',
+		'$q',
+		'$rootScope',
 		'$interval',
 		'$timeout',
 		'$uibModal',
+		'eventDetailsModalService',
+		'eventlogSetupAPIService',
+		'failureModal',
+		'lessonLearnedSetupAPIService',
+		'failureSetupAPIService',
+		'lessonLearnedModal',
 		'operationDataService',
 		'dialogService',
 	];
+
+	public listTrackingEventByOperationPromise: any;
+
 	public operationDataFactory: any;
+	public eventId: any;
+	public eventStartTime: any;
+	public eventEndTime: any;
+
 	constructor(
 		private $scope: any,
-		private $interval: any,
-		private $timeout: any,
+		private $q: angular.IQService,
+		private $rootScope: any,
+		private $interval: angular.IIntervalService,
+		private $timeout: angular.ITimeoutService,
 		private $uibModal: IModalService,
+		private eventDetailsModalService: EventDetailsModalService,
+		private eventlogSetupAPIService: EventLogSetupAPIService,
+		private failureModal: FailureModalFactory,
+		private lessonLearnedSetupAPIService: LessonLearnedSetupAPIService,
+		private failureSetupAPIService: FailureSetupAPIService,
+		private lessonLearnedModal: LessonLearnedModalService,
 		private operationDataService: OperationDataService,
-		private dialogService: DialogService) {
+		private dialogService: DialogService,
+	) {
 
 		const vm = this;
+
+		this.listTrackingEventByOperationPromise = null;
+
+		$rootScope.XPDmodule = 'admin';
 
 		$scope.dados = {
 			connectionTimes: [],
@@ -55,45 +89,70 @@ export class TrackingController {
 		};
 
 		operationDataService.openConnection([]).then(() => {
+			vm.operationDataFactory = operationDataService.operationDataFactory;
+			$scope.operationData = vm.operationDataFactory.operationData;
+			vm.loadEvents();
 			vm.init();
+			// vm.changeTrackingContent = changeTrackingContent;
+
+			/**
+			 * ADMIN ONLY
+			 */
+
+			operationDataService.on('setOnParallelEventChangeListener', () => { vm.loadEvents(); });
+			// * MODAL ACTIONS *//
+
+			// * ALARM *//
+
+			// buildEventStruture();
+			operationDataService.on('setOnEventChangeListener', (data) => { vm.loadEvents(); vm.buildEventStruture(); });
+			operationDataService.on('setOnCurrentEventListener', (data) => { vm.buildEventStruture(); });
+			operationDataService.on('setOnNoCurrentEventListener', (data) => { vm.buildEventStruture(); });
+			operationDataService.on('setOnEventLogUpdateListener', (data) => { vm.buildEventStruture(); });
+			operationDataService.on('setOnWaitEventListener', (data) => { vm.buildEventStruture(); });
+
+			// buildTimeSlicesStruture();
+			operationDataService.on('setOnTimeSlicesChangeListener', (data) => { vm.buildTimeSlicesStruture(); });
+			operationDataService.on('setOnTimeSlicesListener', (data) => { vm.buildTimeSlicesStruture(); });
+			operationDataService.on('setOnNoTimeSlicesListener', (data) => { vm.buildTimeSlicesStruture(); });
+
+			operationDataService.on('setOnAboveSpeedLimitListener', (data) => { vm.onAboveSpeedLimit(); });
+			operationDataService.on('setOnUnreachableTargetListener', (data) => { vm.onUnreachableTarget(); });
+
+			// removeTeamsFromShift();
+			operationDataService.on('setOnShiftListener', (data) => { vm.removeTeamsFromShift(); });
+
+			// buildAcknowledgementList();
+			operationDataService.on('setOnAlarmsChangeListener', (data) => { vm.buildAcknowledgementList(); });
+			operationDataService.on('setOnCurrentAlarmsListener', (data) => { vm.buildAcknowledgementList(); });
+			operationDataService.on('setOnNoCurrentAlarmsListener', (data) => { vm.buildAcknowledgementList(); });
+			operationDataService.on('setOnSpeedRestrictionAlarmListener', (data) => { vm.buildAcknowledgementList(); });
+			operationDataService.on('setOnDurationAlarmListener', (data) => { vm.buildAcknowledgementList(); });
+			operationDataService.on('setOnNoCurrentAlarmListener', (data) => { vm.buildAcknowledgementList(); });
+			operationDataService.on('setOnExpectedAlarmChangeListener', (data) => { vm.buildAcknowledgementList(); });
+
 		});
-		// vm.changeTrackingContent = changeTrackingContent;
 
-		/**
-		 * ADMIN ONLY
-		 */
+	}
 
-		// * MODAL ACTIONS *//
+	public actionOpenDropdownMenu(mouseEvent, eventLog) {
+		const modalOption: any = document.querySelector('.slips-to-slips-dropdown-menu');
 
-		// * ALARM *//
+		modalOption.style.top = (mouseEvent.clientY) + 'px';
+		modalOption.style.left = (mouseEvent.clientX) + 'px';
 
-		// buildEventStruture();
-		operationDataService.on('setOnEventChangeListener', (data) => { vm.buildEventStruture(); });
-		operationDataService.on('setOnCurrentEventListener', (data) => { vm.buildEventStruture(); });
-		operationDataService.on('setOnNoCurrentEventListener', (data) => { vm.buildEventStruture(); });
-		operationDataService.on('setOnEventLogUpdateListener', (data) => { vm.buildEventStruture(); });
-		operationDataService.on('setOnWaitEventListener', (data) => { vm.buildEventStruture(); });
+		if (!this.$scope.flags.openDropdownMenu) {
+			this.$scope.flags.openDropdownMenu = !this.$scope.flags.openDropdownMenu;
+		}
 
-		// buildTimeSlicesStruture();
-		operationDataService.on('setOnTimeSlicesChangeListener', (data) => { vm.buildTimeSlicesStruture(); });
-		operationDataService.on('setOnTimeSlicesListener', (data) => { vm.buildTimeSlicesStruture(); });
-		operationDataService.on('setOnNoTimeSlicesListener', (data) => { vm.buildTimeSlicesStruture(); });
+		this.eventId = eventLog.id;
+		this.eventStartTime = eventLog.startTime;
+		this.eventEndTime = eventLog.endTime;
 
-		operationDataService.on('setOnAboveSpeedLimitListener', (data) => { vm.onAboveSpeedLimit(); });
-		operationDataService.on('setOnUnreachableTargetListener', (data) => { vm.onUnreachableTarget(); });
+	}
 
-		// removeTeamsFromShift();
-		operationDataService.on('setOnShiftListener', (data) => { vm.removeTeamsFromShift(); });
-
-		// buildAcknowledgementList();
-		operationDataService.on('setOnAlarmsChangeListener', (data) => { vm.buildAcknowledgementList(); });
-		operationDataService.on('setOnCurrentAlarmsListener', (data) => { vm.buildAcknowledgementList(); });
-		operationDataService.on('setOnNoCurrentAlarmsListener', (data) => { vm.buildAcknowledgementList(); });
-		operationDataService.on('setOnSpeedRestrictionAlarmListener', (data) => { vm.buildAcknowledgementList(); });
-		operationDataService.on('setOnDurationAlarmListener', (data) => { vm.buildAcknowledgementList(); });
-		operationDataService.on('setOnNoCurrentAlarmListener', (data) => { vm.buildAcknowledgementList(); });
-		operationDataService.on('setOnExpectedAlarmChangeListener', (data) => { vm.buildAcknowledgementList(); });
-
+	public actionClickEventDetailsButton() {
+		this.eventDetailsModalService.open(this.eventId);
 	}
 
 	public actionButtonStartOperation(operation: any) {
@@ -150,28 +209,17 @@ export class TrackingController {
 	}
 
 	public actionClickFailuresButton() {
-		const vm = this;
-		vm.$uibModal.open({
-			animation: true,
-			keyboard: false,
-			backdrop: 'static',
-			size: 'modal-sm',
-			windowClass: 'xpd-operation-modal',
-			template: 'failures.modal.html',
-		});
-
+		this.failureModal.open(
+			this.getSelectedEvent(),
+		);
 	}
 
 	public actionClickLessonsLearnedButton() {
-		const vm = this;
-		vm.$uibModal.open({
-			animation: true,
-			keyboard: false,
-			backdrop: 'static',
-			size: 'modal-sm',
-			windowClass: 'xpd-operation-modal',
-			template: 'lesson-learned.modal.html',
-		});
+		this.lessonLearnedModal.open(
+			this.getSelectedEvent(),
+			(arg) => { this.insertLessonLearnedCallback(arg); },
+			(arg) => { this.updateLessonLearnedCallback(arg); },
+		);
 	}
 
 	public actionButtonCloseAlarmsAcknowledgementModal() {
@@ -215,6 +263,30 @@ export class TrackingController {
 
 	public finishDurationAlarm() {
 		this.operationDataFactory.emitFinishDurationAlarm();
+	}
+
+	private getSelectedEvent() {
+		const operationId = this.$scope.operationData.operationContext.currentOperation.id;
+		const start = new Date(this.eventStartTime);
+		const end = new Date(this.eventEndTime);
+
+		const selectedEvent = {
+			operation: {
+				id: operationId,
+			},
+			startTime: start,
+			endTime: end,
+		};
+
+		return selectedEvent;
+	}
+
+	private insertLessonLearnedCallback(lessonLearned) {
+		this.lessonLearnedSetupAPIService.insertObject(lessonLearned);
+	}
+
+	private updateLessonLearnedCallback(lessonLearned) {
+		this.lessonLearnedSetupAPIService.updateObject(lessonLearned);
 	}
 
 	private init() {
@@ -318,6 +390,71 @@ export class TrackingController {
 		 */
 	}
 
+	private loadEvents() {
+
+		if (this.$scope.operationData != null &&
+			this.$scope.operationData.operationContext &&
+			this.$scope.operationData.operationContext.currentOperation &&
+			this.$scope.operationData.operationContext.currentOperation.running) {
+
+			if (!this.listTrackingEventByOperationPromise) {
+
+				this.listTrackingEventByOperationPromise = this.listTrackingEventByOperation(
+					this.$scope.operationData.operationContext.currentOperation.id);
+
+				this.listTrackingEventByOperationPromise.then((trackingEvents) => {
+					this.organizeEventsOnLists(trackingEvents);
+					this.listTrackingEventByOperationPromise = null;
+				});
+
+			}
+		}
+
+	}
+
+	private listTrackingEventByOperation(operationId) {
+		return this.eventlogSetupAPIService.listTrackingEventByOperation(operationId);
+	}
+
+	private organizeEventsOnLists(trackingEvents) {
+
+		this.$scope.dados.connectionEvents = [];
+		this.$scope.dados.tripEvents = [];
+		this.$scope.dados.timeEvents = [];
+		this.$scope.dados.connectionTimes = [];
+		this.$scope.dados.tripTimes = [];
+
+		trackingEvents.map((event) => {
+
+			if (event.id && event.duration) {
+
+				if (event.eventType === 'CONN') {
+					this.$scope.dados.connectionEvents.push(event);
+				}
+
+				if (event.eventType === 'TRIP') {
+					this.$scope.dados.tripEvents.push(event);
+				}
+
+				if (event.eventType === 'TIME') {
+					this.$scope.dados.timeEvents.push(event);
+				}
+
+			}
+
+		});
+
+		this.$scope.dados.connectionTimes = this.$scope.dados.connectionEvents.slice(-200);
+		this.$scope.dados.tripTimes = this.$scope.dados.tripEvents.slice(-200);
+
+		const lastConn = this.$scope.dados.connectionEvents[this.$scope.dados.connectionEvents.length - 1];
+		const lastTrip = this.$scope.dados.tripEvents[this.$scope.dados.tripEvents.length - 1];
+
+		this.$scope.dados.lastConnDuration = (lastConn.duration / 1000);
+		this.$scope.dados.lastTripDuration = (lastTrip.duration / 1000);
+
+	}
+
 	private buildEventStruture() {
 
 		const eventContext = this.$scope.operationData.eventContext;
@@ -340,7 +477,7 @@ export class TrackingController {
 		if (timeSlicesContext && timeSlicesContext.currentTimeSlices != null) {
 
 			try {
-				timeSlicesContext.currentTimeSlices = timeSlicesContext.currentTimeSlices.map(function (ts) {
+				timeSlicesContext.currentTimeSlices = timeSlicesContext.currentTimeSlices.map((ts) => {
 
 					if (ts.enabled === false) {
 						ts.enabled = false;
@@ -355,7 +492,7 @@ export class TrackingController {
 			}
 
 			timeSlicesContext.currentTimeSlices = (
-				timeSlicesContext.currentTimeSlices.filter(function (ts) {
+				timeSlicesContext.currentTimeSlices.filter((ts) => {
 					return ts.enabled = true;
 				}));
 

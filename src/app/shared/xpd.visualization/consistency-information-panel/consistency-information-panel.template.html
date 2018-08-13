@@ -55,20 +55,20 @@
 		<div class="col-md-6 nopadding">
 			<xpd-performance-progress-bar
 				title="Last Event ({{lastEventType | xpdEventLabelFilter}})"
-				current-value="duration[lastEventType]"
-				low-value= "contractTimePerformance[lastEventType].voptimumTime",
-				medium-value= "contractTimePerformance[lastEventType].vstandardTime",
-				high-value= "contractTimePerformance[lastEventType].vpoorTime">
+				current-value="{{ duration[lastEventType] }}"
+				low-value= "{{ contractTimePerformance[lastEventType].voptimumTime }}",
+				medium-value= "{{ contractTimePerformance[lastEventType].vstandardTime }}",
+				high-value= "{{ contractTimePerformance[lastEventType].vpoorTime }}">
 			</xpd-performance-progress-bar>
 		</div>
 
 		<div class="col-md-6 nopadding">
 			<xpd-performance-progress-bar
 				title="Current Event ({{currentEventType | xpdEventLabelFilter}})"
-				current-value="(currentEventDuration / 1000)"
-				low-value= "contractTimePerformance[currentEventType].voptimumTime",
-				medium-value= "contractTimePerformance[currentEventType].vstandardTime",
-				high-value= "contractTimePerformance[currentEventType].vpoorTime"
+				current-value="{{ (currentEventDuration / 1000) }}"
+				low-value= "{{ contractTimePerformance[currentEventType].voptimumTime }}",
+				medium-value= "{{ contractTimePerformance[currentEventType].vstandardTime }}",
+				high-value= "{{ contractTimePerformance[currentEventType].vpoorTime }}"
 				is-real-time="true">
 			</xpd-performance-progress-bar>
 		</div>
@@ -76,10 +76,10 @@
 		<div class="col-md-12 nopadding">
 			<xpd-performance-progress-bar
 				title="Current Joint"
-				current-value="(currentJointDuration / 1000)"
-				low-value= "contractTimePerformance['BOTH'].voptimumTime",
-				medium-value= "contractTimePerformance['BOTH'].vstandardTime",
-				high-value= "contractTimePerformance['BOTH'].vpoorTime"
+				current-value="{{ (currentJointDuration / 1000) }}"
+				low-value= "{{ contractTimePerformance['BOTH'].voptimumTime }}",
+				medium-value= "{{ contractTimePerformance['BOTH'].vstandardTime }}",
+				high-value= "{{ contractTimePerformance['BOTH'].vpoorTime }}"
 				is-real-time="true">
 			</xpd-performance-progress-bar>
 		</div>
@@ -91,20 +91,20 @@
 		<div class="col-md-6 nopadding" ng-repeat="eventType in ['CONN', 'TRIP']">
 			<xpd-performance-progress-bar
 				title="Last {{eventType | xpdEventLabelFilter}} Done"
-				current-value="duration[eventType]"
-				low-value= "contractTimePerformance[eventType].voptimumTime",
-				medium-value= "contractTimePerformance[eventType].vstandardTime",
-				high-value= "contractTimePerformance[eventType].vpoorTime">
+				current-value="{{ duration[eventType] }}"
+				low-value= "{{ contractTimePerformance[eventType].voptimumTime }}",
+				medium-value= "{{ contractTimePerformance[eventType].vstandardTime }}",
+				high-value= "{{ contractTimePerformance[eventType].vpoorTime }}">
 			</xpd-performance-progress-bar>
 		</div>
 
 		<div class="col-md-12 nopadding">
 			<xpd-performance-progress-bar
 				title="Last Joint Done"
-				current-value="getLastJointDuration()"
-				low-value= "contractTimePerformance['BOTH'].voptimumTime",
-				medium-value= "contractTimePerformance['BOTH'].vstandardTime",
-				high-value= "contractTimePerformance['BOTH'].vpoorTime">
+				current-value="{{ getLastJointDuration() }}"
+				low-value= "{{ contractTimePerformance['BOTH'].voptimumTime }}",
+				medium-value= "{{ contractTimePerformance['BOTH'].vstandardTime }}",
+				high-value= "{{ contractTimePerformance['BOTH'].vpoorTime }}">
 			</xpd-performance-progress-bar>
 		</div>
 

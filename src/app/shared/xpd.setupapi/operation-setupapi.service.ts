@@ -25,7 +25,7 @@ export class OperationSetupAPIService {
 		return this.setupAPIService.doRequest(req);
 	}
 
-	public getObjectById(id) {
+	public getOperationById(id) {
 
 		const req = {
 			method: 'GET',

@@ -4,11 +4,16 @@
 // 	xpdOperationManager.$inject = ['$uibModal', 'dialogService'];
 import { IModalService } from 'angular-ui-bootstrap';
 import { DialogService } from '../xpd.dialog/xpd.dialog.factory';
+import './operationmanager.style.scss';
 import template from './operationmanager.template.html';
 
 export class XPDOperationManagerDirective {
 
 	public static $inject: string[] = ['$uibModal', 'dialogService'];
+
+	public static Factory(): ng.IDirectiveFactory {
+		return ($uibModal: IModalService, dialogService: DialogService) => new XPDOperationManagerDirective($uibModal, dialogService);
+	}
 
 	public scope = {
 		currentOperation: '=',
@@ -173,10 +178,6 @@ export class XPDOperationManagerDirective {
 		scope.actionDisabledCementation = (arg) => { actionDisabledCementation(); };
 		scope.onClickFinishDurationAlarm = (arg) => { onClickFinishDurationAlarm(); };
 
-	}
-
-	public static Factory(): ng.IDirectiveFactory {
-		return ($uibModal: IModalService, dialogService: DialogService) => new XPDOperationManagerDirective($uibModal, dialogService);
 	}
 
 }

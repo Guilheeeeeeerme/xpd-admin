@@ -1,4 +1,5 @@
 import { IModalService } from 'angular-ui-bootstrap';
+import './xpd-modal-failure.style.scss';
 import modalTemplate from './xpd-modal-failure.template.html';
 
 // (function() {
@@ -27,7 +28,7 @@ export class FailureModalFactory {
 			backdrop: 'static',
 			template: modalTemplate,
 			windowClass: 'xpd-operation-modal',
-			controller: 'modalFailureController as mfController',
+			controller: 'ModalFailureController as mfController',
 			size: 'modal-md',
 			resolve: {
 				selectedFailure() {

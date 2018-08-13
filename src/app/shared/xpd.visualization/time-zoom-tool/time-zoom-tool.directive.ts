@@ -6,7 +6,11 @@ import template from './time-zoom-tool.template.html';
 
 export class TimeZoomToolDirective implements ng.IDirective {
 
-	constructor(private $filter: any) { }
+	public static Factory(): ng.IDirectiveFactory {
+		const directive = ($filter: ng.IFilterFilter) => new TimeZoomToolDirective($filter);
+		directive.$inject = ['$filter'];
+		return directive;
+	}
 
 	public restrict = 'E';
 	public template = template;
@@ -18,6 +22,8 @@ export class TimeZoomToolDirective implements ng.IDirective {
 		minDepth: '=',
 		maxDepth: '=',
 	};
+
+	constructor(private $filter: any) { }
 
 	public link: ng.IDirectiveLinkFn = (
 		scope: any,
@@ -427,12 +433,6 @@ export class TimeZoomToolDirective implements ng.IDirective {
 
 		}
 
-	}
-
-	public static Factory(): ng.IDirectiveFactory {
-		const directive = ($filter: ng.IFilterFilter) => new TimeZoomToolDirective($filter);
-		directive.$inject = ['$filter'];
-		return directive;
 	}
 
 }

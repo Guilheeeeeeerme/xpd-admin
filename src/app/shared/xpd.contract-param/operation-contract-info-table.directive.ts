@@ -1,17 +1,16 @@
 
-// (function() {
-// 	'use strict';
-
-// 	operationContractInfoTable.$inject = ['vCruisingCalculator'];
-
 import { VCruisingCalculatorService } from '../xpd.calculation/calculation.service';
 import './operation-contract-info-table.style.scss';
 import template from './operation-contract-info-table.template.html';
 
 export class OperationContractInfoTableDirective {
+
 	public static $inject: string[] = ['vCruisingCalculator'];
 
-	constructor(private vCruisingCalculator: VCruisingCalculatorService) { }
+	public static Factory(): ng.IDirectiveFactory {
+		return (vCruisingCalculator: VCruisingCalculatorService) => new OperationContractInfoTableDirective(vCruisingCalculator);
+	}
+
 	// Runs during compile
 	public scope = {
 		state: '@',
@@ -29,6 +28,8 @@ export class OperationContractInfoTableDirective {
 	};
 	public restrict = 'E';
 	public template = template;
+
+	constructor(private vCruisingCalculator: VCruisingCalculatorService) { }
 
 	public link: ng.IDirectiveLinkFn = (
 		scope: any,
@@ -123,10 +124,6 @@ export class OperationContractInfoTableDirective {
 		// vCruisingCalculator
 
 		element[0].className = element[0].className + ' table-contract-info';
-	}
-
-	public static Factory(): ng.IDirectiveFactory {
-		return (vCruisingCalculator: VCruisingCalculatorService) => new OperationContractInfoTableDirective(vCruisingCalculator);
 	}
 }
 

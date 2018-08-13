@@ -1,5 +1,24 @@
+xpd-section-list {
+    display: block;
 
+    .section-list-table {
 
-.actions-column-label{
-    padding-top: 13px;
+        .section-list-label-name{
+            width: 20%;
+            text-overflow: ellipsis;
+        }
+        .section-list-label-size
+        .section-list-label-mdTop,
+        .section-list-label-mdBottom{
+            width: 50/3%;
+            text-overflow: ellipsis;
+        }
+        .section-list-label-action{
+            width: 30%;
+        }
+    }
+
+    xpd-operation-list {
+        margin-left: 5%;
+    }
 }

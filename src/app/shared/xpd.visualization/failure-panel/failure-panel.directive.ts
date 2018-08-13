@@ -2,6 +2,10 @@ import template from './failure-panel.template.html';
 
 export class FailurePanelDirective implements ng.IDirective {
 
+	public static Factory(): ng.IDirectiveFactory {
+		return () => new FailurePanelDirective();
+	}
+
 	public restrict = 'EA';
 	public template = template;
 	public scope = {
@@ -39,10 +43,6 @@ export class FailurePanelDirective implements ng.IDirective {
 			return new Date(diffTime);
 		};
 
-	}
-
-	public static Factory(): ng.IDirectiveFactory {
-		return () => new FailurePanelDirective();
 	}
 
 }

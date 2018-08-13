@@ -5,6 +5,10 @@
 import template from './register-alarm-modal.template.html';
 
 export class RegisterAlarmModalDirective implements ng.IDirective {
+
+	public static Factory(): ng.IDirectiveFactory {
+		return () => new RegisterAlarmModalDirective();
+	}
 	public restrict = 'E';
 	public scope = {
 		alarm: '=',
@@ -52,10 +56,6 @@ export class RegisterAlarmModalDirective implements ng.IDirective {
 			}
 		}
 
-	}
-
-	public static Factory(): ng.IDirectiveFactory {
-		return () => new RegisterAlarmModalDirective();
 	}
 
 }

@@ -30,6 +30,7 @@ import { TripRulerDirective } from './trip-ruler/trip-ruler.directive';
 import { UpcomingAlarmsPanelDirective } from './upcoming-alarms-panel/upcoming-alarms-panel.directive';
 import { WellInformationPanelDirective } from './well-information-panel/well-information-panel.directive';
 import { XPDViewBoxDirective } from './xpd-view-box.directive';
+import './xpd-visualization.scss';
 
 const XPDVisualizationModule: angular.IModule = angular.module('xpd.visualization', []);
 

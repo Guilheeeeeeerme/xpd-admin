@@ -5,6 +5,10 @@ import template from './xpd.switch.template.html';
 
 export class XPDSwitchDirective implements ng.IDirective {
 
+	public static Factory(): ng.IDirectiveFactory {
+		return () => new XPDSwitchDirective();
+	}
+
 	public restrict = 'E';
 	public scope = {
 		shape: '@',
@@ -36,10 +40,6 @@ export class XPDSwitchDirective implements ng.IDirective {
 				console.error(e);
 			}
 		}
-	}
-
-	public static Factory(): ng.IDirectiveFactory {
-		return () => new XPDSwitchDirective();
 	}
 
 }

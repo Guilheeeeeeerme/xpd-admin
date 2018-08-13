@@ -2,6 +2,10 @@ import template from './upcoming-alarms-panel.template.html';
 
 export class UpcomingAlarmsPanelDirective implements ng.IDirective {
 
+	public static Factory(): ng.IDirectiveFactory {
+		return () => new UpcomingAlarmsPanelDirective();
+	}
+
 	public retrict = 'EA';
 	public template = template;
 	public scope = {
@@ -111,10 +115,6 @@ export class UpcomingAlarmsPanelDirective implements ng.IDirective {
 			scope.alarmListSorted = getAlarmByDirectionSorted(scope.tripinAlarms, scope.tripoutAlarms);
 		}, true);
 
-	}
-
-	public static Factory(): ng.IDirectiveFactory {
-		return () => new UpcomingAlarmsPanelDirective();
 	}
 
 }

@@ -1,6 +1,10 @@
 import template from './operation-information-panel.template.html';
 
 export class OperationInformationPanelDirective implements ng.IDirective {
+
+	public static Factory(): ng.IDirectiveFactory {
+		return () => new OperationInformationPanelDirective();
+	}
 	public restrict = 'EA';
 	public template = template;
 	public scope = {
@@ -42,9 +46,5 @@ export class OperationInformationPanelDirective implements ng.IDirective {
 			localStorage.setItem(keyName, JSON.stringify(newState));
 		};
 
-	}
-
-	public static Factory(): ng.IDirectiveFactory {
-		return () => new OperationInformationPanelDirective();
 	}
 }

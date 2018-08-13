@@ -6,6 +6,12 @@ import './dmec-tracking.style.scss';
 import template from './dmec-tracking.template.html';
 
 export class DMECTrackingDirective implements ng.IDirective {
+
+	public static Factory(): ng.IDirectiveFactory {
+		const directive = (dmecService: DMECService) => new DMECTrackingDirective(dmecService);
+		directive.$inject = ['dmecService'];
+		return directive;
+	}
 	public scope = {
 		connectionEvents: '=',
 		tripEvents: '=',
@@ -45,12 +51,6 @@ export class DMECTrackingDirective implements ng.IDirective {
 		function setSelectedPoint(position) {
 			scope.selectedPoint({point: position});
 		}
-	}
-
-	public static Factory(): ng.IDirectiveFactory {
-		const directive = (dmecService: DMECService) => new DMECTrackingDirective(dmecService);
-		directive.$inject = ['dmecService'];
-		return directive;
 	}
 
 }

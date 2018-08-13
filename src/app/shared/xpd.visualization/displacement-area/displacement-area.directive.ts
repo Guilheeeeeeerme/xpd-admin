@@ -8,6 +8,10 @@ import template from './displacement-area.template.html';
 
 export class DisplacementAreaFactory implements ng.IDirective {
 	public static $inject = [];
+
+	public static Factory(): ng.IDirectiveFactory {
+		return () => new DisplacementAreaFactory();
+	}
 	public template = template;
 	public restrict = 'E';
 	public scope = {
@@ -76,10 +80,6 @@ export class DisplacementAreaFactory implements ng.IDirective {
 
 		});
 
-	}
-
-	public static Factory(): ng.IDirectiveFactory {
-		return () => new DisplacementAreaFactory();
 	}
 
 }

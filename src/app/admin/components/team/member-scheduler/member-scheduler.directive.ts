@@ -6,6 +6,10 @@ export class MemberSchedulerDirective implements ng.IDirective {
 	// memberScheduler.$inject = ['$compile', 'ganttService'];
 	public static $inject: string[] = ['$compile', 'ganttService'];
 
+	public static Factory(): ng.IDirectiveFactory {
+		return ($compile: ng.ICompileService, ganttService: GanttService) => new MemberSchedulerDirective($compile, ganttService);
+	}
+
 	public restrict = 'A';
 	public scope = {
 		scheduleList: '=',
@@ -515,9 +519,5 @@ export class MemberSchedulerDirective implements ng.IDirective {
 				}
 			});
 		});
-	}
-
-	public static Factory(): ng.IDirectiveFactory {
-		return ($compile: ng.ICompileService, ganttService: GanttService) => new MemberSchedulerDirective($compile, ganttService);
 	}
 }

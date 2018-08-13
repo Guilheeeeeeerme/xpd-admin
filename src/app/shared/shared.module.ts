@@ -8,12 +8,42 @@ import 'angular-ui-bootstrap';
 import 'bootstrap';
 import 'jquery';
 
+console.log('Importando css globais');
+import './../../../node_modules/angular-toastr/dist/angular-toastr.css';
+import './../../../node_modules/bootstrap/dist/css/bootstrap.min.css';
+import './../../../node_modules/font-awesome/css/font-awesome.min.css';
+
+import './../../assets/css/xpd-watermark.scss';
+import './../../assets/css/bootstrap-fix.scss';
+import './../../assets/css/equilibrium-time-table.scss';
+import './../../assets/css/height.scss';
+import './../../assets/css/scrollbar.scss';
+import './../../assets/css/xpd-box.scss';
+import './../../assets/css/xpd-chart-container.scss';
+import './../../assets/css/xpd-operation-modal.scss';
+import './../../assets/css/xpd-operation-table.scss';
+import './../../assets/css/xpd-panel.scss';
+import './../../assets/css/xpd-placeholder.scss';
+
+import alarmInfoTemplate from './../../components/admin/views/forms/alarm-info.template.html';
+import bhaContractTemplate from './../../components/admin/views/forms/bha-contract-info.template.html';
+import bhaGeneralTemplate from './../../components/admin/views/forms/bha-general-info.template.html';
+import casingContractTemplate from './../../components/admin/views/forms/casing-contract-info.template.html';
+import casingGeneralTemplate from './../../components/admin/views/forms/casing-general-info.template.html';
+import riserContractTemplate from './../../components/admin/views/forms/riser-contract-info.template.html';
+import riserGeneralTemplate from './../../components/admin/views/forms/riser-general-info.template.html';
+import timeContractTemplate from './../../components/admin/views/forms/time-contract-info.template.html';
+import timeGeneralTemplate from './../../components/admin/views/forms/time-general-info.template.html';
+import failureModalTemplate from './../../components/admin/views/modal/failures.modal.html';
+import lessonLearndModalTemplate from './../../components/admin/views/modal/lesson-learned.modal.html';
 import { AngularTreeviewModule } from './angular.treeview/angular-treeview.module';
 import { XPDConnectionStatusModule } from './connection-status/connection-status.module';
 import { XPDGanttModule } from './gantt/gantt.module';
 import { XPDHighchartsModule } from './highcharts/highcharts.module';
+import { XPDOperationConfigModule } from './operation-configuration/operation-configuration.module';
 import { XPDAccessModule } from './xpd.access/accessfactory.module';
 import { XPDAdminNavBarModule } from './xpd.admin-nav-bar/admin-nav-bar.module';
+import { XPDAlarmUpsertModule } from './xpd.alarm/alarm.module';
 import { XPDCalculationModule } from './xpd.calculation/calculation.module';
 import { XPDContractParamModule } from './xpd.contract-param/contract-param.module';
 import { XPDContractTimeInputModule } from './xpd.contract-time-input/contract-time-input.module';
@@ -29,6 +59,7 @@ import { XPDFailureModule } from './xpd.modal.failure/xpd-modal-failure.module';
 import { XPDLayDownConfirmationModule } from './xpd.modal.laydown-confirmation/xpd.modal.laydown-confirmation.module';
 import { XPDLessonLearnedModule } from './xpd.modal.lessonlearned/xpd-modal-lessonlearned.module';
 import { XPDOperationDataModule } from './xpd.operation-data/operation-data.module';
+import { XPDOperationListModule } from './xpd.operation-list/operation-list.module';
 import { XPDOperationManagerModule } from './xpd.operationmanager/operationmanager.module';
 import { XPDPlannerModule } from './xpd.planner/planner.module';
 import { XPDRegisterAlarmModule } from './xpd.register-alarm-modal/register-alarm-modal.module';
@@ -85,22 +116,12 @@ const XPDSharedModule: angular.IModule = angular.module('xpd.shared', [
 	XPDZeroTimeZoneModule.name,
 	XPDSectionListModule.name,
 	XPDConnectionStatusModule.name,
+	XPDOperationListModule.name,
+	XPDAlarmUpsertModule.name,
+	XPDOperationConfigModule.name,
 ]);
 
 export { XPDSharedModule };
-
-import alarmInfoTemplate from './../../components/admin/views/forms/alarm-info.template.html';
-import bhaContractTemplate from './../../components/admin/views/forms/bha-contract-info.template.html';
-import bhaGeneralTemplate from './../../components/admin/views/forms/bha-general-info.template.html';
-import casingContractTemplate from './../../components/admin/views/forms/casing-contract-info.template.html';
-import casingGeneralTemplate from './../../components/admin/views/forms/casing-general-info.template.html';
-import riserContractTemplate from './../../components/admin/views/forms/riser-contract-info.template.html';
-import riserGeneralTemplate from './../../components/admin/views/forms/riser-general-info.template.html';
-import timeContractTemplate from './../../components/admin/views/forms/time-contract-info.template.html';
-import timeGeneralTemplate from './../../components/admin/views/forms/time-general-info.template.html';
-
-import failureModalTemplate from './../../components/admin/views/modal/failures.modal.html';
-import lessonLearndModalTemplate from './../../components/admin/views/modal/lesson-learned.modal.html';
 
 XPDSharedModule.run(['$templateCache', ($templateCache: ng.ITemplateCacheService) => {
 	$templateCache.put('alarm-info.template.html', alarmInfoTemplate);

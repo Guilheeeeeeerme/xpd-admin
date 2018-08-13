@@ -6,6 +6,10 @@ import './score-gauge.style.scss';
 
 export class ScoreGaugeDirective implements ng.IDirective {
 
+	public static Factory(): ng.IDirectiveFactory {
+		return () => new ScoreGaugeDirective();
+	}
+
 	public restrict = 'E';
 	public scope = {
 		currentScore: '=',
@@ -457,9 +461,5 @@ export class ScoreGaugeDirective implements ng.IDirective {
 			}
 		}
 
-	}
-
-	public static Factory(): ng.IDirectiveFactory {
-		return () => new ScoreGaugeDirective();
 	}
 }

@@ -6,6 +6,13 @@ import template from './d3-dmec-chart.template.html';
 
 export class D3DMECChartDirective implements ng.IDirective {
 	public static $inject = ['$q', '$window', '$uibModal'];
+
+	public static Factory(): ng.IDirectiveFactory {
+		return (
+			$q: ng.IQService,
+			$window: angular.IWindowService,
+			$uibModal: IModalService) => new D3DMECChartDirective($q, $window, $uibModal);
+	}
 	public restrict = 'E';
 	public template = template;
 	public scope = {
@@ -721,13 +728,6 @@ export class D3DMECChartDirective implements ng.IDirective {
 			param: 'sppa',
 			nextParam: false,
 		}];
-	}
-
-	public static Factory(): ng.IDirectiveFactory {
-		return (
-			$q: ng.IQService,
-			$window: angular.IWindowService,
-			$uibModal: IModalService) => new D3DMECChartDirective($q, $window, $uibModal);
 	}
 
 }

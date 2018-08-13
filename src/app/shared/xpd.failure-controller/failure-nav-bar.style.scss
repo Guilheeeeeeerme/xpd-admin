@@ -1,0 +1,129 @@
+@import '~styles/font.scss';
+
+xpd-failure-nav-bar {
+
+    display: inline-block;
+    height: 100%;
+    width: 375px;
+    font-family: $font-family-1;
+    padding-left: 25px;
+    padding-right: 25px;
+
+    .failure-title {
+        display: inline-block;
+        border: 2px solid #456c75;
+        background-color: #ddd;
+        color: #456c75;
+        height: 50px;
+        padding: 10px;
+        width: 230px;
+        font-weight: bolder;
+        text-transform: uppercase;
+        margin-top: 2px;
+        font-size: 1.5em;
+    }
+
+    .add-failure-on-going {
+        height: 46px;
+        margin-top: -13px;
+        // display: inline;
+        // height: 47px;
+    }
+
+    .center-align-list td {
+        text-align: center;
+    }
+    
+    .in-npt{
+        background-color: #e0b9b9;
+    }
+
+    .in-best-practices {
+        background-color: #7dcf82;
+    }
+    
+    .in-best-practices td:first-child span {
+        color: #f9ff00;
+     }
+
+    .failure-npt-category{
+        background-color: rgb(230, 88, 88);
+    }
+
+    .failure-npt {
+        background-color: rgb(219, 230, 239);
+        color: rgb(243, 66, 66);
+    }
+
+    .failure-normal {
+        background-color: rgb(219, 230, 239);
+        color: rgb(218, 165, 19);
+    }
+    
+    .failure-normal-category{
+        background-color: rgb(241, 191, 0);
+    }
+
+    .failure-category{
+        font-size: 0.7em;
+        border: 0;
+        color: #222;
+        width: 100%;
+        border-width: 1px 2px 1px 2px;
+        border-style: solid;
+        border-color: #456c75;
+    }
+
+    .failure-report-chart{
+        margin-bottom: 10px;
+    }
+
+
+    .failure-report-chart div{
+        border-radius: 5px;
+    }
+
+    .failures-breadcrumb{
+        background-color: transparent;
+        color: #acd7ca;
+    }
+
+    .failures-breadcrumb a{
+        cursor: pointer;
+        color: #436a72;
+    }
+    
+    .failures-report-table{
+        border-radius: 3px;
+       background-color: #2b908f;
+    }
+
+    .failures-report-tbody tr{
+        cursor: pointer;
+    }
+
+    .failures-report-tbody tr{
+        background-color: #acd7ca;
+    }
+
+    .failures-report-tbody tr:hover{
+        background-color: #9fd8c7
+    }
+
+    .cell-description {
+        max-width: 100px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .scrolling-table-tabs {
+        max-height: 400px;
+        overflow: auto;
+    }
+
+    .table-fixed-header{
+        margin-bottom: 0;
+    }
+
+}

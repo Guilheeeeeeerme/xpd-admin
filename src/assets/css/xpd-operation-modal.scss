@@ -1,0 +1,93 @@
+@import '~styles/font.scss';
+
+.xpd-operation-modal{
+    font-family: $font-family-1;
+}
+
+.xpd-operation-modal .modal-content{
+    border-radius: 0;
+    border: 3px solid #2e9098;
+}
+
+.xpd-operation-modal .modal-content form{
+    margin-bottom: 0;
+}
+
+.xpd-operation-modal .modal-header{
+    padding-bottom: 2px;
+    padding-top: 10px;
+    border-bottom: 3px solid #2e9098;
+    background-color: black;
+    color: #54848f;
+    font-weight: bold;
+    font-size: 16px;
+}
+
+.xpd-operation-modal .modal-body, 
+.xpd-operation-modal .modal-footer{
+    background-color: #c8e5dc;
+    padding: 5px;
+}
+
+.xpd-operation-modal .modal-footer{
+    border-top: 2px solid #2e9098;
+}
+
+.xpd-operation-modal .modal-header.splitted-header{
+    padding: 0;
+}
+
+.xpd-operation-modal .modal-header.splitted-header .splitted-modal-col{
+    padding-bottom: 2px;
+    padding-top: 10px;
+    padding-left: 15px;
+}
+
+.xpd-operation-modal .splitted-modal-col{
+    width: 42%;
+    float: left;
+}
+
+.xpd-operation-modal .modal-body.splitted-body{
+    padding: 0;
+}
+
+.xpd-operation-modal .container-fluid{
+    padding: 0;
+}
+
+.xpd-operation-modal .modal-body.splitted-body .splitted-modal-col{
+    padding: 5px;
+}
+
+.xpd-operation-modal div .splitted-modal-col:first-child{
+    width: 58%;
+}
+
+.xpd-operation-modal div .splitted-modal-col:nth-child(2){
+    border-left: 3px solid #2e9098;
+}
+
+.xpd-operation-modal .modal-body input.form-control{
+    height: 25px;
+    /*max-width: 140px;*/
+    padding: 4px;
+}
+
+.xpd-operation-modal-category-list{
+    min-height: 250px;
+    max-height: 250px;
+}
+
+.xpd-operation-modal-category-list div ul li{
+    padding: 0 0 0 2px;
+    line-height: 16px;
+}
+
+.xpd-operation-modal textarea.form-control{
+    border: 2px solid #2e9098;
+    border-radius: 0;
+    background-color: #acd7ca;
+    color: black;
+    font-weight: bold;
+}

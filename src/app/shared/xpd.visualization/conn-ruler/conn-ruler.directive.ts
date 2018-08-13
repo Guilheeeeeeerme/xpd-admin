@@ -8,6 +8,10 @@ import template from './conn-ruler.template.html';
 
 export class ConnRulerDirective implements ng.IDirective {
 	public static $inject = [];
+
+	public static Factory(): ng.IDirectiveFactory {
+		return () => new ConnRulerDirective();
+	}
 	public restrict = 'E';
 	public template = template;
 	public scope = {
@@ -146,9 +150,5 @@ export class ConnRulerDirective implements ng.IDirective {
 			});
 		}
 
-	}
-
-	public static Factory(): ng.IDirectiveFactory {
-		return () => new ConnRulerDirective();
 	}
 }

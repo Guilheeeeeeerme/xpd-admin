@@ -23,6 +23,20 @@ export class VREReportController {
 		this.getWellList();
 	}
 
+	public onClickFilterButton(fromDate, toDate) {
+		this.$scope.$parent.rController.getFailuresOnInterval(fromDate, toDate);
+
+		this.$scope.vreData.period = {
+			fromDate: fromDate,
+			toDate: toDate,
+		};
+
+		this.reportsSetupAPIService.getVreList(fromDate, toDate).then(
+			(arg) => { this.vreListSuccessCallback(arg); },
+			(arg) => { this.vreListErrorCallback(arg); },
+		);
+	}
+
 	// --implements--
 	private getWellList() {
 		this.wellSetupAPIService.getList().then(
@@ -75,20 +89,6 @@ export class VREReportController {
 
 		this.$scope.vreData.vreDaily = { totalTime: runningTime, vreTotal: vreTotal, remainingTime: remainingTime };
 
-	}
-
-	public onClickFilterButton(fromDate, toDate) {
-		this.$scope.$parent.rController.getFailuresOnInterval(fromDate, toDate);
-
-		this.$scope.vreData.period = {
-			fromDate: fromDate,
-			toDate: toDate,
-		};
-
-		this.reportsSetupAPIService.getVreList(fromDate, toDate).then(
-			(arg) => { this.vreListSuccessCallback(arg); },
-			(arg) => { this.vreListErrorCallback(arg); },
-		);
 	}
 }
 // })();

@@ -1,4 +1,4 @@
-
+@import '~styles/green-box.scss';
 
 .planner-error-text {
     font-size: 0.8em;
@@ -63,4 +63,35 @@
     text-align: center;
     color: #fff;
     background-color: #337ab7;
+}
+
+.operation-progress-delay {
+    color: white;
+    font-family: $font-family-1;
+    height: 100%;
+    padding: 5px;
+    padding-top: 0;
+}
+
+.operation-progress-delay-title {
+    font-size: 1em;
+    text-align: center;
+    -webkit-text-stroke: 1px #517f89;
+    -webkit-text-fill-color: transparent;
+    height: 20%;
+}
+
+.operation-progress-delay-info {
+    font-size: 1.3em;
+    height: 80%;
+}
+
+.operation-progress-delay-info .table > tbody > tr > td {
+    border-top: 0;
+    text-align: center;
+    color: #fff
+}
+
+.operation-progress-delay-info .table {
+    margin-bottom: 0;
 }

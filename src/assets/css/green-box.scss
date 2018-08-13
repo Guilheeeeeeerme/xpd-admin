@@ -1,0 +1,75 @@
+.xpd-green-styled-box {
+    font-family: $font-family-1;
+    font-size: 1.3em;
+    font-weight: bolder;
+}
+
+.xpd-green-styled-box-popover {
+    font-family: $font-family-1;
+    font-size: 1em;
+    font-weight: bolder;
+    z-index: 100000;
+    border: 2px solid #456c75;
+    border-radius: 0;
+    width: 200px;
+    min-width: 100px;
+    background: transparent;
+}
+
+.xpd-green-styled-box-popover .popover-content{
+    padding: 0;
+}
+
+.xpd-green-styled-box-popover .equilibrium-time-table {
+    margin-bottom: 0px;
+}
+
+.xpd-green-styled-box-cell {
+    display: table;
+    height: 50px;
+    max-height: 50px;
+    border: 2px solid #456c75;
+    padding: 0px;
+    white-space: nowrap;
+    position: relative;
+}
+
+.xpd-green-styled-box-cell-blink {
+    animation: xpd-blinker 1s linear infinite;
+}
+
+@keyframes xpd-blinker {
+    50% {
+        opacity: 0.5;
+    }
+}
+
+.xpd-green-styled-box-cell:hover {
+    background-color: #456c75;
+    border: 2px solid black;
+}
+
+.xpd-green-styled-box-cell a:hover {
+    background-color: #456c75;
+    color: black;
+}
+
+.xpd-green-styled-box-cell a {
+    cursor: pointer;
+    display: table-cell;
+    text-align: center;
+    vertical-align: middle;
+    width: 100%;
+    white-space: nowrap;
+    padding-left: 0;
+    padding-right: 0;
+}
+
+.xpd-green-styled-box-cell.active {
+    background-color: #456c75;
+    /* border: 2px solid black; */
+}
+
+.xpd-green-styled-box-cell.active a {
+    color: black;
+}

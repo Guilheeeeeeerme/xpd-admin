@@ -1,10 +1,76 @@
-.tracking-message-row,
-.tracking-alarm-row  {
-    font-family: $font-family-1;
-    color: #4b7f88;
-}
+
 
 .ship-placeholder {
     max-width: 60%;
     max-height: 60%;
+}
+
+.data-bit-depth-content{
+    margin:0 auto;
+    margin-bottom: 10px;
+}
+
+.data-bit-depth-title{
+    font-family: $font-family-1;
+    color: #fff;
+    font-size: medium;
+}
+
+.data-bit-depth-value{
+    font-family: $font-family-1;
+    color: #fff;
+    font-size: large;
+    font-weight: 600;
+}
+
+.no-bit-depth {
+    color: #cc0505;
+    font-weight: bold;
+}
+
+
+.data-sso-box{
+    width: 75px;
+    margin:0 auto;
+    margin-bottom: 10px;
+}
+
+.data-sso-indicator{
+    background-color: #e89313;
+    text-align: center;
+    font-weight: 800;
+    font-family: $font-family-1;
+    color: #000;
+    font-size: 1em;
+}
+
+.operation-progress-delay {
+    color: white;
+    font-family: $font-family-1;
+    height: 100%;
+    padding: 5px;
+    padding-top: 0;
+}
+
+.operation-progress-delay-title {
+    font-size: 1em;
+    text-align: center;
+    -webkit-text-stroke: 1px #517f89;
+    -webkit-text-fill-color: transparent;
+    height: 20%;
+}
+
+.operation-progress-delay-info {
+    font-size: 1.3em;
+    height: 80%;
+}
+
+.operation-progress-delay-info .table > tbody > tr > td {
+    border-top: 0;
+    text-align: center;
+    color: #fff
+}
+
+.operation-progress-delay-info .table {
+    margin-bottom: 0;
 }

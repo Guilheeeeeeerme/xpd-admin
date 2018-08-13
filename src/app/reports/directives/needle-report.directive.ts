@@ -7,6 +7,16 @@ import { HighchartsService } from '../../shared/highcharts/highcharts.service';
 export class ReportNeedleChart {
 	public static $inject: string[] = ['highchartsService'];
 
+	public static Factory(): ng.IDirectiveFactory {
+		const directive = (
+			highchartsService: HighchartsService,
+		) => new ReportNeedleChart(
+			highchartsService,
+			);
+
+		return directive;
+	}
+
 	public restrict: 'EA';
 	public scope = {
 		// chartCategories: '=',
@@ -258,16 +268,6 @@ export class ReportNeedleChart {
 			}
 
 		});
-	}
-
-	public static Factory(): ng.IDirectiveFactory {
-		const directive = (
-			highchartsService: HighchartsService,
-		) => new ReportNeedleChart(
-			highchartsService,
-			);
-
-		return directive;
 	}
 }
 // }) ();

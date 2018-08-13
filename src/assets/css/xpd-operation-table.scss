@@ -1,0 +1,45 @@
+
+/**
+ * XPD OPERATION TABLE
+ */
+ .xpd-operation-table{
+    border: 2px solid #517f89;
+}
+
+ .xpd-operation-table>tbody>tr>td, 
+ .xpd-operation-table>tbody>tr>th,
+ .xpd-operation-table>tfoot>tr>td, 
+ .xpd-operation-table>tfoot>tr>th,
+ .xpd-operation-table>thead>tr>td, 
+ .xpd-operation-table>thead>tr>th{
+    border: 2px solid #517f89
+ }
+
+  .xpd-operation-table>thead>tr>th{
+    color: #000;
+    background-color: #517f89;
+ }
+
+ .xpd-operation-table.table>tbody>tr>td,
+ .xpd-operation-table.table>tbody>tr>th,
+ .xpd-operation-table.table>tfoot>tr>td,
+ .xpd-operation-table.table>tfoot>tr>th,
+ .xpd-operation-table.table>thead>tr>td,
+ .xpd-operation-table.table>thead>tr>th{
+    padding: 3px;
+ }
+
+ .xpd-operation-table.table>tbody>tr>td{
+    /*color: #517f89;*/
+    color: #444;
+    font-family: sans-serif;
+    font-size: 12px;
+ }
+
+ .xpd-operation-table.table>tbody>tr>th{
+    background-color: #acd7ca;
+ }
+
+ .xpd-operation-table .splitted-modal-header>div{
+    width: 50%;
+ }

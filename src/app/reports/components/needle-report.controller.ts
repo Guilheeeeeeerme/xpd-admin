@@ -42,6 +42,16 @@ export class NeedleReportController {
 		this.renderChart();
 	}
 
+	public onClickFilterButton(fromDate, toDate) {
+
+		this.reportsSetupAPIService.getNeedleDataChart(
+			fromDate,
+			toDate).then(
+			(arg) => { this.getNeedleInitialDateCallbackSuccess(arg); },
+			(arg) => { this.getNeedleInitialDateCallbackError(arg); },
+		);
+	}
+
 	private renderChart() {
 
 		const parentData = this.$scope.reportsData;
@@ -68,16 +78,6 @@ export class NeedleReportController {
 
 	private getNeedleInitialDateCallbackError(error) {
 		console.log(error);
-	}
-
-	public onClickFilterButton(fromDate, toDate) {
-
-		this.reportsSetupAPIService.getNeedleDataChart(
-			fromDate,
-			toDate).then(
-			(arg) => { this.getNeedleInitialDateCallbackSuccess(arg); },
-			(arg) => { this.getNeedleInitialDateCallbackError(arg); },
-		);
 	}
 
 	private groupOperationByState(activities) {

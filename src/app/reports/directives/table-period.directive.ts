@@ -6,6 +6,10 @@ import template from './table-period.template.html';
 
 export class TablePeriod implements ng.IDirective {
 
+	public static Factory(): ng.IDirectiveFactory {
+		return () => new TablePeriod();
+	}
+
 	public restrict: 'EA';
 	public template = template;
 	public scope = {
@@ -62,10 +66,6 @@ export class TablePeriod implements ng.IDirective {
 			}
 		}
 
-	}
-
-	public static Factory(): ng.IDirectiveFactory {
-		return () => new TablePeriod();
 	}
 }
 // }) ();

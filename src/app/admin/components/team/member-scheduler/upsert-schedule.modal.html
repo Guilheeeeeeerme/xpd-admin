@@ -60,10 +60,10 @@
 		</div>
 
 		<div class="modal-footer">
-			<button class="btn btn-primary" type="submit" ng-click="actionButtonAdd()" ng-disabled="usForm.$invalid || ( modalData.repeat == true && (modalData.repeatUntil < modalData.endDate) )">Save
+			<button class="btn btn-primary" type="submit" ng-click="ueController.actionButtonAdd()" ng-disabled="usForm.$invalid || ( modalData.repeat == true && (modalData.repeatUntil < modalData.endDate) )">Save
 			</button>
-			<button ng-if="modalData.id != null" class="btn btn-danger" ng-click="actionButtonRemove()">Remove</button>
-			<button class="btn btn-secondary" ng-click="actionButtonCancel()">Cancel</button>
+			<button ng-if="modalData.id != null" class="btn btn-danger" ng-click="ueController.actionButtonRemove()">Remove</button>
+			<button class="btn btn-secondary" ng-click="ueController.actionButtonCancel()">Leave</button>
 		</div>
 
 	</div>

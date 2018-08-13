@@ -1,11 +1,18 @@
 import * as angular from 'angular';
 import { OperationDataService } from '../../../shared/xpd.operation-data/operation-data.service';
+import { EventLogSetupAPIService } from '../../../shared/xpd.setupapi/eventlog-setupapi.service';
 import { ReadingSetupAPIService } from '../../../shared/xpd.setupapi/reading-setupapi.service';
 import { OperationActivitiesEstimatorService } from './operation-activities-estimator/operation-activities-estimator.service';
 
 export class OperationDashboardController {
 
-	public static $inject = ['$scope', '$filter', 'operationDataService', 'readingSetupAPIService', 'operationActivitiesEstimatorService'];
+	public static $inject = [
+		'$scope',
+		'$filter',
+		'operationDataService',
+		'readingSetupAPIService',
+		'eventlogSetupAPIService',
+		'operationActivitiesEstimatorService'];
 	public operationDataFactory: any;
 
 	private colors = [
@@ -26,12 +33,14 @@ export class OperationDashboardController {
 		'#BF5650', '#E83000', '#66796D', '#DA007C', '#FF1A59', '#8ADBB4', '#1E0200', '#5B4E51',
 		'#C895C5', '#320033', '#FF6832', '#66E1D3', '#CFCDAC', '#D0AC94', '#7ED379', '#012C58',
 	];
+	private listTrackingEventByOperationPromise: any;
 
 	constructor(
 		private $scope: any,
 		private $filter,
 		private operationDataService: OperationDataService,
 		private readingSetupAPIService: ReadingSetupAPIService,
+		private eventlogSetupAPIService: EventLogSetupAPIService,
 		private operationActivitiesEstimatorService: OperationActivitiesEstimatorService) {
 
 		const vm = this;
@@ -54,7 +63,12 @@ export class OperationDashboardController {
 		operationDataService.openConnection([]).then(() => {
 			vm.operationDataFactory = operationDataService.operationDataFactory;
 			$scope.operationData = vm.operationDataFactory.operationData;
+
 			vm.generateEstimatives();
+			vm.loadEvents();
+
+			operationDataService.on('setOnParallelEventChangeListener', () => { vm.loadEvents(); });
+			operationDataService.on('setOnEventChangeListener', (data) => { vm.loadEvents(); });
 
 			operationDataService.on('setOnEstimativesChangeListener', () => { vm.generateEstimatives(); });
 			operationDataService.on('setOnForecastChangeListener', () => { vm.generateEstimatives(); });
@@ -156,9 +170,9 @@ export class OperationDashboardController {
 
 	private getContractTimePerformance(eventType, vOptimumStateJointInterval, vStandardStateJointInterval, vPoorStateJointInterval) {
 		return {
-			voptimumTime: (vOptimumStateJointInterval[eventType].finalTime / (vOptimumStateJointInterval[eventType].finalJoint - vOptimumStateJointInterval[eventType].initialJoint) ),
-			vstandardTime: (vStandardStateJointInterval[eventType].finalTime / (vStandardStateJointInterval[eventType].finalJoint - vStandardStateJointInterval[eventType].initialJoint ) ),
-			vpoorTime: (vPoorStateJointInterval[eventType].finalTime / (vPoorStateJointInterval[eventType].finalJoint - vPoorStateJointInterval[eventType].initialJoint ) ),
+			voptimumTime: (vOptimumStateJointInterval[eventType].finalTime / (vOptimumStateJointInterval[eventType].finalJoint - vOptimumStateJointInterval[eventType].initialJoint)),
+			vstandardTime: (vStandardStateJointInterval[eventType].finalTime / (vStandardStateJointInterval[eventType].finalJoint - vStandardStateJointInterval[eventType].initialJoint)),
+			vpoorTime: (vPoorStateJointInterval[eventType].finalTime / (vPoorStateJointInterval[eventType].finalJoint - vPoorStateJointInterval[eventType].initialJoint)),
 		};
 	}
 
@@ -190,6 +204,71 @@ export class OperationDashboardController {
 
 	private restoreColor(color: string) {
 		this.colors.push(color);
+	}
+
+	private loadEvents() {
+
+		if (this.$scope.operationData != null &&
+			this.$scope.operationData.operationContext &&
+			this.$scope.operationData.operationContext.currentOperation &&
+			this.$scope.operationData.operationContext.currentOperation.running) {
+
+			if (!this.listTrackingEventByOperationPromise) {
+
+				this.listTrackingEventByOperationPromise = this.listTrackingEventByOperation(
+					this.$scope.operationData.operationContext.currentOperation.id);
+
+				this.listTrackingEventByOperationPromise.then((trackingEvents) => {
+					this.organizeEventsOnLists(trackingEvents);
+					this.listTrackingEventByOperationPromise = null;
+				});
+
+			}
+		}
+
+	}
+
+	private listTrackingEventByOperation(operationId) {
+		return this.eventlogSetupAPIService.listTrackingEventByOperation(operationId);
+	}
+
+	private organizeEventsOnLists(trackingEvents) {
+
+		this.$scope.dados.connectionEvents = [];
+		this.$scope.dados.tripEvents = [];
+		this.$scope.dados.timeEvents = [];
+		this.$scope.dados.connectionTimes = [];
+		this.$scope.dados.tripTimes = [];
+
+		trackingEvents.map((event) => {
+
+			if (event.id && event.duration) {
+
+				if (event.eventType === 'CONN') {
+					this.$scope.dados.connectionEvents.push(event);
+				}
+
+				if (event.eventType === 'TRIP') {
+					this.$scope.dados.tripEvents.push(event);
+				}
+
+				if (event.eventType === 'TIME') {
+					this.$scope.dados.timeEvents.push(event);
+				}
+
+			}
+
+		});
+
+		this.$scope.dados.connectionTimes = this.$scope.dados.connectionEvents.slice(-200);
+		this.$scope.dados.tripTimes = this.$scope.dados.tripEvents.slice(-200);
+
+		const lastConn = this.$scope.dados.connectionEvents[this.$scope.dados.connectionEvents.length - 1];
+		const lastTrip = this.$scope.dados.tripEvents[this.$scope.dados.tripEvents.length - 1];
+
+		this.$scope.dados.lastConnDuration = (lastConn.duration / 1000);
+		this.$scope.dados.lastTripDuration = (lastTrip.duration / 1000);
+
 	}
 
 }

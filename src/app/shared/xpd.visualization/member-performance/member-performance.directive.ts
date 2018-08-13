@@ -3,6 +3,10 @@ import './member-performance.style.scss';
 import template from './member-performance.template.html';
 
 export class MemberPerformanceDirective implements ng.IDirective {
+
+	public static Factory(): ng.IDirectiveFactory {
+		return () => new MemberPerformanceDirective();
+	}
 	public template = template;
 	public restrict = 'E';
 	public scope = {
@@ -31,9 +35,5 @@ export class MemberPerformanceDirective implements ng.IDirective {
 		scope.svg.viewBoxHeight = (scope.svg.height * 192) / scope.svg.width;
 		scope.svg.viewBox = '0 0 192 ' + scope.svg.viewBoxHeight;
 
-	}
-
-	public static Factory(): ng.IDirectiveFactory {
-		return () => new MemberPerformanceDirective();
 	}
 }

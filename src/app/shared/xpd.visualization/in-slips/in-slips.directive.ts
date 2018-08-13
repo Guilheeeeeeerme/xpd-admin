@@ -6,6 +6,10 @@ import template from './in-slips.template.html';
 
 export class InSlipsDirective implements ng.IDirective {
 
+	public static Factory(): ng.IDirectiveFactory {
+		return () => new InSlipsDirective();
+	}
+
 	public template = template;
 	public restrict = 'E';
 	public scope = {
@@ -37,9 +41,5 @@ export class InSlipsDirective implements ng.IDirective {
 				};
 			}
 		}
-	}
-
-	public static Factory(): ng.IDirectiveFactory {
-		return () => new InSlipsDirective();
 	}
 }

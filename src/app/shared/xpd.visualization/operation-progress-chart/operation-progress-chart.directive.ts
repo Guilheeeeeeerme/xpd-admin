@@ -5,6 +5,10 @@ import './operation-progress-chart.style.scss';
 import template from './operation-progress-chart.template.html';
 
 export class OperationProgressChartDirective implements ng.IDirective {
+
+	public static Factory(): ng.IDirectiveFactory {
+		return () => new OperationProgressChartDirective();
+	}
 	public template = template;
 	public restrict = 'E';
 	public scope = {
@@ -99,9 +103,5 @@ export class OperationProgressChartDirective implements ng.IDirective {
 			}
 		}
 
-	}
-
-	public static Factory(): ng.IDirectiveFactory {
-		return () => new OperationProgressChartDirective();
 	}
 }
