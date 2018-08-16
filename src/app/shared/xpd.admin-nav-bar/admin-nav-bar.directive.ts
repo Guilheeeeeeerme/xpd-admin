@@ -22,6 +22,19 @@ export class XPDAdminNavBarDirective implements ng.IDirective {
 		'operationDataService',
 		'dialogService'];
 
+	public static Factory(): ng.IDirectiveFactory {
+		return (
+			$location: ng.ILocationService,
+			menuConfirmationService: MenuConfirmationService,
+			operationDataService: OperationDataService,
+			dialogService: DialogService) => new XPDAdminNavBarDirective(
+				$location,
+				menuConfirmationService,
+				operationDataService,
+				dialogService,
+			);
+	}
+
 	public restrict = 'E';
 	public template = template;
 	public operationDataFactory: any;
@@ -59,7 +72,7 @@ export class XPDAdminNavBarDirective implements ng.IDirective {
 			if (this.$location.port()) {
 				path = 'https://' + this.$location.host() + ':' + this.$location.port() + path;
 			} else {
-				for (const page of ['admin.html', 'dmec-log.html', 'reports.html']) {
+				for (const page of ['setup.html', 'admin.html', 'dmec-log.html', 'reports.html']) {
 					if (window.location.href.indexOf(page) >= 0) {
 						path = window.location.href.slice(0, (window.location.href.indexOf(page) - 1) ) + path;
 						break;
@@ -102,19 +115,6 @@ export class XPDAdminNavBarDirective implements ng.IDirective {
 
 		});
 
-	}
-
-	public static Factory(): ng.IDirectiveFactory {
-		return (
-			$location: ng.ILocationService,
-			menuConfirmationService: MenuConfirmationService,
-			operationDataService: OperationDataService,
-			dialogService: DialogService) => new XPDAdminNavBarDirective(
-				$location,
-				menuConfirmationService,
-				operationDataService,
-				dialogService,
-			);
 	}
 }
 

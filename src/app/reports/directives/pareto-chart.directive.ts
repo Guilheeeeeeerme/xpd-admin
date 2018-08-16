@@ -6,6 +6,16 @@ import { HighchartsService } from '../../shared/highcharts/highcharts.service';
 export class ParetoChartDirective {
 
 	public static $inject: string[] = ['highchartsService'];
+
+	public static Factory(): ng.IDirectiveFactory {
+		const directive = (
+			highchartsService: HighchartsService,
+		) => new ParetoChartDirective(
+			highchartsService,
+			);
+
+		return directive;
+	}
 	public restrict: 'EA';
 	public scope = {
 		chartTitle: '=',
@@ -135,16 +145,6 @@ export class ParetoChartDirective {
 				});
 			}
 		});
-	}
-
-	public static Factory(): ng.IDirectiveFactory {
-		const directive = (
-			highchartsService: HighchartsService,
-		) => new ParetoChartDirective(
-			highchartsService,
-			);
-
-		return directive;
 	}
 }
 // }) ();

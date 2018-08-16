@@ -1,0 +1,69 @@
+.tree-content{
+    background-color: #acd7ca;
+    border-radius: 2px;
+    overflow: auto;
+    max-height: 525px;
+    border: solid #3a7b93 2px;
+}
+
+.xpd-operation-content-category{
+    border-top: 3px solid #2e9098;
+    padding: 5px;
+    clear: both;
+}
+
+/**
+ * NPT SWITCH
+ */
+ .npt-switch{
+    float: right;
+    margin-right: 15px;
+}
+
+.npt-switch .npt-switch-label {
+    margin-bottom: 0;
+    font-size: 1em;
+}
+
+.npt-switch .switch {
+    position: relative;
+    display: inline-block;
+    width: 38px;
+    height: 23px;
+    margin-bottom: -4px;
+    /*width: 60px;
+    height: 34px;*/
+}
+
+.npt-switch .switch input[type="checkbox"] {
+    display: none;
+}
+
+.npt-switch .slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: transparent;
+    border: 3px solid #517f89;
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+
+.npt-switch .slider:before {
+    position: absolute;
+    content: "";
+    height: 16px;
+    width: 16px;
+    left: 1px;
+    bottom: 1px;
+    background-color: white;
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+
+.npt-switch input:checked + .slider:before{
+    /*background-color: #00b050;*/
+}

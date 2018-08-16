@@ -39,7 +39,7 @@
 					Time Diff.
 				</th>
 				<td class="equilibrium-time-table-text" ng-if="dados.plannedEvent && dados.executedEvent">
-					{{ (dados.plannedEvent.startTime - dados.executedEvent.startTime)/1000 | secondsToHourMinutesSeconds }}
+					{{ ( bdtController.toDate(dados.plannedEvent.startTime) - bdtController.toDate(dados.executedEvent.startTime) ) / 1000 | secondsToHourMinutesSeconds }}
 				</td>
 				<td class="equilibrium-time-table-text" ng-if="!(dados.plannedEvent && dados.executedEvent)">
 					Please check two points

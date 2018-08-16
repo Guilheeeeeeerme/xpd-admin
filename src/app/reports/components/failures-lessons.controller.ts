@@ -89,6 +89,110 @@ export class FailuresLassonsController {
 	}
 
 	/**
+	 * Busca uma lista de categorias e failures/lessons
+	 * com as datas selecionada pelo usuário
+	 * @param  {date} fromDate data inicial
+	 * @param  {date} toDate   data final
+	 */
+	public onClickFilterButton(fromDate, toDate) {
+
+		this.$scope.data.breadcrumbs = [
+			{ name: this.$scope.breadcrumbsName },
+		];
+
+		if (this.$scope.type === 'failures') {
+			this.reportsSetupAPIService.getFailuresNptDataChart(
+				fromDate,
+				toDate).then(
+					(arg) => { this.getListSuccessCallback(arg); },
+					(arg) => { this.getListErrorCallback(arg); },
+			);
+		} else {
+			this.reportsSetupAPIService.getLessonsLearnedDataChart(
+				fromDate,
+				toDate).then(
+					(arg) => { this.getListSuccessCallback(arg); },
+					(arg) => { this.getListErrorCallback(arg); },
+			);
+		}
+
+	}
+
+	/**
+	 * Redesenha a lista com os filhos da
+	 * categoria selecionada e adiciona o
+	 * pai no breadcrums
+	 * @param  {obj} node Categoria e filhos
+	 */
+	public actionButtonSelectCategory(node) {
+		const vm = this;
+
+		const nodeList = node.children;
+
+		vm.chartDonut.title = node.name;
+		vm.totalTime = node.time;
+		vm.totalFailuresLessons = node.failuresLessonsLength;
+
+		this.createSeriesDataChart(nodeList);
+
+		this.$scope.data.breadcrumbs.push(
+			{ id: node.id, name: node.name },
+		);
+
+		vm.nodeList = nodeList;
+	}
+
+	/**
+	 * Redesenha a lista com os filhos da
+	 * categoria selecionada e remove o
+	 * ultimo indice do breadcrumbs
+	 * @param  {int} key  indice atual do breadcrumbs
+	 * @param  {obj} node categoria selecionada
+	 */
+	public actionClickBreadcrumbs(key, node) {
+		const vm = this;
+		vm.chartDonut.title = node.name;
+
+		if (node.id) {
+			vm.totalTime = this.listCategory[node.id].time;
+			vm.totalFailuresLessons = this.listCategory[node.id].failuresLessonsLength;
+			vm.nodeList = this.listCategory[node.id].children;
+		} else {
+			vm.totalTime = this.$scope.failuresLessonsData.categories.time;
+			vm.totalFailuresLessons = this.$scope.failuresLessonsData.categories.failuresLessonsLength;
+			vm.nodeList = this.$scope.failuresLessonsData.categories.children;
+		}
+
+		this.createSeriesDataChart(vm.nodeList);
+		this.$scope.failuresLessonsData.breadcrumbs.splice(key + 1, this.$scope.failuresLessonsData.breadcrumbs.length);
+	}
+
+	/**
+	 * Abre um modal com a lista de
+	 * todas failures/lessons relacionada a categoria
+	 * @param  {obj} categoria com suas respectivas falhas
+	 */
+	public actionButtonClickCategory(category) {
+
+		this.$scope.modalData.category = category;
+
+		this.$scope.$modalInstance = this.$modal.open({
+			animation: true,
+			keyboard: false,
+			backdrop: 'static',
+			size: 'modal-sm',
+			windowClass: 'xpd-operation-modal',
+			template: template,
+			scope: this.$scope,
+		});
+	}
+
+	/** Fecha o modal com alista de failures/lessons */
+	public modalActionButtonClose() {
+		this.$scope.$modalInstance.close();
+	}
+
+	/**
 	 * Prepara todo os scopo do grafico de failures/lessons
 	 * @param  {obj} result lista de failures/lessons e categorias
 	 */
@@ -179,85 +283,6 @@ export class FailuresLassonsController {
 
 		node.failuresLessons.push(failuresLessons);
 		return node;
-	}
-
-	/**
-	 * Busca uma lista de categorias e failures/lessons
-	 * com as datas selecionada pelo usuário
-	 * @param  {date} fromDate data inicial
-	 * @param  {date} toDate   data final
-	 */
-	public onClickFilterButton(fromDate, toDate) {
-
-		this.$scope.data.breadcrumbs = [
-			{ name: this.$scope.breadcrumbsName },
-		];
-
-		if (this.$scope.type === 'failures') {
-			this.reportsSetupAPIService.getFailuresNptDataChart(
-				fromDate,
-				toDate).then(
-					(arg) => { this.getListSuccessCallback(arg); },
-					(arg) => { this.getListErrorCallback(arg); },
-			);
-		} else {
-			this.reportsSetupAPIService.getLessonsLearnedDataChart(
-				fromDate,
-				toDate).then(
-					(arg) => { this.getListSuccessCallback(arg); },
-					(arg) => { this.getListErrorCallback(arg); },
-			);
-		}
-
-	}
-
-	/**
-	 * Redesenha a lista com os filhos da
-	 * categoria selecionada e adiciona o
-	 * pai no breadcrums
-	 * @param  {obj} node Categoria e filhos
-	 */
-	public actionButtonSelectCategory(node) {
-		const vm = this;
-
-		const nodeList = node.children;
-
-		vm.chartDonut.title = node.name;
-		vm.totalTime = node.time;
-		vm.totalFailuresLessons = node.failuresLessonsLength;
-
-		this.createSeriesDataChart(nodeList);
-
-		this.$scope.data.breadcrumbs.push(
-			{ id: node.id, name: node.name },
-		);
-
-		vm.nodeList = nodeList;
-	}
-
-	/**
-	 * Redesenha a lista com os filhos da
-	 * categoria selecionada e remove o
-	 * ultimo indice do breadcrumbs
-	 * @param  {int} key  indice atual do breadcrumbs
-	 * @param  {obj} node categoria selecionada
-	 */
-	public actionClickBreadcrumbs(key, node) {
-		const vm = this;
-		vm.chartDonut.title = node.name;
-
-		if (node.id) {
-			vm.totalTime = this.listCategory[node.id].time;
-			vm.totalFailuresLessons = this.listCategory[node.id].failuresLessonsLength;
-			vm.nodeList = this.listCategory[node.id].children;
-		} else {
-			vm.totalTime = this.$scope.failuresLessonsData.categories.time;
-			vm.totalFailuresLessons = this.$scope.failuresLessonsData.categories.failuresLessonsLength;
-			vm.nodeList = this.$scope.failuresLessonsData.categories.children;
-		}
-
-		this.createSeriesDataChart(vm.nodeList);
-		this.$scope.failuresLessonsData.breadcrumbs.splice(key + 1, this.$scope.failuresLessonsData.breadcrumbs.length);
 	}
 
 	/**
@@ -389,31 +414,6 @@ export class FailuresLassonsController {
 			parentNode.failuresLessonsLength += nodes[i].failuresLessonsLength;
 			parentNode.nptBpLength += nodes[i].nptBpLength;
 		}
-	}
-
-	/**
-	 * Abre um modal com a lista de
-	 * todas failures/lessons relacionada a categoria
-	 * @param  {obj} categoria com suas respectivas falhas
-	 */
-	public actionButtonClickCategory(category) {
-
-		this.$scope.modalData.category = category;
-
-		this.$scope.$modalInstance = this.$modal.open({
-			animation: true,
-			keyboard: false,
-			backdrop: 'static',
-			size: 'modal-sm',
-			windowClass: 'xpd-operation-modal',
-			template: template,
-			scope: this.$scope,
-		});
-	}
-
-	/** Fecha o modal com alista de failures/lessons */
-	public modalActionButtonClose() {
-		this.$scope.$modalInstance.close();
 	}
 
 	/**

@@ -21,28 +21,6 @@ export class SetupAPIService {
 
 	}
 
-	private hasSpinner(url) {
-
-		const urlsWithoutSpinner = [
-			// '/xpd-setup-api/setup/reports/',
-			// '/xpd-setup-api/setup/reading/from/',
-			'/xpd-setup-api/setup/reading/tick/',
-			'/xpd-setup-api/setup/event/list-by-type/',
-			// '/xpd-setup-api/tripin/rig-pictures/load/'
-		];
-
-		let result = true;
-
-		for (const i in urlsWithoutSpinner) {
-			if (url.indexOf(urlsWithoutSpinner[i]) >= 0) {
-				result = false;
-				break;
-			}
-		}
-
-		return result;
-	}
-
 	public doRequest(req) {
 		const self = this;
 
@@ -82,15 +60,6 @@ export class SetupAPIService {
 
 	}
 
-	private finallySpinner() {
-		--this.runningRequests;
-
-		if (this.runningRequests === 0) {
-			this.hasRunningRequests = false;
-			this.usSpinnerService.stop('xpd-spinner');
-		}
-	}
-
 	public generateToast(error) {
 
 		console.error(error);
@@ -126,6 +95,37 @@ export class SetupAPIService {
 		// 	window.open(url, httpStatus);
 		// }
 
+	}
+
+	private hasSpinner(url) {
+
+		const urlsWithoutSpinner = [
+			// '/xpd-setup-api/setup/reports/',
+			// '/xpd-setup-api/setup/reading/from/',
+			'/xpd-setup-api/setup/reading/tick/',
+			'/xpd-setup-api/setup/event/list-by-type/',
+			// '/xpd-setup-api/tripin/rig-pictures/load/'
+		];
+
+		let result = true;
+
+		for (const i in urlsWithoutSpinner) {
+			if (url.indexOf(urlsWithoutSpinner[i]) >= 0) {
+				result = false;
+				break;
+			}
+		}
+
+		return result;
+	}
+
+	private finallySpinner() {
+		--this.runningRequests;
+
+		if (this.runningRequests === 0) {
+			this.hasRunningRequests = false;
+			this.usSpinnerService.stop('xpd-spinner');
+		}
 	}
 
 	private getHttpStatus(errorCode) {

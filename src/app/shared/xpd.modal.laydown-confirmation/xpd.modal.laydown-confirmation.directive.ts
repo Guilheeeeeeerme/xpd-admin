@@ -6,17 +6,24 @@
 
 import { IModalService } from 'angular-ui-bootstrap';
 import { OperationDataService } from '../xpd.operation-data/operation-data.service';
+import './xpd.modal.laydown-confirmation.style.scss';
 import modalTemplate from './xpd.modal.laydown-confirmation.template.html';
 
 export class LayDownConfirmationDirective implements ng.IDirective {
 
+	public static Factory(): ng.IDirectiveFactory {
+		const directive = ($uibModal, operationDataService) => new LayDownConfirmationDirective($uibModal, operationDataService);
+		directive.$inject = ['$uibModal', 'operationDataService'];
+		return directive;
+	}
+
 	public operationDataFactory: any;
 	public layDownDetectedModal: any;
-	constructor(private $uibModal: IModalService, private operationDataService: OperationDataService) { }
 
 	public scope = {
 		dismissable: '<',
 	};
+	constructor(private $uibModal: IModalService, private operationDataService: OperationDataService) { }
 
 	public link: ng.IDirectiveLinkFn = (
 		scope: any,
@@ -74,12 +81,6 @@ export class LayDownConfirmationDirective implements ng.IDirective {
 
 		};
 
-	}
-
-	public static Factory(): ng.IDirectiveFactory {
-		const directive = ($uibModal, operationDataService) => new LayDownConfirmationDirective($uibModal, operationDataService);
-		directive.$inject = ['$uibModal', 'operationDataService'];
-		return directive;
 	}
 }
 

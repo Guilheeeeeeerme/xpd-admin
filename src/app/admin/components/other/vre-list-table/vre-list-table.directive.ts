@@ -4,6 +4,10 @@ import './vre-list-table.style.scss';
 import template from './vre-list-table.template.html';
 
 export class VREListTableDirective implements ng.IDirective {
+
+	public static Factory(): ng.IDirectiveFactory {
+		return () => new VREListTableDirective();
+	}
 	public scope = {
 		vreData: '=',
 	};
@@ -27,9 +31,5 @@ export class VREListTableDirective implements ng.IDirective {
 		scope.showCollapse = (eventVre) => {
 			return eventVre.vreType !== 'other' && Object.keys(eventVre.vreList).length > 0;
 		};
-	}
-
-	public static Factory(): ng.IDirectiveFactory {
-		return () => new VREListTableDirective();
 	}
 }

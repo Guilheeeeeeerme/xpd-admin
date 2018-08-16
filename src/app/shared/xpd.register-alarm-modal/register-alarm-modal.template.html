@@ -295,9 +295,10 @@
                             name = "timeSlicesTripin"
                             time-slice-form = "alarmForm"
                             disabled = "alarm.tripin != true"
+                            direction = "tripin"
                             ng-model = "alarm.timeSlices.tripin"
-                            duration = "{{ 3600 / alarm.optimumSpeed }}">
-                        </xpd-time-slices-table>
+                            duration = "{{ 3600 / alarm.optimumSpeed }}"
+                        ></xpd-time-slices-table>
 
                     </div>
 
@@ -305,11 +306,12 @@
 
                         <xpd-time-slices-table 
                             name = "timeSlicesTripout"
+                            time-slice-form = "alarmForm"
                             disabled = "alarm.tripout != true"
                             direction = "tripout"
                             ng-model = "alarm.timeSlices.tripout"
-                            duration = "{{ 3600 / alarm.optimumSpeed }}">
-                        </xpd-time-slices-table>
+                            duration = "{{ 3600 / alarm.optimumSpeed }}"
+                        ></xpd-time-slices-table>
 
                     </div>
 

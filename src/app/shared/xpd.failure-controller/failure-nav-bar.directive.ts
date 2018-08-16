@@ -14,6 +14,7 @@ import { IModalService } from 'angular-ui-bootstrap';
 import { DialogService } from '../xpd.dialog/xpd.dialog.factory';
 import { OperationDataService } from '../xpd.operation-data/operation-data.service';
 import { CategorySetupAPIService } from '../xpd.setupapi/category-setupapi.service';
+import './failure-nav-bar.style.scss';
 import template from './failure-nav-bar.template.html';
 import failureLessoModal from './tabs-failure-lesson.modal.html';
 
@@ -24,7 +25,19 @@ export class FailureNavBarDirective implements ng.IDirective {
 		'operationDataService',
 		'dialogService'];
 
-	public restrict = 'EA';
+	public static Factory(): ng.IDirectiveFactory {
+		return (
+			$uibModal: IModalService,
+			categorySetupAPIService: CategorySetupAPIService,
+			operationDataService: OperationDataService,
+			dialogService: DialogService) => new FailureNavBarDirective(
+				$uibModal,
+				categorySetupAPIService,
+				operationDataService,
+				dialogService);
+	}
+
+	public restrict = 'E';
 	public template = template;
 	public operationDataFactory: any;
 
@@ -112,18 +125,6 @@ export class FailureNavBarDirective implements ng.IDirective {
 
 		});
 
-	}
-
-	public static Factory(): ng.IDirectiveFactory {
-		return (
-			$uibModal: IModalService,
-			categorySetupAPIService: CategorySetupAPIService,
-			operationDataService: OperationDataService,
-			dialogService: DialogService) => new FailureNavBarDirective(
-				$uibModal,
-				categorySetupAPIService,
-				operationDataService,
-				dialogService);
 	}
 }
 

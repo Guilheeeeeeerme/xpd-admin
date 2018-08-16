@@ -23,16 +23,6 @@ const copyFiles = [
 
 	new CopyWebpackPlugin(
 		[{
-			from: './src/assets/js/dhtmlxgantt.js',
-			to: './assets/js/',
-		}],
-		{
-			debug: true
-		}
-	),
-
-	new CopyWebpackPlugin(
-		[{
 			from: './src/package.json',
 			to: './',
 		}],
@@ -75,6 +65,7 @@ const copyFiles = [
 const bundleModules = [
 	'dmec-log',
 	'admin',
+	'setup',
 	'reports',
 	'well-view-only',
 	'operation-view-only'].map((chunk) => {
@@ -96,9 +87,10 @@ module.exports = {
 	target: 'web',
 
 	entry: {
-		'd3-dmec-chart.worker': './src/workers/d3-dmec-chart.worker.ts',
+		'dmec-chart.worker': './src/workers/dmec-chart.worker.ts',
 		'xpd-timers.worker': './src/workers/xpd-timers.worker.ts',
 
+		'setup': './src/app/setup/setup.ts',
 		'admin': './src/app/admin/admin.ts',
 		'dmec-log': './src/app/dmec-log/dmec-log.ts',
 		'reports': './src/app/reports/reports.ts',

@@ -3,6 +3,10 @@ import './speed-gauge.style.scss';
 import template from './speed-gauge.template.html';
 
 export class SpeedGaugeDirective implements ng.IDirective {
+
+	public static Factory(): ng.IDirectiveFactory {
+		return () => new SpeedGaugeDirective();
+	}
 	public template = template;
 	public restrict = 'E';
 	public scope = {
@@ -139,9 +143,5 @@ export class SpeedGaugeDirective implements ng.IDirective {
 			scope.speedYTicks = scope.speedYPosition.ticks(5);
 		}
 
-	}
-
-	public static Factory(): ng.IDirectiveFactory {
-		return () => new SpeedGaugeDirective();
 	}
 }

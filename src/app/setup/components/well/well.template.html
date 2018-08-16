@@ -1,0 +1,114 @@
+<style>
+    .xpd-header-logo {
+        width: 45px;
+    }
+</style>
+
+<div class="panel panel-default xpd-setup-container">
+
+    <div class="panel-heading xpd-setup-container-heading">
+
+        <button class="btn btn-sm btn-success pull-right button-add-well" ng-click="wellController.actionButtonAddWell()" id="setup-well-add-well">
+            <span class="glyphicon glyphicon-plus"></span> Well
+        </button>
+
+
+        <h3 class="panel-title">
+            <strong> Well </strong>/
+        </h3>
+    </div>
+
+    <div class="panel-body xpd-setup-container-body">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <table class="table table-striped table-hover table-condensed">
+                    <thead>
+                        <tr>
+                            <th>Well Name</th>
+                            <th>Air Gap (m)</th>
+                            <th>Water Depth (m)</th>
+                            <th>Actions</th>
+                            <!-- <th>
+                                        <button class="btn btn-sm btn-success pull-right" ng-click="wellController.actionButtonAddWell()" id="setup-well-add-well">
+                                            <span class="glyphicon glyphicon-plus"></span> Well
+                                        </button>
+                                    </th> -->
+
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        <tr ng-show="dados.wellList == null || dados.wellList.length == 0">
+                            <td colspan="4">
+                                No wells registered
+                            </td>
+                        </tr>
+
+                        <tr ng-repeat="(key, well) in dados.wellList | orderBy : 'id' " ng-class="{'well well-sm current-well-well': well.current }">
+
+                            <td id="setup-well-label-name-{{$index + 1}}">
+                                <span ng-if="well.current"> Selected Well:
+                                    <strong class="current-well-name">{{well.name}}
+                                        <span class="glyphicon glyphicon-ok"></span>
+                                    </strong>
+                                </span>
+
+                                <span ng-if="!well.current">{{well.name}}</span>
+                            </td>
+
+
+                            <td id="setup-well-label-airGap-{{$index + 1}}">{{well.airGap}}</td>
+
+                            <td id="setup-well-label-onshore-{{$index + 1}}">
+                                <span ng-if="!well.onshore">
+                                    {{well.waterDepth}}
+                                </span>
+
+                                <span ng-if="well.onshore">
+                                    <i>Onshore</i>
+                                </span>
+                            </td>
+
+                            <td id="setup-well-label-actions-{{$index + 1}}">
+
+                                <button ng-if="well.current != true" ng-click="wellController.actionButtonMakeCurrent(well)" class="btn btn-sm btn-primary button-current-well"
+                                    id="setup-well-make-current-well-{{$index + 1}}" ng-disabled="operationData.wellContext.currentWell != null">
+                                    MAKE CURRENT
+                                </button>
+
+                                <button ng-if="well.current == true" ng-click="wellController.actionButtonMakeNotCurrent(well)" id="setup-well-interrupt-well-{{$index + 1}}"
+                                    class="btn btn-sm btn-danger button-current-well">
+                                    INTERRUPT
+                                </button>
+
+                                <a ng-disabled="!well.current" class="btn btn-sm btn-info" id="setup-well-{{$index + 1}}-got-to-sections" href="#/well/{{well.id}}/section">
+                                    SECTIONS
+                                    <span class="glyphicon glyphicon-menu-right"></span>
+                                </a>
+
+                                <a href="./well-view-only.html#/{{well.id}}" id="setup-well-view-only-well-{{$index + 1}}" class="view-only-link button-edit"
+                                    target="_blank">
+                                    <button class="btn btn-sm btn-default">VIEW</button>
+                                </a>
+
+                                <button class="btn btn-sm btn-default" id="setup-well-edit-well-{{$index + 1}}" ng-click="wellController.actionButtonEditWell(well)"
+                                    ng-disabled="well.current">EDIT
+                                </button>
+
+                                <button class="btn btn-sm btn-danger" id="setup-well-remove-well-{{$index + 1}}" ng-click="wellController.actionButtonRemoveWell(well)"
+                                    ng-disabled="well.current">REMOVE
+                                </button>
+                            </td>
+
+                        </tr>
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

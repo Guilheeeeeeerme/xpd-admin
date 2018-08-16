@@ -8,6 +8,8 @@ const XPDDMECLogModule: angular.IModule  = angular.module('xpd.dmeclog', [
 	XPDSharedModule.name,
 ]);
 
+import './../../assets/css/dmec-log.scss';
+
 export { XPDDMECLogModule };
 
 XPDDMECLogModule.config(DMECConfig);

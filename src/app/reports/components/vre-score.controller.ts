@@ -44,6 +44,20 @@ export class VREScoreController {
 		this.getVreScoreList();
 	}
 
+	public onClickFilterButton(fromDate, toDate) {
+
+		if (toDate === undefined) { return false; }
+
+		if (toDate >= fromDate) {
+			this.reportsSetupAPIService.getVreScoreList(fromDate, toDate).then(
+				(arg) => { this.getVreScoreListSuccess(arg); },
+				(arg) => { this.getVreScoreListError(arg); },
+			);
+		} else {
+			return false;
+		}
+	}
+
 	private getVreScoreList() {
 
 		const parentData = this.$scope.reportsData;
@@ -74,20 +88,6 @@ export class VREScoreController {
 
 	private getVreScoreListError(error) {
 		console.log(error);
-	}
-
-	public onClickFilterButton(fromDate, toDate) {
-
-		if (toDate === undefined) { return false; }
-
-		if (toDate >= fromDate) {
-			this.reportsSetupAPIService.getVreScoreList(fromDate, toDate).then(
-				(arg) => { this.getVreScoreListSuccess(arg); },
-				(arg) => { this.getVreScoreListError(arg); },
-			);
-		} else {
-			return false;
-		}
 	}
 
 	// function setColorToLastIndexVre(dataChart) {

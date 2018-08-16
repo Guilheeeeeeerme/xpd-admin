@@ -3,9 +3,11 @@ import './old-tracking.style.scss';
 import template from './old-tracking.template.html';
 
 export class OldTrackingDirective implements ng.IDirective {
+
+	public static Factory(): ng.IDirectiveFactory {
+		return () => new OldTrackingDirective();
+	}
 	public scope = {
-		actionEventModalButtonClose: '=',
-		actionEventModalButtonSave: '=',
 		actionOpenDropdownMenu: '&',
 		actionClickEventDetails: '&',
 		actionClickFailures: '&',
@@ -55,9 +57,5 @@ export class OldTrackingDirective implements ng.IDirective {
 		scope.onClickLessonsLearned = () => {
 			scope.actionClickLessonsLearned();
 		};
-	}
-
-	public static Factory(): ng.IDirectiveFactory {
-		return () => new OldTrackingDirective();
 	}
 }

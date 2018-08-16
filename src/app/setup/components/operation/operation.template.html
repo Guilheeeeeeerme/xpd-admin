@@ -1,0 +1,126 @@
+<div class="panel panel-default xpd-setup-container">
+
+    <div class="panel-heading xpd-setup-container-heading">
+
+        <div class="col-md-9">
+            <h3 class="panel-title">
+
+                <strong> {{well.name}} </strong>/
+                <strong> {{section.name}} </strong>/
+
+                <!-- <strong> {{ dados.operation.id != null?'Edit':'New' }} </strong> -->
+
+                <strong> {{dados.operation.name}} </strong>
+                <span ng-if="dados.operation.type =='bha'">[BHA]</span>
+                <span ng-if="dados.operation.type =='casing'">[Casing]</span>
+                <span ng-if="dados.operation.type =='riser'">[Riser]</span>
+                <span ng-if="dados.operation.type =='time'">[Time]</span>
+
+            </h3>
+        </div>
+
+        <div class="col-md-3">
+
+            <div ng-class="{ 'dropdown': !open, 'dropdown open': open }" ng-init="open = false">
+
+                <a class="btn btn-sm fa fa-calculator" ng-click="open = !open"></a>
+
+                <ul class="dropdown-menu row">
+
+                    <div class="form-group col-md-12">
+                        <label>Unit:</label>
+                        <select class="form-control" ng-model="measureConversorData.unit" ng-init="measureConversorData.unit = 'min'">
+                            <option value="min">min. to m/h</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group col-md-12" ng-show="measureConversorData.unit == 'min'">
+                        <label>Displacement (m):</label>
+                        <input type="number" class="form-control" ng-model="measureConversorData.displacement" ng-change="operationController.calcContractParamsConverter(measureConversorData.value, measureConversorData.displacement, measureConversorData.unit)">
+                    </div>
+
+                    <div class="form-group col-md-12" ng-show="measureConversorData.unit == 'min'">
+                        <label>Minutes:</label>
+                        <input type="number" class="form-control" ng-model="measureConversorData.value" ng-change="operationController.calcContractParamsConverter(measureConversorData.value, measureConversorData.displacement, measureConversorData.unit)">
+                    </div>
+
+                    <div class="form-group col-md-12" ng-show="measureConversorData.calculatorResult">
+                        <label>Result:
+                            <div class="input-group">
+                                <input id="copy-and-paste-calculator-result" type="number" class="form-control" value="{{measureConversorData.calculatorResult}}">
+                                <div class="input-group-addon " ng-click="operationController.copyAndPaste()">
+                                    <i class="fa fa-copy"></i>
+                                </div>
+                            </div>
+                        </label>
+                    </div>
+
+                </ul>
+
+            </div>
+        </div>
+
+    </div>
+
+    <div class="panel-body xpd-setup-container-body">
+
+        <uib-tabset justified="true" active="dados.tabIndex" ng-init="dados.tabIndex = 0">
+
+            <uib-tab index="$index" ng-repeat="tab in tabs" heading="{{tab.title}}" select="operationController.markTabAsVisited($index)">
+                <br/>
+                <div class="container-fluid" ng-include="tab.url"></div>
+            </uib-tab>
+
+        </uib-tabset>
+    </div>
+
+    <div class="panel-footer xpd-setup-container-footer">
+
+        <div class="container">
+
+            <div class="pull-left">
+                <button class="btn btn-default" ng-click="operationController.confirmLeaving()">
+                    <span class="glyphicon glyphicon-chevron-left"></span> Back to Section List
+                </button>
+            </div>
+
+            <div class="pull-right">
+
+                <button 
+                    class="btn btn-warning" 
+                    ng-click="operationController.validateGeneralInfo()" 
+                    ng-show="dados.operation.type != 'time' && 
+                        ( operationController.allTabsWereVisited() == true && operationController.info.$invalid )">
+                    <span class="glyphicon glyphicon-warning-sign"></span>
+                    General Info Issue</button>
+
+                <button 
+                    class="btn btn-warning" 
+                    ng-click="operationController.validateGeneralInfo()" 
+                    ng-show="dados.operation.type == 'time' && 
+                        ( operationController.allTabsWereVisited() == true && 
+                        ( operationController.info.$invalid || operationController.contract.$invalid ) )">
+                    <span class="glyphicon glyphicon-warning-sign"></span>
+                    General Info Issue</button>
+
+                <button class="btn btn-warning" ng-click="operationController.validateContractParams()" ng-show="dados.operation.type != 'time'
+                    && ( operationController.allTabsWereVisited() == true && operationController.contract.$invalid )">
+                    <span class="glyphicon glyphicon-warning-sign"></span>
+                    Contract Issue</button>
+
+                <button class="btn btn-info" ng-click="dados.tabIndex = dados.tabIndex + 1" ng-show="( operationController.allTabsWereVisited() != true && dados.tabIndex < 2) && !dados.operation.id">
+                    NEXT
+                    <span class="glyphicon glyphicon-menu-right"></span>
+                </button>
+
+                <button class="btn btn-default" ng-click="operationController.actionButtonSave()" ng-show="( operationController.allTabsWereVisited() == true || dados.operation.id)
+                    && !operationController.contract.$invalid && !operationController.info.$invalid">
+                    Save & Close
+                    <span class="glyphicon glyphicon-floppy-disk"></span>
+                </button>
+            </div>
+        </div>
+
+    </div>
+
+</div>

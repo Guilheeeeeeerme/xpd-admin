@@ -1,0 +1,9 @@
+@import '~styles/font.scss';
+
+.laydown-confirmation-modal{
+    font-family: $font-family-1;
+}
+
+.laydown-confirmation-modal .modal-footer button{
+	margin: auto;
+}

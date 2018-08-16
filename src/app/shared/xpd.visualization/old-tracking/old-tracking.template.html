@@ -1,6 +1,6 @@
 <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 xpd-chart-container">
     <div class="xpd-chart-container-header">
-        Slips to Slips (Conn)
+        <p>Slips to Slips (Conn)</p>
     </div>
     <div class="xpd-chart-container-content">
         <xpd-times ng-if="currentOperation && currentOperation.running && currentEvent != null" times='connectionTimes' max-seconds="175"
@@ -16,7 +16,7 @@
 <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 xpd-chart-container">
 
     <div class="xpd-chart-container-header">
-        Slips to Slips (Trip)
+        <p>Slips to Slips (Trip)</p>
     </div>
 
     <div class="xpd-chart-container-content">
@@ -109,7 +109,7 @@
 
     </div>
 
-    <div ng-if="currentOperation && currentOperation.running" class="xpd-conn-chronometers xpd-conn-chronometers-top">
+    <div ng-if="currentOperation && currentOperation.running" class="row nopadding h-10 xpd-conn-chronometers xpd-conn-chronometers-top">
         <span ng-class="{'trip-time-target-overtime': ( currentTick / 1000 ) > taskExpectedDuration }">
             {{ ( currentTick / 1000 ) | secondsToHourMinutesSeconds }}
         </span>
@@ -136,60 +136,4 @@
             <a ng-click="onClickLessonsLearned()" id="times-bar-click-lessons">Lessons Learned</a>
         </li>
     </ul>
-</div>
-
-<!-- MODAL -->
-<div class="times-event-dialog" ng-show="flags.showEventDialog">
-
-    <div class="col-md-8 times-event-header">
-        {{selectedEvent.eventType==="CONN"?"Connection":"Trip"}} ({{selectedEvent.startTime | date:'MM/dd/yyyy HH:mm:ss'}} / {{ (selectedEvent.duration/1000)
-        | secondsToHourMinutesSeconds}}) {{selectedEvent.state }}
-    </div>
-
-    <div class="col-md-4 times-event-header text-right">
-        <span class="glyphicon glyphicon-remove" ng-click="actionEventModalButtonClose()"></span>
-    </div>
-
-    <span class="glyphicon glyphicon-triangle-left selected-arrow"></span>
-
-    <div class="col-md-4 times-event-dialog-col times-event-status-col">
-
-        <div class="npt-switch">
-            <label class="switch">
-                <input type="checkbox" ng-model="selectedEvent.npt">
-                <div class="slider round"></div>
-            </label>
-            <label class="npt-switch-label">NPT</label>
-        </div>
-        <br/>
-        <div class="times-event-radio">
-            <input ng-model="selectedEvent.statusCategory" id="radioOperational" type="radio" name="statusCategory" value="operational">
-            <label for="radioOperational">Operational</label>
-            <br/>
-            <input ng-model="selectedEvent.statusCategory" id="radioFailure" type="radio" name="statusCategory" value="failure">
-            <label for="radioFailure">Failure</label>
-            <br/>
-            <input ng-model="selectedEvent.statusCategory" id="radioDelay" type="radio" name="statusCategory" value="delay">
-            <label for="radioDelay">Delay</label>
-            <br/>
-            <input ng-model="selectedEvent.statusCategory" id="radioOther" type="radio" name="statusCategory" value="other">
-            <label for="radioOther">Other</label>
-            <br/>
-            <input ng-model="selectedEvent.statusCategory" id="radioBest" type="radio" name="statusCategory" value="best">
-            <label for="radioBest">Best Practice</label>
-            <br/>
-        </div>
-    </div>
-    <div class="col-md-8 times-event-dialog-col times-event-comments-col">
-        <div class="comments-header">Comments</div>
-        <div class="comments-content">
-            <textarea name="justification" rows="8" cols="70" id="justification" class="form-control" ng-model="selectedEvent.justification">
-                        Comments...
-                    </textarea>
-        </div>
-    </div>
-    <div class="col-md-12 times-event-footer">
-        <button class="btn btn-primary btn-sm" ng-click="actionEventModalButtonSave(selectedEvent)">Save
-        </button>
-    </div>
 </div>

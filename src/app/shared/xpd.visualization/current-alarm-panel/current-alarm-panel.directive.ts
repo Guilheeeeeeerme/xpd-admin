@@ -2,6 +2,10 @@ import template from './current-alarm-panel.template.html';
 
 export class CurrentAlarmPanelDirective implements ng.IDirective {
 
+	public static Factory(): ng.IDirectiveFactory {
+		return () => new CurrentAlarmPanelDirective();
+	}
+
 	public restrict = 'EA';
 	public template = template;
 	public scope = {
@@ -32,10 +36,6 @@ export class CurrentAlarmPanelDirective implements ng.IDirective {
 			localStorage.setItem(keyName, JSON.stringify(newState));
 		};
 
-	}
-
-	public static Factory(): ng.IDirectiveFactory {
-		return () => new CurrentAlarmPanelDirective();
 	}
 
 }

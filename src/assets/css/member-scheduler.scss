@@ -1,0 +1,108 @@
+@import './font.scss';
+
+
+.member-scheduler-setup-container {
+    text-align: center;
+    margin: 2px;
+}
+.member-scheduler-setup-months {
+    margin-bottom: 2px;
+    font-size: 18px;
+}
+
+.member-scheduler-setup-months .btn-default.active, 
+.member-scheduler-setup-months .btn-default:active {
+    background-color: #BABABA;
+    border-color: #CACACA;
+}
+
+.member-scheduler-setup-year {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+
+.member-scheduler-setup-days button {
+    width: 42px;
+}
+
+.member-scheduler-hour-label {
+    font-size: 10px;
+    font-weight: bold;
+    text-align: center;
+}
+
+.member-scheduler-identification-label {
+    position: absolute;
+    color: #255987;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.member-scheduler-monthly-view-overlay {
+    position: absolute;
+    top: 0;
+    background-color: #333;
+    display: none;
+    opacity: 0.4;
+    width: 100%;
+    height: 100%;
+}
+
+.member-scheduler-monthly-view-overlay-icon {
+    color: #000;
+}
+
+.member-scheduler-odd-bg-column {
+    background-color: #9e9e9e;
+    opacity: 0.3;
+    position: absolute;
+    top: 0;
+}
+
+.gantt_task_row {
+    position: relative;
+}
+
+.gantt_task_row.gantt_selected .agenda-odd-bg-column {
+    background-color: transparent;
+}
+
+.gantt_cell .gantt_tree_icon.gantt_folder_closed, .gantt_cell .gantt_tree_icon.gantt_folder_open {
+    background-image: url("../img/hard-hat.png");
+}
+
+.gantt_cell .gantt_tree_icon.gantt_file {
+    background-image: url("../img/worker-icon.png");
+}
+
+.team_gantt_task_row .gantt_cell, .team_gantt_row  .gantt_cell{
+    color: black;
+    background-color: #f0f0f0;
+    font-weight: bolder;
+}
+
+.team_gantt_row_parent .gantt_cell .gantt_tree_icon.gantt_folder_closed,
+.team_gantt_row_parent .gantt_cell .gantt_tree_icon.gantt_folder_open{
+    background-image: url("../img/teams-icon.png");
+    background-size: 26px 31px;
+}
+
+.team_gantt_row_child .gantt_cell .gantt_tree_icon.gantt_file{
+    background-image: url("../img/team-icon.png");
+    background-size: 26px 31px;
+}
+
+.gantt_row.team_gantt_row+:not(.team_gantt_row),
+.gantt_task_row.team_gantt_task_row+:not(.team_gantt_task_row){
+    border-top: solid thin #a0a0a0;
+}
+
+.gantt_tree_content{
+    cursor: pointer;
+}
+
+.gantt_tree_content:hover{
+    color: #286090;
+    font-weight: bolder;
+}

@@ -19,7 +19,6 @@ export class WellInformationPanelDirective implements ng.IDirective {
 		ctrl: any,
 	) => {
 
-
 		const keyName = 'panelWellIsCollapsed';
 		const getPanelState = () => {
 			try {

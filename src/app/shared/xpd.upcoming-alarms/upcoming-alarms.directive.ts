@@ -6,6 +6,10 @@ import template from './upcoming-alarms.template.html';
 
 export class UpcomingAlarmsDirective implements ng.IDirective {
 
+	public static Factory(): ng.IDirectiveFactory {
+		return () => new UpcomingAlarmsDirective();
+	}
+
 	public restrict = 'AE';
 	public scope = {
 		currentDirection: '=',
@@ -84,10 +88,6 @@ export class UpcomingAlarmsDirective implements ng.IDirective {
 			}
 		}
 
-	}
-
-	public static Factory(): ng.IDirectiveFactory {
-		return () => new UpcomingAlarmsDirective();
 	}
 
 }

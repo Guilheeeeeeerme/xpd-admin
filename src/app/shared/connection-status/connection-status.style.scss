@@ -3,13 +3,14 @@ xpd-connection-status {
     width: 100%;
     position: absolute;
     top: 0;
-    z-index: 3000;
 
     .xpd-connection-status-label {
         text-align: center;
         font-size: 1em;
         color: white;
         transition: all 700ms;
+        
+        z-index: -3000;
         margin: -30px 0;
     
         &.xpd-connection-status-reconnecting {
@@ -21,6 +22,7 @@ xpd-connection-status {
         }
         
         &.open {
+            z-index: 3000;
             margin: 0px 0;
         }
 

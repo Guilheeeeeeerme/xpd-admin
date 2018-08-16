@@ -1,21 +1,14 @@
-// (function() {
 
-// 	'use strict';
-
-// 	/**
-//      * Diretiva que recebe como entrada uma velocidade de contrato de parâmetro
-//      * de tempo e transforma em um input com uma notação de duração (HH:mm:ss)
-//      *
-//      * Entrada: Velocidade (VOptimum / VStandard / Vpoor)
-//      * Saída: Tempo (HH:mm:ss)
-//      */
-
-// 	contractTimeInput.$inject = [];
 import * as angular from 'angular';
+import './contract-time-input.style.scss';
 import template from './contract-time-input.template.html';
 
 export class ContractTimeInputDirective {
 	public static $inject: string[] = [];
+
+	public static Factory(): ng.IDirectiveFactory {
+		return () => new ContractTimeInputDirective();
+	}
 	public restrict = 'E';
 	public require = '^ngModel';
 	public scope = {
@@ -40,9 +33,7 @@ export class ContractTimeInputDirective {
 		ctrl: any,
 	) => {
 
-		scope.watchInput = watchInput;
-
-		scope.$watch('ngModel', function (ngModel) {
+		scope.$watch('ngModel', (ngModel) => {
 
 			if (angular.isDefined(ngModel)) {
 
@@ -62,7 +53,7 @@ export class ContractTimeInputDirective {
 
 		}, true);
 
-		function watchInput() {
+		const watchInput = () => {
 
 			/**
 			 * Garante que o min e max nunca fiquem vazios
@@ -97,16 +88,13 @@ export class ContractTimeInputDirective {
 			const seconds = +scope.seconds;
 
 			const actualDuration = ((hours * 3600000) + (minutes * 60000) + (seconds * 1000));
-			ngModel = (actualDuration != 0) ? 3600000 / actualDuration : null;
+			ngModel = (actualDuration !== 0) ? 3600000 / actualDuration : null;
 
 			ctrl.$setViewValue(ngModel);
 
-		}
+		};
 
-	}
+		scope.watchInput = watchInput;
 
-	public static Factory(): ng.IDirectiveFactory {
-		return () => new ContractTimeInputDirective();
 	}
 }
-// })();

@@ -1,0 +1,317 @@
+@import '~styles/font.scss';
+
+/* CONNECTION ROW */
+
+
+
+/*************************/
+
+/*************************/
+
+.trip-time-target-overtime {
+    color: #cf1111;
+}
+
+
+
+.blockspeed-ruler-go {
+    background-color: #9ed09e;
+    height: 100%;
+    position: absolute;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    width: 100%;
+}
+
+.blockspeed-ruler-go-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    font-size: 10em;
+    font-family: $font-family-1;
+    font-weight: bold;
+    color: #333;
+    margin-top: -1em;
+    margin-left: -0.5em;
+}
+
+.blockspeed-ruler-slow-down {
+    background-color: #ffd42a;
+    height: 100%;
+    position: absolute;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    width: 100%;
+    display: table;
+    animation: blinker 1s linear infinite;
+}
+
+.blockspeed-ruler-slow-down-text {
+    font-size: 5em;
+    font-family: $font-family-1;
+    font-weight: bold;
+    color: white;
+    display: table-cell;
+    text-align: center;
+    vertical-align: middle;
+    color: #333;
+    text-transform: uppercase;
+}
+
+.unreachable-target-stroke{
+    stroke: #b710fb;
+}
+
+.unreachable-target-fill{
+    fill: #b710fb;
+}
+
+/***********************/
+
+/***********************/
+
+/***********************/
+
+@keyframes blinker {
+    50% {
+        opacity: 0.0;
+    }
+}
+
+/* EVENTS CHART */
+
+.xpd-events-container {
+    max-height: 100%;
+}
+
+.x-ticks {
+    font-size: 2px;
+}
+
+.xpd-events-ticks {
+    /* font-size: 0.5em; */
+    fill: #bff0ef;
+    text-anchor: end;
+}
+
+/* TIME BARS */
+
+.xpd-times-container {
+    padding: 10px 5px;
+}
+
+.xpd-times-ticks {
+    font-size: 0.2em;
+    fill: #bff0ef;
+    text-anchor: end;
+}
+
+.xpd-times-bar:hover,
+.xpd-times-selected-bar {
+    fill: white;
+}
+
+.times-container {
+    height: 100%;
+    padding: 0px;
+}
+
+.times-chart-container {
+    height: 100%;
+}
+
+.times-chart,
+.times-chart > svg {
+    height: 100%;
+}
+
+input:checked + .slider {
+    /*background-color: #2196F3;*/
+}
+
+input:focus + .slider {
+    box-shadow: 0 0 1px #2196F3;
+}
+
+input:checked + .slider:before {
+    -webkit-transform: translateX(16px);
+    -ms-transform: translateX(16px);
+    transform: translateX(16px);
+}
+
+/* Rounded sliders */
+
+.slider.round {
+    border-radius: 15px;
+}
+
+.slider.round:before {
+    border-radius: 50%;
+}
+
+/* BLOCK SPEED */
+
+.times-container {
+    height: 100%;
+    padding: 0px;
+}
+
+.xpd-block-speed-container {
+}
+
+.block-speed-chart-container {
+    height: 100%;
+}
+
+.block-speed-chart {
+    height: 100%;
+}
+
+.block-speed-chart > svg {
+    padding: 10px;
+}
+
+.xpd-whole-block-speed-selected-space {
+    stroke: white;
+    stroke-width: 4;
+}
+
+.xpd-whole-block-speed-selected-target {
+    stroke: white;
+    stroke-width: 2;
+}
+
+.xpd-whole-block-speed-selected-target:hover {
+    stroke: white;
+    stroke-width: 4;
+}
+
+.xpd-block-speed-whole-reading-path {
+    fill: none;
+    stroke: #83b2bc;
+    /*stroke: #753e40;*/
+    stroke-width: 1;
+}
+
+.xpd-block-speed-whole-calculated-path {
+    fill: none;
+    stroke: #753e40;
+    /*stroke: #83b2bc;*/
+    stroke-width: 1;
+}
+
+.xpd-block-speed-detailed-reading-path {
+    fill: none;
+    fill-opacity: 0.3;
+    /*stroke: #753e40;*/
+    stroke: #83b2bc;
+    stroke-width: 1;
+}
+
+.xpd-block-speed-detailed-calculated-path {
+    fill: none;
+    fill-opacity: 0.3;
+    stroke: #753e40;
+    /*stroke: #83b2bc;*/
+    stroke-width: 1;
+}
+
+.xpd-block-speed-tick-text {
+    font-size: 0.2em;
+    fill: white;
+    text-anchor: end;
+}
+
+.xpd-block-speed-tick-text:hover {
+    font-size: 0.5em;
+}
+
+/* CONN RULER */
+
+
+
+/* IN SLIPS */
+
+.xpd-in-slips-bar-mask {
+    stroke-opacity: 0.5;
+    stroke-width: 1;
+    stroke: #4b7f88;
+    fill: none;
+}
+
+.xpd-in-slips-bar {
+    stroke-width: 1;
+    fill-opacity: 0.4;
+    fill: red;
+}
+
+.xpd-in-slips-bar-tick-text {
+    font-size: 0.4em;
+    fill: #bff0ef;
+}
+
+.xpd-in-slips-bar-text {
+    font-size: 0.4em;
+    fill: #bff0ef;
+    font-family: $font-family-1;
+    font-style: italic;
+}
+
+/**
+ * PERFORMANCE PARAMETER BAR
+ */
+
+.performance-parameter-bar {
+}
+
+.performance-parameter-bar-title {
+    height: 50%;
+}
+
+.performance-parameter-bar-container {
+    width: 100%;
+    height: 50%;
+    min-height: 10px;
+    background-color: #253848;
+    position: relative;
+}
+
+.performance-parameter-bar-value {
+    width: 50%;
+    position: absolute;
+    height: 100%;
+}
+
+/**
+*   forecast line
+**/
+
+xpd-forecast-line {
+    display: block;
+    height: 100%;
+    width: 100%;
+}
+
+.xpd-forecast-line-axis-label {
+    fill: #476f78;
+    font-family: $font-family-1;
+    font-size: 0.5em;
+}
+
+.xpd-forecast-line-axis-text {
+    font-family: $font-family-1;
+    font-size: 0.5em;
+    text-anchor: end;
+}
+
+.xpd-forecast-line-axis-border {
+    fill: none;
+    stroke: #476f78;
+    stroke-width: 1;
+}
+
+/*border: solid thin #476f78;*/
+
+/********************************************************/

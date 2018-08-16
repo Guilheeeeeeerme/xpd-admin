@@ -1,0 +1,123 @@
+@import '~styles/font.scss';
+
+div[data-angular-treeview] {
+  /* prevent user selection */
+  -moz-user-select: -moz-none;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+
+  /* default */
+  font-family: Tahoma;
+  font-size:13px;
+  color: #555;
+  text-decoration: none;
+  overflow: auto;
+}
+
+div[data-tree-model] ul {
+  margin: 0;
+  padding: 0;
+  list-style: none; 
+  border: none;
+  /*overflow: hidden;*/
+  white-space: nowrap;
+}
+
+div[data-tree-model] li {
+  position: relative;
+  padding: 0 0 0 5px;
+  line-height: 20px;
+}
+
+div[data-tree-model] li .expanded {
+  padding: 1px 10px;
+  background-image: url("~images/folder.png");
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
+div[data-tree-model] li .collapsed {
+  padding: 1px 10px;
+  background-image: url("~images/folder-closed.png");
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
+div[data-tree-model] li .normal {
+  padding: 1px 10px;
+  background-image: url("~images/file.png");
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
+div[data-tree-model] li i, div[data-tree-model] li span {
+  cursor: pointer;
+}
+
+div[data-tree-model] li .selected {
+  background-color: #aaddff;
+  font-weight: bold;
+  padding: 1px 5px;
+}
+
+.checkbox-tree-input{
+    display: none;
+}
+.checkbox-tree-input + label span {
+    background-color: #acd7ca;
+    border: 1px solid #000;
+    border-radius: 2px;
+    box-shadow: 2px 2px;
+    display:inline-block;
+    width:13px;
+    height:13px;
+    vertical-align:middle;
+    cursor:pointer;
+}
+
+.checkbox-tree-input:checked + label span {
+    background-color: #fff;
+    background:url("~images/checked-icon.png") top no-repeat;
+    background-size: 100%;
+}
+
+.tree-ul{
+  color: black;
+  font-family: $font-family-1;
+  text-align: left;
+  text-anchor: middle;
+  font-size: 15px;
+}
+
+.tree-ul li{
+  margin:5px;
+}
+
+.selected-node{
+  background-color: #000; /*#fff;*/
+  padding: 3px;
+  border-radius: 2px;
+  text-decoration: underline;
+  color: #fff; /*#00807f;*/
+}
+
+.add-node{
+  color: #00807f;
+  margin-left: 2px;
+}
+
+.edit-node{
+  color: #00807f;
+}
+
+.remove-node{
+  color: #cc0505;
+}
+
+.content-select-node{
+  display: initial;
+  margin-right: 10px;
+  margin-left: 7px;
+}

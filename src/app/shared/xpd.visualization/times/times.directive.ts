@@ -4,6 +4,10 @@ import template from './times.template.html';
 
 export class EventTimesDirective implements ng.IDirective {
 
+	public static Factory(): ng.IDirectiveFactory {
+		return () => new EventTimesDirective();
+	}
+
 	public template = template;
 	public restrict = 'AE';
 	public scope = {
@@ -79,10 +83,6 @@ export class EventTimesDirective implements ng.IDirective {
 			}
 		}
 
-	}
-
-	public static Factory(): ng.IDirectiveFactory {
-		return () => new EventTimesDirective();
 	}
 
 }

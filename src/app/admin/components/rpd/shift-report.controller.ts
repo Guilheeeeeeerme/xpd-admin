@@ -51,6 +51,12 @@ export class RPDController {
 
 	}
 
+	public reloadReport() {
+		if (this.$routeParams.wellId !== this.$scope.dados.wellId) {
+			this.$location.path('/shift-report/' + this.$scope.dados.wellId).search();
+		}
+	}
+
 	private wellIsSelected() {
 		this.loadSectionList(this.$scope.dados.wellId).then((sections: any) => {
 			const promises = [];
@@ -225,12 +231,6 @@ export class RPDController {
 		}));
 
 		return Promise.all(promises);
-	}
-
-	public reloadReport() {
-		if (this.$routeParams.wellId !== this.$scope.dados.wellId) {
-			this.$location.path('/shift-report/' + this.$scope.dados.wellId).search();
-		}
 	}
 
 	private loadOperations(sectionId) {

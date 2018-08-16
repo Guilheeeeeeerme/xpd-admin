@@ -1,5 +1,9 @@
 
 export class XPDScoredEventsDirective implements ng.IDirective {
+
+		public static Factory(): ng.IDirectiveFactory {
+		  return () => new XPDScoredEventsDirective();
+		}
 	// Runs during compile
 	public scope = {
 		eventList: '=',
@@ -25,8 +29,4 @@ export class XPDScoredEventsDirective implements ng.IDirective {
 		'</tr>' +
 		'</tbody>' +
 		'</table>';
-
-		public static Factory(): ng.IDirectiveFactory {
-		  return () => new XPDScoredEventsDirective();
-		}
 }

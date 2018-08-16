@@ -1,5 +1,9 @@
 export class XPDFormValidationDirective implements ng.IDirective {
 
+	public static Factory(): ng.IDirectiveFactory {
+		return () => new XPDFormValidationDirective();
+	}
+
 	public restrict = 'A';
 	public require = '^ngModel';
 	public priority = 1;
@@ -85,10 +89,6 @@ export class XPDFormValidationDirective implements ng.IDirective {
 
 		}
 
-	}
-
-	public static Factory(): ng.IDirectiveFactory {
-		return () => new XPDFormValidationDirective();
 	}
 
 }

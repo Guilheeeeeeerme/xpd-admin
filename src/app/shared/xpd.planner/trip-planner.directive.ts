@@ -9,6 +9,10 @@ export class XPDTripPlannerDirective implements ng.IDirective {
 
 	public static $inject: string[] = ['vCruisingCalculator'];
 
+	public static Factory(): ng.IDirectiveFactory {
+		return (vCruisingCalculator: VCruisingCalculatorService) => new XPDTripPlannerDirective(vCruisingCalculator);
+	}
+
 	public scope = {
 		label: '@',
 		targetSpeed: '=',
@@ -86,10 +90,6 @@ export class XPDTripPlannerDirective implements ng.IDirective {
 			scope.vcruising = vcruising;
 		}
 
-	}
-
-	public static Factory(): ng.IDirectiveFactory {
-		return (vCruisingCalculator: VCruisingCalculatorService) => new XPDTripPlannerDirective(vCruisingCalculator);
 	}
 }
 

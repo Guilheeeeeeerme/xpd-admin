@@ -45,6 +45,38 @@ export class ModalLessonLearnedController {
 
 	}
 
+	public modalActionButtonSave() {
+		const lessonLearned = this.$scope.selectedLessonLearned;
+
+		if (!lessonLearned.id) {
+			this.registerLessonLearned(lessonLearned);
+		} else {
+			this.updateLessonLearned(lessonLearned);
+		}
+
+	}
+
+	public modalActionButtonClose() {
+		this.$uibModalInstance.close();
+	}
+
+	public actionClickSelectItem(node) {
+		this.makeBreadCrumbs(node);
+
+		if (this.$scope.lessonLearned.lastSelected != null) {
+			this.$scope.lessonLearned.lastSelected.selected = false;
+		}
+
+		this.$scope.lessonLearned.lastSelected = node;
+
+		// reset
+		this.$scope.selectedLessonLearned.lessonLearnedCategory = {};
+
+		this.$scope.selectedLessonLearned.lessonLearnedCategory.id = node.id;
+
+		node.selected = true;
+	}
+
 	private getLessonLearnedCategoryList() {
 		this.lessonLearnedSetupAPIService.getListCategory().then(
 			(arg) => { this.getLessonLearnedCategoryListSuccessCallback(arg); },
@@ -59,17 +91,6 @@ export class ModalLessonLearnedController {
 
 	private getLessonLearnedCategoryListErrorCallback(error) {
 		console.log(error);
-	}
-
-	public modalActionButtonSave() {
-		const lessonLearned = this.$scope.selectedLessonLearned;
-
-		if (!lessonLearned.id) {
-			this.registerLessonLearned(lessonLearned);
-		} else {
-			this.updateLessonLearned(lessonLearned);
-		}
-
 	}
 
 	private registerLessonLearned(lessonLearned) {
@@ -95,10 +116,6 @@ export class ModalLessonLearnedController {
 
 	private lessonLearnedErrorCallback(error) {
 		this.modalErrorCallback();
-	}
-
-	public modalActionButtonClose() {
-		this.$uibModalInstance.close();
 	}
 
 	private makeTreeStructure(data) {
@@ -133,23 +150,6 @@ export class ModalLessonLearnedController {
 		}
 
 		this.$scope.selectedLessonLearned.roleList = lessonLearnedCategoryData;
-	}
-
-	public actionClickSelectItem(node) {
-		this.makeBreadCrumbs(node);
-
-		if (this.$scope.lessonLearned.lastSelected != null) {
-			this.$scope.lessonLearned.lastSelected.selected = false;
-		}
-
-		this.$scope.lessonLearned.lastSelected = node;
-
-		// reset
-		this.$scope.selectedLessonLearned.lessonLearnedCategory = {};
-
-		this.$scope.selectedLessonLearned.lessonLearnedCategory.id = node.id;
-
-		node.selected = true;
 	}
 
 	private makeBreadCrumbs(node) {

@@ -71,13 +71,13 @@
 
 	</uib-accordion>
 
-	<div class="row h-40 chart-content">
+	<div class="row h-40 xpd-chart-container">
 
-		<div class="xpd-chart-container-header dmec-chart-label">
-			DMEC
+		<div class="xpd-chart-container-header ">
+			<p>DMEC</p>
 		</div>
 
-		<xpd-d3-dmec-chart 
+		<xpd-dmec-chart 
 			ng-if="dmecTrackingStartAt && zoomStartAt && zoomEndAt"
 			threads="4" 
 			horizontal="true" 
@@ -86,17 +86,17 @@
 			on-reading="onReading"
 		 	zoom-start-at="zoomStartAt" 
 			zoom-end-at="zoomEndAt"
-			set-selected-point="setSelectedPoint"
+			set-selected-point="setSelectedPoint(position)"
 			last-selected-point="lastSelectedPoint"
 			remove-marker= "removeMarker">
-		</xpd-d3-dmec-chart>
+		</xpd-dmec-chart>
 
 	</div>
 
-	<div class="row h-10 chart-content">
+	<div class="row h-10 xpd-chart-container">
 
-		<div class="xpd-chart-container-header dmec-chart-label">
-			Zoom
+		<div class="xpd-chart-container-header ">
+			<p>Zoom</p>
 		</div>
 
 		<xpd-time-zoom-tool 
@@ -110,10 +110,10 @@
 		</xpd-time-zoom-tool>
 	</div>
 
-	<div class="row h-10 chart-content">
+	<div class="row h-15 xpd-chart-container">
 
-		<div class="xpd-chart-container-header dmec-chart-label">
-			Slips to Slips (Conn)
+		<div class="xpd-chart-container-header ">
+			<p>Slips to Slips (Conn)</p>
 		</div>
 
 		<xpd-dmec-tracking-events 
@@ -130,10 +130,10 @@
 
 	</div>
 
-	<div class="row h-10 chart-content">
+	<div class="row h-15 xpd-chart-container">
 
-		<div class="xpd-chart-container-header dmec-chart-label">
-			Slips to Slips (Trip)
+		<div class="xpd-chart-container-header ">
+			<p>Slips to Slips (Trip)</p>
 		</div>
 
 		<xpd-dmec-tracking-events 
@@ -150,10 +150,10 @@
 
 	</div>
 
-	<div class="row h-10 chart-content">
+	<div class="row h-15 xpd-chart-container">
 
-		<div class="xpd-chart-container-header dmec-chart-label">
-			Time
+		<div class="xpd-chart-container-header ">
+			<p>Time</p>
 		</div>
 
 		<xpd-dmec-tracking-events 

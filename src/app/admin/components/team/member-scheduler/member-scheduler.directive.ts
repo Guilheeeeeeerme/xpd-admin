@@ -1,4 +1,5 @@
 import { GanttService } from '../../../../shared/gantt/gantt.service';
+import './member-scheduler.style.scss';
 
 export class MemberSchedulerDirective implements ng.IDirective {
 	// 'use strict';
@@ -6,7 +7,11 @@ export class MemberSchedulerDirective implements ng.IDirective {
 	// memberScheduler.$inject = ['$compile', 'ganttService'];
 	public static $inject: string[] = ['$compile', 'ganttService'];
 
-	public restrict = 'A';
+	public static Factory(): ng.IDirectiveFactory {
+		return ($compile: ng.ICompileService, ganttService: GanttService) => new MemberSchedulerDirective($compile, ganttService);
+	}
+
+	public restrict = 'E';
 	public scope = {
 		scheduleList: '=',
 		referenceDate: '=',
@@ -515,9 +520,5 @@ export class MemberSchedulerDirective implements ng.IDirective {
 				}
 			});
 		});
-	}
-
-	public static Factory(): ng.IDirectiveFactory {
-		return ($compile: ng.ICompileService, ganttService: GanttService) => new MemberSchedulerDirective($compile, ganttService);
 	}
 }

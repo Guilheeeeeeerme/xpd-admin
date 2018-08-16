@@ -5,6 +5,10 @@
 import template from './channels-information-panel.template.html';
 
 export class ChannelsInformationPanel implements ng.IDirective {
+
+	public static Factory(): ng.IDirectiveFactory {
+		return () => new ChannelsInformationPanel();
+	}
 	public restrict = 'EA';
 	public template = template;
 	public scope = {
@@ -36,9 +40,5 @@ export class ChannelsInformationPanel implements ng.IDirective {
 			localStorage.setItem(keyName, JSON.stringify(newState));
 		};
 
-	}
-
-	public static Factory(): ng.IDirectiveFactory {
-		return () => new ChannelsInformationPanel();
 	}
 }

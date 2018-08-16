@@ -2,10 +2,10 @@
 
 xpd-admin-nav-bar {
 
-	background: url('./../../../assets/img/bg.png');
 	border-color: transparent;
 	
 	 .navbar {
+		background: url('./../../../assets/img/bg.png');
 		border: 0;
 	}
 
@@ -25,6 +25,7 @@ xpd-admin-nav-bar {
 	}
 
 	 .xpd-nav-button {
+        height: 57px;
 		border: 2px solid #456c75;
 		padding: 15px;
 		font-family: $font-family-1;
@@ -32,4 +33,5 @@ xpd-admin-nav-bar {
 		font-weight: bolder;
 		color: #456c75;
 	}
+
 }
