@@ -37,7 +37,7 @@ public getListCategory;
 
 		$scope.selectedFailure = angular.copy(selectedFailure);
 
-		$scope.toMilli = (arg) => { vm.toMilli(arg); };
+		$scope.toMilli = (arg) => vm.toMilli(arg);
 		$scope.now = () => { vm.now(); };
 		$scope.keepTimeBeforeNow = () => { vm.keepTimeBeforeNow(); };
 

@@ -83,16 +83,6 @@ namespace worker.d3.dmec {
 
 		const getParamPointAVL = (timestamp, param, oldPoints, newPoints) => {
 
-			console.log('oldPoints[%s].length = %s', param, oldPoints[param].length);
-			oldPoints[param] = oldPoints[param].filter(exclude);
-			console.log('oldPoints[%s].length = %s', param, oldPoints[param].length);
-
-			console.log('newPoints[%s].length = %s', param, newPoints[param].length);
-			newPoints[param] = newPoints[param].filter(exclude);
-			console.log('newPoints[%s].length = %s', param, newPoints[param].length);
-
-			console.log('---------');
-
 			return new Promise((resolve, reject) => {
 
 				let points = [];

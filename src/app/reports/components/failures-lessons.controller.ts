@@ -17,19 +17,17 @@ export class FailuresLassonsController {
 		private $modal: IModalService,
 		private reportsSetupAPIService: ReportsSetupAPIService) {
 
-		const vm = this;
+		$scope.totalTime = null;
+		$scope.totalFailuresLessons = null;
+		$scope.nodeList = [];
 
-		vm.totalTime = null;
-		vm.totalFailuresLessons = null;
-		vm.nodeList = [];
-
-		vm.chartPareto = {
+		$scope.chartPareto = {
 			title: $scope.paretoTitle,
 			data: [],
 			totalTime: 0,
 		};
 
-		vm.chartDonut = {
+		$scope.chartDonut = {
 			title: null,
 			data: [],
 		};
@@ -129,9 +127,9 @@ export class FailuresLassonsController {
 
 		const nodeList = node.children;
 
-		vm.chartDonut.title = node.name;
-		vm.totalTime = node.time;
-		vm.totalFailuresLessons = node.failuresLessonsLength;
+		this.$scope.chartDonut.title = node.name;
+		this.$scope.totalTime = node.time;
+		this.$scope.totalFailuresLessons = node.failuresLessonsLength;
 
 		this.createSeriesDataChart(nodeList);
 
@@ -139,7 +137,7 @@ export class FailuresLassonsController {
 			{ id: node.id, name: node.name },
 		);
 
-		vm.nodeList = nodeList;
+		this.$scope.nodeList = nodeList;
 	}
 
 	/**
@@ -151,19 +149,19 @@ export class FailuresLassonsController {
 	 */
 	public actionClickBreadcrumbs(key, node) {
 		const vm = this;
-		vm.chartDonut.title = node.name;
+		this.$scope.chartDonut.title = node.name;
 
 		if (node.id) {
-			vm.totalTime = this.listCategory[node.id].time;
-			vm.totalFailuresLessons = this.listCategory[node.id].failuresLessonsLength;
-			vm.nodeList = this.listCategory[node.id].children;
+			this.$scope.totalTime = this.listCategory[node.id].time;
+			this.$scope.totalFailuresLessons = this.listCategory[node.id].failuresLessonsLength;
+			this.$scope.nodeList = this.listCategory[node.id].children;
 		} else {
-			vm.totalTime = this.$scope.failuresLessonsData.categories.time;
-			vm.totalFailuresLessons = this.$scope.failuresLessonsData.categories.failuresLessonsLength;
-			vm.nodeList = this.$scope.failuresLessonsData.categories.children;
+			this.$scope.totalTime = this.$scope.failuresLessonsData.categories.time;
+			this.$scope.totalFailuresLessons = this.$scope.failuresLessonsData.categories.failuresLessonsLength;
+			this.$scope.nodeList = this.$scope.failuresLessonsData.categories.children;
 		}
 
-		this.createSeriesDataChart(vm.nodeList);
+		this.createSeriesDataChart(this.$scope.nodeList);
 		this.$scope.failuresLessonsData.breadcrumbs.splice(key + 1, this.$scope.failuresLessonsData.breadcrumbs.length);
 	}
 
@@ -197,10 +195,11 @@ export class FailuresLassonsController {
 	 * @param  {obj} result lista de failures/lessons e categorias
 	 */
 	private getListSuccessCallback(result) {
+
 		const vm = this;
 
 		if (Object.keys(result[this.$scope.type]).length === 0) {
-			vm.nodeList = [];
+			this.$scope.nodeList = [];
 			return;
 		}
 
@@ -216,11 +215,11 @@ export class FailuresLassonsController {
 
 		this.$scope.data.categories = this.listCategory[1];
 
-		vm.chartDonut.title = this.listCategory[1].name;
-		vm.totalTime = this.listCategory[1].time;
-		vm.totalFailuresLessons = this.listCategory[1].failuresLessonsLength;
-		vm.nodeList = this.listCategory[1].children;
-		this.createSeriesDataChart(vm.nodeList);
+		this.$scope.chartDonut.title = this.listCategory[1].name;
+		this.$scope.totalTime = this.listCategory[1].time;
+		this.$scope.totalFailuresLessons = this.listCategory[1].failuresLessonsLength;
+		this.$scope.nodeList = this.listCategory[1].children;
+		this.createSeriesDataChart(this.$scope.nodeList);
 	}
 
 	private getListErrorCallback(error) {
@@ -232,13 +231,13 @@ export class FailuresLassonsController {
 	 * @param  {obj} failuresLessons failures/lessons
 	 * @return {obj} categoria com sua failures/lessons
 	 */
-	private insertFailureLessonInCategory(failuresLessons) {
+	private insertFailureLessonInCategory(failureLesson) {
 
 		const categories = this.listCategory;
 
-		const node = categories[failuresLessons[this.$scope.category].id];
-		const time = (new Date(failuresLessons.endTime).getTime() - new Date(failuresLessons.startTime).getTime()) / 1000;
-		failuresLessons.time = time;
+		const node = categories[failureLesson[this.$scope.category].id];
+		const time = (new Date(failureLesson.endTime).getTime() - new Date(failureLesson.startTime).getTime()) / 1000;
+		failureLesson.time = time;
 
 		/** Time / SelfTime */
 		if (node.time === undefined) {
@@ -268,7 +267,7 @@ export class FailuresLassonsController {
 			node.selfNptBpLength = 0;
 		}
 
-		if (failuresLessons.npt || failuresLessons.bestPractices) {
+		if (failureLesson.npt || failureLesson.bestPractices) {
 			node.selfNptBpTime += time;
 			node.selfNptBpLength += 1;
 		}
@@ -281,7 +280,7 @@ export class FailuresLassonsController {
 			node.failuresLessonsLength = 0;
 		}
 
-		node.failuresLessons.push(failuresLessons);
+		node.failuresLessons.push(failureLesson);
 		return node;
 	}
 
@@ -295,7 +294,7 @@ export class FailuresLassonsController {
 
 		const type = this.$scope.type;
 
-		if (node[type]) {
+		if (node.failuresLessons) {
 			const virtualNode = {
 				name: 'Other',
 				initial: node.initial,
@@ -375,7 +374,7 @@ export class FailuresLassonsController {
 			} else {
 				if (!nodes[i].parentId && !nodes[i].children) {
 					/**
-					 * Caso só exista o nó raiz e o nó raiz possua lessons learned
+					 * Caso só exista o nó raiz e o nó raiz possua failures/lessons
 					 * deverá ser criado um nó virtual para exibir os dados
 					 */
 					nodes[i].children = [];
@@ -510,7 +509,7 @@ export class FailuresLassonsController {
 				}
 			}
 
-			paretoItem.percent = (nodes[i].failuresLessonsLength * 100) / vm.totalFailuresLessons;
+			paretoItem.percent = (nodes[i].failuresLessonsLength * 100) / this.$scope.totalFailuresLessons;
 			paretoItem.category = nodes[i].name;
 
 			const failuresLessonsLength = {
@@ -555,7 +554,7 @@ export class FailuresLassonsController {
 
 		chartDonut.donut = donut;
 		chartDonut.pie = pie;
-		vm.chartDonut.data = chartDonut;
-		vm.chartPareto.data = chartPareto;
+		this.$scope.chartDonut.data = chartDonut;
+		this.$scope.chartPareto.data = chartPareto;
 	}
 }
