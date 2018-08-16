@@ -12,14 +12,16 @@ namespace worker.d3.dmec {
 			console.error(error);
 		}
 
+		const exclude = (point) => {
+			return point.x >= data.zoomStartAt  && point.x <= data.zoomEndAt;
+		};
+
 		const overflowPoints = (tracks, points) => {
 
 			const result = {};
 
 			tracks.map((track) => {
-				points[track.param] = points[track.param].filter((point) => {
-					return point.x >= data.zoomStartAt  && point.x <= data.zoomEndAt;
-				});
+				points[track.param] = points[track.param].filter(exclude);
 				result[track.param] = handleOverflow(points[track.param], track);
 			});
 
@@ -79,8 +81,17 @@ namespace worker.d3.dmec {
 			return result;
 		};
 
-		const getParamPointAVL = (timestamp, param, 
-			, newPoints) => {
+		const getParamPointAVL = (timestamp, param, oldPoints, newPoints) => {
+
+			console.log('oldPoints[%s].length = %s', param, oldPoints[param].length);
+			oldPoints[param] = oldPoints[param].filter(exclude);
+			console.log('oldPoints[%s].length = %s', param, oldPoints[param].length);
+
+			console.log('newPoints[%s].length = %s', param, newPoints[param].length);
+			newPoints[param] = newPoints[param].filter(exclude);
+			console.log('newPoints[%s].length = %s', param, newPoints[param].length);
+
+			console.log('---------');
 
 			return new Promise((resolve, reject) => {
 
