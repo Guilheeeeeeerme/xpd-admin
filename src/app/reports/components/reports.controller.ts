@@ -70,7 +70,6 @@ export class ReportsController {
 	}
 
 	private setCurrentDate() {
-		console.log('setCurrentDate');
 
 		try {
 			this.$scope.reportsData.fromDate.setHours(0, 0, 0, 0);

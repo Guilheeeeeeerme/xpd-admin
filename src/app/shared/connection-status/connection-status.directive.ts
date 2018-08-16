@@ -26,8 +26,6 @@ export class ConnectionStatusDirective implements ng.IDirective {
 
 		let closeTimeout;
 
-		element[0].style.visibility = 'hidden';
-
 		const open = () => {
 			if (!angular.element(element.children()[0]).hasClass('open')) {
 				angular.element(element.children()[0]).addClass('open');
@@ -51,12 +49,10 @@ export class ConnectionStatusDirective implements ng.IDirective {
 
 			closeTimeout = setTimeout(() => {
 				close();
-				element[0].style.visibility = 'hidden';
 			}, 3000);
 		};
 
 		const isNotConnected = () => {
-			element[0].style.visibility = 'visible';
 			scope.connected = false;
 			try { scope.$apply(); } catch (e) { /*console.log(e)*/ }
 			open();

@@ -49,7 +49,7 @@ export class PieChartDirective {
 				if (newValue) {
 					createChart();
 				}
-			});
+			}, true);
 
 			const createChart = () => {
 
