@@ -4,6 +4,10 @@
 import template from './next-activities-information-panel.template.html';
 
 export class NextActivitiesInformationPanelDirective implements ng.IDirective {
+
+	public static Factory(): ng.IDirectiveFactory {
+		return () => new NextActivitiesInformationPanelDirective();
+	}
 	public restrict = 'EA';
 	public template = template;
 	public scope = {
@@ -37,9 +41,5 @@ export class NextActivitiesInformationPanelDirective implements ng.IDirective {
 			localStorage.setItem(keyName, JSON.stringify(newState));
 		};
 
-	}
-
-	public static Factory(): ng.IDirectiveFactory {
-		return () => new NextActivitiesInformationPanelDirective();
 	}
 }

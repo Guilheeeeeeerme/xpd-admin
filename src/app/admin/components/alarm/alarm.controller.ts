@@ -9,9 +9,9 @@
 
 // 	alarmController.$inject = ['$scope', 'operationDataService', 'operationSetupAPIService', 'alarmCRUDService'];
 import * as angular from 'angular';
+import { AlarmCRUDService } from '../../../shared/xpd.alarm/alarm.service';
 import { OperationDataService } from '../../../shared/xpd.operation-data/operation-data.service';
 import { OperationSetupAPIService } from '../../../shared/xpd.setupapi/operation-setupapi.service';
-import { AlarmCRUDService } from './alarm.service';
 import depthAlarmTemplate from './depth-alarm-upsert.modal.html';
 import timeAlarmTemplate from './time-alarm-upsert.modal.html';
 

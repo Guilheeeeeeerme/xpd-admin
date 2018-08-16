@@ -70,7 +70,7 @@ export class SchedulerActionsService {
 			backdrop: 'static',
 			size: 'modal-sm',
 			template: upsertMemberTemplate,
-			controller: 'UpsertMemberController as uwController',
+			controller: 'UpsertMemberController as upsertMemberController',
 			resolve: {
 				insertMemberCallback() {
 					return (arg) => { self.insertMemberCallback(arg); };
@@ -87,18 +87,6 @@ export class SchedulerActionsService {
 			},
 		});
 
-	}
-
-	private insertMemberCallback(member) {
-		this.innerAddToGantt('member', member);
-	}
-
-	private updateMemberCallback(member) {
-		this.innerUpdateFromGantt('member', member);
-	}
-
-	private removeMemberCallback(member) {
-		this.innerRemoveFromGantt('member', member);
 	}
 
 	// ######## ##     ## ##    ##  ######  ######## ####  #######  ##    ##
@@ -141,18 +129,6 @@ export class SchedulerActionsService {
 			},
 		});
 
-	}
-
-	private removeFunctionCallback(func) {
-		this.innerRemoveFromGantt('function', func);
-	}
-
-	private insertFunctionCallback(func) {
-		this.innerAddToGantt('function', func);
-	}
-
-	private updateFunctionCallback(func) {
-		this.innerUpdateFromGantt('function', func);
 	}
 
 	//  ######   ######  ##     ## ######## ########  ##     ## ##       ########
@@ -198,18 +174,6 @@ export class SchedulerActionsService {
 				},
 			},
 		});
-	}
-
-	private removeScheduleCallback(schedule) {
-		this.innerRemoveFromGantt('schedule', schedule);
-	}
-
-	private updateScheduleCallback(schedule) {
-		this.innerUpdateFromGantt('schedule', schedule);
-	}
-
-	private insertScheduleCallback(schedule) {
-		this.innerAddToGantt('schedule', schedule);
 	}
 
 	// ########  ######## ##     ##  #######  ##     ## ########     ######   ######  ##     ## ######## ########  ##     ## ##       ########  ######
@@ -309,6 +273,60 @@ export class SchedulerActionsService {
 
 	}
 
+	public onMemberUpdate(member) {
+		this.scheduleSetupAPIService.getMemberById(member.memberId).then((member1) => {
+			this.onUpsertMember(null, member1);
+		}, (arg) => { this.generalError(arg); });
+	}
+
+	public onFunctionUpdate(func) {
+		this.scheduleSetupAPIService.getFunctionById(func.functionId).then((func1) => {
+			this.onUpsertFunction(func1);
+		}, (arg) => { this.generalError(arg); });
+	}
+
+	public onScheduleUpdate(schedule) {
+		this.scheduleSetupAPIService.getScheduleById(schedule.id).then((schedule1: any) => {
+			this.onUpsertSchedule(null, schedule1);
+		}, (arg) => { this.generalError(arg); });
+	}
+
+	private insertMemberCallback(member) {
+		this.innerAddToGantt('member', member);
+	}
+
+	private updateMemberCallback(member) {
+		this.innerUpdateFromGantt('member', member);
+	}
+
+	private removeMemberCallback(member) {
+		this.innerRemoveFromGantt('member', member);
+	}
+
+	private removeFunctionCallback(func) {
+		this.innerRemoveFromGantt('function', func);
+	}
+
+	private insertFunctionCallback(func) {
+		this.innerAddToGantt('function', func);
+	}
+
+	private updateFunctionCallback(func) {
+		this.innerUpdateFromGantt('function', func);
+	}
+
+	private removeScheduleCallback(schedule) {
+		this.innerRemoveFromGantt('schedule', schedule);
+	}
+
+	private updateScheduleCallback(schedule) {
+		this.innerUpdateFromGantt('schedule', schedule);
+	}
+
+	private insertScheduleCallback(schedule) {
+		this.innerAddToGantt('schedule', schedule);
+	}
+
 	/******************************************************************/
 	/******************************************************************/
 	/******************************************************************/
@@ -393,24 +411,6 @@ export class SchedulerActionsService {
 
 	private generalError(error) {
 		this.dialogService.showCriticalDialog(JSON.stringify(error));
-	}
-
-	public onMemberUpdate(member) {
-		this.scheduleSetupAPIService.getMemberById(member.memberId).then((member1) => {
-			this.onUpsertMember(null, member1);
-		}, (arg) => { this.generalError(arg); });
-	}
-
-	public onFunctionUpdate(func) {
-		this.scheduleSetupAPIService.getFunctionById(func.functionId).then((func1) => {
-			this.onUpsertFunction(func1);
-		}, (arg) => { this.generalError(arg); });
-	}
-
-	public onScheduleUpdate(schedule) {
-		this.scheduleSetupAPIService.getScheduleById(schedule.id).then((schedule1: any) => {
-			this.onUpsertSchedule(null, schedule1);
-		}, (arg) => { this.generalError(arg); });
 	}
 
 	/**************************************************************************/

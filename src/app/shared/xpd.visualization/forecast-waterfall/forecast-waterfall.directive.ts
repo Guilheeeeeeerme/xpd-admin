@@ -8,6 +8,14 @@ import { HighchartsService } from '../../highcharts/highcharts.service';
 export class ForecastWaterfallDirective implements ng.IDirective {
 	public static $inject: string[] = ['$filter', 'highchartsService'];
 
+	public static Factory(): ng.IDirectiveFactory {
+		return (
+			$filter: any,
+			highchartsService: HighchartsService) => new ForecastWaterfallDirective(
+				$filter,
+				highchartsService);
+	}
+
 	public scope = {
 		dataChart: '=',
 	};
@@ -88,14 +96,6 @@ export class ForecastWaterfallDirective implements ng.IDirective {
 
 		});
 
-	}
-
-	public static Factory(): ng.IDirectiveFactory {
-		return (
-			$filter: any,
-			highchartsService: HighchartsService) => new ForecastWaterfallDirective(
-				$filter,
-				highchartsService);
 	}
 
 }

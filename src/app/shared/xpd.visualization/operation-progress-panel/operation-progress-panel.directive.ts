@@ -1,6 +1,11 @@
+import './operation-progress-panel.style.scss';
 import template from './operation-progress-panel.template.html';
 
 export class OperationProgressPanelDirective implements ng.IDirective {
+
+	public static Factory(): ng.IDirectiveFactory {
+		return () => new OperationProgressPanelDirective();
+	}
 	public restrict = 'EA';
 	public template = template;
 	public scope = {
@@ -64,9 +69,5 @@ export class OperationProgressPanelDirective implements ng.IDirective {
 			scope.collapse = newState;
 			localStorage.setItem(keyName, JSON.stringify(newState));
 		};
-	}
-
-	public static Factory(): ng.IDirectiveFactory {
-		return () => new OperationProgressPanelDirective();
 	}
 }

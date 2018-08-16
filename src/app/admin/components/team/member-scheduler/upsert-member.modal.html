@@ -1,5 +1,5 @@
 
-<form name="uwController.uwForm">
+<form name="upsertMemberController.upsertMemberForm">
     
     <div class="modal-content">
 
@@ -14,7 +14,7 @@
                 
                 <div 
                     class="form-group" 
-                    ng-class="{ 'has-error' : uwController.uwForm.name.$invalid && !uwController.uwForm.name.$pristine }">
+                    ng-class="{ 'has-error' : upsertMemberController.upsertMemberForm.name.$invalid && !upsertMemberController.upsertMemberForm.name.$pristine }">
                     <label for="name">Name:</label>
                     <input 
                         name="name" 
@@ -27,7 +27,7 @@
                 
                 <div 
                     class="form-group" 
-                    ng-class="{ 'has-error' : (uwController.uwForm.identification.$invalid && !uwController.uwForm.identification.$pristine) || duplicatedIdentification }">
+                    ng-class="{ 'has-error' : (upsertMemberController.upsertMemberForm.identification.$invalid && !upsertMemberController.upsertMemberForm.identification.$pristine) || duplicatedIdentification }">
                     <label for="identification">Id:</label>
                     <input 
                         name="identification" 
@@ -53,7 +53,7 @@
 
                     <div class="media">
                         <div class="media-left media-middle">
-                            <img ng-if="imagePath != null" src="data:image/png;base64, {{ imagePath }}" class="media-object member-form-photo">
+                            <img ng-if="imagePathSet" ng-src="{{ imagePath }}" class="media-object member-form-photo">
                         </div>
                         <div class="media-body">
                             <h4 class="media-heading">{{(modalData.function.name)?modalData.function.name:modalData.function.text }}</h4>
@@ -73,23 +73,23 @@
                 ng-if="modalData.id != null" 
                 class="btn btn-primary" 
                 type="submit" 
-                ng-click="uwController.actionButtonAdd()"
-                ng-disabled="uwController.uwForm.$invalid || duplicatedIdentification">Update
+                ng-click="upsertMemberController.actionButtonAdd()"
+                ng-disabled="upsertMemberController.upsertMemberForm.$invalid || duplicatedIdentification">Update
             </button>
 
             <button 
                 ng-if="modalData.id == null" 
                 class="btn btn-success" 
                 type="submit" 
-                ng-click="uwController.actionButtonAdd()"
-                ng-disabled="uwController.uwForm.$invalid || duplicatedIdentification">Add
+                ng-click="upsertMemberController.actionButtonAdd()"
+                ng-disabled="upsertMemberController.upsertMemberForm.$invalid || duplicatedIdentification">Add
             </button>
             
-            <button ng-if="modalData.id != null" class="btn btn-danger" ng-click="uwController.actionButtonRemove()">
+            <button ng-if="modalData.id != null" class="btn btn-danger" ng-click="upsertMemberController.actionButtonRemove()">
                 Remove
             </button>
             
-            <button class="btn btn-secondary" ng-click="uwController.actionButtonCancel()">Done</button>
+            <button class="btn btn-secondary" ng-click="upsertMemberController.actionButtonCancel()">Leave</button>
         
         </div>
 

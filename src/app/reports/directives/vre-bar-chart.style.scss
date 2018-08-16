@@ -35,3 +35,14 @@
 .vre-report-table > tbody > tr:nth-child(even) > td {
     background-color: rgba(33, 30, 30, 0.85);
 }
+
+.table > tbody > tr > td.vre-svg-container, 
+.table > thead > tr > th.vre-svg-container, 
+.table > tfoot > tr > td.vre-svg-container {
+    /*background-color: transparent;*/
+    background-color: black;
+    width: 30%;
+    border-bottom: 0;
+    border-top: 0;
+    padding: 0;
+}

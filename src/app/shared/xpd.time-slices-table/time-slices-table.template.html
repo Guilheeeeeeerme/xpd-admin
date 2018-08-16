@@ -1,154 +1,118 @@
 <fieldset ng-disabled="disabled">
 
-        <table class="table table-condensed table-stripped table-hovered">
+    <table class="table table-condensed table-stripped table-hovered">
 
-            <!-- ng-if = "!disabled" -->
-            <div 
-                ng-show="false" 
-                ng-init="refreshList()">
-                
-                <input
-                    id="time-slice-{{direction}}-remaining-time" 
-                    type="number" 
-                    name="{{ name }}"
-                    ng-max="!disabled ? 0 : 100"
-                    ng-model="remainingPercentage"
-                    >
-            
-            </div>
-            
-            <caption>
-                <!-- <i 	id="alarm-info-upsert-label-duration-{{direction}}" 
-                    class="pull-right">Total Time: {{ durationAlarm || 0 | secondsToHourMinutesSeconds }}
-                </i>
-                <br> -->
-                <i 
-                    id="alarm-info-upsert-label-remainingTime-{{direction}}" 
-                    class="pull-right has-error form-error-message"
-                    ng-if="!disabled && remainingTime > 0">Unallocated Time:
-                    <strong>{{ remainingTime || 0 | secondsToHourMinutesSeconds }}</strong>
-                </i>
+        <div ng-show="false">
+            <input 
+                id="time-slice-{{direction}}-remaining-time" 
+                type="number" 
+                name="{{ name }}" 
+                ng-max="!disabled ? 0 : 100" 
+                ng-model="remainingPercentage">
+        </div>
 
-            </caption>
-            
-            <thead>
-                <tr>
-                    <th colspan="2">#</th>
-                    <th>Name</th>
-                    <th>Duration</th>
-                    <th colspan="2"></th>
-                </tr>
-            </thead>
+        <caption>
+            <i 
+                id="alarm-info-upsert-label-remainingTime-{{direction}}" 
+                class="pull-right has-error form-error-message" 
+                ng-if="!disabled && remainingTime > 0">Unallocated Time:
+                <strong>{{ remainingTime || 0 | secondsToHourMinutesSeconds }}</strong>
+            </i>
+        </caption>
 
-            <tbody>
+        <thead>
+            <tr>
+                <th colspan="2">#</th>
+                <th>Name</th>
+                <th>Duration</th>
+                <th colspan="2"></th>
+            </tr>
+        </thead>
 
-                <tr ng-repeat='(key, timeSlice) in timeSlices | filter: { enabled: true }'>
-                    
-                    <td id="time-slice-{{direction}}-data-timeOrder-{{ $index + 1 }}">
-                        {{ timeSlice.timeOrder }}
-                    </td>
+        <tbody>
 
-                    <td class="action-button-swap">
+            <tr ng-repeat='(key, timeSlice) in timeSlices | filter: { enabled: true }'>
 
-                        <button class="btn btn-sm btn-default glyphicon glyphicon-chevron-up"
-                            id="time-slice-{{direction}}-up-{{$index + 1}}"
-                            type="button"
-                            ng-click="actionButtonSwap(timeSlices[$index], timeSlices[$index-1])">
-                        </button>
+                <td id="time-slice-{{direction}}-data-timeOrder-{{ $index + 1 }}">
+                    {{ timeSlice.timeOrder }}
+                </td>
 
-                        <button class="btn btn-sm btn-default glyphicon glyphicon-chevron-down"
-                            id="time-slice-{{direction}}-down-{{$index + 1}}"
-                            type="button"
-                            ng-click="actionButtonSwap(timeSlices[$index], timeSlices[$index+1])">
-                        </button>
-                        
-                    </td>
+                <td class="action-button-swap">
 
-                    <td class="input-group-sm">
-                        
-                        <input class="form-control"
-                            id="time-slice-{{direction}}-data-taskName-{{$index + 1}}"
-                            type="text" 
-                            name= "time-slice-{{direction}}-data-taskName-{{$index + 1}}"
-                            ng-model="timeSlice.name"
-                            xpd-form-validation="timeSliceForm"
-                            maxlength="20"
-                            required>
-                    </td>
+                    <button class="btn btn-sm btn-default glyphicon glyphicon-chevron-up" id="time-slice-{{direction}}-up-{{$index + 1}}" type="button"
+                        ng-click="actionButtonSwap(timeSlices[$index], timeSlices[$index-1])">
+                    </button>
 
-                    <td id="time-slice-{{direction}}-data-duration-{{$index + 1}}">
-                        {{ timeSlice.duration | secondsToHourMinutesSeconds }}
-                    </td>
+                    <button class="btn btn-sm btn-default glyphicon glyphicon-chevron-down" id="time-slice-{{direction}}-down-{{$index + 1}}"
+                        type="button" ng-click="actionButtonSwap(timeSlices[$index], timeSlices[$index+1])">
+                    </button>
 
-                    <td class="input-group-sm">
-                        <input 
-                            class="form-control"
-                            id="time-slice-{{direction}}-data-range-percentage-{{$index + 1}}"
-                            type="range" 
-                            name="rangePercentage-{{direction}}-{{$index + 1}}"
-                            ng-model="timeSlice.percentage"
-                            ng-change="actionChangePercentage(timeSlice)"
-                            min="0" 
-                            max="100" 
-                            step="{{ 100 / duration }}">
-                    </td>
+                </td>
 
-                    <td>
-                        <button class="btn btn-sm btn-danger glyphicon glyphicon-remove"
-                            id="time-slice-{{direction}}-remove-{{$index + 1}}"
-                            type="button"
-                            ng-click="actionButtonRemoveTimeSlice(timeSlice)">
-                        </button>
-                    </td>
-                    
-                </tr>
+                <td class="input-group-sm">
 
-            </tbody>
+                    <input class="form-control" id="time-slice-{{direction}}-data-taskName-{{$index + 1}}" type="text" name="time-slice-{{direction}}-data-taskName-{{$index + 1}}"
+                        ng-model="timeSlice.name" xpd-form-validation="timeSliceForm" maxlength="100" required>
+                </td>
 
-            <tfoot>
+                <td id="time-slice-{{direction}}-data-duration-{{$index + 1}}">
+                    {{ ( duration * ( timeSlice.percentage / 100 ) ) | secondsToHourMinutesSeconds }}
+                </td>
 
-                <tr>
-                    <td colspan="8">
-                        <div class="col-md-12 form-group-sm">
+                <td class="input-group-sm">
+                    <input 
+                        class="form-control" 
+                        id="time-slice-{{direction}}-data-range-percentage-{{$index + 1}}" 
+                        type="range" 
+                        name="rangePercentage-{{direction}}-{{$index + 1}}"
+                        ng-model="timeSlice.percentage" 
+                        ng-change="actionChangePercentage(timeSlice)" 
+                        min="0" 
+                        max="100" 
+                        step="1">
+                </td>
 
-                            <div class="input-group">
-                                <input 
-                                    class="form-control" 
-                                    id="time-slice-{{direction}}-data-newTask" 
-                                    type="text" 
-                                    ng-model='newTask'
-                                    maxlength="20" 
-                                    placeholder="New Task...">
+                <td>
+                    <button class="btn btn-sm btn-danger glyphicon glyphicon-remove" id="time-slice-{{direction}}-remove-{{$index + 1}}" type="button"
+                        ng-click="actionButtonRemoveTimeSlice(timeSlice)">
+                    </button>
+                </td>
 
-                                <div class="input-group-btn">
+            </tr>
 
-                                    <button 
-                                        class="btn btn-sm btn-success" 
-                                        id="time-slice-{{direction}}-add" 
-                                        type="button" 
-                                        ng-click="actionButtonAddTimeSlice(newTask)">
+        </tbody>
 
-                                        <span class="glyphicon glyphicon-plus"></span> Task
+        <tfoot>
 
-                                    </button>
+            <tr>
+                <td colspan="8">
+                    <div class="col-md-12 form-group-sm">
 
-                                </div>
+                        <div class="input-group">
+                            <input class="form-control" id="time-slice-{{direction}}-data-newTask" type="text" ng-model='newTaskName' maxlength="100" placeholder="New Task...">
+
+                            <div class="input-group-btn">
+
+                                <button 
+                                    ng-disabled="!newTaskName"
+                                    class="btn btn-sm btn-success" 
+                                    id="time-slice-{{direction}}-add" 
+                                    type="button" 
+                                    ng-click="actionButtonAddTimeSlice(newTaskName)">
+
+                                    <span class="glyphicon glyphicon-plus"></span> Task
+
+                                </button>
+
                             </div>
-
-                            <!-- <i class="pull-left xpd-error-text-color" ng-if="timeSliceForm.remainingPercentage-{{direction}}.$invalid || timeSliceForm.remainingPercentage-tripout.$invalid"> -->
-                            
-                                <!-- <i class="pull-left xpd-error-text-color" ng-if="timeSliceForm.remainingPercentage-tripin.$invalid || timeSliceForm.remainingPercentage-tripout.$invalid"> -->
-                            <!-- <i class="pull-left xpd-error-text-color"> -->
-                            
-                                <!-- Please allocate the Time Slices
-                            </i> -->
-                            
                         </div>
-                    </td>
-                </tr>
 
-            </tfoot>
+                    </div>
+                </td>
+            </tr>
 
-        </table>
+        </tfoot>
 
-    </fieldset>
+    </table>
+
+</fieldset>

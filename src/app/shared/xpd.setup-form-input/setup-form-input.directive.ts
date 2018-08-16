@@ -9,11 +9,17 @@
 // 	'use strict';
 
 // 	xpdSetupFormInput.$inject = [];
+import './setup-form-input.style.scss';
 import template from './setup-form-input.template.html';
 
 export class XPDSetupFormInputDirective implements ng.IDirective {
 
 	public static $inject = [];
+
+	public static Factory(): ng.IDirectiveFactory {
+		const directive = () => new XPDSetupFormInputDirective();
+		return directive;
+	}
 
 	public restrict = 'E';
 	public scope = {
@@ -39,11 +45,6 @@ export class XPDSetupFormInputDirective implements ng.IDirective {
 		charLimitation: '@',
 	};
 	public template = template;
-
-	public static Factory(): ng.IDirectiveFactory {
-		const directive = () => new XPDSetupFormInputDirective();
-		return directive;
-	}
 
 }
 // })();

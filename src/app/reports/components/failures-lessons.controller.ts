@@ -96,7 +96,6 @@ export class FailuresLassonsController {
 	 * @param  {date} toDate   data final
 	 */
 	public onClickFilterButton(fromDate, toDate) {
-		console.log('onClickFilterButton');
 
 		this.$scope.data.breadcrumbs = [
 			{ name: this.$scope.breadcrumbsName },

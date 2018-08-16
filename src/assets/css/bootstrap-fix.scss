@@ -1,0 +1,8 @@
+.modal-dialog {
+    div.modal-content[uib-modal-transclude]{
+        padding: 0;
+        & > * {
+            margin: 0;
+        }
+    }
+}

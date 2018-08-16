@@ -5,14 +5,19 @@ import { ReportsSetupAPIService } from '../../xpd.setupapi/reports-setupapi.serv
 
 export class ForecastLineDirective implements ng.IDirective {
 
-	constructor(
-		private $q: ng.IQService,
-		private reportsSetupAPIService: ReportsSetupAPIService,
-		private operationDataService: OperationDataService,
-		private highchartsService: HighchartsService) {
-	}
-
 	public static $inject = ['$q', 'highchartsService', 'reportsSetupAPIService', 'operationDataService'];
+
+	public static Factory(): ng.IDirectiveFactory {
+		return (
+			$q: ng.IQService,
+			reportsSetupAPIService: ReportsSetupAPIService,
+			operationDataService: OperationDataService,
+			highchartsService: HighchartsService) => new ForecastLineDirective(
+				$q,
+				reportsSetupAPIService,
+				operationDataService,
+				highchartsService);
+	}
 	public restrict = 'E';
 	public scope = {
 		tripin: '=',
@@ -20,6 +25,13 @@ export class ForecastLineDirective implements ng.IDirective {
 		state: '@',
 		zoomAtState: '@',
 	};
+
+	constructor(
+		private $q: ng.IQService,
+		private reportsSetupAPIService: ReportsSetupAPIService,
+		private operationDataService: OperationDataService,
+		private highchartsService: HighchartsService) {
+	}
 
 	public link: ng.IDirectiveLinkFn = (
 		scope: any,
@@ -389,17 +401,5 @@ export class ForecastLineDirective implements ng.IDirective {
 			}],
 
 		});
-	}
-
-	public static Factory(): ng.IDirectiveFactory {
-		return (
-			$q: ng.IQService,
-			reportsSetupAPIService: ReportsSetupAPIService,
-			operationDataService: OperationDataService,
-			highchartsService: HighchartsService) => new ForecastLineDirective(
-				$q,
-				reportsSetupAPIService,
-				operationDataService,
-				highchartsService);
 	}
 }

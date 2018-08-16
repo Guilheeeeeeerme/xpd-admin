@@ -27,10 +27,10 @@
 		</table>
 
 			<xpd-performance-progress-bar
-				current-value="stateDuration / 1000"
-				low-value= "optimumExpectedDuration / 1000",
-				medium-value= "standardExpectedDuration / 1000",
-				high-value= "poorExpectedDuration / 1000"
+				current-value="{{ stateDuration / 1000 }}"
+				low-value= "{{ optimumExpectedDuration / 1000 }}",
+				medium-value= "{{ standardExpectedDuration / 1000 }}",
+				high-value= "{{ poorExpectedDuration / 1000 }}"
 				is-real-time="true">
 			</xpd-performance-progress-bar>
 

@@ -24,10 +24,10 @@
         </div>
     
         <div class="modal-footer">
-            <button class="btn btn-success" type="submit" ng-if="!modalData.id" ng-click="actionButtonAdd()" ng-disabled="ufForm.$invalid">Add</button>
-            <button class="btn btn-primary" type="submit" ng-if="modalData.id" ng-click="actionButtonAdd()" ng-disabled="ufForm.$invalid">Update</button>
-            <button ng-if="modalData.id != null" class="btn btn-danger" ng-click="actionButtonRemove()">Remove</button>
-            <button class="btn btn-secondary" ng-click="actionButtonCancel()">Cancel</button>
+            <button class="btn btn-success" type="submit" ng-if="!modalData.id" ng-click="ufController.actionButtonAdd()" ng-disabled="ufForm.$invalid">Add</button>
+            <button class="btn btn-primary" type="submit" ng-if="modalData.id" ng-click="ufController.actionButtonAdd()" ng-disabled="ufForm.$invalid">Update</button>
+            <button ng-if="modalData.id != null" class="btn btn-danger" ng-click="ufController.actionButtonRemove()">Remove</button>
+            <button class="btn btn-secondary" ng-click="ufController.actionButtonCancel()">Leave</button>
         </div>
 
     </div>

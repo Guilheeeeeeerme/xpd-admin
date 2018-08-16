@@ -7,6 +7,10 @@ import template from './slips-to-slips-bar-chart.template.html';
 
 export class SlipsToSlipsBarChart {
 
+	public static Factory(): ng.IDirectiveFactory {
+		return () => new SlipsToSlipsBarChart();
+	}
+
 	public template = template;
 	public scope = {
 		slipsData: '=',
@@ -105,10 +109,6 @@ export class SlipsToSlipsBarChart {
 		function getXPosition(stringDate) {
 			return scope.xScale(new Date(stringDate));
 		}
-	}
-
-	public static Factory(): ng.IDirectiveFactory {
-		return () => new SlipsToSlipsBarChart();
 	}
 }
 // }) ();

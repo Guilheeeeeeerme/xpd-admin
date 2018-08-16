@@ -1,0 +1,32 @@
+xpd-operation-list {
+    display: block;
+
+    .actions-column-label{
+        padding-top: 13px;
+    }
+
+    .operation-list-table {
+
+        .operation-list-label-name{
+            width: 20%;
+            text-overflow: ellipsis;
+        }
+
+        .operation-list-label-startDate,
+        .operation-list-label-endDate,
+        .operation-list-label-startBitDepth,
+        .operation-list-label-endBitDepth,
+        .operation-list-label-startHoleDepth,
+        .operation-list-label-type{
+            width: 40/6%;
+        }
+
+        .operation-list-label-action{
+            width: 40%;
+            text-overflow: ellipsis;
+        }
+            
+    }
+
+
+}

@@ -1,8 +1,8 @@
 import * as angular from 'angular';
 import { IModalService } from 'angular-ui-bootstrap';
-import { DialogService } from './../../../shared/xpd.dialog/xpd.dialog.factory';
-import { CategorySetupAPIService } from './../../../shared/xpd.setupapi/category-setupapi.service';
-import { LessonLearnedSetupAPIService } from './../../../shared/xpd.setupapi/lessonlearned-setupapi.service';
+import { DialogService } from '../../../shared/xpd.dialog/xpd.dialog.factory';
+import { CategorySetupAPIService } from '../../../shared/xpd.setupapi/category-setupapi.service';
+import { LessonLearnedSetupAPIService } from '../../../shared/xpd.setupapi/lessonlearned-setupapi.service';
 import upsertCategoryTemplate from './upsert-category.modal.html';
 
 export class CategoryController {
@@ -35,22 +35,6 @@ export class CategoryController {
 
 		this.getCategoryList();
 
-	}
-
-	private getCategoryList() {
-		this.categorySetupAPIService.getListCategory().then(
-			(arg) => { this.getCategoryListSuccessCallback(arg); },
-			(arg) => { this.getCategoryListErrorCallback(arg); },
-		);
-	}
-
-	private getCategoryListSuccessCallback(result) {
-		this.roleList = result;
-		this.makeTreeStructure(this.roleList);
-	}
-
-	private getCategoryListErrorCallback(error) {
-		console.log(error);
 	}
 
 	public actionClickAdd(parentNode) {
@@ -104,6 +88,42 @@ export class CategoryController {
 
 	public modalActionButtonClose() {
 		this.$scope.$modalInstance.close();
+	}
+
+	public actionClickSelectItem(node) {
+		if (this.$scope.category.lastSelected != null) {
+			this.$scope.category.lastSelected.selected = false;
+		}
+
+		this.$scope.category.lastSelected = node;
+
+		node.selected = true;
+	}
+
+	public hasChildren(node) {
+		const children = node.children;
+
+		if (children.length > 0) {
+			return true;
+		}
+
+		return false;
+	}
+
+	private getCategoryList() {
+		this.categorySetupAPIService.getListCategory().then(
+			(arg) => { this.getCategoryListSuccessCallback(arg); },
+			(arg) => { this.getCategoryListErrorCallback(arg); },
+		);
+	}
+
+	private getCategoryListSuccessCallback(result) {
+		this.roleList = result;
+		this.makeTreeStructure(this.roleList);
+	}
+
+	private getCategoryListErrorCallback(error) {
+		console.log(error);
 	}
 
 	private saveNode(node) {
@@ -168,16 +188,6 @@ export class CategoryController {
 		this.dialogService.showConfirmDialog(error.message);
 	}
 
-	public actionClickSelectItem(node) {
-		if (this.$scope.category.lastSelected != null) {
-			this.$scope.category.lastSelected.selected = false;
-		}
-
-		this.$scope.category.lastSelected = node;
-
-		node.selected = true;
-	}
-
 	private makeTreeStructure(data) {
 
 		const objList = data;
@@ -199,16 +209,6 @@ export class CategoryController {
 		}
 
 		this.$scope.category.roleList = categoryData;
-	}
-
-	public hasChildren(node) {
-		const children = node.children;
-
-		if (children.length > 0) {
-			return true;
-		}
-
-		return false;
 	}
 
 }

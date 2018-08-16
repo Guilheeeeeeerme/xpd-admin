@@ -1,17 +1,16 @@
 import * as angular from 'angular';
 import { IModalServiceInstance } from 'angular-ui-bootstrap';
+import { DialogService } from '../../../../shared/xpd.dialog/xpd.dialog.factory';
 import { PhotoAPIService } from '../../../../shared/xpd.setupapi/photo-setupapi.service';
 import { ScheduleSetupAPIService } from '../../../../shared/xpd.setupapi/schedule-setupapi.service';
 
 export class UpsertMemberController {
-	// 'use strict';
-
-	// 	.controller('UpsertMemberController', upsertMemberController);
 
 	public static $inject: string[] = [
 		'$scope',
 		'scheduleSetupAPIService',
 		'photoAPIService',
+		'dialogService',
 		'$uibModalInstance',
 		'$member',
 		'removeMemberCallback',
@@ -22,6 +21,7 @@ export class UpsertMemberController {
 		private $scope: any,
 		private scheduleSetupAPIService: ScheduleSetupAPIService,
 		private photoAPIService: PhotoAPIService,
+		private dialogService: DialogService,
 		private $modalInstance: IModalServiceInstance,
 		private $member: any,
 		private removeMemberCallback: any,
@@ -44,9 +44,13 @@ export class UpsertMemberController {
 
 		$scope.modalData = angular.copy($member);
 
+		$scope.actionSelectPhoto = (data) => { this.actionSelectPhoto(data); };
+
+		this.$scope.imagePathSet = false;
 		photoAPIService.loadPhoto('tripin/member-pictures', $scope.modalData.photoPath).then((data) => { this.setImagePath(data); });
 
 		$scope.$watch('modalData.photoPath', (photoPath) => {
+			this.$scope.imagePathSet = false;
 
 			try {
 
@@ -79,9 +83,6 @@ export class UpsertMemberController {
 		}, true);
 
 	}
-	private setImagePath(imagePath) {
-		this.$scope.imagePath = imagePath;
-	}
 
 	public actionButtonCancel() {
 		this.$modalInstance.close();
@@ -98,21 +99,29 @@ export class UpsertMemberController {
 			name: this.$scope.modalData.name,
 		};
 
-		if (member.id !== null) {
+		this.dialogService.showCriticalDialog(
+			'Are you sure you want to ' + ((member.id !== null) ? 'update' : 'insert') +
+			' the ' + ((this.$scope.modalData.function.id !== 1) ? 'member' : 'team') +
+			' ' + member.name + '?',
+			() => {
 
-			this.scheduleSetupAPIService.updateMember(member).then((member1) => {
-				this.$modalInstance.close();
-				this.updateMemberCallback(member1);
+				if (member.id !== null) {
+
+					this.scheduleSetupAPIService.updateMember(member).then((member1) => {
+						this.$modalInstance.close();
+						this.updateMemberCallback(member1);
+					});
+
+				} else {
+
+					this.scheduleSetupAPIService.insertMember(member).then((member1) => {
+						this.$modalInstance.close();
+						this.insertMemberCallback(member1);
+					});
+
+				}
+
 			});
-
-		} else {
-
-			this.scheduleSetupAPIService.insertMember(member).then((member1) => {
-				this.$modalInstance.close();
-				this.insertMemberCallback(member1);
-			});
-
-		}
 
 	}
 
@@ -120,23 +129,35 @@ export class UpsertMemberController {
 
 		const member = { id: this.$scope.modalData.id };
 
-		this.scheduleSetupAPIService.removeMember(member).then((member1) => {
-			this.$modalInstance.close();
-			this.removeMemberCallback(member1);
-		});
-
+		this.dialogService.showCriticalDialog(
+			'Are you sure you want to delete the ' + ((this.$scope.modalData.function.id !== 1) ? 'member' : 'team') +
+			' ' + this.$scope.modalData.name + '?',
+			() => {
+				this.scheduleSetupAPIService.removeMember(member).then((member1) => {
+					this.$modalInstance.close();
+					this.removeMemberCallback(member1);
+				});
+			});
 	}
 
-	public actionSelectPhoto(files) {
-		const data = {}; // file object
+	private actionSelectPhoto(files) {
+
+		const file = files[0];
 
 		const fd = new FormData();
-		fd.append('uploadedFile', files[0]);
+		fd.append('uploadedFile', file);
 
+		console.log(fd, file);
 		this.photoAPIService.uploadPhoto(fd, 'tripin/member-pictures').then((data1: any) => {
+			console.log(data1);
 			this.$scope.modalData.photoPath = data1.data.path;
 		});
 
+	}
+	private setImagePath(imagePath) {
+		imagePath = 'data:image/png;base64, ' + imagePath;
+		this.$scope.imagePath = imagePath;
+		this.$scope.imagePathSet = true;
 	}
 
 }

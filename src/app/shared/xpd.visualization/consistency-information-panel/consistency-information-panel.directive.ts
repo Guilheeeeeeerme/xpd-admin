@@ -1,7 +1,12 @@
+import './consistency-information-panel.style.scss';
 import template from './consistency-information-panel.template.html';
 
 export class ConsistencyInformationPanelDirective implements ng.IDirective {
 	public static $inject = [];
+
+	public static Factory(): ng.IDirectiveFactory {
+		return () => new ConsistencyInformationPanelDirective();
+	}
 
 	public restrict = 'EA';
 	public template = template;
@@ -61,9 +66,5 @@ export class ConsistencyInformationPanelDirective implements ng.IDirective {
 			scope.collapse = newState;
 			localStorage.setItem(keyName, JSON.stringify(newState));
 		};
-	}
-
-	public static Factory(): ng.IDirectiveFactory {
-		return () => new ConsistencyInformationPanelDirective();
 	}
 }

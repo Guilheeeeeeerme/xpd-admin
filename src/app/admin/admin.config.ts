@@ -5,9 +5,6 @@ import MenuTemplate from './components/menu/menu.template.html';
 import OperationDashboardTemplate from './components/operation-dashboard/operation-dashboard.template.html';
 import PlannerTemplate from './components/planner/planner.template.html';
 import rpdTemplate from './components/rpd/shift-report.template.html';
-import OperationTemplate from './components/setup/operation/operation.template.html';
-import SectionTemplate from './components/setup/section/section.template.html';
-import WellTemplate from './components/setup/well/well.template.html';
 import MemberSchedulerTemplate from './components/team/member-scheduler.template.html';
 import TeamTemplate from './components/team/team.template.html';
 import TrackingTemplate from './components/tracking/tracking.template.html';
@@ -40,24 +37,6 @@ const AdminConfig = ($routeProvider) => {
 	$routeProvider.when('/menu/lesson-learned-category', {
 		template: CategoryTemplate,
 		controller: 'LessonLearnedCategoryController as llcController',
-	});
-
-	$routeProvider.when('/setup', {
-		template: WellTemplate,
-		controller: 'WellController as wellController',
-	});
-	$routeProvider.when('/setup/well', {
-		template: WellTemplate,
-		controller: 'WellController as wellController',
-	});
-	$routeProvider.when('/setup/well/:wellId/section', {
-		template: SectionTemplate,
-		controller: 'SectionController as sectionController',
-	});
-
-	$routeProvider.when('/setup/well/:wellId/section/:sectionId/operation', {
-		template: OperationTemplate,
-		controller: 'OperationController as operationController',
 	});
 
 	$routeProvider.when('/team/members', {

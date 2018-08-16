@@ -1,4 +1,5 @@
 import { IModalService } from 'angular-ui-bootstrap';
+import './xpd-modal-lessonlearned.style.scss';
 import modalTemplate from './xpd-modal-lessonlearned.template.html';
 
 // (function() {

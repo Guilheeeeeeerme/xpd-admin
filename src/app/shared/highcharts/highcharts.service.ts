@@ -49,6 +49,10 @@ export class HighchartsService {
 		// });
 	}
 
+	public highcharts() {
+		return this.highchartDefer.promise;
+	}
+
 	private getHighchartsTheme() {
 		return {
 			colors: ['#2b908f', '#90ee7e', '#f45b5b', '#7798BF', '#aaeeee', '#ff0066', '#eeaaee',
@@ -247,10 +251,6 @@ export class HighchartsService {
 			contrastTextColor: '#F0F0F3',
 			maskColor: 'rgba(255,255,255,0.3)',
 		};
-	}
-
-	public highcharts() {
-		return this.highchartDefer.promise;
 	}
 
 	// constructor(

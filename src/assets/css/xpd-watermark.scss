@@ -1,0 +1,18 @@
+.xpd-watermark, 
+.xpd-logo-watermark{
+    background-repeat: no-repeat;
+    position: fixed;
+    height: 40px;
+    width: 40px;
+    bottom: 5px;
+    right: 5px;
+    pointer-events: none;
+    opacity:0.5;
+    // z-index: 99;
+    color:white;
+}
+
+.xpd-logo-watermark{
+    background: url('./../img/xpd-logo.png');
+    background-size: 40px 40px;
+}

@@ -10,6 +10,13 @@ export class AccessFactoryDirective implements ng.IDirective {
 
 	public static $inject: string[] = ['$uibModal', '$window', 'dialogService'];
 
+	public static Factory(): ng.IDirectiveFactory {
+		return (
+			$uibModal: IModalService,
+			$window: IWindowService,
+			dialogService: DialogService) => new AccessFactoryDirective($uibModal, $window, dialogService);
+	}
+
 	public restrict = 'E';
 	public scope = {
 		hideReports: '@',
@@ -66,13 +73,6 @@ export class AccessFactoryDirective implements ng.IDirective {
 				});
 			}
 		}
-	}
-
-	public static Factory(): ng.IDirectiveFactory {
-		return (
-			$uibModal: IModalService,
-			$window: IWindowService,
-			dialogService: DialogService) => new AccessFactoryDirective($uibModal, $window, dialogService);
 	}
 
 }

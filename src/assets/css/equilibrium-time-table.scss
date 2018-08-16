@@ -1,0 +1,31 @@
+@import '~styles/font.scss';
+
+.equilibrium-time-table {
+    font-family: $font-family-1;
+    border: solid thin #517f89;
+}
+
+.equilibrium-time-table-title {
+    color: black;
+    background-color: #517f89;
+    text-align: center;
+    fill: black;
+    text-anchor: middle;
+}
+
+.equilibrium-time-table-label {
+    background-color: #acd7ca;
+    color: black;
+    text-align: center;
+    fill: black;
+    text-anchor: middle;
+}
+
+.equilibrium-time-table-text {
+    background-color: black;
+    color: #517f89;
+    text-align: center;
+    height: 100%;
+    fill: #517f89;
+    text-anchor: middle;
+}

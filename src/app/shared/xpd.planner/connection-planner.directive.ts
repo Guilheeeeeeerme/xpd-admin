@@ -5,6 +5,10 @@ import './connection-planner.style.scss';
 import template from './connection-planner.template.html';
 
 export class XPDConnectionPlannerDirective implements ng.IDirective {
+
+	public static Factory(): ng.IDirectiveFactory {
+		return () => new XPDConnectionPlannerDirective();
+	}
 	public scope = {
 		label: '@',
 		targetSpeed: '=',
@@ -134,10 +138,6 @@ export class XPDConnectionPlannerDirective implements ng.IDirective {
 
 		}
 
-	}
-
-	public static Factory(): ng.IDirectiveFactory {
-		return () => new XPDConnectionPlannerDirective();
 	}
 }
 

@@ -1,4 +1,5 @@
 import { IModalService } from 'angular-ui-bootstrap';
+import './xpd.dialog.style.scss';
 
 // (function() {
 // 	'use strict';

@@ -1,0 +1,33 @@
+xpd-contract-time-input {
+
+    table {
+        table-layout: fixed;
+        width: 100%;
+        white-space: nowrap;
+
+        td {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+
+            input {
+                font-weight: bold;
+                text-align: center;
+            }
+        }
+
+    }
+
+    // .contract-time-input {
+    //     padding: 0;
+    //     margin: 0;
+    // }
+
+    // .contract-time-input input {
+    //     display: inline-block;
+    //     width: 30%;
+    //     padding: 0;
+    //     text-align: center;
+    // }
+    
+}

@@ -1,5 +1,19 @@
 @import '~styles/font.scss';
 
+.xpd-conn-chronometers {
+    /* height: 10%; */
+    color: #93c2cc;
+    text-align: center;
+    font-weight: bolder;
+    font-family: $font-family-1;
+    width: 100%;
+    // font-size: 4.2em;
+}
+
+.xpd-conn-chronometers-top {
+    display: table;
+}
+
 .times-event-dialog .selected-arrow {
     position: absolute;
     left: -30px;
@@ -106,6 +120,12 @@
 
 .times-event-dialog .times-event-radio input[type=radio]:checked + label:before {
     background-color: #517f89;
+}
+
+.slips-to-slips-dropdown-menu{
+    position: fixed;
+    z-index: 1;
+    cursor: pointer;
 }
 
 .xpd-conn-chronometers {

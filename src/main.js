@@ -35,15 +35,15 @@ function createWindow() {
     })
 }
 
-var MAX_GIGABYTES = 4;
-var MAX_MEGABYTES = MAX_GIGABYTES * 1024;
+// var MAX_GIGABYTES = 4;
+// var MAX_MEGABYTES = MAX_GIGABYTES * 1024;
 
 // var clientCrt = path.join('/', '.xpd', 'keys', 'os', 'XPD-Client.crt');
 var clientCrt = path.join(__dirname, 'keys', 'XPD-Client.crt');
 
 app.commandLine.appendSwitch('client-certificate', clientCrt);
 app.commandLine.appendSwitch('ignore-certificate-errors');
-app.commandLine.appendSwitch('js-flags', '--max_old_space_size=' + MAX_MEGABYTES);
+// app.commandLine.appendSwitch('js-flags', '--max_old_space_size=' + MAX_MEGABYTES);
 
 // Este método será chamado quando o Electron tiver finalizado
 // a inicialização e está pronto para criar a janela browser.

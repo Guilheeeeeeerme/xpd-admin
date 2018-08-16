@@ -12,10 +12,10 @@ export class PerformanceProgressBarDirective implements ng.IDirective {
 	public scope = {
 		title: '@',
 		expectedValue: '=?',
-		currentValue: '=',
-		lowValue: '=',
-		mediumValue: '=',
-		highValue: '=',
+		currentValue: '@',
+		lowValue: '@',
+		mediumValue: '@',
+		highValue: '@',
 		isRealTime: '=?',
 	};
 
@@ -38,9 +38,9 @@ export class PerformanceProgressBarDirective implements ng.IDirective {
 
 		scope.$watchGroup(['lowValue', 'mediumValue', 'highValue'], (newValues) => {
 			if (newValues) {
-				scope.lowValue = newValues[0] || 0;
-				scope.mediumValue = newValues[1] || 0;
-				scope.highValue = newValues[2] || 0;
+				scope.lowValue = +newValues[0] || 0;
+				scope.mediumValue = +newValues[1] || 0;
+				scope.highValue = +newValues[2] || 0;
 
 				prepareLegendBar();
 				prepareCurrentPerformance();
@@ -50,11 +50,11 @@ export class PerformanceProgressBarDirective implements ng.IDirective {
 
 		const prepareLegendBar = () => {
 
-			scope.afterHighValue = scope.highValue + (scope.highValue / 10);
+			scope.afterHighValue = +scope.highValue + (+scope.highValue / 10);
 
-			const lowPercentage = calcPercentage(scope.lowValue, scope.afterHighValue);
-			const mediumPercentage = calcPercentage(scope.mediumValue, scope.afterHighValue) - lowPercentage;
-			const highPercentage = calcPercentage(scope.highValue, scope.afterHighValue) - (lowPercentage + mediumPercentage);
+			const lowPercentage = calcPercentage(+scope.lowValue, scope.afterHighValue);
+			const mediumPercentage = calcPercentage(+scope.mediumValue, scope.afterHighValue) - lowPercentage;
+			const highPercentage = calcPercentage(+scope.highValue, scope.afterHighValue) - (lowPercentage + mediumPercentage);
 			const afterHighPercentage = 100 - (lowPercentage + mediumPercentage + highPercentage);
 
 			scope.legendBar = [
@@ -78,9 +78,9 @@ export class PerformanceProgressBarDirective implements ng.IDirective {
 		};
 
 		const prepareCurrentPerformance = () => {
-			const percentage = calcPercentage(scope.currentValue, scope.afterHighValue);
+			const percentage = calcPercentage(+scope.currentValue, scope.afterHighValue);
 			scope.currentPercentage = (percentage > 100) ? 100 : percentage;
-			scope.currentColor = getColorPerformance(scope.currentValue, scope.lowValue, scope.mediumValue, scope.highValue);
+			scope.currentColor = getColorPerformance(+scope.currentValue, +scope.lowValue, +scope.mediumValue, +scope.highValue);
 		};
 
 		const calcPercentage = (partTime, totalTime) => {

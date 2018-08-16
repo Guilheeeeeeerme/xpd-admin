@@ -4,12 +4,9 @@
 
 		<div class="btn-group">
 
-			<!-- <button 
-				type="button" 
-				class="btn btn-primary xpd-nav-button" 
-				id="nav-bar-access-factory">
-				<xpd-access-factory-directive>Config</xpd-access-factory-directive> 
-			</button> -->
+			<button type="button" class="btn btn-primary xpd-nav-button" id="nav-bar-access-factory">
+				<xpd-access-factory-directive>Config</xpd-access-factory-directive>
+			</button>
 
 			<button type="button" class="btn btn-primary dropdown-toggle xpd-nav-button" uib-dropdown is-open="status.isopen" uib-dropdown-toggle
 			 href="#" id="nav-bar-menu">
@@ -36,7 +33,7 @@
 
 			</button>
 
-			<button type="button" class="btn btn-primary xpd-nav-button" ng-click="onclickItemMenu('/admin.html#/setup')" id="nav-bar-setup">Setup
+			<button type="button" class="btn btn-primary xpd-nav-button" ng-click="onclickItemMenu('/setup.html#/')" id="nav-bar-setup">Setup
 			</button>
 
 
@@ -44,8 +41,8 @@
 			</button>
 
 
-			<button type="button" class="btn btn-primary xpd-nav-button" ng-click="onclickItemMenu('/admin.html#/shift-report/')" id="nav-bar-rpd">RPD
-			</button>
+			<!-- <button type="button" class="btn btn-primary xpd-nav-button" ng-click="onclickItemMenu('/admin.html#/shift-report/')" id="nav-bar-rpd">RPD
+			</button> -->
 
 
 			<button type="button" class="btn btn-primary dropdown-toggle xpd-nav-button" uib-dropdown is-open="flags.isopen" uib-dropdown-toggle
@@ -64,7 +61,7 @@
 					<li ng-if="hasRunningOperation">
 						<a ng-click="onclickItemMenu('/admin.html#/operation-dashboard')" id="nav-bar-operation-operation-dashboard">Dashboard</a>
 					</li>
-					<li>
+					<li ng-if="hasRunningOperation"> 
 						<a ng-click="onclickItemMenu('/admin.html#/alarm')" id="nav-bar-operation-alarm">Alarm</a>
 					</li>
 					<li>
@@ -74,18 +71,13 @@
 
 			</button>
 
-			<button 
-				type="button" 
-				class="btn btn-primary xpd-nav-button" 
-				ng-click="onclickItemMenu('/reports.html#/', true)" 
-				id="nav-bar-reports">Reports
+			<button type="button" class="btn btn-primary xpd-nav-button" ng-click="onclickItemMenu('/reports.html#/', true)" id="nav-bar-reports">Reports
 			</button>
 
+			<xpd-failure-nav-bar></xpd-failure-nav-bar>
 
 		</div>
 
 	</div>
 
 </nav>
-
-<xpd-failure-nav-bar></xpd-failure-nav-bar>

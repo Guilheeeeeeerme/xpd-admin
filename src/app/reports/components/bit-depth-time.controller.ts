@@ -37,6 +37,48 @@ export class BitDepthTimeController {
 		}
 	}
 
+	public toDate(arg) {
+		return new Date(arg).getTime();
+	}
+
+	public setCurrentPoint(event) {
+
+		// XPDSearchMapSingleton.getInstance().flush(injectName);
+
+		// console.log(this.bitDepthReportData.plannedPoints);
+		// console.log(this.bitDepthReportData.holeDepthPoints);
+		// console.log(this.bitDepthReportData.executedPoints);
+
+		this.$scope.dados.selectedLineType = event.selectedLineType;
+
+		const plannedLocked = event.plannedLocked;
+		const executedLocked = event.executedLocked;
+
+		if (this.$scope.dados.selectedLineType === 'executedEvent') {
+			if (!executedLocked) {
+				this.eventLogSetupAPIService.getWithDetails(event.id).then((eventDetails: any) => {
+					this.setCurrentExecutedEvent(eventDetails);
+				});
+			}
+			this.setHoleDepth({ depth: event.holeDepth });
+		} else if (this.$scope.dados.selectedLineType === 'plannedEvent') {
+			if (!executedLocked) {
+				this.findExecutedEvent(event.x);
+			}
+			this.findHoleDepth(event.x);
+		} else {
+			if (!executedLocked) {
+				this.findExecutedEvent(event.x);
+			}
+			this.setHoleDepth({ depth: event.y });
+		}
+
+		if (!plannedLocked) {
+			this.findPlannedEvent(event.x);
+		}
+
+	}
+
 	private setOperationQueue(operationQueue) {
 
 		const bitDepthReportData: any = {};
@@ -134,44 +176,6 @@ export class BitDepthTimeController {
 		}
 
 		return this.$q.all(planningPromises);
-	}
-
-	public setCurrentPoint(event) {
-
-		// XPDSearchMapSingleton.getInstance().flush(injectName);
-
-		// console.log(this.bitDepthReportData.plannedPoints);
-		// console.log(this.bitDepthReportData.holeDepthPoints);
-		// console.log(this.bitDepthReportData.executedPoints);
-
-		this.$scope.dados.selectedLineType = event.selectedLineType;
-
-		const plannedLocked = event.plannedLocked;
-		const executedLocked = event.executedLocked;
-
-		if (this.$scope.dados.selectedLineType === 'executedEvent') {
-			if (!executedLocked) {
-				this.eventLogSetupAPIService.getWithDetails(event.id).then((eventDetails: any) => {
-					this.setCurrentExecutedEvent(eventDetails);
-				});
-			}
-			this.setHoleDepth({ depth: event.holeDepth });
-		} else if (this.$scope.dados.selectedLineType === 'plannedEvent') {
-			if (!executedLocked) {
-				this.findExecutedEvent(event.x);
-			}
-			this.findHoleDepth(event.x);
-		} else {
-			if (!executedLocked) {
-				this.findExecutedEvent(event.x);
-			}
-			this.setHoleDepth({ depth: event.y });
-		}
-
-		if (!plannedLocked) {
-			this.findPlannedEvent(event.x);
-		}
-
 	}
 
 	private setCurrentPlannedEvent(event) {

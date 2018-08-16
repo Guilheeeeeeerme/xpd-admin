@@ -12,6 +12,20 @@ import template from './dmec-tracking-events.template.html';
 export class DMECTrackingEventsDirective implements ng.IDirective {
 
 	public static $inject: string[] = ['eventDetailsModalService', 'failureModal', 'lessonLearnedModal'];
+
+	public static Factory(): ng.IDirectiveFactory {
+		const directive = (
+			eventDetailsModalService: EventDetailsModalService,
+			failureModal: FailureModalFactory,
+			lessonLearnedModal: LessonLearnedModalService,
+		) => new DMECTrackingEventsDirective(
+			eventDetailsModalService,
+			failureModal,
+			lessonLearnedModal,
+			);
+
+		return directive;
+	}
 	public template = template;
 	public scope = {
 		tick: '=',
@@ -348,19 +362,5 @@ export class DMECTrackingEventsDirective implements ng.IDirective {
 			return event;
 		}
 
-	}
-
-	public static Factory(): ng.IDirectiveFactory {
-		const directive = (
-			eventDetailsModalService: EventDetailsModalService,
-			failureModal: FailureModalFactory,
-			lessonLearnedModal: LessonLearnedModalService,
-		) => new DMECTrackingEventsDirective(
-			eventDetailsModalService,
-			failureModal,
-			lessonLearnedModal,
-			);
-
-		return directive;
 	}
 }

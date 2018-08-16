@@ -1,0 +1,71 @@
+.tree-content{
+    background-color: #acd7ca;
+    border-radius: 2px;
+    overflow: auto;
+    max-height: 525px;
+    border: solid #3a7b93 2px;
+}
+
+.xpd-operation-content-category{
+    border-top: 3px solid #2e9098;
+    padding: 5px;
+    clear: both;
+}
+
+/**
+ * BEST PRACTICES SWITCH
+ */
+ .best-practices-switch{
+    float: right;
+    margin-right: 15px;
+}
+
+.best-practices-switch .best-practices-switch-label {
+    margin-bottom: 0;
+    font-size: 1em;
+}
+
+.best-practices-switch .switch {
+    position: relative;
+    display: inline-block;
+    width: 38px;
+    height: 23px;
+    margin-bottom: -4px;
+}
+
+.best-practices-switch .switch input[type="checkbox"] {
+    display: none;
+}
+
+.best-practices-switch .slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: transparent;
+    border: 3px solid #517f89;
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+
+.best-practices-switch .slider:before {
+    position: absolute;
+    content: "";
+    height: 16px;
+    width: 16px;
+    left: 1px;
+    bottom: 1px;
+    background-color: white;
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+
+.best-practices-switch input:checked + .slider{
+    background-color: #7dcf82
+}
+
+input:checked + .slider{
+    background-color: #bf0808;
+}

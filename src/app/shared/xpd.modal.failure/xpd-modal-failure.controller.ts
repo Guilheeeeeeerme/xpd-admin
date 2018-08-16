@@ -1,10 +1,4 @@
-// (function() {
 
-// 	'use strict',
-
-// 	modalFailureController.$inject = ['$scope', '$uibModalInstance', 'categorySetupAPIService', 'failureSetupAPIService', 'selectedFailure', 'dialogService', 'operationDataService'];
-
-//
 import * as angular from 'angular';
 import { IModalServiceInstance } from 'angular-ui-bootstrap';
 import { DialogService } from '../xpd.dialog/xpd.dialog.factory';
@@ -26,6 +20,7 @@ export class ModalFailureController {
 
 	public operationDataFactory: any;
 	public roleList: {};
+public getListCategory;
 
 	constructor(
 		private $scope: any,
@@ -60,6 +55,45 @@ export class ModalFailureController {
 		this.getFailuresOnGoing();
 
 	}
+
+	public modalActionButtonSave() {
+		const failure = this.$scope.selectedFailure;
+
+		if (!failure.id) {
+			this.registerFailure(failure);
+		} else {
+			this.updateFailure(failure);
+		}
+	}
+
+	public modalActionButtonClose() {
+		this.$uibModalInstance.close();
+	}
+
+	public actionOnGoingCheckboxClick(value) {
+		this.$scope.selectedFailure.onGoing = value;
+
+		if (value) {
+			this.$scope.selectedFailure.endTime = null;
+		}
+	}
+
+	public actionClickSelectItem(node) {
+		this.makeBreadCrumbs(node);
+
+		if (this.$scope.category.lastSelected != null) {
+			this.$scope.category.lastSelected.selected = false;
+		}
+
+		this.$scope.category.lastSelected = node;
+
+		// reset
+		this.$scope.selectedFailure.category = {};
+
+		this.$scope.selectedFailure.category.id = node.id;
+
+		node.selected = true;
+	}
 	private getCategoryList() {
 		this.categorySetupAPIService.getListCategory().then(
 			(arg) => { this.getCategoryListSuccessCallback(arg); },
@@ -70,8 +104,7 @@ export class ModalFailureController {
 	private getCategoryListSuccessCallback(result) {
 		this.roleList = result;
 		this.makeTreeStructure(this.roleList);
-	}public getListCategory;
-
+	}
 	private getCategoryListErrorCallback(error) {
 		console.log(error);
 	}
@@ -109,16 +142,6 @@ export class ModalFailureController {
 			});
 	}
 
-	public modalActionButtonSave() {
-		const failure = this.$scope.selectedFailure;
-
-		if (!failure.id) {
-			this.registerFailure(failure);
-		} else {
-			this.updateFailure(failure);
-		}
-	}
-
 	private registerFailure(failure) {
 		this.operationDataFactory.emitInsertFailure(failure);
 		this.upsertListenerCallback();
@@ -149,18 +172,6 @@ export class ModalFailureController {
 		this.dialogService.showConfirmDialog('NPT already exists in this time interval!', () => {
 			// faça nada
 		});
-	}
-
-	public modalActionButtonClose() {
-		this.$uibModalInstance.close();
-	}
-
-	public actionOnGoingCheckboxClick(value) {
-		this.$scope.selectedFailure.onGoing = value;
-
-		if (value) {
-			this.$scope.selectedFailure.endTime = null;
-		}
 	}
 
 	private makeTreeStructure(data) {
@@ -196,23 +207,6 @@ export class ModalFailureController {
 		}
 
 		this.$scope.category.roleList = categoryData;
-	}
-
-	public actionClickSelectItem(node) {
-		this.makeBreadCrumbs(node);
-
-		if (this.$scope.category.lastSelected != null) {
-			this.$scope.category.lastSelected.selected = false;
-		}
-
-		this.$scope.category.lastSelected = node;
-
-		// reset
-		this.$scope.selectedFailure.category = {};
-
-		this.$scope.selectedFailure.category.id = node.id;
-
-		node.selected = true;
 	}
 
 	private makeBreadCrumbs(node) {

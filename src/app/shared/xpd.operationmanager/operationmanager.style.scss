@@ -1,0 +1,48 @@
+
+@import '~styles/font.scss';
+@import '~styles/green-box.scss';
+
+xpd-operation-manager {
+
+    position: absolute;
+    top: 0;
+    right: 0;
+    z-index: 1030;
+
+    .xpd-nav-button {
+        background-color: transparent;
+    }
+
+    .xpd-nav-button {
+        height: 57px;
+        border: 2px solid #456c75;
+        padding: 15px;
+        font-family: $font-family-1;
+        font-size: 1.3em;
+        font-weight: bolder;
+        color: #456c75;
+    }
+    
+    .xpd-nav-button {
+        color: #456c75;
+    }
+    
+    .xpd-nav-button:focus,
+    .xpd-nav-button:hover,{
+        background-color: #456c75;
+        color: white;
+    }
+    
+    .button-bellow-label {
+        position: absolute;
+        bottom: -1.5em;
+        border-top: 0;
+        right: 0;
+        background-color: #456c75;
+        color: white;
+        padding: 1px 3px;
+        font-size: 1em;
+        z-index: 1049;
+    }
+
+}

@@ -1,0 +1,75 @@
+<form name="form">
+
+	<div class="modal-content">
+
+		<div class="modal-header">
+			<h4 class="modal-title">Section Setup Information
+				<span class="label label-default">{{ (section.well.onshore)?'On':'Off'}} Shore Well</span>
+			</h4>
+		</div>
+
+		<div class="modal-body">
+
+			<div class="form-group" ng-class="{ 'has-error': form.name.$invalid && !form.name.$pristine }">
+				<label for="section-upsert-data-name">Name</label>
+				<input type="text" name="name" maxlength="20" ng-model="section.name" class="form-control" autofocus="true" id="section-upsert-data-name"
+				 placeholder="Name" xpd-form-validation="form" required>
+			</div>
+
+			<div class="form-group" ng-class="{ 'has-error': form.size.$invalid && !form.size.$pristine }">
+				<label for="section-upsert-data-size">Size (Diameter)</label>
+				<div class="input-group">
+					<input type="number" name="size" min="0" max="10000" ng-model="section.size" class="form-control" autofocus="true" id="section-upsert-data-size"
+					 placeholder="Size" xpd-form-validation="form" required>
+					<span class="input-group-addon">in</span>
+				</div>
+			</div>
+
+			<div class="well">
+				<strong>MD Top</strong> and
+				<strong>MD Bottom</strong> should be greater than
+				<strong>{{ section.well.waterDepth + section.well.airGap }}</strong> (m)
+			</div>
+
+			<div class="form-group" ng-class="{ 'has-error': form.mdTop.$invalid && !form.mdTop.$pristine }">
+				<label for="section-upsert-data-mdTop">MD Top</label>
+				<div class="input-group">
+					<input type="number" name="mdTop" min="{{ section.well.waterDepth + section.well.airGap }}" max="{{section.mdBottom}}"
+					 ng-model="section.mdTop" class="form-control" autofocus="true" id="section-upsert-data-mdTop" placeholder="MD Top"
+					 xpd-form-validation="form" required>
+					<span class="input-group-addon">m</span>
+				</div>
+			</div>
+
+			<div class="form-group" ng-class="{ 'has-error': form.height.$invalid && !form.height.$pristine }">
+				<label for="section-upsert-data-height">Section Height</label>
+				<div class="input-group">
+					<input type="number" name="height" min="0" max="10000" ng-model="sectionHeight" class="form-control"
+					 autofocus="true" id="section-upsert-data-height" placeholder="Section height" xpd-form-validation="form" 
+					 ng-change="section.mdBottom = section.mdTop + sectionHeight" required>
+					<span class="input-group-addon">m</span>
+				</div>
+			</div>
+
+			<div class="form-group" ng-class="{ 'has-error': form.mdBottom.$invalid && !form.mdBottom.$pristine }">
+				<label for="section-upsert-data-mdBottom">MD Bottom</label>
+				<div class="input-group">
+					<input type="number" name="mdBottom" min="{{section.mdTop}}" max="10000" ng-model="section.mdBottom" class="form-control"
+					 autofocus="true" id="section-upsert-data-mdBottom" placeholder="MD Bottom" xpd-form-validation="form" 
+					 ng-init="sectionHeight = (section.mdBottom - section.mdTop)" 
+					 ng-change="sectionHeight = (section.mdBottom - section.mdTop)" required>
+					<span class="input-group-addon">m</span>
+				</div>
+			</div>
+
+		</div>
+
+		<div class="modal-footer">
+			<button type="submit" class="btn btn-primary" id="section-upsert-button-save" ng-click="suController.actionButtonSave();"
+			 ng-disabled="form.$invalid">Save</button>
+			<button type="button" class="btn btn-secondary" id="section-upsert-button-close" ng-click="suController.actionButtonClose();">Cancel</button>
+		</div>
+
+	</div>
+
+</form>

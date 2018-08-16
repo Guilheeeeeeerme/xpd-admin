@@ -5,5 +5,5 @@ import { FailureModalFactory } from './xpd-modal-failure.factory';
 const XPDFailureModule: angular.IModule = angular.module('xpd.modal-failure', []);
 export  { XPDFailureModule };
 
-XPDFailureModule.controller('modalFailureController', ModalFailureController);
+XPDFailureModule.controller('ModalFailureController', ModalFailureController);
 XPDFailureModule.service('failureModal', FailureModalFactory);
