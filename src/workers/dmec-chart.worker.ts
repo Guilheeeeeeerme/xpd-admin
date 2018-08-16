@@ -12,14 +12,16 @@ namespace worker.d3.dmec {
 			console.error(error);
 		}
 
+		const exclude = (point) => {
+			return point.x >= data.zoomStartAt  && point.x <= data.zoomEndAt;
+		};
+
 		const overflowPoints = (tracks, points) => {
 
 			const result = {};
 
 			tracks.map((track) => {
-				points[track.param] = points[track.param].filter((point) => {
-					return point.x >= data.zoomStartAt  && point.x <= data.zoomEndAt;
-				});
+				points[track.param] = points[track.param].filter(exclude);
 				result[track.param] = handleOverflow(points[track.param], track);
 			});
 

@@ -69,7 +69,6 @@ export class DMECChartDirective implements ng.IDirective {
 
 				onReadingSince.then((points) => {
 					oldPoints = points;
-					updateChart();
 					draw('oldPoints', oldPoints);
 				});
 
@@ -93,7 +92,6 @@ export class DMECChartDirective implements ng.IDirective {
 
 					readingsToPoints(readings, tracks).then((points) => {
 						newPoints = points;
-						updateChart();
 						draw('oldPoints', oldPoints);
 					});
 
@@ -121,8 +119,8 @@ export class DMECChartDirective implements ng.IDirective {
 		const updateChart = () => {
 
 			scope.svg = {
-				viewWidth: element[0].clientWidth || 200,
-				viewHeight: element[0].offsetHeight || 200,
+				viewWidth: element[0].clientWidth,
+				viewHeight: element[0].offsetHeight,
 			};
 
 			scope.timeScale = d3.scaleTime()
@@ -488,6 +486,9 @@ export class DMECChartDirective implements ng.IDirective {
 
 		scope.openScaleModal = () => { openScaleModal(); };
 		scope.listenToMouseMove = () => { listenToMouseMove(); };
+
+		updateChart();
+
 	}
 
 	public onWorker(subject, callback) {
