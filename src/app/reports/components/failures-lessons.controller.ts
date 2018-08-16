@@ -59,6 +59,7 @@ export class FailuresLassonsController {
 	 * dentro de um intervalo de tempo
 	 */
 	public getFailureList() {
+		console.log('getFailureList');
 
 		const parentData = this.$scope.reportsData;
 
@@ -89,105 +90,13 @@ export class FailuresLassonsController {
 	}
 
 	/**
-	 * Prepara todo os scopo do grafico de failures/lessons
-	 * @param  {obj} result lista de failures/lessons e categorias
-	 */
-	private getListSuccessCallback(result) {
-		const vm = this;
-
-		if (Object.keys(result[this.$scope.type]).length === 0) {
-			vm.nodeList = [];
-			return;
-		}
-
-		const failuresLessons = result[this.$scope.type];
-		this.listCategory = result.categories;
-
-		for (const i in failuresLessons) {
-			const node = this.insertFailureLessonInCategory(failuresLessons[i]);
-			this.createTreeStructure(node);
-		}
-
-		this.setTimeAndFailuresLessonsLength([this.listCategory[1]]);
-
-		this.$scope.data.categories = this.listCategory[1];
-
-		vm.chartDonut.title = this.listCategory[1].name;
-		vm.totalTime = this.listCategory[1].time;
-		vm.totalFailuresLessons = this.listCategory[1].failuresLessonsLength;
-		vm.nodeList = this.listCategory[1].children;
-		this.createSeriesDataChart(vm.nodeList);
-	}
-
-	private getListErrorCallback(error) {
-		console.log(error);
-	}
-
-	/**
-	 * Insere a failures/lessons na categoria relacionada
-	 * @param  {obj} failuresLessons failures/lessons
-	 * @return {obj} categoria com sua failures/lessons
-	 */
-	private insertFailureLessonInCategory(failuresLessons) {
-
-		const categories = this.listCategory;
-
-		const node = categories[failuresLessons[this.$scope.category].id];
-		const time = (new Date(failuresLessons.endTime).getTime() - new Date(failuresLessons.startTime).getTime()) / 1000;
-		failuresLessons.time = time;
-
-		/** Time / SelfTime */
-		if (node.time === undefined) {
-			node.time = 0;
-		}
-
-		if (node.selfTime === undefined) {
-			node.selfTime = 0;
-		}
-
-		node.selfTime += time;
-
-		/**  nptBpTime / selfNptBpTime */
-		if (node.nptBpTime === undefined) {
-			node.nptBpTime = 0;
-		}
-
-		if (node.selfNptBpTime === undefined) {
-			node.selfNptBpTime = 0;
-		}
-
-		if (!node.nptBpLength) {
-			node.nptBpLength = 0;
-		}
-
-		if (!node.selfNptBpLength) {
-			node.selfNptBpLength = 0;
-		}
-
-		if (failuresLessons.npt || failuresLessons.bestPractices) {
-			node.selfNptBpTime += time;
-			node.selfNptBpLength += 1;
-		}
-
-		if (!node.failuresLessons) {
-			node.failuresLessons = [];
-		}
-
-		if (!node.failuresLessonsLength) {
-			node.failuresLessonsLength = 0;
-		}
-
-		node.failuresLessons.push(failuresLessons);
-		return node;
-	}
-
-	/**
 	 * Busca uma lista de categorias e failures/lessons
 	 * com as datas selecionada pelo usuário
 	 * @param  {date} fromDate data inicial
 	 * @param  {date} toDate   data final
 	 */
 	public onClickFilterButton(fromDate, toDate) {
+		console.log('onClickFilterButton');
 
 		this.$scope.data.breadcrumbs = [
 			{ name: this.$scope.breadcrumbsName },
@@ -261,6 +170,124 @@ export class FailuresLassonsController {
 	}
 
 	/**
+	 * Abre um modal com a lista de
+	 * todas failures/lessons relacionada a categoria
+	 * @param  {obj} categoria com suas respectivas falhas
+	 */
+	public actionButtonClickCategory(category) {
+
+		this.$scope.modalData.category = category;
+
+		this.$scope.$modalInstance = this.$modal.open({
+			animation: true,
+			keyboard: false,
+			backdrop: 'static',
+			size: 'modal-sm',
+			windowClass: 'xpd-operation-modal',
+			template: template,
+			scope: this.$scope,
+		});
+	}
+
+	/** Fecha o modal com alista de failures/lessons */
+	public modalActionButtonClose() {
+		this.$scope.$modalInstance.close();
+	}
+
+	/**
+	 * Prepara todo os scopo do grafico de failures/lessons
+	 * @param  {obj} result lista de failures/lessons e categorias
+	 */
+	private getListSuccessCallback(result) {
+		const vm = this;
+
+		if (Object.keys(result[this.$scope.type]).length === 0) {
+			vm.nodeList = [];
+			return;
+		}
+
+		const failuresLessons = result[this.$scope.type];
+		this.listCategory = result.categories;
+
+		for (const i in failuresLessons) {
+			const node = this.insertFailureLessonInCategory(failuresLessons[i]);
+			this.createTreeStructure(node);
+		}
+
+		this.setTimeAndFailuresLessonsLength([this.listCategory[1]]);
+
+		this.$scope.data.categories = this.listCategory[1];
+
+		vm.chartDonut.title = this.listCategory[1].name;
+		vm.totalTime = this.listCategory[1].time;
+		vm.totalFailuresLessons = this.listCategory[1].failuresLessonsLength;
+		vm.nodeList = this.listCategory[1].children;
+		this.createSeriesDataChart(vm.nodeList);
+	}
+
+	private getListErrorCallback(error) {
+		console.log(error);
+	}
+
+	/**
+	 * Insere a failures/lessons na categoria relacionada
+	 * @param  {obj} failuresLessons failures/lessons
+	 * @return {obj} categoria com sua failures/lessons
+	 */
+	private insertFailureLessonInCategory(failureLesson) {
+
+		const categories = this.listCategory;
+
+		const node = categories[failureLesson[this.$scope.category].id];
+		const time = (new Date(failureLesson.endTime).getTime() - new Date(failureLesson.startTime).getTime()) / 1000;
+		failureLesson.time = time;
+
+		/** Time / SelfTime */
+		if (node.time === undefined) {
+			node.time = 0;
+		}
+
+		if (node.selfTime === undefined) {
+			node.selfTime = 0;
+		}
+
+		node.selfTime += time;
+
+		/**  nptBpTime / selfNptBpTime */
+		if (node.nptBpTime === undefined) {
+			node.nptBpTime = 0;
+		}
+
+		if (node.selfNptBpTime === undefined) {
+			node.selfNptBpTime = 0;
+		}
+
+		if (!node.nptBpLength) {
+			node.nptBpLength = 0;
+		}
+
+		if (!node.selfNptBpLength) {
+			node.selfNptBpLength = 0;
+		}
+
+		if (failureLesson.npt || failureLesson.bestPractices) {
+			node.selfNptBpTime += time;
+			node.selfNptBpLength += 1;
+		}
+
+		if (!node.failuresLessons) {
+			node.failuresLessons = [];
+		}
+
+		if (!node.failuresLessonsLength) {
+			node.failuresLessonsLength = 0;
+		}
+
+		node.failuresLessons.push(failureLesson);
+		return node;
+	}
+
+	/**
 	 * Monta uma lista parcial das categorias
 	 * com as failures/lessons inserindo o pai como
 	 * filho virtual
@@ -270,7 +297,7 @@ export class FailuresLassonsController {
 
 		const type = this.$scope.type;
 
-		if (node[type]) {
+		if (node.failuresLessons) {
 			const virtualNode = {
 				name: 'Other',
 				initial: node.initial,
@@ -350,7 +377,7 @@ export class FailuresLassonsController {
 			} else {
 				if (!nodes[i].parentId && !nodes[i].children) {
 					/**
-					 * Caso só exista o nó raiz e o nó raiz possua lessons learned
+					 * Caso só exista o nó raiz e o nó raiz possua failures/lessons
 					 * deverá ser criado um nó virtual para exibir os dados
 					 */
 					nodes[i].children = [];
@@ -389,31 +416,6 @@ export class FailuresLassonsController {
 			parentNode.failuresLessonsLength += nodes[i].failuresLessonsLength;
 			parentNode.nptBpLength += nodes[i].nptBpLength;
 		}
-	}
-
-	/**
-	 * Abre um modal com a lista de
-	 * todas failures/lessons relacionada a categoria
-	 * @param  {obj} categoria com suas respectivas falhas
-	 */
-	public actionButtonClickCategory(category) {
-
-		this.$scope.modalData.category = category;
-
-		this.$scope.$modalInstance = this.$modal.open({
-			animation: true,
-			keyboard: false,
-			backdrop: 'static',
-			size: 'modal-sm',
-			windowClass: 'xpd-operation-modal',
-			template: template,
-			scope: this.$scope,
-		});
-	}
-
-	/** Fecha o modal com alista de failures/lessons */
-	public modalActionButtonClose() {
-		this.$scope.$modalInstance.close();
 	}
 
 	/**

@@ -50,11 +50,27 @@ export class ReportsController {
 			(arg) => { this.currentOperationErrorCallback(arg); });
 	}
 
+	public getFailuresOnInterval(startTime, endTime) {
+
+		this.$scope.reportsData.failuresOnInterval = null;
+
+		const startInterval = new Date(startTime).getTime();
+		const endInterval = new Date(endTime).getTime();
+
+		if (startTime && endTime) {
+			this.$scope.reportsData.failuresOnInterval = this.checkNptOnInterval(startInterval, endInterval);
+		}
+
+		this.setCurrentDate();
+
+	}
+
 	private onFailureChange() {
 		this.getFailuresOnInterval(this.$scope.reportsData.fromDate, this.$scope.reportsData.toDate);
 	}
 
 	private setCurrentDate() {
+		console.log('setCurrentDate');
 
 		try {
 			this.$scope.reportsData.fromDate.setHours(0, 0, 0, 0);
@@ -135,21 +151,6 @@ export class ReportsController {
 		if (currentWell) {
 			this.$scope.reportsData.reportList.push({ type: 'Bit Depth x Time', url: '#/bit-depth-time/' + currentWell.id });
 		}
-	}
-
-	public getFailuresOnInterval(startTime, endTime) {
-
-		this.$scope.reportsData.failuresOnInterval = null;
-
-		const startInterval = new Date(startTime).getTime();
-		const endInterval = new Date(endTime).getTime();
-
-		if (startTime && endTime) {
-			this.$scope.reportsData.failuresOnInterval = this.checkNptOnInterval(startInterval, endInterval);
-		}
-
-		this.setCurrentDate();
-
 	}
 
 	private checkNptOnInterval(startInterval, endInterval) {
