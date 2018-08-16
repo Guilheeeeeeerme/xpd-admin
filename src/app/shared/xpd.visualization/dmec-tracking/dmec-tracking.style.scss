@@ -1,14 +1,9 @@
 
 
+
 xpd-dmec-tracking,
-xpd-dmec-tracking > .dmec-tracking-container,
-xpd-dmec-tracking xpd-d3-dmec-chart,
-xpd-dmec-tracking xpd-time-zoom-tool,
-xpd-dmec-tracking xpd-time-zoom-tool > svg,
-xpd-dmec-tracking xpd-dmec-tracking-events,
-xpd-dmec-tracking xpd-dmec-tracking-events > svg  {
+xpd-dmec-tracking > .dmec-tracking-container  {
     display: block;
     width: 100%;
     height: 100%;
 }
-

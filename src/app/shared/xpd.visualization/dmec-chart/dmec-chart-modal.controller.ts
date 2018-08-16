@@ -1,10 +1,7 @@
 import * as angular from 'angular';
 import { IModalInstanceService } from 'angular-ui-bootstrap';
 
-// module.controller('D3DMECChartModalController', D3DMECChartModalController);
-// D3DMECChartModalController.$inject = ['$scope', '$uibModalInstance', 'tracks', 'onTracksChange'];
-// function D3DMECChartModalController($scope, $modalInstance, tracks, onTracksChange) {
-export class D3DMECChartModalController {
+export class DMECChartModalController {
 
 	public static $inject: string[] = [
 		'$scope',

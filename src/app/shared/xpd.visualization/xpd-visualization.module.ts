@@ -5,9 +5,9 @@ import { ChannelsInformationPanel } from './channels-information-panel/channels-
 import { ConnRulerDirective } from './conn-ruler/conn-ruler.directive';
 import { ConsistencyInformationPanelDirective } from './consistency-information-panel/consistency-information-panel.directive';
 import { CurrentAlarmPanelDirective } from './current-alarm-panel/current-alarm-panel.directive';
-import { D3DMECChartModalController } from './d3-dmec-chart/d3-dmec-chart-modal.controller';
-import { D3DMECChartDirective } from './d3-dmec-chart/d3-dmec-chart.directive';
 import { DisplacementAreaFactory } from './displacement-area/displacement-area.directive';
+import { DMECChartModalController } from './dmec-chart/dmec-chart-modal.controller';
+import { DMECChartDirective } from './dmec-chart/dmec-chart.directive';
 import { DMECTrackingEventsDirective } from './dmec-tracking-events/dmec-tracking-events.directive';
 import { DMECTrackingDirective } from './dmec-tracking/dmec-tracking.directive';
 import { FailurePanelDirective } from './failure-panel/failure-panel.directive';
@@ -59,8 +59,8 @@ XPDVisualizationModule.directive('xpdForecastLine', ForecastLineDirective.Factor
 XPDVisualizationModule.directive('xpdDmecTracking', DMECTrackingDirective.Factory());
 XPDVisualizationModule.directive('xpdDmecTrackingEvents', DMECTrackingEventsDirective.Factory());
 XPDVisualizationModule.directive('xpdDisplacementArea', DisplacementAreaFactory.Factory());
-XPDVisualizationModule.directive('xpdD3DmecChart', D3DMECChartDirective.Factory());
-XPDVisualizationModule.controller('D3DMECChartModalController', D3DMECChartModalController);
+XPDVisualizationModule.directive('xpdDmecChart', DMECChartDirective.Factory());
+XPDVisualizationModule.controller('DMECChartModalController', DMECChartModalController);
 XPDVisualizationModule.directive('xpdConsistencyInformationPanel', ConsistencyInformationPanelDirective.Factory());
 XPDVisualizationModule.directive('xpdConnRuler', ConnRulerDirective.Factory());
 XPDVisualizationModule.directive('xpdForecastWaterfall', ForecastWaterfallDirective.Factory());

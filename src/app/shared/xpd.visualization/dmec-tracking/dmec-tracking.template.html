@@ -77,7 +77,7 @@
 			<p>DMEC</p>
 		</div>
 
-		<xpd-d3-dmec-chart 
+		<xpd-dmec-chart 
 			ng-if="dmecTrackingStartAt && zoomStartAt && zoomEndAt"
 			threads="4" 
 			horizontal="true" 
@@ -86,10 +86,10 @@
 			on-reading="onReading"
 		 	zoom-start-at="zoomStartAt" 
 			zoom-end-at="zoomEndAt"
-			set-selected-point="setSelectedPoint"
+			set-selected-point="setSelectedPoint(position)"
 			last-selected-point="lastSelectedPoint"
 			remove-marker= "removeMarker">
-		</xpd-d3-dmec-chart>
+		</xpd-dmec-chart>
 
 	</div>
 

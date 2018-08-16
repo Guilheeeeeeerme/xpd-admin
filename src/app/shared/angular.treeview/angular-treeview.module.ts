@@ -8,4 +8,3 @@ const AngularTreeviewModule: angular.IModule = angular.module('angularTreeview',
 AngularTreeviewModule.directive('treeModel', TreeModelDirective.Factory());
 
 export { AngularTreeviewModule };
-

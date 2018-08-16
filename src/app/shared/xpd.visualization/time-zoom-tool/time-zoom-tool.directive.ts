@@ -2,6 +2,7 @@
 // timeZoomTool.$inject = ['$filter', 'd3Service'];
 import * as angular from 'angular';
 import * as d3 from 'd3';
+import './time-zoom-tool.style.scss';
 import template from './time-zoom-tool.template.html';
 
 export class TimeZoomToolDirective implements ng.IDirective {
@@ -87,6 +88,9 @@ export class TimeZoomToolDirective implements ng.IDirective {
 			endNavigatorInitialPosition = endt.translate[0];
 
 			clickedElement.classed('active', true);
+
+			getStartZoomElement().on('click', mouseUp);
+			getEndZoomElement().on('click', mouseUp);
 
 			getOverlayElement().on('mousemove', mouseMove).on('mouseup', mouseUp);
 			getZoomAreaElement().on('mousemove', mouseMove).on('mouseup', mouseUp);
@@ -202,6 +206,9 @@ export class TimeZoomToolDirective implements ng.IDirective {
 			);
 
 			clickedElement.classed('active', false);
+
+			getStartZoomElement().on('click', null);
+			getEndZoomElement().on('click', null);
 
 			getOverlayElement().on('mousemove', null).on('mouseup', null);
 			getZoomAreaElement().on('mousemove', null).on('mouseup', null);

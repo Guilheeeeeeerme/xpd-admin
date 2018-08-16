@@ -14,7 +14,9 @@ import './../../../node_modules/bootstrap/dist/css/bootstrap.min.css';
 import './../../../node_modules/font-awesome/css/font-awesome.min.css';
 
 import './../../assets/css/xpd-watermark.scss';
+
 import './../../assets/css/bootstrap-fix.scss';
+
 import './../../assets/css/equilibrium-time-table.scss';
 import './../../assets/css/height.scss';
 import './../../assets/css/scrollbar.scss';

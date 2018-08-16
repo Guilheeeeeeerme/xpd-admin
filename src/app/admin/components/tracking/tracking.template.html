@@ -38,7 +38,7 @@
 
         <div class="col-md-4">
 
-            <div class="ship-placeholder-container">
+            <div class="row h-50">
                 <img class="ship-placeholder" xpd-photo-api-directive photo-api-directive-photo-name="operationData.wellContext.currentWell.rig.photoPath"
                     photo-api-directive-server-path="tripin/rig-pictures">
 
@@ -73,8 +73,10 @@
 
             </div>
 
-            <xpd-member-performance ng-if="operationData.shiftContext.onShift[0] != null" member="operationData.shiftContext.onShift[0].member">
-            </xpd-member-performance>
+            <div class="row h-50">
+                <xpd-member-performance ng-if="operationData.shiftContext.onShift[0] != null" member="operationData.shiftContext.onShift[0].member">
+                </xpd-member-performance>
+            </div>
 
         </div>
 

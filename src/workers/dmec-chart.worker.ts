@@ -5,22 +5,21 @@ namespace worker.d3.dmec {
 	ctx.addEventListener('message', (event) => {
 		const data = event.data;
 
-		// var threadId = getRandomArbitrary(0, 1000) + ' ' + data.cmd;
-		// var startTime = new Date().getTime();
-		// console.log('%s começou', threadId);
-
-		// var endTime = new Date().getTime();
-		// console.log('%s terminou [%s ms]', threadId, (endTime - startTime));
-
-		const getRandomArbitrary = (min, max) => {
-			return Math.floor(Math.random() * (max - min) + min);
-		};
+		try {
+			data.zoomStartAt = new Date(data.zoomStartAt).getTime();
+			data.zoomEndAt = new Date(data.zoomEndAt).getTime();
+		} catch (error) {
+			console.error(error);
+		}
 
 		const overflowPoints = (tracks, points) => {
 
 			const result = {};
 
 			tracks.map((track) => {
+				points[track.param] = points[track.param].filter((point) => {
+					return point.x >= data.zoomStartAt  && point.x <= data.zoomEndAt;
+				});
 				result[track.param] = handleOverflow(points[track.param], track);
 			});
 
@@ -80,34 +79,8 @@ namespace worker.d3.dmec {
 			return result;
 		};
 
-		const getPoint = (timestamp, tracks, oldPoints, newPoints) => {
-
-			const promises = [];
-
-			tracks.map((track) => {
-				promises.push(getParamPointAVL(timestamp, track.param, oldPoints, newPoints));
-				// promises.push(getParamPointLinear(timestamp, track.param, oldPoints, newPoints));
-			});
-
-			return new Promise((resolve, reject) => {
-
-				Promise.all(promises).then((top) => {
-
-					const reading = {};
-
-					for (const i in top) {
-						reading[top[i].param] = top[i].point;
-					}
-
-					resolve(reading);
-
-				});
-
-			});
-
-		};
-
-		const getParamPointAVL = (timestamp, param, oldPoints, newPoints) => {
+		const getParamPointAVL = (timestamp, param, 
+			, newPoints) => {
 
 			return new Promise((resolve, reject) => {
 
@@ -146,46 +119,6 @@ namespace worker.d3.dmec {
 						points = firstHalf;
 					}
 
-				}
-
-				resolve({
-					param: param,
-					point: points[0] || null,
-				});
-
-			});
-
-		};
-
-		const getParamPointLinear = (timestamp, param, oldPoints, newPoints) => {
-
-			return new Promise((resolve, reject) => {
-
-				let points = [];
-
-				if (newPoints &&
-					newPoints[param] &&
-					newPoints[param].length &&
-					timestamp >= newPoints[param][0].x) {
-
-					points = newPoints[param];
-
-				} else {
-					if (oldPoints &&
-						oldPoints[param] &&
-						oldPoints[param].length) {
-
-						points = oldPoints[param];
-					}
-				}
-
-				while (points && points.length > 1) {
-
-					if ((points[0].x <= timestamp) && (points[1].x >= timestamp)) {
-						break;
-					}
-
-					points.shift();
 				}
 
 				resolve({
@@ -237,26 +170,8 @@ namespace worker.d3.dmec {
 		};
 
 		switch (data.cmd) {
-
-			case 'find-point':
-				getPoint(data.timestamp, data.tracks, data.oldPoints, data.newPoints).then((points) => {
-					ctx.postMessage({
-						cmd: data.cmd,
-						points: points,
-					});
-				});
-				break;
 			case 'find-point-avl':
 				getParamPointAVL(data.timestamp, data.param, data.oldPoints, data.newPoints).then((point) => {
-					ctx.postMessage({
-						cmd: data.cmd,
-						point: point,
-						param: data.param,
-					});
-				});
-				break;
-			case 'find-point-linear':
-				getParamPointLinear(data.timestamp, data.param, data.oldPoints, data.newPoints).then((point) => {
 					ctx.postMessage({
 						cmd: data.cmd,
 						point: point,
@@ -272,6 +187,11 @@ namespace worker.d3.dmec {
 				});
 				break;
 			case 'reading-to-points':
+
+				data.readings = data.readings.filter((reading) => {
+					return reading.timestamp >= data.zoomStartAt  && reading.timestamp <= data.zoomEndAt;
+				});
+
 				ctx.postMessage({
 					cmd: data.cmd,
 					points: readingsToPoints(data.readings, data.tracks),

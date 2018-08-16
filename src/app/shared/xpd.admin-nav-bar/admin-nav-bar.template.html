@@ -41,8 +41,8 @@
 			</button>
 
 
-			<button type="button" class="btn btn-primary xpd-nav-button" ng-click="onclickItemMenu('/admin.html#/shift-report/')" id="nav-bar-rpd">RPD
-			</button>
+			<!-- <button type="button" class="btn btn-primary xpd-nav-button" ng-click="onclickItemMenu('/admin.html#/shift-report/')" id="nav-bar-rpd">RPD
+			</button> -->
 
 
 			<button type="button" class="btn btn-primary dropdown-toggle xpd-nav-button" uib-dropdown is-open="flags.isopen" uib-dropdown-toggle
@@ -61,7 +61,7 @@
 					<li ng-if="hasRunningOperation">
 						<a ng-click="onclickItemMenu('/admin.html#/operation-dashboard')" id="nav-bar-operation-operation-dashboard">Dashboard</a>
 					</li>
-					<li>
+					<li ng-if="hasRunningOperation"> 
 						<a ng-click="onclickItemMenu('/admin.html#/alarm')" id="nav-bar-operation-alarm">Alarm</a>
 					</li>
 					<li>

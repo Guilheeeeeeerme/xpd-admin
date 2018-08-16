@@ -100,8 +100,8 @@ export class UpsertMemberController {
 		};
 
 		this.dialogService.showCriticalDialog(
-			'Are you sure you want to ' + ((member.id !== null) ? 'update' : 'insert') + 
-			' the ' + ((this.$scope.modalData.function.id !== 1) ? 'member' : 'team') + 
+			'Are you sure you want to ' + ((member.id !== null) ? 'update' : 'insert') +
+			' the ' + ((this.$scope.modalData.function.id !== 1) ? 'member' : 'team') +
 			' ' + member.name + '?',
 			() => {
 
@@ -130,7 +130,7 @@ export class UpsertMemberController {
 		const member = { id: this.$scope.modalData.id };
 
 		this.dialogService.showCriticalDialog(
-			'Are you sure you want to delete the ' + ((this.$scope.modalData.function.id !== 1) ? 'member' : 'team') + 
+			'Are you sure you want to delete the ' + ((this.$scope.modalData.function.id !== 1) ? 'member' : 'team') +
 			' ' + this.$scope.modalData.name + '?',
 			() => {
 				this.scheduleSetupAPIService.removeMember(member).then((member1) => {

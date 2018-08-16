@@ -34,7 +34,8 @@
                         </div>
                         <div class="checkbox">
                             <label>
-                                <input name="keepZoomAtTheEnd" ng-model="inputRangeForm.keepZoomAtTheEnd" type="checkbox"> Keep zoom at the end
+                                <input name="keepZoomAtTheEnd" ng-model="inputRangeForm.keepZoomAtTheEnd" type="checkbox">                                Keep
+                                zoom at the end
                             </label>
                         </div>
 
@@ -79,9 +80,35 @@
 
 </nav>
 
+<xpd-dmec-chart 
+    ng-if="dmecTrackingStartAt && zoomStartAt && zoomEndAt" 
+    threads="4" 
+    horizontal="false" 
+    select-on-hover="true"
+    on-reading-since="onReadingSince" 
+    actual-start-at="dmecTrackingStartAt" 
+    on-reading="onReading" 
+    zoom-start-at="zoomStartAt"
+    zoom-end-at="zoomEndAt" 
+    set-selected-point="setSelectedPoint(position)"
+    last-selected-point="lastSelectedPoint" 
+    remove-marker="removeMarker">
+</xpd-dmec-chart>
+
+
+<!-- <xpd-dmec-chart 
+    ng-if="dmecTrackingStartAt && zoomStartAt && zoomEndAt" 
+    threads="4" 
+    horizontal="true" 
+    on-reading-since="onReadingSince"
+    actual-start-at="dmecTrackingStartAt" 
+    on-reading="onReading" 
+    zoom-start-at="zoomStartAt" 
+    zoom-end-at="zoomEndAt" 
+    set-selected-point="setSelectedPoint(position)"
+    last-selected-point="lastSelectedPoint" 
+    remove-marker="removeMarker">
+</xpd-dmec-chart> -->
+
 <xpd-time-zoom-tool ng-if="zoomStartAt && zoomEndAt" zoom-start-at="zoomStartAt" zoom-end-at="zoomEndAt" set-zoom="setZoom">
 </xpd-time-zoom-tool>
-
-<xpd-d3-dmec-chart ng-if="dmecTrackingStartAt && zoomStartAt && zoomEndAt" threads="4" horizontal="false" on-reading-since="onReadingSince"
-    actual-start-at="dmecTrackingStartAt" on-reading="onReading" zoom-start-at="zoomStartAt" zoom-end-at="zoomEndAt">
-</xpd-d3-dmec-chart>

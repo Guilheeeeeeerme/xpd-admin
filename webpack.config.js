@@ -23,16 +23,6 @@ const copyFiles = [
 
 	new CopyWebpackPlugin(
 		[{
-			from: './src/assets/js/dhtmlxgantt.js',
-			to: './assets/js/',
-		}],
-		{
-			debug: true
-		}
-	),
-
-	new CopyWebpackPlugin(
-		[{
 			from: './src/package.json',
 			to: './',
 		}],
@@ -97,7 +87,7 @@ module.exports = {
 	target: 'web',
 
 	entry: {
-		'd3-dmec-chart.worker': './src/workers/d3-dmec-chart.worker.ts',
+		'dmec-chart.worker': './src/workers/dmec-chart.worker.ts',
 		'xpd-timers.worker': './src/workers/xpd-timers.worker.ts',
 
 		'setup': './src/app/setup/setup.ts',
