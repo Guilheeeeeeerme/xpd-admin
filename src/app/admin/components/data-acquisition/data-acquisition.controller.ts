@@ -19,7 +19,7 @@ export class DataAcquisitionController {
 			readingJson: false,
 		};
 
-		operationDataService.openConnection([]).then(function() {
+		operationDataService.openConnection(['reading', 'dataAcquisition']).then(function() {
 			vm.operationDataFactory = operationDataService.operationDataFactory;
 			$scope.readingData = vm.operationDataFactory.operationData.readingContext;
 			$scope.acquisitionData = vm.operationDataFactory.operationData.dataAcquisitionContext;

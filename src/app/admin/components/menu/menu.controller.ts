@@ -20,7 +20,14 @@ export class MenuController {
 
 		$scope.dados = {};
 
-		operationDataService.openConnection([]).then(function() {
+		operationDataService.openConnection([
+				'alarm',
+				'bitDepth',
+				'dataAcquisition',
+				'operation',
+				'reading',
+				'speedSecurity',
+			]).then(() => {
 			vm.operationDataFactory = operationDataService.operationDataFactory;
 			$scope.operationData = vm.operationDataFactory.operationData;
 		});

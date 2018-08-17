@@ -51,7 +51,7 @@ export class OperationController {
 
 		$scope.dados = {};
 
-		operationDataService.openConnection([]).then(() => {
+		operationDataService.openConnection(['operation', 'operationQueue']).then(() => {
 			this.operationDataFactory = operationDataService.operationDataFactory;
 
 			wellSetupAPIService.getObjectById($routeParams.wellId).then((well) => {

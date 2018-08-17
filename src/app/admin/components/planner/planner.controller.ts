@@ -27,7 +27,15 @@ export class PlannerController {
 			timeSlices: null,
 		};
 
-		operationDataService.openConnection([]).then(() => {
+		operationDataService.openConnection([
+			'subOperation',
+			'operationProgress',
+			'operation',
+			'direction',
+			'state',
+			'timeSlices',
+			'vTarget',
+		]).then(() => {
 
 			this.operationDataFactory = operationDataService.operationDataFactory;
 			$scope.operationData = this.operationDataFactory.operationData;

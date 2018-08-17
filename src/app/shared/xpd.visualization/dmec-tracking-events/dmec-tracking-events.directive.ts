@@ -183,7 +183,7 @@ export class DMECTrackingEventsDirective implements ng.IDirective {
 
 			let height = yScale(event.actualSpeed);
 
-			if (scope.currentEvent.id !== event.id && event.eventType === 'TRIP') {
+			if (scope.currentEvent && (scope.currentEvent.id !== event.id && event.eventType === 'TRIP')) {
 				height = yScale(event.actualSpeed * 30);
 			}
 

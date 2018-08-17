@@ -103,7 +103,7 @@ export class XPDAdminNavBarDirective implements ng.IDirective {
 			scope.onclickItemMenu = onclickItemMenuAdmin;
 		}
 
-		this.operationDataService.openConnection([]).then(() => {
+		this.operationDataService.openConnection(['operation']).then(() => {
 
 			this.operationDataFactory = this.operationDataService.operationDataFactory;
 

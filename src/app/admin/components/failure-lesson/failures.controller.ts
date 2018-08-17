@@ -37,7 +37,7 @@ export class FailuresController {
 		vm.actionClickButtonRemoveFailure = actionClickButtonRemoveFailure;
 		vm.actionClickButtonEditFailure = actionClickButtonEditFailure;
 
-		operationDataService.openConnection([]).then(function () {
+		operationDataService.openConnection(['failure', 'operation']).then(() => {
 			vm.operationDataFactory = operationDataService.operationDataFactory;
 			$scope.modalData.operation = vm.operationDataFactory.operationData.operationContext.currentOperation;
 			$scope.modalData.failuresList = vm.operationDataFactory.operationData.failureContext.failureList;

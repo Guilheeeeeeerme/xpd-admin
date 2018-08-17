@@ -37,7 +37,7 @@ export class AlarmController {
 			depthAlarms: [],
 		};
 
-		operationDataService.openConnection([]).then(() => {
+		operationDataService.openConnection(['operation', 'alarm']).then(() => {
 			vm.operationDataFactory = operationDataService.operationDataFactory;
 			$scope.operationData = vm.operationDataFactory.operationData;
 

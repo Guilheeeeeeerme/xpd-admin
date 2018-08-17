@@ -131,7 +131,7 @@ export class ForecastLineDirective implements ng.IDirective {
 
 		});
 
-		this.operationDataService.openConnection([]).then(() => {
+		this.operationDataService.openConnection(['forecast', 'subOperation']).then(() => {
 			scope.operationData = this.operationDataService.operationDataFactory.operationData;
 		});
 

@@ -33,7 +33,7 @@ export class LayDownConfirmationDirective implements ng.IDirective {
 	) => {
 		const vm = this;
 
-		this.operationDataService.openConnection([]).then(() => {
+		this.operationDataService.openConnection(['operation', 'state']).then(() => {
 
 			vm.operationDataFactory = vm.operationDataService.operationDataFactory;
 
