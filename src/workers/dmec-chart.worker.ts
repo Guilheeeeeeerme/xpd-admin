@@ -13,7 +13,7 @@ namespace worker.d3.dmec {
 		}
 
 		const exclude = (point) => {
-			return point.x >= data.zoomStartAt  && point.x <= data.zoomEndAt;
+			return point.x >= data.zoomStartAt && point.x <= data.zoomEndAt;
 		};
 
 		const overflowPoints = (tracks, points) => {
@@ -89,18 +89,17 @@ namespace worker.d3.dmec {
 
 				if (newPoints &&
 					newPoints[param] &&
-					newPoints[param].length &&
-					timestamp >= newPoints[param][0].x) {
+					newPoints[param].length) {
 
 					points = newPoints[param];
 
-				} else {
-					if (oldPoints &&
-						oldPoints[param] &&
-						oldPoints[param].length) {
+				}
 
-						points = oldPoints[param];
-					}
+				if (oldPoints &&
+					oldPoints[param] &&
+					oldPoints[param].length) {
+
+					points = [...oldPoints[param], ...points];
 				}
 
 				while (points && points.length > 1) {
@@ -112,7 +111,7 @@ namespace worker.d3.dmec {
 
 					if (lastHalf &&
 						lastHalf.length &&
-						timestamp >= lastHalf[0].x) {
+						timestamp > lastHalf[0].x) {
 
 						points = lastHalf;
 
@@ -190,7 +189,7 @@ namespace worker.d3.dmec {
 			case 'reading-to-points':
 
 				data.readings = data.readings.filter((reading) => {
-					return reading.timestamp >= data.zoomStartAt  && reading.timestamp <= data.zoomEndAt;
+					return reading.timestamp >= data.zoomStartAt && reading.timestamp <= data.zoomEndAt;
 				});
 
 				ctx.postMessage({

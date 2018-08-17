@@ -1,36 +1,73 @@
-<svg 
-	ng-if="$tracks" 
-	xmlns="http://www.w3.org/2000/svg" 
-	xmlns:dc="http://purl.org/dc/elements/1.1/" 
-	xmlns:cc="http://creativecommons.org/ns#"
- 	xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" 
-	xmlns:svg="http://www.w3.org/2000/svg" 
-	version='1.1' 
-	ng-attr-width='{{ svg.viewWidth }}'
- 	ng-attr-height='{{ svg.viewHeight }}'>
+<svg ng-if="$tracks" xmlns="http://www.w3.org/2000/svg" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"
+ xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:svg="http://www.w3.org/2000/svg" version='1.1' ng-attr-width='{{ svg.viewWidth }}'
+ ng-attr-height='{{ svg.viewHeight }}'>
 
-	<rect 
-		class="dmec-bg" 
-		fill="white" 
-		fill-opacity="0.1" 
-		x="0" 
-		y="0" 
-		ng-attr-width='{{ svg.viewWidth }}' 
-		ng-attr-height='{{ svg.viewHeight }}'>
+	<!-- <foreignobject x="75" y="20" ng-attr-width="{{ svg.viewWidth / 2 }}" height="100" class="xpd-dmec-chart-legend">
+		<ul>
+			<li ng-repeat="track in $tracks" ng-style="{ 'color': track.color }">{{ track.label }}</li>
+		</ul>
+	</foreignobject> -->
+
+	<g ng-if="horizontal">
+		<g class="legend" ng-repeat="track in $tracks">
+			<text 
+				text-anchor="start" 
+				alignment-baseline="hanging" 
+				ng-attr-stroke="{{ track.color }}" 
+				ng-attr-x="{{ track.labelPosition * 40 }}"
+				ng-attr-y="{{ track.trackScale(track.max) }}">{{ track.max | number: 0 }}
+			</text>
+			<text 
+				text-anchor="start" 
+				ng-attr-alignment-baseline="{{ track.labelPosition ? 'hanging':'baseline' }}" 
+				ng-attr-stroke="{{ track.color }}" 
+				x="0"
+				ng-attr-y="{{ ( track.trackScale(track.max) + track.trackScale(track.min) ) / 2 }}">{{ track.label }}
+			</text>
+			<text 
+				text-anchor="start" 
+				alignment-baseline="baseline" 
+				ng-attr-stroke="{{ track.color }}" 
+				ng-attr-x="{{ track.labelPosition * 40 }}"
+				ng-attr-y="{{ track.trackScale(track.min) }}">{{ track.min | number: 0 }}
+			</text>
+		</g>
+	</g>
+
+	<g ng-if="!horizontal">
+		<g class="legend" ng-repeat="track in $tracks">
+			<text 
+				text-anchor="end" 
+				alignment-baseline="hanging" 
+				ng-attr-stroke="{{ track.color }}" 
+				ng-attr-y="{{ track.labelPosition * 40 }}"
+				ng-attr-x="{{ track.trackScale(track.max) }}">{{ track.max | number: 0 }}
+			</text>
+			<text 
+				text-anchor="middle" 
+				alignment-baseline="hanging" 
+				ng-attr-stroke="{{ track.color }}" 
+				ng-attr-y="{{ track.labelPosition * 40 }}"
+				ng-attr-x="{{ ( track.trackScale(track.max) + track.trackScale(track.min) ) / 2 }}">{{ track.label }}
+			</text>
+			<text 
+				text-anchor="start" 
+				alignment-baseline="hanging" 
+				ng-attr-stroke="{{ track.color }}" 
+				ng-attr-y="{{ track.labelPosition * 40 }}"
+				ng-attr-x="{{ track.trackScale(track.min) }}">{{ track.min | number: 0 }}
+			</text>
+		</g>
+	</g>
+
+	<rect class="dmec-bg" fill="white" fill-opacity="0.1" x="0" y="0" ng-attr-width='{{ svg.viewWidth }}' ng-attr-height='{{ svg.viewHeight }}'>
 	</rect>
 
 	<g class="range-ticks">
 		<g ng-repeat="track in $tracks">
-			<line 
-				 ng-repeat="tick in track.ticks" 
-				 ng-attr-transform="translate( {{ horizontal? 0: track.trackScale(tick) }}, {{ horizontal? track.trackScale(tick): 0 }} )"
-				 x1='0' 
-				 y1='0' 
-				 ng-attr-x2='{{ horizontal? svg.viewWidth: 0  }}' 
-				 ng-attr-y2='{{ horizontal? 0: svg.viewHeight }}' 
-				 stroke="#e9e9e9"
-				 stroke-opacity="0.2" 
-				 stroke-width="1" />
+			<line ng-repeat="tick in track.ticks" ng-attr-transform="translate( {{ horizontal? 0: track.trackScale(tick) }}, {{ horizontal? track.trackScale(tick): 0 }} )"
+			 x1='0' y1='0' ng-attr-x2='{{ horizontal? svg.viewWidth: 0  }}' ng-attr-y2='{{ horizontal? 0: svg.viewHeight }}' stroke="#e9e9e9"
+			 stroke-opacity="0.2" stroke-width="1" />
 		</g>
 	</g>
 
@@ -86,7 +123,7 @@
 		</g> -->
 	</g>
 
-	<g class="legend" ng-if="!horizontal">
+	<!-- <g class="legend" ng-if="!horizontal">
 
 		<g class="label" ng-if="$tracks && track.labelPosition != null" ng-repeat="(key, track) in $tracks">
 
@@ -118,16 +155,10 @@
 
 		</g>
 
-	</g>
+	</g> -->
 
 	<rect ng-if="listenToMouseMove != null" style="fill: none; pointer-events: all;" class="overlay" ng-dblclick="openScaleModal()"
 	 ng-init="listenToMouseMove()" x="0" y="0" ng-attr-width='{{ svg.viewWidth }}' ng-attr-height='{{ svg.viewHeight }}'>
 	</rect>
 
 </svg>
-
-<div class="xpd-dmec-chart-legend">
-	<ul>
-		<li ng-repeat="track in $tracks" ng-style="{ 'color': track.color }">{{ track.label }}</li>
-	</ul>
-</div>
