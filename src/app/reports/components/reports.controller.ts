@@ -30,7 +30,6 @@ export class ReportsController {
 
 			vm.operationDataFactory = operationDataService.operationDataFactory;
 			$scope.operationData = vm.operationDataFactory.operationData;
-			console.log('operationData', $scope.operationData);
 
 			operationDataService.on('setOnFailureChangeListener', () => { this.onFailureChange(); });
 

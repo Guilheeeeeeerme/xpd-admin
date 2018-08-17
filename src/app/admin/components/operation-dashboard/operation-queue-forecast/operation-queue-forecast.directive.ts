@@ -71,7 +71,7 @@ export class XPDOperationQueueForecastDirective implements ng.IDirective {
 				});
 
 				planningPromises = scope.validOperations.map((operation) => {
-						return this.reportsSetupAPIService.getOperationEstimative(scope.currentWellId, operation.id);
+					return this.reportsSetupAPIService.getOperationEstimative(scope.currentWellId, operation.id);
 				});
 
 				this.$q.all(planningPromises).then((data) => {
