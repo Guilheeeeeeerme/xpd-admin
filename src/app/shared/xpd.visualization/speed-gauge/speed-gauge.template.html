@@ -56,14 +56,17 @@
         <!-- MASK BAR -->
         <g ng-repeat="(key, value) in speedYTicks" ng-attr-transform="translate(20, {{speedYPosition(value)}})">
 
-            <rect x="0" y="0" width="10" height="3" fill="black"/>
-            <rect x="0" y="-7" width="10" height="7" fill="none" stroke="#9fc" stroke-width="1"/>
+            <rect x="0" y="0" width="10" height="1" fill="black" />
+            <!-- <rect x="0" y="-7" width="10" height="7" fill="none" stroke="#9fc" stroke-width="1"/> -->
 
-            <rect ng-if="value < 5000" x="0" y="-10" width="10" height="3" fill="black"/>
-            <rect ng-if="value < 5000" x="0" y="-17" width="10" height="7" fill="none" stroke="#9fc" stroke-width="1"/>
+            <!-- <rect ng-if="value < 5000" x="0" y="-10" width="10" height="3" fill="black"/> -->
+            <!-- <rect ng-if="value < 5000" x="0" y="-17" width="10" height="7" fill="none" stroke="#9fc" stroke-width="1"/> -->
 
         </g>
 
+        <g ng-attr-transform="translate(20, {{speedYPosition(value)}})">
+                <rect x="20" y="-67" width="10" height="119" fill="none" stroke="#9fc" stroke-width="1" />
+        </g>
         <!-- <text ng-if="!!currentAlarm && !currentAlarm.hasvre"
               class="xpd-speed-gauge-text-vre xpd-speed-gauge-no-vre" x="65" y="35">NO VRE
         </text> -->
