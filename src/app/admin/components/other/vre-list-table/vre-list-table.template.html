@@ -1,5 +1,5 @@
 <div class="general-vre-container"
-     ng-class="{'positive-vre':(vreData.totalVRE>0), 'negative-vre':(vreData.totalVRE<=0)}">
+    ng-class="{'positive-vre':(vreData.totalVRE>0), 'negative-vre':(vreData.totalVRE<=0)}">
     VRE: {{vreData.totalVRE | percentage:2 }}
 </div>
 <div ng-repeat="(key, eventVre) in vreData.categories" class="xpd-vre-list">
