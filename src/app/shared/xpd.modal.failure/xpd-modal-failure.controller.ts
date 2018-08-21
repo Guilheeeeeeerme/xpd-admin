@@ -41,7 +41,7 @@ public getListCategory;
 		$scope.now = () => { vm.now(); };
 		$scope.keepTimeBeforeNow = () => { vm.keepTimeBeforeNow(); };
 
-		operationDataService.openConnection([]).then(() => {
+		operationDataService.openConnection(['failure']).then(() => {
 			vm.operationDataFactory = operationDataService.operationDataFactory;
 		});
 

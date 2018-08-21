@@ -88,7 +88,28 @@ export class TrackingController {
 			depthAlarms: [],
 		};
 
-		operationDataService.openConnection([]).then(() => {
+		operationDataService.openConnection([
+				'alarm',
+				'bitDepth',
+				'blockSpeed',
+				'chronometer',
+				'direction',
+				'elevatorTarget',
+				'event',
+				'jointLog',
+				'operation',
+				'operationProgress',
+				'operationQueue',
+				'parallelEvent',
+				'reading',
+				'score',
+				'shift',
+				'speedSecurity',
+				'state',
+				'timeSlices',
+				'vre',
+				'well',
+			]).then(() => {
 			vm.operationDataFactory = operationDataService.operationDataFactory;
 			$scope.operationData = vm.operationDataFactory.operationData;
 			vm.loadEvents();

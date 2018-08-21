@@ -26,7 +26,7 @@ export class ReportsController {
 			toDate: null,
 		};
 
-		operationDataService.openConnection([]).then(() => {
+		operationDataService.openConnection(['failure']).then(() => {
 
 			vm.operationDataFactory = operationDataService.operationDataFactory;
 			$scope.operationData = vm.operationDataFactory.operationData;

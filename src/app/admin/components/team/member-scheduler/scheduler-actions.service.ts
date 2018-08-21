@@ -38,7 +38,7 @@ export class SchedulerActionsService {
 		self.removeFromGantt = null;
 		self.updateFromGantt = null;
 
-		operationDataService.openConnection([]).then(() => {
+		operationDataService.openConnection(['shift']).then(() => {
 			self.operationDataFactory = operationDataService.operationDataFactory;
 		});
 	}

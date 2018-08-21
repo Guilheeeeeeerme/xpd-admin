@@ -36,6 +36,9 @@ export class XPDOperationQueueForecastDirective implements ng.IDirective {
 		ctrl: any,
 	) => {
 
+		const keyName = 'panelOperationQueueCollapsed';
+		scope.collapse = getPanelState();
+
 		const processPlanning = (estimativesList: any[]) => {
 
 			const nextActivitiesEstimativesList = [];
@@ -78,6 +81,20 @@ export class XPDOperationQueueForecastDirective implements ng.IDirective {
 			}
 
 		});
+
+		function getPanelState() {
+			try {
+				return JSON.parse(localStorage.getItem(keyName));
+			} catch (error) {
+				return true;
+			}
+		}
+
+		scope.changePanelState = () => {
+			const newState = !getPanelState();
+			scope.collapse = newState;
+			localStorage.setItem(keyName, JSON.stringify(newState));
+		};
 
 	}
 

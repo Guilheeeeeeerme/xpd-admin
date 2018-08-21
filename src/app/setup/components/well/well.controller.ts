@@ -26,7 +26,7 @@ export class WellController {
 			wellList: [],
 		};
 
-		operationDataService.openConnection([]).then(() => {
+		operationDataService.openConnection(['operation', 'well']).then(() => {
 			vm.operationDataFactory = operationDataService.operationDataFactory;
 			$scope.operationData = vm.operationDataFactory.operationData;
 		});

@@ -54,7 +54,7 @@ export class SectionController {
 
 		}, true);
 
-		operationDataService.openConnection([]).then(() => {
+		operationDataService.openConnection(['operation', 'operationQueue', 'well']).then(() => {
 			this.operationDataFactory = operationDataService.operationDataFactory;
 			$scope.operationData = this.operationDataFactory.operationData;
 		});

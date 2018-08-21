@@ -41,22 +41,40 @@ export class OperationDashboardController {
 			timeEvents: [],
 		};
 
-		operationDataService.openConnection([]).then(() => {
-			vm.operationDataFactory = operationDataService.operationDataFactory;
-			$scope.operationData = vm.operationDataFactory.operationData;
+		operationDataService.openConnection([
+			'event',
+			'reading',
+			'operation',
+			'chronometer',
+			'well',
+			'alarm',
+			'jointLog',
+			'state',
+			'direction',
+			'operationQueue',
+			'score',
+			'operationProgress',
+			'bitDepth',
+			'failure',
+			'forecast',
+			'parallelEvent',
+			'shift',
+		]).then(() => {
+				vm.operationDataFactory = operationDataService.operationDataFactory;
+				$scope.operationData = vm.operationDataFactory.operationData;
 
-			vm.generateEstimatives();
-			vm.loadEvents();
+				vm.generateEstimatives();
+				vm.loadEvents();
 
-			operationDataService.on('setOnParallelEventChangeListener', () => { vm.loadEvents(); });
-			operationDataService.on('setOnEventChangeListener', (data) => { vm.loadEvents(); });
+				operationDataService.on('setOnParallelEventChangeListener', () => { vm.loadEvents(); });
+				operationDataService.on('setOnEventChangeListener', (data) => { vm.loadEvents(); });
 
-			operationDataService.on('setOnEstimativesChangeListener', () => { vm.generateEstimatives(); });
-			operationDataService.on('setOnForecastChangeListener', () => { vm.generateEstimatives(); });
+				operationDataService.on('setOnEstimativesChangeListener', () => { vm.generateEstimatives(); });
+				operationDataService.on('setOnForecastChangeListener', () => { vm.generateEstimatives(); });
 
-			operationDataService.on('setOnJointChangeListener', () => { vm.generateEstimatives(); });
-			operationDataService.on('setOnCurrentJointListener', () => { vm.generateEstimatives(); });
-			operationDataService.on('setOnNoCurrentJointListener', () => { vm.generateEstimatives(); });
+				operationDataService.on('setOnJointChangeListener', () => { vm.generateEstimatives(); });
+				operationDataService.on('setOnCurrentJointListener', () => { vm.generateEstimatives(); });
+				operationDataService.on('setOnNoCurrentJointListener', () => { vm.generateEstimatives(); });
 		});
 	}
 

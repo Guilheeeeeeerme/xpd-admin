@@ -31,7 +31,7 @@ export class LessonLearnedController {
 			},
 		};
 
-		operationDataService.openConnection([]).then(() => {
+		operationDataService.openConnection(['operation']).then(() => {
 			vm.operationDataFactory = operationDataService.operationDataFactory;
 			$scope.modalData.operation = vm.operationDataFactory.operationData.operationContext.currentOperation;
 		});

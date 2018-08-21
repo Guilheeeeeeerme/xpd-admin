@@ -14,31 +14,31 @@ import { XPDAccessService } from '../xpd.access/access.service';
 export class OperationDataService {
 
 	public static THREADS = [
-		'failure',
-		'well',
-		'blockSpeed',
-		'shift',
-		'operation',
-		'timeSlices',
 		'alarm',
-		'state',
-		'chronometer',
-		'event',
-		'parallelEvent',
-		'jointLog',
-		'operationProgress',
-		'elevatorTarget',
-		'score',
-		'vTarget',
-		'reading',
 		'bitDepth',
-		'vre',
-		'subOperation',
-		'forecast',
-		'operationQueue',
-		'speedSecurity',
-		'direction',
+		'blockSpeed',
+		'chronometer',
 		'dataAcquisition',
+		'direction',
+		'elevatorTarget',
+		'event',
+		'failure',
+		'forecast',
+		'jointLog',
+		'operation',
+		'operationProgress',
+		'operationQueue',
+		'parallelEvent',
+		'reading',
+		'score',
+		'shift',
+		'speedSecurity',
+		'state',
+		'subOperation',
+		'timeSlices',
+		'vre',
+		'vTarget',
+		'well',
 	];
 
 	public static $inject = ['$q', '$rootScope', 'xpdAccessService'];
@@ -49,6 +49,7 @@ export class OperationDataService {
 
 	public socket: any;
 	private locked: boolean;
+	private threads: string[] = [];
 	private operationDataDefer: angular.IDeferred<{}>;
 
 	private observer: EventEmitter;
@@ -57,6 +58,18 @@ export class OperationDataService {
 		$q: IQService,
 		private $rootScope: IRootScopeService,
 		private accessService: XPDAccessService) {
+
+		OperationDataService.THREADS.map((thread) => {
+			Object.defineProperty(OperationDataService, 'operationDataFactory.operationData.' + thread + 'Context', {
+				get: () => {
+					if (!this.threads.includes(thread)) {
+						throw new Error('Please listen to ' + thread);
+					} else {
+						return this.operationDataFactory.operationData[thread + 'Context'];
+					}
+				},
+			  });
+		});
 
 		this.operationDataDefer = $q.defer();
 		this.locked = false;
@@ -107,11 +120,7 @@ export class OperationDataService {
 			self.socket.on('pong', (data) => { self.emit('pong', data); });
 
 			socket.on('connect', () => {
-
-				threads.map((thread) => {
-					socket.emit('room', thread);
-				});
-
+				this.emitEvent(threads);
 			});
 
 			socket.on('subjects', (response) => {
@@ -143,11 +152,23 @@ export class OperationDataService {
 			});
 
 		} else {
+			this.emitEvent(threads);
 			console.log('Reusando conexão com operation server');
 		}
 
 		return self.operationDataDefer.promise;
 
+	}
+
+	private emitEvent(threads) {
+		const self: OperationDataService = this;
+
+		threads.map((thread) => {
+			if (!self.threads.includes(thread)) {
+				self.threads.push(thread);
+				self.socket.emit('room', thread);
+			}
+		});
 	}
 
 	private contextSubjectGenerator(ContextSubjects, communicationChannel) {
