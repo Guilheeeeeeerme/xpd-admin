@@ -3,15 +3,19 @@ body {
 	padding-top: 0;
 }
 
+nav {
+	height: 10vh;
+}
+
 xpd-dmec-chart {
-	margin-top: 80px;
+	height: 80vh;
+	margin-top: 10vh;
 	background: black;
-	margin-bottom: 75px;
 }
 
 xpd-time-zoom-tool {
 	position: fixed;
 	bottom: 0;
 	width: 100%;
-	height: 75px;
+	height: 10vh;
 }

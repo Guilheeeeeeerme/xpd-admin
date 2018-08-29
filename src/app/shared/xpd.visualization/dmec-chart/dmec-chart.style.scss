@@ -1,32 +1,4 @@
 xpd-dmec-chart {
     display: block;
     height: 100%;
-
-	.xpd-dmec-chart-legend {
-        height: 0%;
-        position: relative;
-        // pointer-events: none;
-	}
-
-	.xpd-dmec-chart-legend ul {
-		opacity: 0.5;
-        position: absolute;
-        right: 10px;
-        top: -10px;
-        font-size: 1em;
-        transform: translate(0%, -100%); // z-index: 99;
-        // margin: 0;
-        // position: absolute;
-        // bottom: 0%;
-        // left: 50%;
-        // transform: translate(100%, 50%);
-		// white-space: nowrap;
-		
-		&:hover{
-			font-weight: bold;
-			opacity: 1;
-			background: rgba(200,200, 200, 0.2);
-		}
-
-	}
 }
