@@ -397,20 +397,23 @@ export class DMECChartDirective implements ng.IDirective {
 			const param = message.data.param;
 			let track;
 
-			for (const i in tracks) {
-				if (tracks[i].param === param) {
-					track = tracks[i];
-					break;
-				}
-			}
-
 			if (point && point.y != null) {
+				for (const i in tracks) {
+					if (tracks[i].param === param) {
+						track = tracks[i];
+						break;
+					}
+				}
 				drawBubbles(point, track, position);
 			}
 
 		};
 
 		const drawBubbles = (point, track, position) => {
+
+			if (track.param === 'hookload') {
+				console.log(point, track, position);
+			}
 
 			const bubbleContent = d3.select(element[0]).selectAll('.bubbles');
 			const line = d3.select(element[0]).selectAll('.line-' + scope.lastSelectedPoint.timestamp).nodes();
