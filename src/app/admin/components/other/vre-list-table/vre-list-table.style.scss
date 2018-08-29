@@ -36,4 +36,20 @@ xpd-vre-list-table {
         border-color: #578893;
     }
 
+    .positive-vre {
+        color: #75b6e5;
+    }
+    
+    .negative-vre {
+        color: #cc0505;
+    }
+
+    .general-vre-container.positive-vre {
+        border: 1px solid #92d050;
+    }
+    
+    .general-vre-container.negative-vre {
+        border: 1px solid #cc0505;
+    }
+
 }
