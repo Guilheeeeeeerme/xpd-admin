@@ -9,6 +9,7 @@
     "lint": "tslint src/**/*.ts --fix",
     "build": "webpack --display-error-detail",
     "electron-packager": "electron-packager dist Admin --platform win32 --arch x64 --out build --overwrite --icon src/assets/img/logo.ico",
+    "electron-packager-all": "electron-packager dist Admin --platform win32 --arch all --out build --overwrite --icon src/assets/img/logo.ico",
     "electron-winstaller": "node installer.js",
     "pack": "npm run build && npm run electron-packager && npm run electron-winstaller",
     "electron": "npm run build && electron dist"
