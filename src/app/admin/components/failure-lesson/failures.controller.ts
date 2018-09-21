@@ -41,9 +41,12 @@ export class FailuresController {
 			vm.operationDataFactory = operationDataService.operationDataFactory;
 			$scope.modalData.operation = vm.operationDataFactory.operationData.operationContext.currentOperation;
 			$scope.modalData.failuresList = vm.operationDataFactory.operationData.failureContext.failureList;
+
+			$scope.modalIsLocked = vm.operationDataFactory.operationData.failureContext.threadIsLocked;
 		});
 
 		operationDataService.on('setOnFailureChangeListener', populateFailureList);
+		operationDataService.on('setOnLockFailureThreadListener', lockUnlockModal);
 
 		function populateFailureList() {
 			const failureContext = vm.operationDataFactory.operationData.failureContext;
@@ -52,7 +55,14 @@ export class FailuresController {
 			$scope.modalData.failureOnGoing = failureContext.failureOnGoing;
 		}
 
+		function lockUnlockModal() {
+			$scope.modalIsLocked = vm.operationDataFactory.operationData.failureContext.threadIsLocked;
+		}
+
 		function actionClickButtonAddFailure() {
+
+			if ($scope.modalIsLocked) { return; }
+
 			let newFailure = {};
 
 			if ($scope.modalData.operation != null) {
@@ -67,6 +77,8 @@ export class FailuresController {
 		}
 
 		function actionClickButtonEditFailure(selectedFailure) {
+			if ($scope.modalIsLocked) { return; }
+
 			if ($scope.modalData.operation != null) {
 				selectedFailure.operation = { id: $scope.modalData.operation.id };
 			}
@@ -75,6 +87,8 @@ export class FailuresController {
 		}
 
 		function actionClickButtonRemoveFailure(failure) {
+			if ($scope.modalIsLocked) { return; }
+
 			dialogService.showConfirmDialog('Do you want to remove this failure',
 				function () {
 					removeFailure(failure);

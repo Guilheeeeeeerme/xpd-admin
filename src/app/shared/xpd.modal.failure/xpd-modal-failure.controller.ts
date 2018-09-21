@@ -43,7 +43,6 @@ export class ModalFailureController {
 
 		operationDataService.openConnection(['failure']).then(() => {
 			vm.operationDataFactory = operationDataService.operationDataFactory;
-			this.lockUnlockModal();
 		});
 
 		$scope.category = {
@@ -155,7 +154,6 @@ export class ModalFailureController {
 	}
 
 	private upsertListenerCallback() {
-		this.operationDataService.on('setOnLockFailureThreadListener', () => { this.lockUnlockModal(); });
 		this.operationDataService.on('setOnFailureChangeListener', () => { this.failureSuccessCallback(); });
 		this.operationDataService.on('setOnErrorUpsertFailureListener', () => { this.failureErrorCallback(); });
 		this.operationDataService.on('setOnNptAlreadyExistsListener', () => { this.nptAlreadyExists(); });
@@ -163,11 +161,6 @@ export class ModalFailureController {
 
 	private failureSuccessCallback() {
 		this.$uibModalInstance.close();
-	}
-
-	private lockUnlockModal() {
-		const failureContext = this.operationDataFactory.operationData.failureContext;
-		this.$scope.modalIsLocked = failureContext.threadIsLocked;
 	}
 
 	private failureErrorCallback() {
