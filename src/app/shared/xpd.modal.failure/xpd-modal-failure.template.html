@@ -83,10 +83,11 @@
 		</div>
 	</div>
 
+	<pre>{{modalIsLocked}}</pre>
 	<div class="modal-footer">
 		<div class="container-fluid">
 			<div class="text-right">
-				<button class="btn btn-primary" ng-disabled="modal.$invalid || !selectedFailure.category.id" ng-click="mfController.modalActionButtonSave();">
+				<button class="btn btn-primary" ng-disabled="modalIsLocked || modal.$invalid || !selectedFailure.category.id" ng-click="mfController.modalActionButtonSave();">
 					Save
 				</button>
 				<button class="btn btn-default" ng-click="mfController.modalActionButtonClose();">

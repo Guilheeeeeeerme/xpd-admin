@@ -20,7 +20,7 @@ export class ModalFailureController {
 
 	public operationDataFactory: any;
 	public roleList: {};
-public getListCategory;
+	public getListCategory;
 
 	constructor(
 		private $scope: any,
@@ -43,6 +43,7 @@ public getListCategory;
 
 		operationDataService.openConnection(['failure']).then(() => {
 			vm.operationDataFactory = operationDataService.operationDataFactory;
+			this.lockUnlockModal();
 		});
 
 		$scope.category = {
@@ -94,6 +95,7 @@ public getListCategory;
 
 		node.selected = true;
 	}
+
 	private getCategoryList() {
 		this.categorySetupAPIService.getListCategory().then(
 			(arg) => { this.getCategoryListSuccessCallback(arg); },
@@ -153,6 +155,7 @@ public getListCategory;
 	}
 
 	private upsertListenerCallback() {
+		this.operationDataService.on('setOnLockFailureThreadListener', () => { this.lockUnlockModal(); });
 		this.operationDataService.on('setOnFailureChangeListener', () => { this.failureSuccessCallback(); });
 		this.operationDataService.on('setOnErrorUpsertFailureListener', () => { this.failureErrorCallback(); });
 		this.operationDataService.on('setOnNptAlreadyExistsListener', () => { this.nptAlreadyExists(); });
@@ -160,6 +163,11 @@ public getListCategory;
 
 	private failureSuccessCallback() {
 		this.$uibModalInstance.close();
+	}
+
+	private lockUnlockModal() {
+		const failureContext = this.operationDataFactory.operationData.failureContext;
+		this.$scope.modalIsLocked = failureContext.threadIsLocked;
 	}
 
 	private failureErrorCallback() {
