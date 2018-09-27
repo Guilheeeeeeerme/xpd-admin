@@ -85,11 +85,13 @@
                             <td class="col-md-1" style="white-space: nowrap;">
                                 <span 
                                     class="btn btn-xs glyphicon glyphicon-pencil"
+                                    ng-disabled="modalIsLocked"
                                     ng-click="fController.actionClickButtonEditFailure(failure)">
                                 </span>
 
                                 <span 
                                     class="btn btn-xs glyphicon glyphicon-remove"
+                                    ng-disabled="modalIsLocked"
                                     ng-if="!failure.onGoing"
                                     ng-click="fController.actionClickButtonRemoveFailure(failure)">
                                 </span>
@@ -106,7 +108,7 @@
         </div>
 
         <div class="pull-right">
-            <span class="btn" ng-click="fController.actionClickButtonAddFailure()">
+            <span class="btn" ng-disabled="modalIsLocked" ng-click="fController.actionClickButtonAddFailure()">
                 <span class="glyphicon glyphicon-plus"></span>
                 Failure / Delay
             </span>

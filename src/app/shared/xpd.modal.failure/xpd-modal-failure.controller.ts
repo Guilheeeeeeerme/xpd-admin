@@ -20,7 +20,7 @@ export class ModalFailureController {
 
 	public operationDataFactory: any;
 	public roleList: {};
-public getListCategory;
+	public getListCategory;
 
 	constructor(
 		private $scope: any,
@@ -94,6 +94,7 @@ public getListCategory;
 
 		node.selected = true;
 	}
+
 	private getCategoryList() {
 		this.categorySetupAPIService.getListCategory().then(
 			(arg) => { this.getCategoryListSuccessCallback(arg); },
