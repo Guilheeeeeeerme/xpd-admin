@@ -12,7 +12,7 @@ export class OperationSetupAPIService {
 	public BASE_URL: string;
 
 	constructor(private xpdAccessService: XPDAccessService, private setupAPIService: SetupAPIService) {
-		this.BASE_URL = xpdAccessService.getSetupURL() + 'setup/operation';
+		this.BASE_URL = xpdAccessService.getSetupAPIURL() + 'setup/operation';
 	}
 
 	public getOperationAlarms(operationId) {
@@ -86,25 +86,11 @@ export class OperationSetupAPIService {
 		return this.setupAPIService.doRequest(req);
 	}
 
-	// function getOperationReadings(operationId, successCallback, errorCallback) {
-
-	// 	$http.get(BASE_URL + '/' + operationId + '/readings')
-	// 		.then(
-	// 			function (response) {
-	// 				successCallback && successCallback(response.data.data);
-	// 			},
-	// 			function (error) {
-	// 				setupAPIService.generateToast(error.data, true);
-	// 				errorCallback && errorCallback(error);
-	// 			}
-	// 		);
-	// }
-
 	public getOperationQueue(wellId) {
 
 		const req = {
 			method: 'GET',
-			url: this.xpdAccessService.getSetupURL() + 'operation-resources/operations-queue/' + wellId,
+			url: this.xpdAccessService.getSetupAPIURL() + 'operation-resources/operations-queue/' + wellId,
 		};
 
 		return this.setupAPIService.doRequest(req);

@@ -13,7 +13,7 @@ export class SectionSetupAPIService {
 	public BASE_URL: string;
 
 	constructor(private xpdAccessService: XPDAccessService, private setupAPIService: SetupAPIService) {
-		this.BASE_URL = xpdAccessService.getSetupURL() + 'setup/section';
+		this.BASE_URL = xpdAccessService.getSetupAPIURL() + 'setup/section';
 	}
 
 	public getObjectById(id) {

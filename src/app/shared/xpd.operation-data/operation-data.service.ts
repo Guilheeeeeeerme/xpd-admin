@@ -3,13 +3,8 @@ import { IPromise, IQService, IRootScopeService } from 'angular';
 import { EventEmitter } from 'events';
 import * as io from 'socket.io-client';
 import { XPDAccessService } from '../xpd.access/access.service';
-
-// (function() {
-// 	'use strict';
-
-// 			.factory('operationDataFactory', operationDataFactory);
-
-// operationDataFactory.$inject = ['$q', 'socketService', 'xpdAccessService'];
+import { AccessFactoryService } from '../xpd.access/accessfactory.service';
+import { AuthService } from '../xpd.setupapi/auth.service';
 
 export class OperationDataService {
 
@@ -68,7 +63,7 @@ export class OperationDataService {
 						return this.operationDataFactory.operationData[thread + 'Context'];
 					}
 				},
-			  });
+			});
 		});
 
 		this.operationDataDefer = $q.defer();
@@ -92,6 +87,8 @@ export class OperationDataService {
 
 		const self: OperationDataService = this;
 
+		const token = AuthService.getOperationServerToken();
+
 		if (!self.locked) {
 			console.log('Criando conexão com operation server');
 
@@ -102,12 +99,19 @@ export class OperationDataService {
 				reconnectionDelay: 500,
 				reconnectionDelayMax: 500,
 				timeout: 500,
+				query: { token: token },
 			};
 
 			const manager: io.Manager = new io.Manager(self.accessService.getOperationServerURL(), options);
 
 			const socket = manager.socket('/operation-socket', options);
 			self.socket = socket;
+
+			socket.on('error', (error) => {
+				if (error === 'Authentication error' ) {
+					AuthService.logout();
+				}
+			});
 
 			self.socket.on('connect_error', (data) => { self.emit('connect_error', data); });
 			self.socket.on('connect_timeout', (data) => { self.emit('connect_timeout', data); });

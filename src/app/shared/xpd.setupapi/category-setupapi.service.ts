@@ -14,7 +14,7 @@ export class CategorySetupAPIService {
 	public BASE_URL: string;
 
 	constructor(private xpdAccessService: XPDAccessService, private setupAPIService: SetupAPIService) {
-		this.BASE_URL = xpdAccessService.getSetupURL() + 'setup/category';
+		this.BASE_URL = xpdAccessService.getSetupAPIURL() + 'setup/category';
 	}
 
 	public getCategoryName(id) {

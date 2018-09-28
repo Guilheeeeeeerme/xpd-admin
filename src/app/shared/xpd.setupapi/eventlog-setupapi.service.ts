@@ -13,7 +13,7 @@ export class EventLogSetupAPIService {
 	public BASE_URL: string;
 
 	constructor(private $rootScope: IRootScopeService, private xpdAccessService: XPDAccessService, private setupAPIService: SetupAPIService) {
-		this.BASE_URL = xpdAccessService.getSetupURL() + 'setup/event';
+		this.BASE_URL = xpdAccessService.getSetupAPIURL() + 'setup/event';
 	}
 
 	public listTrackingEventByOperation(operationId) {

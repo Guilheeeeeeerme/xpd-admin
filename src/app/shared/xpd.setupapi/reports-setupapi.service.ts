@@ -14,7 +14,7 @@ export class ReportsSetupAPIService {
 	public BASE_URL: string;
 
 	constructor(private xpdAccessService: XPDAccessService, private setupAPIService: SetupAPIService) {
-		this.BASE_URL = xpdAccessService.getSetupURL() + 'setup/reports';
+		this.BASE_URL = xpdAccessService.getSetupAPIURL() + 'setup/reports';
 	}
 
 	public getVreList(fromDate, toDate) {

@@ -2,11 +2,6 @@ import { IQService } from 'angular';
 import 'angular-spinner';
 import { IToastrService } from 'angular-toastr';
 
-// (function() {
-// 	'use strict',
-
-// 		.service('setupAPIService', setupAPIService)});
-
 export class SetupAPIService {
 
 	public static $inject: string[] = ['$http', '$q', 'toastr', 'usSpinnerService'];

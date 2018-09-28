@@ -12,7 +12,7 @@ export class ReadingSetupAPIService {
 	public BASE_URL: string;
 
 	constructor(private xpdAccessService: XPDAccessService, private setupAPIService: SetupAPIService) {
-		this.BASE_URL = xpdAccessService.getSetupURL() + 'setup/reading';
+		this.BASE_URL = xpdAccessService.getSetupAPIURL() + 'setup/reading';
 	}
 
 	public getAllReadingSince(from) {

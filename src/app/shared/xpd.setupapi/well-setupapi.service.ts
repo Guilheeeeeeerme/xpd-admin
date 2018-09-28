@@ -16,7 +16,7 @@ export class WellSetupAPIService {
 	constructor(
 		private xpdAccessService: XPDAccessService,
 		private setupAPIService: SetupAPIService) {
-		this.BASE_URL = xpdAccessService.getSetupURL() + 'setup/well';
+		this.BASE_URL = xpdAccessService.getSetupAPIURL() + 'setup/well';
 	}
 
 	public insertObject(object) {

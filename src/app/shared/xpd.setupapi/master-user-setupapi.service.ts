@@ -21,7 +21,7 @@ export class MasterUserSetupAPIService {
 
 		const req = {
 			method: 'POST',
-			url: this.xpdAccessService.getSetupURL() + 'setup/master-user/login',
+			url: this.xpdAccessService.getSetupAPIURL() + 'setup/master-user/login',
 			headers: {
 				'Content-Type': 'application/json',
 			},

@@ -2,6 +2,7 @@ import * as angular from 'angular';
 
 import { AdminUserSetupAPIService } from './admin-user-setupapi.service';
 import { AlarmSetupAPIService } from './alarm-setupapi.service';
+import { AuthService } from './auth.service';
 import { CategorySetupAPIService } from './category-setupapi.service';
 import { EventLogSetupAPIService } from './eventlog-setupapi.service';
 import { FailureSetupAPIService } from './failure-setupapi.service';
@@ -38,3 +39,4 @@ XPDSetupAPIModule.service('eventlogSetupAPIService', EventLogSetupAPIService);
 XPDSetupAPIModule.service('categorySetupAPIService', CategorySetupAPIService);
 XPDSetupAPIModule.service('alarmSetupAPIService', AlarmSetupAPIService);
 XPDSetupAPIModule.service('adminUserSetupAPIService', AdminUserSetupAPIService);
+XPDSetupAPIModule.service('authService', AuthService);

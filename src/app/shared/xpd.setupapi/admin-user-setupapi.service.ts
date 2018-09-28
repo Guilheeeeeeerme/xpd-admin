@@ -12,7 +12,7 @@ export class AdminUserSetupAPIService {
 	public BASE_URL: string;
 
 	constructor(private xpdAccessService: XPDAccessService, private setupAPIService: SetupAPIService) {
-		this.BASE_URL = xpdAccessService.getSetupURL() + 'setup/admin-user';
+		this.BASE_URL = xpdAccessService.getSetupAPIURL() + 'setup/admin-user';
 	}
 
 	public authenticate(loginInfo) {

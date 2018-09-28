@@ -14,7 +14,7 @@ export class AlarmSetupAPIService {
 	public BASE_URL: string;
 
 	constructor(private xpdAccessService: XPDAccessService, private setupAPIService: SetupAPIService) {
-		this.BASE_URL = xpdAccessService.getSetupURL() + 'setup/alarm';
+		this.BASE_URL = xpdAccessService.getSetupAPIURL() + 'setup/alarm';
 	}
 
 	public insertAlarm(alarm) {

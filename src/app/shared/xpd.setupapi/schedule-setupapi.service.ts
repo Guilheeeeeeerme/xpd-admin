@@ -17,7 +17,7 @@ export class ScheduleSetupAPIService {
 	public SCHEDULE_URL: string;
 
 	constructor(private xpdAccessService: XPDAccessService, private setupAPIService: SetupAPIService) {
-		this.BASE_URL = xpdAccessService.getSetupURL();
+		this.BASE_URL = xpdAccessService.getSetupAPIURL();
 		this.FUNCTION_URL = this.BASE_URL + 'setup/function';
 		this.MEMBER_URL = this.BASE_URL + 'setup/member';
 		this.SCHEDULE_URL = this.BASE_URL + 'setup/schedule';
