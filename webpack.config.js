@@ -33,7 +33,7 @@ const copyFiles = [
 
 	new CopyWebpackPlugin(
 		[{
-			from: './src/main.js',
+			from: './src/electron.js',
 			to: './',
 		}],
 		{

@@ -5,7 +5,7 @@ const checkIfItIsLogged = () => {
 	console.log('Checking Credentials');
 
 	if (!AuthService.isLogged()) {
-		location.href = '/auth.html#';
+		AuthService.redirectToPath('/auth.html#', false);
 	}
 
 };

@@ -16,8 +16,38 @@ export class AuthService {
 	public static RS_TOKEN = 'reportsServerToken';
 
 	public static logout() {
-		sessionStorage.clear();
-		location.href = '/auth.html#';
+		sessionStorage.removeItem(AuthService.OS_TOKEN);
+		sessionStorage.removeItem(AuthService.RS_TOKEN);
+		AuthService.redirectToPath('/auth.html#', false);
+	}
+
+	public static redirectToPath(path: any, newTab: any): any {
+
+		if (window.location.href.indexOf('auth.html') < 0) {
+			sessionStorage.setItem('redirectTo', window.location.href);
+		}
+
+		if (location.port) {
+			path = 'https://' + location.hostname + ':' + location.port + path;
+		} else {
+			for (const page of ['auth.html', 'setup.html', 'admin.html', 'dmec-log.html', 'reports.html']) {
+				if (window.location.href.indexOf(page) >= 0) {
+					path = window.location.href.slice(0, (window.location.href.indexOf(page) - 1)) + path;
+					break;
+				}
+			}
+		}
+
+		// console.log(path);
+		// console.log(location);
+
+		// debugger;
+
+		if (newTab === true) {
+			window.open(path);
+		} else {
+			window.location.href = path;
+		}
 	}
 
 	public static isLogged() {
@@ -56,11 +86,11 @@ export class AuthService {
 		const reportsServerPromise = this.setupAPIService.doRequest(reportsServerRequest);
 
 		operationServerPromise.then((data: any) => {
-			sessionStorage.setItem(AuthService.OS_TOKEN, data.token);
+			sessionStorage.setItem(AuthService.OS_TOKEN, data.token);    
 		});
 
 		reportsServerPromise.then((data: any) => {
-			sessionStorage.setItem(AuthService.RS_TOKEN, data.token);
+			sessionStorage.setItem(AuthService.RS_TOKEN, data.token); 
 		});
 
 		return this.$q.all([
