@@ -1,12 +1,24 @@
 <form>
 
 	<div class="modal-header">
-		<h3 class="modal-title" id="modal-title">Access Data</h3>
+		<h3 class="modal-title" id="modal-title">Access Data
+		</h3>
+		<a ng-click="isRegister = !isRegister">{{ !isRegister ? 'Register' : 'Login' }}</a>
 	</div>
 
 	<div class="modal-body" id="modal-body">
 
 		<div class="col-md-6 col-sm-12">
+
+			<div class="form-group" ng-if="isRegister">
+				<label for="xpdName">Name</label>
+				<input type="text" ng-model="user.name" class="form-control" id="xpdName">
+			</div>
+
+			<div class="form-group" ng-if="isRegister">
+				<label for="xpdEmail">Email</label>
+				<input type="email" ng-model="user.email" class="form-control" id="xpdEmail">
+			</div>
 
 			<div class="form-group">
 				<label for="xpdUsername">Username</label>
@@ -65,7 +77,7 @@
 
 		<p><strong>Do not change these values unless you are told so !!!</strong></p>
 
-		<button class="btn btn-primary" type="button" ng-click="actionButtonSave()">Login</button>
+		<button class="btn btn-primary" type="button" ng-click="actionButtonSave()">{{ isRegister ? 'Register' : 'Login' }}</button>
 		<button class="btn btn-warning" type="button" ng-if="actionButtonCancel" ng-click="actionButtonCancel()">Cancel</button>
 	</div>
 

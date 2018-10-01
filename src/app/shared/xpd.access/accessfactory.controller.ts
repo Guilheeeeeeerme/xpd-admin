@@ -39,9 +39,16 @@ export class AccessFactoryController {
 			localStorage.setItem('xpd.admin.XPDAccessData', JSON.stringify($scope.dados.XPDAccessData));
 
 			vm.xpdAccessService.loadAccessData();
-			vm.authService.login($scope.user).finally(() => {
-				vm.$window.location.reload();
-			});
+
+			if ($scope.isRegister) {
+				vm.authService.register($scope.user).finally(() => {
+					vm.$window.location.reload();
+				});
+			} else {
+				vm.authService.login($scope.user).finally(() => {
+					vm.$window.location.reload();
+				});
+			}
 		};
 
 		$scope.actionButtonSave = actionButtonSave;

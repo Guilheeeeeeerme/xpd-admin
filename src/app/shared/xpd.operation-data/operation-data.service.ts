@@ -79,6 +79,20 @@ export class OperationDataService {
 		this.observer.on(subject, callback);
 	}
 
+	public log(eventName, data) {
+		try {
+			this.socket.emit('logactivity', {
+				module: 'admin',
+				timestamp: new Date().toISOString(),
+				path: location.href,
+				action: eventName,
+				data,
+			});
+		} catch (e) {
+			console.error(e);
+		}
+	}
+
 	public openConnection(threads: string[]): IPromise<{}> {
 
 		if (!threads || threads.length === 0) {
@@ -108,7 +122,7 @@ export class OperationDataService {
 			self.socket = socket;
 
 			socket.on('error', (error) => {
-				if (error === 'Authentication error' ) {
+				if (error === 'Authentication error') {
 					AuthService.logout();
 				}
 			});
@@ -266,6 +280,7 @@ export class OperationDataService {
 
 	private setEmit(socket, eventName): any {
 		return (data) => {
+			this.log(eventName, data);
 			socket.emit(eventName, data);
 		};
 	}

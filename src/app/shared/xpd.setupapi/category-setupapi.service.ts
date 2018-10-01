@@ -24,7 +24,7 @@ export class CategorySetupAPIService {
 			url: this.BASE_URL + '/' + id,
 		};
 
-		return this.setupAPIService.doRequest(req);
+		return this.setupAPIService.doRequest(req, false);
 	}
 
 	public getListCategory() {
@@ -34,7 +34,7 @@ export class CategorySetupAPIService {
 			url: this.BASE_URL + '/list',
 		};
 
-		return this.setupAPIService.doRequest(req);
+		return this.setupAPIService.doRequest(req, false);
 	}
 
 	public insertCategory(object) {
@@ -48,7 +48,7 @@ export class CategorySetupAPIService {
 			data: object,
 		};
 
-		return this.setupAPIService.doRequest(req);
+		return this.setupAPIService.doRequest(req, true);
 	}
 
 	public removeCategory(object) {
@@ -62,7 +62,7 @@ export class CategorySetupAPIService {
 			data: object,
 		};
 
-		return this.setupAPIService.doRequest(req);
+		return this.setupAPIService.doRequest(req, true);
 
 	}
 
@@ -77,7 +77,7 @@ export class CategorySetupAPIService {
 			data: object,
 		};
 
-		return this.setupAPIService.doRequest(req);
+		return this.setupAPIService.doRequest(req, true);
 
 	}
 

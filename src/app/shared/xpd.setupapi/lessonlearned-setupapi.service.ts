@@ -26,7 +26,7 @@ export class LessonLearnedSetupAPIService {
 			url,
 		};
 
-		return this.setupAPIService.doRequest(req);
+		return this.setupAPIService.doRequest(req, false);
 	}
 
 	public updateObject(object) {
@@ -40,7 +40,7 @@ export class LessonLearnedSetupAPIService {
 			data: object,
 		};
 
-		return this.setupAPIService.doRequest(req);
+		return this.setupAPIService.doRequest(req, true);
 	}
 
 	public insertObject(object) {
@@ -54,7 +54,7 @@ export class LessonLearnedSetupAPIService {
 			data: object,
 		};
 
-		return this.setupAPIService.doRequest(req);
+		return this.setupAPIService.doRequest(req, true);
 
 	}
 
@@ -69,7 +69,7 @@ export class LessonLearnedSetupAPIService {
 			data: object,
 		};
 
-		return this.setupAPIService.doRequest(req);
+		return this.setupAPIService.doRequest(req, true);
 	}
 
 	public getListCategory() {
@@ -80,7 +80,7 @@ export class LessonLearnedSetupAPIService {
 			url: this.BASE_URL + '_category/list',
 		};
 
-		return this.setupAPIService.doRequest(req);
+		return this.setupAPIService.doRequest(req, false);
 	}
 
 	public removeCategory(object) {
@@ -95,7 +95,7 @@ export class LessonLearnedSetupAPIService {
 			data: object,
 		};
 
-		return this.setupAPIService.doRequest(req);
+		return this.setupAPIService.doRequest(req, true);
 
 	}
 
@@ -111,7 +111,7 @@ export class LessonLearnedSetupAPIService {
 			data: object,
 		};
 
-		return this.setupAPIService.doRequest(req);
+		return this.setupAPIService.doRequest(req, true);
 
 	}
 
@@ -127,7 +127,7 @@ export class LessonLearnedSetupAPIService {
 			data: object,
 		};
 
-		return this.setupAPIService.doRequest(req);
+		return this.setupAPIService.doRequest(req, true);
 
 	}
 }

@@ -21,6 +21,16 @@ export class AuthService {
 		AuthService.redirectToPath('/auth.html#', false);
 	}
 
+	public static skipAuth() {
+		if (sessionStorage.getItem('redirectTo')) {
+			const href = sessionStorage.getItem('redirectTo');
+			sessionStorage.removeItem('redirectTo');
+			location.href = href;
+		} else {
+			AuthService.redirectToPath('/admin.html#', false);
+		}
+	}
+
 	public static redirectToPath(path: any, newTab: any): any {
 
 		if (window.location.href.indexOf('auth.html') < 0) {
@@ -82,15 +92,15 @@ export class AuthService {
 			data: user,
 		};
 
-		const operationServerPromise = this.setupAPIService.doRequest(operationServerRequest);
-		const reportsServerPromise = this.setupAPIService.doRequest(reportsServerRequest);
+		const operationServerPromise = this.setupAPIService.doRequest(operationServerRequest, true);
+		const reportsServerPromise = this.setupAPIService.doRequest(reportsServerRequest, true);
 
 		operationServerPromise.then((data: any) => {
-			sessionStorage.setItem(AuthService.OS_TOKEN, data.token);    
+			sessionStorage.setItem(AuthService.OS_TOKEN, data.token);
 		});
 
 		reportsServerPromise.then((data: any) => {
-			sessionStorage.setItem(AuthService.RS_TOKEN, data.token); 
+			sessionStorage.setItem(AuthService.RS_TOKEN, data.token);
 		});
 
 		return this.$q.all([
@@ -100,15 +110,23 @@ export class AuthService {
 
 	}
 
-	public registerToOperationServer(user?: any) {
+	public register(user?: any) {
 
-		const req = {
+		const operationServerRequest = {
 			method: 'POST',
 			url: this.xpdAccessService.getOperationServerURL() + '/auth/register',
 			data: user,
 		};
 
-		return this.setupAPIService.doRequest(req);
+		const operationServerPromise = this.setupAPIService.doRequest(operationServerRequest, true);
+
+		operationServerPromise.then((data: any) => {
+			sessionStorage.setItem(AuthService.OS_TOKEN, data.token);
+		});
+
+		return this.$q.all([
+			operationServerPromise,
+		]);
 
 	}
 

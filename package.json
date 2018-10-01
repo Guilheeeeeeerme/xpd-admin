@@ -1,5 +1,5 @@
 {
-  "name": "xpd-admin",
+  "name": "xpd_admin",
   "version": "1.0.0",
   "license": "ISC",
   "private": true,
@@ -8,7 +8,7 @@
     "start": "webpack-dev-server --watch --https --cert=./keys/XPD-Server.crt --key=./keys/XPD-Server.key",
     "lint": "tslint src/**/*.ts --fix",
     "build": "webpack --display-error-detail",
-    "electron-packager": "electron-packager dist/ xpd-admin --platform win32 --arch x64 --out build --overwrite --icon dist/favicon.ico",
+    "electron-packager": "electron-packager dist/ xpd_admin --platform win32 --arch x64 --out build --overwrite --icon dist/favicon.ico",
     "electron-winstaller": "node installer.js",
     "pack": "npm run build && npm run electron-packager && npm run electron-winstaller",
     "electron": "npm run build && electron dist"
@@ -27,6 +27,7 @@
     "highcharts": "6.1.1",
     "highcharts-multicolor-series": "2.2.1",
     "jquery": "3.3.1",
+    "md5": "^2.2.1",
     "progress": "2.0.0",
     "socket.io-client": "1.7.3",
     "tableexport": "4.0.11",

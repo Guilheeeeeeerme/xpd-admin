@@ -1,13 +1,11 @@
 import * as angular from 'angular';
 
-import { AdminUserSetupAPIService } from './admin-user-setupapi.service';
 import { AlarmSetupAPIService } from './alarm-setupapi.service';
 import { AuthService } from './auth.service';
 import { CategorySetupAPIService } from './category-setupapi.service';
 import { EventLogSetupAPIService } from './eventlog-setupapi.service';
 import { FailureSetupAPIService } from './failure-setupapi.service';
 import { LessonLearnedSetupAPIService } from './lessonlearned-setupapi.service';
-import { MasterUserSetupAPIService } from './master-user-setupapi.service';
 import { OperationSetupAPIService } from './operation-setupapi.service';
 import { PhotoApiDirective } from './photo-setupapi.directive';
 import { PhotoAPIService } from './photo-setupapi.service';
@@ -32,11 +30,9 @@ XPDSetupAPIModule.service('readingSetupAPIService', ReadingSetupAPIService);
 XPDSetupAPIModule.service('photoAPIService', PhotoAPIService);
 XPDSetupAPIModule.directive('xpdPhotoApiDirective', PhotoApiDirective.Factory());
 XPDSetupAPIModule.service('operationSetupAPIService', OperationSetupAPIService);
-XPDSetupAPIModule.service('masterUserSetupAPIService', MasterUserSetupAPIService);
 XPDSetupAPIModule.service('lessonLearnedSetupAPIService', LessonLearnedSetupAPIService);
 XPDSetupAPIModule.service('failureSetupAPIService', FailureSetupAPIService);
 XPDSetupAPIModule.service('eventlogSetupAPIService', EventLogSetupAPIService);
 XPDSetupAPIModule.service('categorySetupAPIService', CategorySetupAPIService);
 XPDSetupAPIModule.service('alarmSetupAPIService', AlarmSetupAPIService);
-XPDSetupAPIModule.service('adminUserSetupAPIService', AdminUserSetupAPIService);
 XPDSetupAPIModule.service('authService', AuthService);

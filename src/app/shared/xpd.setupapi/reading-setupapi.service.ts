@@ -24,7 +24,7 @@ export class ReadingSetupAPIService {
 			},
 		};
 
-		return this.setupAPIService.doRequest(req);
+		return this.setupAPIService.doRequest(req, false);
 	}
 
 	public getTick(tick) {
@@ -36,7 +36,7 @@ export class ReadingSetupAPIService {
 			},
 		};
 
-		return this.setupAPIService.doRequest(req);
+		return this.setupAPIService.doRequest(req, false);
 	}
 
 	public getAllReadingByStartEndTime(from, to) {
@@ -49,7 +49,7 @@ export class ReadingSetupAPIService {
 			},
 		};
 
-		return this.setupAPIService.doRequest(req);
+		return this.setupAPIService.doRequest(req, false);
 	}
 }
 

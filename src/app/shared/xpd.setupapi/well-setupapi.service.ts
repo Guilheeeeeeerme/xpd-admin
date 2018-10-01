@@ -30,7 +30,7 @@ export class WellSetupAPIService {
 			data: object,
 		};
 
-		return this.setupAPIService.doRequest(req);
+		return this.setupAPIService.doRequest(req, true);
 
 	}
 
@@ -45,7 +45,7 @@ export class WellSetupAPIService {
 			data: object,
 		};
 
-		return this.setupAPIService.doRequest(req);
+		return this.setupAPIService.doRequest(req, true);
 	}
 
 	public updateObject(object) {
@@ -59,7 +59,7 @@ export class WellSetupAPIService {
 			data: object,
 		};
 
-		return this.setupAPIService.doRequest(req);
+		return this.setupAPIService.doRequest(req, true);
 	}
 
 	public getList() {
@@ -69,7 +69,7 @@ export class WellSetupAPIService {
 			url: this.BASE_URL + '/list',
 		};
 
-		return this.setupAPIService.doRequest(req);
+		return this.setupAPIService.doRequest(req, false);
 	}
 
 	public getObjectById(id) {
@@ -79,7 +79,7 @@ export class WellSetupAPIService {
 			url: this.BASE_URL + '/' + id,
 		};
 
-		return this.setupAPIService.doRequest(req);
+		return this.setupAPIService.doRequest(req, false);
 	}
 
 }

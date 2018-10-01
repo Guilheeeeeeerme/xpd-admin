@@ -6,12 +6,12 @@ function buildFor (arch) {
     console.log("Building ", arch);
 
     const options = {
-        appDirectory: path.join(__dirname, 'build', 'xpd-admin-win32-' + arch),
-        outputDirectory: path.join(__dirname, 'bin', 'xpd-admin-win32-' + arch),
+        appDirectory: path.join(__dirname, 'build', 'xpd_admin-win32-' + arch),
+        outputDirectory: path.join(__dirname, 'bin', 'xpd_admin-win32-' + arch),
         title: 'XPD Admin',
         description: 'System Setup and Admin Control',
         authors: 'RZX Tecnologia',
-        setupExe: 'xpd-admin.exe',
+        setupExe: 'xpd_admin.exe',
         iconUrl: path.join(__dirname, 'dist', 'favicon.ico'),
         setupIcon: path.join(__dirname, 'dist', 'favicon.ico'),
     };

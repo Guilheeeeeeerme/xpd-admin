@@ -34,7 +34,7 @@ export class ScheduleSetupAPIService {
 			url: this.FUNCTION_URL + '/' + id,
 		};
 
-		return this.setupAPIService.doRequest(req);
+		return this.setupAPIService.doRequest(req, false);
 
 	}
 
@@ -49,7 +49,7 @@ export class ScheduleSetupAPIService {
 			data: object,
 		};
 
-		return this.setupAPIService.doRequest(req);
+		return this.setupAPIService.doRequest(req, true);
 	}
 
 	public updateFunction(object) {
@@ -63,7 +63,7 @@ export class ScheduleSetupAPIService {
 			data: object,
 		};
 
-		return this.setupAPIService.doRequest(req);
+		return this.setupAPIService.doRequest(req, true);
 	}
 
 	public removeFunction(object) {
@@ -77,7 +77,7 @@ export class ScheduleSetupAPIService {
 			data: { id: object.id },
 		};
 
-		return this.setupAPIService.doRequest(req);
+		return this.setupAPIService.doRequest(req, true);
 	}
 
 	/**
@@ -95,7 +95,7 @@ export class ScheduleSetupAPIService {
 			data: object,
 		};
 
-		return this.setupAPIService.doRequest(req);
+		return this.setupAPIService.doRequest(req, true);
 	}
 
 	public getMemberById(id) {
@@ -105,7 +105,7 @@ export class ScheduleSetupAPIService {
 			url: this.MEMBER_URL + '/' + id,
 		};
 
-		return this.setupAPIService.doRequest(req);
+		return this.setupAPIService.doRequest(req, false);
 
 	}
 
@@ -120,7 +120,7 @@ export class ScheduleSetupAPIService {
 			req.url += '/exclude-member/' + id;
 		}
 
-		return this.setupAPIService.doRequest(req);
+		return this.setupAPIService.doRequest(req, false);
 
 	}
 
@@ -135,7 +135,7 @@ export class ScheduleSetupAPIService {
 			data: object,
 		};
 
-		return this.setupAPIService.doRequest(req);
+		return this.setupAPIService.doRequest(req, true);
 	}
 
 	public removeMember(object) {
@@ -149,7 +149,7 @@ export class ScheduleSetupAPIService {
 			data: { id: object.id },
 		};
 
-		return this.setupAPIService.doRequest(req);
+		return this.setupAPIService.doRequest(req, true);
 	}
 
 	public getMemberScore() {
@@ -162,7 +162,7 @@ export class ScheduleSetupAPIService {
 			},
 		};
 
-		return this.setupAPIService.doRequest(req);
+		return this.setupAPIService.doRequest(req, false);
 	}
 
 	/**
@@ -176,7 +176,7 @@ export class ScheduleSetupAPIService {
 			url: this.SCHEDULE_URL + '/' + id,
 		};
 
-		return this.setupAPIService.doRequest(req);
+		return this.setupAPIService.doRequest(req, false);
 	}
 
 	public removeSchedule(object) {
@@ -190,7 +190,7 @@ export class ScheduleSetupAPIService {
 			data: { id: object.id },
 		};
 
-		return this.setupAPIService.doRequest(req);
+		return this.setupAPIService.doRequest(req, true);
 	}
 
 	public insertSchedule(object) {
@@ -204,7 +204,7 @@ export class ScheduleSetupAPIService {
 			data: object,
 		};
 
-		return this.setupAPIService.doRequest(req);
+		return this.setupAPIService.doRequest(req, true);
 	}
 
 	public updateSchedule(object) {
@@ -218,7 +218,7 @@ export class ScheduleSetupAPIService {
 			data: object,
 		};
 
-		return this.setupAPIService.doRequest(req);
+		return this.setupAPIService.doRequest(req, true);
 	}
 
 	/**
@@ -239,7 +239,7 @@ export class ScheduleSetupAPIService {
 			url,
 		};
 
-		return this.setupAPIService.doRequest(req);
+		return this.setupAPIService.doRequest(req, false);
 	}
 
 	/**
@@ -260,7 +260,7 @@ export class ScheduleSetupAPIService {
 			url,
 		};
 
-		return this.setupAPIService.doRequest(req);
+		return this.setupAPIService.doRequest(req, false);
 	}
 
 	/**
@@ -281,7 +281,7 @@ export class ScheduleSetupAPIService {
 			data: schedule,
 		};
 
-		return this.setupAPIService.doRequest(req);
+		return this.setupAPIService.doRequest(req, false);
 
 	}
 

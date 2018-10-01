@@ -26,13 +26,7 @@ export class AccessFactoryLoginController extends AccessFactoryController {
 			xpdAccessService);
 
 		if (AuthService.isLogged()) {
-			if (sessionStorage.getItem('redirectTo')) {
-				const href = sessionStorage.getItem('redirectTo');
-				sessionStorage.removeItem('redirectTo');
-				location.href = href;
-			} else {
-				AuthService.redirectToPath('/admin.html#', false);
-			}
+			AuthService.skipAuth();
 		}
 
 	}

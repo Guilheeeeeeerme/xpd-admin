@@ -22,7 +22,7 @@ export class OperationSetupAPIService {
 			url: this.BASE_URL + '/' + operationId + '/alarms',
 		};
 
-		return this.setupAPIService.doRequest(req);
+		return this.setupAPIService.doRequest(req, false);
 	}
 
 	public getOperationById(id) {
@@ -32,7 +32,7 @@ export class OperationSetupAPIService {
 			url: this.BASE_URL + '/' + id,
 		};
 
-		return this.setupAPIService.doRequest(req);
+		return this.setupAPIService.doRequest(req, false);
 	}
 
 	public getList() {
@@ -42,7 +42,7 @@ export class OperationSetupAPIService {
 			url: this.BASE_URL + '/list',
 		};
 
-		return this.setupAPIService.doRequest(req);
+		return this.setupAPIService.doRequest(req, false);
 	}
 
 	public insertObject(object) {
@@ -56,7 +56,7 @@ export class OperationSetupAPIService {
 			data: object,
 		};
 
-		return this.setupAPIService.doRequest(req);
+		return this.setupAPIService.doRequest(req, true);
 
 	}
 
@@ -71,7 +71,7 @@ export class OperationSetupAPIService {
 			data: object,
 		};
 
-		return this.setupAPIService.doRequest(req);
+		return this.setupAPIService.doRequest(req, true);
 	}
 
 	public getDefaultFields(type) {
@@ -83,7 +83,7 @@ export class OperationSetupAPIService {
 			},
 		};
 
-		return this.setupAPIService.doRequest(req);
+		return this.setupAPIService.doRequest(req, false);
 	}
 
 	public getOperationQueue(wellId) {
@@ -93,7 +93,7 @@ export class OperationSetupAPIService {
 			url: this.xpdAccessService.getSetupAPIURL() + 'operation-resources/operations-queue/' + wellId,
 		};
 
-		return this.setupAPIService.doRequest(req);
+		return this.setupAPIService.doRequest(req, false);
 	}
 }
 
