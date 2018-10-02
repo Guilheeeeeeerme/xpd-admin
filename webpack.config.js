@@ -33,7 +33,7 @@ const copyFiles = [
 
 	new CopyWebpackPlugin(
 		[{
-			from: './src/main.js',
+			from: './src/electron.js',
 			to: './',
 		}],
 		{
@@ -66,6 +66,7 @@ const bundleModules = [
 	'dmec-log',
 	'admin',
 	'setup',
+	'auth',
 	'reports',
 	'well-view-only',
 	'operation-view-only'].map((chunk) => {
@@ -91,6 +92,7 @@ module.exports = {
 		'xpd-timers.worker': './src/workers/xpd-timers.worker.ts',
 
 		'setup': './src/app/setup/setup.ts',
+		'auth': './src/app/auth/auth.ts',
 		'admin': './src/app/admin/admin.ts',
 		'dmec-log': './src/app/dmec-log/dmec-log.ts',
 		'reports': './src/app/reports/reports.ts',

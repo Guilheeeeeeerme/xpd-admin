@@ -5,16 +5,22 @@ import { IWindowService } from 'angular';
 import { IModalService } from 'angular-ui-bootstrap';
 import template from '../xpd.access/accessfactory.template.html';
 import { DialogService } from '../xpd.dialog/xpd.dialog.factory';
+import { AuthService } from '../xpd.setupapi/auth.service';
+import { XPDAccessService } from './access.service';
+import { AccessFactoryService } from './accessfactory.service';
 
 export class AccessFactoryDirective implements ng.IDirective {
 
-	public static $inject: string[] = ['$uibModal', '$window', 'dialogService'];
+	public static $inject: string[] = ['$uibModal', '$window', 'dialogService', 'authService', 'xpdAccessService'];
 
 	public static Factory(): ng.IDirectiveFactory {
 		return (
 			$uibModal: IModalService,
 			$window: IWindowService,
-			dialogService: DialogService) => new AccessFactoryDirective($uibModal, $window, dialogService);
+			dialogService: DialogService,
+			authService: AuthService,
+			accessFactoryService: AccessFactoryService,
+			xpdAccessService: XPDAccessService) => new AccessFactoryDirective($uibModal, $window, dialogService, authService, accessFactoryService, xpdAccessService);
 	}
 
 	public restrict = 'E';
@@ -27,7 +33,10 @@ export class AccessFactoryDirective implements ng.IDirective {
 	constructor(
 		private $uibModal: IModalService,
 		private $window: ng.IWindowService,
-		private dialogService: DialogService) {
+		private dialogService: DialogService,
+		private authService: AuthService,
+		private accessFactoryService: AccessFactoryService,
+		private xpdAccessService: XPDAccessService) {
 	}
 
 	public link: ng.IDirectiveLinkFn = (
@@ -36,43 +45,12 @@ export class AccessFactoryDirective implements ng.IDirective {
 		attrs: ng.IAttributes,
 		ctrl: any,
 	) => {
-		const vm = this;
 
-		let modalInstance;
+		const actionButtonEditAccessData = () => {
+			this.accessFactoryService.actionButtonEditAccessData();
+		};
 
 		scope.actionButtonEditAccessData = actionButtonEditAccessData;
-		scope.actionButtonSave = actionButtonSave;
-		scope.actionButtonCancel = actionButtonCancel;
-
-		function actionButtonSave() {
-			vm.dialogService.showConfirmDialog('This action will reload your aplication screen. Proceed?', actionProceed);
-		}
-
-		function actionProceed() {
-			localStorage.setItem('xpd.admin.XPDAccessData', JSON.stringify(scope.dados.XPDAccessData));
-			vm.$window.location.reload();
-		}
-
-		function actionButtonCancel() {
-			modalInstance.close();
-			modalInstance = null;
-		}
-
-		function actionButtonEditAccessData() {
-			scope.dados = {
-				XPDAccessData: JSON.parse(localStorage.getItem('xpd.admin.XPDAccessData')),
-			};
-
-			if (!modalInstance) {
-				modalInstance = vm.$uibModal.open({
-					animation: true,
-					size: 'sm',
-					backdrop: false,
-					templateUrl: 'accessfactory.template.html',
-					scope,
-				});
-			}
-		}
 	}
 
 }

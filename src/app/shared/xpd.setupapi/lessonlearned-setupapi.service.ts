@@ -14,7 +14,7 @@ export class LessonLearnedSetupAPIService {
 	public BASE_URL: string;
 
 	constructor(private xpdAccessService: XPDAccessService, private setupAPIService: SetupAPIService) {
-		this.BASE_URL = xpdAccessService.getSetupURL() + 'setup/lessonlearned';
+		this.BASE_URL = xpdAccessService.getSetupAPIURL() + 'setup/lessonlearned';
 	}
 
 	public getList() {
@@ -26,7 +26,7 @@ export class LessonLearnedSetupAPIService {
 			url,
 		};
 
-		return this.setupAPIService.doRequest(req);
+		return this.setupAPIService.doRequest(req, false);
 	}
 
 	public updateObject(object) {
@@ -40,7 +40,7 @@ export class LessonLearnedSetupAPIService {
 			data: object,
 		};
 
-		return this.setupAPIService.doRequest(req);
+		return this.setupAPIService.doRequest(req, true);
 	}
 
 	public insertObject(object) {
@@ -54,7 +54,7 @@ export class LessonLearnedSetupAPIService {
 			data: object,
 		};
 
-		return this.setupAPIService.doRequest(req);
+		return this.setupAPIService.doRequest(req, true);
 
 	}
 
@@ -69,24 +69,8 @@ export class LessonLearnedSetupAPIService {
 			data: object,
 		};
 
-		return this.setupAPIService.doRequest(req);
+		return this.setupAPIService.doRequest(req, true);
 	}
-
-	// function listByOperation(id, successCallback, errorCallback) {
-
-	// 	var url = BASE_URL + '/list-by-operation/' + id;
-
-	// 	$http.get(url)
-	// 		.then(
-	// 			function (response) {
-	// 				successCallback && successCallback(response.data.data);
-	// 			},
-	// 			function (error) {
-	// 				setupAPIService.generateToast(error.data, true);
-	// 				errorCallback && errorCallback(error);
-	// 			}
-	// 		);
-	// }
 
 	public getListCategory() {
 		// lessonlearned_category
@@ -96,7 +80,7 @@ export class LessonLearnedSetupAPIService {
 			url: this.BASE_URL + '_category/list',
 		};
 
-		return this.setupAPIService.doRequest(req);
+		return this.setupAPIService.doRequest(req, false);
 	}
 
 	public removeCategory(object) {
@@ -111,7 +95,7 @@ export class LessonLearnedSetupAPIService {
 			data: object,
 		};
 
-		return this.setupAPIService.doRequest(req);
+		return this.setupAPIService.doRequest(req, true);
 
 	}
 
@@ -127,7 +111,7 @@ export class LessonLearnedSetupAPIService {
 			data: object,
 		};
 
-		return this.setupAPIService.doRequest(req);
+		return this.setupAPIService.doRequest(req, true);
 
 	}
 
@@ -143,7 +127,7 @@ export class LessonLearnedSetupAPIService {
 			data: object,
 		};
 
-		return this.setupAPIService.doRequest(req);
+		return this.setupAPIService.doRequest(req, true);
 
 	}
 }

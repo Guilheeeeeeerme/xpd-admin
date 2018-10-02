@@ -1,15 +1,11 @@
 import { IQService } from 'angular';
 import 'angular-spinner';
 import { IToastrService } from 'angular-toastr';
-
-// (function() {
-// 	'use strict',
-
-// 		.service('setupAPIService', setupAPIService)});
+import { OperationDataService } from '../xpd.operation-data/operation-data.service';
 
 export class SetupAPIService {
 
-	public static $inject: string[] = ['$http', '$q', 'toastr', 'usSpinnerService'];
+	public static $inject: string[] = ['$http', '$q', 'toastr', 'usSpinnerService', 'operationDataService'];
 	private runningRequests: number = 0;
 	private hasRunningRequests: boolean = false;
 
@@ -17,14 +13,19 @@ export class SetupAPIService {
 		private $http: ng.IHttpService,
 		private $q: IQService,
 		private toastr: IToastrService,
-		private usSpinnerService: any) {
+		private usSpinnerService: any,
+		private operationDataService: OperationDataService) {
 
 	}
 
-	public doRequest(req) {
+	public doRequest(req, log: boolean) {
 		const self = this;
 
 		const request = this.$http(req);
+
+		if (log) {
+			this.operationDataService.log(req.method + ' ' + req.url, req);
+		}
 
 		if (req && req.url && this.hasSpinner(req.url)) {
 

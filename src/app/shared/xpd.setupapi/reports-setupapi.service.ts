@@ -14,7 +14,7 @@ export class ReportsSetupAPIService {
 	public BASE_URL: string;
 
 	constructor(private xpdAccessService: XPDAccessService, private setupAPIService: SetupAPIService) {
-		this.BASE_URL = xpdAccessService.getSetupURL() + 'setup/reports';
+		this.BASE_URL = xpdAccessService.getSetupAPIURL() + 'setup/reports';
 	}
 
 	public getVreList(fromDate, toDate) {
@@ -29,7 +29,7 @@ export class ReportsSetupAPIService {
 			url,
 		};
 
-		return this.setupAPIService.doRequest(req);
+		return this.setupAPIService.doRequest(req, false);
 	}
 
 	public getVreScoreList(fromDate, toDate) {
@@ -43,7 +43,7 @@ export class ReportsSetupAPIService {
 			url,
 		};
 
-		return this.setupAPIService.doRequest(req);
+		return this.setupAPIService.doRequest(req, false);
 	}
 
 	public getPlannedGraphicDataOperation(operationId) {
@@ -53,7 +53,7 @@ export class ReportsSetupAPIService {
 			url: this.BASE_URL + '/planned-operation-graphic-data?'
 				+ 'operation-id=' + operationId,
 		};
-		return this.setupAPIService.doRequest(req);
+		return this.setupAPIService.doRequest(req, false);
 	}
 
 	public getRealizedGraphicDataOperation(operationId) {
@@ -64,7 +64,7 @@ export class ReportsSetupAPIService {
 				'operation-id=' + operationId,
 		};
 
-		return this.setupAPIService.doRequest(req);
+		return this.setupAPIService.doRequest(req, false);
 	}
 
 	public getHistogramData(fromDate, toDate) {
@@ -78,7 +78,7 @@ export class ReportsSetupAPIService {
 			url,
 		};
 
-		return this.setupAPIService.doRequest(req);
+		return this.setupAPIService.doRequest(req, false);
 	}
 
 	public getNeedleDataChart(fromDate, toDate) {
@@ -92,7 +92,7 @@ export class ReportsSetupAPIService {
 			url,
 		};
 
-		return this.setupAPIService.doRequest(req);
+		return this.setupAPIService.doRequest(req, false);
 	}
 
 	public getFailuresNptDataChart(fromDate, toDate) {
@@ -106,7 +106,7 @@ export class ReportsSetupAPIService {
 			url,
 		};
 
-		return this.setupAPIService.doRequest(req);
+		return this.setupAPIService.doRequest(req, false);
 	}
 
 	public getLessonsLearnedDataChart(fromDate, toDate) {
@@ -120,7 +120,7 @@ export class ReportsSetupAPIService {
 			url,
 		};
 
-		return this.setupAPIService.doRequest(req);
+		return this.setupAPIService.doRequest(req, false);
 	}
 
 	public getOperationQueue(wellId) {
@@ -131,7 +131,7 @@ export class ReportsSetupAPIService {
 			url: this.xpdAccessService.getReportsAPIURL() + 'planning/well/' + wellId,
 		};
 
-		return this.setupAPIService.doRequest(req);
+		return this.setupAPIService.doRequest(req, false);
 
 	}
 
@@ -143,7 +143,7 @@ export class ReportsSetupAPIService {
 			url: this.xpdAccessService.getReportsAPIURL() + 'planning/well/' + wellId + '/operation-estimative/' + operationId,
 		};
 
-		return this.setupAPIService.doRequest(req);
+		return this.setupAPIService.doRequest(req, false);
 
 	}
 
@@ -155,7 +155,7 @@ export class ReportsSetupAPIService {
 			url: this.xpdAccessService.getReportsAPIURL() + 'planning/well/' + wellId + '/operation/' + operationId,
 		};
 
-		return this.setupAPIService.doRequest(req);
+		return this.setupAPIService.doRequest(req, false);
 
 	}
 
@@ -167,7 +167,7 @@ export class ReportsSetupAPIService {
 			url: this.xpdAccessService.getReportsAPIURL() + 'executed/operation/' + operationId,
 		};
 
-		return this.setupAPIService.doRequest(req);
+		return this.setupAPIService.doRequest(req, false);
 
 	}
 
@@ -179,7 +179,7 @@ export class ReportsSetupAPIService {
 			url: this.xpdAccessService.getReportsAPIURL() + 'executed/suboperation/' + suboperationId,
 		};
 
-		return this.setupAPIService.doRequest(req);
+		return this.setupAPIService.doRequest(req, false);
 
 	}
 

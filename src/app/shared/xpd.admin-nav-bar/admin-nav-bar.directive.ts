@@ -11,6 +11,7 @@
 import { DialogService } from '../xpd.dialog/xpd.dialog.factory';
 import { MenuConfirmationService } from '../xpd.menu-confirmation/menu-confirmation.factory';
 import { OperationDataService } from '../xpd.operation-data/operation-data.service';
+import { AuthService } from '../xpd.setupapi/auth.service';
 import './admin-nav-bar.style.scss';
 import template from './admin-nav-bar.template.html';
 
@@ -68,23 +69,7 @@ export class XPDAdminNavBarDirective implements ng.IDirective {
 		};
 
 		const redirectToPath = (path, newTab) => {
-
-			if (this.$location.port()) {
-				path = 'https://' + this.$location.host() + ':' + this.$location.port() + path;
-			} else {
-				for (const page of ['setup.html', 'admin.html', 'dmec-log.html', 'reports.html']) {
-					if (window.location.href.indexOf(page) >= 0) {
-						path = window.location.href.slice(0, (window.location.href.indexOf(page) - 1) ) + path;
-						break;
-					}
-				}
-			}
-
-			if (newTab === true) {
-				window.open(path);
-			} else {
-				window.location.href = path;
-			}
+			AuthService.redirectToPath(path, newTab);
 
 		};
 
@@ -117,41 +102,3 @@ export class XPDAdminNavBarDirective implements ng.IDirective {
 
 	}
 }
-
-// this.$location.path( path );
-
-// console.log(path, newTab);
-
-// if (self.$location.port()) {
-
-// 	if (path === 'dmeclog.html#/') {
-// 		window.open('https://' + self.$location.host() + ':' + self.$location.port() + '/admin/dmeclog.html#');
-// 	} else if (path === 'reports.html#/') {
-// 		window.location.href = 'https://' + self.$location.host() + ':' + self.$location.port() + '/' + path;
-// 	} else {
-// 		if (!window.location.href.endsWith(path)) {
-// 			if (newTab) {
-// 				window.open('admin.html#' + path);
-// 			} else {
-// 				self.$location.url(path);
-// 			}
-// 		}
-// 	}
-
-// } else {
-
-// 	const url = window.location.href.split('pages')[0];
-
-// 	if (path === 'dmeclog.html#/') {
-// 		window.open(url + '/pages/' + path);
-// 	} else if (path === 'reports.html#/') {
-// 		window.location.href = url + '/pages/' + path;
-// 	} else {
-// 		if (!window.location.href.endsWith(path)) {
-// 			self.$location.url(path);
-// 		}
-// 	}
-
-// }
-
-// })();

@@ -12,7 +12,7 @@ export class OperationSetupAPIService {
 	public BASE_URL: string;
 
 	constructor(private xpdAccessService: XPDAccessService, private setupAPIService: SetupAPIService) {
-		this.BASE_URL = xpdAccessService.getSetupURL() + 'setup/operation';
+		this.BASE_URL = xpdAccessService.getSetupAPIURL() + 'setup/operation';
 	}
 
 	public getOperationAlarms(operationId) {
@@ -22,7 +22,7 @@ export class OperationSetupAPIService {
 			url: this.BASE_URL + '/' + operationId + '/alarms',
 		};
 
-		return this.setupAPIService.doRequest(req);
+		return this.setupAPIService.doRequest(req, false);
 	}
 
 	public getOperationById(id) {
@@ -32,7 +32,7 @@ export class OperationSetupAPIService {
 			url: this.BASE_URL + '/' + id,
 		};
 
-		return this.setupAPIService.doRequest(req);
+		return this.setupAPIService.doRequest(req, false);
 	}
 
 	public getList() {
@@ -42,7 +42,7 @@ export class OperationSetupAPIService {
 			url: this.BASE_URL + '/list',
 		};
 
-		return this.setupAPIService.doRequest(req);
+		return this.setupAPIService.doRequest(req, false);
 	}
 
 	public insertObject(object) {
@@ -56,7 +56,7 @@ export class OperationSetupAPIService {
 			data: object,
 		};
 
-		return this.setupAPIService.doRequest(req);
+		return this.setupAPIService.doRequest(req, true);
 
 	}
 
@@ -71,7 +71,7 @@ export class OperationSetupAPIService {
 			data: object,
 		};
 
-		return this.setupAPIService.doRequest(req);
+		return this.setupAPIService.doRequest(req, true);
 	}
 
 	public getDefaultFields(type) {
@@ -83,31 +83,17 @@ export class OperationSetupAPIService {
 			},
 		};
 
-		return this.setupAPIService.doRequest(req);
+		return this.setupAPIService.doRequest(req, false);
 	}
-
-	// function getOperationReadings(operationId, successCallback, errorCallback) {
-
-	// 	$http.get(BASE_URL + '/' + operationId + '/readings')
-	// 		.then(
-	// 			function (response) {
-	// 				successCallback && successCallback(response.data.data);
-	// 			},
-	// 			function (error) {
-	// 				setupAPIService.generateToast(error.data, true);
-	// 				errorCallback && errorCallback(error);
-	// 			}
-	// 		);
-	// }
 
 	public getOperationQueue(wellId) {
 
 		const req = {
 			method: 'GET',
-			url: this.xpdAccessService.getSetupURL() + 'operation-resources/operations-queue/' + wellId,
+			url: this.xpdAccessService.getSetupAPIURL() + 'operation-resources/operations-queue/' + wellId,
 		};
 
-		return this.setupAPIService.doRequest(req);
+		return this.setupAPIService.doRequest(req, false);
 	}
 }
 

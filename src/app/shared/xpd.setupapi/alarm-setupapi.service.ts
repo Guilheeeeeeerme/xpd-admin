@@ -14,7 +14,7 @@ export class AlarmSetupAPIService {
 	public BASE_URL: string;
 
 	constructor(private xpdAccessService: XPDAccessService, private setupAPIService: SetupAPIService) {
-		this.BASE_URL = xpdAccessService.getSetupURL() + 'setup/alarm';
+		this.BASE_URL = xpdAccessService.getSetupAPIURL() + 'setup/alarm';
 	}
 
 	public insertAlarm(alarm) {
@@ -28,7 +28,7 @@ export class AlarmSetupAPIService {
 			data: alarm,
 		};
 
-		return this.setupAPIService.doRequest(req);
+		return this.setupAPIService.doRequest(req, true);
 	}
 
 	public removeAlarm(alarm) {
@@ -41,7 +41,7 @@ export class AlarmSetupAPIService {
 			},
 		};
 
-		return this.setupAPIService.doRequest(req);
+		return this.setupAPIService.doRequest(req, true);
 	}
 
 	public updateAlarm(alarm) {
@@ -55,7 +55,7 @@ export class AlarmSetupAPIService {
 			data: alarm,
 		};
 
-		return this.setupAPIService.doRequest(req);
+		return this.setupAPIService.doRequest(req, true);
 	}
 
 	public updateArchive(id, archived) {
@@ -64,7 +64,7 @@ export class AlarmSetupAPIService {
 			url: this.BASE_URL + '/' + id + '/archive/' + archived,
 		};
 
-		return this.setupAPIService.doRequest(req);
+		return this.setupAPIService.doRequest(req, true);
 	}
 
 	public getByOperationType(type, butNot) {
@@ -74,7 +74,7 @@ export class AlarmSetupAPIService {
 			url: this.BASE_URL + '/of-operations/' + type + '/but-not-id/' + (butNot || 0),
 		};
 
-		return this.setupAPIService.doRequest(req);
+		return this.setupAPIService.doRequest(req, false);
 	}
 }
 

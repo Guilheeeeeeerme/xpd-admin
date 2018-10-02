@@ -12,7 +12,7 @@ export class ReadingSetupAPIService {
 	public BASE_URL: string;
 
 	constructor(private xpdAccessService: XPDAccessService, private setupAPIService: SetupAPIService) {
-		this.BASE_URL = xpdAccessService.getSetupURL() + 'setup/reading';
+		this.BASE_URL = xpdAccessService.getSetupAPIURL() + 'setup/reading';
 	}
 
 	public getAllReadingSince(from) {
@@ -24,7 +24,7 @@ export class ReadingSetupAPIService {
 			},
 		};
 
-		return this.setupAPIService.doRequest(req);
+		return this.setupAPIService.doRequest(req, false);
 	}
 
 	public getTick(tick) {
@@ -36,7 +36,7 @@ export class ReadingSetupAPIService {
 			},
 		};
 
-		return this.setupAPIService.doRequest(req);
+		return this.setupAPIService.doRequest(req, false);
 	}
 
 	public getAllReadingByStartEndTime(from, to) {
@@ -49,7 +49,7 @@ export class ReadingSetupAPIService {
 			},
 		};
 
-		return this.setupAPIService.doRequest(req);
+		return this.setupAPIService.doRequest(req, false);
 	}
 }
 

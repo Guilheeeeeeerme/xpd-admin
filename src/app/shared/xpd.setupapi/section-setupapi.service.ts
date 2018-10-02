@@ -13,7 +13,7 @@ export class SectionSetupAPIService {
 	public BASE_URL: string;
 
 	constructor(private xpdAccessService: XPDAccessService, private setupAPIService: SetupAPIService) {
-		this.BASE_URL = xpdAccessService.getSetupURL() + 'setup/section';
+		this.BASE_URL = xpdAccessService.getSetupAPIURL() + 'setup/section';
 	}
 
 	public getObjectById(id) {
@@ -23,7 +23,7 @@ export class SectionSetupAPIService {
 			url: this.BASE_URL + '/' + id,
 		};
 
-		return this.setupAPIService.doRequest(req);
+		return this.setupAPIService.doRequest(req, false);
 	}
 
 	public insertObject(object) {
@@ -37,7 +37,7 @@ export class SectionSetupAPIService {
 			data: object,
 		};
 
-		return this.setupAPIService.doRequest(req);
+		return this.setupAPIService.doRequest(req, true);
 
 	}
 
@@ -52,7 +52,7 @@ export class SectionSetupAPIService {
 			data: object,
 		};
 
-		return this.setupAPIService.doRequest(req);
+		return this.setupAPIService.doRequest(req, true);
 	}
 
 	public getListOfSectionsByWell(wellId) {
@@ -64,7 +64,7 @@ export class SectionSetupAPIService {
 			url,
 		};
 
-		return this.setupAPIService.doRequest(req);
+		return this.setupAPIService.doRequest(req, false);
 
 	}
 
@@ -77,7 +77,7 @@ export class SectionSetupAPIService {
 			url,
 		};
 
-		return this.setupAPIService.doRequest(req);
+		return this.setupAPIService.doRequest(req, false);
 	}
 
 }

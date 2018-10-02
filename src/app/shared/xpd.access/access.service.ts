@@ -14,7 +14,10 @@ export class XPDAccessService {
 	private server: any;
 
 	constructor() {
+		this.loadAccessData();
+	}
 
+	public loadAccessData() {
 		let XPDAccessData;
 
 		// 	tem algo no local storage?
@@ -54,8 +57,19 @@ export class XPDAccessService {
 		this.server = XPDAccessData.server;
 	}
 
+	public getRawReportsAPIURL() {
+		const url = 'https://' + this.server.xpdDefaultReportsAPIAccessIp + ':' + this.server.xpdDefaultReportsAPIPort;
+		// console.log(url);
+		return url;
+	}
+
+	public getRawSetupAPIURL() {
+		const url = 'https://' + this.server.xpdDefaultAccessIp + ':' + this.server.xpdDefaultSetupApiPort;
+		return url;
+	}
+
 	public getReportsAPIURL() {
-		const url = 'https://' + this.server.xpdDefaultReportsAPIAccessIp + ':' + this.server.xpdDefaultReportsAPIPort + '/reports-api/';
+		const url = this.getRawReportsAPIURL() + '/reports-api/';
 		// console.log(url);
 		return url;
 	}
@@ -66,8 +80,8 @@ export class XPDAccessService {
 		return url;
 	}
 
-	public getSetupURL() {
-		const url = 'https://' + this.server.xpdDefaultAccessIp + ':' + this.server.xpdDefaultSetupApiPort + '/xpd-setup-api/';
+	public getSetupAPIURL() {
+		const url = this.getRawSetupAPIURL() + '/xpd-setup-api/';
 		// console.log(url);
 		return url;
 	}

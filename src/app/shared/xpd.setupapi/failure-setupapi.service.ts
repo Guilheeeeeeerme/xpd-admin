@@ -14,7 +14,7 @@ export class FailureSetupAPIService {
 	public BASE_URL: string;
 
 	constructor(private xpdAccessService: XPDAccessService, private setupAPIService: SetupAPIService) {
-		this.BASE_URL = xpdAccessService.getSetupURL() + 'setup/failure';
+		this.BASE_URL = xpdAccessService.getSetupAPIURL() + 'setup/failure';
 	}
 
 	public updateObject(failure) {
@@ -28,7 +28,7 @@ export class FailureSetupAPIService {
 			data: failure,
 		};
 
-		return this.setupAPIService.doRequest(req);
+		return this.setupAPIService.doRequest(req, true);
 
 	}
 
@@ -43,7 +43,7 @@ export class FailureSetupAPIService {
 			data: object,
 		};
 
-		return this.setupAPIService.doRequest(req);
+		return this.setupAPIService.doRequest(req, true);
 	}
 
 	public insertObject(object) {
@@ -57,7 +57,7 @@ export class FailureSetupAPIService {
 			data: object,
 		};
 
-		return this.setupAPIService.doRequest(req);
+		return this.setupAPIService.doRequest(req, true);
 
 	}
 
@@ -69,24 +69,8 @@ export class FailureSetupAPIService {
 			url,
 		};
 
-		return this.setupAPIService.doRequest(req);
+		return this.setupAPIService.doRequest(req, false);
 	}
-
-	// function listByOperation(id, successCallback, errorCallback) {
-
-	// 	var url = BASE_URL + '/list-by-operation/' + id;
-
-	// 	$http.get(url)
-	// 		.then(
-	// 			function (response) {
-	// 				successCallback && successCallback(response.data.data);
-	// 			},
-	// 			function (error) {
-	// 				setupAPIService.generateToast(error.data, true);
-	// 				errorCallback && errorCallback(error);
-	// 			}
-	// 		);
-	// }
 
 	public listFailuresOnGoing() {
 		const url = this.BASE_URL + '/list-on-going';
@@ -96,7 +80,7 @@ export class FailureSetupAPIService {
 			url,
 		};
 
-		return this.setupAPIService.doRequest(req);
+		return this.setupAPIService.doRequest(req, false);
 	}
 
 	public listFailures() {
@@ -107,7 +91,7 @@ export class FailureSetupAPIService {
 			url,
 		};
 
-		return this.setupAPIService.doRequest(req);
+		return this.setupAPIService.doRequest(req, false);
 	}
 }
 

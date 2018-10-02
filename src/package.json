@@ -1,8 +1,8 @@
 {
-    "name": "admin",
+    "name": "xpd_admin",
     "version": "1.0.0",
     "description": "",
-    "main": "main.js",
+    "main": "electron.js",
     "scripts": {
     },
     "keywords": [],

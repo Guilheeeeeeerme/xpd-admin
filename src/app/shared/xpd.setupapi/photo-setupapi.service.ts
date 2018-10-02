@@ -2,11 +2,6 @@ import angular = require('angular');
 import { XPDAccessService } from '../xpd.access/access.service';
 import { SetupAPIService } from './setupapi.service';
 
-// (function() {
-// 	'use strict',
-
-// 	photoAPIService.$inject = ['$http', 'xpdAccessService', 'setupAPIService'];
-
 export class PhotoAPIService {
 
 	public static $inject: string[] = ['$http', '$q', 'xpdAccessService', 'setupAPIService'];
@@ -18,7 +13,7 @@ export class PhotoAPIService {
 		private xpdAccessService: XPDAccessService,
 		private setupAPIService: SetupAPIService) {
 
-		this.BASE_URL = xpdAccessService.getSetupURL();
+		this.BASE_URL = xpdAccessService.getSetupAPIURL();
 	}
 
 	public loadPhoto(path, name) {
@@ -80,21 +75,4 @@ export class PhotoAPIService {
 		return window.btoa(binary);
 	}
 
-	// xpd-setup-api/tripin/rig-pictures/load/default
-
-	// function getObjectById(modelURL, id, successCallback, errorCallback) {
-	// 	$http.get(xpdAccessService.getSetupURL() + modelURL + '/' + id)
-	// 		.then(
-	// 			function(response) {
-	// 				successCallback && successCallback(response.data);
-	// 			},
-	// 			function(error) {
-	// 				setupAPIService.generateToast(error);
-	// 				errorCallback && errorCallback(error);
-	// 			},
-	// 		);
-	// }
-
 }
-
-// })();

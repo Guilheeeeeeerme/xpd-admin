@@ -13,7 +13,7 @@ export class EventLogSetupAPIService {
 	public BASE_URL: string;
 
 	constructor(private $rootScope: IRootScopeService, private xpdAccessService: XPDAccessService, private setupAPIService: SetupAPIService) {
-		this.BASE_URL = xpdAccessService.getSetupURL() + 'setup/event';
+		this.BASE_URL = xpdAccessService.getSetupAPIURL() + 'setup/event';
 	}
 
 	public listTrackingEventByOperation(operationId) {
@@ -24,7 +24,7 @@ export class EventLogSetupAPIService {
 			url,
 		};
 
-		return this.setupAPIService.doRequest(req);
+		return this.setupAPIService.doRequest(req, false);
 	}
 
 	public listByFilters(eventType, operationId, limit, fromDate, toDate) {
@@ -88,7 +88,7 @@ export class EventLogSetupAPIService {
 			url,
 		};
 
-		return this.setupAPIService.doRequest(req);
+		return this.setupAPIService.doRequest(req, false);
 	}
 
 	public getWithDetails(eventId) {
@@ -100,7 +100,7 @@ export class EventLogSetupAPIService {
 			url,
 		};
 
-		return this.setupAPIService.doRequest(req);
+		return this.setupAPIService.doRequest(req, false);
 	}
 
 }
