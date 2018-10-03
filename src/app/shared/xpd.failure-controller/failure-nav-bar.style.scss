@@ -127,3 +127,9 @@ xpd-failure-nav-bar {
     }
 
 }
+
+.table-scroll {
+    overflow: scroll;
+    display: block;
+    max-height: 300px;
+}

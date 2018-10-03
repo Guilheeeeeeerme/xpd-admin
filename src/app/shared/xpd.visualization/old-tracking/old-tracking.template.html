@@ -75,12 +75,12 @@
     <!-- CONN and TIME -->
     <div class="row nopadding h-90" ng-if="currentEvent != null && (currentEvent.eventType == 'CONN' || currentEvent.eventType == 'TIME')">
 
-        <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
+        <div class="h-95 col-xs-8 col-sm-8 col-md-8 col-lg-8">
             <xpd-conn-ruler chronometer="( currentTick / 1000 )" vtarget-duration='taskExpectedDuration' time-blocks="timeBlocks" flash-go-div="dController.flashGoDiv">
             </xpd-conn-ruler>
         </div>
 
-        <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 nopadding">
+        <div class="h-95 col-xs-4 col-sm-4 col-md-4 col-lg-4 nopadding">
 
             <xpd-trip-ruler show-slow-down="flags.showSlowDown" readings='currentReading' calculated='currentCalculated' current-event="{{currentEvent}}"
                 operation='currentOperation'>
@@ -93,13 +93,13 @@
     <!--WAIT -->
     <div class="row nopadding h-90" ng-if="currentOperation != null && currentOperation.running && currentEvent != null && currentEvent.eventType == 'WAIT'">
 
-        <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8 ">
+        <div class="h-95 col-xs-8 col-sm-8 col-md-8 col-lg-8 ">
             <xpd-conn-ruler chronometer="( currentTick / 1000 )" vtarget-duration='taskExpectedDuration' time-blocks="timeBlocks" flash-go-div="dController.flashGoDiv">
             </xpd-conn-ruler>
 
         </div>
 
-        <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 ">
+        <div class="h-95 col-xs-4 col-sm-4 col-md-4 col-lg-4 ">
 
             <xpd-trip-ruler show-slow-down="flags.showSlowDown" readings='currentReading' calculated='currentCalculated' current-event="{{currentEvent}}"
                 operation='currentOperation'>
