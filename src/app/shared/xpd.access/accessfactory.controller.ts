@@ -23,6 +23,7 @@ export class AccessFactoryController {
 
 		$scope.dados = {
 			XPDAccessData: JSON.parse(localStorage.getItem('xpd.admin.XPDAccessData')),
+			loginError: false,
 		};
 
 		$scope.user = {
@@ -47,6 +48,9 @@ export class AccessFactoryController {
 			} else {
 				vm.authService.login($scope.user).finally(() => {
 					vm.$window.location.reload();
+				}).catch((e) => {
+					// vm.$scope.dados.loginError = true;
+					// console.log('loginError', vm.$scope.dados.loginError);
 				});
 			}
 		};

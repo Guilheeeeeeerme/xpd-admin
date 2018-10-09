@@ -97,7 +97,7 @@ export class AuthService {
 
 		operationServerPromise.then((data: any) => {
 			sessionStorage.setItem(AuthService.OS_TOKEN, data.token);
-		});
+		}, (error) => error );
 
 		reportsServerPromise.then((data: any) => {
 			sessionStorage.setItem(AuthService.RS_TOKEN, data.token);
