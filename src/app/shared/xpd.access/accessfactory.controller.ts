@@ -30,6 +30,8 @@ export class AccessFactoryController {
 
 		};
 
+		$scope.authForm = {};
+
 		const actionButtonSave = () => {
 			vm.dialogService.showConfirmDialog('This action will reload your aplication screen. Proceed?', () => {
 				actionProceed();
@@ -42,7 +44,8 @@ export class AccessFactoryController {
 			vm.xpdAccessService.loadAccessData();
 
 			if ($scope.isRegister) {
-				vm.authService.register($scope.user).finally(() => {
+
+				vm.authService.register($scope.user).success(() => {
 					vm.$window.location.reload();
 				});
 			} else {

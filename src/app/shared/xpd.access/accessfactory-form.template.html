@@ -1,3 +1,14 @@
+<header>
+	<nav class="navbar navbar-inverse navbar-fixed-top">
+		<div class="container-fluid">
+			<div class="navbar-header">
+				<img class="xpd-header-logo" src="../../../assets/img/xpd-logo.png" />
+			</div>
+		</div>
+	</nav>
+</header>
+
+
 <div class="col-md-8 col-md-offset-2">
 
 	<div class="modal-content">
@@ -18,22 +29,27 @@
 						<li ng-class="{'active': !isRegister}">
 							<a ng-click="isRegister = false">Login</a>
 						</li>
-						<li  ng-class="{'active': isRegister}">
-							<a ng-click="isRegister = true" >Register</a>
+						<li ng-class="{'active': isRegister}">
+							<a ng-click="isRegister = true">Register</a>
 						</li>
 					</ul>
 
-					<xpd-setup-form-input ng-if="isRegister" form-name="authForm" label="Name" type="text" model="user.name" name="name" required="true">
+					<xpd-setup-form-input ng-if="isRegister" form-name="authForm" label="Name" type="text" model="user" name="name" required="true">
 					</xpd-setup-form-input>
 
-					<xpd-setup-form-input ng-if="isRegister" form-name="authForm" label="Email" type="email" model="user.email" name="email"
-					 required="true">
+					<xpd-setup-form-input ng-if="isRegister" form-name="authForm" label="Email" type="email" model="user" name="email" required="true">
 					</xpd-setup-form-input>
 
-					<xpd-setup-form-input form-name="authForm" label="Username" type="text" model="user.username" name="username" required="true">
+					<xpd-setup-form-input form-name="authForm" label="Username" type="text" model="user" name="username" required="true">
 					</xpd-setup-form-input>
 
-					<xpd-setup-form-input form-name="authForm" label="Password" type="password" model="user.password" name="password" required="true">
+					<xpd-setup-form-input form-name="authForm" label="Password" type="password" model="user" name="password" required="true">
+					</xpd-setup-form-input>
+
+					<xpd-setup-form-input ng-if="isRegister" form-name="authForm" label="Master User" type="text" model="user" name="masterUser" required="true">
+					</xpd-setup-form-input>
+
+					<xpd-setup-form-input ng-if="isRegister" form-name="authForm" label="Master Password" type="password" model="user" name="masterPassword" required="true">
 					</xpd-setup-form-input>
 
 					<!-- ng-keyup="$event.keyCode == 13 ? actionButtonSave() : null" -->
