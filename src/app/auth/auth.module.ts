@@ -10,6 +10,7 @@ const XPDAuthModule: angular.IModule = angular.module('xpd.auth', [
 
 // import './../../assets/css/setup.scss';
 // import './../../assets/css/xpd.scss';
+import './auth.style.scss';
 
 export { XPDAuthModule };
 

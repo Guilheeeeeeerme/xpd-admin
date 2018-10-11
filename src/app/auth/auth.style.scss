@@ -1,0 +1,27 @@
+html {
+    height: 100%;
+    background-color: #ccc;
+}
+
+body {
+    background-color: transparent;
+}
+
+.xpd-header-logo {
+    width: 45px;
+}
+
+.auth-content {
+    padding-top: 100px;
+}
+
+.modal-content {
+    border-radius: 0;
+}
+
+.nav-tabs {
+    margin-bottom: 5px;
+}
+.nav-tabs > li > a {
+    cursor: pointer;
+}

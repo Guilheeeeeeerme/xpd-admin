@@ -1,84 +1,105 @@
-<form>
+<div class="modal-dialog modal-lg">
 
-	<div class="modal-header">
-		<h3 class="modal-title" id="modal-title">Access Data
-		</h3>
-		<a ng-click="isRegister = !isRegister">{{ !isRegister ? 'Register' : 'Login' }}</a>
-	</div>
+	<div class="modal-content">
 
-	<div class="modal-body" id="modal-body">
-
-		<div class="col-md-6 col-sm-12">
-
-			<div class="form-group" ng-if="isRegister">
-				<label for="xpdName">Name</label>
-				<input type="text" ng-model="user.name" class="form-control" id="xpdName">
-			</div>
-
-			<div class="form-group" ng-if="isRegister">
-				<label for="xpdEmail">Email</label>
-				<input type="email" ng-model="user.email" class="form-control" id="xpdEmail">
-			</div>
-
-			<div class="form-group">
-				<label for="xpdUsername">Username</label>
-				<input type="text" ng-model="user.username" class="form-control" id="xpdUsername">
-			</div>
-
-			<div class="form-group">
-				<label for="xpdPassword">Password</label>
-				<input type="password" ng-model="user.password" class="form-control" id="xpdPassword">
-			</div>
-
-			<button class="btn btn-warning" type="button" ng-if="actionButtonLogout" ng-click="actionButtonLogout()">Logout</button>
-
+		<div class="modal-header">
+			<h3 class="modal-title" id="modal-title">Access Data
+			</h3>
 		</div>
 
-		<div class="col-md-6 col-sm-12">
+		<div>
+			<div class="modal-body" id="modal-body">
+				<form name="authForm" class="row">
 
-			<div class="form-group">
-				<label for="xpdDefaultAccessIp">Operations Server IP Address</label>
-				<input type="text" ng-model="dados.XPDAccessData.server.xpdDefaultAccessIp" class="form-control" id="xpdDefaultAccessIp">
-			</div>
+					<div class="col-md-6 col-sm-12">
 
-			<div class="form-group">
-				<label for="xpdDefaultOperationServerPort">Operations Server Port</label>
-				<input type="number" ng-init="dados.XPDAccessData.server.xpdDefaultOperationServerPort = +dados.XPDAccessData.server.xpdDefaultOperationServerPort"
-				 ng-model="dados.XPDAccessData.server.xpdDefaultOperationServerPort" class="form-control" id="xpdDefaultOperationServerPort">
-			</div>
+						<ul class="nav nav-tabs">
+							<li ng-class="{'active': !isRegister}">
+								<a ng-click="isRegister = false">Login</a>
+							</li>
+							<li ng-class="{'active': isRegister}">
+								<a ng-click="isRegister = true">Register</a>
+							</li>
+						</ul>
 
-			<div class="form-group" ng-if="!hideSetup">
-				<label for="xpdDefaultSetupAPIAccessIp">Setup Server IP Address</label>
-				<input type="text" ng-model="dados.XPDAccessData.server.xpdDefaultSetupAPIAccessIp" class="form-control" id="xpdDefaultSetupAPIAccessIp">
-			</div>
+						<xpd-setup-form-input ng-if="isRegister" form-name="authForm" label="Name" type="text" model="user" name="name" required="true">
+						</xpd-setup-form-input>
 
-			<div class="form-group" ng-if="!hideSetup">
-				<label for="xpdDefaultSetupApiPort">Setup Server Port</label>
-				<input type="number" ng-init="dados.XPDAccessData.server.xpdDefaultSetupApiPort = +dados.XPDAccessData.server.xpdDefaultSetupApiPort"
-				 ng-model="dados.XPDAccessData.server.xpdDefaultSetupApiPort" class="form-control" id="xpdDefaultSetupApiPort">
-			</div>
+						<xpd-setup-form-input ng-if="isRegister" form-name="authForm" label="Email" type="email" model="user" name="email" required="true">
+						</xpd-setup-form-input>
 
-			<div class="form-group" ng-if="!hideReports">
-				<label for="xpdDefaultReportsAPIAccessIp">Reports Server IP Address</label>
-				<input type="text" ng-model="dados.XPDAccessData.server.xpdDefaultReportsAPIAccessIp" class="form-control" id="xpdDefaultReportsAPIAccessIp">
-			</div>
+						<xpd-setup-form-input form-name="authForm" label="Username" type="text" model="user" name="username" required="true">
+						</xpd-setup-form-input>
 
-			<div class="form-group" ng-if="!hideReports">
-				<label for="xpdDefaultReportsAPIPort">Reports Server Port</label>
-				<input type="number" ng-init="dados.XPDAccessData.server.xpdDefaultReportsAPIPort = +dados.XPDAccessData.server.xpdDefaultReportsAPIPort"
-				 ng-model="dados.XPDAccessData.server.xpdDefaultReportsAPIPort" class="form-control" id="xpdDefaultReportsAPIPort">
-				<!-- placeholder="8082" -->
+						<xpd-setup-form-input form-name="authForm" label="Password" type="password" model="user" name="password" required="true">
+						</xpd-setup-form-input>
+
+						<xpd-setup-form-input ng-if="isRegister" form-name="authForm" label="Master User" type="text" model="user" name="masterUser"
+						 required="true">
+						</xpd-setup-form-input>
+
+						<xpd-setup-form-input ng-if="isRegister" form-name="authForm" label="Master Password" type="password" model="user" name="masterPassword"
+						 required="true">
+						</xpd-setup-form-input>
+
+						<!-- ng-keyup="$event.keyCode == 13 ? actionButtonSave() : null" -->
+
+						<div ng-show="(dados.loginError)" class="alert alert-danger" role="alert">
+							This is a danger alert—check it out!
+						</div>
+
+						<button class="btn btn-warning" type="button" ng-if="actionButtonLogout" ng-click="actionButtonLogout()">Logout</button>
+
+					</div>
+
+					<div class="col-md-6 col-sm-12">
+
+						<div class="form-group">
+							<label for="xpdDefaultAccessIp">Operations Server IP Address</label>
+							<input type="text" ng-model="dados.XPDAccessData.server.xpdDefaultAccessIp" class="form-control" id="xpdDefaultAccessIp">
+						</div>
+
+						<div class="form-group">
+							<label for="xpdDefaultOperationServerPort">Operations Server Port</label>
+							<input type="number" ng-init="dados.XPDAccessData.server.xpdDefaultOperationServerPort = +dados.XPDAccessData.server.xpdDefaultOperationServerPort"
+							 ng-model="dados.XPDAccessData.server.xpdDefaultOperationServerPort" class="form-control" id="xpdDefaultOperationServerPort">
+						</div>
+
+						<div class="form-group" ng-if="!hideSetup">
+							<label for="xpdDefaultSetupAPIAccessIp">Setup Server IP Address</label>
+							<input type="text" ng-model="dados.XPDAccessData.server.xpdDefaultSetupAPIAccessIp" class="form-control" id="xpdDefaultSetupAPIAccessIp">
+						</div>
+
+						<div class="form-group" ng-if="!hideSetup">
+							<label for="xpdDefaultSetupApiPort">Setup Server Port</label>
+							<input type="number" ng-init="dados.XPDAccessData.server.xpdDefaultSetupApiPort = +dados.XPDAccessData.server.xpdDefaultSetupApiPort"
+							 ng-model="dados.XPDAccessData.server.xpdDefaultSetupApiPort" class="form-control" id="xpdDefaultSetupApiPort">
+						</div>
+
+						<div class="form-group" ng-if="!hideReports">
+							<label for="xpdDefaultReportsAPIAccessIp">Reports Server IP Address</label>
+							<input type="text" ng-model="dados.XPDAccessData.server.xpdDefaultReportsAPIAccessIp" class="form-control" id="xpdDefaultReportsAPIAccessIp">
+						</div>
+
+						<div class="form-group" ng-if="!hideReports">
+							<label for="xpdDefaultReportsAPIPort">Reports Server Port</label>
+							<input type="number" ng-init="dados.XPDAccessData.server.xpdDefaultReportsAPIPort = +dados.XPDAccessData.server.xpdDefaultReportsAPIPort"
+							 ng-model="dados.XPDAccessData.server.xpdDefaultReportsAPIPort" class="form-control" id="xpdDefaultReportsAPIPort">
+							<!-- placeholder="8082" -->
+						</div>
+					</div>
+				</form>
 			</div>
 		</div>
 
+
+		<div class="modal-footer">
+			<p>
+				<strong>Do not change these values unless you are told so !!!</strong>
+			</p>
+
+			<button class="btn btn-primary" type="button" ng-click="actionButtonSave()" ng-disabled="!authForm.$valid">{{ isRegister ? 'Register' : 'Login' }}</button>
+			<button class="btn btn-warning" type="button" ng-if="actionButtonCancel" ng-click="actionButtonCancel()">Cancel</button>
+		</div>
 	</div>
-
-	<div class="modal-footer">
-
-		<p><strong>Do not change these values unless you are told so !!!</strong></p>
-
-		<button class="btn btn-primary" type="button" ng-click="actionButtonSave()">{{ isRegister ? 'Register' : 'Login' }}</button>
-		<button class="btn btn-warning" type="button" ng-if="actionButtonCancel" ng-click="actionButtonCancel()">Cancel</button>
-	</div>
-
-</form>
+</div>

@@ -71,8 +71,12 @@ export class OperationDataService {
 		this.observer = new EventEmitter();
 	}
 
-	public emit(subject: string, data: any): void {
+	public emit(subject: string, data: any, log: boolean): void {
 		this.observer.emit(subject, data);
+
+		if (log) {
+			this.log(subject, data);
+		}
 	}
 
 	public on(subject: string, callback): void {
@@ -127,18 +131,24 @@ export class OperationDataService {
 				}
 			});
 
-			self.socket.on('connect_error', (data) => { self.emit('connect_error', data); });
-			self.socket.on('connect_timeout', (data) => { self.emit('connect_timeout', data); });
-			self.socket.on('reconnect', (data) => { self.emit('reconnect', data); });
-			self.socket.on('reconnect_attempt', (data) => { self.emit('reconnect_attempt', data); });
-			self.socket.on('reconnecting', (data) => { self.emit('reconnecting', data); });
-			self.socket.on('reconnect_error', (data) => { self.emit('reconnect_error', data); });
-			self.socket.on('reconnect_failed', (data) => { self.emit('reconnect_failed', data); });
-			self.socket.on('ping', (data) => { self.emit('ping', data); });
-			self.socket.on('pong', (data) => { self.emit('pong', data); });
+			self.socket.on('connect_error', (data) => { self.emit('connect_error', data, true); });
+			self.socket.on('connect_timeout', (data) => { self.emit('connect_timeout', data, true); });
+			self.socket.on('reconnect', (data) => { self.emit('reconnect', data, true); });
+			self.socket.on('reconnect_attempt', (data) => { self.emit('reconnect_attempt', data, true); });
+			self.socket.on('reconnecting', (data) => { self.emit('reconnecting', data, true); });
+			self.socket.on('reconnect_error', (data) => { self.emit('reconnect_error', data, true); });
+			self.socket.on('reconnect_failed', (data) => { self.emit('reconnect_failed', data, true); });
+			self.socket.on('ping', (data) => { self.emit('ping', data, false); });
+			self.socket.on('pong', (data) => { self.emit('pong', data, false); });
 
 			socket.on('connect', () => {
 				this.emitEvent(threads);
+				this.log('connect', null);
+			});
+
+			socket.on('authenticated', () => {
+				// use the socket as usual
+				console.log('User is authenticated');
 			});
 
 			socket.on('subjects', (response) => {

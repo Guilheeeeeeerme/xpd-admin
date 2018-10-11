@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,8 +9,20 @@
 </head>
 
 <body ng-app="xpd.auth">
-    <!-- <xpd-admin-nav-bar nav-origin="admin"> </xpd-admin-nav-bar> -->
-	<section ng-view></section>
+
+    <header>
+            <nav class="navbar navbar-inverse navbar-fixed-top">
+                <div class="container-fluid">
+                    <div class="navbar-header">
+                        <img class="xpd-header-logo" src="../../assets/img/xpd-logo.png" />
+                    </div>
+                </div>
+            </nav>
+    </header>
+
+    <div class=" auth-content">
+        <section ng-view></section>
+    </div>
 
     <div class="xpd-logo-watermark"></div>
 </body>
