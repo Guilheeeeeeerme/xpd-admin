@@ -1,41 +1,63 @@
 <form name="form">
     <div class="modal-content">
-        
-        <div class="modal-header">
+
+        <!-- <div class="modal-header">
             <h4 class="modal-title">Well Setup Information</h4>
+        </div> -->
+
+        <div class="modal-header well well-default">
+            <h4 class="modal-title">Well Setup<br />
+                <!-- <span class="label label-warning">{{ (section.well.onshore)?'On':'Off'}} Shore Well</span>
+                <span class="label label-primary" nf-if="!section.well.onshore">Water Depth {{ section.well.waterDepth }} (m)</span>
+                <span class="label label-info">Air Gap {{ section.well.airGap }} (m)</span> -->
+            </h4>
         </div>
 
         <div class="modal-body">
 
             <div class="container-fluid">
 
-                <div class="form-group col-md-12" ng-class="{ 'has-error': form.name.$invalid && !form.name.$pristine }">
+                <div class="form-group col-md-6" ng-class="{ 'has-error': form.name.$invalid && !form.name.$pristine }">
                     <label for="well-upsert-data-name">Name</label>
-                    <input type="text" name="name" maxlength="20" ng-model="well.name" class="form-control" autofocus="true" id="well-upsert-data-name"
-                        placeholder="Name" xpd-form-validation="form" required>
+                    <input type="text" name="name" maxlength="20" ng-model="well.name" class="form-control" autofocus="true"
+                        id="well-upsert-data-name" placeholder="Name" xpd-form-validation="form" required>
                 </div>
 
-                <div class="form-group col-md-6">
-                    <div class="checkbox">
-                        <label>
-                            <input id="well-upsert-data-onshore" type="checkbox" ng-model="well.onshore" ng-click="wuController.changeOnshore()"> Onshore
-                        </label>
-                    </div>
+                <div class="form-group col-md-3">
+                    <label for="well-upsert-data-onshore">Onshore</label>
+                    <br />
+                    <xpd-switch 
+                        id="well-upsert-data-onshore" 
+                        shape="round" 
+                        ng-model="well.onshore" 
+                        resolve="well.waterDepth = 0; well.onshore = true"
+                        reject="well.onshore = false">
+                    </xpd-switch>
+
                 </div>
-                
-                <div class="form-group col-md-6">
+
+                <div class="form-group col-md-3">
+                    <label for="well-upsert-data-bopSetted">Is BOP Setted?</label>
+                    <br />
+                    <xpd-switch id="well-upsert-data-bopSetted" shape="round" ng-model="well.bopSetted" resolve="well.bopSetted = true"
+                        reject="well.bopSetted = false">
+                    </xpd-switch>
+                </div>
+
+                <!-- <div class="form-group col-md-6">
                     <div class="checkbox">
                         <label>
                             <input id="well-upsert-data-bopSetted" type="checkbox" ng-model="well.bopSetted"> Bop setted
                         </label>
                     </div>
-                </div>
-                
+                </div> -->
+
                 <div class="form-group col-md-6" ng-class="{ 'has-error': form.airGap.$invalid && !form.airGap.$pristine }">
                     <label for="well-upsert-data-airGap">Air Gap</label>
                     <div class="input-group">
-                        <input type="number" name="airGap" min="0" max="10000" ng-model="well.airGap" class="form-control" autofocus="true"
-                            id="well-upsert-data-airGap" placeholder="Air Gap" xpd-form-validation="form" required>
+                        <input type="number" name="airGap" min="0" max="10000" ng-model="well.airGap" class="form-control"
+                            autofocus="true" id="well-upsert-data-airGap" placeholder="Air Gap" xpd-form-validation="form"
+                            required>
                         <span class="input-group-addon">m</span>
                     </div>
                 </div>
@@ -44,8 +66,8 @@
                     <label for="well-upsert-data-waterDepth">Water Depth</label>
                     <div class="input-group">
                         <input ng-disabled="well.onshore" type="number" name="waterDepth" min="0" max="10000" ng-model="well.waterDepth"
-                            class="form-control" autofocus="true" id="well-upsert-data-waterDepth" placeholder="Water Depth" xpd-form-validation="form"
-                            required>
+                            class="form-control" autofocus="true" id="well-upsert-data-waterDepth" placeholder="Water Depth"
+                            xpd-form-validation="form" required>
                         <span class="input-group-addon">m</span>
                     </div>
                 </div>
@@ -53,8 +75,8 @@
                 <div class="form-group col-md-6">
                     <label for="well-upsert-data-holeDepth">Hole Depth</label>
                     <div class="input-group">
-                        <input disabled type="number" name="holeDepth" ng-model="well.holeDepth"
-                            class="form-control" autofocus="true" id="well-upsert-data-holeDepth" placeholder="0" xpd-form-validation="form" >
+                        <input disabled type="number" name="holeDepth" ng-model="well.holeDepth" class="form-control"
+                            autofocus="true" id="well-upsert-data-holeDepth" placeholder="0" xpd-form-validation="form">
                         <span class="input-group-addon">m</span>
                     </div>
                 </div>
@@ -62,8 +84,8 @@
                 <div class="form-group col-md-6">
                     <label for="well-upsert-data-shoeDepth">Last Section Shoe Depth</label>
                     <div class="input-group">
-                        <input disabled type="number" name="shoeDepth" ng-model="well.shoeDepth"
-                            class="form-control" autofocus="true" id="well-upsert-data-shoeDepth" placeholder="0" xpd-form-validation="form">
+                        <input disabled type="number" name="shoeDepth" ng-model="well.shoeDepth" class="form-control"
+                            autofocus="true" id="well-upsert-data-shoeDepth" placeholder="0" xpd-form-validation="form">
                         <span class="input-group-addon">m</span>
                     </div>
                 </div>
@@ -73,8 +95,9 @@
         </div>
 
         <div class="modal-footer">
-            <button type="submit" class="btn btn-primary" id="well-upsert-button-save" ng-click="wuController.actionButtonSave();" ng-disabled="form.$invalid">
-                Save
+            <button type="submit" class="btn btn-primary" id="well-upsert-button-save" ng-click="wuController.actionButtonSave();"
+                ng-disabled="form.$invalid">
+                {{ well.id? 'Update Well':'Add new Well' }}
             </button>
             <button type="button" class="btn btn-secondary" id="well-upsert-button-close" ng-click="wuController.actionButtonClose();">Cancel</button>
         </div>

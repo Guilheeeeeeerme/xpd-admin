@@ -24,10 +24,4 @@ export class WellUpsertController {
 		this.$modalInstance.close();
 	}
 
-	public changeOnshore() {
-		if (this.$scope.well.onshore) {
-			this.$scope.well.waterDepth = 0;
-		}
-	}
-
 }
