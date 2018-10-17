@@ -7,7 +7,6 @@
 // (function() {
 // 	'use strict';
 
-// 	alarmController.$inject = ['$scope', 'operationDataService', 'operationSetupAPIService', 'alarmCRUDService'];
 import * as angular from 'angular';
 import { AlarmCRUDService } from '../../../shared/xpd.alarm/alarm.service';
 import { OperationDataService } from '../../../shared/xpd.operation-data/operation-data.service';

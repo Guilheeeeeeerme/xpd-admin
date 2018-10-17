@@ -52,6 +52,7 @@ export class OperationController {
 		$scope.dados = {};
 
 		operationDataService.openConnection(['operation', 'operationQueue']).then(() => {
+
 			this.operationDataFactory = operationDataService.operationDataFactory;
 
 			wellSetupAPIService.getObjectById($routeParams.wellId).then((well) => {
@@ -94,9 +95,8 @@ export class OperationController {
 										'slipsThreshold',
 									];
 
-									console.log(queue);
-									console.log(this.$scope.section);
-									console.log(this.$scope.well);
+									// console.log('section', this.$scope.section);
+									// console.log('well', this.$scope.well);
 
 									operationQueue.map((op) => {
 
@@ -406,7 +406,7 @@ export class OperationController {
 	public allTabsWereVisited() {
 
 		for (const index in this.visitedTab) {
-			if (this.visitedTab[index] != true) {
+			if (this.visitedTab[index] !== true) {
 				return false;
 			}
 		}

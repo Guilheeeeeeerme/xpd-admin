@@ -2,9 +2,11 @@
 
 	<div class="modal-content">
 
-		<div class="modal-header">
-			<h4 class="modal-title">Section Setup Information
-				<span class="label label-default">{{ (section.well.onshore)?'On':'Off'}} Shore Well</span>
+		<div class="modal-header well well-default">
+			<h4 class="modal-title">Section Setup<br/>
+				<span class="label label-warning">{{ (section.well.onshore)?'On':'Off'}} Shore Well</span>
+				<span class="label label-primary" nf-if="!section.well.onshore">Water Depth {{ section.well.waterDepth }} (m)</span>
+				<span class="label label-info">Air Gap {{ section.well.airGap }} (m)</span>
 			</h4>
 		</div>
 
@@ -19,13 +21,13 @@
 			<div class="form-group" ng-class="{ 'has-error': form.size.$invalid && !form.size.$pristine }">
 				<label for="section-upsert-data-size">Size (Diameter)</label>
 				<div class="input-group">
-					<input type="number" name="size" min="0" max="10000" ng-model="section.size" class="form-control" autofocus="true" id="section-upsert-data-size"
-					 placeholder="Size" xpd-form-validation="form" required>
+					<input type="number" name="size" min="0" max="10000" ng-model="section.size" class="form-control" autofocus="true"
+					 id="section-upsert-data-size" placeholder="Size" xpd-form-validation="form" required>
 					<span class="input-group-addon">in</span>
 				</div>
 			</div>
 
-			<div class="well">
+			<div class="well" ng-if="(section.well.waterDepth + section.well.airGap) > 0">
 				<strong>MD Top</strong> and
 				<strong>MD Bottom</strong> should be greater than
 				<strong>{{ section.well.waterDepth + section.well.airGap }}</strong> (m)
@@ -35,18 +37,8 @@
 				<label for="section-upsert-data-mdTop">MD Top</label>
 				<div class="input-group">
 					<input type="number" name="mdTop" min="{{ section.well.waterDepth + section.well.airGap }}" max="{{section.mdBottom}}"
-					 ng-model="section.mdTop" class="form-control" autofocus="true" id="section-upsert-data-mdTop" placeholder="MD Top"
-					 xpd-form-validation="form" required>
-					<span class="input-group-addon">m</span>
-				</div>
-			</div>
-
-			<div class="form-group" ng-class="{ 'has-error': form.height.$invalid && !form.height.$pristine }">
-				<label for="section-upsert-data-height">Section Height</label>
-				<div class="input-group">
-					<input type="number" name="height" min="0" max="10000" ng-model="sectionHeight" class="form-control"
-					 autofocus="true" id="section-upsert-data-height" placeholder="Section height" xpd-form-validation="form" 
-					 ng-change="section.mdBottom = section.mdTop + sectionHeight" required>
+					 ng-model="section.mdTop" class="form-control" autofocus="true" ng-change="sectionHeight = (section.mdBottom - section.mdTop)"
+					 id="section-upsert-data-mdTop" placeholder="MD Top" xpd-form-validation="form" required>
 					<span class="input-group-addon">m</span>
 				</div>
 			</div>
@@ -55,11 +47,14 @@
 				<label for="section-upsert-data-mdBottom">MD Bottom</label>
 				<div class="input-group">
 					<input type="number" name="mdBottom" min="{{section.mdTop}}" max="10000" ng-model="section.mdBottom" class="form-control"
-					 autofocus="true" id="section-upsert-data-mdBottom" placeholder="MD Bottom" xpd-form-validation="form" 
-					 ng-init="sectionHeight = (section.mdBottom - section.mdTop)" 
-					 ng-change="sectionHeight = (section.mdBottom - section.mdTop)" required>
+					 autofocus="true" id="section-upsert-data-mdBottom" placeholder="MD Bottom" xpd-form-validation="form" ng-change="sectionHeight = (section.mdBottom - section.mdTop)"
+					 required>
 					<span class="input-group-addon">m</span>
 				</div>
+			</div>
+
+			<div class="well" ng-if="sectionHeight >= 0" ng-init="sectionHeight = (section.mdBottom - section.mdTop)">
+				Section Height <strong>{{ sectionHeight }}</strong> (m)
 			</div>
 
 		</div>

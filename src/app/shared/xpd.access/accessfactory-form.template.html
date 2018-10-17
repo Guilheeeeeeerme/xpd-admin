@@ -47,9 +47,6 @@
 						<div ng-show="(dados.loginError)" class="alert alert-danger" role="alert">
 							This is a danger alert—check it out!
 						</div>
-
-						<button class="btn btn-warning" type="button" ng-if="actionButtonLogout" ng-click="actionButtonLogout()">Logout</button>
-
 					</div>
 
 					<div class="col-md-6 col-sm-12">
@@ -98,8 +95,9 @@
 				<strong>Do not change these values unless you are told so !!!</strong>
 			</p>
 
+			<button class="btn btn-danger" type="button" ng-if="actionButtonLogout" ng-click="actionButtonLogout()">Logout</button>
 			<button class="btn btn-primary" type="button" ng-click="actionButtonSave()" ng-disabled="!authForm.$valid">{{ isRegister ? 'Register' : 'Login' }}</button>
-			<button class="btn btn-warning" type="button" ng-if="actionButtonCancel" ng-click="actionButtonCancel()">Cancel</button>
+			<button class="btn btn-default" type="button" ng-if="actionButtonCancel" ng-click="actionButtonCancel()">Cancel</button>
 		</div>
 	</div>
 </div>
