@@ -141,10 +141,10 @@ export class DialogService {
 
 		} else if (type === DialogService.CONFIRM_DIALOG || type === DialogService.CRITICAL_DIALOG) {
 			footer += '<div class=" col-xs-6 text-center">' +
-				'<button class="btn-modal btn-primary" type="button" ng-click="actionButtonYes()">YES</button>' +
+				'<button id="confirm" class="btn-modal btn-primary" type="button" ng-click="actionButtonYes()">YES</button>' +
 				'</div>' +
 				'<div class=" col-xs-6 text-center">' +
-				'<button class="btn-modal btn-warning" type="button" ng-click="actionButtonNo()">NO</button>' +
+				'<button id="deny" class="btn-modal btn-warning" type="button" ng-click="actionButtonNo()">NO</button>' +
 				'</div>';
 		}
 

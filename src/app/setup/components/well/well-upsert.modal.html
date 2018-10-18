@@ -27,7 +27,7 @@
                     <label for="well-upsert-data-onshore">Onshore</label>
                     <br />
                     <xpd-switch 
-                        id="well-upsert-data-onshore" 
+                        switch-id="well-upsert-data-onshore" 
                         shape="round" 
                         ng-model="well.onshore" 
                         resolve="well.waterDepth = 0; well.onshore = true"
@@ -39,7 +39,7 @@
                 <div class="form-group col-md-3">
                     <label for="well-upsert-data-bopSetted">Is BOP Setted?</label>
                     <br />
-                    <xpd-switch id="well-upsert-data-bopSetted" shape="round" ng-model="well.bopSetted" resolve="well.bopSetted = true"
+                    <xpd-switch switch-id="well-upsert-data-bopSetted" shape="round" ng-model="well.bopSetted" resolve="well.bopSetted = true"
                         reject="well.bopSetted = false">
                     </xpd-switch>
                 </div>

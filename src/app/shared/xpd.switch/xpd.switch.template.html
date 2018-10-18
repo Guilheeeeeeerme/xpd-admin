@@ -62,8 +62,9 @@
 </style>
 
 <label class="switch" ng-ig="shape == 'round'">
-    
-    <input 
+
+    <input
+        id="{{switchId}}"
         type="checkbox"
         ng-model="ngModel"
         ng-change="onSwitchChange()">
