@@ -1,0 +1,21 @@
+{
+    "extends": "../tsconfig.json",
+    "compilerOptions": {
+        "outDir": "../e2e/dist/",
+        "baseUrl": "./",
+        "module": "commonjs",
+        "target": "es5",
+        "types": [
+            "jasmine",
+            "jasminewd2",
+            "node"
+        ]
+    },
+    "include": [
+      "./**/*"
+    ],
+    "exclude": [
+        "./specs/login.spec.ts"
+    ]
+
+}

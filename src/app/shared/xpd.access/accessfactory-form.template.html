@@ -95,8 +95,8 @@
 				<strong>Do not change these values unless you are told so !!!</strong>
 			</p>
 
-			<button class="btn btn-danger" type="button" ng-if="actionButtonLogout" ng-click="actionButtonLogout()">Logout</button>
-			<button class="btn btn-primary" type="button" ng-click="actionButtonSave()" ng-disabled="!authForm.$valid">{{ isRegister ? 'Register' : 'Login' }}</button>
+			<button id="logout" class="btn btn-danger" type="button" ng-if="actionButtonLogout" ng-click="actionButtonLogout()">Logout</button>
+			<button id="login" class="btn btn-primary" type="button" ng-click="actionButtonSave()" ng-disabled="!authForm.$valid">{{ isRegister ? 'Register' : 'Login' }}</button>
 			<button class="btn btn-default" type="button" ng-if="actionButtonCancel" ng-click="actionButtonCancel()">Cancel</button>
 		</div>
 	</div>

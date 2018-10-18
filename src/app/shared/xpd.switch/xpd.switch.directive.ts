@@ -11,6 +11,7 @@ export class XPDSwitchDirective implements ng.IDirective {
 
 	public restrict = 'E';
 	public scope = {
+		switchId: '@',
 		shape: '@',
 		resolve: '&',
 		reject: '&',
