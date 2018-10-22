@@ -119,8 +119,8 @@ export class DMECChartDirective implements ng.IDirective {
 		const updateChart = () => {
 
 			scope.svg = {
-				viewWidth: element[0].clientWidth,
-				viewHeight: element[0].offsetHeight,
+				viewWidth: element[0].clientWidth || 100,
+				viewHeight: element[0].offsetHeight || 100,
 			};
 
 			scope.timeScale = d3.scaleTime()

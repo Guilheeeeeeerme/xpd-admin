@@ -1,4 +1,9 @@
 @import '~styles/green-box.scss';
+@import '~styles/font.scss';
+
+.xpd-panel {
+    font-family: $font-family-1;
+}
 
 .planner-error-text {
     font-size: 0.8em;

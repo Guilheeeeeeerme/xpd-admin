@@ -12,9 +12,9 @@
 				</span>
 
 				<i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': status.isCustomHeaderOpen, 'glyphicon-chevron-right': !status.isCustomHeaderOpen}">
-					
+
 				</i>
-			
+
 			</uib-accordion-heading>
 
 			<form name="inputRange.form">
@@ -41,8 +41,8 @@
 					</div>
 
 
-					<button type="submit" ng-click="actionButtonUseOperationStartDate(currentOperation.startDate)"
-					 class="btn btn-default">Use Operation Start Time ({{ currentOperation.startDate | date: 'medium' }})</button>
+					<button type="submit" ng-click="actionButtonUseOperationStartDate(currentOperation.startDate)" class="btn btn-default">Use
+						Operation Start Time ({{ currentOperation.startDate | date: 'medium' }})</button>
 
 				</div>
 
@@ -71,102 +71,77 @@
 
 	</uib-accordion>
 
-	<div class="row h-40 xpd-chart-container">
+	<div class="h-40 col-md-12 xpd-chart-container">
 
 		<div class="xpd-chart-container-header ">
 			<p>DMEC</p>
 		</div>
 
-		<xpd-dmec-chart 
-			ng-if="dmecTrackingStartAt && zoomStartAt && zoomEndAt"
-			threads="4" 
-			horizontal="true" 
-			on-reading-since="onReadingSince"
-			actual-start-at="dmecTrackingStartAt" 
-			on-reading="onReading"
-		 	zoom-start-at="zoomStartAt" 
-			zoom-end-at="zoomEndAt"
-			set-selected-point="setSelectedPoint(position)"
-			last-selected-point="lastSelectedPoint"
-			remove-marker= "removeMarker">
-		</xpd-dmec-chart>
+		<div class="xpd-chart-container-content">
+			<xpd-dmec-chart ng-if="dmecTrackingStartAt && zoomStartAt && zoomEndAt" threads="4" horizontal="true"
+			 on-reading-since="onReadingSince" actual-start-at="dmecTrackingStartAt" on-reading="onReading" zoom-start-at="zoomStartAt"
+			 zoom-end-at="zoomEndAt" set-selected-point="setSelectedPoint(position)" last-selected-point="lastSelectedPoint"
+			 remove-marker="removeMarker">
+			</xpd-dmec-chart>
+		</div>
 
 	</div>
 
-	<div class="row h-10 xpd-chart-container">
+	<div class="h-10 col-md-12 xpd-chart-container">
 
 		<div class="xpd-chart-container-header ">
 			<p>Zoom</p>
 		</div>
 
-		<xpd-time-zoom-tool 
-			ng-if="zoomStartAt && zoomEndAt" 
-			bit-depth-points="bitDepthPoints" 
-			zoom-start-at="zoomStartAt" 
-			zoom-end-at="zoomEndAt" 
-			set-zoom="setZoom" 
-			min-depth="0" 
-			max-depth="maxDepth">
-		</xpd-time-zoom-tool>
+		<div class="xpd-chart-container-content">
+			<xpd-time-zoom-tool ng-if="zoomStartAt && zoomEndAt" bit-depth-points="bitDepthPoints" zoom-start-at="zoomStartAt"
+			 zoom-end-at="zoomEndAt" set-zoom="setZoom" min-depth="0" max-depth="maxDepth">
+			</xpd-time-zoom-tool>
+		</div>
 	</div>
 
-	<div class="row h-15 xpd-chart-container">
+	<div class="h-15 col-md-12 xpd-chart-container">
 
 		<div class="xpd-chart-container-header ">
 			<p>Slips to Slips (Conn)</p>
 		</div>
+		<div class="xpd-chart-container-content">
 
-		<xpd-dmec-tracking-events 
-			tick="currentTick" 
-			current-operation='currentOperation'		 
-			events='connectionEvents' 
-		 	event-type="'CONN'" 
-		 	current-event="currentEvent" 
-		 	current-block-position="currentBlockPosition"
-		 	zoom-start-at="zoomStartAt" 
-			zoom-end-at="zoomEndAt"
-			set-zoom="setZoom">
-		</xpd-dmec-tracking-events>
+			<xpd-dmec-tracking-events tick="currentTick" current-operation='currentOperation' events='connectionEvents'
+			 event-type="'CONN'" current-event="currentEvent" current-block-position="currentBlockPosition" zoom-start-at="zoomStartAt"
+			 zoom-end-at="zoomEndAt" set-zoom="setZoom">
+			</xpd-dmec-tracking-events>
+		</div>
 
 	</div>
 
-	<div class="row h-15 xpd-chart-container">
+	<div class="h-15 col-md-12 xpd-chart-container">
 
 		<div class="xpd-chart-container-header ">
 			<p>Slips to Slips (Trip)</p>
 		</div>
+		<div class="xpd-chart-container-content">
 
-		<xpd-dmec-tracking-events 
-			tick="currentTick" 
-			current-operation='currentOperation'
-			events='tripEvents' 
-			event-type="'TRIP'" 
-			current-event="currentEvent" 
-			current-block-position="currentBlockPosition"
-			zoom-start-at="zoomStartAt" 
-			zoom-end-at="zoomEndAt"
-			set-zoom="setZoom">
-		</xpd-dmec-tracking-events>
+			<xpd-dmec-tracking-events tick="currentTick" current-operation='currentOperation' events='tripEvents' event-type="'TRIP'"
+			 current-event="currentEvent" current-block-position="currentBlockPosition" zoom-start-at="zoomStartAt" zoom-end-at="zoomEndAt"
+			 set-zoom="setZoom">
+			</xpd-dmec-tracking-events>
+		</div>
 
 	</div>
 
-	<div class="row h-15 xpd-chart-container">
+	<div class="h-15 col-md-12 xpd-chart-container">
 
 		<div class="xpd-chart-container-header ">
 			<p>Time</p>
 		</div>
+		<div class="xpd-chart-container-content">
 
-		<xpd-dmec-tracking-events 
-			tick="currentTick" 
-			current-operation='currentOperation'		 
-			events='timeEvents' 
-		 	event-type="'TIME'" 
-		 	current-event="currentEvent" 
-		 	current-block-position="currentBlockPosition"		 
-		 	zoom-start-at="zoomStartAt" 
-			zoom-end-at="zoomEndAt"
-			set-zoom="setZoom" >
-		</xpd-dmec-tracking-events>
+			<xpd-dmec-tracking-events tick="currentTick" current-operation='currentOperation' events='timeEvents' event-type="'TIME'"
+			 current-event="currentEvent" current-block-position="currentBlockPosition" zoom-start-at="zoomStartAt" zoom-end-at="zoomEndAt"
+			 set-zoom="setZoom">
+			</xpd-dmec-tracking-events>
+		</div>
 
 	</div>
 

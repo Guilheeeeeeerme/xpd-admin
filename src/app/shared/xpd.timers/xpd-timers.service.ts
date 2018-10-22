@@ -43,7 +43,7 @@ class XPDAsync {
 // tslint:disable-next-line:max-classes-per-file
 export class XPDIntervalService extends XPDAsync {
 	public run(callback, timeout, scope) {
-		const worker = this.doAsync('interval', callback, timeout, scope);
+		const worker = this.doAsync('interval', () => { callback(); }, timeout, scope);
 		return worker;
 	}
 }
@@ -51,7 +51,7 @@ export class XPDIntervalService extends XPDAsync {
 // tslint:disable-next-line:max-classes-per-file
 export class XPDTimeoutService extends XPDAsync {
 	public run(callback, timeout, scope) {
-		const worker = this.doAsync('timeout', callback, timeout, scope);
+		const worker = this.doAsync('timeout', () => { callback(); }, timeout, scope);
 		return worker;
 	}
 }

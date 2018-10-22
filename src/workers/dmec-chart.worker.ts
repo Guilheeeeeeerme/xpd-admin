@@ -21,8 +21,12 @@ namespace worker.d3.dmec {
 			const result = {};
 
 			tracks.map((track) => {
-				points[track.param] = points[track.param].filter(exclude);
-				result[track.param] = handleOverflow(points[track.param], track);
+				try {
+					points[track.param] = points[track.param].filter(exclude);
+					result[track.param] = handleOverflow(points[track.param], track);
+				} catch (error) {
+					// faça nada
+				}
 			});
 
 			return result;
