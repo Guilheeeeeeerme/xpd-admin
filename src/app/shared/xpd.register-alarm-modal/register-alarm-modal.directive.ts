@@ -1,7 +1,3 @@
-// (function() {
-// 	'use strict';
-
-// 	registerAlarmModal.$inject = [];
 import template from './register-alarm-modal.template.html';
 
 export class RegisterAlarmModalDirective implements ng.IDirective {
@@ -28,35 +24,32 @@ export class RegisterAlarmModalDirective implements ng.IDirective {
 		ctrl: any,
 	) => {
 
-		scope.actionChangeDepth = actionChangeDepth;
-		scope.$watch('alarm.isDurationAlarm', changeIsDurationAlarm);
-		scope.$watch('alarm.startTime', takeSecondsAway, true);
-		scope.$watch('alarm.endTime', takeSecondsAway, true);
-
-		function changeIsDurationAlarm() {
-
+		scope.changeIsDurationAlarm = () => {
 			if (scope.alarm.isDurationAlarm === true) {
 				scope.alarm.endDepth = scope.alarm.startDepth;
 			}
+		};
 
-		}
-
-		function actionChangeDepth() {
-
+		scope.actionChangeDepth = () => {
 			if (scope.alarm.isDurationAlarm) {
 				scope.alarm.endDepth = scope.alarm.startDepth;
 			}
+		};
 
-		}
-
-		function takeSecondsAway(date) {
-			if (date && (date.getSeconds() || date.getMilliseconds())) {
+		scope.takeSecondsAway = (date) => {
+			if (date && date !== undefined) {
+				date = new Date(date);
 				date.setSeconds(null);
 				date.setMilliseconds(null);
+			} else {
+				return;
 			}
-		}
+		};
+
+		scope.$watch('alarm.isDurationAlarm', scope.changeIsDurationAlarm);
+		scope.$watch('alarm.startTime', scope.takeSecondsAway, true);
+		scope.$watch('alarm.endTime', scope.takeSecondsAway, true);
 
 	}
 
 }
-// })();

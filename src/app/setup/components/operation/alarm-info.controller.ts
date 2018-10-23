@@ -99,8 +99,16 @@ export class AlarmInfoController {
 
 	}
 
-	public actionButtonRemoveAlarm(alarm) {
-		this.alarmCRUDService.removeAlarm(alarm);
+	public actionButtonRemoveAlarm(alarm, index) {
+		this.alarmCRUDService.removeAlarm(alarm).then(
+			(resp: any) => {
+				if (resp == null) {
+					this.$scope.dados.operation.alarms.splice(index, 1);
+				} else {
+					this.$scope.dados.operation.alarms[index] = resp;
+				}
+			},
+		);
 	}
 
 	private loadLegacy() {

@@ -10,7 +10,6 @@ import { LessonLearnedCategoryController } from './components/failure-lesson/les
 import { MenuController } from './components/menu/menu.controller';
 import { OperationDashboardController } from './components/operation-dashboard/operation-dashboard.controller';
 import { XPDOperationDashboardModule } from './components/operation-dashboard/operation-dashboard.module';
-import { SavedAlarmsListDirectives } from './components/other/saved-alarms-list/saved-alarms-list.directive';
 import { VREListTableDirective } from './components/other/vre-list-table/vre-list-table.directive';
 import { PlannerController } from './components/planner/planner.controller';
 import { RPDController } from './components/rpd/shift-report.controller';
@@ -61,7 +60,6 @@ XPDAdminModule.controller('RPDController', RPDController);
 XPDAdminModule.controller('TeamController', TeamController);
 
 XPDAdminModule.directive('xpdMemberScheduler', MemberSchedulerDirective.Factory());
-XPDAdminModule.directive('xpdSavedAlarmsList', SavedAlarmsListDirectives.Factory());
 XPDAdminModule.directive('xpdVreListTable', VREListTableDirective.Factory());
 
 XPDAdminModule.run(AdminRunScope);
