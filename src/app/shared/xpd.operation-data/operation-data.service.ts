@@ -142,6 +142,7 @@ export class OperationDataService {
 			self.socket.on('pong', (data) => { self.emit('pong', data, false); });
 
 			socket.on('connect', () => {
+				console.log('connect');
 				this.emitEvent(threads);
 				this.log('connect', null);
 			});
