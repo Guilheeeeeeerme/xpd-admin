@@ -18,7 +18,7 @@
 
                     <div class="list-group alarm-list-group">
 
-                        <div xpd-saved-alarms-list
+                        <xpd-saved-alarms-list
                             heading="Defaults"
                             popover="Archive"
                             alarms-list="alarms.defaultAlarms"
@@ -27,9 +27,9 @@
                             alarms-to-import="alarms.alarmToImport"
                             action-click-button="alarmInfoController.actionButtonArchive(alarm)"
                             action-import-button="alarmInfoController.actionButtonImport(alarm)">
-                        </div>
+                        </xpd-saved-alarms-list>
 
-                        <div xpd-saved-alarms-list
+                        <xpd-saved-alarms-list
                             heading="History"
                             popover="Archive"
                             alarms-list="alarms.historyAlarms"
@@ -38,16 +38,16 @@
                             alarms-to-import="alarms.alarmToImport"
                             action-click-button="alarmInfoController.actionButtonArchive(alarm)"
                             action-import-button="alarmInfoController.actionButtonImport(alarm)">
-                        </div>
+                        </xpd-saved-alarms-list>
 
-                        <div xpd-saved-alarms-list
+                        <xpd-saved-alarms-list
                             heading="Archived"
                             popover="Unarchive"
                             alarms-list="alarms.archivedAlarms"
                             show-archived= "showArchived == true"
                             buttom-icon="glyphicon-transfer"
                             action-click-button="alarmInfoController.actionButtonUnarchive(alarm)">
-                        </div>
+                        </xpd-saved-alarms-list>
 
                     </div>
 

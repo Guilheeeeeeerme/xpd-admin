@@ -9,10 +9,10 @@
 
 import template from './saved-alarms-list.template.html';
 
-export class SavedAlarmsListDirectives implements ng.IDirective {
+export class SavedAlarmsListDirective implements ng.IDirective {
 
 	public static Factory(): ng.IDirectiveFactory {
-		return () => new SavedAlarmsListDirectives();
+		return () => new SavedAlarmsListDirective();
 	}
 	public scope = {
 		heading: '@',
@@ -22,7 +22,7 @@ export class SavedAlarmsListDirectives implements ng.IDirective {
 		buttomIcon: '@',
 		alarmsToImport: '=',
 		actionClickButton: '&',
-		actionImportButton: '&',
+		actionImportButton: '&?',
 	};
 	public restrict = 'AE';
 	public template = template;
