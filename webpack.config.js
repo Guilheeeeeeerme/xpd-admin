@@ -127,7 +127,7 @@ module.exports = {
 				test: /\.scss$/,
 				use: [
 					"style-loader", // creates style nodes from JS strings
-					"css-loader?-minimize", // translates CSS into CommonJS
+					"css-loader", // translates CSS into CommonJS ?-minimize
 					"sass-loader" // compiles Sass to CSS
 				]
 			},

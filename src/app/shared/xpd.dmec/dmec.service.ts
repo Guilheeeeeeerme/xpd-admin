@@ -1,31 +1,43 @@
-import { IWindowService } from 'angular';
+import { IModalService } from 'angular-ui-bootstrap';
+import { XPDSecondsToHourMinutesSecondsFilter } from '../xpd.filters/xpd-seconds-to-hour-minutes-seconds.filter';
 import { ReadingSetupAPIService } from '../xpd.setupapi/reading-setupapi.service';
-import { XPDIntervalService, XPDTimeoutService } from '../xpd.timers/xpd-timers.service';
+
+import modalTemplate from './dmec-chart-modal.template.html';
 
 export class DMECService {
 
 	public static $inject: string[] = [
-		'$xpdTimeout',
-		'$xpdInterval',
 		'$location',
-		'$window',
+		'$uibModal',
 		'$routeParams',
 		'$q',
-		'readingSetupAPIService'];
+		'readingSetupAPIService',
+		'$interval',
+		'$xpdInterval',
+		'$filter'];
+	private tracks: any;
 
 	constructor(
-		private $xpdTimeout: XPDTimeoutService,
-		private $xpdInterval: XPDIntervalService,
 		private $location: ng.ILocationService,
-		private $window: IWindowService,
+		private $uibModal: IModalService,
 		private $routeParams: any,
 		private $q: ng.IQService,
-		private readingSetupAPIService: ReadingSetupAPIService) {
+		private readingSetupAPIService: ReadingSetupAPIService,
+		private $interval: any,
+		private $xpdInterval: any,
+		private $filter: any) {
+
+		if (!localStorage.getItem('xpd.admin.dmec.dmecTracks')) {
+			localStorage.setItem('xpd.admin.dmec.dmecTracks', JSON.stringify(this.getDefaultTracks()));
+		}
+
+		this.tracks = JSON.parse(localStorage.getItem('xpd.admin.dmec.dmecTracks'));
 
 	}
 
 	public dmec(scope, localStoragePath, getCurrentOperation?, getCurrentReading?) {
 
+		const vm = this;
 		const colors = [
 			'#1CE6FF', '#FF34FF', '#008941', '#A30059',
 			'#7A4900', '#63FFAC', '#B79762', '#8FB0FF',
@@ -45,12 +57,7 @@ export class DMECService {
 			'#C895C5', '#320033', '#FF6832', '#66E1D3', '#CFCDAC', '#D0AC94', '#7ED379', '#012C58',
 		];
 
-		const vm = this;
-
-		const ONE_HOUR = 3600000;
 		const getTickFrequency = 1000;
-		let getTickInterval;
-		let resetPageTimeout;
 
 		/**
 		 * Função que inicializa o serviço e as buscas
@@ -60,7 +67,7 @@ export class DMECService {
 			let startAtMillis;
 			const endAtMillis = new Date().getTime();
 			let intervalToShow = 0;
-			const inputRangeForm = scope.inputRangeForm = getInputRangeForm();
+			const inputRangeForm = scope.inputRangeForm = this.getInputRangeForm(localStoragePath);
 
 			if (inputRangeForm.realtime) {
 				intervalToShow = (+inputRangeForm.last * +inputRangeForm.toMilliseconds);
@@ -71,13 +78,14 @@ export class DMECService {
 
 			startAtMillis = new Date(scope.dmecTrackingStartAt).getTime();
 
-			intervalToShow = (endAtMillis - startAtMillis);
+			intervalToShow = Math.abs(endAtMillis - startAtMillis);
 
 			setZoom(
-				new Date(endAtMillis - (intervalToShow / 1)),
-				new Date(endAtMillis + (intervalToShow / 2)),
+				new Date(endAtMillis - intervalToShow),
+				new Date(endAtMillis),
 			);
 
+			// não tem como inicilizar duas vezes
 			// tslint:disable-next-line:no-empty
 			scope.initializeComponent = () => { };
 
@@ -98,33 +106,12 @@ export class DMECService {
 		*/
 		const actionButtonSubmitDmecRange = () => {
 			// localStorage.setItem(localStoragePath, JSON.stringify(scope.inputRangeForm));
-
 			const param = {};
 			param[localStoragePath] = JSON.stringify(scope.inputRangeForm);
-
 			vm.$location.path(vm.$location.path()).search(param);
-
-			reload();
+			vm.reload();
 		};
 
-		/**
-		 * Recarregar a página
-		 */
-		const reload = () => {
-			vm.$window.location.reload();
-		};
-
-		/**
-		 * Quando sair do controller
-		 */
-		const destroy = () => {
-			if (resetPageTimeout) {
-				vm.$xpdTimeout.cancel(resetPageTimeout);
-			}
-			if (getTickInterval) {
-				vm.$xpdInterval.cancel(getTickInterval);
-			}
-		};
 		/**
 		 * Por onde as directive alteram o zoom
 		 * @param {Date} zoomStartAt
@@ -133,6 +120,44 @@ export class DMECService {
 		const setZoom = (zoomStartAt, zoomEndAt) => {
 			scope.zoomStartAt = new Date(zoomStartAt);
 			scope.zoomEndAt = new Date(zoomEndAt);
+
+			const intervalToShow = Math.abs(
+				new Date(scope.zoomEndAt).getTime() -
+				new Date(scope.zoomStartAt).getTime(),
+			);
+
+			scope.slider = {
+				options: {
+					floor: new Date(scope.dmecTrackingStartAt).getTime(),
+					ceil: new Date().getTime() + (intervalToShow / 2),
+					// tslint:disable-next-line:only-arrow-functions
+					translate: function(value) {
+						return vm.$filter('date')(value, 'medium');
+					},
+				},
+			};
+
+		};
+
+		const toReading = (activity, useRaw: boolean) => {
+
+			const reading = {
+				timestamp: activity.xData[0],
+			};
+
+			activity.datasets.forEach((dataset, i) => {
+
+				// reading[dataset.param] = dataset.data;
+
+				if (useRaw === true) {
+					reading[dataset.param] = dataset.data[0][1] == null ? dataset.data[0][0] : dataset.data[0][1];
+				} else {
+					reading[dataset.param] = dataset.data[0];
+				}
+
+			});
+
+			return reading;
 		};
 
 		/**
@@ -141,34 +166,25 @@ export class DMECService {
 		 */
 		const getTick = () => {
 
+			console.log('getTick');
+
 			const now = new Date().getTime();
 
 			scope.onReading = vm.$q((resolve, reject) => {
-				if (getCurrentReading) {
+				// if (getCurrentReading) {
 
-					const currentReading = getCurrentReading();
+				// 	const currentReading = getCurrentReading();
 
-					if (currentReading.timestamp && currentReading.timestamp) {
-						currentReading.timestamp = new Date(currentReading.timestamp).getTime();
-						resolve(currentReading);
-					}
+				// 	if (currentReading.timestamp && currentReading.timestamp) {
+				// 		currentReading.timestamp = new Date(currentReading.timestamp).getTime();
+				// 		resolve(currentReading);
+				// 	}
 
-				} else {
-					vm.readingSetupAPIService.getTick((now - getTickFrequency)).then((arg) => { resolve(arg); }, (arg) => { reject(arg); });
-				}
-			});
-
-			scope.onReading.then((reading) => {
-
-				scope.maxDepth = Math.max(scope.maxDepth, reading.bitDepth);
-
-				if (scope.bitDepthPoints) {
-					scope.bitDepthPoints.push({
-						x: reading.timestamp,
-						y: reading.bitDepth,
-					});
-				}
-
+				// } else {
+					vm.readingSetupAPIService.getTick((now - getTickFrequency), this.tracks).then(
+						(activity) => { resolve(toReading(activity, false)); },
+						(arg) => { reject(arg); });
+				// }
 			});
 
 			if (scope.inputRangeForm.keepZoomAtTheEnd && now >= new Date(scope.zoomEndAt).getTime()) {
@@ -176,8 +192,8 @@ export class DMECService {
 				const intervalToShow = new Date(scope.zoomEndAt).getTime() - new Date(scope.zoomStartAt).getTime();
 
 				setZoom(
-					new Date(now - (intervalToShow / 1)),
-					new Date(now + (intervalToShow / 2)),
+					new Date(now - intervalToShow),
+					new Date(now),
 				);
 
 			}
@@ -187,169 +203,31 @@ export class DMECService {
 		/**
 		 * Vai no banco buscar o historico de leituras
 		 * Se tiver um operação como base, limita a busca ao start date de operação
-		 * @param {Date} startTime
+		 * @param {Date} fromTime
 		 */
-		const getAllReadingSince = (startTime) => {
+		const getAllReadingSince = (fromTime) => {
 
-			startTime = new Date(startTime);
+			fromTime = new Date(fromTime);
 
 			if (getCurrentOperation) {
 				const operationStartDate = new Date(getCurrentOperation().startDate);
 
-				if (startTime.getTime() < operationStartDate.getTime()) {
-					startTime = operationStartDate;
+				if (fromTime.getTime() < operationStartDate.getTime()) {
+					fromTime = operationStartDate;
 				}
 			}
 
-			const loopLimit = new Date();
-			let loopStartTime = new Date(startTime);
-			const loopEndTime = new Date(startTime);
+			fromTime = new Date(fromTime);
+			const toTime = new Date();
 
-			// loopStartTime.setHours(0);
-			loopStartTime.setMinutes(0);
-			loopStartTime.setSeconds(0);
-			loopStartTime.setMilliseconds(0);
+			scope.onReadingSince = vm.readingSetupAPIService.getAllReadingByStartEndTime(
+				fromTime.getTime(),
+				toTime.getTime(),
+				this.tracks,
+			);
 
-			const hours = (loopLimit.getTime() - loopStartTime.getTime()) / 3600000;
+			return fromTime;
 
-			let step = Math.floor(hours / 12) * 6;
-
-			step = (step < 1) ? 1 : step;
-
-			const promises = [];
-
-			while (loopEndTime.getTime() < loopLimit.getTime()) {
-
-				loopEndTime.setHours(loopStartTime.getHours() + step);
-				let loopEndTimestamp = loopEndTime.getTime();
-
-				if (loopEndTime.getTime() > loopLimit.getTime()) {
-					loopEndTimestamp = null;
-				}
-
-				promises.push(vm.$q((resolve, reject) => {
-
-					vm.readingSetupAPIService.getAllReadingByStartEndTime(
-						loopStartTime.getTime(),
-						loopEndTimestamp ? loopEndTimestamp : new Date().getTime()).then(
-							(arg) => { resolve(arg); },
-							(arg) => { reject(arg); },
-						);
-
-				}));
-
-				loopStartTime = new Date(loopEndTime);
-			}
-
-			const onReadingSince = vm.$q((resolve, reject) => {
-
-				vm.$q.all(promises).then((readingsList) => {
-
-					const parsedReadings = {};
-
-					try {
-
-						while (readingsList && readingsList.length > 0) {
-
-							const readings = readingsList.shift();
-
-							for (const attr in readings) {
-								if (!parsedReadings[attr]) {
-									parsedReadings[attr] = readings[attr];
-								} else {
-									parsedReadings[attr] = parsedReadings[attr].concat(readings[attr]);
-								}
-							}
-						}
-
-					} catch (e) {
-						console.error(e);
-					}
-
-					resolve(parsedReadings);
-
-				});
-
-			});
-
-			scope.bitDepthPoints = null;
-			scope.maxDepth = null;
-
-			onReadingSince.then((readings: any) => {
-				if (readings && readings.bitDepth) {
-					scope.bitDepthPoints = generateBitDepthPoints(readings.bitDepth);
-				} else {
-					scope.bitDepthPoints = [];
-				}
-			});
-
-			onReadingSince.then(() => {
-				destroy();
-				resetPageTimeout = vm.$xpdTimeout.run(() => { reload(); }, (ONE_HOUR / 2), scope);
-				getTickInterval = vm.$xpdInterval.run(() => { getTick(); }, getTickFrequency, scope);
-			});
-
-			scope.onReadingSince = onReadingSince;
-
-			return startTime;
-		};
-
-		/**
-		 * Pega as confições salvas em localstorage
-		 */
-		const getInputRangeForm = () => {
-
-			let inputRangeForm;
-
-			try {
-
-				inputRangeForm = JSON.parse(vm.$routeParams[localStoragePath]);
-				// inputRangeForm = JSON.parse(localStorage.getItem(localStoragePath));
-			} catch (e) {
-				inputRangeForm = null;
-			}
-
-			if (!inputRangeForm) {
-				inputRangeForm = {
-					realtime: true,
-					keepZoomAtTheEnd: true,
-					last: 30,
-					toMilliseconds: '60000',
-				};
-			}
-
-			if (inputRangeForm && inputRangeForm.startTime) {
-				inputRangeForm.startTime = new Date(inputRangeForm.startTime);
-			}
-
-			return inputRangeForm;
-		};
-
-		/**
-		 * Algoritmo para colocar a linha de bitdepth no zoom
-		 * @param {Lista de bitdepths} bitDepthList
-		 */
-		const generateBitDepthPoints = (bitDepthList) => {
-			const points = [];
-
-			bitDepthList.map((bitDepthPoint) => {
-
-				if (bitDepthPoint.actual) {
-					if (scope.maxDepth == null) {
-						scope.maxDepth = bitDepthPoint.actual;
-					} else {
-						scope.maxDepth = Math.max(scope.maxDepth, bitDepthPoint.actual);
-					}
-				}
-
-				points.push({
-					x: bitDepthPoint.x,
-					y: bitDepthPoint.actual || null,
-				});
-
-			});
-
-			return points;
 		};
 
 		const getReading = (point) => {
@@ -357,19 +235,25 @@ export class DMECService {
 			if (!point.timestamp) { return; }
 
 			const tick = new Date(point.timestamp).getTime();
-			this.readingSetupAPIService.getTick(tick).then((reading: any) => {
+			this.readingSetupAPIService.getTick(tick, this.tracks).then((activity: any) => {
 
-				reading.color = point.color = getColor();
+				// voltar aqui
+
+				activity = toReading(activity, true);
+
+				activity.timestamp = point.timestamp;
+
+				activity.color = point.color = getColor();
 
 				try {
-					scope.selectedReadings.push(reading);
+					scope.selectedReadings.push(activity);
 				} catch (e) {
-					scope.selectedReadings = [reading];
+					scope.selectedReadings = [activity];
 				}
 
 				// O time stamp enviado na rota é diferente do que vem na leitura
 				// Isso garante que o ponto e a leitura tenha o mesmo timestamp
-				point.timestamp = reading.timestamp;
+				// point.timestamp = reading.timestamp;
 				scope.lastSelectedPoint = point;
 			});
 		};
@@ -378,25 +262,147 @@ export class DMECService {
 			return colors.shift();
 		};
 
-		const selectedPoint = (point) => {
-			getReading(point);
-		};
-
-		const restoreColor = (color: string) => {
-			colors.push(color);
-		};
-
 		const setSelectedPoint = (position) => {
-			scope.selectedPoint(position);
+			getReading(position);
 		};
 
 		scope.actionButtonUseOperationStartDate = (arg) => { actionButtonUseOperationStartDate(arg); };
 		scope.actionButtonSubmitDmecRange = () => { actionButtonSubmitDmecRange(); };
 		scope.initializeComponent = () => { initializeComponent(); };
-		scope.setZoom = (arg1, arg2) => { setZoom(arg1, arg2); };
-		scope.selectedPoint = (arg) => { selectedPoint(arg); };
+		scope.setZoom = (zstart, zend) => { setZoom(zstart, zend); };
 		scope.setSelectedPoint = (position) => { setSelectedPoint(position); };
+		scope.openScaleModal = () => { vm.openScaleModal(); };
 
+		this.$interval(() => {
+			getTick();
+		}, getTickFrequency);
+
+		// this.$xpdInterval.run(() => {
+		// 	getTick();
+		// }, getTickFrequency, scope);
+
+	}
+
+	/**
+	 * Recarregar a página
+	 */
+	private reload () {
+		location.reload();
+	}
+
+	private getDefaultTracks() {
+
+		return [{
+			label: 'BLOCK POSITION',
+			min: -10,
+			max: 50,
+			unitMeasure: 'm',
+			param: 'blockPosition',
+			nextParam: true,
+		}, {
+			label: 'RATE OF PENETRATION',
+			min: 0,
+			max: 100,
+			unitMeasure: 'm/hr',
+			param: 'rop',
+			nextParam: false,
+		}, {
+			label: 'WOB',
+			min: -10,
+			max: 40,
+			unitMeasure: 'klbf',
+			param: 'wob',
+			nextParam: true,
+		}, {
+			label: 'HOOKLOAD',
+			min: -10,
+			max: 500,
+			unitMeasure: 'klbf',
+			param: 'hookload',
+			nextParam: false,
+		}, {
+			label: 'RPM',
+			min: -10,
+			max: 200,
+			unitMeasure: 'c/min',
+			param: 'rpm',
+			nextParam: true,
+		}, {
+			label: 'TORQUE',
+			min: 0,
+			max: 5000,
+			unitMeasure: 'kft.lbf',
+			param: 'torque',
+			nextParam: false,
+		}, {
+			label: 'FLOW',
+			min: 0,
+			max: 1200,
+			unitMeasure: 'gal/min',
+			param: 'flow',
+			nextParam: true,
+		}, {
+			label: 'STANDPIPE PRESSURE',
+			min: 0,
+			max: 5000,
+			unitMeasure: 'psi',
+			param: 'sppa',
+			nextParam: false,
+		}];
+	}
+
+	private openScaleModal() {
+		const self = this;
+
+		this.$uibModal.open({
+			animation: false,
+			keyboard: false,
+			backdrop: 'static',
+			template: modalTemplate,
+			controller: 'DMECChartModalController',
+			windowClass: 'change-scale-modal',
+			resolve: {
+				tracks() {
+					return self.tracks;
+				},
+				onTracksChange() {
+					return () => {
+						self.reload();
+					};
+				},
+			},
+		});
+	}
+
+	/**
+	 * Pega as confições salvas em localstorage
+	 */
+	private getInputRangeForm(localStoragePath) {
+
+		let inputRangeForm;
+
+		try {
+
+			inputRangeForm = JSON.parse(this.$routeParams[localStoragePath]);
+			// inputRangeForm = JSON.parse(localStorage.getItem(localStoragePath));
+		} catch (e) {
+			inputRangeForm = null;
+		}
+
+		if (!inputRangeForm) {
+			inputRangeForm = {
+				realtime: true,
+				keepZoomAtTheEnd: true,
+				last: 30,
+				toMilliseconds: '60000',
+			};
+		}
+
+		if (inputRangeForm && inputRangeForm.startTime) {
+			inputRangeForm.startTime = new Date(inputRangeForm.startTime);
+		}
+
+		return inputRangeForm;
 	}
 
 }

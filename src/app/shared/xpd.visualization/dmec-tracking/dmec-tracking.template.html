@@ -1,112 +1,110 @@
-<div class="dmec-tracking-container" ng-if="currentOperation && currentOperation.running" ng-init="initializeComponent()">
+<uib-accordion>
 
-	<uib-accordion>
+	<div uib-accordion-group class="panel-default" is-open="status.isCustomHeaderOpen">
 
-		<div uib-accordion-group class="panel-default" is-open="status.isCustomHeaderOpen">
+		<uib-accordion-heading>
+			Settings
 
-			<uib-accordion-heading>
-				Settings
+			<span class="well well-sm">
+				<strong>DMEC is starting at</strong> {{ dmecTrackingStartAt | date:'medium' }}
+			</span>
 
-				<span class="well well-sm">
-					<strong>DMEC is starting at</strong> {{ dmecTrackingStartAt | date:'medium' }}
-				</span>
+			<i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': status.isCustomHeaderOpen, 'glyphicon-chevron-right': !status.isCustomHeaderOpen}">
 
-				<i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': status.isCustomHeaderOpen, 'glyphicon-chevron-right': !status.isCustomHeaderOpen}">
+			</i>
 
-				</i>
+		</uib-accordion-heading>
 
-			</uib-accordion-heading>
+		<form name="inputRange.form">
 
-			<form name="inputRange.form">
+			<div class="checkbox">
+				<label>
+					<input name="realtime" ng-model="inputRangeForm.realtime" type="checkbox"> Real Time
+				</label>
+			</div>
+			<div class="checkbox">
+				<label>
+					<input name="keepZoomAtTheEnd" ng-model="inputRangeForm.keepZoomAtTheEnd" type="checkbox"> Keep zoom at the end
+				</label>
+			</div>
 
-				<div class="checkbox">
-					<label>
-						<input name="realtime" ng-model="inputRangeForm.realtime" type="checkbox"> Real Time
-					</label>
-				</div>
-				<div class="checkbox">
-					<label>
-						<input name="keepZoomAtTheEnd" ng-model="inputRangeForm.keepZoomAtTheEnd" type="checkbox"> Keep zoom at the end
-					</label>
-				</div>
+			<p>You will be limited to the <strong>current operation start time</strong> in order to match the events bellow</p>
 
-				<p>You will be limited to the <strong>current operation start time</strong> in order to match the events bellow</p>
+			<div ng-if="!inputRangeForm.realtime">
 
-				<div ng-if="!inputRangeForm.realtime">
-
-					<div class="form-group">
-						<label for="startTime">From:</label>
-						<input ng-model="inputRangeForm.startTime" type="datetime-local" class="form-control" required min="{{ currentOperation.startDate | date:'yyyy-MM-ddTHH:mm' }}"
-						 name="startTime" id="startTime">
-					</div>
-
-
-					<button type="submit" ng-click="actionButtonUseOperationStartDate(currentOperation.startDate)" class="btn btn-default">Use
-						Operation Start Time ({{ currentOperation.startDate | date: 'medium' }})</button>
-
+				<div class="form-group">
+					<label for="startTime">From:</label>
+					<input ng-model="inputRangeForm.startTime" type="datetime-local" class="form-control" required min="{{ currentOperation.startDate | date:'yyyy-MM-ddTHH:mm' }}"
+					 name="startTime" id="startTime">
 				</div>
 
-				<div ng-if="inputRangeForm.realtime">
 
-					<div class="form-group">
-						<label for="last">Last:</label>
-						<input ng-model="inputRangeForm.last" type="number" class="form-control" required name="last" id="last">
-					</div>
+				<button type="submit" ng-click="actionButtonUseOperationStartDate(currentOperation.startDate)" class="btn btn-default">Use
+					Operation Start Time ({{ currentOperation.startDate | date: 'medium' }})</button>
 
-					<div class="form-group">
-						<select ng-model="inputRangeForm.toMilliseconds" class="form-control" required name="toMilliseconds" id="toMilliseconds">
-							<option value="86400000">Days</option>
-							<option value="3600000">Hours</option>
-							<option value="60000">Minutes</option>
-							<option value="1000">Seconds</option>
-						</select>
-					</div>
+			</div>
 
+			<div ng-if="inputRangeForm.realtime">
+
+				<div class="form-group">
+					<label for="last">Last:</label>
+					<input ng-model="inputRangeForm.last" type="number" class="form-control" required name="last" id="last">
 				</div>
 
-				<button type="submit" ng-click="actionButtonSubmitDmecRange()" ng-disabled="inputRange.form.$invalid" class="btn btn-default">Submit</button>
+				<div class="form-group">
+					<select ng-model="inputRangeForm.toMilliseconds" class="form-control" required name="toMilliseconds" id="toMilliseconds">
+						<option value="86400000">Days</option>
+						<option value="3600000">Hours</option>
+						<option value="60000">Minutes</option>
+						<option value="1000">Seconds</option>
+					</select>
+				</div>
 
-			</form>
-		</div>
+			</div>
 
-	</uib-accordion>
+			<button type="submit" ng-click="actionButtonSubmitDmecRange()" ng-disabled="inputRange.form.$invalid" class="btn btn-default">Submit</button>
 
-	<div class="h-40 col-md-12 xpd-chart-container">
+		</form>
+	</div>
+
+</uib-accordion>
+
+<div class="row" ng-if="currentOperation && currentOperation.running" ng-init="initializeComponent()">
+
+	<div class="h-50 xpd-chart-container">
 
 		<div class="xpd-chart-container-header ">
 			<p>DMEC</p>
 		</div>
 
 		<div class="xpd-chart-container-content">
-			<xpd-dmec-chart ng-if="dmecTrackingStartAt && zoomStartAt && zoomEndAt" threads="4" horizontal="true"
-			 on-reading-since="onReadingSince" actual-start-at="dmecTrackingStartAt" on-reading="onReading" zoom-start-at="zoomStartAt"
-			 zoom-end-at="zoomEndAt" set-selected-point="setSelectedPoint(position)" last-selected-point="lastSelectedPoint"
-			 remove-marker="removeMarker">
+			<xpd-dmec-chart ng-if="zoomStartAt && zoomEndAt" horizontal="true" on-reading-since="onReadingSince" on-reading="onReading"
+			 zoom-start-at="zoomStartAt" zoom-end-at="zoomEndAt" set-selected-point="setSelectedPoint(position)"
+			 last-selected-point="lastSelectedPoint" remove-marker="removeMarker" ng-dblclick="openScaleModal()">
 			</xpd-dmec-chart>
 		</div>
 
 	</div>
 
-	<div class="h-10 col-md-12 xpd-chart-container">
+	<div class="h-10 xpd-chart-container">
 
 		<div class="xpd-chart-container-header ">
 			<p>Zoom</p>
 		</div>
 
 		<div class="xpd-chart-container-content">
-			<xpd-time-zoom-tool ng-if="zoomStartAt && zoomEndAt" bit-depth-points="bitDepthPoints" zoom-start-at="zoomStartAt"
-			 zoom-end-at="zoomEndAt" set-zoom="setZoom" min-depth="0" max-depth="maxDepth">
-			</xpd-time-zoom-tool>
+			<rzslider rz-slider-model="zoomStartAt" rz-slider-high="zoomEndAt" rz-slider-options="slider.options">
+			</rzslider>
 		</div>
 	</div>
 
-	<div class="h-15 col-md-12 xpd-chart-container">
+	<div class="h-15 xpd-chart-container">
 
 		<div class="xpd-chart-container-header ">
 			<p>Slips to Slips (Conn)</p>
 		</div>
-		<div class="xpd-chart-container-content">
 
+		<div class="xpd-chart-container-content">
 			<xpd-dmec-tracking-events tick="currentTick" current-operation='currentOperation' events='connectionEvents'
 			 event-type="'CONN'" current-event="currentEvent" current-block-position="currentBlockPosition" zoom-start-at="zoomStartAt"
 			 zoom-end-at="zoomEndAt" set-zoom="setZoom">
@@ -115,13 +113,13 @@
 
 	</div>
 
-	<div class="h-15 col-md-12 xpd-chart-container">
+	<div class="h-15 xpd-chart-container">
 
 		<div class="xpd-chart-container-header ">
 			<p>Slips to Slips (Trip)</p>
 		</div>
-		<div class="xpd-chart-container-content">
 
+		<div class="xpd-chart-container-content">
 			<xpd-dmec-tracking-events tick="currentTick" current-operation='currentOperation' events='tripEvents' event-type="'TRIP'"
 			 current-event="currentEvent" current-block-position="currentBlockPosition" zoom-start-at="zoomStartAt" zoom-end-at="zoomEndAt"
 			 set-zoom="setZoom">
@@ -130,13 +128,13 @@
 
 	</div>
 
-	<div class="h-15 col-md-12 xpd-chart-container">
+	<div class="h-15 xpd-chart-container">
 
 		<div class="xpd-chart-container-header ">
 			<p>Time</p>
 		</div>
-		<div class="xpd-chart-container-content">
 
+		<div class="xpd-chart-container-content">
 			<xpd-dmec-tracking-events tick="currentTick" current-operation='currentOperation' events='timeEvents' event-type="'TIME'"
 			 current-event="currentEvent" current-block-position="currentBlockPosition" zoom-start-at="zoomStartAt" zoom-end-at="zoomEndAt"
 			 set-zoom="setZoom">

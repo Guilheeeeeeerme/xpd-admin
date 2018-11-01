@@ -92,23 +92,12 @@
     zoom-end-at="zoomEndAt" 
     set-selected-point="setSelectedPoint(position)"
     last-selected-point="lastSelectedPoint" 
+    ng-dblclick="openScaleModal()"
     remove-marker="removeMarker">
 </xpd-dmec-chart>
 
-
-<!-- <xpd-dmec-chart 
-    ng-if="dmecTrackingStartAt && zoomStartAt && zoomEndAt" 
-    threads="4" 
-    horizontal="true" 
-    on-reading-since="onReadingSince"
-    actual-start-at="dmecTrackingStartAt" 
-    on-reading="onReading" 
-    zoom-start-at="zoomStartAt" 
-    zoom-end-at="zoomEndAt" 
-    set-selected-point="setSelectedPoint(position)"
-    last-selected-point="lastSelectedPoint" 
-    remove-marker="removeMarker">
-</xpd-dmec-chart> -->
-
-<xpd-time-zoom-tool ng-if="zoomStartAt && zoomEndAt" zoom-start-at="zoomStartAt" zoom-end-at="zoomEndAt" set-zoom="setZoom">
-</xpd-time-zoom-tool>
+<rzslider 
+    rz-slider-model="zoomStartAt"
+    rz-slider-high="zoomEndAt"
+    rz-slider-options="slider.options">
+</rzslider>

@@ -5,6 +5,7 @@ import 'angular-route';
 import 'angular-spinner';
 import 'angular-toastr';
 import 'angular-ui-bootstrap';
+import 'angularjs-slider';
 import 'bootstrap';
 import 'jquery';
 
@@ -12,6 +13,8 @@ console.log('Importando css globais');
 import './../../../node_modules/angular-toastr/dist/angular-toastr.css';
 import './../../../node_modules/bootstrap/dist/css/bootstrap.min.css';
 import './../../../node_modules/font-awesome/css/font-awesome.min.css';
+
+import './../../../node_modules/angularjs-slider/dist/rzslider.css';
 
 import './../../assets/css/xpd-watermark.scss';
 
@@ -83,6 +86,7 @@ const XPDSharedModule: angular.IModule = angular.module('xpd.shared', [
 	'toastr',
 	'ngAnimate',
 	'angularSpinner',
+	'rzModule',
 	XPDDialogModule.name,
 	XPDAccessModule.name,
 	XPDCalculationModule.name,

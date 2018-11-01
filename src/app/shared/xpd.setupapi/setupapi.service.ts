@@ -18,7 +18,7 @@ export class SetupAPIService {
 
 	}
 
-	public doRequest(req, log: boolean) {
+	public doRequest(req, log: boolean, hideSpinner?: boolean) {
 		const self = this;
 
 		const request = this.$http(req);
@@ -27,7 +27,7 @@ export class SetupAPIService {
 			this.operationDataService.log(req.method + ' ' + req.url, req);
 		}
 
-		if (req && req.url && this.hasSpinner(req.url)) {
+		if (req && req.url && hideSpinner === true) {
 
 			++this.runningRequests;
 
@@ -96,28 +96,6 @@ export class SetupAPIService {
 		// 	window.open(url, httpStatus);
 		// }
 
-	}
-
-	private hasSpinner(url) {
-
-		const urlsWithoutSpinner = [
-			// '/xpd-setup-api/setup/reports/',
-			// '/xpd-setup-api/setup/reading/from/',
-			'/xpd-setup-api/setup/reading/tick/',
-			'/xpd-setup-api/setup/event/list-by-type/',
-			// '/xpd-setup-api/tripin/rig-pictures/load/'
-		];
-
-		let result = true;
-
-		for (const i in urlsWithoutSpinner) {
-			if (url.indexOf(urlsWithoutSpinner[i]) >= 0) {
-				result = false;
-				break;
-			}
-		}
-
-		return result;
 	}
 
 	private finallySpinner() {

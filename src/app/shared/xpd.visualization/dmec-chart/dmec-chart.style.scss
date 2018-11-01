@@ -1,4 +1,13 @@
 xpd-dmec-chart {
     display: block;
     height: 100%;
+    
+    #xpd-dmec-chart-container {
+        display: block;
+        height: 100%;
+
+        .xpd-dmec-chart {
+            height: 25%;
+        }
+    }
 }

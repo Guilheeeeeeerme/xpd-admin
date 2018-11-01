@@ -12,10 +12,8 @@ xpd-old-tracking {
         font-family: $font-family-1;
         width: 100%;
         // font-size: 4.2em;
-    }
-
-    .xpd-conn-chronometers-top {
         display: table;
+        font-size: 2.7em;
     }
 
     .times-event-dialog .selected-arrow {
@@ -130,10 +128,6 @@ xpd-old-tracking {
         position: fixed;
         z-index: 1;
         cursor: pointer;
-    }
-
-    .xpd-conn-chronometers {
-        font-size: 2.7em;
     }
 
 }
