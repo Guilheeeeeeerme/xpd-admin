@@ -7,10 +7,11 @@ import alarmInfoTemplate from './alarm-info-upsert.modal.html';
 export class AlarmInfoController {
 	// 'use strict';
 
-	public static $inject = ['$scope', 'alarmSetupAPIService', 'alarmCRUDService'];
+	public static $inject = ['$scope', '$filter', 'alarmSetupAPIService', 'alarmCRUDService'];
 
 	constructor(
 		private $scope: any,
+		private $filter,
 		private alarmSetupAPIService: AlarmSetupAPIService,
 		private alarmCRUDService: AlarmCRUDService) {
 
@@ -99,13 +100,17 @@ export class AlarmInfoController {
 
 	}
 
-	public actionButtonRemoveAlarm(alarm, index) {
+	public actionButtonRemoveAlarm(alarm) {
 		this.alarmCRUDService.removeAlarm(alarm).then(
 			(resp: any) => {
 				if (resp == null) {
-					this.$scope.dados.operation.alarms.splice(index, 1);
+					this.$scope.dados.operation.alarms = this.$filter('filter')(this.$scope.dados.operation.alarms, (a) => {
+						return a.$$hashKey !== alarm.$$hashKey;
+					});
 				} else {
-					this.$scope.dados.operation.alarms[index] = resp;
+					this.$scope.dados.operation.alarms = this.$filter('filter')(this.$scope.dados.operation.alarms, (a) => {
+						return a.id !== alarm.id;
+					});
 				}
 			},
 		);

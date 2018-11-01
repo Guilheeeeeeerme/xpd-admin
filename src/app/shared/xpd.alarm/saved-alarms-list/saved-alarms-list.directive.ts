@@ -22,7 +22,7 @@ export class SavedAlarmsListDirective implements ng.IDirective {
 		buttomIcon: '@',
 		alarmsToImport: '=',
 		actionClickButton: '&',
-		actionImportButton: '&',
+		actionImportButton: '&?',
 	};
 	public restrict = 'AE';
 	public template = template;
