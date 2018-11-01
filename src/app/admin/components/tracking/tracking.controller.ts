@@ -1,28 +1,26 @@
+
 import * as angular from 'angular';
-import { IModalService } from 'angular-ui-bootstrap';
+import {TraceClass} from 'typescript-debug';
 import { DialogService } from '../../../shared/xpd.dialog/xpd.dialog.factory';
 import { EventDetailsModalService } from '../../../shared/xpd.modal.event-details/xpd-modal-event-details.factory';
 import { FailureModalFactory } from '../../../shared/xpd.modal.failure/xpd-modal-failure.factory';
 import { LessonLearnedModalService } from '../../../shared/xpd.modal.lessonlearned/xpd-modal-lessonlearned.service';
 import { OperationDataService } from '../../../shared/xpd.operation-data/operation-data.service';
 import { EventLogSetupAPIService } from '../../../shared/xpd.setupapi/eventlog-setupapi.service';
-import { FailureSetupAPIService } from '../../../shared/xpd.setupapi/failure-setupapi.service';
 import { LessonLearnedSetupAPIService } from '../../../shared/xpd.setupapi/lessonlearned-setupapi.service';
 
+@TraceClass({ tracePrefix: 'TrackingController' })
 export class TrackingController {
 
 	public static $inject: string[] = [
 		'$scope',
-		'$q',
 		'$rootScope',
 		'$interval',
 		'$timeout',
-		'$uibModal',
 		'eventDetailsModalService',
 		'eventlogSetupAPIService',
 		'failureModal',
 		'lessonLearnedSetupAPIService',
-		'failureSetupAPIService',
 		'lessonLearnedModal',
 		'operationDataService',
 		'dialogService',
@@ -37,16 +35,13 @@ export class TrackingController {
 
 	constructor(
 		private $scope: any,
-		private $q: angular.IQService,
-		private $rootScope: any,
+		$rootScope: any,
 		private $interval: angular.IIntervalService,
 		private $timeout: angular.ITimeoutService,
-		private $uibModal: IModalService,
 		private eventDetailsModalService: EventDetailsModalService,
 		private eventlogSetupAPIService: EventLogSetupAPIService,
 		private failureModal: FailureModalFactory,
 		private lessonLearnedSetupAPIService: LessonLearnedSetupAPIService,
-		private failureSetupAPIService: FailureSetupAPIService,
 		private lessonLearnedModal: LessonLearnedModalService,
 		private operationDataService: OperationDataService,
 		private dialogService: DialogService,
@@ -89,27 +84,27 @@ export class TrackingController {
 		};
 
 		operationDataService.openConnection([
-				'alarm',
-				'bitDepth',
-				'blockSpeed',
-				'chronometer',
-				'direction',
-				'elevatorTarget',
-				'event',
-				'jointLog',
-				'operation',
-				'operationProgress',
-				'operationQueue',
-				'parallelEvent',
-				'reading',
-				'score',
-				'shift',
-				'speedSecurity',
-				'state',
-				'timeSlices',
-				'vre',
-				'well',
-			]).then(() => {
+			'alarm',
+			'bitDepth',
+			'blockSpeed',
+			'chronometer',
+			'direction',
+			'elevatorTarget',
+			'event',
+			'jointLog',
+			'operation',
+			'operationProgress',
+			'operationQueue',
+			'parallelEvent',
+			'reading',
+			'score',
+			'shift',
+			'speedSecurity',
+			'state',
+			'timeSlices',
+			'vre',
+			'well',
+		]).then(() => {
 			vm.operationDataFactory = operationDataService.operationDataFactory;
 			$scope.operationData = vm.operationDataFactory.operationData;
 			vm.loadEvents();
@@ -126,36 +121,37 @@ export class TrackingController {
 			// * ALARM *//
 
 			// buildEventStruture();
-			operationDataService.on('setOnEventChangeListener', (data) => { vm.loadEvents(); vm.buildEventStruture(); });
-			operationDataService.on('setOnCurrentEventListener', (data) => { vm.buildEventStruture(); });
-			operationDataService.on('setOnNoCurrentEventListener', (data) => { vm.buildEventStruture(); });
-			operationDataService.on('setOnEventLogUpdateListener', (data) => { vm.buildEventStruture(); });
-			operationDataService.on('setOnWaitEventListener', (data) => { vm.buildEventStruture(); });
+			operationDataService.on('setOnEventChangeListener', () => { vm.loadEvents(); vm.buildEventStruture(); });
+			operationDataService.on('setOnCurrentEventListener', () => { vm.buildEventStruture(); });
+			operationDataService.on('setOnNoCurrentEventListener', () => { vm.buildEventStruture(); });
+			operationDataService.on('setOnEventLogUpdateListener', () => { vm.buildEventStruture(); });
+			operationDataService.on('setOnWaitEventListener', () => { vm.buildEventStruture(); });
 
 			// buildTimeSlicesStruture();
-			operationDataService.on('setOnTimeSlicesChangeListener', (data) => { vm.buildTimeSlicesStruture(); });
-			operationDataService.on('setOnTimeSlicesListener', (data) => { vm.buildTimeSlicesStruture(); });
-			operationDataService.on('setOnNoTimeSlicesListener', (data) => { vm.buildTimeSlicesStruture(); });
+			operationDataService.on('setOnTimeSlicesChangeListener', () => { vm.buildTimeSlicesStruture(); });
+			operationDataService.on('setOnTimeSlicesListener', () => { vm.buildTimeSlicesStruture(); });
+			operationDataService.on('setOnNoTimeSlicesListener', () => { vm.buildTimeSlicesStruture(); });
 
-			operationDataService.on('setOnAboveSpeedLimitListener', (data) => { vm.onAboveSpeedLimit(); });
-			operationDataService.on('setOnUnreachableTargetListener', (data) => { vm.onUnreachableTarget(); });
+			operationDataService.on('setOnAboveSpeedLimitListener', () => { vm.onAboveSpeedLimit(); });
+			operationDataService.on('setOnUnreachableTargetListener', () => { vm.onUnreachableTarget(); });
 
 			// removeTeamsFromShift();
-			operationDataService.on('setOnShiftListener', (data) => { vm.removeTeamsFromShift(); });
+			operationDataService.on('setOnShiftListener', () => { vm.removeTeamsFromShift(); });
 
 			// buildAcknowledgementList();
-			operationDataService.on('setOnAlarmsChangeListener', (data) => { vm.buildAcknowledgementList(); });
-			operationDataService.on('setOnCurrentAlarmsListener', (data) => { vm.buildAcknowledgementList(); });
-			operationDataService.on('setOnNoCurrentAlarmsListener', (data) => { vm.buildAcknowledgementList(); });
-			operationDataService.on('setOnSpeedRestrictionAlarmListener', (data) => { vm.buildAcknowledgementList(); });
-			operationDataService.on('setOnDurationAlarmListener', (data) => { vm.buildAcknowledgementList(); });
-			operationDataService.on('setOnNoCurrentAlarmListener', (data) => { vm.buildAcknowledgementList(); });
-			operationDataService.on('setOnExpectedAlarmChangeListener', (data) => { vm.buildAcknowledgementList(); });
+			operationDataService.on('setOnAlarmsChangeListener', () => { vm.buildAcknowledgementList(); });
+			operationDataService.on('setOnCurrentAlarmsListener', () => { vm.buildAcknowledgementList(); });
+			operationDataService.on('setOnNoCurrentAlarmsListener', () => { vm.buildAcknowledgementList(); });
+			operationDataService.on('setOnSpeedRestrictionAlarmListener', () => { vm.buildAcknowledgementList(); });
+			operationDataService.on('setOnDurationAlarmListener', () => { vm.buildAcknowledgementList(); });
+			operationDataService.on('setOnNoCurrentAlarmListener', () => { vm.buildAcknowledgementList(); });
+			operationDataService.on('setOnExpectedAlarmChangeListener', () => { vm.buildAcknowledgementList(); });
 
 		});
 
 	}
 
+	// @XPDMethodDebugDecorator()
 	public actionOpenDropdownMenu(mouseEvent, eventLog) {
 		const modalOption: any = document.querySelector('.slips-to-slips-dropdown-menu');
 
@@ -172,10 +168,12 @@ export class TrackingController {
 
 	}
 
+	// @XPDMethodDebugDecorator()
 	public actionClickEventDetailsButton() {
 		this.eventDetailsModalService.open(this.eventId);
 	}
 
+	// @XPDMethodDebugDecorator()
 	public actionButtonStartOperation(operation: any) {
 		const vm = this;
 		vm.dialogService.showConfirmDialog(
@@ -184,6 +182,7 @@ export class TrackingController {
 			});
 	}
 
+	// @XPDMethodDebugDecorator()
 	public actionButtonFinishOperation() {
 		const vm = this;
 		vm.dialogService.showConfirmDialog(
@@ -192,6 +191,7 @@ export class TrackingController {
 			});
 	}
 
+	// @XPDMethodDebugDecorator()
 	public actionButtonStartCementation() {
 		const vm = this;
 
@@ -212,6 +212,7 @@ export class TrackingController {
 		}
 	}
 
+	// @XPDMethodDebugDecorator()
 	public actionButtonStopCementation() {
 		const vm = this;
 		vm.dialogService.showCriticalDialog(
@@ -220,6 +221,7 @@ export class TrackingController {
 			});
 	}
 
+	// @XPDMethodDebugDecorator()
 	public flashGoDiv() {
 		const vm = this;
 		vm.$scope.flags.showGo = true;
@@ -229,12 +231,14 @@ export class TrackingController {
 		}, 500, vm.$scope);
 	}
 
+	// @XPDMethodDebugDecorator()
 	public actionClickFailuresButton() {
 		this.failureModal.open(
 			this.getSelectedEvent(),
 		);
 	}
 
+	// @XPDMethodDebugDecorator()
 	public actionClickLessonsLearnedButton() {
 		this.lessonLearnedModal.open(
 			this.getSelectedEvent(),
@@ -243,11 +247,13 @@ export class TrackingController {
 		);
 	}
 
+	// @XPDMethodDebugDecorator()
 	public actionButtonCloseAlarmsAcknowledgementModal() {
 		const vm = this;
 		vm.$scope.$uibModalInstance.close();
 	}
 
+	// @XPDMethodDebugDecorator()
 	public actionButtonUnconfirmAcknowledgement(acknowledgement) {
 		const vm = this;
 		vm.dialogService.showConfirmDialog('Unconfirm Acknowledgement?', () => {
@@ -255,6 +261,7 @@ export class TrackingController {
 		});
 	}
 
+	// @XPDMethodDebugDecorator()
 	public actionButtonConfirmAcknowledgement(acknowledgement) {
 		const vm = this;
 		vm.dialogService.showConfirmDialog('Confirm Acknowledgement?', () => {
@@ -262,31 +269,38 @@ export class TrackingController {
 		});
 	}
 
+	// @XPDMethodDebugDecorator()
 	public actionButtonStartMakeUp() {
 		this.operationDataFactory.emitStartMakeUp();
 	}
 
+	// @XPDMethodDebugDecorator()
 	public actionButtonStartLayDown() {
 		this.operationDataFactory.emitStartLayDown();
 	}
 
+	// @XPDMethodDebugDecorator()
 	public actionButtonFinishMakeUp() {
 		this.operationDataFactory.emitFinishMakeUp();
 	}
 
+	// @XPDMethodDebugDecorator()
 	public actionButtonFinishLayDown() {
 		this.operationDataFactory.emitFinishLayDown();
 	}
 
+	// @XPDMethodDebugDecorator()
 	public actionButtonFinishDurationAlarm() {
 		this.operationDataFactory.emitFinishDurationAlarm();
 	}
 
+	// @XPDMethodDebugDecorator()
 	public finishDurationAlarm() {
 		this.operationDataFactory.emitFinishDurationAlarm();
 	}
 
-	private getSelectedEvent() {
+	// @XPDMethodDebugDecorator()
+	public getSelectedEvent() {
 		const operationId = this.$scope.operationData.operationContext.currentOperation.id;
 		const start = new Date(this.eventStartTime);
 		const end = new Date(this.eventEndTime);
@@ -302,14 +316,17 @@ export class TrackingController {
 		return selectedEvent;
 	}
 
+	// @XPDMethodDebugDecorator()
 	private insertLessonLearnedCallback(lessonLearned) {
 		this.lessonLearnedSetupAPIService.insertObject(lessonLearned);
 	}
 
+	// @XPDMethodDebugDecorator()
 	private updateLessonLearnedCallback(lessonLearned) {
 		this.lessonLearnedSetupAPIService.updateObject(lessonLearned);
 	}
 
+	// @XPDMethodDebugDecorator()
 	private init() {
 		const vm = this;
 
@@ -327,6 +344,7 @@ export class TrackingController {
 		vm.buildAcknowledgementList();
 	}
 
+	// @XPDMethodDebugDecorator()
 	private startCementation() {
 		const vm = this;
 		this.dialogService.showConfirmDialog(
@@ -335,12 +353,14 @@ export class TrackingController {
 			});
 	}
 
+	// @XPDMethodDebugDecorator()
 	private circulateShiftList() {
 		if (this.$scope.operationData.shiftContext.onShift != null && this.$scope.operationData.shiftContext.onShift.length > 1) {
 			this.$scope.operationData.shiftContext.onShift.push(this.$scope.operationData.shiftContext.onShift.shift());
 		}
 	}
 
+	// @XPDMethodDebugDecorator()
 	private removeTeamsFromShift() {
 		if (this.$scope.operationData.shiftContext != null && this.$scope.operationData.shiftContext.onShift != null) {
 			this.$scope.operationData.shiftContext.onShift = this.$scope.operationData.shiftContext.onShift.filter((shift) => {
@@ -349,6 +369,7 @@ export class TrackingController {
 		}
 	}
 
+	// @XPDMethodDebugDecorator()
 	private buildAcknowledgementList() {
 
 		this.$scope.acknowledgement.depthAlarms = [];
@@ -383,6 +404,7 @@ export class TrackingController {
 		}
 	}
 
+	// @XPDMethodDebugDecorator()
 	private onAboveSpeedLimit() {
 		const vm = this;
 
@@ -398,6 +420,7 @@ export class TrackingController {
 
 	}
 
+	// @XPDMethodDebugDecorator()
 	private onUnreachableTarget() {
 		/*
 		 if ($scope.flags.showUnreachable == true)
@@ -411,6 +434,7 @@ export class TrackingController {
 		 */
 	}
 
+	// @XPDMethodDebugDecorator()
 	private loadEvents() {
 
 		if (this.$scope.operationData != null &&
@@ -433,10 +457,12 @@ export class TrackingController {
 
 	}
 
+	// @XPDMethodDebugDecorator()
 	private listTrackingEventByOperation(operationId) {
 		return this.eventlogSetupAPIService.listTrackingEventByOperation(operationId);
 	}
 
+	// @XPDMethodDebugDecorator()
 	private organizeEventsOnLists(trackingEvents) {
 
 		this.$scope.dados.connectionEvents = [];
@@ -476,6 +502,7 @@ export class TrackingController {
 
 	}
 
+	// @XPDMethodDebugDecorator()
 	private buildEventStruture() {
 
 		const eventContext = this.$scope.operationData.eventContext;
@@ -491,6 +518,7 @@ export class TrackingController {
 
 	}
 
+	// @XPDMethodDebugDecorator()
 	private buildTimeSlicesStruture() {
 
 		const timeSlicesContext = this.$scope.operationData.timeSlicesContext;

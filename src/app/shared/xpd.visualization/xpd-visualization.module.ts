@@ -6,7 +6,6 @@ import { ConnRulerDirective } from './conn-ruler/conn-ruler.directive';
 import { ConsistencyInformationPanelDirective } from './consistency-information-panel/consistency-information-panel.directive';
 import { CurrentAlarmPanelDirective } from './current-alarm-panel/current-alarm-panel.directive';
 import { DisplacementAreaFactory } from './displacement-area/displacement-area.directive';
-import { DMECChartModalController } from './dmec-chart/dmec-chart-modal.controller';
 import { DMECChartDirective } from './dmec-chart/dmec-chart.directive';
 import { DMECTrackingEventsDirective } from './dmec-tracking-events/dmec-tracking-events.directive';
 import { DMECTrackingDirective } from './dmec-tracking/dmec-tracking.directive';
@@ -60,7 +59,6 @@ XPDVisualizationModule.directive('xpdDmecTracking', DMECTrackingDirective.Factor
 XPDVisualizationModule.directive('xpdDmecTrackingEvents', DMECTrackingEventsDirective.Factory());
 XPDVisualizationModule.directive('xpdDisplacementArea', DisplacementAreaFactory.Factory());
 XPDVisualizationModule.directive('xpdDmecChart', DMECChartDirective.Factory());
-XPDVisualizationModule.controller('DMECChartModalController', DMECChartModalController);
 XPDVisualizationModule.directive('xpdConsistencyInformationPanel', ConsistencyInformationPanelDirective.Factory());
 XPDVisualizationModule.directive('xpdConnRuler', ConnRulerDirective.Factory());
 XPDVisualizationModule.directive('xpdForecastWaterfall', ForecastWaterfallDirective.Factory());

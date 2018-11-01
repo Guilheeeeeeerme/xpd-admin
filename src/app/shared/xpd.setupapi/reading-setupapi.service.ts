@@ -12,41 +12,43 @@ export class ReadingSetupAPIService {
 	public BASE_URL: string;
 
 	constructor(private xpdAccessService: XPDAccessService, private setupAPIService: SetupAPIService) {
-		this.BASE_URL = xpdAccessService.getSetupAPIURL() + 'setup/reading';
+		this.BASE_URL = xpdAccessService.getReportsAPIURL() + 'executed/readings';
 	}
 
-	public getAllReadingSince(from) {
+	public getAllReadingSince(from, tracks) {
 		const req = {
-			method: 'GET',
+			method: 'POST',
 			url: this.BASE_URL + '/from/' + from,
 			headers: {
 				'Content-Type': 'application/json',
 			},
+			data: tracks,
 		};
 
 		return this.setupAPIService.doRequest(req, false);
 	}
 
-	public getTick(tick) {
+	public getTick(tick, tracks) {
 		const req = {
-			method: 'GET',
+			method: 'POST',
 			url: this.BASE_URL + '/tick/' + tick,
 			headers: {
 				'Content-Type': 'application/json',
 			},
+			data: tracks,
 		};
 
 		return this.setupAPIService.doRequest(req, false);
 	}
 
-	public getAllReadingByStartEndTime(from, to) {
+	public getAllReadingByStartEndTime(from, to, tracks) {
 		const req = {
-			method: 'GET',
+			method: 'POST',
 			url: this.BASE_URL + '/from/' + from + ((to) ? ('/to/' + to) : ''),
-			// cache: (to) ? true : false,
 			headers: {
 				'Content-Type': 'application/json',
 			},
+			data: tracks,
 		};
 
 		return this.setupAPIService.doRequest(req, false);

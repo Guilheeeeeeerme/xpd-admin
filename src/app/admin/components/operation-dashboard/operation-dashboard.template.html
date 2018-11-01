@@ -3,101 +3,85 @@
     <div class="container-fluid scrollable-content">
 
         <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8 scrollable-content">
-            <xpd-dmec-tracking 
-                current-operation="operationData.operationContext.currentOperation" 
-                current-event="operationData.eventContext.currentEvent"
-                current-tick="operationData.chronometerContext.tick" 
-                current-block-position="operationData.readingContext.currentReading.blockPosition"
-                current-reading="operationData.readingContext.currentReading" 
-                connection-events="dados.connectionEvents" 
-                trip-events="dados.tripEvents"
-                time-events="dados.timeEvents" 
-                selected-readings="selectedReadings"
-                last-selected-point="lastSelectedPoint" 
-                remove-marker="removeMarker">
+            <xpd-dmec-tracking current-operation="operationData.operationContext.currentOperation" current-event="operationData.eventContext.currentEvent"
+                current-tick="operationData.chronometerContext.tick" current-block-position="operationData.readingContext.currentReading.blockPosition"
+                current-reading="operationData.readingContext.currentReading" connection-events="dados.connectionEvents"
+                trip-events="dados.tripEvents" time-events="dados.timeEvents" selected-readings="selectedReadings"
+                last-selected-point="lastSelectedPoint" remove-marker="removeMarker">
             </xpd-dmec-tracking>
         </div>
 
         <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4 scrollable-content">
 
-            <xpd-channels-information-panel 
-                readings="selectedReadings"
-                remove-reading= "odController.removeReadingFromList(index)">
-            </xpd-channels-information-panel>
+            <div class="col-md-12 col-xs-12 col-sm-6">
+                <xpd-channels-information-panel readings="selectedReadings" remove-reading="odController.removeReadingFromList(index)">
+                </xpd-channels-information-panel>
+            </div>
 
             <!-- Well Information -->
-            <xpd-well-information-panel
-                well="operationData.wellContext.currentWell">
-            </xpd-well-information-panel>
+            <div class="col-md-12 col-xs-12 col-sm-6">
+                <xpd-well-information-panel well="operationData.wellContext.currentWell">
+                </xpd-well-information-panel>
+            </div>
 
-            <!-- Operation Information -->
-            <xpd-operation-information-panel
-                number-joints="operationData.jointContext.numberJoints"
-                joint-number="operationData.jointContext.currentJoint.jointNumber" 
-                operation="operationData.operationContext.currentOperation"
-                state="operationData.stateContext.currentState" 
-                reading="operationData.readingContext.currentReading"
-                acc-score="scoreData.accScore"
-                state-duration="operationData.chronometerContext.stateTick"
-                target-param-expected-end-time="rawExpectations.stateExpectedEndTime"
-                optimum-expected-duration="rawExpectations.vOptimumStateExpectedDuration"
-                standard-expected-duration="rawExpectations.vStandardStateExpectedDuration"
-                poor-expected-duration="rawExpectations.vPoorStateExpectedDuration"
-                well="operationData.wellContext.currentWell">
-            </xpd-operation-information-panel>
+            <div class="col-md-12 col-xs-12 col-sm-6">
+                <!-- Operation Information -->
+                <xpd-operation-information-panel number-joints="operationData.jointContext.numberJoints" joint-number="operationData.jointContext.currentJoint.jointNumber"
+                    operation="operationData.operationContext.currentOperation" state="operationData.stateContext.currentState"
+                    reading="operationData.readingContext.currentReading" acc-score="scoreData.accScore" state-duration="operationData.chronometerContext.stateTick"
+                    target-param-expected-end-time="rawExpectations.stateExpectedEndTime" optimum-expected-duration="rawExpectations.vOptimumStateExpectedDuration"
+                    standard-expected-duration="rawExpectations.vStandardStateExpectedDuration" poor-expected-duration="rawExpectations.vPoorStateExpectedDuration"
+                    well="operationData.wellContext.currentWell">
+                </xpd-operation-information-panel>
+            </div>
 
-            <!-- Consistency Information -->
-            <xpd-consistency-information-panel
-                state="operationData.stateContext.currentState" 
-                current-event-type="operationData.eventContext.currentEvent.eventType"
-                is-tripin="operationData.directionContext.tripin" 
-                score="operationData.scoreContext.currentScore"
-                current-event-duration="operationData.chronometerContext.tick"
-                last-event-type="operationData.eventContext.lastEvent.eventType"
-                current-joint-duration="operationData.chronometerContext.jointTick"
-                last-trip-duration="dados.lastTripDuration"
-                last-conn-duration="dados.lastConnDuration"
-                contract-time-performance="contractTimePerformance">
-            </xpd-consistency-information-panel>
+            <div class="col-md-12 col-xs-12 col-sm-6">
+                <!-- Consistency Information -->
+                <xpd-consistency-information-panel state="operationData.stateContext.currentState" current-event-type="operationData.eventContext.currentEvent.eventType"
+                    is-tripin="operationData.directionContext.tripin" score="operationData.scoreContext.currentScore"
+                    current-event-duration="operationData.chronometerContext.tick" last-event-type="operationData.eventContext.lastEvent.eventType"
+                    current-joint-duration="operationData.chronometerContext.jointTick" last-trip-duration="dados.lastTripDuration"
+                    last-conn-duration="dados.lastConnDuration" contract-time-performance="contractTimePerformance">
+                </xpd-consistency-information-panel>
+            </div>
 
-            <!-- Next Activities Information -->
-            <xpd-next-activities-information-panel
-                mark-first-as-current="true"
-                operation="operationData.operationContext.currentOperation"
-                activities="nextActivitiesEstimatives">
-            </xpd-next-activities-information-panel>
+            <div class="col-md-12 col-xs-12 col-sm-6">
+                <!-- Next Activities Information -->
+                <xpd-next-activities-information-panel mark-first-as-current="true" operation="operationData.operationContext.currentOperation"
+                    activities="nextActivitiesEstimatives">
+                </xpd-next-activities-information-panel>
+            </div>
 
-            <xpd-operation-queue-forecast
-                start-time="{{ operationFinalTimeEstimative }}"
-                current-well-id="{{ operationData.wellContext.currentWell.id }}"
-                current-operation-id="{{ operationData.operationContext.currentOperation.id }}"
-                operation-queue="operationData.operationQueueContext.operationQueue">
-            </xpd-operation-queue-forecast>
+            <div class="col-md-12 col-xs-12 col-sm-6">
+                <xpd-operation-queue-forecast start-time="{{ operationFinalTimeEstimative }}" current-well-id="{{ operationData.wellContext.currentWell.id }}"
+                    current-operation-id="{{ operationData.operationContext.currentOperation.id }}" operation-queue="operationData.operationQueueContext.operationQueue">
+                </xpd-operation-queue-forecast>
+            </div>
 
-            <!-- Operation Progress -->
-            <xpd-operation-progress-panel
-                current-score="operationData.scoreContext.currentScore" 
-                progress-data="operationData.operationProgressContext.operationProgressData[operationData.stateContext.currentState]">
-            </xpd-operation-progress-panel>
+            <div class="col-md-12 col-xs-12 col-sm-6">
+                <!-- Operation Progress -->
+                <xpd-operation-progress-panel current-score="operationData.scoreContext.currentScore" progress-data="operationData.operationProgressContext.operationProgressData[operationData.stateContext.currentState]">
+                </xpd-operation-progress-panel>
+            </div>
 
-            <!-- Current Alarm -->
-            <xpd-current-alarm-panel
-                current-alarm="operationData.alarmContext.currentAlarm">
-            </xpd-current-alarm-panel>
+            <div class="col-md-12 col-xs-12 col-sm-6">
+                <!-- Current Alarm -->
+                <xpd-current-alarm-panel current-alarm="operationData.alarmContext.currentAlarm">
+                </xpd-current-alarm-panel>
+            </div>
 
-            <!-- Upcoming Alarm -->
-            <xpd-upcoming-alarms-panel
-                limit="3"
-                tripin-alarms="operationData.alarmContext.tripin"
-                tripout-alarms="operationData.alarmContext.tripout"
-                current-direction="operationData.directionContext.tripin"
-                current-bit-depth="operationData.bitDepthContext.bitDepth">
-            </xpd-upcoming-alarms-panel>
+            <div class="col-md-12 col-xs-12 col-sm-6">
+                <!-- Upcoming Alarm -->
+                <xpd-upcoming-alarms-panel limit="3" tripin-alarms="operationData.alarmContext.tripin" tripout-alarms="operationData.alarmContext.tripout"
+                    current-direction="operationData.directionContext.tripin" current-bit-depth="operationData.bitDepthContext.bitDepth">
+                </xpd-upcoming-alarms-panel>
+            </div>
 
-            <!-- Failures -->
-            <xpd-failure-panel
-                failure-list="operationData.failureContext.failureList">
-            </xpd-failure-panel>
+            <div class="col-md-12 col-xs-12 col-sm-6">
+                <!-- Failures -->
+                <xpd-failure-panel failure-list="operationData.failureContext.failureList">
+                </xpd-failure-panel>
+            </div>
 
         </div>
 

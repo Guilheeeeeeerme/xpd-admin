@@ -92,14 +92,19 @@ export class AuthService {
 			data: user,
 		};
 
+		// console.log('operationServerRequest', operationServerRequest);
+		// console.log('reportsServerRequest', reportsServerRequest);
+
 		const operationServerPromise = this.setupAPIService.doRequest(operationServerRequest, true);
 		const reportsServerPromise = this.setupAPIService.doRequest(reportsServerRequest, true);
 
 		operationServerPromise.then((data: any) => {
+			// console.log(AuthService.OS_TOKEN, data.token)
 			sessionStorage.setItem(AuthService.OS_TOKEN, data.token);
 		}, (error) => error );
 
 		reportsServerPromise.then((data: any) => {
+			// console.log(AuthService.RS_TOKEN, data.token)
 			sessionStorage.setItem(AuthService.RS_TOKEN, data.token);
 		});
 

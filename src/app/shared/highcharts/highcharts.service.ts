@@ -20,6 +20,8 @@ declare var require: any;
 // tslint:disable-next-line:no-var-requires
 require('highcharts/highcharts-more')(Highcharts);
 // tslint:disable-next-line:no-var-requires
+require('highcharts/modules/boost')(Highcharts);
+// tslint:disable-next-line:no-var-requires
 require('highcharts-multicolor-series')(Highcharts);
 
 export class HighchartsService {
@@ -41,6 +43,7 @@ export class HighchartsService {
 
 		options.global = {
 			timezoneOffset: new Date().getTimezoneOffset(),
+			seriesThreshold: 20,
 		};
 
 		Highcharts.setOptions(options);

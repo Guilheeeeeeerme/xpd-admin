@@ -1,9 +1,15 @@
 
 
 
-xpd-dmec-tracking,
-xpd-dmec-tracking > .dmec-tracking-container  {
-    display: block;
-    width: 100%;
-    height: 100%;
+xpd-dmec-tracking {
+
+    .xpd-chart-container {
+        width: 100%;
+    }
+
+    > .row {
+        display: block;
+        width: 100%;
+        height: 100%;
+    }
 }

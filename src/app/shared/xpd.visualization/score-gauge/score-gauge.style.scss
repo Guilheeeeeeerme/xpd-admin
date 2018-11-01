@@ -4,11 +4,19 @@ xpd-score-gauge {
 
 	display: block;
 	height: 100%;
+	// margin: 5px;
 
 	.score-gauge-svg {
 		font-family: $font-family-1;
 	}
 	
+	div.score-div-container {
+		display: block;
+		width: 100%;
+		height: 100%;
+		margin: 5px;
+	}
+
 	/**
 	* SCORE GAUGE
 	*/

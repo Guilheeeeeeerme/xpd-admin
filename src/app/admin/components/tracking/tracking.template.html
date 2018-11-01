@@ -1,27 +1,28 @@
 <xpd-operation-manager display="inline" popover-placement="bottom-right" current-event="operationData.eventContext.currentEvent"
     operation-queue='operationData.operationQueueContext.operationQueue' current-operation='operationData.operationContext.currentOperation'
-    last-section='operationData.operationQueueContext.lastSection' current-state="operationData.stateContext.currentState" current-direction="operationData.directionContext"
-    bit-depth-context='operationData.bitDepthContext' current-alarm="operationData.alarmContext.currentAlarm" action-button-start-operation='tController.actionButtonStartOperation(operation)'
-    action-button-finish-operation='tController.actionButtonFinishOperation()' action-button-start-cementation="tController.actionButtonStartCementation()"
-    action-button-stop-cementation="tController.actionButtonStopCementation()" action-button-start-make-up="tController.actionButtonStartMakeUp()"
-    action-button-start-lay-down="tController.actionButtonStartLayDown()" action-button-finish-make-up="tController.actionButtonFinishMakeUp()"
-    action-button-finish-lay-down="tController.actionButtonFinishLayDown()" action-button-finish-duration-alarm="tController.finishDurationAlarm()">
+    last-section='operationData.operationQueueContext.lastSection' current-state="operationData.stateContext.currentState"
+    current-direction="operationData.directionContext" bit-depth-context='operationData.bitDepthContext' current-alarm="operationData.alarmContext.currentAlarm"
+    action-button-start-operation='tController.actionButtonStartOperation(operation)' action-button-finish-operation='tController.actionButtonFinishOperation()'
+    action-button-start-cementation="tController.actionButtonStartCementation()" action-button-stop-cementation="tController.actionButtonStopCementation()"
+    action-button-start-make-up="tController.actionButtonStartMakeUp()" action-button-start-lay-down="tController.actionButtonStartLayDown()"
+    action-button-finish-make-up="tController.actionButtonFinishMakeUp()" action-button-finish-lay-down="tController.actionButtonFinishLayDown()"
+    action-button-finish-duration-alarm="tController.finishDurationAlarm()">
 
 </xpd-operation-manager>
 
 
 <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8 h-100 nopadding">
 
-    <xpd-old-tracking action-open-dropdown-menu="tController.actionOpenDropdownMenu(mouseEvent, eventLog)" action-click-event-details="tController.actionClickEventDetailsButton()"
-        action-click-failures="tController.actionClickFailuresButton()" action-click-lessons-learned="tController.actionClickLessonsLearnedButton()"
-        task-expected-duration="operationData.chronometerContext.expected" current-tick="operationData.chronometerContext.tick"
-        current-operation="operationData.operationContext.currentOperation" current-event="operationData.eventContext.currentEvent"
-        current-reading="operationData.readingContext.currentReading" current-calculated="operationData.elevatorTargetContext.currentCalculated"
-        safety-speed-limit="operationData.elevatorTargetContext.safetySpeedLimit" current-time-calculated="operationData.elevatorTargetContext.currentTimeCalculated"
-        block-speed-context="operationData.blockSpeedContext" changing-states-list="operationData.stateContext.changingStatesList"
-        changing-alarms-list="operationData.alarmContext.changingAlarmsList" unreachable="operationData.elevatorTargetContext.unreachable"
-        current-state="operationData.stateContext.currentState" connection-times="dados.connectionTimes" trip-times="dados.tripTimes"
-        time-blocks="dados.timeBlocks" flags="flags">
+    <xpd-old-tracking action-open-dropdown-menu="tController.actionOpenDropdownMenu(mouseEvent, eventLog)"
+        action-click-event-details="tController.actionClickEventDetailsButton()" action-click-failures="tController.actionClickFailuresButton()"
+        action-click-lessons-learned="tController.actionClickLessonsLearnedButton()" task-expected-duration="operationData.chronometerContext.expected"
+        current-tick="operationData.chronometerContext.tick" current-operation="operationData.operationContext.currentOperation"
+        current-event="operationData.eventContext.currentEvent" current-reading="operationData.readingContext.currentReading"
+        current-calculated="operationData.elevatorTargetContext.currentCalculated" safety-speed-limit="operationData.elevatorTargetContext.safetySpeedLimit"
+        current-time-calculated="operationData.elevatorTargetContext.currentTimeCalculated" block-speed-context="operationData.blockSpeedContext"
+        changing-states-list="operationData.stateContext.changingStatesList" changing-alarms-list="operationData.alarmContext.changingAlarmsList"
+        unreachable="operationData.elevatorTargetContext.unreachable" current-state="operationData.stateContext.currentState"
+        connection-times="dados.connectionTimes" trip-times="dados.tripTimes" time-blocks="dados.timeBlocks" flags="flags">
     </xpd-old-tracking>
 
 </div>
@@ -30,15 +31,18 @@
 
     <div class="col-md-12 h-30 xpd-chart-container">
 
-        <div class="col-md-4">
-            <xpd-score-gauge joint-data="operationData.jointContext" direction-data="operationData.directionContext" number-joints="operationData.jointContext.numberJoints"
-                current-score="operationData.scoreContext.currentScore" acc-score="operationData.shiftContext.accScore">
-            </xpd-score-gauge>
+        <div class="col-md-4 h-100">
+            <div class="h-100">
+                <xpd-score-gauge joint-data="operationData.jointContext" direction-data="operationData.directionContext"
+                    number-joints="operationData.jointContext.numberJoints" current-score="operationData.scoreContext.currentScore"
+                    acc-score="operationData.shiftContext.accScore">
+                </xpd-score-gauge>
+            </div>
         </div>
 
-        <div class="col-md-4">
+        <div class="col-md-4 h-100">
 
-            <div class="row h-50">
+            <div class="h-50">
                 <img class="ship-placeholder" xpd-photo-api-directive photo-api-directive-photo-name="operationData.wellContext.currentWell.rig.photoPath"
                     photo-api-directive-server-path="tripin/rig-pictures">
 
@@ -73,14 +77,14 @@
 
             </div>
 
-            <div class="row h-50">
+            <div class="h-50">
                 <xpd-member-performance ng-if="operationData.shiftContext.onShift[0] != null" member="operationData.shiftContext.onShift[0].member">
                 </xpd-member-performance>
             </div>
 
         </div>
 
-        <div class="col-md-4">
+        <div class="col-md-4 h-100">
             <xpd-vre-list-table vre-data="operationData.vreContext.vreData">
             </xpd-vre-list-table>
         </div>
@@ -137,13 +141,14 @@
                         <span class="glyphicon glyphicon-download-alt"></span>
                     </div>
                     <div class="media-body">
-                        <h4 class="media-heading">{{ acknowledgement.alarm.name }}</h4> {{ acknowledgement.alarm.message }}
-                        <br/>
+                        <h4 class="media-heading">{{ acknowledgement.alarm.name }}</h4> {{
+                        acknowledgement.alarm.message }}
+                        <br />
 
                         <i>Triggered at:
                             <strong>{{ acknowledgement.playTime | date: 'short' }}</strong>
                         </i>
-                        <br/>
+                        <br />
 
                         <i ng-if="acknowledgement.acknowledgeTime != null">Acknowledged at:
                             <strong>{{ acknowledgement.acknowledgeTime | date: 'short' }}</strong>
@@ -168,13 +173,14 @@
                         <span class="glyphicon glyphicon-time"></span>
                     </div>
                     <div class="media-body">
-                        <h4 class="media-heading">{{ acknowledgement.alarm.name }}</h4> {{ acknowledgement.alarm.message }}
-                        <br/>
+                        <h4 class="media-heading">{{ acknowledgement.alarm.name }}</h4> {{
+                        acknowledgement.alarm.message }}
+                        <br />
 
                         <i>Triggered at:
                             <strong>{{ acknowledgement.playTime | date: 'short' }}</strong>
                         </i>
-                        <br/>
+                        <br />
 
                         <i ng-if="acknowledgement.acknowledgeTime != null">Acknowledged at:
                             <strong>{{ acknowledgement.acknowledgeTime | date: 'short' }}</strong>

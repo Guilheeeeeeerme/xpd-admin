@@ -93,9 +93,11 @@ export class ScoreGaugeDirective implements ng.IDirective {
 		 **/
 		const divContainer = d3.select(element[0]).append('div');
 
-		divContainer.style('position', 'relative');
-		divContainer.style('padding-top', '0px');
-		divContainer.style('height', '100%');
+		// divContainer.style('position', 'relative');
+  divContainer.attr('class', 'score-div-container');
+		// divContainer.style('padding-top', '0px');
+		// divContainer.style('height', '100%');
+		// divContainer.style('width', '100%');
 
 		// const divContainer = d3.select(element[0]).append('div').style({
 		// 	'position': 'relative',
@@ -130,6 +132,7 @@ export class ScoreGaugeDirective implements ng.IDirective {
 		 </marker>
 		 */
 
+		// console.log('translate(' + ((width) / 2) + ', ' + ((height + margin.top) / 2) + ')');
 		const chart = svgContainer
 			.append('g')
 			.attr('transform', 'translate(' + ((width) / 2) + ', ' + ((height + margin.top) / 2) + ')');
@@ -262,20 +265,33 @@ export class ScoreGaugeDirective implements ng.IDirective {
 		/**
 		 * SCOPE DATA WATCHERS
 		 */
-		scope.$watch('currentScore', redrawCurrentScoreArc);
+		scope.$watch('currentScore', (currentScore) => {
+			currentScore = currentScore || 0;
+			// console.log('currentScore', currentScore);
+			redrawCurrentScoreArc( currentScore );
+		});
 
-		scope.$watch('accScore', redrawAccScoreArc);
+		scope.$watch('accScore', (accScore) => {
+			// console.log('accScore', accScore);
+			redrawAccScoreArc(accScore);
+		});
 
-		scope.$watch('jointData', renderJointData, true);
+		scope.$watch('jointData', (jointData) => {
+			// console.log('jointData', jointData);
+			renderJointData(jointData);
+		}, true);
 
-		scope.$watch('directionData', setCurrentDirection, true);
+		scope.$watch('directionData', (directionData) => {
+			// console.log('directionData', directionData);
+			setCurrentDirection(directionData);
+		}, true);
 
-		function redrawCurrentScoreArc(newValue) {
-			if (newValue != null && typeof (newValue) !== 'undefined' && !isNaN(newValue)) {
+		function redrawCurrentScoreArc(currentScore) {
+			if (currentScore != null && typeof (currentScore) !== 'undefined' && !isNaN(currentScore)) {
 				plotCurrentScoreArc.transition().duration(500)
-					.call(scoreArcTween, currentScoreArc, 'startAngle', currentScoreScale(newValue));
+					.call(scoreArcTween, currentScoreArc, 'startAngle', currentScoreScale(currentScore));
 
-				currentScoreValueText.text(newValue.toFixed(0));
+				currentScoreValueText.text(currentScore.toFixed(0));
 			} else {
 				plotCurrentScoreArc.transition().duration(500)
 					.call(scoreArcTween, currentScoreArc, 'startAngle', currentScoreScale(0));
@@ -367,6 +383,7 @@ export class ScoreGaugeDirective implements ng.IDirective {
 				.attr('transform', function(d) {
 					const coordinates = createTickTranslation(100 - d, currentScoreScale, 10);
 
+					// console.log('translate(' + coordinates.x + ',' + coordinates.y + ')');
 					return 'translate(' + coordinates.x + ',' + coordinates.y + ')';
 				});
 
@@ -384,6 +401,7 @@ export class ScoreGaugeDirective implements ng.IDirective {
 				.attr('transform', function(d) {
 					const coordinates = createTickTranslation(100 - d, accScoreScale, -10);
 
+					// console.log('translate(' + coordinates.x + ',' + coordinates.y + ')');
 					return 'translate(' + coordinates.x + ',' + coordinates.y + ')';
 				});
 		}

@@ -1,21 +1,48 @@
 body {
 	margin: 0;
 	padding-top: 0;
+
+	.xpd-dmec-tbl {
+		display: table;
+		height: 100vh;
+		width: 100%;
+
+		nav {
+			uib-accordion {
+				.panel-group {
+					margin: 0;
+				}
+			}	
+		}
+
+		nav,
+		xpd-time-zoom-tool {
+			display: table-row;
+		}
+
+		xpd-dmec-chart {
+			display: table-row;
+			height: 100%;
+		}
+
+
+	}
+
 }
 
-nav {
-	height: 10vh;
-}
+// nav {
+// 	height: 10vh;
+// }
 
-xpd-dmec-chart {
-	height: 80vh;
-	margin-top: 10vh;
-	background: black;
-}
+// xpd-dmec-chart {
+// 	height: 80vh;
+// 	margin-top: 10vh;
+// 	background: black;
+// }
 
-xpd-time-zoom-tool {
-	position: fixed;
-	bottom: 0;
-	width: 100%;
-	height: 10vh;
-}
+// xpd-time-zoom-tool {
+// 	position: fixed;
+// 	bottom: 0;
+// 	width: 100%;
+// 	height: 10vh;
+// }
