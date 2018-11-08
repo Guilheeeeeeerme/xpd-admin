@@ -74,6 +74,13 @@ export class HistogramReportController {
 
 		this.groupOperationByState(data);
 
+		this.$scope.histoData.isEmpty = this.operationTypes.none.activities.length === 0;
+
+		this.$scope.histoData.isEmpty = this.$scope.histoData.isEmpty || this.operationTypes.bha.activities.length === 0;
+		this.$scope.histoData.isEmpty = this.$scope.histoData.isEmpty || this.operationTypes.casing.activities.length === 0;
+		this.$scope.histoData.isEmpty = this.$scope.histoData.isEmpty || this.operationTypes.riser.activities.length === 0;
+		this.$scope.histoData.isEmpty = this.$scope.histoData.isEmpty || this.operationTypes.time.activities.length === 0;
+
 		this.$scope.histoData.histograms = this.operationTypes;
 	}
 

@@ -21,13 +21,15 @@ export class SetupAPIService {
 	public doRequest(req, log: boolean, hideSpinner?: boolean) {
 		const self = this;
 
+		hideSpinner = !!hideSpinner;
+
 		const request = this.$http(req);
 
 		if (log) {
 			this.operationDataService.log(req.method + ' ' + req.url, req);
 		}
 
-		if (req && req.url && hideSpinner === true) {
+		if (req && req.url && !hideSpinner) {
 
 			++this.runningRequests;
 

@@ -1,52 +1,25 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>XPD Reports</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>XPD Reports</title>
 </head>
 
-<body ng-app="xpd.reports">
+<body ng-app="xpd.reports" class="xpd-section-with-navbar">
 
-	<xpd-admin-nav-bar nav-origin="report"> </xpd-admin-nav-bar>
+	<header>
+		<xpd-admin-nav-bar nav-origin="report"> </xpd-admin-nav-bar>
+	</header>
 
-	<section class="xpd-section-with-navbar">
-
+	<section>
 		<xpd-reports-component>
-
 		</xpd-reports-component>
-
-		<!-- <div class="container-fluid">
-			<div class="row">
-				<div class="col-md-2">
-
-					<div class="xpd-green-list-container">
-
-						<h1 class="xpd-box-title">Operation Reports</h1>
-
-						<ul class="nav nav-pills nav-stacked">Select Report
-							<li ng-repeat="report in reportsData.reportList">
-								<a href="{{ report.url }}">{{report.type}}</a>
-							</li>
-						</ul>
-
-					</div>
-				</div>
-
-				<div class="empty-value-report-message has-error" ng-if="( reportsData.failuresOnInterval ).length > 0">
-					There are
-					<strong>{{ ( reportsData.failuresOnInterval ).length }}</strong> NPT(s) on this interval
-				</div>
-
-				<div class="col-md-10" ng-view></div>
-
-			</div>
-		</div> -->
-
 	</section>
 
-    <div class="xpd-logo-watermark"></div>
+	<div class="xpd-logo-watermark"></div>
 
 </body>
 

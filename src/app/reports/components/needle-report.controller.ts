@@ -43,6 +43,7 @@ export class NeedleReportController {
 	}
 
 	public onClickFilterButton(fromDate, toDate) {
+		this.$scope.$parent.rController.getFailuresOnInterval(fromDate, toDate);
 
 		this.reportsSetupAPIService.getNeedleDataChart(
 			fromDate,
@@ -72,6 +73,13 @@ export class NeedleReportController {
 		this.operationTypes.time.activities = [];
 
 		this.groupOperationByState(result.activities);
+
+		this.$scope.needleData.isEmpty = this.operationTypes.none.activities.length === 0;
+
+		this.$scope.needleData.isEmpty = this.$scope.needleData.isEmpty || this.operationTypes.bha.activities.length === 0;
+		this.$scope.needleData.isEmpty = this.$scope.needleData.isEmpty || this.operationTypes.casing.activities.length === 0;
+		this.$scope.needleData.isEmpty = this.$scope.needleData.isEmpty || this.operationTypes.riser.activities.length === 0;
+		this.$scope.needleData.isEmpty = this.$scope.needleData.isEmpty || this.operationTypes.time.activities.length === 0;
 
 		this.$scope.needleData.operationTypes = this.operationTypes;
 	}
