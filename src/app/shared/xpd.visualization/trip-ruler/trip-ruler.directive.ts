@@ -73,7 +73,7 @@ export class TripRulerDirective implements ng.IDirective {
 				scope.svg.width = element[0].clientWidth;
 			}
 
-			console.log(scope.svg);
+			// console.log(scope.svg);
 			// console.log(element.parent().height());
 
 			scope.svg.viewBoxHeight = (scope.svg.height * 100) / scope.svg.width;

@@ -166,7 +166,7 @@ export class DMECService {
 		 */
 		const getTick = () => {
 
-			console.log('getTick');
+			// console.log('getTick');
 
 			const now = new Date().getTime();
 
