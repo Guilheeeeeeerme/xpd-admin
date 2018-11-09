@@ -93,6 +93,7 @@ export class FailuresLassonsController {
 	 * @param  {date} toDate   data final
 	 */
 	public onClickFilterButton(fromDate, toDate) {
+		this.$scope.$parent.rController.getFailuresOnInterval(fromDate, toDate);
 
 		this.$scope.data.breadcrumbs = [
 			{ name: this.$scope.breadcrumbsName },

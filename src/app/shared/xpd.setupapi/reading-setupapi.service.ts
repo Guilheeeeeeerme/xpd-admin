@@ -38,7 +38,7 @@ export class ReadingSetupAPIService {
 			data: tracks,
 		};
 
-		return this.setupAPIService.doRequest(req, false);
+		return this.setupAPIService.doRequest(req, false, true);
 	}
 
 	public getAllReadingByStartEndTime(from, to, tracks) {

@@ -1,12 +1,15 @@
+import * as angular from 'angular';
 import * as d3 from 'd3';
 import './trip-ruler.style.scss';
 import template from './trip-ruler.template.html';
 
 export class TripRulerDirective implements ng.IDirective {
 
+	public static $inject = ['$window'];
 	public static Factory(): ng.IDirectiveFactory {
-		return () => new TripRulerDirective();
+		return ($window: any) => new TripRulerDirective($window);
 	}
+
 	public restrict = 'E';
 	public template = template;
 	public scope = {
@@ -19,12 +22,16 @@ export class TripRulerDirective implements ng.IDirective {
 		unreachable: '=',
 	};
 
+	constructor(private $window: any) { }
+
 	public link: ng.IDirectiveLinkFn = (
 		scope: any,
 		element: ng.IAugmentedJQuery,
 		attributes: ng.IAttributes,
 		ctrl: any,
 	) => {
+
+		const vm = this;
 
 		const alarmColors = d3.scaleOrdinal(d3.schemeCategory10);
 
@@ -56,6 +63,22 @@ export class TripRulerDirective implements ng.IDirective {
 
 		const buildRuler = () => {
 
+			if (!scope.svg) {
+				scope.svg = {
+					height: element[0].offsetHeight,
+					width: element[0].clientWidth,
+				};
+			} else {
+				scope.svg.height = element[0].offsetHeight;
+				scope.svg.width = element[0].clientWidth;
+			}
+
+			// console.log(scope.svg);
+			// console.log(element.parent().height());
+
+			scope.svg.viewBoxHeight = (scope.svg.height * 100) / scope.svg.width;
+			scope.svg.viewBox = '0 0 100 ' + scope.svg.viewBoxHeight;
+
 			scope.ruler = {
 				size: 45,
 				// size: scope.operation.averageStandLength + scope.operation.stickUp,
@@ -72,19 +95,24 @@ export class TripRulerDirective implements ng.IDirective {
 		scope._expectedChanging = [];
 		scope._expectedAlarmChanging = [];
 
-		scope.svg = {
-			height: element[0].offsetHeight,
-			width: element[0].clientWidth,
-		};
-
-		scope.svg.viewBoxHeight = (scope.svg.height * 100) / scope.svg.width;
-		scope.svg.viewBox = '0 0 100 ' + scope.svg.viewBoxHeight;
-
-		scope.$watch('operation', (data) => checkLabelRuler(data) );
-		scope.$watch('expectedChanging', (data) => checkExpectedChanging(data) , true);
-		scope.$watch('expectedAlarmChanging', (data) => checkExpectedAlarmChanging(data) , true);
-
 		buildRuler();
+
+		scope.$watch('operation', (data) => checkLabelRuler(data));
+		scope.$watch('expectedChanging', (data) => checkExpectedChanging(data), true);
+		scope.$watch('expectedAlarmChanging', (data) => checkExpectedAlarmChanging(data), true);
+
+		angular.element(vm.$window).bind('resize', () => {
+
+			buildRuler();
+
+			// manuall $digest required as resize event
+			// is outside of angular
+			scope.$digest();
+		});
+
+		// setTimeout(() => {
+		// 	buildRuler();
+		// }, 500);
 
 	}
 

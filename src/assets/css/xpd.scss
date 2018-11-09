@@ -3,48 +3,18 @@ html {
 }
 
 body {
-    // background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('./../img/bg.png');
     background: url('./../img/bg.png');
     padding: 0;
     margin: 0;
-    height: 100vh;
-    max-height: 100vh;
-    min-height: 100vh;
     font-family: 'Arial', serif;
     font-weight: 400;
     line-height: 1.45;
-    // color: #333;
 }
 
-p {
-    margin-bottom: 1.3em;
-}
-
-h1, h2, h3, h4 {
-    /*margin: 1.414em 0 0.5em;*/
-    font-weight: inherit;
-    line-height: 1.2;
-}
-
-h1 {
-    margin-top: 0;
-    font-size: 2.441em;
-}
-
-h2 {
-    font-size: 1.953em;
-}
-
-h3 {
-    font-size: 1.563em;
-}
-
-h4 {
-    font-size: 1.25em;
-}
-
-small, .font_small {
-    font-size: 0.8em;
+html, body, .xpd-section-with-navbar {
+    height: 100%;
+    width: 100%;
+    margin: 0;
 }
 
 .panel,
@@ -65,13 +35,6 @@ small, .font_small {
 .scrollable-content {
     overflow: auto;
     height: 100%;
-}
-
-.xpd-section-with-navbar {
-    padding-top: 70px;
-    min-height: 100vh;
-    height: 100vh;
-    margin: 0;
 }
 
 .popover {
@@ -125,3 +88,46 @@ small, .font_small {
    padding: 0 !important;
    margin: 0 !important;
 }
+
+.xpd-section-with-navbar {
+
+    > header {
+        height: 70px;
+    }
+
+    > section {
+        height: calc(100% - 70px);   
+    }
+
+}
+
+// p {
+//     margin-bottom: 1.3em;
+// }
+
+// h1, h2, h3, h4 {
+//     /*margin: 1.414em 0 0.5em;*/
+//     font-weight: inherit;
+//     line-height: 1.2;
+// }
+
+// h1 {
+//     margin-top: 0;
+//     font-size: 2.441em;
+// }
+
+// h2 {
+//     font-size: 1.953em;
+// }
+
+// h3 {
+//     font-size: 1.563em;
+// }
+
+// h4 {
+//     font-size: 1.25em;
+// }
+
+// small, .font_small {
+//     font-size: 0.8em;
+// }

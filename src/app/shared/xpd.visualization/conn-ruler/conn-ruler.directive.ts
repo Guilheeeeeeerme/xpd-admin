@@ -7,11 +7,12 @@ import './conn-ruler.style.scss';
 import template from './conn-ruler.template.html';
 
 export class ConnRulerDirective implements ng.IDirective {
-	public static $inject = [];
 
+	public static $inject = ['$window'];
 	public static Factory(): ng.IDirectiveFactory {
-		return () => new ConnRulerDirective();
+		return ($window: any) => new ConnRulerDirective($window);
 	}
+
 	public restrict = 'E';
 	public template = template;
 	public scope = {
@@ -21,6 +22,8 @@ export class ConnRulerDirective implements ng.IDirective {
 		flashGoDiv: '=',
 	};
 
+	constructor(private $window: any) { }
+
 	public link: ng.IDirectiveLinkFn = (
 		scope: any,
 		element: ng.IAugmentedJQuery,
@@ -28,24 +31,9 @@ export class ConnRulerDirective implements ng.IDirective {
 		ctrl: any,
 	) => {
 
+		const vm = this;
+
 		let unwatchChronometer;
-
-		scope.svg = {
-			height: element[0].offsetHeight,
-			width: element[0].clientWidth,
-		};
-
-		scope.svg.viewBoxHeight = Math.floor((scope.svg.height * 100) / scope.svg.width);
-		scope.svg.viewBox = '0 0 100 ' + scope.svg.viewBoxHeight;
-
-		scope.$watch('timeBlocks', function (timeBlocks) {
-			buildRuler(angular.copy(timeBlocks), scope.vtargetDuration);
-		}, true);
-
-		scope.$watch('vtargetDuration', function (vtargetDuration) {
-			buildRuler(angular.copy(scope.timeBlocks), vtargetDuration);
-		}, true);
-
 		function buildRuler(timeBlocks, vtargetDuration) {
 			if (vtargetDuration == null) {
 				scope.hasVtarget = false;
@@ -97,10 +85,10 @@ export class ConnRulerDirective implements ng.IDirective {
 			// TODO VERIFICAR A ADAPTAÇÃO AS ANY
 			scope.colorGradientScale = d3.scaleLinear()
 				.domain([0, 100])
-				.range([('#000000' as any), ('#517f89'as any)]);
+				.range([('#000000' as any), ('#517f89' as any)]);
 			scope.colorGradientScaleInverse = d3.scaleLinear()
 				.domain([0, 100])
-				.range([('#517f89' as any), ('#000000'as any)]);
+				.range([('#517f89' as any), ('#000000' as any)]);
 
 			if (scope.hasVtarget) {
 				unwatchChronometer = watchChronometer();
@@ -135,7 +123,7 @@ export class ConnRulerDirective implements ng.IDirective {
 				timeBlock.past = true;
 
 				if (index > 0 && scope.flashGoDiv) {
-					 scope.flashGoDiv();
+					scope.flashGoDiv();
 				}
 			}
 
@@ -149,6 +137,31 @@ export class ConnRulerDirective implements ng.IDirective {
 				}
 			});
 		}
+
+		scope.$watch('timeBlocks', function (timeBlocks) {
+			buildRuler(angular.copy(timeBlocks), scope.vtargetDuration);
+		}, true);
+
+		scope.$watch('vtargetDuration', function (vtargetDuration) {
+			buildRuler(angular.copy(scope.timeBlocks), vtargetDuration);
+		}, true);
+
+		if (!scope.svg) {
+			scope.svg = {
+				height: element[0].offsetHeight,
+				width: element[0].clientWidth,
+			};
+		} else {
+			scope.svg.height = element[0].offsetHeight;
+			scope.svg.width = element[0].clientWidth;
+		}
+
+		scope.svg.viewBoxHeight = Math.floor((scope.svg.height * 100) / scope.svg.width);
+		scope.svg.viewBox = '0 0 100 ' + scope.svg.viewBoxHeight;
+
+		angular.element(vm.$window).bind('resize', () => {
+			// scope.$digest();
+		});
 
 	}
 }

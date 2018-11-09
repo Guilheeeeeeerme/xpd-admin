@@ -6,7 +6,7 @@
 	<div class="col-md-6 col-md-offset-6"
 		xpd-table-period initial-date="reportsData.fromDate"
 		final-date="reportsData.toDate"
-		function-change-period="hrController.actionFilterButton">
+		function-change-period="hrController.actionFilterButton(fromDate, toDate)">
 	</div>
 	
 	<div class="col-md-12 child-element-spacing">
@@ -27,7 +27,7 @@
 
 </div>
 
-<div ng-if="histoData.histograms && histoData.histograms.length<=0"
+<div ng-if="histoData.isEmpty"
 	class="empty-value-report-message">
 	No activities in this data range
 </div>

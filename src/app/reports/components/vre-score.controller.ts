@@ -45,6 +45,7 @@ export class VREScoreController {
 	}
 
 	public onClickFilterButton(fromDate, toDate) {
+		this.$scope.$parent.rController.getFailuresOnInterval(fromDate, toDate);
 
 		if (toDate === undefined) { return false; }
 

@@ -130,4 +130,57 @@ xpd-old-tracking {
         cursor: pointer;
     }
 
+    // .current-activity-container {
+
+    //     .current-activity-container-footer{
+    //         height: 80px;
+    //     }
+
+    //     .current-activity-container-content{
+    //         height: 100%;
+    //     }
+
+    //     .tracking-container {
+
+    //         width: 100%;
+    //         padding: 0;
+    //         margin: 0;
+            
+    //         &.tracking-conn-container {
+    //             xpd-conn-ruler,
+    //             xpd-trip-ruler{
+    //                 display: inline-block;
+    //             }
+
+    //             xpd-conn-ruler{
+    //                 width: 65%;
+    //             }
+
+    //             xpd-trip-ruler{
+    //                 width: 32%;
+    //             }
+    //         }
+    //         &.tracking-trip-container {
+    //             xpd-speed-gauge,
+    //             xpd-in-slips,
+    //             xpd-trip-ruler{
+    //                 display: inline-block;
+    //             }
+
+    //             xpd-speed-gauge,
+    //             xpd-trip-ruler{
+    //                 width: 49%;
+    //                 height: 90%;
+    //             }
+
+    //             xpd-in-slips {
+    //                 width: 100%;
+    //                 height: 10%;
+    //             }
+    //         }
+
+    //     }
+
+    // }
+
 }
