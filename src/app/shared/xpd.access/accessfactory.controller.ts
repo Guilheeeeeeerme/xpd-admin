@@ -50,7 +50,7 @@ export class AccessFactoryController {
 				});
 			} else {
 				vm.authService.login($scope.user).finally(() => {
-					// vm.$window.location.reload();
+					vm.$window.location.reload();
 				}).catch((e) => {
 					// vm.$scope.dados.loginError = true;
 					// console.log('loginError', vm.$scope.dados.loginError);
