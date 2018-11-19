@@ -1,7 +1,10 @@
 @import '~styles/font.scss';
 
 xpd-vre-list-table {
-    
+
+    display: block;
+    max-height: 100%;
+    overflow-x: hidden;
     font-family: $font-family-1;
 
     .vre-log-list {
