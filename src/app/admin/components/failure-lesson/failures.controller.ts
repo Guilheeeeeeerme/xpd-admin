@@ -20,7 +20,6 @@ export class FailuresController {
 		operationDataService: OperationDataService,
 		dialogService: DialogService) {
 
-		console.log('failure controller');
 		const vm = this;
 
 		$scope.modalData = {
