@@ -8,6 +8,8 @@ import { SetupAPIService } from './setupapi.service';
 
 // 	wellSetupAPIService.$inject = ['xpdAccessService', 'setupAPIService'];
 
+const STORAGE_TYPE = localStorage;
+
 export class AuthService {
 
 	public static $inject: string[] = ['$q', 'xpdAccessService', 'setupAPIService'];
@@ -16,15 +18,15 @@ export class AuthService {
 	public static RS_TOKEN = 'reportsServerToken';
 
 	public static logout() {
-		sessionStorage.removeItem(AuthService.OS_TOKEN);
-		sessionStorage.removeItem(AuthService.RS_TOKEN);
+		STORAGE_TYPE.removeItem(AuthService.OS_TOKEN);
+		STORAGE_TYPE.removeItem(AuthService.RS_TOKEN);
 		AuthService.redirectToPath('/auth.html#', false);
 	}
 
 	public static skipAuth() {
-		if (sessionStorage.getItem('redirectTo')) {
-			const href = sessionStorage.getItem('redirectTo');
-			sessionStorage.removeItem('redirectTo');
+		if (STORAGE_TYPE.getItem('redirectTo')) {
+			const href = STORAGE_TYPE.getItem('redirectTo');
+			STORAGE_TYPE.removeItem('redirectTo');
 			location.href = href;
 		} else {
 			AuthService.redirectToPath('/admin.html#', false);
@@ -34,7 +36,7 @@ export class AuthService {
 	public static redirectToPath(path: any, newTab: any): any {
 
 		if (window.location.href.indexOf('auth.html') < 0) {
-			sessionStorage.setItem('redirectTo', window.location.href);
+			STORAGE_TYPE.setItem('redirectTo', window.location.href);
 		}
 
 		if (location.port) {
@@ -61,15 +63,15 @@ export class AuthService {
 	}
 
 	public static isLogged() {
-		return sessionStorage.getItem(AuthService.OS_TOKEN) && sessionStorage.getItem(AuthService.RS_TOKEN);
+		return STORAGE_TYPE.getItem(AuthService.OS_TOKEN) && STORAGE_TYPE.getItem(AuthService.RS_TOKEN);
 	}
 
 	public static getOperationServerToken() {
-		return sessionStorage.getItem(AuthService.OS_TOKEN);
+		return STORAGE_TYPE.getItem(AuthService.OS_TOKEN);
 	}
 
 	public static getReportsAPIToken() {
-		return sessionStorage.getItem(AuthService.RS_TOKEN);
+		return STORAGE_TYPE.getItem(AuthService.RS_TOKEN);
 	}
 
 	constructor(
@@ -100,12 +102,12 @@ export class AuthService {
 
 		operationServerPromise.then((data: any) => {
 			// console.log(AuthService.OS_TOKEN, data.token)
-			sessionStorage.setItem(AuthService.OS_TOKEN, data.token);
+			STORAGE_TYPE.setItem(AuthService.OS_TOKEN, data.token);
 		}, (error) => error );
 
 		reportsServerPromise.then((data: any) => {
 			// console.log(AuthService.RS_TOKEN, data.token)
-			sessionStorage.setItem(AuthService.RS_TOKEN, data.token);
+			STORAGE_TYPE.setItem(AuthService.RS_TOKEN, data.token);
 		});
 
 		return this.$q.all([
@@ -126,7 +128,7 @@ export class AuthService {
 		const operationServerPromise = this.setupAPIService.doRequest(operationServerRequest, true);
 
 		operationServerPromise.then((data: any) => {
-			sessionStorage.setItem(AuthService.OS_TOKEN, data.token);
+			STORAGE_TYPE.setItem(AuthService.OS_TOKEN, data.token);
 		});
 
 		return this.$q.all([
