@@ -1,4 +1,4 @@
-import angular = require('angular');
+import * as angular from 'angular';
 import { XPDAccessService } from '../xpd.access/access.service';
 import { SetupAPIService } from './setupapi.service';
 

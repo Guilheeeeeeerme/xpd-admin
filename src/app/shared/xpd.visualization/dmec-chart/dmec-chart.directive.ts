@@ -39,7 +39,39 @@ export class DMECChartDirective implements ng.IDirective {
 		ctrl: any,
 	) => {
 
+		const vm = this;
+
 		this.highchartsService.highcharts().then((Highcharts) => {
+
+			const binarySearch = (points, start, end, x) => {
+
+				let point = null;
+
+				do {
+
+					const middle = Math.floor((end + start) / 2);
+					const plotX = points[middle].plotX;
+					point = points[middle];
+					// const plotX = Math.floor(points[middle].plotX);
+
+					// console.log('Looking for %d between %d and %d (%d and %d)', x, points[start].plotX, points[end].plotX, start, end);
+					// console.log(point);
+
+					if (plotX > x) {
+						start = 0;
+						end = (middle - 1);
+					} else if (plotX < x) {
+						start = (middle + 1);
+						end = end;
+					} else {
+						break;
+					}
+
+				} while ( (end - start) > 2 );
+
+				return point;
+
+			};
 
 			const trackNameHash = {};
 
@@ -67,6 +99,8 @@ export class DMECChartDirective implements ng.IDirective {
 						let i;
 						let event;
 
+						// console.clear();
+
 						for (i = 0; i < Highcharts.charts.length; i = i + 1) {
 							chart = Highcharts.charts[i];
 
@@ -75,16 +109,29 @@ export class DMECChartDirective implements ng.IDirective {
 							// Get the hovered point
 
 							const point1 = chart.series[0].searchPoint(event, true);
+							const point2 = chart.series[1].searchPoint(event, true);
 
 							if (point1) {
 								point1.highlight(e);
+							} else {
+								if (point2) {
+									point2.highlight(e);
+								}
 							}
 
-							const point2 = chart.series[1].searchPoint(event, true);
 
-							if (point2) {
-								point2.highlight(e);
-							}
+							// vm.$timeout(() => {
+							// const point3 = binarySearch(chart.series[0].points, 0, ( chart.series[0].points.length - 1 ), event.x);
+							// }, 1);
+
+							// vm.$timeout(() => {
+							// const point4 = binarySearch(chart.series[1].points, 0, ( chart.series[1].points.length - 1 ), event.x);
+							// }, 1);
+
+							// console.log('point1', point1);
+							// console.log('point2', point2);
+							// console.log('point3', point3);
+							// console.log('point4', point4);
 
 						}
 					},
@@ -216,6 +263,7 @@ export class DMECChartDirective implements ng.IDirective {
 						Highcharts.chart(chartDiv, {
 							chart: {
 								type: 'line',
+								animation: false,
 								margin: [5, 5, 5, 5],
 								spacing: [0, 0, 0, 0],
 								events: {

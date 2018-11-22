@@ -21,7 +21,7 @@ export class SetupAPIService {
 	public doRequest(req, log: boolean, hideSpinner?: boolean) {
 		const self = this;
 
-		hideSpinner = !!hideSpinner;
+		hideSpinner = hideSpinner === true;
 
 		const request = this.$http(req);
 
@@ -29,7 +29,7 @@ export class SetupAPIService {
 			this.operationDataService.log(req.method + ' ' + req.url, req);
 		}
 
-		if (req && req.url && !hideSpinner) {
+		if (!hideSpinner) {
 
 			++this.runningRequests;
 
@@ -56,7 +56,7 @@ export class SetupAPIService {
 					errorCallback(error);
 				},
 			).finally(() => {
-				self.finallySpinner();
+				self.finallySpinner(hideSpinner);
 			});
 
 		});
@@ -100,12 +100,16 @@ export class SetupAPIService {
 
 	}
 
-	private finallySpinner() {
-		--this.runningRequests;
+	private finallySpinner(hideSpinner: boolean) {
 
-		if (this.runningRequests === 0) {
-			this.hasRunningRequests = false;
-			this.usSpinnerService.stop('xpd-spinner');
+		if (!hideSpinner) {
+
+			--this.runningRequests;
+
+			if (this.runningRequests === 0) {
+				this.hasRunningRequests = false;
+				this.usSpinnerService.stop('xpd-spinner');
+			}
 		}
 	}
 

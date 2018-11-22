@@ -57,7 +57,7 @@ export class DMECService {
 			'#C895C5', '#320033', '#FF6832', '#66E1D3', '#CFCDAC', '#D0AC94', '#7ED379', '#012C58',
 		];
 
-		const getTickFrequency = 1000;
+		const getTickFrequency = 10000;
 
 		/**
 		 * Função que inicializa o serviço e as buscas
@@ -131,7 +131,7 @@ export class DMECService {
 					floor: new Date(scope.dmecTrackingStartAt).getTime(),
 					ceil: new Date().getTime() + (intervalToShow / 2),
 					// tslint:disable-next-line:only-arrow-functions
-					translate: function(value) {
+					translate: function (value) {
 						return vm.$filter('date')(value, 'medium');
 					},
 				},
@@ -177,17 +177,36 @@ export class DMECService {
 
 				// 	if (currentReading.timestamp && currentReading.timestamp) {
 				// 		currentReading.timestamp = new Date(currentReading.timestamp).getTime();
-				// 		resolve(currentReading);
+				// 		console.log(currentReading);
+
+				// 		// blockPosition: (3) [29.0186781289047, 29.0186781289047, 0]
+				// 		// flow: (3) [736.944641019626, 736.944641019626, 0]
+				// 		// hookload: (3) [100, 100, 0]
+				// 		// rop: (3) [25.9561911425934, 25.9561911425934, 0]
+				// 		// rpm: (3) [102.036602322774, 102.036602322774, 0]
+				// 		// sppa: (3) [2156.3318493977, 2156.3318493977, 0]
+				// 		// timestamp: 1542638490444
+				// 		// torque: (3) [4553.12246374157, 4553.12246374157, 0]
+				// 		// wob: (3) [18.2070904990249, 18.2070904990249, 0]
+
+				// 		// resolve(currentReading);
+
 				// 	}
 
 				// } else {
-					vm.readingSetupAPIService.getTick((now - getTickFrequency), this.tracks).then(
-						(activity) => { resolve(toReading(activity, false)); },
-						(arg) => { reject(arg); });
+				vm.readingSetupAPIService.getTick((now - getTickFrequency), this.tracks).then(
+					(activity) => {
+						// console.log(activity);
+						activity = toReading(activity, false);
+						resolve(activity);
+					},
+					(arg) => { reject(arg); });
 				// }
 			});
 
-			if (scope.inputRangeForm.keepZoomAtTheEnd && now >= new Date(scope.zoomEndAt).getTime()) {
+			scope.inputRangeForm = this.getInputRangeForm(localStoragePath);
+
+			if (scope.inputRangeForm && scope.inputRangeForm.keepZoomAtTheEnd && now >= new Date(scope.zoomEndAt).getTime()) {
 
 				const intervalToShow = new Date(scope.zoomEndAt).getTime() - new Date(scope.zoomStartAt).getTime();
 
@@ -286,7 +305,7 @@ export class DMECService {
 	/**
 	 * Recarregar a página
 	 */
-	private reload () {
+	private reload() {
 		location.reload();
 	}
 
