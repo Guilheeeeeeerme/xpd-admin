@@ -21,25 +21,25 @@
             <div>
                 <table class="table table-bordered xpd-operation-table table-fixed">
                     <tbody>
-                        <tr ng-repeat="failureOnGoing in modalData.failureOnGoing" 
-                            ng-if="modalData.failureOnGoing.length > 0" 
-                            ng-class="{ 'in-npt': failureOnGoing.npt }"
+                        <tr 
+                            ng-if="modalData.failureOnGoing" 
+                            ng-class="{ 'in-npt': modalData.failureOnGoing.npt }"
                             class="center-align-list">
                             
                             <td class="col-md-1">
-                                <span ng-class="{'glyphicon glyphicon-ok':(failureOnGoing.npt), '':(!failureOnGoing.npt)}"></span>
+                                <span ng-class="{'glyphicon glyphicon-ok':(modalData.failureOnGoing.npt), '':(!modalData.failureOnGoing.npt)}"></span>
                             </td>
-                            <td class="col-md-3">{{(failureOnGoing.category)? failureOnGoing.category.initial +' - '+  failureOnGoing.category.name : 'Non categorized' }}</td>
-                            <td class="col-md-2">{{failureOnGoing.startTime | date:'MM/dd/yyyy HH:mm:ss'}}</td>
-                            <td class="col-md-3 cell-description">{{failureOnGoing.description}}</td>
+                            <td class="col-md-3">{{(modalData.failureOnGoing.category)? modalData.failureOnGoing.category.initial +' - '+ modalData.failureOnGoing.category.name : 'Non categorized' }}</td>
+                            <td class="col-md-2">{{modalData.failureOnGoing.startTime | date:'MM/dd/yyyy HH:mm:ss'}}</td>
+                            <td class="col-md-3 cell-description">{{modalData.failureOnGoing.description}}</td>
                             <td class="col-md-1" style="white-space: nowrap;">
                                 <span 
                                     class="btn btn-xs glyphicon glyphicon-pencil"
-                                    ng-click="fController.actionClickButtonEditFailure(failureOnGoing)">
+                                    ng-click="fController.actionClickButtonEditFailure(modalData.failureOnGoing)">
                                 </span>
                             </td>
                         </tr>
-                        <tr ng-if="modalData.failureOnGoing.length <= 0">
+                        <tr ng-if="!modalData.failureOnGoing">
                             <td colspan="6">
                                 No failure on Going
                             </td>

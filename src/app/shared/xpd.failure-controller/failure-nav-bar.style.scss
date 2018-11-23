@@ -30,8 +30,43 @@ xpd-failure-nav-bar {
         // height: 47px;
     }
 
+    .failure-category{
+        font-size: 0.7em;
+        border: 0;
+        color: #222;
+        width: 100%;
+        border-width: 1px 2px 1px 2px;
+        border-style: solid;
+        border-color: #456c75;
+    }
+
+    .failure-npt {
+        background-color: rgb(219, 230, 239);
+        color: rgb(243, 66, 66);
+    }
+
+    .failure-npt-category{
+        background-color: rgb(230, 88, 88);
+    }
+
+    .failure-normal {
+        background-color: rgb(219, 230, 239);
+        color: rgb(218, 165, 19);
+    }
+
+    .failure-normal-category{
+        background-color: rgb(241, 191, 0);
+    }
+}
+
+.xpd-operation-table {
+
     .center-align-list td {
         text-align: center;
+    }
+
+    .center-align-list td:first-child {
+        vertical-align: middle;
     }
     
     .in-npt{
@@ -44,40 +79,11 @@ xpd-failure-nav-bar {
     
     .in-best-practices td:first-child span {
         color: #f9ff00;
-     }
-
-    .failure-npt-category{
-        background-color: rgb(230, 88, 88);
-    }
-
-    .failure-npt {
-        background-color: rgb(219, 230, 239);
-        color: rgb(243, 66, 66);
-    }
-
-    .failure-normal {
-        background-color: rgb(219, 230, 239);
-        color: rgb(218, 165, 19);
-    }
-    
-    .failure-normal-category{
-        background-color: rgb(241, 191, 0);
-    }
-
-    .failure-category{
-        font-size: 0.7em;
-        border: 0;
-        color: #222;
-        width: 100%;
-        border-width: 1px 2px 1px 2px;
-        border-style: solid;
-        border-color: #456c75;
     }
 
     .failure-report-chart{
         margin-bottom: 10px;
     }
-
 
     .failure-report-chart div{
         border-radius: 5px;
@@ -126,10 +132,4 @@ xpd-failure-nav-bar {
         margin-bottom: 0;
     }
 
-}
-
-.table-scroll {
-    overflow: scroll;
-    display: block;
-    max-height: 300px;
 }

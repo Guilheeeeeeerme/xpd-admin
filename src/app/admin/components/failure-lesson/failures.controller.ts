@@ -40,11 +40,13 @@ export class FailuresController {
 		operationDataService.openConnection(['failure', 'operation']).then(() => {
 			vm.operationDataFactory = operationDataService.operationDataFactory;
 			$scope.modalData.operation = vm.operationDataFactory.operationData.operationContext.currentOperation;
-			$scope.modalData.failuresList = vm.operationDataFactory.operationData.failureContext.failureList;
+			populateFailureList();
 
 			$scope.modalIsLocked = vm.operationDataFactory.operationData.failureContext.threadIsLocked;
+
 		});
 
+		operationDataService.on('setOnGoingFailureListener', populateFailureList);
 		operationDataService.on('setOnFailureChangeListener', populateFailureList);
 		operationDataService.on('setOnLockFailureThreadListener', lockUnlockModal);
 
@@ -52,7 +54,7 @@ export class FailuresController {
 			const failureContext = vm.operationDataFactory.operationData.failureContext;
 
 			$scope.modalData.failuresList = failureContext.failureList;
-			$scope.modalData.failureOnGoing = failureContext.failureOnGoing;
+			$scope.modalData.failureOnGoing = failureContext.onGoingFailure;
 		}
 
 		function lockUnlockModal() {
