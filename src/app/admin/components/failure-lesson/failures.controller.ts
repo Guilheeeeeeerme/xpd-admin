@@ -75,7 +75,7 @@ export class FailuresController {
 				};
 			}
 
-			failureModal.open(newFailure);
+			failureModal.open(newFailure, null, null);
 		}
 
 		function actionClickButtonEditFailure(selectedFailure) {
@@ -85,7 +85,7 @@ export class FailuresController {
 				selectedFailure.operation = { id: $scope.modalData.operation.id };
 			}
 
-			failureModal.open(selectedFailure);
+			failureModal.open(selectedFailure, null, null);
 		}
 
 		function actionClickButtonRemoveFailure(failure) {

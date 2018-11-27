@@ -14,6 +14,8 @@ export class ModalFailureController {
 		'categorySetupAPIService',
 		'failureSetupAPIService',
 		'selectedFailure',
+		'modalSuccessCallback',
+		'modalErrorCallback',
 		'dialogService',
 		'operationDataService',
 	];
@@ -28,6 +30,8 @@ export class ModalFailureController {
 		private categorySetupAPIService: CategorySetupAPIService,
 		private failureSetupAPIService: FailureSetupAPIService,
 		private selectedFailure: any,
+		private modalSuccessCallback: any,
+		private modalErrorCallback: any,
 		private dialogService: DialogService,
 		private operationDataService: OperationDataService) {
 
@@ -53,6 +57,10 @@ export class ModalFailureController {
 
 		this.getCategoryList();
 		this.getFailuresOnGoing();
+
+		this.operationDataService.on('setOnFailureChangeListener', () => { this.failureSuccessCallback(); });
+		this.operationDataService.on('setOnErrorUpsertFailureListener', () => { this.failureErrorCallback(); });
+		this.operationDataService.on('setOnNptAlreadyExistsListener', () => { this.nptAlreadyExists(); });
 
 	}
 
@@ -145,33 +153,26 @@ export class ModalFailureController {
 
 	private registerFailure(failure) {
 		this.operationDataFactory.emitInsertFailure(failure);
-		this.upsertListenerCallback();
 	}
 
 	private updateFailure(failure) {
 		this.operationDataFactory.emitUpdateFailure(failure);
-		this.upsertListenerCallback();
-	}
-
-	private upsertListenerCallback() {
-		this.operationDataService.on('setOnFailureChangeListener', () => { this.failureSuccessCallback(); });
-		this.operationDataService.on('setOnErrorUpsertFailureListener', () => { this.failureErrorCallback(); });
-		this.operationDataService.on('setOnNptAlreadyExistsListener', () => { this.nptAlreadyExists(); });
 	}
 
 	private failureSuccessCallback() {
 		this.$uibModalInstance.close();
+		this.modalSuccessCallback();
 	}
 
 	private failureErrorCallback() {
-		this.dialogService.showConfirmDialog('Error on inserting failure, please try again!', () => {
-			// faça nada
+		this.dialogService.showMessageDialog('Error on inserting failure, please try again!', 'Error', () => {
+			this.$uibModalInstance.close();
 		});
 	}
 
 	private nptAlreadyExists() {
-		this.dialogService.showConfirmDialog('NPT already exists in this time interval!', () => {
-			// faça nada
+		this.dialogService.showMessageDialog('NPT already exists in this time interval!', 'Error', () => {
+			this.$uibModalInstance.close();
 		});
 	}
 

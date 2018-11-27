@@ -235,6 +235,8 @@ export class TrackingController {
 	public actionClickFailuresButton() {
 		this.failureModal.open(
 			this.getSelectedEvent(),
+			null,
+			null,
 		);
 	}
 
@@ -242,8 +244,8 @@ export class TrackingController {
 	public actionClickLessonsLearnedButton() {
 		this.lessonLearnedModal.open(
 			this.getSelectedEvent(),
-			(arg) => { this.insertLessonLearnedCallback(arg); },
-			(arg) => { this.updateLessonLearnedCallback(arg); },
+			(arg) => { this.successLessonLearnedCallback(arg); },
+			(arg) => { this.errorLessonLearnedCallback(arg); },
 		);
 	}
 
@@ -317,13 +319,13 @@ export class TrackingController {
 	}
 
 	// @XPDMethodDebugDecorator()
-	private insertLessonLearnedCallback(lessonLearned) {
-		this.lessonLearnedSetupAPIService.insertObject(lessonLearned);
+	private successLessonLearnedCallback(lessonLearned) {
+		// this.lessonLearnedSetupAPIService.insertObject(lessonLearned);
 	}
 
 	// @XPDMethodDebugDecorator()
-	private updateLessonLearnedCallback(lessonLearned) {
-		this.lessonLearnedSetupAPIService.updateObject(lessonLearned);
+	private errorLessonLearnedCallback(lessonLearned) {
+		// this.lessonLearnedSetupAPIService.updateObject(lessonLearned);
 	}
 
 	// @XPDMethodDebugDecorator()

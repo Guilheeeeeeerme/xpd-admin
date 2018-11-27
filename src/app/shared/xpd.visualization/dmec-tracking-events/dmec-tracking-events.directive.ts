@@ -329,7 +329,15 @@ export class DMECTrackingEventsDirective implements ng.IDirective {
 
 		function actionOpenFailuresModal() {
 
-			self.failureModal.open(getEvent());
+			self.failureModal.open(
+				getEvent(),
+				() => {
+					console.log('success');
+				},
+				() => {
+					console.log('error');
+				},
+			);
 
 			closeDetailsMenu();
 		}
@@ -338,10 +346,10 @@ export class DMECTrackingEventsDirective implements ng.IDirective {
 
 			self.lessonLearnedModal.open(
 				getEvent(),
-				function () {
+				() => {
 					console.log('success');
 				},
-				function () {
+				() => {
 					console.log('error');
 				},
 			);
