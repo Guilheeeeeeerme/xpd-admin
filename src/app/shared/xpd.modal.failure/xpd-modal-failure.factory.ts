@@ -13,7 +13,7 @@ export class FailureModalFactory {
 
 	}
 
-	public open(selectedFailure) {
+	public open(selectedFailure, modalSuccessCallback, modalErrorCallback) {
 
 		if (selectedFailure.startTime) {
 			selectedFailure.startTime = new Date(selectedFailure.startTime);
@@ -33,6 +33,12 @@ export class FailureModalFactory {
 			resolve: {
 				selectedFailure() {
 					return selectedFailure;
+				},
+				modalSuccessCallback() {
+					return modalSuccessCallback;
+				},
+				modalErrorCallback() {
+					return modalErrorCallback;
 				},
 			},
 		});

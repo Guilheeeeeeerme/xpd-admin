@@ -80,7 +80,9 @@ export class OperationDataService {
 	}
 
 	public on(subject: string, callback): void {
-		this.observer.on(subject, callback);
+		if (this.observer.listeners(subject).length === 0) {
+			this.observer.on(subject, callback);
+		}
 	}
 
 	public log(eventName, data) {
