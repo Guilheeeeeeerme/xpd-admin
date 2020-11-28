@@ -40,7 +40,9 @@ export class AuthService {
 		}
 
 		if (location.port) {
-			path = 'https://' + location.hostname + ':' + location.port + path;
+			// path = 'https://' + location.hostname + ':' + location.port + path;
+			// path = 'http://' + location.hostname + ':' + location.port + path;
+			path = location.origin + path;
 		} else {
 			for (const page of ['auth.html', 'setup.html', 'admin.html', 'dmec-log.html', 'reports.html']) {
 				if (window.location.href.indexOf(page) >= 0) {

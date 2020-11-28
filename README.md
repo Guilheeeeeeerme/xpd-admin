@@ -27,3 +27,9 @@ This README would normally document whatever steps are necessary to get your app
 
 * Repo owner or admin
 * Other community or team contact
+
+Electron removido para performance
+"start": "webpack-dev-server --watch --https --cert=./keys/XPD-Server.crt --key=./keys/XPD-Server.key",   
+"electron": "^4.0.0-beta.7",
+"electron-packager": "12.2.0",
+"electron-winstaller": "2.7.0",

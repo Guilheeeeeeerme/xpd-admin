@@ -32,22 +32,22 @@ export class XPDAccessService {
 
 			XPDAccessData = {
 				server: {
-					xpdDefaultAccessIp: '127.0.0.1',
+					xpdDefaultAccessIp: 'http://127.0.0.1',
 					xpdDefaultOperationServerPort: '8081',
 					xpdDefaultReportsAPIPort: '8082',
-					xpdDefaultSetupApiPort: '8443',
+					xpdDefaultSetupApiPort: '8080',
 				},
 			};
 		}
 
 		// colocando valores default
-		XPDAccessData.server.xpdDefaultAccessIp = XPDAccessData.server.xpdDefaultAccessIp || '127.0.0.1';
+		XPDAccessData.server.xpdDefaultAccessIp = XPDAccessData.server.xpdDefaultAccessIp || 'http://127.0.0.1';
 		XPDAccessData.server.xpdDefaultReportsAPIAccessIp = XPDAccessData.server.xpdDefaultReportsAPIAccessIp || XPDAccessData.server.xpdDefaultAccessIp;
 		XPDAccessData.server.xpdDefaultSetupAPIAccessIp = XPDAccessData.server.xpdDefaultSetupAPIAccessIp || XPDAccessData.server.xpdDefaultAccessIp;
 
 		XPDAccessData.server.xpdDefaultOperationServerPort = XPDAccessData.server.xpdDefaultOperationServerPort || '8081';
 		XPDAccessData.server.xpdDefaultReportsAPIPort = XPDAccessData.server.xpdDefaultReportsAPIPort || '8082';
-		XPDAccessData.server.xpdDefaultSetupApiPort = XPDAccessData.server.xpdDefaultSetupApiPort || '8443';
+		XPDAccessData.server.xpdDefaultSetupApiPort = XPDAccessData.server.xpdDefaultSetupApiPort || '8080';
 
 		// 	sincronizando local storage
 		// console.log('Atualizando Local Storage !!!');
@@ -58,13 +58,15 @@ export class XPDAccessService {
 	}
 
 	public getRawReportsAPIURL() {
-		const url = 'https://' + this.server.xpdDefaultReportsAPIAccessIp + ':' + this.server.xpdDefaultReportsAPIPort;
+		// const url = 'https://' + this.server.xpdDefaultReportsAPIAccessIp + ':' + this.server.xpdDefaultReportsAPIPort;
+		const url = this.server.xpdDefaultReportsAPIAccessIp + ':' + this.server.xpdDefaultReportsAPIPort;
 		// console.log(url);
 		return url;
 	}
 
 	public getRawSetupAPIURL() {
-		const url = 'https://' + this.server.xpdDefaultAccessIp + ':' + this.server.xpdDefaultSetupApiPort;
+		// const url = 'https://' + this.server.xpdDefaultAccessIp + ':' + this.server.xpdDefaultSetupApiPort;
+		const url = this.server.xpdDefaultAccessIp + ':' + this.server.xpdDefaultSetupApiPort;
 		return url;
 	}
 
@@ -75,7 +77,8 @@ export class XPDAccessService {
 	}
 
 	public getOperationServerURL() {
-		const url = 'https://' + this.server.xpdDefaultSetupAPIAccessIp + ':' + this.server.xpdDefaultOperationServerPort;
+		// const url = 'https://' + this.server.xpdDefaultSetupAPIAccessIp + ':' + this.server.xpdDefaultOperationServerPort;
+		const url = this.server.xpdDefaultSetupAPIAccessIp + ':' + this.server.xpdDefaultOperationServerPort;
 		// console.log(url);
 		return url;
 	}

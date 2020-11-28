@@ -1,0 +1,17 @@
+version: "3.7"
+        
+networks:
+    xpd-network:
+        name: 'xpd-network'
+    
+services:
+  admin:
+      build: "."
+      hostname: 'xpd-admin'
+      container_name: 'xpd-admin'
+    #   volumes:
+    #     - ./dist:/usr/share/nginx/html
+      ports: 
+          - "9000:80"
+      networks:
+          - xpd-network

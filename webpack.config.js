@@ -86,6 +86,7 @@ module.exports = {
 
 	mode: 'development',
 	target: 'web',
+	stats: 'verbose',
 
 	entry: {
 		'dmec-chart.worker': './src/workers/dmec-chart.worker.ts',
