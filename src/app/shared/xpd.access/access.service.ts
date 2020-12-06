@@ -32,7 +32,7 @@ export class XPDAccessService {
 
 			XPDAccessData = {
 				server: {
-					xpdDefaultAccessIp: 'http://127.0.0.1',
+					xpdDefaultAccessIp: 'https://127.0.0.1',
 					xpdDefaultOperationServerPort: '8081',
 					xpdDefaultReportsAPIPort: '8082',
 					xpdDefaultSetupApiPort: '8080',
@@ -41,7 +41,7 @@ export class XPDAccessService {
 		}
 
 		// colocando valores default
-		XPDAccessData.server.xpdDefaultAccessIp = XPDAccessData.server.xpdDefaultAccessIp || 'http://127.0.0.1';
+		XPDAccessData.server.xpdDefaultAccessIp = XPDAccessData.server.xpdDefaultAccessIp || 'https://127.0.0.1';
 		XPDAccessData.server.xpdDefaultReportsAPIAccessIp = XPDAccessData.server.xpdDefaultReportsAPIAccessIp || XPDAccessData.server.xpdDefaultAccessIp;
 		XPDAccessData.server.xpdDefaultSetupAPIAccessIp = XPDAccessData.server.xpdDefaultSetupAPIAccessIp || XPDAccessData.server.xpdDefaultAccessIp;
 
