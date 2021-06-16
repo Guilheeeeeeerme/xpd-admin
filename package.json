@@ -6,7 +6,8 @@
   "scripts": {
     "test": "tsc -p e2e/tsconfig.e2e.json",
     "transpile": "tsc -p tsconfig.json --watch",
-    "start": "webpack-dev-server --watch --https --cert=./keys/XPD-Server.crt --key=./keys/XPD-Server.key",
+    "start": "webpack-dev-server --watch",
+    "startOld": "webpack-dev-server --watch --https --cert=./keys/XPD-Server.crt --key=./keys/XPD-Server.key",
     "lint": "tslint src/**/*.ts --fix",
     "build": "webpack --display-error-detail",
     "electron-packager": "electron-packager dist/ xpd_admin --platform win32 --arch x64 --out build --overwrite --icon dist/favicon.ico",
