@@ -64,6 +64,7 @@ import { XPDFailureModule } from './xpd.modal.failure/xpd-modal-failure.module';
 import { XPDLayDownConfirmationModule } from './xpd.modal.laydown-confirmation/xpd.modal.laydown-confirmation.module';
 import { XPDLessonLearnedModule } from './xpd.modal.lessonlearned/xpd-modal-lessonlearned.module';
 import { XPDOperationDataModule } from './xpd.operation-data/operation-data.module';
+import { XPDWitsDataModule } from './xpd.wits-data/wits-data.module';
 import { XPDOperationListModule } from './xpd.operation-list/operation-list.module';
 import { XPDOperationManagerModule } from './xpd.operationmanager/operationmanager.module';
 import { XPDPlannerModule } from './xpd.planner/planner.module';
@@ -99,6 +100,7 @@ const XPDSharedModule: angular.IModule = angular.module('xpd.shared', [
 	XPDGanttModule.name,
 	XPDHighchartsModule.name,
 	XPDOperationDataModule.name,
+	XPDWitsDataModule.name,
 	XPDAdminNavBarModule.name,
 	XPDFormValidationModule.name,
 	XPDEventDetailsModule.name,

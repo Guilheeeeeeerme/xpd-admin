@@ -33,9 +33,11 @@ export class XPDAccessService {
 			XPDAccessData = {
 				server: {
 					xpdDefaultAccessIp: 'http://127.0.0.1',
+					xpdDefaultWitsTranslatorIp: 'http://165.22.178.111',
 					xpdDefaultOperationServerPort: '8081',
 					xpdDefaultReportsAPIPort: '8082',
 					xpdDefaultSetupApiPort: '8080',
+					xpdDefaultWitsTranslatorServerPort: '9596',
 				},
 			};
 		}
@@ -44,10 +46,13 @@ export class XPDAccessService {
 		XPDAccessData.server.xpdDefaultAccessIp = XPDAccessData.server.xpdDefaultAccessIp || 'http://127.0.0.1';
 		XPDAccessData.server.xpdDefaultReportsAPIAccessIp = XPDAccessData.server.xpdDefaultReportsAPIAccessIp || XPDAccessData.server.xpdDefaultAccessIp;
 		XPDAccessData.server.xpdDefaultSetupAPIAccessIp = XPDAccessData.server.xpdDefaultSetupAPIAccessIp || XPDAccessData.server.xpdDefaultAccessIp;
+		XPDAccessData.server.xpdDefaultWitsTranslatorIp = XPDAccessData.server.xpdDefaultWitsTranslatorIp || "http://165.22.178.111";
 
 		XPDAccessData.server.xpdDefaultOperationServerPort = XPDAccessData.server.xpdDefaultOperationServerPort || '8081';
 		XPDAccessData.server.xpdDefaultReportsAPIPort = XPDAccessData.server.xpdDefaultReportsAPIPort || '8082';
 		XPDAccessData.server.xpdDefaultSetupApiPort = XPDAccessData.server.xpdDefaultSetupApiPort || '8080';
+		XPDAccessData.server.xpdDefaultWitsTranslatorServerPort = XPDAccessData.server.xpdDefaultWitsTranslatorServerPort || "9596";
+		
 
 		// 	sincronizando local storage
 		// console.log('Atualizando Local Storage !!!');
@@ -86,6 +91,11 @@ export class XPDAccessService {
 	public getSetupAPIURL() {
 		const url = this.getRawSetupAPIURL() + '/xpd-setup-api/';
 		// console.log(url);
+		return url;
+	}
+
+	public getWitsTranslatorURL() {
+		const url = this.server.xpdDefaultWitsTranslatorIp + ':' + this.server.xpdDefaultWitsTranslatorServerPort;
 		return url;
 	}
 }
