@@ -187,7 +187,7 @@
                     <select
                       id="input_as"
                       ng-model="map.input_as"
-                      ng-model="map.field"
+                      ng-model="map.teste"
                       ng-disabled="!map.possibilities || map.possibilities.length == 0"
                     >
                       <option
@@ -202,7 +202,7 @@
                     <button
                       ng-if="serverInfo.isConnected"
                       type="submit"
-                      ng-click="daController.actionButtonDisconnect()"
+                      ng-click="map.field = null"
                       class="btn btn-sm btn-danger"
                     >
                       UNMAP
