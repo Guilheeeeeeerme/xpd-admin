@@ -1,32 +1,138 @@
+import { WitsDataService } from './../../../shared/xpd.wits-data/wits-data.service';
 import { OperationDataService } from '../../../shared/xpd.operation-data/operation-data.service';
-
+import angular = require('angular');
+var convert = require('convert-units');
 export class DataAcquisitionController {
+
 	// 'use strict';
 
 	// 	.controller('DataAcquisitionController', dataAcquisitionController);
+	// private loadServerInfo() {
 
-	public static $inject = ['$scope', 'operationDataService'];
+	// 	this.$scope.dados.sectionList = [];
+
+	// 	if (this.$routeParams.wellId != null) {
+	// 		this.sectionSetupAPIService.getListOfSectionsByWell(this.$routeParams.wellId).then((sectionList) => {
+	// 			this.$scope.dados.sectionList = this.$filter('orderBy')(sectionList, 'sectionOrder');
+	// 		});
+	// 	}
+
+	// }
+
+	public static $inject = ['$scope', '$rootScope', 'operationDataService', 'witsDataService'];
 	public changeViewAcquisition: () => void;
+	public openModalTranslatorConfig: () => void;
+	public changeFilterField: () => void;
+	public actionBuildSubmetric: (data: any) => void;
+	public closeModal: () => void;
+	public showModalSettings: () => void;
+	public actionButtonUpdateMapping: () => void;
 	public changeViewReading: () => void;
+	public resetForm: (connType) => void;
+	public actionButtonConnect: () => void;
+	public actionButtonDisconnect: () => void;
+	public update: (data: any) => void;
 	public operationDataFactory: any;
+	public witsDataFactory: any;
 
-	constructor($scope, operationDataService: OperationDataService) {
+	constructor($scope, $rootScope, operationDataService: OperationDataService, witsDataService: WitsDataService) {
 
 		const vm = this;
-
+		var submetricsTemp;
+		$scope.master = {};
+		$scope.wits = {};
+		$scope.item = {};
+		$scope.serverInfo = {};
+		$scope.new = {};
+		$scope.dadosWits = [];
 		$scope.dados = {
+			isConnected: false,
 			acquisitionJson: false,
 			readingJson: false,
+			readingData: {}
 		};
 
-		operationDataService.openConnection(['reading', 'dataAcquisition']).then(function() {
+		//Mapping
+		$scope.allMetrics = convert().measures();
+		$scope.sortRec = {
+			rec: '',
+			item: '',
+			description: ''
+		};
+		$scope.fields = [
+			'rpm',
+			'wob',
+			'rop',
+			'flow',
+			'torque',
+			'depth',
+			'blockPosition',
+			'hookload',
+			'sppa',
+			'bitDepth',
+			'blockSpeed',
+			'date',
+			'time'
+		];
+		// vm.openModalTranslatorConfig = openModalTranslatorConfig;
+		vm.actionButtonConnect = actionButtonConnect;
+		vm.changeFilterField = changeFilterField;
+		vm.actionBuildSubmetric = actionBuildSubmetric;
+		vm.actionButtonDisconnect = actionButtonDisconnect;
+		vm.showModalSettings = showModalSettings;
+		vm.changeViewAcquisition = changeViewAcquisition;
+		vm.actionButtonUpdateMapping = actionButtonUpdateMapping;
+		vm.update = update;
+		vm.closeModal = closeModal;
+		vm.resetForm = resetForm;
+		vm.changeViewReading = changeViewReading;
+
+
+		function onAcquisitionDetails(details) {
+			console.log('details', details);
+			details.mapped = witsDataService.readingLineToJson(details.readingLine, $scope.mapping);
+			details.wits = witsDataService.readingWitsToJson(details.wits);
+			details.line = witsDataService.merge(details.readingLine);
+			$scope.dadosWits.unshift(details);
+			if ($scope.dadosWits.length == 50) {
+				$scope.dadosWits.pop();
+			}
+
+			$scope.$apply();
+		}
+
+		function hasConnection(serverInfo) {
+			$scope.serverInfo = serverInfo;
+			$scope.$apply();
+		}
+
+		operationDataService.openConnection(['reading', 'dataAcquisition']).then(function () {
 			vm.operationDataFactory = operationDataService.operationDataFactory;
 			$scope.readingData = vm.operationDataFactory.operationData.readingContext;
 			$scope.acquisitionData = vm.operationDataFactory.operationData.dataAcquisitionContext;
 		});
 
-		vm.changeViewAcquisition = changeViewAcquisition;
-		vm.changeViewReading = changeViewReading;
+
+		witsDataService.openConnection(['mapping', 'dataAcquisition']).then(() => {
+			vm.witsDataFactory = witsDataService.witsDataFactory;
+			$scope.witsReadingData = vm.witsDataFactory.operationData;
+			witsDataService.on('acquisition-details', (arg) => onAcquisitionDetails(arg));
+			witsDataService.on('server-info', (serverInfo) => hasConnection(serverInfo))
+		}).catch(e => {
+			console.log('log erro', e)
+		});
+
+		function actionButtonConnect() {
+			witsDataService.emitEv('user-request-connection', $scope.wits);
+		}
+
+		function actionButtonDisconnect() {
+			witsDataService.emitEv('user-request-disconnection', $scope.wits)
+		}
+
+		function showModalSettings() {
+			console.log('abrir modal')
+		}
 
 		function changeViewAcquisition() {
 			if ($scope.dados.acquisitionJson) {
@@ -34,6 +140,50 @@ export class DataAcquisitionController {
 			} else {
 				$scope.dados.acquisitionJson = true;
 			}
+		}
+
+		function changeFilterField() {
+			if ($scope.filterField == true) {
+				$scope.filterField = false;
+				$scope.sortRec.rec = '01';
+			} else {
+				$scope.filterField = true;
+				$scope.sortRec.rec = '';
+			}
+		}
+
+		function actionBuildSubmetric(measure) {
+			if (!measure) {
+				return [];
+			}
+
+			if (!submetricsTemp) {
+				submetricsTemp = {};
+			}
+
+			if (!submetricsTemp[measure]) {
+				submetricsTemp[measure] = convert().list(measure) || [];
+			}
+
+			return submetricsTemp[measure];
+		}
+
+		function update(newMap) {
+			witsDataService.addMapping(newMap);
+		}
+
+		function closeModal() {
+			$scope.new = {
+			}
+		}
+
+		function actionButtonUpdateMapping() {
+			witsDataService.emitEv('user-update-mapping', $scope.mapping.map(function (map) {
+
+				delete map.$$hashKey;
+				delete map.possibilities;
+				return map;
+			}))
 		}
 
 		function changeViewReading() {
@@ -44,6 +194,14 @@ export class DataAcquisitionController {
 			}
 		}
 
+		function resetForm(connectionType) {
+			$scope.wits = {
+				connectionType: connectionType,
+				address: null,
+				port: null,
+				serialPort: null
+			};
+		}
 	}
-
 }
+

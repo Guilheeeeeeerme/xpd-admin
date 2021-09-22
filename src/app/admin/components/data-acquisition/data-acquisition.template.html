@@ -1,182 +1,536 @@
 <div class="xpd-panel">
+  <div class="panel-body xpd-setup-container-body">
+    <div class="panel panel-default">
+      <div class="panel-body">
+        <form novalidate class="simple-form">
+          <br />
+          TYPE CONNECTION:
+          <label
+            ><input
+              ng-disabled="serverInfo.isConnected || !connectToTranslator"
+              type="radio"
+              ng-model="wits.connectionType"
+              ng-click="daController.resetForm(wits.connectionType)"
+              value="tcp"
+            />TCP</label
+          >
+          <label
+            ><input
+              ng-disabled="serverInfo.isConnected || !connectToTranslator"
+              type="radio"
+              ng-model="wits.connectionType"
+              ng-click="daController.resetForm(wits.connectionType)"
+              value="serial"
+            />SERIAL</label
+          ><br />
+          <label>
+            WITS Serial Port
+            <select
+              id="field"
+              ng-model="wits.serialPort"
+              ng-disabled="wits.connectionType === 'tcp' || !connectToTranslator"
+            >
+              <option ng-repeat="port in serverInfo.serialPorts">
+                {{ port.path }}
+              </option>
+            </select>
+          </label>
+          <div>
+            <label>WITS SERVER IP Address:</label>
+            <input
+              type="text"
+              ng-model="wits.address"
+              ng-disabled="serverInfo.isConnected || wits.connectionType === 'serial' || !connectToTranslator"
+              pattern="^([0-9]{1,3}\.){3}[0-9]{1,3}$"
+              placeholder="{{serverInfo.address}}"
+            />
+            <small id="IPAddressHelp" class="form-text text-muted"
+              >Ex: 192.168.0.100</small
+            >
+          </div>
+          <br />
+          <label>WITS SERVER PORT:</label>
+          <input
+            type="text"
+            ng-model="wits.port"
+            ng-disabled="serverInfo.isConnected || wits.connectionType === 'serial' || !connectToTranslator"
+            placeholder="{{serverInfo.port}}"
+          />
+        </form>
+        <button
+          ng-if="!serverInfo.isConnected && connectToTranslator"
+          type="submit"
+          ng-click="daController.actionButtonConnect()"
+          class="btn btn-sm btn-success"
+        >
+          CONNECT
+        </button>
 
-    <div class="xpd-panel-body">
+        <button
+          ng-if="serverInfo.isConnected"
+          type="submit"
+          ng-click="daController.actionButtonDisconnect()"
+          class="btn btn-sm btn-danger"
+        >
+          DISCONNECT
+        </button>
+        <button
+          ng-if="connectToTranslator"
+          type="button"
+          class="btn btn-primary"
+          data-toggle="modal"
+          data-target="#modalExemplo"
+        >
+          SETTINGS
+        </button>
+      </div>
 
-        <div class="col-md-6 out-of-slips-indicators-container">
+      <table class="table table-sm">
+        <thead>
+          <tr>
+            <th>Incoming Data</th>
+            <th>Mapped Data</th>
+            <th>Outcoming Data</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>
+              <pre class="wits-content">{{ dadosWits[0].wits }}</pre>
+            </td>
 
-            <table class="table table-condensed equilibrium-time-table">
+            <td>
+              <pre class="json-content">{{ dadosWits[0].mapped }}</pre>
+            </td>
 
-                <thead>
-
-                    <tr class="current-elevator-bit-depth-cicle-row">
-                        <th class="equilibrium-time-table-title" colspan="4">Data Aquisition
-                            <xpd-access-factory-directive></xpd-access-factory-directive>
-                        </th>
-                    </tr>
-
-                    <tr>
-                        <th class="equilibrium-time-table-label">Status</th>
-                        <th class="equilibrium-time-table-label">Mode</th>
-                        <th class="equilibrium-time-table-label">IP</th>
-                        <th class="equilibrium-time-table-label">Port</th>
-                    </tr>
-
-                </thead>
-
-                <tbody>
-
-                    <tr class="current-elevator-bit-depth-cicle-row">
-
-                        <td class="equilibrium-time-table-text">
-                            <span class="glyphicon glyphicon-transfer data-acquisition-status-icon" ng-class="{'status-open': (acquisitionData.currentStatus==='open'), 'status-close':(acquisitionData.currentStatus==='closed')}">
-                            </span>
-                        </td>
-
-                        <td class="equilibrium-time-table-text">{{ acquisitionData.mode }}</td>
-
-                        <td class="equilibrium-time-table-text">{{ acquisitionData.ip }}</td>
-
-                        <td class="equilibrium-time-table-text">{{ acquisitionData.port }}</td>
-
-                    </tr>
-
-                </tbody>
-
-                <tfoot>
-
-                    <tr ng-if="operationData.dataAcquisitionContext.delayOnReading == true">
-                        <th class="equilibrium-time-table-title" colspan="4">
-                            <span class="bellow-poor-text glyphicon glyphicon-exclamation-sign"></span> Reading With Delay !!!
-                        </th>
-                    </tr>
-
-                    <tr ng-if="operationData.dataAcquisitionContext.delayOnReading != true">
-                        <th class="equilibrium-time-table-title" colspan="4">
-                            <span class="above-optimum-text glyphicon glyphicon-ok"></span> Readings Without Delay !!!
-                        </th>
-                    </tr>
-
-                </tfoot>
-
-            </table>
-
-            <table ng-show="!dados.acquisitionJson" class="table table-condensed equilibrium-time-table">
-                <thead>
-
-                    <tr>
-                        <th class="equilibrium-time-table-title" colspan="5">
-                            Incoming Reading
-                            <button ng-click="daController.changeViewAcquisition()">Json/Table</button>
-                        </th>
-                    </tr>
-
-                    <tr>
-                        <th class="equilibrium-time-table-label">Block Position (m)</th>
-                        <th class="equilibrium-time-table-label">Bit Depth (m)</th>
-                        <th class="equilibrium-time-table-label">Block Speed (m/s)</th>
-                        <th class="equilibrium-time-table-label">HookLoad (klb)</th>
-                        <th class="equilibrium-time-table-label">Timestamp</th>
-                    </tr>
-
-                </thead>
-
-                <tbody>
-                    <td class="equilibrium-time-table-text">{{ acquisitionData.currentReading.blockPosition | number:2}}</td>
-                    <td class="equilibrium-time-table-text">{{ acquisitionData.currentReading.bitDepth | number:2}}</td>
-                    <td class="equilibrium-time-table-text">{{ acquisitionData.currentReading.blockSpeed | number:2}}</td>
-                    <td class="equilibrium-time-table-text">{{ acquisitionData.currentReading.hookload }}</td>
-                    <td class="equilibrium-time-table-text">{{ acquisitionData.currentReading.timestamp }}</td>
-                </tbody>
-
-            </table>
-
-            <div ng-show="dados.acquisitionJson">
-                <table class="table table-condensed equilibrium-time-table">
-                    <thead>
-                        <tr>
-                            <th class="equilibrium-time-table-title" colspan="6">
-                                Data Aquisition Context
-                                <button ng-click="daController.changeViewAcquisition()">Json/Table</button>
-                            </th>
-                        </tr>
-                    </thead>
-                </table>
-
-                <pre>{{ acquisitionData | json }}</pre>
-            </div>
-
-        </div>
-
-        <!-- ======================================================= -->
-
-        <div class="col-md-6">
-
-            <table class="table table-condensed equilibrium-time-table">
-
-                <thead>
-
-                    <tr class="current-elevator-bit-depth-cicle-row">
-                        <th class="equilibrium-time-table-title" colspan="2">System Require Readings</th>
-                    </tr>
-
-                </thead>
-
-                <tbody>
-
-                    <tr class="current-elevator-bit-depth-cicle-row">
-                        <td class="equilibrium-time-table-text readings-is-acquired" ng-class="(readingData.isAcquiring)? 'glyphicon glyphicon-ok' : 'glyphicon glyphicon-remove'"></td>
-                        <td class="equilibrium-time-table-text">{{ (readingData.bitDepth)? (readingData.bitDepth | number:2) : 'None' }}</td>
-                    </tr>
-
-                </tbody>
-
-            </table>
-
-            <table ng-show="!dados.readingJson" class="table table-condensed equilibrium-time-table">
-                <thead>
-                    <tr>
-                        <th class="equilibrium-time-table-title" colspan="5">
-                            System Actual Reading
-                            <button ng-click="daController.changeViewReading()">Json/Table</button>
-                        </th>
-                    </tr>
-
-                    <tr>
-                        <th class="equilibrium-time-table-label">Block Position (m)</th>
-                        <th class="equilibrium-time-table-label">Bit Depth (m)</th>
-                        <th class="equilibrium-time-table-label">Block Speed (m/s)</th>
-                        <th class="equilibrium-time-table-label">HookLoad (klb)</th>
-                        <th class="equilibrium-time-table-label">Timestamp</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <td class="equilibrium-time-table-text">{{ readingData.currentReading.blockPosition | number:2}}</td>
-                    <td class="equilibrium-time-table-text">{{ readingData.currentReading.bitDepth | number:2}}</td>
-                    <td class="equilibrium-time-table-text">{{ readingData.currentReading.blockSpeed | number:2}}</td>
-                    <td class="equilibrium-time-table-text">{{ readingData.currentReading.hookload }}</td>
-                    <td class="equilibrium-time-table-text">{{ readingData.currentReading.timestamp }}</td>
-
-                </tbody>
-
-            </table>
-
-            <div ng-show="dados.readingJson">
-                <table class="table table-condensed equilibrium-time-table">
-                    <thead>
-                        <tr>
-                            <th class="equilibrium-time-table-title">
-                                Data Aquisition Context
-                                <button ng-click="daController.changeViewReading()">Json/Table</button>
-                            </th>
-                        </tr>
-                    </thead>
-                </table>
-
-                <pre>{{ readingData | json }}</pre>
-            </div>
-
-        </div>
-
+            <td>
+              <pre class="json-content">{{ dadosWits[0].reading | json }}</pre>
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </div>
 
+    <!-- Modal -->
+    <div
+      class="modal fade"
+      id="modalExemplo"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="exampleModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">MAP LIST</h5>
+            <button
+              type="button"
+              class="close"
+              data-dismiss="modal"
+              aria-label="Fechar"
+              ng-click="daController.closeModal()"
+            >
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <table class="table table-condensed">
+              <thead>
+                <tr>
+                  <th>Rec</th>
+                  <th>Item</th>
+                  <th>Description</th>
+                  <th>Field</th>
+                  <th>Unit</th>
+                  <th>Comming as</th>
+                </tr>
+              </thead>
+
+              <tbody>
+                <tr
+                  ng-repeat="map in mappingFilter | filter:filterRecsByField | filter:sortRec"
+                >
+                  <td>
+                    {{ map.rec }}
+                    <!-- <input type="text" ng-model='map.rec'> -->
+                  </td>
+                  <td>
+                    {{ map.item }}
+                    <!-- <input type="text" ng-model='map.item'> -->
+                  </td>
+                  <td>
+                    {{ map.description }}
+                    <!-- <input type="text" ng-model='map.description'> -->
+                  </td>
+
+                  <td>
+                    <select id="field" ng-model="map.field">
+                      <option ng-repeat="field in fields">{{ field }}</option>
+                    </select>
+                  </td>
+
+                  <td>
+                    <select
+                      ng-init="map.possibilities = daController.actionBuildSubmetric(map.unit)"
+                      ng-change="map.possibilities = daController.actionBuildSubmetric(map.unit)"
+                      id="unit"
+                      ng-model="map.unit"
+                    >
+                      <option ng-repeat="unit in allMetrics" value="{{ unit }}">
+                        {{ unit }}
+                      </option>
+                    </select>
+                  </td>
+
+                  <td>
+                    <select
+                      id="input_as"
+                      ng-model="map.input_as"
+                      ng-model="map.field"
+                      ng-disabled="!map.possibilities || map.possibilities.length == 0"
+                    >
+                      <option
+                        ng-repeat="input_as in map.possibilities"
+                        value="{{ input_as.abbr }}"
+                      >
+                        {{ input_as.plural }}
+                      </option>
+                    </select>
+                  </td>
+                  <td>
+                    <button
+                      ng-if="serverInfo.isConnected"
+                      type="submit"
+                      ng-click="daController.actionButtonDisconnect()"
+                      class="btn btn-sm btn-danger"
+                    >
+                      UNMAP
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="modal-footer">
+            <div>
+              <form novalidate class="css-form">
+                <label
+                  >REC:
+                  <input
+                    type="number"
+                    ng-model="new.rec"
+                    placeholder="00~99"
+                    maxlength="2"
+                    min="01"
+                    max="99"
+                    required /></label
+                ><br />
+                <label
+                  >ITEM:
+                  <input
+                    type="number"
+                    ng-model="new.item"
+                    placeholder="00~99"
+                    maxlength="2"
+                    min="00"
+                    max="99"
+                    required /></label
+                ><br />
+                <!-- <label
+                  >FIELD:
+                  <select id="field" ng-model="map.field" required>
+                    <option ng-repeat="field in fields">{{ field }}</option>
+                  </select></label
+                >
+                <br />
+                <label
+                  >UNIT
+                  <select
+                    required
+                    ng-init="map.possibilities = daController.actionBuildSubmetric(map.unit)"
+                    ng-change="map.possibilities = daController.actionBuildSubmetric(map.unit)"
+                    id="unit"
+                    ng-model="map.unit"
+                  >
+                    <option ng-repeat="unit in allMetrics" value="{{ unit }}">
+                      {{ unit }}
+                    </option>
+                  </select>
+                </label>
+                <br />
+                <label
+                  >COMMING AS:
+
+                  <select
+                    id="input_as"
+                    ng-model="map.input_as"
+                    ng-model="map.field"
+                    ng-disabled="!map.possibilities || map.possibilities.length == 0"
+                  >
+                    <option
+                      ng-repeat="input_as in map.possibilities"
+                      value="{{ input_as.abbr }}"
+                    >
+                      {{ input_as.plural }}
+                    </option>
+                  </select>
+                </label> -->
+                <br />
+                <button
+                  type="button"
+                  ng-click="daController.update(new)"
+                  class="btn btn-primary"
+                >
+                  INSERT A NEW MAP
+                </button>
+                <!-- <input type="button" ng-click="reset()" value="Reset" />
+                <input type="submit" ng-click="update(user)" value="Save" /> -->
+              </form>
+              <style type="text/css">
+                .css-form input.ng-invalid.ng-touched {
+                  background-color: #fa787e;
+                }
+
+                .css-form input.ng-valid.ng-touched {
+                  background-color: #78fa89;
+                }
+              </style>
+            </div>
+            <br />
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-dismiss="modal"
+              ng-click="daController.closeModal()"
+            >
+              CLOSE
+            </button>
+            <button
+              type="button"
+              class="btn btn-primary"
+              ng-click="daController.actionButtonUpdateMapping()"
+            >
+              SAVE CHANGES
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="xpd-panel-body">
+    <div class="col-md-6 out-of-slips-indicators-container">
+      <table class="table table-condensed equilibrium-time-table">
+        <thead>
+          <tr class="current-elevator-bit-depth-cicle-row">
+            <th class="equilibrium-time-table-title" colspan="4">
+              Data Aquisition
+              <xpd-access-factory-directive></xpd-access-factory-directive>
+            </th>
+          </tr>
+
+          <tr>
+            <th class="equilibrium-time-table-label">Status</th>
+            <th class="equilibrium-time-table-label">Mode</th>
+            <th class="equilibrium-time-table-label">IP</th>
+            <th class="equilibrium-time-table-label">Port</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr class="current-elevator-bit-depth-cicle-row">
+            <td class="equilibrium-time-table-text">
+              <span
+                class="
+                  glyphicon glyphicon-transfer
+                  data-acquisition-status-icon
+                "
+                ng-class="{'status-open': (acquisitionData.currentStatus==='open'), 'status-close':(acquisitionData.currentStatus==='closed')}"
+              >
+              </span>
+            </td>
+
+            <td class="equilibrium-time-table-text">
+              {{ acquisitionData.mode }}
+            </td>
+
+            <td class="equilibrium-time-table-text">
+              {{ acquisitionData.ip }}
+            </td>
+
+            <td class="equilibrium-time-table-text">
+              {{ acquisitionData.port }}
+            </td>
+          </tr>
+        </tbody>
+
+        <tfoot>
+          <tr
+            ng-if="operationData.dataAcquisitionContext.delayOnReading == true"
+          >
+            <th class="equilibrium-time-table-title" colspan="4">
+              <span
+                class="bellow-poor-text glyphicon glyphicon-exclamation-sign"
+              ></span>
+              Reading With Delay !!!
+            </th>
+          </tr>
+
+          <tr
+            ng-if="operationData.dataAcquisitionContext.delayOnReading != true"
+          >
+            <th class="equilibrium-time-table-title" colspan="4">
+              <span class="above-optimum-text glyphicon glyphicon-ok"></span>
+              Readings Without Delay !!!
+            </th>
+          </tr>
+        </tfoot>
+      </table>
+
+      <table
+        ng-show="!dados.acquisitionJson"
+        class="table table-condensed equilibrium-time-table"
+      >
+        <thead>
+          <tr>
+            <th class="equilibrium-time-table-title" colspan="5">
+              Incoming Reading
+              <button ng-click="daController.changeViewAcquisition()">
+                Json/Table
+              </button>
+            </th>
+          </tr>
+
+          <tr>
+            <th class="equilibrium-time-table-label">Block Position (m)</th>
+            <th class="equilibrium-time-table-label">Bit Depth (m)</th>
+            <th class="equilibrium-time-table-label">Block Speed (m/s)</th>
+            <th class="equilibrium-time-table-label">HookLoad (klb)</th>
+            <th class="equilibrium-time-table-label">Timestamp</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <td class="equilibrium-time-table-text">
+            {{ acquisitionData.currentReading.blockPosition | number:2}}
+          </td>
+          <td class="equilibrium-time-table-text">
+            {{ acquisitionData.currentReading.bitDepth | number:2}}
+          </td>
+          <td class="equilibrium-time-table-text">
+            {{ acquisitionData.currentReading.blockSpeed | number:2}}
+          </td>
+          <td class="equilibrium-time-table-text">
+            {{ acquisitionData.currentReading.hookload }}
+          </td>
+          <td class="equilibrium-time-table-text">
+            {{ acquisitionData.currentReading.timestamp }}
+          </td>
+        </tbody>
+      </table>
+
+      <div ng-show="dados.acquisitionJson">
+        <table class="table table-condensed equilibrium-time-table">
+          <thead>
+            <tr>
+              <th class="equilibrium-time-table-title" colspan="6">
+                Data Aquisition Context
+                <button ng-click="daController.changeViewAcquisition()">
+                  Json/Table
+                </button>
+              </th>
+            </tr>
+          </thead>
+        </table>
+
+        <pre>{{ acquisitionData | json }}</pre>
+      </div>
+    </div>
+
+    <!-- ======================================================= -->
+
+    <div class="col-md-6">
+      <table class="table table-condensed equilibrium-time-table">
+        <thead>
+          <tr class="current-elevator-bit-depth-cicle-row">
+            <th class="equilibrium-time-table-title" colspan="2">
+              System Require Readings
+            </th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr class="current-elevator-bit-depth-cicle-row">
+            <td
+              class="equilibrium-time-table-text readings-is-acquired"
+              ng-class="(readingData.isAcquiring)? 'glyphicon glyphicon-ok' : 'glyphicon glyphicon-remove'"
+            ></td>
+            <td class="equilibrium-time-table-text">
+              {{ (readingData.bitDepth)? (readingData.bitDepth | number:2) :
+              'None' }}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <table
+        ng-show="!dados.readingJson"
+        class="table table-condensed equilibrium-time-table"
+      >
+        <thead>
+          <tr>
+            <th class="equilibrium-time-table-title" colspan="5">
+              System Actual Reading
+              <button ng-click="daController.changeViewReading()">
+                Json/Table
+              </button>
+            </th>
+          </tr>
+
+          <tr>
+            <th class="equilibrium-time-table-label">Block Position (m)</th>
+            <th class="equilibrium-time-table-label">Bit Depth (m)</th>
+            <th class="equilibrium-time-table-label">Block Speed (m/s)</th>
+            <th class="equilibrium-time-table-label">HookLoad (klb)</th>
+            <th class="equilibrium-time-table-label">Timestamp</th>
+          </tr>
+        </thead>
+        <tbody>
+          <td class="equilibrium-time-table-text">
+            {{ readingData.currentReading.blockPosition | number:2}}
+          </td>
+          <td class="equilibrium-time-table-text">
+            {{ readingData.currentReading.bitDepth | number:2}}
+          </td>
+          <td class="equilibrium-time-table-text">
+            {{ readingData.currentReading.blockSpeed | number:2}}
+          </td>
+          <td class="equilibrium-time-table-text">
+            {{ readingData.currentReading.hookload }}
+          </td>
+          <td class="equilibrium-time-table-text">
+            {{ readingData.currentReading.timestamp }}
+          </td>
+        </tbody>
+      </table>
+
+      <div ng-show="dados.readingJson">
+        <table class="table table-condensed equilibrium-time-table">
+          <thead>
+            <tr>
+              <th class="equilibrium-time-table-title">
+                Data Aquisition Context
+                <button ng-click="daController.changeViewReading()">
+                  Json/Table
+                </button>
+              </th>
+            </tr>
+          </thead>
+        </table>
+
+        <pre>{{ readingData | json }}</pre>
+      </div>
+    </div>
+  </div>
 </div>
