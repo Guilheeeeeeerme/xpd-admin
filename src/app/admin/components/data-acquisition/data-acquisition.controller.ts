@@ -25,7 +25,6 @@ export class DataAcquisitionController {
 	public changeFilterField: () => void;
 	public actionBuildSubmetric: (data: any) => void;
 	public closeModal: () => void;
-	public showModalSettings: () => void;
 	public actionButtonUpdateMapping: () => void;
 	public changeViewReading: () => void;
 	public resetForm: (connType) => void;
@@ -79,7 +78,6 @@ export class DataAcquisitionController {
 		vm.changeFilterField = changeFilterField;
 		vm.actionBuildSubmetric = actionBuildSubmetric;
 		vm.actionButtonDisconnect = actionButtonDisconnect;
-		vm.showModalSettings = showModalSettings;
 		vm.changeViewAcquisition = changeViewAcquisition;
 		vm.actionButtonUpdateMapping = actionButtonUpdateMapping;
 		vm.update = update;
@@ -128,10 +126,6 @@ export class DataAcquisitionController {
 
 		function actionButtonDisconnect() {
 			witsDataService.emitEv('user-request-disconnection', $scope.wits)
-		}
-
-		function showModalSettings() {
-			console.log('abrir modal')
 		}
 
 		function changeViewAcquisition() {

@@ -125,33 +125,7 @@ export class WitsDataService {
 
 
 	public onServerInfo(serverInfo) {
-		const mockserial = [
-			{
-				"path": "COM1",
-				"manufacturer": "(Tipos de porta padr�o)",
-				"pnpId": "ACPI\\PNP0501\\0"
-			},
-			{
-				"path": "COM1",
-				"manufacturer": "(Tipos de porta padr�o)",
-				"pnpId": "ACPI\\PNP0501\\1"
-			},
-			{
-				"path": "COM4",
-				"manufacturer": "Vyacheslav Frolov",
-				"pnpId": "COM0COM\\PORT\\CNCA1",
-				"locationId": "CNCA1"
-			},
-			{
-				"path": "COM3",
-				"manufacturer": "Vyacheslav Frolov",
-				"pnpId": "COM0COM\\PORT\\CNCB1",
-				"locationId": "CNCB1"
-			}
-		];
 		this.$rootScope.serverInfo = serverInfo;
-		this.$rootScope.serverInfo.serialPorts = mockserial;
-		this.$rootScope.serverInfo.serialPort = "COM1";
 		this.$rootScope.$apply();
 	}
 
@@ -217,7 +191,6 @@ export class WitsDataService {
 	}
 
 	public onAcquisitionDetails(details) {
-		console.log('detais reading', details)
 		this.$rootScope.dados = [];
 		try {
 			details.mapped = this.readingLineToJson(details.readingLine, this.$rootScope.mapping);
