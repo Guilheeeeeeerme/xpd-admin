@@ -90,6 +90,7 @@ export class DataAcquisitionController {
 
 		function onAcquisitionDetails(details) {
 			details.mapped = witsDataService.readingLineToJson(details.readingLine, $scope.mapping);
+			details.rawData = details.wits;
 			details.wits = witsDataService.readingWitsToJson(details.wits);
 			details.line = witsDataService.merge(details.readingLine);
 			$scope.dadosWits.unshift(details);
