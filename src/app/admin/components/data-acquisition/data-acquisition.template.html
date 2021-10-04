@@ -43,8 +43,8 @@
                 form-name="connectForm"
                 ng-required="serverInfo.connectionType === 'serial'"
               >
-                <option ng-repeat="port in serverInfo.serialPorts">
-                  {{ port.path }}
+                <option ng-repeat="port in serverInfo.serialPorts" value="{{port.path}}">
+                  {{port.path}}
                 </option>
               </select>
             </label>
