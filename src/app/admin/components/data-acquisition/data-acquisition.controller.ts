@@ -121,11 +121,11 @@ export class DataAcquisitionController {
 		});
 
 		function actionButtonConnect() {
-			witsDataService.emitEv('user-request-connection', $scope.wits);
+			witsDataService.emitEv('user-request-connection', $rootScope.serverInfo);
 		}
 
 		function actionButtonDisconnect() {
-			witsDataService.emitEv('user-request-disconnection', $scope.wits)
+			witsDataService.emitEv('user-request-disconnection', $rootScope.serverInfo)
 		}
 
 		function changeViewAcquisition() {

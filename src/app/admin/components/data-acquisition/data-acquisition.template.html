@@ -2,14 +2,24 @@
   <div class="panel-body xpd-setup-container-body">
     <div class="panel panel-default">
       <div class="panel-body">
-        <form name="connectForm" class="row">
+        <div>
+          <h3 ng-show="!connectToTranslator">
+            Haven't connection with Wits Translator
+          </h3>
+          <h4 ng-show="!connectToTranslator" class="text-danger">
+            Please, check if the Wits Translator IP and Config Port are set
+            correctly in Access Data, to be able to connect to the Wits
+            Simulator
+          </h4>
+        </div>
+        <form name="connectForm" class="row" ng-show="connectToTranslator">
           <br />
           TYPE CONNECTION:
           <label
             ><input
               ng-disabled="serverInfo.isConnected || !connectToTranslator"
               type="radio"
-              ng-model="wits.connectionType"
+              ng-model="serverInfo.connectionType"
               ng-click="daController.resetForm(wits.connectionType)"
               value="tcp"
             />TCP</label
@@ -18,20 +28,20 @@
             ><input
               ng-disabled="serverInfo.isConnected || !connectToTranslator"
               type="radio"
-              ng-model="wits.connectionType"
-              ng-click="daController.resetForm(wits.connectionType)"
+              ng-model="serverInfo.connectionType"
+              ng-click="daController.resetForm(serverInfo.connectionType)"
               value="serial"
             />SERIAL</label
           ><br />
-          <div ng-show="wits.connectionType === 'serial'">
+          <div ng-show="serverInfo.connectionType === 'serial'">
             <label>
               WITS Serial Port
               <select
                 id="field"
-                ng-model="wits.serialPort"
-                ng-disabled="!connectToTranslator"
+                ng-model="serverInfo.serialPort"
+                ng-disabled="!connectToTranslator || serverInfo.isConnected"
                 form-name="connectForm"
-                ng-required="wits.connectionType === 'serial'"
+                ng-required="serverInfo.connectionType === 'serial'"
               >
                 <option ng-repeat="port in serverInfo.serialPorts">
                   {{ port.path }}
@@ -40,16 +50,16 @@
             </label>
           </div>
 
-          <div ng-show="wits.connectionType === 'tcp'">
+          <div ng-show="serverInfo.connectionType === 'tcp'">
             <label>WITS SERVER IP Address:</label>
             <input
               type="text"
-              ng-model="wits.address"
+              ng-model="serverInfo.address"
               ng-disabled="serverInfo.isConnected"
               pattern="^([0-9]{1,3}\.){3}[0-9]{1,3}$"
               placeholder="{{serverInfo.address}}"
               form-name="connectForm"
-              ng-required="wits.connectionType === 'tcp'"
+              ng-required="serverInfo.connectionType === 'tcp'"
             />
             <small id="IPAddressHelp" class="form-text text-muted"
               >Ex: 192.168.0.100</small
@@ -58,11 +68,11 @@
             <label>WITS SERVER PORT:</label>
             <input
               type="text"
-              ng-model="wits.port"
+              ng-model="serverInfo.port"
               ng-disabled="serverInfo.isConnected"
               placeholder="{{serverInfo.port}}"
               form-name="connectForm"
-              ng-required="wits.connectionType === 'tcp'"
+              ng-required="serverInfo.connectionType === 'tcp'"
             />
           </div>
         </form>
@@ -95,28 +105,34 @@
         </button>
       </div>
 
-      <table class="table table-sm">
-        <thead>
-          <tr>
-            <th>Raw Data</th>
-            <th>Incoming Data</th>
-            <th>Outcoming Data</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>
-              <pre class="wits-content">{{ dadosWits[0].rawData }}</pre>
-            </td>
-            <td>
-              <pre class="wits-content">{{ dadosWits[0].wits }}</pre>
-            </td>
-            <td>
-              <pre class="json-content">{{ dadosWits[0].reading | json }}</pre>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+      <div ng-show="connectToTranslator">
+        <table class="table table-sm">
+          <thead>
+            <tr>
+              <th>Raw Data</th>
+              <th>Incoming Data</th>
+              <th>Outcoming Data</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <pre class="wits-content">{{ dadosWits[0].rawData }}</pre>
+              </td>
+              <td>
+                <pre class="wits-content">
+                </br>{{ dadosWits[0].wits }}
+                </pre>
+              </td>
+              <td>
+                <pre class="json-content">
+{{ dadosWits[0].reading | json }}</pre
+                >
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
     <div
       class="modal fade"
@@ -157,15 +173,9 @@
                 <tr
                   ng-repeat="map in mappingFilter | filter:filterRecsByField | filter:sortRec"
                 >
-                  <td>
-                    {{ map.rec }}
-                  </td>
-                  <td>
-                    {{ map.item }}
-                  </td>
-                  <td>
-                    {{ map.description }}
-                  </td>
+                  <td>{{ map.rec }}</td>
+                  <td>{{ map.item }}</td>
+                  <td>{{ map.description }}</td>
 
                   <td>
                     <select id="field" ng-model="map.field">

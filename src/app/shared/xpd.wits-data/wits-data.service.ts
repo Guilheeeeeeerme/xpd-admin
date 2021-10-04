@@ -119,7 +119,6 @@ export class WitsDataService {
 				metric: `${item.metric_units}`,
 			});
 		}
-		console.log('mapping', mapping);
 		this.$rootScope.$apply();
 	}
 
