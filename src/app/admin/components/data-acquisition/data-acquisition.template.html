@@ -2,7 +2,6 @@
   <div class="panel-body xpd-setup-container-body">
     <div class="panel panel-default">
       <div class="panel-body">
-        >
         <form name="connectForm" class="row">
           <br />
           TYPE CONNECTION:
@@ -24,28 +23,29 @@
               value="serial"
             />SERIAL</label
           ><br />
-          <label>
-            WITS Serial Port
-            <select
-              id="field"
-              ng-model="wits.serialPort"
-              ng-disabled="wits.connectionType === 'tcp' || !connectToTranslator"
-              form-name="connectForm"
-              ng-required="wits.connectionType === 'serial'"
-            >
-              <option
-                ng-repeat="port in serverInfo.serialPorts"
+          <div ng-show="wits.connectionType === 'serial'">
+            <label>
+              WITS Serial Port
+              <select
+                id="field"
+                ng-model="wits.serialPort"
+                ng-disabled="!connectToTranslator"
+                form-name="connectForm"
+                ng-required="wits.connectionType === 'serial'"
               >
-                {{ port.path }}
-              </option>
-            </select>
-          </label>
-          <div>
+                <option ng-repeat="port in serverInfo.serialPorts">
+                  {{ port.path }}
+                </option>
+              </select>
+            </label>
+          </div>
+
+          <div ng-show="wits.connectionType === 'tcp'">
             <label>WITS SERVER IP Address:</label>
             <input
               type="text"
               ng-model="wits.address"
-              ng-disabled="serverInfo.isConnected || wits.connectionType === 'serial' || !connectToTranslator"
+              ng-disabled="serverInfo.isConnected"
               pattern="^([0-9]{1,3}\.){3}[0-9]{1,3}$"
               placeholder="{{serverInfo.address}}"
               form-name="connectForm"
@@ -54,17 +54,17 @@
             <small id="IPAddressHelp" class="form-text text-muted"
               >Ex: 192.168.0.100</small
             >
+            <br />
+            <label>WITS SERVER PORT:</label>
+            <input
+              type="text"
+              ng-model="wits.port"
+              ng-disabled="serverInfo.isConnected"
+              placeholder="{{serverInfo.port}}"
+              form-name="connectForm"
+              ng-required="wits.connectionType === 'tcp'"
+            />
           </div>
-          <br />
-          <label>WITS SERVER PORT:</label>
-          <input
-            type="text"
-            ng-model="wits.port"
-            ng-disabled="serverInfo.isConnected || wits.connectionType === 'serial' || !connectToTranslator"
-            placeholder="{{serverInfo.port}}"
-            form-name="connectForm"
-            ng-required="wits.connectionType === 'tcp'"
-          />
         </form>
         <button
           ng-if="!serverInfo.isConnected && connectToTranslator"
@@ -100,7 +100,6 @@
           <tr>
             <th>Raw Data</th>
             <th>Incoming Data</th>
-            <!-- <th>Mapped Data</th> -->
             <th>Outcoming Data</th>
           </tr>
         </thead>
@@ -112,11 +111,6 @@
             <td>
               <pre class="wits-content">{{ dadosWits[0].wits }}</pre>
             </td>
-
-            <!-- <td>
-              <pre class="json-content">{{ dadosWits[0].mapped }}</pre>
-            </td> -->
-
             <td>
               <pre class="json-content">{{ dadosWits[0].reading | json }}</pre>
             </td>
@@ -124,8 +118,6 @@
         </tbody>
       </table>
     </div>
-
-    <!-- Modal -->
     <div
       class="modal fade"
       id="modalExemplo"
@@ -156,7 +148,7 @@
                   <th>Item</th>
                   <th>Description</th>
                   <th>Field</th>
-                  <th>Unit</th>
+                  <th>Incoming Unit</th>
                   <th>Comming as</th>
                 </tr>
               </thead>
@@ -167,15 +159,12 @@
                 >
                   <td>
                     {{ map.rec }}
-                    <!-- <input type="text" ng-model='map.rec'> -->
                   </td>
                   <td>
                     {{ map.item }}
-                    <!-- <input type="text" ng-model='map.item'> -->
                   </td>
                   <td>
                     {{ map.description }}
-                    <!-- <input type="text" ng-model='map.description'> -->
                   </td>
 
                   <td>
@@ -251,45 +240,6 @@
                     max="99"
                     required /></label
                 ><br />
-                <!-- <label
-                  >FIELD:
-                  <select id="field" ng-model="map.field" required>
-                    <option ng-repeat="field in fields">{{ field }}</option>
-                  </select></label
-                >
-                <br />
-                <label
-                  >UNIT
-                  <select
-                    required
-                    ng-init="map.possibilities = daController.actionBuildSubmetric(map.unit)"
-                    ng-change="map.possibilities = daController.actionBuildSubmetric(map.unit)"
-                    id="unit"
-                    ng-model="map.unit"
-                  >
-                    <option ng-repeat="unit in allMetrics" value="{{ unit }}">
-                      {{ unit }}
-                    </option>
-                  </select>
-                </label>
-                <br />
-                <label
-                  >COMMING AS:
-
-                  <select
-                    id="input_as"
-                    ng-model="map.input_as"
-                    ng-model="map.field"
-                    ng-disabled="!map.possibilities || map.possibilities.length == 0"
-                  >
-                    <option
-                      ng-repeat="input_as in map.possibilities"
-                      value="{{ input_as.abbr }}"
-                    >
-                      {{ input_as.plural }}
-                    </option>
-                  </select>
-                </label> -->
                 <br />
                 <button
                   type="button"
@@ -298,8 +248,6 @@
                 >
                   INSERT A NEW MAP
                 </button>
-                <!-- <input type="button" ng-click="reset()" value="Reset" />
-                <input type="submit" ng-click="update(user)" value="Save" /> -->
               </form>
               <style type="text/css">
                 .css-form input.ng-invalid.ng-touched {
@@ -323,6 +271,7 @@
             <button
               type="button"
               class="btn btn-primary"
+              data-dismiss="modal"
               ng-click="daController.actionButtonUpdateMapping()"
             >
               SAVE CHANGES
