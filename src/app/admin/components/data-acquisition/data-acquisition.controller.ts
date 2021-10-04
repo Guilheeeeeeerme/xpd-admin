@@ -121,6 +121,7 @@ export class DataAcquisitionController {
 		});
 
 		function actionButtonConnect() {
+			$rootScope.serverInfo.serialPort = $rootScope.serverInfo.serialPort.trim();
 			witsDataService.emitEv('user-request-connection', $rootScope.serverInfo);
 		}
 
