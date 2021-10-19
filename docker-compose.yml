@@ -6,6 +6,7 @@ networks:
     
 services:
   admin:
+      image: $CI_REGISTRY/$CI_PROJECT_NAMESPACE/$CI_PROJECT_NAME
       build: "."
       hostname: 'xpd-admin'
       container_name: 'xpd-admin'
