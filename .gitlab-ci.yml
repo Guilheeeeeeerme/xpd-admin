@@ -7,13 +7,6 @@ variables:
 homolog:
   stage: deploy
   before_script:
-    - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
-    - eval $(ssh-agent -s)
-    - echo "$NECTO_INFRA_PRIVATE_KEY" | tr -d '\r' | ssh-add -
-    - mkdir -p ~/.ssh
-    - chmod 700 ~/.ssh
-    - if ! grep "$(ssh-keyscan 165.22.178.111 2>/dev/null)" ~/.ssh/known_hosts > /dev/null; then ssh-keyscan 165.22.178.111 >> ~/.ssh/known_hosts; fi
-    - docker-compose --version
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
     - envsubst < .env-homolog > .env
 
@@ -21,9 +14,9 @@ homolog:
     - echo $IMAGE_TAG
     - docker-compose build admin
     - docker-compose push admin
-    - export DOCKER_HOST=ssh://root@165.22.178.111
-    - docker-compose pull admin
     - docker-compose stop
     - docker-compose up -d
   only:
     - feature/docker
+  tags:
+    - rzx
