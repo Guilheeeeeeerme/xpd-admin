@@ -17,6 +17,6 @@ homolog:
     - docker-compose stop
     - docker-compose up -d
   only:
-    - feature/docker
+    - main
   tags:
     - rzx
