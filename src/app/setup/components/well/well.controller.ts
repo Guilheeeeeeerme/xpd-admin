@@ -99,6 +99,7 @@ export class WellController {
 			this.dialogService.showMessageDialog('Unable to change Well due to Running Operation.', 'Error');
 		} else {
 			this.operationDataFactory.emitMakeCurrentWell(well);
+			window.location.reload();
 		}
 	}
 
@@ -108,6 +109,7 @@ export class WellController {
 			this.dialogService.showMessageDialog('Unable to change Well due to Running Operation.', 'Error');
 		} else {
 			this.operationDataFactory.emitInterruptCurrentWell(well);
+			window.location.reload();
 		}
 	}
 
