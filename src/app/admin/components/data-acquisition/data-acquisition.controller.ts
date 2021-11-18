@@ -1,7 +1,10 @@
 import { WitsDataService } from './../../../shared/xpd.wits-data/wits-data.service';
 import { OperationDataService } from '../../../shared/xpd.operation-data/operation-data.service';
 import angular = require('angular');
-var convert = require('convert-units');
+import configureMeasurements,  {allMeasures}  from 'convert-units';
+var customMeasures = require('./custom-measures');
+var convert = configureMeasurements(allMeasures);
+var convertCustom = configureMeasurements(customMeasures);
 export class DataAcquisitionController {
 
 	// 'use strict';
@@ -52,7 +55,10 @@ export class DataAcquisitionController {
 		};
 
 		//Mapping
-		$scope.allMetrics = convert().measures();
+		const defaultMeasures = convert().measures();
+		const customMeasures = convertCustom().measures()
+		$scope.allMetrics = customMeasures.concat(defaultMeasures)
+
 		$scope.sortRec = {
 			rec: '',
 			item: '',
@@ -159,7 +165,12 @@ export class DataAcquisitionController {
 			}
 
 			if (!submetricsTemp[measure]) {
-				submetricsTemp[measure] = convert().list(measure) || [];
+				
+				if (convert().measures().indexOf(measure) > -1) {
+					submetricsTemp[measure] = convert().list(measure) || [];
+				} else{
+					submetricsTemp[measure] = convertCustom().list(measure) || [];
+				}
 			}
 
 			return submetricsTemp[measure];
