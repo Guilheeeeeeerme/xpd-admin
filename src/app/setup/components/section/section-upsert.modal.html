@@ -53,7 +53,7 @@
 				</div>
 			</div>
 
-			<div class="well" ng-if="sectionHeight >= 0" ng-init="sectionHeight = (section.mdBottom - section.mdTop)">
+			<div class="well" ng-if="sectionHeight >= 0" ng-init="sectionHeight = {{section.mdBottom - section.mdTop}}">
 				Section Height <strong>{{ sectionHeight }}</strong> (m)
 			</div>
 
