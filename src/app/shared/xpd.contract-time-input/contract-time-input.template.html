@@ -1,21 +1,66 @@
-<input style="display: none" type="number" name="{{name}}" disabled="{{disabled}}" required="{{required}}" ng-model="ngModel"
-    min="{{min ? min : lastMin}}" max="{{max ? max : lastMax}}" input-time at-least="{{atLeast}}" at-most="{{atMost}}" xpd-form-validation="contractTimeForm">
-
+<input
+  style="display: none"
+  type="number"
+  name="{{name}}"
+  disabled="{{disabled}}"
+  required="{{required}}"
+  ng-model="ngModel"
+  min="{{min ? min : lastMin}}"
+  max="{{max ? max : lastMax}}"
+  input-time
+  at-least="{{atLeast}}"
+  at-most="{{atMost}}"
+  xpd-form-validation="contractTimeForm"
+/>
 
 <table>
-    <tr>
-        <td>
-
-            <input class="form-control input-sm" placeholder="Hours" type="number" ng-disabled="{{disabled}}" ng-required="{{required}}"
-                min="0" ng-model="hours" ng-change="watchInput()">
-        </td>
-        <td>
-            <input class="form-control input-sm" placeholder="Minutes" type="number" ng-disabled="{{disabled}}" ng-required="{{required}}"
-                min="0" max="60" ng-model="minutes" ng-change="watchInput()">
-        </td>
-        <td>
-            <input class="form-control input-sm" placeholder="Seconds" type="number" ng-disabled="{{disabled}}" ng-required="{{required}}"
-                min="0" max="60" ng-model="seconds" ng-change="watchInput()">
-        </td>
-    </tr>
+  <tr>
+    <td>
+      <div class="input-group">
+        <input
+          class="form-control input-sm"
+          placeholder="Hours"
+          type="number"
+          ng-disabled="{{disabled}}"
+          ng-required="{{required}}"
+          min="0"
+          ng-model="hours"
+          ng-change="watchInput()"
+        />
+        <span class="input-group-addon unit-addon">Hrs</span>
+      </div>
+    </td>
+    <td>
+      <div class="input-group">
+        <input
+          class="form-control input-sm"
+          placeholder="Minutes"
+          type="number"
+          ng-disabled="{{disabled}}"
+          ng-required="{{required}}"
+          min="0"
+          max="60"
+          ng-model="minutes"
+          ng-change="watchInput()"
+        />
+        <span class="input-group-addon unit-addon">Min</span>
+      </div>
+    </td>
+    <td>
+      <div class="input-group">
+        <input
+          class="form-control input-sm"
+          placeholder="Seconds"
+          type="number"
+          ng-disabled="{{disabled}}"
+          ng-required="{{required}}"
+          min="0"
+          max="60"
+          ng-model="seconds"
+          ng-change="watchInput()"
+        />
+        <span class="input-group-addon unit-addon">Sec</span>
+      </div>
+    </td>
+  </tr>
 </table>
