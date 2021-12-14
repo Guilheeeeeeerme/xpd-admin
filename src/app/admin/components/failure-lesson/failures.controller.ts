@@ -46,9 +46,9 @@ export class FailuresController {
 
 		});
 
-		operationDataService.on('setOnGoingFailureListener', populateFailureList);
-		operationDataService.on('setOnFailureChangeListener', populateFailureList);
-		operationDataService.on('setOnLockFailureThreadListener', lockUnlockModal);
+		operationDataService.on($scope, 'setOnGoingFailureListener', populateFailureList);
+		operationDataService.on($scope, 'setOnFailureChangeListener', populateFailureList);
+		operationDataService.on($scope, 'setOnLockFailureThreadListener', lockUnlockModal);
 
 		function populateFailureList() {
 			const failureContext = vm.operationDataFactory.operationData.failureContext;

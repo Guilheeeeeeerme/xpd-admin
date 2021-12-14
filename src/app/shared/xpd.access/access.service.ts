@@ -64,14 +64,16 @@ export class XPDAccessService {
 
 	public getRawReportsAPIURL() {
 		// const url = 'https://' + this.server.xpdDefaultReportsAPIAccessIp + ':' + this.server.xpdDefaultReportsAPIPort;
-		const url = this.server.xpdDefaultReportsAPIAccessIp + ':' + this.server.xpdDefaultReportsAPIPort;
+		// const url = this.server.xpdDefaultReportsAPIAccessIp + ':' + this.server.xpdDefaultReportsAPIPort;
 		// console.log(url);
+		const url = 'http://165.22.178.111:8082'
 		return url;
 	}
 
 	public getRawSetupAPIURL() {
 		// const url = 'https://' + this.server.xpdDefaultAccessIp + ':' + this.server.xpdDefaultSetupApiPort;
-		const url = this.server.xpdDefaultAccessIp + ':' + this.server.xpdDefaultSetupApiPort;
+		// const url = this.server.xpdDefaultAccessIp + ':' + this.server.xpdDefaultSetupApiPort;
+		const url = 'http://165.22.178.111:8080'
 		return url;
 	}
 
@@ -83,8 +85,9 @@ export class XPDAccessService {
 
 	public getOperationServerURL() {
 		// const url = 'https://' + this.server.xpdDefaultSetupAPIAccessIp + ':' + this.server.xpdDefaultOperationServerPort;
-		const url = this.server.xpdDefaultSetupAPIAccessIp + ':' + this.server.xpdDefaultOperationServerPort;
+		// const url = this.server.xpdDefaultSetupAPIAccessIp + ':' + this.server.xpdDefaultOperationServerPort;
 		// console.log(url);
+		const url = 'http://165.22.178.111:8081'
 		return url;
 	}
 
@@ -95,7 +98,8 @@ export class XPDAccessService {
 	}
 
 	public getWitsTranslatorURL() {
-		const url = this.server.xpdDefaultWitsTranslatorIp + ':' + this.server.xpdDefaultWitsTranslatorServerPort;
+		// const url = this.server.xpdDefaultWitsTranslatorIp + ':' + this.server.xpdDefaultWitsTranslatorServerPort;
+		const url = 'http://165.22.178.111:9596'
 		return url;
 	}
 }

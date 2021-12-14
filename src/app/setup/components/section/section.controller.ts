@@ -59,10 +59,10 @@ export class SectionController {
 			$scope.operationData = this.operationDataFactory.operationData;
 		});
 
-		operationDataService.on('setOnOperationQueueChangeListener', () => { this.loadSectionList(); });
-		operationDataService.on('setOnCurrentOperationQueueListener', () => { this.loadSectionList(); });
-		operationDataService.on('setOnNoCurrentOperationQueueListener', () => { this.loadSectionList(); });
-		operationDataService.on('setOnUnableToMakeCurrentListener', (operation) => { this.unableToMakeCurrent(operation); });
+		operationDataService.on($scope, 'setOnOperationQueueChangeListener', () => { this.loadSectionList(); });
+		operationDataService.on($scope, 'setOnCurrentOperationQueueListener', () => { this.loadSectionList(); });
+		operationDataService.on($scope, 'setOnNoCurrentOperationQueueListener', () => { this.loadSectionList(); });
+		operationDataService.on($scope, 'setOnUnableToMakeCurrentListener', (operation) => { this.unableToMakeCurrent(operation); });
 
 		this.loadSectionList();
 	}

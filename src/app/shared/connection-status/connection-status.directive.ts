@@ -58,23 +58,23 @@ export class ConnectionStatusDirective implements ng.IDirective {
 			open();
 		};
 
-		this.operationDataService.on('reconnecting', () => {
+		this.operationDataService.on(scope, 'reconnecting', () => {
 			isNotConnected();
 		});
 
-		this.operationDataService.on('reconnect', () => {
+		this.operationDataService.on(scope, 'reconnect', () => {
 			isConnected();
 		});
 
-		// this.operationDataService.on('connect_error', (data) => { console.log('connect_error', data); });
-		// this.operationDataService.on('connect_timeout', (data) => { console.log('connect_timeout', data); });
-		// this.operationDataService.on('reconnect', (data) => { console.log('reconnect', data); });
-		// this.operationDataService.on('reconnect_attempt', (data) => { console.log('reconnect_attempt', data); });
-		// this.operationDataService.on('reconnecting', (data) => { console.log('reconnecting', data); });
-		// this.operationDataService.on('reconnect_error', (data) => { console.log('reconnect_error', data); });
-		// this.operationDataService.on('reconnect_failed', (data) => { console.log('reconnect_failed', data); });
-		// this.operationDataService.on('ping', (data) => { console.log('ping', data); });
-		// this.operationDataService.on('pong', (data) => { console.log('pong', data); });
+		// this.operationDataService.on(scope, 'connect_error', (data) => { console.log('connect_error', data); });
+		// this.operationDataService.on(scope, 'connect_timeout', (data) => { console.log('connect_timeout', data); });
+		// this.operationDataService.on(scope, 'reconnect', (data) => { console.log('reconnect', data); });
+		// this.operationDataService.on(scope, 'reconnect_attempt', (data) => { console.log('reconnect_attempt', data); });
+		// this.operationDataService.on(scope, 'reconnecting', (data) => { console.log('reconnecting', data); });
+		// this.operationDataService.on(scope, 'reconnect_error', (data) => { console.log('reconnect_error', data); });
+		// this.operationDataService.on(scope, 'reconnect_failed', (data) => { console.log('reconnect_failed', data); });
+		// this.operationDataService.on(scope, 'ping', (data) => { console.log('ping', data); });
+		// this.operationDataService.on(scope, 'pong', (data) => { console.log('pong', data); });
 
 		// Event: ‘connect_error’
 		// error (Object) error object

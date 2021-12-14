@@ -1,7 +1,6 @@
 import { WitsDataService } from './../../../shared/xpd.wits-data/wits-data.service';
 import { OperationDataService } from '../../../shared/xpd.operation-data/operation-data.service';
-import angular = require('angular');
-var convert = require('convert-units');
+import * as convert from 'convert-units';
 export class DataAcquisitionController {
 
 	// 'use strict';
