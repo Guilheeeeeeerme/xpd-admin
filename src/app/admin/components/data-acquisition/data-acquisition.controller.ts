@@ -1,6 +1,5 @@
 import { WitsDataService } from './../../../shared/xpd.wits-data/wits-data.service';
 import { OperationDataService } from '../../../shared/xpd.operation-data/operation-data.service';
-import angular = require('angular');
 import configureMeasurements,  {allMeasures}  from 'convert-units';
 var customMeasures = require('./custom-measures');
 var convert = configureMeasurements(allMeasures);
