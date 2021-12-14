@@ -114,7 +114,7 @@ export class FailureNavBarDirective implements ng.IDirective {
 		this.operationDataService.openConnection(['failure']).then(() => {
 			this.operationDataFactory = this.operationDataService.operationDataFactory;
 
-			this.operationDataService.on('setOnGoingFailureListener', () => {
+			this.operationDataService.on(scope, 'setOnGoingFailureListener', () => {
 				loadOnGoingFailure();
 			});
 

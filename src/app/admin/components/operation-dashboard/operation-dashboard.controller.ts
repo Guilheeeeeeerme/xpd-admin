@@ -66,15 +66,15 @@ export class OperationDashboardController {
 				vm.generateEstimatives();
 				vm.loadEvents();
 
-				operationDataService.on('setOnParallelEventChangeListener', () => { vm.loadEvents(); });
-				operationDataService.on('setOnEventChangeListener', (data) => { vm.loadEvents(); });
+				operationDataService.on($scope, 'setOnParallelEventChangeListener', () => { vm.loadEvents(); });
+				operationDataService.on($scope, 'setOnEventChangeListener', (data) => { vm.loadEvents(); });
 
-				operationDataService.on('setOnEstimativesChangeListener', () => { vm.generateEstimatives(); });
-				operationDataService.on('setOnForecastChangeListener', () => { vm.generateEstimatives(); });
+				operationDataService.on($scope, 'setOnEstimativesChangeListener', () => { vm.generateEstimatives(); });
+				operationDataService.on($scope, 'setOnForecastChangeListener', () => { vm.generateEstimatives(); });
 
-				operationDataService.on('setOnJointChangeListener', () => { vm.generateEstimatives(); });
-				operationDataService.on('setOnCurrentJointListener', () => { vm.generateEstimatives(); });
-				operationDataService.on('setOnNoCurrentJointListener', () => { vm.generateEstimatives(); });
+				operationDataService.on($scope, 'setOnJointChangeListener', () => { vm.generateEstimatives(); });
+				operationDataService.on($scope, 'setOnCurrentJointListener', () => { vm.generateEstimatives(); });
+				operationDataService.on($scope, 'setOnNoCurrentJointListener', () => { vm.generateEstimatives(); });
 		});
 	}
 

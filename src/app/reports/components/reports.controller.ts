@@ -31,7 +31,7 @@ export class ReportsController {
 			vm.operationDataFactory = operationDataService.operationDataFactory;
 			$scope.operationData = vm.operationDataFactory.operationData;
 
-			operationDataService.on('setOnFailureChangeListener', () => { this.onFailureChange(); });
+			operationDataService.on($scope, 'setOnFailureChangeListener', () => { this.onFailureChange(); });
 
 		});
 

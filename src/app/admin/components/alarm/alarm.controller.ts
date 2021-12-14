@@ -43,13 +43,13 @@ export class AlarmController {
 			this.loadOperation(vm.operationDataFactory.operationData.operationContext);
 		});
 
-		operationDataService.on('setOnOperationChangeListener', (arg) => { vm.loadOperation(arg); });
-		operationDataService.on('setOnCurrentOperationListener', (arg) => { vm.loadOperation(arg); });
-		operationDataService.on('setOnRunningOperationListener', (arg) => { vm.loadOperation(arg); });
+		operationDataService.on($scope, 'setOnOperationChangeListener', (arg) => { vm.loadOperation(arg); });
+		operationDataService.on($scope, 'setOnCurrentOperationListener', (arg) => { vm.loadOperation(arg); });
+		operationDataService.on($scope, 'setOnRunningOperationListener', (arg) => { vm.loadOperation(arg); });
 
-		operationDataService.on('setOnAlarmsChangeListener', (arg) => { vm.reloadAlarms(); });
-		operationDataService.on('setOnDurationAlarmListener', (arg) => { vm.reloadAlarms(); });
-		operationDataService.on('setOnSpeedRestrictionAlarmListener', (arg) => { vm.reloadAlarms(); });
+		operationDataService.on($scope, 'setOnAlarmsChangeListener', (arg) => { vm.reloadAlarms(); });
+		operationDataService.on($scope, 'setOnDurationAlarmListener', (arg) => { vm.reloadAlarms(); });
+		operationDataService.on($scope, 'setOnSpeedRestrictionAlarmListener', (arg) => { vm.reloadAlarms(); });
 
 	}
 
