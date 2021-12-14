@@ -1,6 +1,5 @@
 
 import * as angular from 'angular';
-import {TraceClass} from 'typescript-debug';
 import { DialogService } from '../../../shared/xpd.dialog/xpd.dialog.factory';
 import { EventDetailsModalService } from '../../../shared/xpd.modal.event-details/xpd-modal-event-details.factory';
 import { FailureModalFactory } from '../../../shared/xpd.modal.failure/xpd-modal-failure.factory';
@@ -9,7 +8,7 @@ import { OperationDataService } from '../../../shared/xpd.operation-data/operati
 import { EventLogSetupAPIService } from '../../../shared/xpd.setupapi/eventlog-setupapi.service';
 import { LessonLearnedSetupAPIService } from '../../../shared/xpd.setupapi/lessonlearned-setupapi.service';
 
-@TraceClass({ tracePrefix: 'TrackingController' })
+
 export class TrackingController {
 
 	public static $inject: string[] = [
