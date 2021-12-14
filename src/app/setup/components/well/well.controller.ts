@@ -31,18 +31,18 @@ export class WellController {
 			$scope.operationData = vm.operationDataFactory.operationData;
 		});
 
-		operationDataService.on('setOnCurrentWellListener', () => { this.loadWellList(); });
-		operationDataService.on('setOnNoCurrentWellListener', () => { this.loadWellList(); });
-		operationDataService.on('setOnWellChangeListener', () => { this.loadWellList(); });
+		operationDataService.on($scope, 'setOnCurrentWellListener', () => { vm.loadWellList(); });
+		operationDataService.on($scope, 'setOnNoCurrentWellListener', () => { vm.loadWellList(); });
+		operationDataService.on($scope, 'setOnWellChangeListener', () => { vm.loadWellList(); });
 
-		this.loadWellList();
+		vm.loadWellList();
 
 	}
 
 	public actionButtonEditWell(well) {
 		const self = this;
 
-		this.$modal.open({
+		self.$modal.open({
 			animation: true,
 			keyboard: false,
 			backdrop: 'static',
@@ -63,7 +63,7 @@ export class WellController {
 	public actionButtonAddWell() {
 		const self = this;
 
-		this.$modal.open({
+		self.$modal.open({
 			animation: true,
 			keyboard: false,
 			backdrop: 'static',
@@ -84,7 +84,7 @@ export class WellController {
 	public actionButtonRemoveWell(well) {
 		const self = this;
 
-		this.sectionSetupAPIService.getListOfSectionsByWell(well.id).then((sectionList: any) => {
+		self.sectionSetupAPIService.getListOfSectionsByWell(well.id).then((sectionList: any) => {
 			if (sectionList.length === 0) {
 				self.removeWell(well);
 			} else {
@@ -99,7 +99,6 @@ export class WellController {
 			this.dialogService.showMessageDialog('Unable to change Well due to Running Operation.', 'Error');
 		} else {
 			this.operationDataFactory.emitMakeCurrentWell(well);
-			window.location.reload();
 		}
 	}
 
@@ -109,13 +108,12 @@ export class WellController {
 			this.dialogService.showMessageDialog('Unable to change Well due to Running Operation.', 'Error');
 		} else {
 			this.operationDataFactory.emitInterruptCurrentWell(well);
-			window.location.reload();
 		}
 	}
 
 	private loadWellList() {
 		const self = this;
-		delete this.$scope.dados.wellList;
+		delete self.$scope.dados.wellList;
 
 		this.wellSetupAPIService.getList().then((wellList) => {
 			self.$scope.dados.wellList = wellList;
@@ -134,7 +132,7 @@ export class WellController {
 	private removeWell(well) {
 		const self = this;
 
-		this.dialogService.showCriticalDialog({
+		self.dialogService.showCriticalDialog({
 			templateHtml: 'By <b>removing</b> a Well you will no longer be able to access its sections. Proceed?',
 		}, () => {
 			self.wellSetupAPIService.removeObject(well).then(() => {

@@ -79,9 +79,16 @@ export class OperationDataService {
 		}
 	}
 
-	public on(subject: string, callback): void {
-		if (this.observer.listeners(subject).length === 0) {
-			this.observer.on(subject, callback);
+	public on($scope: any, subject: string, callback): void {
+
+		this.observer.on(subject, callback);
+
+		if($scope && $scope.$on) {	
+			$scope.$on("$destroy", () => {
+				try {
+					this.observer.removeListener(subject, callback);
+				} catch {}
+			});
 		}
 	}
 

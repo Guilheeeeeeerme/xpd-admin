@@ -58,9 +58,9 @@ export class ModalFailureController {
 		this.getCategoryList();
 		this.getFailuresOnGoing();
 
-		this.operationDataService.on('setOnFailureChangeListener', () => { this.failureSuccessCallback(); });
-		this.operationDataService.on('setOnErrorUpsertFailureListener', () => { this.failureErrorCallback(); });
-		this.operationDataService.on('setOnNptAlreadyExistsListener', () => { this.nptAlreadyExists(); });
+		this.operationDataService.on($scope, 'setOnFailureChangeListener', () => { this.failureSuccessCallback(); });
+		this.operationDataService.on($scope, 'setOnErrorUpsertFailureListener', () => { this.failureErrorCallback(); });
+		this.operationDataService.on($scope, 'setOnNptAlreadyExistsListener', () => { this.nptAlreadyExists(); });
 
 	}
 

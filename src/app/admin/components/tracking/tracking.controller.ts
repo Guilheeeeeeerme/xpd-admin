@@ -1,6 +1,5 @@
 
 import * as angular from 'angular';
-import {TraceClass} from 'typescript-debug';
 import { DialogService } from '../../../shared/xpd.dialog/xpd.dialog.factory';
 import { EventDetailsModalService } from '../../../shared/xpd.modal.event-details/xpd-modal-event-details.factory';
 import { FailureModalFactory } from '../../../shared/xpd.modal.failure/xpd-modal-failure.factory';
@@ -9,7 +8,7 @@ import { OperationDataService } from '../../../shared/xpd.operation-data/operati
 import { EventLogSetupAPIService } from '../../../shared/xpd.setupapi/eventlog-setupapi.service';
 import { LessonLearnedSetupAPIService } from '../../../shared/xpd.setupapi/lessonlearned-setupapi.service';
 
-@TraceClass({ tracePrefix: 'TrackingController' })
+
 export class TrackingController {
 
 	public static $inject: string[] = [
@@ -115,37 +114,37 @@ export class TrackingController {
 			 * ADMIN ONLY
 			 */
 
-			operationDataService.on('setOnParallelEventChangeListener', () => { vm.loadEvents(); });
+			operationDataService.on($scope, 'setOnParallelEventChangeListener', () => { vm.loadEvents(); });
 			// * MODAL ACTIONS *//
 
 			// * ALARM *//
 
 			// buildEventStruture();
-			operationDataService.on('setOnEventChangeListener', () => { vm.loadEvents(); vm.buildEventStruture(); });
-			operationDataService.on('setOnCurrentEventListener', () => { vm.buildEventStruture(); });
-			operationDataService.on('setOnNoCurrentEventListener', () => { vm.buildEventStruture(); });
-			operationDataService.on('setOnEventLogUpdateListener', () => { vm.buildEventStruture(); });
-			operationDataService.on('setOnWaitEventListener', () => { vm.buildEventStruture(); });
+			operationDataService.on($scope, 'setOnEventChangeListener', () => { vm.loadEvents(); vm.buildEventStruture(); });
+			operationDataService.on($scope, 'setOnCurrentEventListener', () => { vm.buildEventStruture(); });
+			operationDataService.on($scope, 'setOnNoCurrentEventListener', () => { vm.buildEventStruture(); });
+			operationDataService.on($scope, 'setOnEventLogUpdateListener', () => { vm.buildEventStruture(); });
+			operationDataService.on($scope, 'setOnWaitEventListener', () => { vm.buildEventStruture(); });
 
 			// buildTimeSlicesStruture();
-			operationDataService.on('setOnTimeSlicesChangeListener', () => { vm.buildTimeSlicesStruture(); });
-			operationDataService.on('setOnTimeSlicesListener', () => { vm.buildTimeSlicesStruture(); });
-			operationDataService.on('setOnNoTimeSlicesListener', () => { vm.buildTimeSlicesStruture(); });
+			operationDataService.on($scope, 'setOnTimeSlicesChangeListener', () => { vm.buildTimeSlicesStruture(); });
+			operationDataService.on($scope, 'setOnTimeSlicesListener', () => { vm.buildTimeSlicesStruture(); });
+			operationDataService.on($scope, 'setOnNoTimeSlicesListener', () => { vm.buildTimeSlicesStruture(); });
 
-			operationDataService.on('setOnAboveSpeedLimitListener', () => { vm.onAboveSpeedLimit(); });
-			operationDataService.on('setOnUnreachableTargetListener', () => { vm.onUnreachableTarget(); });
+			operationDataService.on($scope, 'setOnAboveSpeedLimitListener', () => { vm.onAboveSpeedLimit(); });
+			operationDataService.on($scope, 'setOnUnreachableTargetListener', () => { vm.onUnreachableTarget(); });
 
 			// removeTeamsFromShift();
-			operationDataService.on('setOnShiftListener', () => { vm.removeTeamsFromShift(); });
+			operationDataService.on($scope, 'setOnShiftListener', () => { vm.removeTeamsFromShift(); });
 
 			// buildAcknowledgementList();
-			operationDataService.on('setOnAlarmsChangeListener', () => { vm.buildAcknowledgementList(); });
-			operationDataService.on('setOnCurrentAlarmsListener', () => { vm.buildAcknowledgementList(); });
-			operationDataService.on('setOnNoCurrentAlarmsListener', () => { vm.buildAcknowledgementList(); });
-			operationDataService.on('setOnSpeedRestrictionAlarmListener', () => { vm.buildAcknowledgementList(); });
-			operationDataService.on('setOnDurationAlarmListener', () => { vm.buildAcknowledgementList(); });
-			operationDataService.on('setOnNoCurrentAlarmListener', () => { vm.buildAcknowledgementList(); });
-			operationDataService.on('setOnExpectedAlarmChangeListener', () => { vm.buildAcknowledgementList(); });
+			operationDataService.on($scope, 'setOnAlarmsChangeListener', () => { vm.buildAcknowledgementList(); });
+			operationDataService.on($scope, 'setOnCurrentAlarmsListener', () => { vm.buildAcknowledgementList(); });
+			operationDataService.on($scope, 'setOnNoCurrentAlarmsListener', () => { vm.buildAcknowledgementList(); });
+			operationDataService.on($scope, 'setOnSpeedRestrictionAlarmListener', () => { vm.buildAcknowledgementList(); });
+			operationDataService.on($scope, 'setOnDurationAlarmListener', () => { vm.buildAcknowledgementList(); });
+			operationDataService.on($scope, 'setOnNoCurrentAlarmListener', () => { vm.buildAcknowledgementList(); });
+			operationDataService.on($scope, 'setOnExpectedAlarmChangeListener', () => { vm.buildAcknowledgementList(); });
 
 		});
 

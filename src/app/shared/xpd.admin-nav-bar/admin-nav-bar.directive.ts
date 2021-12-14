@@ -94,9 +94,9 @@ export class XPDAdminNavBarDirective implements ng.IDirective {
 
 			checkIfHasRunningOperation();
 
-			this.operationDataService.on('setOnRunningOperationListener', () => { checkIfHasRunningOperation(); });
-			this.operationDataService.on('setOnOperationChangeListener', () => { checkIfHasRunningOperation(); });
-			this.operationDataService.on('setOnNoCurrentOperationListener', () => { checkIfHasRunningOperation(); });
+			this.operationDataService.on(scope, 'setOnRunningOperationListener', () => { checkIfHasRunningOperation(); });
+			this.operationDataService.on(scope, 'setOnOperationChangeListener', () => { checkIfHasRunningOperation(); });
+			this.operationDataService.on(scope, 'setOnNoCurrentOperationListener', () => { checkIfHasRunningOperation(); });
 
 		});
 
