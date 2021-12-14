@@ -1,4 +1,4 @@
-FROM node:12 as builder
+FROM node:14 as builder
 
 RUN apt update && apt install python-minimal
 WORKDIR /.xpd
