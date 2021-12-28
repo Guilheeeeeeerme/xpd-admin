@@ -1,0 +1,13 @@
+{
+    "name": "xpd_admin",
+    "version": "1.0.0",
+    "description": "",
+    "main": "electron.js",
+    "scripts": {
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "dependencies": {}
+  }
+  
