@@ -30,9 +30,9 @@ export class XPDAccessService {
 		// const xpdDefaultSetupAPIAccessIp = 'http://165.22.178.111:8080/xpd-setup-api/';
 		// const xpdDefaultWitsTranslatorIp = 'http://165.22.178.111:9596';
 
-		const xpdDefaultAccessIp = 'http://operation-xpd.ngrok.io';
-		const xpdDefaultReportsAPIAccessIp = 'http://reports-xpd.ngrok.io';
-		const xpdDefaultSetupAPIAccessIp = 'http://setup-xpd.ngrok.io/xpd-setup-api/';
+		const xpdDefaultAccessIp = 'https://operation-xpd.ngrok.io';
+		const xpdDefaultReportsAPIAccessIp = 'https://reports-xpd.ngrok.io';
+		const xpdDefaultSetupAPIAccessIp = 'https://setup-xpd.ngrok.io/xpd-setup-api/';
 		const xpdDefaultWitsTranslatorIp = 'http://165.22.178.111:9596';
 
 		// 	checando se tem os campos necessários
