@@ -1,0 +1,26 @@
+authtoken: 22uymzdqwAvuUo0BgGOBFYEBeX1_cXapJY1bzSTC285wZ51S
+tunnels:
+  setup:
+    addr: 8080
+    proto: http
+    hostname: setup-xpd.ngrok.io
+  operations:
+    addr: 8081
+    proto: http
+    hostname: operation-xpd.ngrok.io
+  reports:
+    addr: 8082
+    proto: http
+    hostname: reports-xpd.ngrok.io
+  # wits:
+  #   addr: 9596
+  #   proto: http
+  #   hostname: wits-xpd.ngrok.io
+  admin:
+    addr: 9090
+    proto: http
+    hostname: admin-xpd.ngrok.io
+  driller:
+    addr: 9091
+    proto: http
+    hostname: driller-xpd.ngrok.io
