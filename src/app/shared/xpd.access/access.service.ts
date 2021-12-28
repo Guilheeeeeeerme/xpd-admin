@@ -21,8 +21,8 @@ export class XPDAccessService {
 		let XPDAccessData;
 
 		// 	tem algo no local storage?
-		if (localStorage.getItem('xpd.admin.XPDAccessData')) {
-			XPDAccessData = JSON.parse(localStorage.getItem('xpd.admin.XPDAccessData'));
+		if (localStorage.getItem('xpd.admin.XPDAccessData_V2')) {
+			XPDAccessData = JSON.parse(localStorage.getItem('xpd.admin.XPDAccessData_V2'));
 		}
 
 		// const xpdDefaultAccessIp = 'http://165.22.178.111:8081';
@@ -33,7 +33,7 @@ export class XPDAccessService {
 		const xpdDefaultAccessIp = 'https://operation-xpd.ngrok.io';
 		const xpdDefaultReportsAPIAccessIp = 'https://reports-xpd.ngrok.io';
 		const xpdDefaultSetupAPIAccessIp = 'https://setup-xpd.ngrok.io/xpd-setup-api/';
-		const xpdDefaultWitsTranslatorIp = 'http://165.22.178.111:9596';
+		const xpdDefaultWitsTranslatorIp = 'https://wits-xpd.ngrok.io';
 
 		// 	checando se tem os campos necessários
 		if (!XPDAccessData || !XPDAccessData.server) {
@@ -69,7 +69,7 @@ export class XPDAccessService {
 		// 	sincronizando local storage
 		// console.log('Atualizando Local Storage !!!');
 		(window as any).XPDAccessData = XPDAccessData;
-		localStorage.setItem('xpd.admin.XPDAccessData', JSON.stringify(XPDAccessData));
+		localStorage.setItem('xpd.admin.XPDAccessData_V2', JSON.stringify(XPDAccessData));
 
 		this.server = XPDAccessData.server;
 	}

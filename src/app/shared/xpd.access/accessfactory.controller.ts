@@ -22,7 +22,7 @@ export class AccessFactoryController {
 		const vm = this;
 
 		$scope.dados = {
-			XPDAccessData: JSON.parse(localStorage.getItem('xpd.admin.XPDAccessData')),
+			XPDAccessData: JSON.parse(localStorage.getItem('xpd.admin.XPDAccessData_V2')),
 			loginError: false,
 		};
 
@@ -39,7 +39,7 @@ export class AccessFactoryController {
 		};
 
 		const actionProceed = () => {
-			localStorage.setItem('xpd.admin.XPDAccessData', JSON.stringify($scope.dados.XPDAccessData));
+			localStorage.setItem('xpd.admin.XPDAccessData_V2', JSON.stringify($scope.dados.XPDAccessData));
 
 			vm.xpdAccessService.loadAccessData();
 

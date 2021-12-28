@@ -12,15 +12,15 @@ tunnels:
     addr: 8082
     proto: http
     hostname: reports-xpd.ngrok.io
-  # wits:
-  #   addr: 9596
+  wits:
+    addr: 9596
+    proto: http
+    hostname: wits-xpd.ngrok.io
+  # admin:
+  #   addr: 9090
   #   proto: http
-  #   hostname: wits-xpd.ngrok.io
-  admin:
-    addr: 9090
-    proto: http
-    hostname: admin-xpd.ngrok.io
-  driller:
-    addr: 9091
-    proto: http
-    hostname: driller-xpd.ngrok.io
+  #   hostname: admin-xpd.ngrok.io
+  # driller:
+  #   addr: 9091
+  #   proto: http
+  #   hostname: driller-xpd.ngrok.io
